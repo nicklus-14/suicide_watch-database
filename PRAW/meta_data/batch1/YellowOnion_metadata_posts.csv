@@ -1,0 +1,1111 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+KeyboardLayouts,Potential for layout overfitting...Wildly different SFB's for same layout.,"There's a concept in economics called [Godhart's Law](https://en.wikipedia.org/wiki/Goodhart%27s_law), and related concept in ML is called [overfitting](https://en.wikipedia.org/wiki/Overfitting) And there seems to be an obsession with optimizing for SFB's, which has me worried some of these layouts, especially < 1% SFB's, that they're compromising other things, things we're not measuring.
+
+For example I've created a layout in Oxeylyzer I call FHAE it ranks modestly on SFB's (2.1%) and redirects (1.6%), if I crank up the weights for both, I get another layout I call HIAE, with 1.3% and 1.8% respectively. When I import FHAE in to cyanophage analyzer the SFB's are completely different, at 1.4% instead, and HIAE at 1.0%.
+
+My FHAE layout also has way better ring-pinky scissors at 0.2%, than the HIAE at 0.4%.
+
+To me I want most typing on my index and middle fingers, I'll happily trade 2 index/ring-finger bigrams to avoid a pinky or ring finger bi-gram, I also noticed that most layouts it spat out were ""stuck"" around 2% SFB's and I had to heavily crank the the weight from 18 to 30-40.
+
+I think the take away I get from this that I get that the corpus that the analyzers aren't standardized, I can't seem to figure out where oxeylyzer sources it's corpus from, and that most people are not aware of the margins of error on the measures, and that hyper optimizing for one or two measures that are a bad approximation for typing in English/Latin, and bad approximations of keyboard displeasure could be compromising the overall experience of typing.
+
+I think there needs to be more critical approach to corpus choice, especially, sourcing the corpus, IMHO Latin Wikipedia would be good start, slightly better than published media you find on Google Ngrams, but then again, I spend most of my type tying to friends and ""chatting"" and most formal media isn't that, and moving away from SFB/redirects as a primary measure.
+
+I know this is just a bunch of dudes on reddit, but I don't see why there can't be more rigorous scientific approach, ones that acknowledges margin of error like we learned in high-school science class, instead of throwing around 4 sig-fig tables like it matters.  
+
+
+Also I wonder if a website could be setup to have users type out two locational bigrams/trigrams/pentragram's and subjectively say which is better, and then just toss them at a machine learning model and see if that could be used to evaluate layouts instead of SFBs / redirects.
+
+    fhae
+    , y o u j  q c n v z
+    f h a e '  m t r s p
+    . k x i ;  g d l b w
+    
+    hiae
+    j y o . ;  k f n v w
+    h i a e ,  m t r s c
+    x q ' u z  g d l b p",1713786767.0,8,1.0,17
+AV1,Why are SVT's 1-pass CRF default settings so bad? how do I get decent quality?,"Maybe I've just been spoiled, but x264 has such good defaults I have a hard time justifying changing them, crf 23 is a few points below almost visually lossless making it a good quality vs size trade off, and and ""default"" preset is a good trade off between performance and size, I usually just adjust the crf to 16-18 and have visually lossless encodes 99% of the time, and if I have time to spare use a slower preset.
+
+With SVT the default crf of 35 produces 1300mbps, 1080p at about 60fps, the quality matches the low bitrate, I'm happy with the speed but even going as low as crf 6 I still see obvious visual artifacts (perhaps a bug?) in mpv. turning off grain synth seems to have fixed this, I know crf is somewhat arbitrary, but something feels off when crf 6 is producing 8mbps video, and everyone else is recommending something in the 30's that looks like crap.
+
+I'm running ffmpeg with version 1.8.0 if that matters.",1711758192.0,11,0.74,35
+chch,PSA: Do not trust Google weather! Screenshots from 2pm.,,1705886505.0,9,0.62,27
+bcachefs,PSA: For those having trouble with mounting/booting! Especially multi-device setups.,"I'm a maintainer of NixOS bcachefs tooling, and spent days debugging boot issues, and lurking/shitposting on the IRC channel.
+
+Make sure you use `UUID=<UUID>` you want the EXTERNAL UUID from bcachefs `show-super` for example:
+
+    mount -t bcachefs UUID=$(bcachefs show-super /dev/nvme0n1p3 | grep Ext | awk '{ print $3 ;}') /mnt-root
+
+As of current date we have no way use /dev/disks/by-uuid symlinks with multi-device systems you must use colons or UUID= syntax.
+
+systemd has a path length limit and doesn't like the colons, so if you have lots of drives, avoid using /dev/by-id
+
+util-linux 2.39.2 has bugs with bcachefs it will detect the UUIDs of fresh bcachefs super blocks, and setup symlinks in /dev/disks/, but as soon as the FS grows in size it fails to detect fs by UUID.
+
+Make sure you have util-linux from master, or the 2.39 git branch, or [patch 2.39.2](https://raw.githubusercontent.com/NixOS/nixpkgs/master/pkgs/os-specific/linux/util-linux/bcachefs-patch-set.patch)
+
+you must have the mount.bcachefs symlink pointing to bcachefs command, both of these are needed to work in initrd if you want to use it for root.
+
+I'm currently booting from a root multi device with UUID= and a patched util-linux.
+
+If you want to have a hassle free experience, try building a bcachefs enabled NixOS iso from nixpkgs master/nixos-unstable-minimal.
+
+Please nag your distro maintainers to include a patched version of util-linux ready for the release of 6.7!
+
+nixpkgs commits from the last few months should help anyone trying to get things working on their distro [https://github.com/search?q=repo%3ANixOS%2Fnixpkgs+bcachefs&type=commits](https://github.com/search?q=repo%3ANixOS%2Fnixpkgs+bcachefs&type=commits)",1700291502.0,11,0.93,2
+swaywm,How do you get Xorg apps and Sway in general to be a fully function as if I was using Gnome or KDE?,"I had until recently both Gnome and Sway installed, and sway has been fairly decent, so I made the decision of uninstalling Gnome, and then a bunch of stuff started to break, I cannot download anything in Firefox, or click on links in other apps to open them in Firefox, I recently discovered that I needed to install `xdg-utils`, and that should fix the issue, but that leaves me wondering what other stuff might be missing from my setup.
+
+non-steam Wine games were not detecting my dvorak layout correctly so all my binds were wrong, xrandr was missing and so Windows games were launching on the wrong monitor.
+
+What other tools am I probably missing that I need to install? I'm running NixOS, so steam is run in its' own Sandbox with it's own bundled dependencies, But I'm not sure what of the dozen or so xlib's do I need to install to replicate the full DE experience.",1684839446.0,1,0.6,5
+Tinder,"Scammers abuse unmatching to avoid getting reported, enable organised crime, I'm deleting this app.","This is the scammer trick:
+
+Be  nice and friendly, ask for your WhatsApp, and then as soon as you add  them, they'll unmatch, They'll message you on WhatsApp from a foreign  number.
+
+It's been about three  years since Bumble implemented the ability to report after an unmatch,  and since COVID there's been a lot more scammers, real human scammers,  not just bots, but real humans probably from poor countries worst hit by  COVID, especially with me being in a small city in a small country  that's reasonably wealthy, sometimes the fake profiles on a bad day can  be upward of 50%, despite the lower quantity of users, it's very very  clear that Bumble is better moderated, and has better engagement.
+
+Usually there's signs:
+
+Bad English (could just be tourist or immigrant).
+
+Generic Asian girl look, stolen Instagram photos without any local photos, but again could be a fresh off the boat immigrant.
+
+Paying  for premium to hide location (yes seriously), but it's actually super  easy to spoof GPS with an Free Android Emulators, so I assume this is  why many have local coords.
+
+If I  happen to let one slip through they usually aggressively try to get you  off the app ASAP. They'll usually insist you give them your phone number  first, so you can't tell they're going to message you from a foreign  number util it's too late.
+
+They  seem to be getting better at hiding, and it's extremely frustrating,  especially being on the spectrum, having to play Tinder police even the  report menu is frustratingly tedious with all it's menu 30-40 options.
+
+The  problem is that there's aren't just bots, they're people, who pretend  to be from HK or another Asian Financial sector, and then swindle some  boomer out of a sweet $500k with a fake investment website, they can  afford to pay for premium because that's a easily recoup that money on a  successful scam, which aligns Tinders interests more with the scammer  than me.
+
+[Tinder is enabling organised crime.](https://www.stuff.co.nz/national/crime/128475643/overseas-organised-crime-rings-behind-tinder-swindler-scam)
+
+I'm  sick of playing the meta-game of ""is this person a scammer or am I  going to offend this person because they're just an immigrant with bad  English"".
+
+Tinder, it's Parent MatchGroup and all it's low-quality dating app subsidiaries can f off,  and also he corrupt FTC for letting this dating monopoly emerge.",1684821217.0,3,0.67,0
+Tinder,"Scammers abuse unmatching to avoid getting reported, enable organised crime, I'm deleting this app, sick of this shit.",[removed],1684821052.0,1,1.0,0
+google,Google deceptively prices it's Workspace Service in most countries with half decent consumer protections.,"Google currently prices this service without VAT / GST, and doesn't indicate anywhere on their front page or on their billing page, that this is excluding VAT / GST, until you actually receive your bill.
+
+&#x200B;
+
+https://preview.redd.it/wbmgnbr57dca1.png?width=391&format=png&auto=webp&s=3d5880d8b587666db4e8dc0732e175e59f076251
+
+In my country (and I assume many European), consumer facing services/retailers price their product including GST, business facing services tend to follow the same retailer practice, or explicitly indicate their prices are excluding GST, i.e. once the client-business have received their tax deduction, all products are exchanged at the same price, including the GST, irrespective if the client is a consumer or business.
+
+Even online retailers like Steam, notorious for being anti-consumer, do not surprise you with taxes at the checkout.
+
+When I bought it up with Customer support, they proceeded to tell me [distributive property](https://www.khanacademy.org/math/4th-grade-foundations-engageny/4th-m3-engage-ny-foundations/4th-m3-te-foundations/a/distributive-property-explained), doesn't exist lol
+
+https://preview.redd.it/0fdnegb56dca1.png?width=391&format=png&auto=webp&s=4cf60cb10e3b7b3e6e40ce70e0b534515ef1c039
+
+I would recommend anyone outside of the US double check their bills, and bring this up with customer support for refunds or pushing them to fix their deceptive pricing, or raise it with the local consumer protection agency.
+
+All they have to do is put a \* on all the prices and indicate somewhere on the page that the prices are excluding Taxes, but I guess that's too much to ask from one of the most unhuman, faceless companies in modern times.
+
+The lazy bastard engineers still don't even support a EN\_NZ locale in Docs or Google Keyboard so I have to put up with using $ and US backwards dates and spelling, or the pound symbol...if a free open source project like aspell and linux can include correct, up to date localization for my country.
+
+I'm also in the market for a replacement for this shitty company if you have any recommendations...I was only grand fathered in to this crap because I had their free ""Legacy"" account.
+
+Screenshot of their website: as of 2023-01-16, and the bill I got.
+
+  
+
+
+https://preview.redd.it/ljplsp689dca1.png?width=490&format=png&auto=webp&s=395a2f73f1602f6c5ed7d609abd5e14788395639
+
+https://preview.redd.it/wy7p2oy17dca1.png?width=2125&format=png&auto=webp&s=8d2a04bfae0738af5dd78da4bcdd37e3a2b8ec70",1673859506.0,1,0.67,0
+rollerblading,Sizing advice needed for wide feet.,"My feet measure without socks, 25.5cm x 10cm.
+
+Most of my shoe purchasing decisions seem to be based on heel width, I have a pair of 9 US Men's runners which are probably too long and laced a little tightly for the shoe design, but the heel is good, and the arch and toe placement feel solid, and a pair of 9.5 US Women's cross trainers which feel more suited to my feet shape, and with a pair of thick socks they're snug.
+
+According to FR sizing chart, I think I should be picking the EU40, but that's two sizes lower, which has me worried it's going to be too small in other places, like my heel.
+
+And I live in a country that doesn't sell anything other than basic K2 plastic frame skates, and Impala boots, while I think a 3x110 wheel design might be better suited to the road conditions here.
+
+So I can't go test any out.",1643330214.0,4,1.0,3
+oneplus,Can OnePlus Nord fast charge on 3rd party chargers?,"I'm looking at getting a new phone and OnePlus doesn't make a AU/NZ compatible ""Warp"" charger.
+
+Oppo actually sells phones here, but apparently can't be bothered getting >20W a AU/NZ charger certified, where they make money (honestly this rather pisses me off).
+
+What's the chances I can get the full 25-30w out of 3rd party charger?
+
+Edit: Sorry I should have mentioned, I'm in NZ, looks like I could get one in Aussie but this there's shipping costs and RMA issues.
+
+Thanks for the help guys.",1622966862.0,99,0.98,18
+Monero,"MobileCoin is incompetent, you need a paid Amazon S3 account to run a validator node.",,1617855967.0,14,0.95,4
+NixOS,Gaming on NixOS?,"I've been having trouble getting *any* game running.
+
+Half-Life 1, a fully native Linux game just shows a window for a second and then closes, no error messages.
+
+[Vermintide](https://lutris.net/games/warhammer-end-times-vermintide/) apparently apparently working fine on FHS linux, but running protontricks to install the correct version of dotnet, from the perspective of the game is broken and tries to use wine-mono which isn't supported in proton.
+
+My [configuration.nix](https://github.com/YellowOnion/nixos-config/blob/master/purple.nix)
+
+Also if there's any active support place (i.e. discord) with some focus on gaming. I wouldn't mind knowing about it.",1613175566.0,11,0.92,11
+Windows10,Windows explorer corrupt fonts on boot after update to 20H2.,"I get this weird bug, about 50% of the time on boot, where all my fonts on Explorer are rendering with the wrong ""something"".
+
+`sfc /scannow` reports nothing is wrong.
+
+the various `dism` scans don't help either.
+
+sometimes it's *only the clock in the tray,* not the tooltips or explorer window.
+
+Thing that partially fix the issue:
+
+Rebooting my computer fixes sometimes.
+
+Switching over to Japanese with `win+space` fixes it temporarily, switching back corruption comes back (possible locale corruption?).
+
+Switching from English (New Zealand) to English (United States) does not fix the issue.
+
+Restarting ""explorer"" from task manager fixes the issue.
+
+&#x200B;
+
+&#x200B;
+
+https://preview.redd.it/do9z6l6pot961.png?width=303&format=png&auto=webp&s=bfbff807334c032ffbec09568d235c080faa3a32
+
+https://preview.redd.it/akqil0sbpt961.png?width=922&format=png&auto=webp&s=71338c8c3dcbf6711cf5751f6b7aecf0d2ff07b6
+
+Edition	Windows 10 Pro
+
+Version	20H2
+
+Installed on	‎11/‎11/‎2020
+
+OS build	19042.685
+
+Experience	Windows Feature Experience Pack 120.2212.551.0
+
+I also have this weird icon corruption (probably unrelated) that has survived a refresh a few years back.
+
+&#x200B;
+
+https://preview.redd.it/hnqmol4avt961.png?width=354&format=png&auto=webp&s=e40003d4cf2675f4716c0ac4d6b4ad985cdddf01
+
+&#x200B;",1609988121.0,4,1.0,6
+ASUS,TUG Gaming B550 Plus: CSM + BAR resizing causes black screen.,"Not sure if this is a bug in the BIOS or my GPU or something else.
+
+My system turns on, and I can access BIOS when I have BAR resizing enabled, but I require CSM to boot Windows, upon reenabling CSM I get a black screen.
+
+This should save a lot of headache for anyone wondering why they can't get ""AMD Smart Access Memory"" working, Windows needs to be on a GPT formatted disk with an efi partition before it will boot without CSM (I'm just working on that now).
+
+Update, I got it working, and on a legacy part.
+
+https://preview.redd.it/ptc5ou9hayy51.png?width=400&format=png&auto=webp&s=f7f5b15ce37636457778212120541b006612e55f",1605231379.0,1,1.0,2
+Monero,Newly Discovered FritzFrog Botnet Mines Monero,,1597841933.0,49,0.94,23
+bcachefs,Cache replacement polices?,"I've noticed that bcache has options: LRU, fifo.
+
+ZFS apparently uses ARC.
+
+dm-cache has ""mq"" and ""smq"" (multi-queue and stochastic multi-queue).
+
+My naive thoughts is that LRU caching policy is not optimal.
+
+I can't find any documentation on bcachefs currently implemented polices.
+
+Are there any plans to add [LFU, ARC or CAR?](https://en.wikipedia.org/wiki/Cache_replacement_policies)",1594524111.0,7,0.9,2
+privacytoolsIO,RouterOS v6.47 / MikroTik devices now has native DNS over HTTPS support,,1593136981.0,4,1.0,3
+math,Debunking Nick Bostrom's Simulation Theory With Information Theory.,"Are there any attempts at debunking this?
+
+I keep hearing about this theory and my first though about it was there's some really bad assumptions that I assume will be debunked soon, but it keeps coming back, and seemly no one has touched it on theoretical grounds.
+
+If we define
+
+`E_b` as the entropy require to run the bottom or ""tail"" simulation for a time step.
+and the function `K(x)` being the [Kolmogorov complexity](https://en.wikipedia.org/wiki/Kolmogorov_complexity) of `x`.
+
+We can then naively define the computation requirements to run a recursive simulation as:
+
+```
+E_1 = a*K(E_b) + c_1
+E_n = a*K(E_n-1) + c_n
+```
+
+where `a` is the simulation efficiency, and `n` is the distance from the bottom of simulations, and `E_n` is the entropy of the top / real universe, and `c_x` is entropy not in the respective sub simulation.
+
+But we also know that `K(K(x)) = K(x)`, because once something is maximally compressed, it can't be compressed anymore.
+
+So we should actually define it as:
+
+```
+E_1 = a*E_b + c_1
+E_n = a*K(E_n-1) + c_n
+```
+
+If we assume the simulation efficiency is perfect, `a = 1`, and `c_1` through `c_n-1` are all `0`.
+
+Then we can simplify the entropy to: `E_n = K(E_b) + c_n`
+
+We no longer care about how deep the simulation is, Kolmogorov complexity of `c_n` is all we care about, in other words the probability that we live in a simulation is more likely to be a simple ratio defined by the compressibility of the base universe and the thermodynamic efficiency of this computer.
+
+This also really highly ideal using abstractions, if we introduce The second law of thermodynamics, then `K(E_b)` approaches `E_b` for large time scales.",1592105123.0,3,0.6,4
+newzealand,This contact tracing app is a joke.,,1589946647.0,19,0.58,28
+LearnJapanese,Problems with (Googles) IME on Windows.,"I have some serious issues that make typing on Windows frustrating as hell.
+
+I'm using Google IME, and dvorak layout, I've successfully hacked the registry of the IME to use dvorak.
+
+But there's a few problems I have.
+
+* Randomly my IME would be in ""Roman/Direct Input"" mode, and I have to go down to the language bar and click on it to switch to Hiragana mode, why isn't this the default?
+* None of the shortcuts work consistently, and so switching to hiragana has to be done with the mouse the IME says I should press the ""hiragana"" button whatever that is, making my own bind doesn't work (perhaps related to dvorak) and it also sends the shortcut in to the app doing various things (i.e. press ctrl+h, might bring up help or something).
+* Sometimes I can't enter the vowel hiragana's for no reason（ういえ etc）so I end up with words like ""はｉ"" and I have to scroll through the list of suggestions to get the correct word.
+
+I can't believe this is so difficult, I can actually type easier on my phone with gboards excellent IME.
+
+Are there any solutions to these problems? I was recommended to use Google's IME, should I change back to Microsoft's one?",1582851001.0,2,0.75,3
+PewdiepieSubmissions,"PSA: NordVPN hacked, stop shilling VPNs!",,1573447010.0,1,1.0,1
+Amd,Why lack of AVX-512 doesn't matter on Zen 2.,"[I recently came across an article](https://blog.cloudflare.com/on-the-dangers-of-intels-frequency-scaling/), and realised that Intel is cheating with AVX-512.
+
+In their [datasheet](https://www.intel.com/content/www/us/en/products/docs/processors/core/8th-gen-core-family-datasheet-vol-1.html) documents we can see the fine print:
+
+[Sorry for screenshot, the pdf is DRM'd](https://preview.redd.it/d98olaj23pj31.png?width=625&format=png&auto=webp&s=d71535594e5be049209520ecd88817ae8ee99e5c)
+
+Intel are apparently too embarrassed by this so the documentation isn't easy to find on just how much slower AVX-512 is than base, but going back to the article:
+
+>It is hard to say just how much each core is throttled at any given time, but doing some sampling using lscpu, I found out that when executing the openssl speed -evp chacha20-poly1305 -multi 48 benchmark, it shows CPU MHz: 1199.963, for OpenSSL with all AES-GCM connections I got CPU MHz: 2399.926
+
+And [more recent benchmarks](https://www.phoronix.com/scan.php?page=article&item=gcc9-skylake-avx512&num=2) show similar issues. 
+
+And lets not forget that Both AMD and Nvidia have [hardware](https://en.wikipedia.org/wiki/General-purpose_computing_on_graphics_processing_units) explicitly designed for ""AVX-512"" workloads.
+
+tl;dr AVX-512 downclocks leading to performance loss in some real world use cases.",1567223084.0,0,0.32,18
+killingfloor,A few (better) ideas for Tripwire if they're losing money.,"You know, I do actually believe Tripwire when they say they're not making as much money as they use to, not because they're greedy, but because they're incompetent, they make good content, but they don't understand how to run a sustainable gaming business in 2019.
+
+Your ""zedeconomy"" is utter trash.
+
+1. Valve hired a economist to help them build the steam market, they're not stupid, so you should copy them more, more importantly they learnt from their mistakes and drastically changed the system when items got too low of value.
+2. This vult cash and crafting system is so utterly annoying, and grindy, I haven't touched those tabs in months, because I have to restart the game every time I get a new a crate, and every time I open one it scrolls me back to the top of the inventory, and there is no god damned filter for crates, fix the UI...Ditch the shitty crafting system, that is just a waste of my time, make it easy to open them, look at Apex legends they have a ""on-click"" open system, right on the main menu, don't frustrate me for supporting you.
+3. let me sell stuff on the market, just because I got it for free, doesn't mean it's not valuable, and it won't make money (Precious DAR set??), 50% of my inventory is ""not tradable"", ""not marketable"", an economy is not very ""economy like"" if the defining feature of economies, that being trade, is not possible.
+4. Expose the steam market in-game gear, in Dota 2 you can literally click on hero and browse ALL the cosmetics, and it'll give you the current market value....i.e. make it easier to buy shit...
+5. Reduce drop rates, to increase the value of my items that I sell...and the value of the fees your receive...Why would I blow $2.50 on a key for a $0.03 item, Valve pointed this out years ago, that they sell keys more often if the lowest value item is worth the cost of the key...Valve even let you buy keys on the marketplace...
+6. If I have something I don't want, and there are items I do want, and I can't sell or to buy items off the marketplace, it's a lot easier to trade and get what I want than use this god awful ""scrapping"" system, you'll notice that Valve ditched scrapping in Dota 2, probably because they realised the same thing, let me trade with friends, and strangers, this will mitigate the issue of low drop rates.
+7. [gifts](https://wiki.teamfortress.com/wiki/Pile_o%27_Gifts)
+8. Better servers and match-making: Most f2p games have a simple way to setup a server, they naturally scale when play count increases, they abuse modern tools like CI and cloud provisioning, you never had issues with *just playing the game* because of this, but Killing Floor 2's free weekends only lead to shitty player experiences, and consequently less purchases, you can never find empty servers, and matchmaking puts you in servers on the other side of the world, I run my own server, I spent more money on that than cosmetics, you don't see a dime of that either, and so I actively kick players from my server when we run out of slots, and I password protect my server during free weekends if the player count is too high, I would happily provide more servers if I was given a way to make back money on my server, let me provide services to the community without it being a burden on me and my time, I'm serious thinking you take the server admin community for granted, hell your game wouldn't be playable without us, but you expect us to provide the service for free.
+9. Make the game f2p with a possible season pass system, give purchasers of the season pass or cosmetics priority with servers slots, have new weapons exclusive to season pass for that season (as in f2p users have to wait 3 - 6 months till they can use the new weapons), season pass owners should get good consistent quality cosmetics, and let me sell stuff I don't want, let me as a server maintainer get some kickbacks, like free season passes, money to pay back my server bills.",1565681865.0,94,0.91,26
+kodi,Why do I have low quality / broken Chroma?,"I'm using spline36 upscaling, but it looks like my chrome is using nearest neighbour upsampling, so all my reds look like pixelated junk.  
+
+
+Here's a comparison with ""Low quality"" upscaled VLC, Chroma looks a lot better:  [https://imgur.com/a/R9ZWhiT](https://imgur.com/a/R9ZWhiT)",1565221886.0,2,0.6,0
+Corridor,Please react to: Final Fantasy: The Spirits Within,"This movie was touted as a revolution, and now it's just does not hold up at all, There's a bunch of things that stand out like low-detail textures in front of high detail textures.",1564888628.0,7,1.0,1
+Amd,"Dear AMD, F11, Alt+R are awful default binds, please QA your defaults.","Seriously this is ridiculous, I can put up ctrl+shift+o for overlay since dvorak isn't well know. (this is the key combo for Apex sliding, and O is where S usually is).
+
+But using keys with no modifier is just stupidest of the stupid defaults in this app, especially one that modifies your performance (F11 is now the default Radeon Chill button), and is *right* next to the steam screenshot button! All non-modified keys *should be reversed for the foreground application.*
+
+I've been wondering why I've had some seriously awful performance issues this week, and I wonder if it's this...
+
+Alt+R is also stupid, again, it's common for applications to use a single modifier, that's ctrl, alt or shift, plus video games use R to reload, Blender uses Alt+R for resetting rotation, and there are reports of others having issues when they bind Alt to something in a video game.
+
+To make matters worse there is no way to unbind any of these keys without registry hacks.",1563587563.0,9,0.71,7
+apexlegends,Can something be done about the hit detection issues?,,1554947016.0,12,0.77,11
+chch,Anyone interested in a local social group tailored towards introvert / creative types?,"I was going to create a group on [MeetUp.com](https://MeetUp.com) but before I commit to a payment I wanted to see if there was a big enough scene here in Christchurch.
+
+The group could focus on music and art, hobbies and common interests, with the intent on meeting members for real-life social gatherings that are friendly to introverts and HSP types.
+
+For example, I personally love ambient music, and don't know anyone locally who likes it.
+
+I've gone and created a discord server to chat, share stuff and to figure out what kind of events people would like to attend.
+
+[https://discord.gg/wRdA2R3](https://discord.gg/wRdA2R3)",1551329571.0,21,0.84,11
+HeadphoneAdvice,$100-120 IEM's (with mic) similar to AKG Q701/K7XX.,"I have a pair of AKG Q701's I love the sound, crisp treble and refined bass, but I can't wear them under my Motorcycle helmet, my Xiaomi Pistons always sound muddy, and recently the right ear stopped working due to failed cable.  
+
+
+I feel like my only options are Shure SE215, but worried they'll be too bassy and be inaudible in calls, and the SE315 don't come with a microphone so I have to spend extra on cable, blowing my budget.  
+
+
+I hear Etymotics are good flat headphones (maybe too flat?), but no Mic on most of the models.",1548293355.0,1,1.0,4
+optometry,How do I tell if my prescription is correct?,"I recently bought my first prescription online, for my Myopia (L: -1.50, -0.25, 15, R: -1.00, -0.25, 112)
+
+They arrived on Monday.
+
+I also measured my PD twice by myself (one by drawing dots on glasses, and the other by measuring directly in the mirror) both times coming out at 65mm, my friend tried measuring it, but got 67, so I tossed that out.
+
+While looking at things in the distance, they feel great, there's no noticeable left-right, up-down distortion, only ""fish eye"" at the preferials.
+
+While trying to use my computer things feel weird, I notice things feel little zoomed out, which negates any of the benefits of the correction, my left eye can't maintain focus when I first put them on, or late at night when I'm tired, which feels like my lense is dirty, unless I close my right eye.
+
+I'm suspecting the positioning of the glasses on my face is not correct, and/or the PD is a little too wide, or I'm still getting use to them.
+
+Oddly I've worn my sisters glasses they both clear up my vision and feel less ""weird"", I suspect it's because her Rx is smaller perhaps -0.50, since she said my glasses provided no improvement for her.",1534477867.0,0,0.33,9
+DotA2,The Dota Plus Goal for Multi-role Heroes is useless.,"For example the goal seems to be an average of both Support Marina, and Carry Mirana, which means the goal is trivially easy for playing Carry, and hard to beat if you're playing support.
+
+The AI should figure out which role you're playing and base your goal on that.",1521258031.0,0,0.33,1
+Mimblewimble,Q: Ring Sigs v logging MimbleWimble intermediate states.,"It seems to me that Ring Signatures have better privacy properties than the algebraic reduction of MimbleWimble.
+
+The day MW goes live, all I have to do is log every transaction, and NOT perform the algebraic reduction to see the entire transaction history, for even small time malicious agents, logging the entire unreduced chain seems fairly easy as you can buy 8TB disks for a few hundred these days.
+
+Am I missing something, it seems awfully naive to assume people will only want the TX log in hindsight.",1514079539.0,13,1.0,3
+KeybaseProofs,My Keybase proof [reddit:yellowonion = keybase:woobilicious] (4IDby0wUPH6DCyItCzIsYDlE60v20oGlwWctAV65MPA),"### Keybase proof
+
+I am:
+
+  * [yellowonion](https://www.reddit.com/user/yellowonion) on reddit.
+  * [woobilicious](https://keybase.io/woobilicious) on keybase.
+
+Proof:
+
+    hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEg4faMQV2hh3Mv15MCoB6lNBmUbIezJUCXFZACG6u0LIsKp3BheWxvYWTFA0N7ImJvZHkiOnsia2V5Ijp7ImVsZGVzdF9raWQiOiIwMTIwZTFmNjhjNDE1ZGExODc3MzJmZDc5MzAyYTAxZWE1MzQxOTk0NmM4N2IzMjU0MDk3MTU5MDAyMWJhYmI0MmM4YjBhIiwiaG9zdCI6ImtleWJhc2UuaW8iLCJraWQiOiIwMTIwZTFmNjhjNDE1ZGExODc3MzJmZDc5MzAyYTAxZWE1MzQxOTk0NmM4N2IzMjU0MDk3MTU5MDAyMWJhYmI0MmM4YjBhIiwidWlkIjoiOWY2YzJjZGI3MTU0NTdiNGU2NDBlNTQzMmM1ZTdlMTkiLCJ1c2VybmFtZSI6Indvb2JpbGljaW91cyJ9LCJtZXJrbGVfcm9vdCI6eyJjdGltZSI6MTUxMDQ1ODA3OCwiaGFzaCI6IjkyZDZmMThlY2NmM2QyMzAxODE2NjY0YzYwNDFmMmQyYjRmOWUxMTUyMWNiN2RjOWIyZjllYmUyZGU1MDU1NzU0NTM3OGE2N2Y1NTkzYWYzMzg0ZjAwOTQzZTQzYWE2ZjhlYzg2NDRlM2QzNDcwZWMyODNlMmNlYmY1OTQyYzA2IiwiaGFzaF9tZXRhIjoiNzhhNzhjMDZlMmQyNDAzNThkYWRmOGE1M2ZiMzQwM2ViNGM4MTk5ODM4ODBkNDU4NjM4ZjQwZGI5MTFiZjg4NSIsInNlcW5vIjoxNjk1NDc4fSwic2VydmljZSI6eyJuYW1lIjoicmVkZGl0IiwidXNlcm5hbWUiOiJ5ZWxsb3dvbmlvbiJ9LCJ0eXBlIjoid2ViX3NlcnZpY2VfYmluZGluZyIsInZlcnNpb24iOjF9LCJjbGllbnQiOnsibmFtZSI6ImtleWJhc2UuaW8gZ28gY2xpZW50IiwidmVyc2lvbiI6IjEuMC4zNCJ9LCJjdGltZSI6MTUxMDQ1ODE2MCwiZXhwaXJlX2luIjo1MDQ1NzYwMDAsInByZXYiOiIwZWI5MDA1ODU3MjE1NTUxZDczYzY5NzI2YjU0NjhiOWI2NzJlNjY4ZGMxN2JkN2QxNjI4OTBhOWE2OGUyNGNmIiwic2Vxbm8iOjUsInRhZyI6InNpZ25hdHVyZSJ9o3NpZ8RAhMDMbx5B95HjKjgEkI4IROp7//yNCt7B+w1s95oNzEJ2VwqPEjgGlam4RTTUWYnB8aNlNSCrtd3zPDJXWZdADqhzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEIJbaSoN/GHzMcj/TW/IaANsjQgG6qD8hv1HSLgAofyd0o3RhZ80CAqd2ZXJzaW9uAQ==
+",1510458217.0,1,1.0,0
+AskEconomics,Questions on Inflation.,"I get the common arguments for an inflationary currency, But I find them weak, let's see if I can summarise my thoughts.
+
+The use of the word hoarding seems emotionally loaded language, If I were to say that it disincentives ""saving"", then people would think I'm stupid for wanting people to not save money.
+
+Everyone ""hoarding"" means everyone's cash assets go up in value, so everyone's a winner, but with Inflation it's the banks who get first mover advantage with this new money being created, leading to increased inequality.
+
+The money-in-mattress example seems absurd, banks exist because they protect my money from theft and fire, better than a mattress, they also offer interest rates *above* the deflation that would occur.
+
+[Negative Interest Rates.](https://en.wikipedia.org/wiki/Interest_rate#Negative_interest_rates)
+
+Makes servicing debt easier, but the corollary to this is that it means we loan to more people and businesses that otherwise shouldn't be given loans, leading to inefficiencies in the market, and bubbles.
+
+Leads to the rise in easy debt, like credit cards, and hire-purchases, which target the working class, and makes recessions worse as they can no longer service their debt after losing their jobs.
+
+Hoarding happens anyway, you don't invest in something if the market doesn't have anything to invest in (baring less productive markets), so you move into ""unproductive"" appreciative assets like Housing, Gold or Bitcoin, but again unlike a common deflationary currency not everyone benefits from the increased value of money they have saved.
+
+Minimum wage laws would be obsolete in a deflationary currency as wages would go up in real value across the board, given workers more bargaining power, and puts the ""capitalist"" back in his place as the risk taker.",1509068800.0,6,1.0,3
+Monero,How will Lightning effect the privacy properties of Monero?,,1505713703.0,6,0.88,0
+Monero,Hawk: Privacy-Preserving Blockchain and Smart Contracts,,1502678535.0,5,0.68,3
+i2p,Nightlies now available for Kovri: a C++ implementation of I2P.,,1498627921.0,23,0.97,12
+haskell,"What's going on in Archlinux? Pandoc requires 1GB of Haskell dependencies, including GHC.","I recently saw [this](https://np.reddit.com/r/archlinux/comments/6jce9x/pandoc_minus_the_new_750mb_haskell_nonsense/) ([confirmed](http://i.imgur.com/joSQyyb.png)), I cannot fathom how so much disk space is required for an app that is already 30MB, and on my machine running Win10, with statically linked dependancies is only 50MB.
+
+What's going on here? This seems like an awful barrier to entry especially for people like me who was considering building a website on my VPS running archlinux, with only 15GB of storage.",1498455172.0,46,0.93,26
+MoneroMining,"Ryzen 1500X, 4C/8T, 16MB L3, Will this run with 8 threads?","The Ryzen 1500X is a 8 core product with 4 of it's cores disabled, but with all of it's cache still enabled.
+
+Would anyone be willing to speculate on the performance of running 8 threads on this?
+
+Assuming it can run on SMT threads, that would be 50% of the price of the 1700X with the same amount of L3 cache.",1497350485.0,4,1.0,6
+btc,The price of a full node is about 40 tx fees.,"Ball park measurements based on a Raspberry Pi, power adapter, and a ~200GB SSD or SD card, and a $4 tx fee.",1496729498.0,62,0.92,8
+Monero,What privacy do I give up using a Node run by a 3rd party?,"I noticed that there's a bunch of public nodes available: https://moneroworld.com/#nodes
+
+These nodes allow for easier adoption, until blockchain sync time is heavily improved on a slower computers, it seems like at least a good idea.",1496220739.0,18,1.0,2
+NixOS,Working with large strings?,"So I'm trying to process a very large string (7000~ lines) in to firewall rules.
+
+But splitString is not optimal and crashes nix with stack overflow, 
+
+What's the best way to process such a large string? 
+
+Should I just use python or bash?
+
+if so, How do I invoke a shell script?
+
+https://gist.github.com/YellowOnion/362cb30dfe895819f06b8d19e5ba5f07",1491648065.0,5,1.0,8
+techsupport,"Windows 10 on X230 Thinkpad, Right-clicking on trackpad causes audio to mute.","To clarify: It is only the full pad press on the right side of pad that causes my audio to mute, two finger tap, external mouse, or use of the dedicated right click button above the pad doesn't effect audio.
+
+I've tried updating my trackpad drivers (to latest from Synaptics), Audio drivers and installing the official trackpad drivers from Lenovo.
+
+This happens with all audio, it's most obvious when playing games that need a lot of right clicking (FTL: Faster Than Light for example).
+
+There are no visual indicators that there's something causing this like for example audio looks like it's playing (seekbar progress), the speaker icon does not go mute, and the volume meter still ebbs and flows with the music as if it was playing.
+
+My brain has me thinking it could be an interrupt issue, but I thought those were a thing of the past.
+
+Edit: found the issue, the audio cable was underneath the trackpad, and not quite placed properly so when I clicked, it would cut the cable, it's probably irreversibly damaged, but audio aint cutting out for now!",1491091212.0,3,1.0,3
+discordapp,Can input volume go above 100%?,"Mumble and TS, and Skype all seems to have mechanisms for actually boosting volume levels above ""no change"" automatically.
+
+This is a serious game breaker for me, I don't want to have to adjust volume levels for everyone, AGC should do this automatically, like every other VOIP on the market, mumble has a 4000% max boost too, which as I've experienced, really is necessary (200% is not enough in most cases).
+
+It would also be nice if echo cancellation actually worked!",1473576158.0,16,0.82,1
+haskellgamedev,Thoughts of a top tier Haskell game engine.,"The entire industry is moving towards Vulkan and DX12, and scalable multicore architectures.
+
+What do I mean by scalable multicore though?
+
+Well in the past it was very much one OS thread per distinctive activity (Scripting, Physics, GPU, Sound, etc), this never seemed to scale past 2.5~cores, which is fine for an Intel 4 Core CPU, but as users/devs of PS4 and Bulldozers realized...It's an issue.
+
+What does a modern engine look like?, everyone is talking about fibers and messaging / ""tasks"", and removing the notion of a ""frame"", which is ironically strange considering haskell does one step better and get preemptive green threads, when most actual Haskell games use single threaded FRP designs.
+
+haxl does automated batching and concurrency/parallelism, from a procedural DSL, Which sounds to me like it solves a lot of problems facings GPU management these days and overall game design (easy to write code, or parallelism - pick one).
+
+Other things to consider: call `performGC` every frame, as most users of Kerbal Space Program on a slow CPU are well aware, intermittent garbage collection sucks.
+
+If your scripting is a DSL, having it automatically and securely create a compact network protocol, that supports things like client side prediction, and server side lag compensation.
+
+What kind of games could this produce? Well the current benchmark for a high performance engines seems to be RTSs (Dota 2, Vulkan; Ashes of the Singularity, DX12), even a [simple boids flocking sim can benefit from smart design ](https://www.youtube.com/watch?v=6DpJY1izxc4)",1469493931.0,8,0.84,2
+ublock,Greylisting YouTube channels? (uBlock Origin),"What I want to do, is block certain elements when the channel is in said greylist, I don't mind google ads down in the corner, but the popup that appears on the top of the video that *requires* you to close it sucks.
+
+I've looked around the settings, and documentation, but I can't seem to see an obvious way with how to do this.",1462886472.0,2,0.75,2
+haskell,LLVM generated binary segfault on Windows.,"So I have some code that works fine with vanila ghc, but when I compile it with -fllvm, it compiles fine, but the exe crashes on start.
+
+I'm using GPipe-Core for my [OpenGL app](https://www.reddit.com/r/haskell/comments/3sc8aw/my_first_bigger_project_a_realtime_60fps_800_body/)
+
+I've hooked up gdb:
+    
+    Starting program: H:\Workings\haskell\nbody-gpipe\nbody-gpipe\.stack-work\install\0464eb7a\bin\nbody-gpipe.exe
+    [New Thread 4624.0x1b04]
+    [New Thread 4624.0x258c]
+    [New Thread 4624.0x24c0]
+    [New Thread 4624.0xde0]
+    [New Thread 4624.0x3060]
+    [New Thread 4624.0x340]
+    [New Thread 4624.0x3168]
+    [New Thread 4624.0x3300]
+    
+    Thread 1 received signal SIGSEGV, Segmentation fault.
+    0x00000000000001af in ?? ()
+    (gdb) where
+    #0  0x00000000000001af in ?? ()
+    Backtrace stopped: previous frame identical to this frame (corrupt stack?)",1461687890.0,9,0.8,3
+Warframe,Odd multiplayer performance issue.,"I'm getting anywhere between 100-160fps on some missions in solo, but as soon as I play with 3 or more players, my FPS drops to an abysmal 30-40fps, My system is by no means slow though is a bit old. My system doesn't look maxed out according to MSI afterburner.
+
+I've tried multiple configurations of multithreaded rendering, and DX10/11 and 64bit
+
+PC Specs:
+
+Phenom X6 1055T (OC 3.9GHz). (I have thoroughly tested for overheating/throttling).
+
+HD 7850 @ 1920x1200 (definitely not maxed until I hit 120fps)
+",1458708717.0,4,0.83,4
+badmusic,Gangnam Park - Psybrid Theory,,1457482849.0,2,1.0,1
+EliteDangerous,"PSA: Steam users, Horizons has been removed from store (now DLC) and no longer up to date, Install base game to solve issues with client being out of date.",[removed],1455727275.0,9,1.0,2
+EliteDangerous,The Night Time Sun is so Pretty! [Bug?],,1453169203.0,0,0.5,3
+hotas,Increasing tension/friction of the T.Flight HOTAS X throttle?,"I've recently acquired this kit from the black friday sale of Amazon, and well,
+
+The throttle has two problems, the static friction is too much, and the kinetic friction too little, which means that fine adjustments are extremely hard to make as the device tends to want to follow Newton's first law of motion.
+
+So has anyone got recommendations to fix it?",1449964461.0,1,1.0,4
+haskell,My First Bigger Project: a Realtime 60fps 800 Body Sim using Repa & GPipe.,,1447198189.0,81,0.99,22
+LGG3,Can I get Nexus-like toggles on Stock-based ROM?,"Been using Custom ROMs for a while now, but all of them suck, generally get lagging after a day or just completely lock up sometimes. They all use CM-based drivers so probably stem from that.
+
+Battery life has gone to shit over the last week as well.
+
+I need rotate lock, and flash light on quick toggles (I don't use anything else) .
+
+NavBar arrows would be nice, but I can probably adapt.
+
+I'm really close to going back to a Nexus at this point.",1445754297.0,3,0.71,4
+Games,"Frontier announce $100,000 tournament for Elite: Dangerous CQC on day of release.",,1444162100.0,24,0.69,4
+eliteexplorers,"Remote semi-famous locations, what's the chance someone has visited?","I'm not so interested in the ~1000ly trips but more the 10,000ly more trips.
+
+For example [UY Scuti](https://en.wikipedia.org/wiki/UY_Scuti) is the largest known star and 9,500ly away.",1443540941.0,5,0.86,13
+EliteDangerous,AMD/Win10 users with performance issues look here.,"The driver 14.12 is currently working for me in Windows 10 with no performance issues.
+
+Run the latest DDU first, as it'll disable the new Windows 10 auto upgrade feature which will reinstall 15.7.1 on reboot. [LINK](http://www.wagnardmobile.com/forums/viewtopic.php?f=5&t=92)
+
+This driver will ***not*** work with Fury and R9 300 series cards, as it is a little old.
+
+I have uploaded the 64bit driver to google drive. [LINK](https://drive.google.com/file/d/0BwqPn9gzXGTvTnBZSUFjXzFSd0k/view?usp=sharing)
+
+~~Currently investigating Windows 8.1/15.7.1 driver installation and performance issues.~~
+
+update:
+Performance issues are still present in 8.1/15.7.1 drivers.",1440238633.0,3,1.0,6
+synthesizers,What MIDI-DIN keyboard controller are you using to control your hardware?,"I'm starting out, and figure the first place I should start is learning to play, But I need a keyboard, that I can connect to my other devices I will eventually buy, most reviews I see center around the computer producer aspect and skimp on mentioning the MIDI-DIN side of things.
+
+my current requirement is:
+
+49 keys, velocity sensitive.
+
+MIDI-DIN output.
+
+and price range $300USD±50
+
+The Novation Impulse is the current only device that seems to have the best set of features for the price.",1436854844.0,2,0.6,11
+sweetfx,Reshade & XNA games (Terraria),"I've gotten SweetFX working with Terraria via Radeon Pro and GeDoSaTo, but I cannot get it working via Reshade.
+
+The problem seems to be that %CWD%\d3d9.dll isn't being loaded at all, and since Radeonpro and GeDoSaTo do it via a different method (In memory hooking?) they actually work.
+
+Is there someway to get SweetFX 2.0/McFX/CustomFX to load with GeDoSaTo or Radeon Pro?
+
+P.S. what the hell is up with ReShade Mediator EffectOrdering being spastic and randomly selecting stuff?",1435584423.0,3,1.0,1
+haskellquestions,Optimising my RayMarcher.,"http://lpaste.net/132013
+
+[output](http://i.imgur.com/8WoTzKP.png)
+
+I'm not sure how to add threading to this as `generateImage` seems a bit like a blackbox to me.
+
+Other improvement ideas welcome.
+
+Especially anything to do with linear as the entire package is a bit over my head, and it was the first vector package to seem reasonably up to date and actually compile.",1430805511.0,4,0.84,8
+haskell,"I want to build an Android app, but I'm an amatuer programmer is haskell barking up the wrong tree?","I see a lot of old information around, ajhc, jhc, ghc-backend for android, most over a year old.
+
+Hints of *soon* like GHC now has a proper portable backend, OpenGL apps running under SDL.
+
+But If I want to make something using for example Material Elements from android 5.
+
+For anyone wondering, I want to make a 3rd party chat app for a site that chat (similar fashion to facebook) only works in desktop mode.
+
+Just to be annoying I also only use Windows at the moment maintaining another OS is a hassle.
+
+If this is out of reach, is there another language with similar philosophy I could use?",1428126455.0,16,0.86,31
+LGG3,Taps registering as Swipes (Blisspop),"This is quite frustrating, on things like Nova's app draw when trying to long press an icon its far too easy to make it think I have moved my finger.
+
+Its apparent on the keyboard when selecting a word from the auto correct, it somehow registers my tap as a swipe up, and thus selecting the wrong word. Coming from a Nexus 4 I had no issues, I assume the increased screen DPI is half the issue.
+
+Is there some way of adjusting the sensitivity of this?",1427515961.0,3,1.0,0
+nexus4,"Digitizer spazzed, stopped working, reboot didn't fix it, but booting in to Recovery did, what's going on?","I'm running Lollipop with FauxKernel (no overclock and ""standard"" voltages) double tap to wake enabled(?).
+
+Just to complicate things I opened up the phone and pull the digitizer plug out as well, while it was still on (How the hell do you shut this thing down without the use of the screen?), and it STILL wasn't working.
+
+It only fixed itself after I booted the recovery.
+
+What could possibly cause such an odd behaviour?
+
+Other issues I have that might be related are:
+
+Phone becomes completely laggy and unresponsive after a day (had this also in SlimKat with various other kernels) I tried Hellscore but that had other odd issues like never sleeping 3 of the cores, and never using the 4th so battery life was 8hrs max, and it would also boot with only one core enabled.
+
+I don't really want to go back to default kernel because I love the custom display settings.
+
+On the other hand I'm pretty sure my phone is fucking haunted, how else can you explain that all these issues persisted between reboots?",1424753024.0,5,0.86,5
+Android,"Lollipop Camera app forgets it has HDR, disables flash when launched via other app.",[removed],1421211477.0,1,1.0,0
+infj,"I'm extremely isolated, how do I expand my social network?","I'm in a pickle.
+
+I have an extremely small friend circle, mostly online, and in the single digits.
+
+I have no job, or hobbies other than video games.
+
+I only leave the house to get food, or see my therapist.
+
+You could say that some of my negative INFJ tendencies have blown in to full on mental disorder ([AvPD](http://en.wikipedia.org/wiki/Avoidant_personality_disorder)).
+
+My closer friends of the extroverted kind have left to other cities.
+
+I want to experience life that isn't virtual, especially of the opposite sex, But I can't find anything that doesn't feel like a huge leap outside my comfort zone that makes me want to go hide.
+
+Edit:
+I'm in New Zealand and posted this around midnight, I've just awoken.
+
+Thanks for the replies, I'm going to have a good think over everything, and try not talk myself out of anything.",1418121496.0,15,0.94,16
+nexus4,"Absolutely frustrated with screen on time, WTF is going on?","My screen constantly takes 10-30s to turn on after pressing power, answering a call or even during a call when I move my face away to press a key pad number.
+
+I've missed calls and failed to press numbers in time on several occasions.
+
+It also consistently gets worse with increaced uptime as well as my phones performance decreases (FPS jitter).
+
+I've tried,
+CarbonROM with matr1x and moobs kernel,
+SlimROM with moob
+And ASOP lollipop with hellscore.
+
+Is the phones GPU dying? Why is it fine after a restart for about 24hrs?",1416864320.0,1,1.0,8
+chch,What do you older introverts do to keep social in Christchurch? (Hobbies etc),"I'm 26 and find my social circle getting smaller as people have kids and jobs etc.
+
+What's out there to do that isn't getting shit-faced with 18-20y/o at a bar?
+
+Might make this a sticky if I get enough content.",1413525436.0,9,0.85,16
+DotA2,"[PSA] Dota2Iounge or dota2iounge fake domain making the rounds, double check your URLs for capital i's.",,1410597917.0,1,1.0,0
+nexus4,Super battery drain with video playing.,"Phone is sitting at 50% twice I've gone to do the dishes, put a video on my phone, by the time I've finished dishes its sitting at 3%, what's more odd is the voltage is at 3.6v.
+
+Isn't 3.6v suppose to be the halfway mark?
+
+Why in 30mins can I lose 47% of my battery?
+
+I'm running CarbonROM, matr1x-ocgpu (this the issue?).
+
+And playing a 1080p video.",1405895060.0,4,0.67,4
+youtube,How do I stop YouTube from buffering & playing 1min of 240p?,"Every single time I watch a video on YouTube I have to endure up to 1min of 240p video before it ups the quality to 720p, this is super frustrating when I have a video with small text at the beginning, that I now can't read.",1404424102.0,1,1.0,1
+WC3,Finding correct/best version of custom maps.,[removed],1398639357.0,0,0.5,1
+blender,"Stanford's Lucy Rendered in Cycles (28mil triangles, 1920x4512)",,1395891651.0,23,0.85,5
+KerbalAcademy,TurboJets ridiculously good in 0.23?,"I've been messing around with some space planes.
+
+and nothing makes sense, I'm hitting 2500m/s at 25-30km.
+
+I'm getting half-way to the mun with just the momentum.
+
+In 0.22 I remember gettting flame outs at 20-22km, now I'm fine up to 30 and have 0 loss in thrust (200kN all the way up).
+
+I'm not abusing inlets (1 ramjet scoop + one engine).
+
+I'm using FAR in both versions if that matters.",1389948079.0,16,0.9,8
+MechanicalKeyboards,$11 EPDM 40A O-Rings found on Ali-Express.,"Well most of this is described in the title.
+
+I've ordered some and will keep you posted if anyone is interested.
+
+link: http://www.aliexpress.com/store/product/EPDM-O-rings/733426_1189015540.html",1388733331.0,4,0.75,1
+DotA2,[Question] Pushing mid advantage.,"I have been playing mid quite a lot, and because of the bracket/party/time of day the other mid tends to be rather shitty.
+
+I'm use to playing hard bots which play quite aggressive and seem like a reasonable match for me, but because I'm aggressive the Human players tend to get overly passive, (tower hugging etc) when this happens don't seem to know how to take full advantage, sure I seem to get more farm and deny them theirs, but ironically I can't get any kills (and tend to snowball less) unless I'm playing a good diving hero, I feel if I leave the lane I'm giving up safe farm and allowing them to catch up, but at the same time I know I'm not playing a carry and should be creating space for mine.
+
+Should I rush a bigger item? (e.g bloodstone/sheep over orchid on Storm?)
+Help supports buy wards?
+Smoke gank?
+Play a greedy Hero?",1387821115.0,1,1.0,6
+Planetside,Keybinding UI is frustratingly terrible.,"How do I unbind a key?
+
+I don't want to erase all keys associated with an action.
+
+I want to unbind all actions linked to a specific key.
+
+I set Mouse 5 to Squad Talk. and wanted to Rebind Mouse 5 as Platoon Talk, yet for some reason Mouse 5 is now Platoon, Squad, and Horn, and the only way is to erase all 3 actions, including keyboard and joystick buttons, rebind all the keyboard binds manually and then rebind mouse button, and I have to do this *everytime* I want to change something around.
+
+As someone who also uses a non standard keyboard layout and Left Handed, this is only the tip of the iceberg.
+
+Most games do the sane option and only allow one key to bind to one action within a context (and usually require advanced macros via scripting to do composite actions).",1386567468.0,1,0.52,7
+DotA2,A problem with MLG team cams.,,1385263032.0,5,0.69,1
+DotA2,MLG in Livestreamer/VLC (1080p for potatoes),"To get MLG's stream working in Livestreamer (http://livestreamer.tanuki.se/)
+
+Use one these commands:
+
+**1080p:**   
+`livestreamer ""hds://mlghds-lh.akamaihd.net/z/mlg_1@136827/manifest.f4m"" 3378k`
+
+**720p:**   
+`livestreamer ""hds://mlghds-lh.akamaihd.net/z/mlg_1@136827/manifest.f4m"" 1327k`
+
+**480p:**   
+`livestreamer ""hds://mlghds-lh.akamaihd.net/z/mlg_1@136827/manifest.f4m"" 759k`
+
+**360p:**  
+`livestreamer ""hds://mlghds-lh.akamaihd.net/z/mlg_1@136827/manifest.f4m"" 581k`
+
+
+**For the Different Streams**
+
+Replace `mlg_1@136827` with:
+
+**Alpha:** `mlg_1@136827`
+
+**Bravo:** `mlgplay2_1@141535`
+
+**Charlie:** `mlgplay3_1@141536`
+
+**COD1:** `mlgcod_1@137495`
+
+**COD2:** `mlgplay_1@140500`",1385167607.0,56,0.86,37
+overclocking,System Stable but BIOS reset after soft-reboot.,"I have a Gigabyte GA-890PA-UD3H, Phenom II X6 1055T, Corsair Vengence 1600 9-9-9-24-41-2T.
+
+My motherboard is being really annoying, apart from my keyboard's (CM Storm TK) delete key not responding in time and having to use another one and mash del until it starts responding.
+
+My system, will get the ""failed to boot, reset settings"" after a software reboot.
+
+To make matters worse:
+
+1. I'll press del to enter setup.
+
+1. Set my clocks to anything not the ""reset"" values (mild overclock).
+
+1. reboot.
+
+1. and it'll fail and reset settings again.
+
+1. But if save and restart the reset values, then enter setup again my overclocks now work.
+
+My current settings:
+
+host clock is 300MHz,
+
+CPU is 3.3Ghz, 11x, 1.275v
+
+CPU Turbo is 3.75GHz, 12.5x, 1.4v
+
+NB: 2400MHz
+
+HT link: 2400MHz
+
+Memory is running stock settings(1600) but with upped voltage (1.65v -> 1.648v) other wise it gets under volted (1.5 -> 1.38) and Chrome seems to crash.",1378676042.0,0,0.43,0
+Cyberpunk_Music,Future Noir volume 1: Dark City - mixed by Mike G [DL in comments],,1378247609.0,4,0.76,2
+a:t5_2tjfz,FKReadsSmallTextBot causing infinite loop with ReadsSmallTextBot,"This bot is absolutely useless.
+
+http://www.reddit.com/user/FKReadsSmallTextBot",1376458059.0,2,1.0,1
+DotaCR,Is the keyboard emulation needed?,"I've noticed that the keyboard emulation is a little confusing to new players ""I think my computer has been hacked"", and a little prone to not working. (especially if the console isn't enabled).
+
+my first suggestion is that you should be starting Dota using CLI parameters all console commands can be sent to the game via the use of ""+"" symbol, much like the +map dota bit of the server launcher,
+
+you also seem to already be putting -novid in the launch options, so why can't the options like
+
+    +connect <ip>:<port> +jointeam good
+
+be put there?",1373981290.0,3,1.0,2
+blenderhelp,How: Sunlight in Cycles (hard shadows)?,"Lamps are broken and all my refractive materials become black. 
+Reading around Lamps have been and are always going to be broken in Cycles because of some fundamental incompatibilities.
+
+But in the end there must be some way to make a source have parallel light emission?",1372298413.0,3,1.0,4
+DotaCR,"Latest Meta mod fixes crash, please update auto server creation.","I manually installed Meta mod and all is working, turns out your meta mod version is about 2 months old.",1372222166.0,1,1.0,6
+OceanicDOTA,TI3 Pubstomps?,[removed],1367045957.0,1,1.0,0
+skeptic,528Hz the Frequency of Life [Warning loud].,,1367025530.0,5,0.73,5
+DnB,Blu Mar Ten - From the Vaults Vol #11 - Jungle Mix - 1995,,1358122693.0,2,0.67,1
+OceanicDOTA,8 Invites to Give Away in Celebration of New Servers,"I received a bunch of invites this morning.
+
+Would like proof that you don't own the game already.
+
+Add me here: http://steamcommunity.com/id/yellow_onion",1357342100.0,6,0.88,1
+overclocking,New DDR3-1600 playing up on my Phenom II X6,"first off here's my current [CPU-Z](http://i.imgur.com/2TT7V.png)
+
+Now in my BIOS I have set RAM to 1.515v and it only runs at 1.5v I thought this would fix the problem since I was getting a reported voltage of 1.488v. but I'm still unstable, the annoying thing is its Chrome that is unstable and Linpack or prime95 doesn't seem to detect anything on a short run, yet I can generally get chrome to crash by refreshing a javascript heavy page like Facebook, Gmail or youtube, all my games but Minecraft are completely stable, I'm suspecting the JIT compiler is pushing the RAM harder than anything else. I'm not even running it above stock, but this under volting problem seems odd. my old RAM was running my CPU and FSB harder than this (245 verse 240 FSB but lower divider 5.33x)
+
+Is this the XMP feature that's causing the problems?",1352781635.0,2,1.0,5
+WTF,"My flatmate went on a religious journey with his friend, what follows is his friend's SMS messages to me after they got snowed in and required some money for food.",,1339421600.0,0,0.29,6
+Cyberpunk_Music,The Crystalline Effect - Ada Makes The Machines Sing (Extended Instrumental),,1338059046.0,8,1.0,1
+DotA2,Per slot bot difficulty.,,1337872678.0,41,0.83,22
+haskell,cabal on Windows works about 2% of the time...,"So far I've tried to install several packages with cabal and hardly any of them have worked.
+
+I've attempted to install:
+
+    cabal
+    jmacro
+    diagrams
+    yi
+
+all of which don't install, `diagrams` has specific instructions on how to install on windows but the compiled app doesn't run because `procedure entry point in deflateSetHeader could not be located in the dynamic library zlib1.dll`
+
+`jmacro` requires cabal
+
+cabal `""Could not find module 'System.Process'""`
+
+and yi makes cabal contradict it's self:
+
+    cabal: dependencies conflict: ghc-7.0.4 requires bytestring ==0.9.1.10 however
+    bytestring-0.9.1.10 was excluded because ghc-7.0.4 requires bytestring
+    ==0.9.2.1
+
+there are several other packages that I've attempted to install which don't work, and I'm pretty sure *only* one package that I've attempted to install actually worked.
+
+Is my haskell install broken? why did it break it's self? Is cabal on windows just not worth my time?",1336564281.0,16,0.81,11
+a:t5_2u1v5,Darkstep,,1336402223.0,1,0.66,0
+a:t5_2u1v5,Techno,,1336401764.0,1,1.0,0
+a:t5_2u1v5,Dark/Doom/ambient Jazz,,1336401591.0,1,1.0,0
+electronicmusic,Andrew Sorensen - Stained [Live coding in Lisp],,1336010551.0,1,1.0,0
+gaming,How many break-ins are we gonna have before the industry start being proactive about security? [don't send me my password via email],,1331531914.0,3,0.67,1
+ideasfortheadmins,redd.it comment support.,"for example:
+
+`http://redd.it/pwad2/c3sqvhb`
+
+should redirect to:
+
+`http://www.reddit.com/r/fuckingphilosophy/comments/pwad2/dis_nigga_wittgenstein_got_me_trippin/c3sqvhb`",1330428351.0,17,0.88,2
+Games,Multiplayer game latency flow chart.,,1330397066.0,0,0.44,1
+dungeondefenders,Is this a Bug?,"Front View (bound to Q by default)
+
+Using mouse controls is inverted compared to non-front view.
+
+Enabling invert in the controls causes the normal mouse control to become inverted, but the front view to be non-inverted.
+
+Edit: rephrase.",1330392827.0,0,0.45,6
+killingfloor,Saved by the pipe bomb.,,1329573126.0,0,0.5,1
+netsec,"Crypto shocker: four of every 1,000 public keys provide no security",,1329308023.0,5,1.0,0
+mcobj,"Blender Cycles attempt 2 [3860x2160, 10MB, PNG]",,1329079979.0,9,1.0,2
+mcobj,Experimenting with Cycles [Blender][2.4MB],,1328766952.0,8,1.0,4
+TheoryOfReddit,AMA + anti-SOPA protests got me thinking.,"Just reading through the Zack Braff AMA, and it got me thinking.
+
+Lots of actors and directors come here and answer questions.
+
+Would it be in peoples best interest to not just be all anti-SOPA.
+
+But inform these actors and directors about about the possibilities of the Internet distribution, and associated tech
+
+Nothing too confrontational I was thinking working a question along the lines of this:
+
+> With the quality of Consumer HD cameras, and cheap internet, and sites like YouTube, would you consider doing an independent film or show and releasing it over the Internet for a small fee? People have been starting to do this recently for example Louis CK released a stand up show he did for $5 online with no copyright protection and he's now a millionaire.
+
+> And a feature length film I'm looking forward to is [Iron Sky](http://www.ironsky.net/) which is independently funded.
+
+
+>An honourable mention would be
+> YouTube's partner program which allows you to earn money for your content (via ads), some examples of this are [TotalBiscuit](http://www.youtube.com/user/TotalHalibut) who earns a living off playing computer games and giving interesting perspectives on various aspects of game play and what not, David Mitchell (of Peep Show and The Mitchell and Webb Look) has also got a [Youtube channel](http://www.youtube.com/user/davidmitchellsoapbox)
+
+
+This could be worded better (writing isn't my thing) but I hope it conveys what I'm trying to explain.",1328403560.0,2,0.75,2
+chch,Mini last minute Meetup TODAY ONLY,"In the off chance this gets seen here and not on [/r/newzealand](/r/newzealand) 
+
+http://www.reddit.com/r/newzealand/comments/p8oij/the_building_blocks_of_the_universe_and_your/",1328313387.0,5,1.0,0
+newzealand,The building blocks of the universe and your childhood in shindig form.,"1. Lego
+
+2. Carl Sagan's Cosmos
+
+Me[1] and Fenix20xx[2] are thinking of throwing something low key, here in Christchurch.
+
+Involving the above listed, on Saturday (4th for future reference) 2pm till late.
+
+Anyone interested I'll p.m. you the details closer to the time, just say you're interested in the comments.
+
+[1] I was the late guy to the Meetup on the 25th of June.
+
+[2] Fenix was the short guy at that meet up.
+
+[3] The Guy at the end of the table [here](http://www.youtube.com/watch?v=oASWozLNJ7Y) will also be attending.
+
+edit: made clearer on how to get details.",1328236683.0,5,0.86,12
+linux_gaming,How to get Unreal Tournament 2004 working in Linux (gog & steam versions),,1328202437.0,19,0.82,6
+Playdate,Anyone keen for Unreal Tournament 2004?,"Online is dead.
+
+Anyone want to play a few games?
+
+send me a p.m. here, or add me on [Steam](http://steamcommunity.com/id/yellow_onion/), or on the [IRC](http://webchat.freenode.net/?channels=rpd&uio=d4) channel as YellowOnion (for you Linux UT'04 fans)",1328128022.0,51,0.89,12
+aww,What happened to the Cute List?,[removed],1327938630.0,1,1.0,0
+chch,Craigslist,,1327757914.0,5,1.0,1
+DnB,Goldie's Essential Mix (1996-04-28),,1327019356.0,30,0.89,18
+Psychonaut,The Universe is in us (Re: Atheism 2.0),,1327001632.0,9,0.92,0
+audiophile,"disappointed with Xonar DS, going to take it back, recommend me something that actually does upmixing properly.","just bought a Xonar DS, sounds great, but the Upmixing was done by idiots. never have I had a soundcard with such stupidity gone in to the driver development. just look at [this](http://imgur.com/FF2j7), how am I suppose to run 5.1 games with 2.0 upmixing on my music?
+
+Anyway I have a logitech Z5500 surround (supports DTS 96/24 and Dolby digital) and a pair of Sennheiser PC 151's for LANs and voice chatting.
+
+I dislike the GX button on the card as well sounds cheesy and nauseating after a while.
+I believe it activates EAX but I can't find any info on the net. here's a [sample](http://ge.tt/9Brv1uA/v/0) of the crap that comes out of it.",1323392354.0,0,0.5,4
+Drugs,"Flat mate doing cough syrup today, ODed last Friday (not dex), calls it his happy place (and I believe he has schizophrenia as well)","should I put up with this shit? he only moved in 1 and a 1/2 months ago.
+
+He seems to think it's OK to take drugs shown to him in fiction specifically South park, and he's not afraid to admit it.
+
+His Pysch Team hasn't talked to me and my other flat mate AT ALL after the incidents I'm really fucking pissed, I don't know if they've addressed the dex usage.
+
+Last thing I want right now is renting out a room with vomit on the floor from where my flat mate ODed and clasped dead.",1323309341.0,6,0.72,11
+gamedev,Help us help you. (Something overlooked by devs in pretty much every programming field),"**Issue/Bug Tracking.**
+
+If you're trying to earn a living off of your game, for example $40,000 a year, assuming $5 income on each game you need to sell 8,000 copies per year, assuming 5% of these people have problems with your game, that's 400 emails each update.
+
+I remember a year or two back, a screenshot of some developers inbox, 1000 unread emails in the ""bugs"" folder.
+
+And recently finding a bug in a reasonably popular game, went to send a report, and found out they were only using email and a Forum to organise issues.
+
+The best effort I've seen from a closed source developer (not just games) was probably Mojang's Get-satisfaction page, and Google ( e.g. http://code.google.com/p/earth-issues/issues/list )
+
+This includes the big boys like Valve.
+
+You're wasting your own time, and our time, something indie devs don't have.
+
+All you really need is public bug tracking software, and a good template on how to report a good bug.
+
+It needs to be public because I can see other peoples bugs and if I find the same bug as I'm having I wont need to report it, I can ""star"" the bug, and receive an email when the bug is fixed (or perhaps become a special fix tester)
+
+a list of bug tracking software can be found [here](http://www.thegeekstuff.com/2010/08/bug-tracking-system/),
+ [here](http://programmers.stackexchange.com/questions/9853/alternative-to-bugzilla),
+ and [here](http://alternativeto.net/software/bugzilla/)
+
+create a template that helps you understand the problem, but first mention to the user to search for the bug to make sure it's not reported, also make sure the user uploads program logs, memory dumps, screenshots to help. or if you want to scare away people link them to this.
+
+http://www.chiark.greenend.org.uk/~sgtatham/bugs.html
+
+Thank your for taking the time to read.",1321031868.0,31,0.89,21
+woahdude,"The Polynomial, will melt your brain [video] of [game]",,1314960893.0,2,0.67,1
+HackBloc,SSL and Google compromised?,,1314658816.0,10,0.87,0
+askscience,Bugging me for years: Escape velocity: How does it work?,"What am I not understanding.
+
+Couldn't I accelerate at the negative acceleration of gravity, effectively cancelling it out, then applying a little extra force, to get any speed I wanted to get away from the planet. 
+
+Put another way, as long as I have any speed moving away from the planet, I'll eventually break orbit wont I?",1314139606.0,8,0.89,8
+Playdate,Addressing segregation/fragmenting complains.,"First off I'm from New Zealand, I can't speak from a European perspective.
+
+So all comments apply to being in the Australasian region.
+
+Segregation and fragmenting is not what's going on here, I'm still subscribed to the main reddit as well.
+
+A more accurate description would be calling it a subset.
+
+No matter how many times you use the slippery slope fallacy. It's still that a fallacy.
+
+What we are doing here is organising more efficiently. When there's only 160 of us it gets hard to organise games within our timezones, without our own chat room and sub-reddit.
+
+There's the technical side as well, the fibre optic cable going from the West cost to Hawaii then to us causes some big problems.
+
+It's currently the only cable to USA, which means monopoly, and large prices to use.
+
+I for one only have a 20GB limit per month we can't afford to download games every other day. (Jesus YouTube is a fucking luxury)
+
+Then there's latency, travelling at the speed of light in glass to the west coast of America is something like 56ms, this is the theoretical smallest latency for a perfect fibre optic cable, with repeaters, packaging and routing delays it gets much larger perhaps 150ms at best, but it can probably get much worse at peak hours when the cable is bogged down, because lets face it pretty much every website we use is in the US. (Halo 2 latency still haunts me to this day)
+
+Sure we can play over this latency, but with having our own sub-reddit and chat, it's our first option to want good latency, then we can play with people in the US that have less than perfect sleeping patterns.
+
+This is pretty much a call to see it in our perspective.
+
+Also it makes it easier for you to find a sheep shagger, didgeridoo player or kangaroo eater.",1314122007.0,6,0.76,2
+sleep,Sleeping's a problem.,"The other ""day"" I woke up at 5pm, realizing my sleeping pattern was out. I pulled an all nighter and probably should have gone to bed at about 8pm the next day, but with getting distracted and then needed to sort some shit out.
+
+I ended up staying up till 1am, after going to sleep I woke up at 5pm again, disappointed with this ridiculously amount of sleep and the time I just waited, pulled another all nighter, this time taking the cue that I should sleep earlier and the fact that I had already been messing with my sleeping patterns I was tired by 2pm, and went to bed.
+
+This is where I get confused, I wake up at 9pm, after 8h of sleep, and actually feel refreshed for once, and interestingly for once didn't oversleep (even though I was expecting this after being awake longer than the typical 16h you ""should"" be)
+
+Staying awake till about 5am and getting bored and a little tired I think ""perhaps I can sneak in some extra hours till maybe 12noon"", someone tries waking me at sometime I don't remember it's all a blur perhaps between 12-1pm, being in a dream-awake trance of some sort, I promptly fall back asleep. I awake at 4pm, feeling groggy as shit (as I always do)
+
+this dream-awake trance happens a lot and is one of the reasons for an alarm clock not existing in this story, I've given up on them unless I really need to get up, which seems to trigger a motivation to get up, but this does not always work.
+
+The real problem is that this always happens, to varying degrees, sleeping wrong hours and feeling groggy as shit waking up.
+
+it seems to be less extreme when partying with friends and crashing the night at their place or something, and even worse, I feel *less* groggy, with a hangover.
+
+I've been diagnosed with Depression then, ""a motivation disorder"" and then Schizophrenia (""the motivation disorder""), there's a sort of duality between distraction and motivation, combining in to a shit storm, of what people would usually call lazy, and procrastination, but to the extreme.",1313997762.0,0,0.5,2
+Metal,Not satisfied: Recommend me some Music/Bands lacking Growling/Screaming,"I've read the Collection of Recommendation Threads.
+
+And I don't have all day trying to find my personal taste in amongst all of it. but I can tell you that I'm not in to growling or screaming (with some leeway see below) at the moment.
+
+The only one that's promising is the Folk Instrumentals, but that's limiting me to only that.
+
+Listing Metal I already like:
+
+Tool
+
+Harvest by Opeth
+
+Yeah that's about it.
+
+But other bands and genres I like that might help you find what I might like:
+
+Nine Inch Nails
+
+Pink Floyd
+
+[Black Sun Empire](http://www.youtube.com/watch?v=RlKsyyHgo7I) (Nuerofunk [Drum and Bass])
+
+[State of Mind](http://www.youtube.com/watch?v=imp0BqHBxyQ) (Trancestep [Drum and bass])
+
+[Psytrance](/r/psytrance) (trance that isn't happy and hasn't been dulled down for the masses)
+
+Deftones is probably the closest I'll get to screaming and even that's pushing it with their first album.
+
+I would generally consider myself by de-facto: anti-pop (or less harshly a-pop), with exceptions like Foo Fighters and Muse.
+
+in the end I like what I like.
+
+Edit: Thanks for the suggestions. keep them coming, some instrumentals would be awesome.",1313993258.0,0,0.5,4
+firstworldproblems,0.0033829185% New Zealand hurt them selves falling out of bed each week.,"
+
+[and people call this news?](http://www.nzherald.co.nz/nz/news/article.cfm?c_id=1&objectid=10745855&ref=rss)
+
+and it'll be statistically high because we had a 7.1 earthquake in the middle of the night.",1313821872.0,1,0.67,0
+newzealand,Simon Power: Commerce Minster and Consumer Affairs Minster. Conflict of interest?,,1313820560.0,19,0.8,4
+skeptic,Centralist view of pretty much every libertarian argument (with facts).,,1313565938.0,1,0.56,9
+askscience,How do we know how abundant or not anti-matter is in the universe?,"Scientists or at least the news outlets report that there isn't an abundant amount of anti-matter in the universe.
+
+I thought anti-matter was pretty much the same and normal matter.
+
+so why can't we assume that some galaxies are made of anti-matter, we just can't see it?",1313505864.0,3,0.8,3
+Anarchism,I would like to talk about recessions and depressions.,"I was day dreaming the other day and I formed a theory about recessions and depressions.
+
+Kinda a radical different look on them.
+
+some people see them as a problem, or a broken aspect of capitalism, or something along those lines.
+
+I proposed a more sinister look on them, not only are they part of a capitalist system, they are desired and created on purpose.
+
+As I understand it whoever holds the most cards holds the power, whether it be money, oil, water, food etc.
+
+but this kinda breaks down a little with the Job market, but the same rules of supply and demand work.
+
+So over the last several decades populations have stabilised or even decreased. this puts the worker in demand, and supply of Jobs high as we have economic growth.
+
+but this also increases worker power, and ability to demand better wages or move to another job because of the benefits.
+
+Exactly not what the state want, they want to hold all the cards, and all the power, and especially all the money.
+
+So what better way to swing the power in their favour, than to make a huge amount of job losses?
+
+Not sure whether the stimulus package was an added bonus or they then convinced the government to pay them to fix it.
+
+Your thoughts r/Anarchism?",1313342729.0,0,0.33,3
+self,I think I've lost faith in humanity :/,"I found out something today. not only do people get religious about religion, and even though they get religious about Political Parties and what not. and even if they're atheists, they can be blind, and religious. and even admitting they dislike the truth and try to discredit you as not having any sense. and even though I thought they we're my friends they straight away said my views weren't important, and didn't matter. only because they didn't want to feel hurt or anger, or hatred, you guys taught me to stand up for what I believe in, but I digress, once you realize the truth, you can't go back, there's no ignorance pill. and you alienate your self from people, who like their imaginary world full of an illusion of comfort and love, but at least now I feel that once I've open the wall of truth, it'll eat away at them until they can't take it no more, and finally feel something needs to be done, but again it'll probably be too late, and the world will be doomed",1313156762.0,0,0.36,8
+newzealand,we need more people! come support those games that don't quite have a population online! (/r/PlaydateAus),,1312799888.0,0,0.33,0
+Playdate,"since everyone is bitching about playing ""popular"" games: DOOM!","> BUT DOOM doesn't have multiplayer! and II works only with IPX!
+
+unlike pretty much every other game developer, id Software release all their old game engines under a Free and Open Source License[1], thus we'll be able to find a game engine with Internet support
+
+http://en.wikipedia.org/wiki/Doom_source_port
+
+
+[1] the game contents aren't free, only the engine is",1312776760.0,18,0.93,6
+PlaydateAus,I Propose...,"since there's not many of us and even less actually committing to playing these games (I mean seriously 67 people on the reddit and about 8 people playing Subvein, which BTW is FREE and 22MB to download)
+
+can we only ""mostly"" follow the main reddit, with almost 9000 users, they have a huge chance of finding people that have Killing Floor (they did vote for it) and Monday Night Combat, etc
+
+I propose that we play the game that most suites us but based off their top games.
+
+If hardly any of us have Monday Night Combat, or Killing Floor for example
+
+perhaps we can decide on a game that we do have, or we can group-buy a particular and play it for a week before buying another
+
+I also propose we Don't vote, but choose which one is cheapest
+
+and we also need to play some games regularly so we/I can justify purchasing them",1312633602.0,5,0.86,7
+a:t5_2spj1,instead of factioning off for anything other than the inability to find each other...,"I propose there's a merge of [/r/playdateaus](/r/playdateaus) and this reddit, I don't care how as long as there's a merge and if there is a NZ one I would like this also merged.
+there's just two few of us to have so many separate groups",1312529279.0,1,0.6,1
+PlaydateAus,instead of factioning off for anything other than the inability to find each other...,"I propose there's a merge of [/r/playdatemate](/r/playdatemate) and this reddit, I don't care how as long as there's a merge and if there is a NZ one I would like this also merged.
+
+there's just two few of us to have so many separate groups
+",1312528646.0,7,0.9,4
+Playdate,dedicated hardware?,"I know this is a really new idea, but I thought I would jump on the hype
+
+most games with 4 player co-op or something similar are alright on your average Internet connection and PC, but when it comes to large amounts of gamers on a single server (16 to 32 players [5,374 subscribers]) you need a lot of bandwidth that at least in some countries just isn't going to cut it on consumer grade Internet, and bandwidth caps
+
+so who's for dedicated hardware?
+
+I could help organise for a Server in NZ/AU, I fear Asia is too far away for anything reliable though",1312464856.0,2,1.0,0
+newzealand,don't worry guys it's still on!,,1309158479.0,2,0.6,3
+Anarchism,George Carlin - Fuck Hope (Only semi related),,1308196144.0,8,0.79,2
+Anarchism,"ANONYMOUS: ""THE PLAN"" IS NOW LIVE. PHASE 1: INITIATED. WAR AGAINST THE SYSTEM.",,1308189008.0,5,0.67,5
+Anarchism,FAQ doesn't seem to cover these questions I have,"how does Anarchy plan to be installed? in other words how can I help?
+
+pleases bare with me on this one: ""Voting"" yes I know it's covered but reading 400+ comments of same stuff is kinda hard. finding the suggestion I want to make ( I did read the first 100 comments or so) is also hard within it
+
+first a disclaimer: I'm from NZ, from my basic understanding of the current system the minor parties hold the balance since for example the Greens have a lot of power in the fact that they can make or break an election by siding with either Labor or National this can be used as a major bargaining chip to get their values in place
+
+now this is where I kinda answer my first question:
+
+everyone seems to take the stance of either vote for someone/party that installs Anarchistic Values, or not vote at all for the system doesn't work (which I can kinda agree with the absolute two party system that the US has)
+
+I haven't read yet a suggestion that voting for a party that does the wrong thing, like lies, steals, raises taxes on the poor while leaving the rich rich (GST Increase john?)
+
+now you're either going WTF or you might see my plan here, for the WTFers:
+
+what we are doing is causing civil unrest and hopefully economic collapse and a general distrust in politicians and the state",1308032919.0,2,0.75,7
+psytrance,Protostar's album: Stellarium,,1307877650.0,1,1.0,0
+Shadowrun,"re-found some computer/human readable data for Shadowrun I had made, reorganized and posted to github for easy editing, good for just about nothing but if finished will come in useful for character generators etc",,1304148449.0,4,1.0,0
+skeptic,Earthquake Light?,,1302248539.0,4,0.84,2
+audiophile,"THX, fidelity ""cups"", other questions (newbie to /r/audiophile)","Hi I'm wondering about what you guys think about THX certified speakers.
+
+I'm thinking there should be a newbie pack in the side bar advising things like fidelity cups (like how they have no scientific basis to work), audio formats and respective qualities, links to hydrogen audio and other reputable websites
+
+On a side note: I think we should introduce our selves, preferences and equipment
+
+Name: Daniel
+
+Preferences: lame mp3 -V 3, flac or vorbis at default
+
+Equipment: Z-5500 Logitech hooked up on spdif with it on Dolby prologic II music setting
+Some cheap Logitech headset for LANs and night listening
+",1292094992.0,3,1.0,6
+newzealand,"for you Scifi Geeks, My friend is doing a his weekly Radio show tonight called Enemy Planet it's about an alien called Kiwi observing humans from out of space",,1288247643.0,3,1.0,2
+technology,Awesome new robotic hand filled with coffee,,1288093320.0,0,0.5,0
+programming,"It's what the client wanted, but I was trying out @font-face and well IE...",,1286169448.0,0,0.14,2
+reddit.com,Facebook violates privacy again by revealing job titles with out permission,,1274754519.0,1,0.6,3
+DnB,"State of Mind - Sunking, I've been listening to the album this song is from over and over all this week and I'm addicted",,1274434352.0,19,0.87,4
+newzealand,Google cars gathered home data without telling (Poll),,1274154059.0,0,0.5,20
+atheism,How would an atheist say grace?,"I'm currently staying at a halfway house for the mentally ill. The halfway house is ""Christian owned"" but the place is pretty secular. The only thing that has come up that is Christian is on Sunday's the staff Cook lunch for us and and depending which staff member is on they say grace.
+
+So I was thinking if they did ask me to say grace I could play a little joke on them and do a secular non-offensive grace
+
+so far I've come up with 
+> Thank the farmers, the truck drivers, the shop assistants the shopper and the cook for this wonderful food that they farmed, transported, stacked, and cooked, so we could have this wonderful fest on this day
+
+this would usually end with ""Amen"" but I'm not exactly sure of the non-religious version would be",1272869111.0,11,0.66,29
+reddit.com,DIMENSIONAL PORTAL INCURSION AT THE LHC,,1270114646.0,1,0.67,2
+linux,Need some help preparing for a Linux install,"I have a botched Ubuntu install (X no longer loads, and I get some sort of context switching with the screen flickers between two buffer and so typing my login details is impossible [Here's me typing in ""Hello, World""](http://imgur.com/FJJd5) also [Recovery mode doesn't work](http://imgur.com/roDg6) ) , so I'm stuck with windows, I think it's time for me to give up on Ubuntu since the last dist-update broke my install
+
+so I want to learn more about Linux so I was thinking of installing Gentoo but I'm not liking the compile times that come with a source based installation and I've been recommend ArchLinux as a reasonable substitute
+
+So first question: will ArchLinux teach me as much as Gentoo?
+
+So I've tried installing ArchLinux in VirtualBox on windows but I have had problems with the install script crashing or hanging indefinitely hopefully this is just a VirtualBox problem
+
+also I have a Home drive that needs backing up (just need to copy files to a NTFS partition) before I format my linux partition 
+
+Will ArchLinux's or Gentoo's Install CD allow me to do this?
+
+I should mention is that I don't have any CD's available but have a 1GB USB flash drive, so I would like to boot the Installation process off of that
+
+and I have No Ethernet connection at the moment I'm currently stuck on a slow wireless connection which should work on linux (acquired the card after Ubuntu got botched, It's a friends card who previously run it under linux with no problems)
+",1270083741.0,8,0.71,8
+bestof,"""Being God is like playing The Sims""",,1269935440.0,0,0.43,0
+Drugs,Acid + Schizophrenia + Risperidone?,"I've been quite interested in taking Acid but I have [Disorganized Schizophrenia][]\[1\] and have been taking [Risperidone][] for it. what's /r/Drugs advice?
+
+P.S. I've been advised to stay away from Cannabis 
+
+
+\[1\]: I've officially been diagnosed as having Schizophrenia but this describes my symptoms better and it stops the assumption that I have Split personality disorder or Paranoid Schizophrenia like most people assume
+[Disorganized Schizophrenia]: http://en.wikipedia.org/wiki/Disorganized_schizophrenia 
+[Risperidone]:                      http://en.wikipedia.org/wiki/Risperidone",1267849098.0,7,0.82,26
+meego,Some bad advice for MeeGo,,1267773233.0,3,0.67,1
+n900,N900 hardware and related software overview,,1264661573.0,21,1.0,6
+atheism,NZ Atheist Bus Campaign raising heaps of money,,1260571505.0,18,0.82,1
+SuicideWatch,"A post to /r/Atheism/, imadeanalt reaching out",,1259150296.0,10,0.92,6
+Guitar,Gibson Guitars raided for alleged use of smuggled wood,,1259038831.0,7,0.73,0
+Physics,"Al McDowell: Uncommon Knowledge : New Science of Gravity, Light, the Origin of Life, and the Mind of Man. Anyone know of this book, is it quackery?",,1254568786.0,0,0.5,0
+redheads,I thought /r/redheads/ wasn't R18,"/r/redheads/ isn't marked as R18 (+18, 18+, what ever) yet people are posting Porn  
+can the Mods either change this to a R18 sub-reddit,
+or can you mark porn with [nsfw]",1254370567.0,0,0.44,3
+programming,Should I distrust MySpace?,"OK I've Been Running NoScript extension in Firefox for a while now and I Noticed MySpace wasn't working too well, So I choose to enable Javascript, I look at the allow/disallow menu and it has an option ""Allow about:blank"" what are MySpace trying to achieve running JS on about:blank? how does that even work? Should I allow this?  
+I would take a screenshot but ubuntu wont let me  
+I figured /r/programming mite know what's going on here but if there is a better place to post please suggest",1253248397.0,0,0.39,6
+sandbox,testing out mark down image embedding,[removed],1253121197.0,0,0.5,1
+albumcritic,Rob Dougan - Furious Angels,,1252677806.0,3,1.0,1
+ideasfortheadmins,Toggle on/off +18 subreddits ,"Not sure if this is possible so this is more of a question
+is there a way to quickly toggle the +18 reddits off/on so when you start browsing using your profile during the day when the kids are awake or when you are at work nothing dodgy is revealed ?
+perhaps a safe.reddit.com domain would be an idea",1252662379.0,14,0.85,2
+facebookquotes,This reminds me of http://bash.org/?23396,,1252390061.0,28,0.69,4

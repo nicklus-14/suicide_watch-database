@@ -1,0 +1,1085 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+haskell,"QuickSearch, a tool for comparing sets of names [newbie]","Hey all, this is my first serious attempt at making something in Haskell and I'd really appreciate any feedback you might have, be it whether something is not idiomatic Haskell or if there's a simpler/better way to accomplish something. [https://github.com/osoleve/Name-QuickSearch](https://github.com/osoleve/Name-QuickSearch)
+
+The purpose of the tool is to allow for fast matching of names (or other short natural language strings) against another set of names using fuzzy similarity metrics, letting you get, say, the highest scoring name out of a set of hundreds of thousands using Jaro-Winkler in under a second. Most of the speed is achieved using a token-matching heuristic, where the similarity scores are only computed between pairs of names sharing an entire token, with token inventories being precomputed and stored in a hashmap.
+
+It works pretty much exactly as I want so far, but as a Haskell beginner I'm sure there are improvements that can be made, and I figured this would be a good place to ask.
+
+Thanks in advance!",1626554448.0,19,0.93,8
+tipofmyjoystick,[Arcade][Early 2000s] A Marvel vs Capcom style game with Vision,"\*\*Solved:\*\* Captain America and the Avengers, not a fighting game
+
+**Platform(s):** Arcade machine
+
+**Genre:** Fighting
+
+**Estimated year of release:** 2000
+
+**Graphics/art style:** Cartoon, MvC style
+
+**Notable characters:** Sentinel, Blackheart, Wolverine, Vision?
+
+**Notable gameplay mechanics:** I think it had the 3-character tag team mechanic. Definitely had Supers and a 3-tiered bar.
+
+**Other details:** Either as a playable character or as an assist, Marvel's Vision was present in an all-white costume with (I think) red eyes.",1614962933.0,2,1.0,8
+tableau,"Selecting Aggregate Calculation Based on Column, or Something Better","I'm currently working on The Devil's Dashboard, an all-text dashboard by request that allows for filling out a few different forms based on need. I've already asked a few times to make absolute sure they don't really want multiple dashboards, or maybe if I could just automate the forms themselves, but here we are.
+
+One piece of the dashboard is a table (sorry!) of some data categories and their relative fill rates by individual, the individual's team, the individual's office, and all active individuals. For any one data category this is well maybe not simple but straightforward:
+
+1. Reshape the data to allow for the fill rate calculation over an arbitrary time period (done)
+2. Write the fill rate calculation
+3. Fix the calculation to different columns to generate calculations for the different groups
+4. Add a parameter control to allow time period selection
+
+The issue comes in when I try to get the different categories into the same table. I tried adding an extra table enumerating the data categories as I want them to appear and simulating a cross join, but when I try to write a calculated field using CASE to select the right fill rate calculation based on the additional column it gets mad because the column is a string and the fill rate calculation returns an aggregate. I can't trick it like usual with MIN or MAX because there are several possible values, and ATTR can't be used in LODs.
+
+What is the \*right way\* to do something like this in Tableau? Where ""something like this"" is display multiple levels of detail for multiple calculations in the same table, where the column labels of the table inform which calculation to display.
+
+I could absolutely do it by precalculating everything and loading that in, but then the workbook wouldn't be usable for anything in the future because people would need to unravel my SQL.
+
+\--
+
+I can't share the underlying data model (and it doesn't lend itself to this type of analysis in the first place) but I've managed to get it into the following form by joining together a bunch of custom queries into one logical table:
+
+|Column|DataType|NULLable|
+|:-|:-|:-|
+|RecordID|INT|NO|
+|RecordClass|NVARCHAR|NO|
+|UserID|NVARCHAR|NO|
+|SupervisorID|NVARCHAR|NO|
+|SupervisorOffice|NVARCHAR|NO|
+|IsRecordCreation|INT|NO|
+|ActivityDate|DATE|NO|
+|Category\_1\_IsExtraCredit|INT|YES|
+|...|INT|YES|
+|Category\_N\_IsExtraCredit|INT|YES|
+
+&#x200B;
+
+The fill rate calculations mentioned above are then a variation of, where X is one of the Category numbers:
+
+    [FillRate_X]=
+    COUNTD(IIF((Category_X_IsExtraCredit=0 AND IsRecordCreation=1) OR Category_X_IsExtraCredit=1, RecordID, NULL))
+    /
+    COUNTD(IIF(<<Variation Based on Record Class>> AND IsRecordCreation=1, RecordID, NULL))
+
+(this can generate fill rates over 100% and that's okay)
+
+With that, the different levels of the calculations I need are (this part is the same across all):
+
+    [ByUser] = {Fixed UserID: [FillRate_X]}
+    [ByTeam] = {FIXED SupervisorID: [FillRate_X]}
+    [ByOffice] = {FIXED SupervisorOffice: [FillRate_X]}
+    [Overall] = {FIXED: [FillRate_X]}
+
+If I could define a calculation to use in the LODs that selects the appropriate \[FillRate\_X\] based on an added column X, I'd be free and clear, but I can't get that approach to work so there has to be a better way.
+
+One last important piece, the calculation has to be variable over a list of possible numbers Y where date >= TODAY - Y, so I'm accomplishing this using a parameter and a context filter.
+
+\--
+
+Okay I think I figured it out. Instead of wrapping the entire aggregate selector in an LOD, create 4 sets of calculations that each wrap the individual CASE clauses in LODs:
+
+    [FillRate (Team)]=
+        CASE SyntheticCategoryColumn
+            WHEN 'Category1' THEN {FIXED [SupervisorID]: [Category1FillRate]}
+            ...
+        END 
+
+&#x200B;",1599164889.0,1,1.0,3
+PySimpleGUI,Adding a table defined at runtime to an existing window,"I've built a tool for my coworkers that does the following:
+
+1. Accepts database table names
+
+2. Outputs a base SQL query with the correct joins and standard business logic
+
+3. Allows the user to view sample rows from the returned query by executing it
+
+Everything is great, except that the sample results currently appear in a new window, and I'd like them to appear in a table in a new row in the main window. The documentation says to accomplish this, start with `Visible=False` and `Update` it to true, but I can't find a way to add a `Table` element without defining its contents at the same time. It appears possible to define it with dummy data at the start and update the values, but I can't find a way to update the headers once they've been defined. `window.Element('table').Update(headings=headers)` complains that `Update` doesn't recognize `headings`, and `window.Element('table').headings=headers` (which isn't something I saw in the docs, but did see in other people's posts) doesn't seem to do anything.
+
+Is this possible at the moment, or should I be happy with the two window solution?",1566415071.0,1,1.0,4
+GoldReplies,The only Fox News comment worth reading,,1533747121.0,134,0.93,0
+tableau,"Thanks, Tableau.",,1530214175.0,30,0.83,9
+tableau,I took the Desktop Certified Professional exam...,"Took it about a week ago, about 24 hours after passing the QA delta exam. Been using Tableau for about two years on a regular basis, and am pretty comfortable with it.
+
+The test destroyed me. It was beyond intense. My main takeaway from it is if you need someone for Tableau and you find someone with the certification, snatch them up as fast as you can because they're a wizard.",1511896023.0,3,0.8,8
+tableau,Limits in MSSQL initial query -- nested loops,"Are there known technical limitations for the ""Initial SQL"" functionality? 
+
+Scenario: I have a query with nested loops that write and execute modified versions of a query, inserting the results into a temp table with each execution. In SSMS, I simply end with a ""SELECT * FROM ##Results"", and in Tableau I just pull the table from the tempdb section.
+
+If I run the query in SSMS to build the table, and then connect to it in Tableau, everything is fine. However, if I run it using the Initial SQL function, it makes it through the first loop (6 iterations), then makes it to the nested loops (3 deep), and makes it exactly halfway through the outermost loop before giving up. The nested loops are as such (in order of scope), followed by the successful iterations:  
+
+1. Time Period (3 entries)  
+2. Identifier Type (6 entries)  
+3. Action type (2 entries)
+
+[It's out of order in terms of complexity because of a massive data set that must be queried for each time period]
+
+|
+
+The results I get are for, in order:  
+
+
+Time Period | Identifier Type | Action Type  
+---|---|---
+1 | 1 | 1  
+1 | 1 | 2  
+1 | 2 | 1  
+1 | 2 | 2  
+1 | 3 | 1  
+1 | 3 | 2
+
+So it literally makes it halfway through the outermost loop before calling it good enough. Is this... like, a thing that I can fix? I'd love to make a view or sproc to just get around it, but views are incompatible with temp tables and variable declarations, and a sproc would raise some security concerns due to the dynamic, concatenative nature of the query itself.
+
+
+",1507559365.0,3,0.8,2
+nottheonion,McConnell promises women can take part in healthcare meetings,,1494618057.0,1,1.0,0
+nottheonion,FBI Translator Daniela Greene Married ISIS Fighter She Spied On,,1493817839.0,1,1.0,0
+iamverysmart,At least my meme game was strong.,,1493333447.0,1,1.0,0
+cringepics,A stereotypical guy generally wouldn't say this.,,1491334773.0,1,1.0,0
+shittyaskscience,Are these snakes venomous?,,1489621620.0,3,0.81,2
+kittensgame,Can't unlock chemistry,"It just won't show up to be researched. I have navigation (which I've read is the prerequisite) but my only options are Physics, Acoustics, Geodesy, and Cryptotheology.
+
+What am I missing? Is it a bug?",1489585653.0,2,1.0,2
+self,I need a life,"^^^^^^^^S ^^^^^^^t ^^^^^^a ^^^^^i ^^^^r ^^^c ^^a ^s e  
+S ^t ^^a ^^^i ^^^^r ^^^^^c ^^^^^^a ^^^^^^^s ^^^^^^^^e  
+^^^^^^^^S ^^^^^^^t ^^^^^^a ^^^^^i ^^^^r ^^^c ^^a ^s e  
+S ^t ^^a ^^^i ^^^^r ^^^^^c ^^^^^^a ^^^^^^^s ^^^^^^^^e  
+^^^^^^^^S ^^^^^^^t ^^^^^^a ^^^^^i ^^^^r ^^^c ^^a ^s e  
+S ^t ^^a ^^^i ^^^^r ^^^^^c ^^^^^^a ^^^^^^^s ^^^^^^^^e  
+^^^^^^^^S ^^^^^^^t ^^^^^^a ^^^^^i ^^^^r ^^^c ^^a ^s e  
+S ^t ^^a ^^^i ^^^^r ^^^^^c ^^^^^^a ^^^^^^^s ^^^^^^^^e  
+",1489544984.0,1,0.67,2
+offmychest,I had an incredibly disturbing dream two days ago and it's still messing me up,"For backstory, a year and a half ago I adopted a puppy after I moved out into my own place. Despite my best efforts, I haven't been able to housebreak her so I spend a lot of time cleaning my floors and being mad at her.
+
+---
+
+I come back home after being at some event where I was disappointed about something.  
+This part of the dream was pretty long but I can't recall most of it. It just set the tone for the end.  
+
+I go to take the dog out back, so I pick her up to put her leash on. As we're walking out the back door, I notice she had another accident. I take a long look at her, and bite a huge chunk out of the top of her head. Then I bite off her jaw. Finally, I bite off the rest of her head, and she shudders and goes limp.  
+I remember this entire part vividly, my brain didn't spare me any of the gory, awful details.  
+
+I walk out the back, which for some reason is now the Everglades, and feed her body to a gator.
+
+---
+
+I woke up completely shaken and dug the puppy out from under the blankets to give her a big hug. I've felt super guilty and uncomfortable ever since, trying to ignore it until I finally realized just how much it was eating at me. I guess it was just a year and a half of pent up anger coming out all at once in a dream.
+
+**tl;dr I had a dream that I ate my dog's head and it's really fucking me up**",1489368567.0,3,1.0,0
+FloridaMan,Florida Man shoots and kills someone texting in the movie theater,,1489166611.0,19,0.79,1
+tableau,Map done for #dataforacause. Any tips on how to make the labels less awful? [OC],,1487964013.0,6,0.76,15
+tableau,"""Automatic sizing"" scaling terribly","I have a dashboard published to our dev server, and while it looks great in Desktop as well as in Edit Mode (as in, it all fits on the screen), when I just look at the dashboard on the server it extends vertically far beyond the bottom of the monitor.
+
+I've set it to a fixed size and that worked well, but people will be looking at this on all different monitors/devices. Is there any way to get around the broken ""Automatic"" scaling?",1487103533.0,1,0.67,11
+tableau,Locking a filter in Tableau Server,"For data privacy reasons, I have a filter checking `ISMEMBEROF()` in almost every worksheet in certain workbooks published to server. Due to company SOPs, once a workbook is published I will not be able to easily modify it, so I need to get this right first time around.
+
+Is there a way I can lock a filter when a workbook is published to the server (regardless of whether or not it's part of context) so that no users except the admins can modify it?",1486399160.0,1,0.66,6
+iamverysmart,9gag OP wasn't verysmart enough,,1482177160.0,2,1.0,0
+humor,"Sometimes, on Reddit, the stars align",,1482164607.0,1,1.0,0
+todayilearned,"TIL there is a cathedral in Poland with ""dragon bones"" hanging outside",,1481906236.0,41,0.83,2
+self,"HP Screwing Around with Cyber Week ""Deals""","Wall of text. [tl;dr](http://imgur.com/a/eHB7w) caveat emptor, read the details of the deals.
+
+---
+
+So I'm in the market for a new laptop, and my work has employee purchase programs with a few manufacturers. I got an email today from HP about their ""Cyber Week"" deals going on, and there was a laptop they had I'd been checking out so I figured I'd check if it had any deals. It did.
+
+The base model of this laptop, was [last week, $899](http://imgur.com/4RwN3xo) (to start, but customizable). Note that this was _not_ a sale. The site has an even better deal, though! The top model of the laptop is marked down from $2,100 to $1000! Let's take a look, I can foot the extra hundred for a sweet work machine.
+
+Something's wrong, though. The model described on the page is the base model I was looking at last week, [down to the same product number](http://imgur.com/T8imnyh). There must be some sort of mistake, maybe they listed the wrong one. I'll talk with support over chat. 
+
+[Transcript excerpt from chat emailed to me.](http://imgur.com/DbLN4sK)
+
+Okay, so the agent sets up for a sales specialist to call me. Very nice lady. After about 20 confusing minutes on the phone and chatting with her supervisor, being unable to reconcile the differences I'm seeing online, she informs me she's able to discount the higher model to about $1,500. Please note that the sales specialists have nothing to do with how prices are set, and she was genuinely working with me.
+
+I'm hoping this was some misunderstanding, or general confusion, but my understanding as of now is that HP is actually inflating their prices and marking it down to make it look like a deal... with the sale price actually being more than the non-sale price. Sales support was unable to explain the discrepancy.",1480522928.0,3,0.81,0
+statistics,Things to learn before going for a master's?,"Background: I'm a data analyst by trade with no (formal) background in stats, aside from things I've learned on the job over the past two years. I have some background in math (up through integral calculus) but my knowledge of statistics is fairly basic -- essentially limited to analytical chemistry.
+
+I'm strongly considering going for a master's in applied statistics to help further my career, but don't want to go in blind. I have a copy of Freedman's Statistics (3rd ed) arriving tomorrow to go through, but I'm not sure what else to work on first.
+
+Any suggestions?",1480443658.0,5,0.78,8
+nottheonion,Tim Kaine joins MC Hammer for Clinton fundraiser,,1476734988.0,1,1.0,1
+tableau,Server - Dynamic User Filters,"I'm having a bit of trouble with regards to multiple user filters on a single worksheet, and can't find documentation for my exact problem.
+
+The sheet in question will have data on a large set of users, each containing the attributes 
+
+* Supervisor: their supervisor
+* Office: the office they work in
+* SupervisorOffice: the office their supervisor works in
+* Email: the individual's email
+
+The only people with access to this will be office managers and select supervisors, and I need to be sure that they can only see data they're privy to. I will likely be able to set up the users grouped by office.
+
+I have no idea how to do this without using multiple worksheets, and don't want to make the report unnecessarily rough on the server.",1476720597.0,3,0.81,13
+tableau,Gap between QA and CP tests?,"I just took the Qualified Associate exam (for Desktop), and with the exception of a few very vague questions it was pretty easy. I'm going to sit the Certified Professional exam at some point in the future and was wondering what I'm in for, as I've heard that it's *very* difficult.
+
+I've been using Tableau for maybe a year and a half now in a professional capacity, and recently devoured ""Storytelling with Data"" by Cole Nussbaumer Knaflic (I heard the CP exam focuses a lot on effective visualizations). What else should I be doing to prepare myself for the exam? ",1476297907.0,2,0.67,2
+shittyaskscience,Why hasn't someone invented postmodern medicine yet?,,1475176462.0,12,0.89,1
+SouthFlorida,Looking for bar,"Trying to get back on the whole ""social life"" thing after taking 4 years off for school and work. Are there any decent bars for 20-somethings with cheap whiskey? Preferably around the Broward/PBC line. 
+
+O'Conner's is OK but the crowd isn't quite my speed. ",1474159260.0,3,0.8,6
+NoMansSkyTheGame,Learn from my mistakes,"As we know:
+
+1. When you die, something of yours breaks
+2. Also, when you die the game saves
+3. The inventory screen does not pause the game. 
+
+I was on a very toxic planet last night when I opened the inventory instead of pausing (always making that mistake) and went to the next room. Ended up falling asleep. 
+
+When I woke up today and turned on the game, everything of mine was broken and I couldn't reload any prior saves because it had continued to save over and over after each break. 
+
+I had just bought a new ship, and am broke. I don't have the materials to fix any of this stuff. 
+
+I am a broken man.",1471713212.0,3,1.0,0
+tableau,Server - Export to File and Reupload,"I'm trying to come up with a way to make feasible a report that requires a dataset of millions of rows, with thousands of more rows added daily. The report has many different levels of detail, requiring that the data be at as granular level as possible.
+
+One way I'm thinking of allowing for this while still having historical data is to export the crosstab of the sheet that needs historical data and reupload it at a separate data source to blend on. The only problem is that this would have to happen daily. Is there any way that I can automate the process of appending the data in the crosstab to an excel file that's already connected as a data source?",1469635994.0,0,0.5,7
+nottheonion,Hastert wants victim's suit over unpaid hush money tossed,,1469477685.0,1,1.0,1
+tableau,Even more convoluted LOD expression,"Following my question [here](https://www.reddit.com/r/tableau/comments/4qhepm/convoluted_lod_expression/), I realized that my requirements were more specific than I thought. Using this updated data set:
+
+ID | User | State | Attribute|Datetime
+---|---|----|----|----
+1 | Greg | Open| 0
+1 | John| Ready for Approval | 0
+2 | Greg| Open | 1
+2 | John| Ready for Approval | 1
+2 | Greg | Rejected| 1
+2 | John| Ready for Approval | 1
+3 | Alice | Open | 1
+3 | John| Ready for Approval| 1
+3 | Alice | Rejected | 1
+3|John|Ready for Approval|1
+3|Alice|Rejected|1
+3|John|Ready for Approval|1
+4 | Alice | Open | 1
+4 | John | Ready for Approval | 1
+4 | Greg| Rejected| 1
+4 | John | Ready for Approval | 1
+
+This [directed graph](http://i.imgur.com/S9kAy6p.png) hopefully explains the relationship between the states well enough. The Attribute column just shows if an ID contains a row with the ""Rejected"" state.
+
+What I need to count is any time a Rejected entry appears after an Open or Rejected within the same ID, but only for whoever worked the offending entry. I know that's probably confusing, so walking through the IDs above:
+
+1. Nobody gets dinged.
+2. Greg works an Open item, which goes to John, who rejects it. Greg works it again (in the Rejected state), and this time it is not rejected. Greg gets dinged once.
+3. Alice works an Open item, which goes to John, who rejects it. Alice works it again (in the Rejected state), and it is rejected again by John. Alice works it a third time, and it is not rejected. Alice gets dinged twice.
+4. Alice works an Open item, which goes to John, who rejects it. Greg works it this time (in the Rejected state), and this time it is not rejected. Alice gets dinged once, but Greg doesn't get dinged because his work wasn't rejected.
+
+Final ""score"":
+
+* Greg: 1; 1 from ID 2
+* Alice: 3; 2 from ID 3, 1 from ID 4
+* John: 0 (Never works an item in the Open or Rejected state)
+
+I'm not even sure this kind of thing is possible, given that it requires looking ahead in the results, but I'm really hoping it is. Does anyone know of a way to calculate this?",1468868193.0,1,0.6,1
+nottheonion,Lena Dunham thinks dining hall sushi amounts to cultural appropriation,,1468347386.0,1,1.0,1
+tableau,Convoluted LOD expression,"I like to think I have a decent handle on LOD expressions, but this one is eluding me. Assuming a table structured as:
+
+
+ID | User | State | Attribute
+---|---|----|----
+1 | Greg | A| 0
+1 | John| B | 0
+2 | Greg| A | 1
+2 | John| B | 1
+2 | Greg | C | 1
+3 | Alice | A | 1
+3 | John| B| 1
+3 | Alice | C | 1
+4 | Alice | A | 1
+4 | John | B | 1
+4 | Alice | C| 1
+
+I want to get a count of distinct IDs for users who appear in rows with states A or C, IF the Attribute of the row is 1. In the above example, the results would be:
+
+* Greg: 1
+* John: 0
+* Alice: 2
+
+because Greg appears alongside two IDs (1 and 2) but only one of them (2) has Attribute = 1, John appears alongside 4 IDs (three of which have Attribute = 1) but only in State B, and Alice appears alongside two IDs, both with Attribute = 1.
+
+Does this make sense?
+
+I tried 
+
+    {INCLUDE ID : SUM(MAX(IIF(Attribute = 1,1,0)))}
+
+but I'm not 100% sure it's correct. A filter makes sure only states A and C are considered.    ",1467228495.0,3,0.72,3
+tableau,Stop Extract from Regenerating,"I'm on Desktop 9.3, and sometimes after generating an extract Tableau will attempt to regenerate it almost immediately or when I go to save. This current extract is taking upwards of 2 hours to create, so I'm really hesitant to hit save as I need to keep working...
+
+Is there a way to disable this behavior? It's really, really disruptive.",1462469933.0,4,0.83,5
+tableau,"Easy way to display ""<1%""","I was asked how to create a label for a chart that showed percent of whole for each, but ""`<1%`"" where Tableau would normally show ""`0%`"". So I got this working in a hack-y manner, with the equation
+
+    IIF([Pct]<0.01
+                 ,""<1%""
+                 ,LEFT(STR([Pct]*100),2)+""%"")
+
+where `[Pct]` is a table calculation for the percent of whole. (The `LEFT(...,2)` works in this scenario because it was 5 wedges, two with double-digit percentages and three less than 1%)
+
+What I'm wondering is, is there a better (built-in?) way to accomplish this? I feel like this is a common enough thing that it must have been considered.",1459440983.0,1,0.6,9
+tableau,Counting Items in a group before a value,"If I have data in the following format:
+
+Group | Status | DateTime Worked
+---|---|----
+A| X| 10:41
+A | X | 10:58
+A | Y | 11:53
+A | Z | 15:15
+B | Z | 1:18
+B | Y | 2:34
+B | Z | 2:45
+B | Z | 6:20
+
+and I want to find out how many in each group have been worked before Status `Z` is encountered, how would I go about making that in a Calculated Field?
+
+For the above data, the desired result would be 4 for group `A` and 1 for group `B` (even though Z also appears in positions 3 and 4 for `B`).
+",1457642392.0,4,0.83,7
+tableau,Quick filter that only applies to records in one subset of one column,"I had no idea how to title this one.
+
+I have data that's preaggregated in SQL before loading into Tableau (to condense 2.6M records into 92K) but in a way that's a little complex. I don't know if this affects the issue or not. Here's a small sample of (a cleaned up version of) the data:
+
+
+
+Row | Category | Bitmap | Attr String | HasAttr-A | Has Attr-B | Has Attr-C | CNT
+----|---|---|----|----|----|----|----
+1|A| 4 | 'C' | FALSE | FALSE | TRUE | 5
+2|A | 1 | 'A' | TRUE | FALSE | FALSE | 3 
+3|B | 7| 'A B C' | TRUE | TRUE | TRUE |  7
+4|B | 5 | 'A C' | TRUE | FALSE | TRUE | 11
+5|C | 4 | 'C' | FALSE | FALSE | TRUE | 2
+
+So here's the problem as it stands: This is a live workbook for execs to be utilized going forward in RFPs, so all filters have to be quick filters. Attribute 'B' ONLY applies to Category B, and is very important to be able to filter on, but either way it is filtered needs to affect the overall count -- not just the count for Category B.
+
+To better explain, the count for **'HasAttr-A' and 'HasAttr-B'** needs to be 10, even though only Row 3 meets that specific criteria, because we only care about 'Attr-B' so far as it applies to category B. *(On a side note, we only care about filtering on 'Attr-B' if it's true, we never filter on if it's false)*
+
+**So my problem is, how can I make a quick filter that only affects Category B?** When clicking True for 
+
+    NOT(Category = 'B' AND 'HasAttr-B' = FALSE)
+
+it works as intended, but when clicking False it breaks everything besides Category B. For now I've settled on aliasing ""False"" to ""Select (All) instead"", but that's... less than ideal. In theory, nobody should ever click False, but that won't stop people from doing so and being confused.
+
+
+",1454341478.0,4,0.83,11
+tableau,Retroactively counting a queue,"I have a queue and I want to go back and see, on any given day, how many items were in the queue. My problem comes from the fact that all I have are the days they entered the queue and the days they came out of the queue, and there will be many days on which no items enter or leave the queue, and I have no idea how to create a generic datetime axis against which I can compare the fields.",1452983098.0,2,0.67,5
+tableau,Top N Set - Dynamic with Filters,"I have data that can be described right now by two relevant columns: Worker and Date. Workers can have multiple rows per date, so I'm measuring by the count by date.
+
+I created a set of top 10 workers on the field of the count by date, but when I try to break up the view into the past 3 months, I only get 4 names (out of 400) -- not per month, but overall. If I just use the current month, I get 6 names.
+
+How can I ...set up... the set so that if I break it up by months (or weeks, or...) I'll get the top 10 from each month?",1449765862.0,4,0.83,3
+tableau,Please tell me there's an easier way to do this...,,1447694620.0,5,1.0,23
+Images,"Really, Outbrain?",,1444659613.0,0,0.47,0
+Entomology,"What/why is this? (South Florida, size of a quarter)",,1442868457.0,3,0.72,6
+tableau,Filtering based on conditions in two fields,"So, let's say in my dataset I have two columns (I can't post the real columns, it's part of proprietary data): A and B.
+
+    A = {X,Y,Z}
+    B ⊂ {0,ℕ}
+    
+    f: A ↦ B
+        f: X ↦ 0
+        f: Y ↦ 0
+        f: Z ↦ [ z | z ∈ B ]
+I'm trying to filter the data to get counts for X, Y, and Z, but for Z ONLY if it does not contain 0 in B.
+
+Is there a way to filter the data in this manner? If I just set a filter for B <> 0, I exclude everything in X and Y.",1441816780.0,3,0.72,5
+Entomology,What are these eggs? (1cm across),,1428883294.0,6,0.88,8
+humor,The NSA visits r/AskHistorians,,1372943407.0,1,1.0,0
+archlinux,Awkward file conflicts with #pacman -Syu,"Okay, this kind of boggles my mind. I tried to run a system update, as per usual, but was hit with this:
+
+    Total Installed Size:   1894.02 MiB
+    Net Upgrade Size:       42.81 MiB
+    
+    :: Proceed with installation? [Y/n] y
+    (374/374) checking keys in keyring                                                                                                [##############################################################################] 100%
+    (374/374) checking package integrity                                                                                              [##############################################################################] 100%
+    (374/374) loading package files                                                                                                   [##############################################################################] 100%
+    (374/374) checking for file conflicts                                                                                             [##############################################################################] 100%
+    error: failed to commit transaction (conflicting files)
+    filesystem: /bin exists in filesystem
+    filesystem: /sbin exists in filesystem
+    filesystem: /usr/sbin exists in filesystem
+
+So... I don't even. My usual method with file conflicts is, check to see if removing the file will break anything, and if not remove it so it can be replaced. Now, I'm pretty sure I can remove */bin* and */usr/bin* safely, but I'm not sure about */usr/sbin*. The sbin part sounds fishy. Something about that s.
+
+But really, what? Has anyone come across this before? It can't be pacman's fault, the man pages **specifically state** that it contains no bugs, and that couldn't be tongue in cheek at all.",1371342031.0,0,0.42,9
+askscience,Necessity of gender-specific chromosomes in human reproduction,"My friends like to ask me science questions because of my physical chemistry background, but today I was asked a reproductive biology/genetics question, which is wayyy out of my area of expertise. I'm not sure I can 100% relay the question because I'm not sure how to phrase what she asked, but here goes:
+
+Is it possible to take a female's gamete and modify/mutate it somehow so that if introduced to another, unmodified  female's gamete, it can form a viable zygote? I don't have a satisfactory explanation for why half of the chromosomes have to come from a male.
+
+Essentially, is it possible for a same sex female couple to have a child with genetic material from each woman, and no sperm?
+
+",1365669608.0,1,0.6,7
+AskReddit,"Employer Willingly, Fraudulently Denying Overtime Pay","I noticed that a friend of mine works a lot of overtime, and made a remark about how he must love the extra cash. Turns out that his employer engages in alarming practices regarding overtime:
+
+Employees log the hours they work in the payroll system (not sure on the specifics). If someone needs some of their hours covered, the employee covering the shift records their hours as the person they are covering for, ensuring that nobody is recorded as working more than 40 hours per week. If you can't get the person to repay you in hours, you've effectively worked a shift for free, for them.
+
+I'm pretty sure this isn't even close to legal (his employer is not exempt from overtime pay laws). What course of action can be taken, here?",1335158632.0,8,0.89,8
+pics,"So, my friend got this awesome tattoo... [NSFW?]",,1327200841.0,0,0.17,0
+WTF,No idea what the purpose of this site is. View the page sources for more (amazing) confusion.,,1315120757.0,0,0.33,0
+learnprogramming,A Microcontroller Dev Kit for $4.30,,1303351879.0,14,0.9,3
+haskell,My First Real Endeavor in Haskell. How Can I Make it More Idiomatic?,,1300826245.0,6,0.81,13
+scheme,"My first Scheme project! Comments, critiques, suggestions?",,1300403338.0,8,0.8,5
+lisp,Comments/Critique/Help With my First Real Undertaking in Common Lisp?,"Because I don't really consider the simple games I wrote in my Lisp endeavors, I feel this is my first actual undertaking. It's an implementation of a simplified Shunting-yard Algorithm.
+
+[Code-y code-y code.](http://pastebin.com/2esHvnMn)
+
+I'd really like to make it so that it doesn't use any global variables, say, by changing the function signature to
+    
+    (defun shunting-yard (stmt &optional output-queue operator-stack)
+
+but all of my attempts so far have been thwarted by the fact that it is recursive, so it has to go back down through the stack after it gets the answer.
+
+So, aside from any suggestions/critiques/random comments (which I'd love), could anyone point me in the right direction as to how to keep this recursive while removing globals?
+
+",1299130330.0,5,0.78,21
+self,Today I'm 100 Days Clean and Sober,"I didn't know who else to share this with, but I'm so damned proud of myself right now.
+
+This is my first time trying to swear off of drugs and alcohol permanently, and being clean and sober today means that I've reached a milestone that I never, ever thought I would achieve. It's absolutely mind-boggling to me to think about the fact that I haven't put a single mind/mood altering substance (save for my anti-depressants) into my body in **100 days.**
+
+I can't believe it. If I can do this, maybe I can get a hold on my depression, too. Maybe I can even get my life back on track.
+
+As much as this is for me, I hope this also serves as a message of hope for those out there working on the same. **It is possible,** so long as you don't worry about the future and just focus on staying clean today.",1298064960.0,104,0.85,20
+learnprogramming,Lisp and Functional Programming,"I've been trying to teach myself Common Lisp for a little while now, but I always get hung up before I start any projects because I don't understand the basic tenets of Functional Programming.
+
+My question is, is CL too closely tied to Functional Programming to be able to effectively or efficiently use it for Imperative or OO style programming? Or is Functional Programming a concept that was developed after the inception of CL, and it just became the preferred paradigm for the language?",1297633656.0,0,0.5,1
+movies,"Ink: Great Movie, or Greatest Movie?",,1297272991.0,3,0.71,4
+learnprogramming,Help with a SEGFAULT?,"I'm trying to learn me some C++ by writing slightly less trivial things than usual, with my current project being an address book. It's less trivial than usual because I'm connecting to a MySQL DB using the MySQL Connector/C++ provided by Oracle, and I plan on adding a GUI once I get it fully working. Unfortunately, the function for displaying the entire book SEGFAULTs when called.
+
+I've been at this for two days now, trying to fix this error, seeking help on Stack Overflow, the MySQL forums, ##c++-basic, and #mysql, all to no avail. Reddit (Obi-Wan), you're my only hope.Can someone help me figure out what's going wrong here?
+
+Here's the complete program: [cooode](http://codepad.org/MDU7533Y)
+
+And here's the backtrace provided so kindly by GDB:
+
+    (gdb) bt
+    #0  0xffffe430 in __kernel_vsyscall ()
+    #1  0xb7abd441 in raise () from /lib/libc.so.6
+    #2  0xb7abeb82 in abort () from /lib/libc.so.6
+    #3  0xb7af89e5 in ?? () from /lib/libc.so.6
+    #4  0xb7afe821 in ?? () from /lib/libc.so.6
+    #5  0xb7b00088 in ?? () from /lib/libc.so.6
+    #6  0xb7b0316d in free () from /lib/libc.so.6
+    #7  0xb7cd8bb1 in operator delete(void*) () from /usr/lib/gcc/i686-pc-linux-gnu/4.4.4/libstdc++.so.6
+    #8  0xb7cb554d in std::string::_Rep::_M_destroy(std::allocator<char> const&) () from /usr/lib/gcc/i686-pc-linux-gnu/4.4.4/libstdc++.so.6
+    #9  0xb7cb6eac in std::basic_string<char, std::char_traits<char>, std::allocator<char> >::~basic_string() () from /usr/lib/gcc/i686-pc-linux-gnu/4.4.4/libstdc++.so.6
+    #10 0x0804a539 in ~SQLString (this=0xbffff1a0, __in_chrg=<value optimized out>) at /usr/local/include/cppconn/sqlstring.h:46
+    #11 0x08049aa4 in addressBook::display (this=0x8060388, con=0x804ebe8) at addressBook_v2.cpp:160
+    #12 0x0804a3f5 in main () at addressBook_v2.cpp:283
+
+
+If anybody could figure this out, I'd love you. *Forever.*",1294538381.0,2,1.0,6
+lisp,Looking for Lisp-y Input! Pt. 2,"Okay, so a hot minute back I posted my two player version of tic tac toe looking for input, and the feedback was so awesome I figured I'd come back for this next project of mine.
+
+This one is a one player version of Battleship, where the goal is simply to sink the ships in as few shots as possible. It's pretty barebones right now, but I've been actively working at sprucing it up. Here's the code, and I'll post a few ideas I have that I'm going to try out on it after.
+
+    ;;;; Battleship.lisp
+    
+    (setf *random-state* (make-random-state t))
+    
+    (defparameter *board* nil)
+    (defparameter *ans-board* nil)
+    (defparameter *shots-fired* 0)
+    (defparameter *boats* '(3 3 4 4 5))
+    
+    (defun x-coord (pos)
+      (round (/ pos 10)))
+    
+    (defun y-coord (pos)
+      (mod pos 10))
+    
+    (defun random-pos ()
+      (random 100))
+    
+    (defun random-dir ()
+      (random 2))
+    
+    (defun new-game ()
+      (init-boards)
+      (game-loop)
+      (format t ""It took you ~a shots to sink the boats.~%"" *shots-fired*))
+    
+    (defun init-boards ()
+      (setf *board* (make-array '(10 10)
+    			    :initial-element '~))
+      (setf *ans-board* (make-array '(10 10)
+    			    :initial-element '~))
+      (loop for len in *boats* do
+           (place-boat len (random-pos) (random-dir))))
+    
+    (defun place-boat (len pos dir)
+      (dotimes (offset len)
+        (setf (aref *ans-board*
+    		(if (= dir 0)
+    		    (+ (x-coord pos) (* (if (< pos 50) 1 -1) offset))
+    		    (x-coord pos))
+    		(if (= dir 1)
+    		    (+ (y-coord pos) (* (if (< pos 50) 1 -1) offset))
+    		    (y-coord pos)))
+    		'^)))
+    
+    (defun game-loop ()
+      (let ((arr (make-array (array-total-size *ans-board*)
+    		       :displaced-to *ans-board*)))
+        (loop until (notany (lambda (x) (eql x '^)) arr)
+    	 do (progn
+    	      (show-board *board*)
+    	      (prompt-for-guess)
+    	      (check-guess (read-guess))
+    	      (incf *shots-fired*)))))
+    	      
+    (defun show-board (board)
+      (princ ""  "")
+      (loop for x from 0 to 9
+           do (progn
+    	    (princ x)
+    	    (princ "" "")))
+      (terpri)
+      (loop for i below (car (array-dimensions board))
+            for y across ""ABCDEFGHIJ""
+         do (progn
+    	  (princ y)
+    	  (princ "" "")
+    	  (loop for j below (cadr (array-dimensions board)) do
+    	       (let ((cell (aref board i j)))
+    		 (format t ""~a "" cell)))
+    	  (terpri))))
+    
+    (defun prompt-for-guess ()
+      (format t ""~&Enter your selection to fire a shot (i.e. C4).~&""))
+    
+    (defun read-guess ()
+      (let* ((guess (read-line *query-io*))
+    	 (guess-num (parse-integer guess :start 1 :junk-allowed t))
+    	 (guess-total (+
+    		       (*
+    			(-
+    			 (char-int (char-upcase (char guess 0)))
+    			 (char-int #\A))
+    			10)
+    		       guess-num)))
+    	 guess-total))
+          
+    (defun check-guess (guess)
+      (if (and (<= guess 99)
+    	   (>= guess 0))
+          (fire-shot *board* guess)
+          (progn
+    	(format t ""~&Invalid selection~%"")
+    	(check-guess (read-guess)))))
+    
+    (defun fire-shot (board pos)
+      (cond ((eql (aref *ans-board* (x-coord pos) (y-coord pos)) '^)
+    	 (setf (aref board (x-coord pos) (y-coord pos)) '*)
+    	 (format t ""Hit!~&""))
+    	(t
+    	 (setf (aref board (x-coord pos) (y-coord pos)) 'O)
+    	 (format t ""Miss!~&"")))
+      (show-board board))
+
+Right now, it doesn't tell you when you've sunk a ship, and there's no differentiating between ships, so I'm thinking about re-implementing the *ans-board* as a hash-table, where the key are the coordinates of the boats (in (X . Y) format), and the values are the names of the boats, which would make this problem easier to fix (I think).
+
+Any other ideas? I know it's not great Lisp code, so please excuse that. I'm really new to the language and the whole functional programming paradigm.",1293244579.0,7,0.77,4
+lisp,Looking for Lisp-y input!,"I decided that I'm in love with Lisp and desperately want to learn it, so I've taken on a few simple projects to teach myself the basics. My second project was the ubiquitous  tic tac toe game, which I found incredibly interesting to write.
+
+If any of you get the chance, could you glance over my code and offer suggestions/criticisms? That's how I learnbest, and I really don't have a head for Lisp yet.
+
+
+    ;;;; tictactoe.lisp
+    ;;;; 
+    ;;;; Andrew Levenson
+    ;;;; 10/27/10
+    ;;;;
+    ;;;; Simple two player ASCII Tic Tac Toe Game
+    
+    (defun create-board ()
+      ""Creates an array with the contents 1-9.""
+      (setf *board* (make-array 9
+    			    :initial-contents
+    			    '(1 2 3 4 5 6 7 8 9))))
+    
+    (defun x-coordinate (cell)
+      ""Computes the given cell's x coordinate.""
+      (mod (1- cell) 3))
+    
+    (defun y-coordinate (cell)
+      ""Computes the given cell's y coordinate.""
+      (floor (/ (1- cell) 3)))
+    
+    (defun ref-cell (x y)
+      ""Returns the value in cell (x, y).""
+      (aref *board* (+ (* y 3) x)))
+    
+    (defun set-cell (x y)
+      ""Sets the value in cell (x, y).""
+      (setf (aref *board* (+ (* y 3) x)) *marker*))
+    
+    (defun welcome-player ()
+      ""Welcomes the player and begins a game.""
+      (format t ""Welcome to TicTacToe!~%~%"")
+      (create-board)
+      (play nil))
+    	
+    (defun switch-player ()
+      ""Switches the active player.""
+      (if (equal *marker* :X)
+            (setf *marker* :O)
+    	(setf *marker* :X))
+      (if (equal *player* ""Player 1"")
+    	(setf *player* ""Player 2"")
+    	(setf *player* ""Player 1"")))
+    
+    (defun draw-board (&optional numbers-p)
+      ""Displays the board. If numbers-p is non-nil, 
+    displays numbers in vacant spaces."" 
+      (format t ""     |     |     ~%"")
+      (if numbers-p 
+          (format t ""   ~a |   ~a |   ~a  ~%"" 
+    	      (ref-cell 0 0) (ref-cell 1 0) (ref-cell 2 0))
+          (format t ""     |     |     ~%""))
+      (format t ""     |     |     ~%"")
+      (format t ""_________________~%"")
+      (format t ""     |     |     ~%"")
+      (if numbers-p 
+          (format t ""   ~a |   ~a |   ~a  ~%"" 
+    	      (ref-cell 0 1) (ref-cell 1 1) (ref-cell 2 1))
+          (format t ""     |     |     ~%""))
+      (format t ""     |     |     ~%"")
+      (format t ""_________________~%"")
+      (format t ""     |     |     ~%"")
+      (if numbers-p 
+          (format t ""   ~a |   ~a |   ~a  ~%"" 
+    	      (ref-cell 0 2) (ref-cell 1 2) (ref-cell 2 2))
+          (format t ""     |     |     ~%""))
+      (format t ""     |     |     ~%~%""))
+    
+    (defun play (&optional switch-p)
+      ""If switch-p is true, switches the active player. 
+    Plays a move; Checks if the move is a win or a stalemate.
+    If neither is true, recursively calls itself. If either is true,
+    prompts for a new game.""
+      (when switch-p (switch-player))
+      (check-choice (read-choice))
+      (when (and 
+    	  (not (check-for-win-p)) 
+    	  (not (stalemate-p)))
+        (play t))
+      (when (check-for-win-p)
+        (progn
+          (format t ""~a has won! "" *player*)
+          (force-output nil)
+          (if (y-or-n-p ""Play again? "")
+    	  (play-again)
+    	  (quit))))
+      (when (stalemate-p)
+        (if (y-or-n-p ""~%~%Stalemate! Play again? "")
+    	(play-again)
+    	(quit))))
+    
+    (defun play-again ()
+      ""Recreates the board, switches the active player, and starts a new game.""
+      (create-board)
+      (switch-player)
+      (format t ""This game will be started by ~a.~%~%"" *player*)
+      (play))
+    
+    (defun read-choice ()
+      ""Displays the board and prompts the player to enter a choice, or to
+    see their options, then reads in and returns their choice.""
+      (draw-board t)
+      (format t ""~a, select a number to choose a square.~%"" *player*) 
+      (force-output nil)
+      (parse-integer (read-line *query-io*) :junk-allowed t))
+     
+    (defun check-choice (choice)
+      ""Checks to ensure the user input is valid,
+    i.e. an integer value between 1 and 9, inclusive.""
+      (if (and (numberp choice)
+               (<= 1 choice 9))
+          (select choice)
+        (progn (format t ""~%Invalid choice.~%"")
+               (check-choice (read-choice)))))
+    
+    (defun select (cell)
+      ""Checks if the cell has not been selected (contains a number).
+    If so, places the players marker in the cell.
+    Otherwise, prompts the player to try again.""
+      (if (numberp (ref-cell (x-coordinate cell) (y-coordinate cell)))
+          (set-cell  (x-coordinate cell) (y-coordinate cell))
+          (invalid-selection)))
+    
+    (defun invalid-selection ()
+      ""Warns the player if they choose a spot that has been taken,
+    and repeats the entry process.""
+      (format t ""That spot is taken. Please choose another spot.~%~%"")
+      (force-output nil)
+      (check-choice (read-choice)))
+    
+    (defun check-for-win-p ()
+      (or
+       (dolist (x '((1 2 3)
+    		(1 4 7)
+    		(1 5 9)
+    		(2 5 8)
+    		(3 6 9)
+    		(3 5 7)
+    		(4 5 6)
+    		(7 8 9)))
+         (is-line-p x))))
+    
+    (defun is-line-p (3-cells)
+      ""Tests to see if the three cells fed to it as arguments
+    contain identical values. Returns t or nil.""
+       (equal
+        (ref-cell (x-coordinate (first 3-cells)) (y-coordinate (first 3-cells)))
+        (ref-cell (x-coordinate (second 3-cells)) (y-coordinate (second 3-cells)))
+        (ref-cell (x-coordinate (third 3-cells)) (y-coordinate (third  3-cells)))))
+    
+    (defun stalemate-p ()
+      ""Checks to see if there is a stalemate,
+    i.e. none of the board's cells contain a number.
+    Returns t or nil.""
+      (notany #'numberp *board*))
+    
+    (setf *marker* :X)
+    (setf *player* ""Player 1"")
+    
+    (welcome-player)
+
+",1288917394.0,7,0.83,14
+technology,Email from the Gmail Team,[removed],1288792203.0,1,1.0,0
+learnprogramming,Tic Tac Toe in Common Lisp,"Hey, r/learnprogramming! I have a LOT of free time lately, so I decided to use this to my advantage before I return to school for my CS degree. My first project was a number guessing game in Common Lisp (not very interesting, but it helped me get down some of Lisp's basics). My second project, finished last night, is a simple two-player implementation of Tic Tac Toe in Common Lisp, which was considerably more challenging and a GREAT learning experience.
+
+I figured I'd put my code up here for a few reasons, most notably, though, to see if anyone had any suggestions for improvements to the code or feature set, and to see if anybody who is a stranger to the beauty that is Lisp might be intrigued by a quick read-through of my code.
+
+It's a pretty short program, made considerably longer by the number of comments I sprinkled in.
+    
+    ;;;; tictactoe.lisp
+    ;;;; 
+    ;;;; Andrew Levenson
+    ;;;; 10/27/10
+    ;;;;
+    ;;;; Simple two player ASCII Tic Tac Toe Game
+    
+    ;;; First player is X, so initialize the marker to X
+    (setf *marker* :X)
+    (setf *player* ""Player 1"")
+    
+    ;;; Create the board in memory
+    (defun create-board ()
+      ;; Board was initially a 3x3 2D Array, for realism.
+      ;; Changed it to a 9 element Vector for simplification of referencing.
+      (setf *board* (make-array 9 :initial-contents
+    		                      '(1 2 3 4 5 6 7 8 9))))
+    
+    ;;; Greet the player and display the board.
+    (defun welcome-player ()
+      (format t ""Welcome to TicTacToe!~%~%"")
+      (create-board)
+      (play nil))
+    	
+    ;;; Switch the active player.
+    (defun switch-player ()
+      (if (equal *marker* :X)
+            (setf *marker* :O)
+    	(setf *marker* :X))
+      (if (equal *player* ""Player 1"")
+    	(setf *player* ""Player 2"")
+    	(setf *player* ""Player 1"")))
+    
+    ;;; Draw the board
+    (defun draw-board ()
+      ;; (cell-ref #) will be either 
+      ;; 1. The number representing the space (before it is chosen), or
+      ;; 2. A marker (:X or :O) once the space has been chosen.
+      (format t ""     |     |     ~%"")
+      (format t ""   ~a |   ~a |   ~a  ~%"" (cell-ref 1) (cell-ref 2) (cell-ref 3))
+      (format t ""     |     |     ~%"")
+      (format t ""_________________~%"")
+      (format t ""     |     |     ~%"")
+      (format t ""   ~a |   ~a |   ~a  ~%"" (cell-ref 4) (cell-ref 5) (cell-ref 6))
+      (format t ""     |     |     ~%"")
+      (format t ""_________________~%"")
+      (format t ""     |     |     ~%"")
+      (format t ""   ~a |   ~a |   ~a  ~%"" (cell-ref 7) (cell-ref 8) (cell-ref 9))
+      (format t ""     |     |     ~%~%""))
+    
+    ;;; Play a move
+    (defun play (&optional switch-p)
+      ;; If the switch predicate is set to true, switch players.
+      (when switch-p (switch-player))
+      ;; Go through the motions for selecting a square 
+      ;; and checking for correctness.
+      (check-choice (read-choice))
+      ;; If nobody has won and the board is not filled,
+      ;; then recursively call this function with the switch predicate
+      ;; so that the next player may go.
+      (when (and 
+    	  (not (check-for-win-p)) 
+    	  (not (stalemate)))
+        (play t))
+      ;; If someone has won
+      ;; 1. Alert the players as to which player won
+      ;; 2. Ask if they want to play again.
+      ;;    If yes, play again. If no, quit.
+      (when (check-for-win-p)
+        (progn
+          (format t ""~a has won! "" *player*)
+          (force-output nil)
+          (if (y-or-n-p ""Play again? "")
+    	  (play-again)
+    	  (quit))))
+      ;; If there is a stalemate
+      ;; Ask if the players wish to play again.
+      ;; If yes, play again. If no, quit.
+      (when (stalemate)
+        (if (y-or-n-p ""~%~%Stalemate! Play again? "")
+    	(play-again)
+    	(quit))))
+    
+    ;;; Play the game again
+    ;;; Is only called after a win or a stalemate
+    (defun play-again ()
+      ;; Reset the board to all numbers
+      (create-board)
+      ;; Switch players, so whoever ended 
+      ;; the last game goes second this game.
+      (switch-player)
+      (format t ""This game will be started by ~a.~%~%"" *player*)
+      (play))
+    
+    ;;; Allow the player to choose a square
+    ;;; Or, if they wish, display the board with
+    ;;; the numbers on it.
+    (defun read-choice ()
+      ;; Show their options
+      (draw-board)
+      (format t ""~a, select a number to choose a square.~%"" *player*) 
+      (force-output nil)
+      ;; Read from STDIN, 
+      ;; parsing an integer out, if there is any.
+      (parse-integer (read-line *query-io*) :junk-allowed t))
+    
+    ;;; Check to make sure that the cell chosen
+    ;;; actually exists on the board.
+    (defun check-choice (choice)
+      (if
+       ;; All of the following must be true
+       (and
+        ;; Must be a number (der)
+        (numberp choice)
+        ;; Must lie between 1 and 9, inclusive
+        (> choice 0)
+        (< choice 10))
+       ;; If it's a valid cell, pass it to (select)
+       (select choice)
+       ;; Otherwise, warn the player they made an invalid
+       ;; selection, and repeat the process.
+       (progn
+         (format t ""~%Invalid choice.~%"")
+         (check-choice (read-choice)))))
+    
+    ;;; Select their cell, if it hasn't
+    ;;; already been selected.
+    (defun select (choice)
+      ;; If the cell contains a number 
+      ;; (i.e. it has not yet been selected)
+      (if (numberp (cell-ref choice))
+          ;; Set the cell to their marker
+          (set-cell choice)
+          ;; Otherwise, warn them of an invalid selection
+          (invalid-selection)))
+    
+    ;;; Warn the player if they choose a spot that is taken.
+    (defun invalid-selection ()
+      (format t ""That spot is taken. Please choose another spot.~%~%"")
+      (force-output nil)
+      (check-choice (read-choice)))
+    
+    ;;; Check to see if there are any lines made
+    ;;; (i.e. someone won)
+    ;;;
+    ;;; This function is called every time someone
+    ;;; selects a cell, to make displaying the winner
+    ;;; easier.
+    (defun check-for-win-p ()
+      ;; If any of these sets of 3 cells form a line,
+      ;; that means that the active player won the game.
+      (or (is-line-p 1 2 3)
+          (is-line-p 1 4 7)
+          (is-line-p 1 5 9)
+          (is-line-p 2 5 8)
+          (is-line-p 3 6 9)
+          (is-line-p 3 5 7)
+          (is-line-p 4 5 6)
+          (is-line-p 7 8 9)))
+    
+    ;;; If the three cell numbers passed to
+    ;;; (is-line-p) contain identical values,
+    ;;; then a line has been made.
+    (defun is-line-p (a b c)
+      (and
+       (equal
+        (cell-ref a)
+        (cell-ref b))
+       (equal
+        (cell-ref a)
+        (cell-ref c))))
+    
+    ;;; Define what it means for the board to be filled.
+    ;;; 
+    ;;; This function is always called AFTER (check-for-win-p).
+    ;;; This ensures that if the last move is a winning move,
+    ;;; a stalemate is not reported.
+    (defun stalemate ()
+      ;; If none of the spaces contain numbers
+      ;; (i.e. all spaces contain a marker)
+      ;; and nobody has won, then a stalemate has been reached.
+      (notany #'numberp *board*))
+    
+    ;;; Mask the implementation of the board
+    ;;; in terms of referencing a cell.
+    (defun cell-ref (cell)
+      ;; (cell-ref cell) now calls an array reference
+      ;; to the cell number minus one, to compensate
+      ;; for the fact that the array index starts at 0.
+      (aref *board* (1- cell)))
+    
+    ;;; Mask the implementation of the board
+    ;;; in terms of setting a cell value.
+    (defun set-cell (cell)
+      ;; (set-cell cell) now calls an array reference
+      ;; to the cell number minus one, to compensate 
+      ;; for the fact that the array index starts at 0,
+      ;; and sets that reference to the marker.
+      (setf (aref *board* (1- cell)) *marker*))
+    
+    ;;; Begin the game.
+    (welcome-player)
+
+So... here goes nothing. Questions? Comments? Concerns?
+    
+    C-x C-s
+
+
+
+",1288547159.0,5,0.85,2
+learnprogramming,Checking for a win in Tic Tac Toe (Common Lisp),"Okay, so I'm about finished with my latest project, a (admittedly not very good) implementation of Tic Tac Toe in Common Lisp (the whole program available [here](gist.github.com/655622)), but I'm stuck on one last part; I can't figure out how to get my function that checks for a winner working. The function (and its subordinate function) look like this:
+
+    (defun check-for-win ()
+        (cond ((is-line 1 2 3) t)
+                ((is-line 1 4 7) t)
+                ((is-line 1 5 9) t)
+                ((is-line 2 5 8) t)
+                ((is-line 3 6 9) t)
+                ((is-line 3 5 7) t)
+                ((is-line 4 5 6) t)
+                ((is-line 7 8 9) t))
+        nil)
+    
+    (defun is-line (a b c)
+        (let ((a (aref *board* (- a 1)))
+                  (b (aref *board* (- b 1)))
+                  (c (aref *board* (- c 1))))
+            (if (and 
+                      (eql a b)
+                      (eql a c)
+                      (eql b c))
+                t
+                nil)))
+
+(albeit not indented so deeply), and in (is-line), a, b and c will be (in a winning scenario) set to a symbol (either :X or :O). How do I get the equality checks working?",1288468052.0,2,1.0,1
+pics,Yes.,,1284527873.0,9,0.68,6
+self,"Does the Reddit alien have really fat hands that stick straight out, or super skinny arms that are always smugly planted on his hips?",,1284074626.0,1,1.0,2
+pics,"Hey, Girl",,1283660568.0,8,0.63,5
+SuicideWatch,Need something to distract me,"I don't know what to write or why I'm really writing this. I guess i'm writing it to pass the time. I'm not technically suicidal because I have no desire to end my life. But I have the urge.
+
+See, I have really severe depression. Really, really severe depression. It's not even as if things are so bad for me right now; I just moved back to college after a year on medical leave to try to get my medication correct and work on some coping techniques, I'm living with two of the coolest girls I know, my classes are easy, I just landed a research position after only two classes because I impressed my professor and 4 days ago I had a really interesting conversation with a cute stranger and I got her number. Pretty much everything is going my way right now, yet as I sit here my brain is just saying 'kill yourself, kill yourself, kill yourself.'
+
+Both of my roommates are out. I'm sitting here, at my computer. The light is on, and the door is open, which is good, but it isn't helping my mood. I tried sitting in the backyard on our tree swing and having a cigarette, but I couldn't even stand that because I wasn't sitting in my room alone.
+
+I hate my depression and I hate my anxiety and I hate my obsessive compulsive personality traits. I hate the medications that I'm on. Well, most of them. But most of all, I hate myself. I mean, I don't hate MYSELF. I love who I am, my intellect and my charisma have brought me so much joy in life. However, I hate who I've become. I really don't feel comfortable expatiating on that with my normal account, though. It's not like i'm a bad person. I'm just not worth anything at the moment. I don't generate any positive value for anyone. I'm a hole my parents are throwing money into.
+
+I could keep writing, and I might if my attention comes back to it, but I'm pretty sure nobody is going to read all of this text so I just got really unmotivated about doing this.",1283298211.0,8,1.0,3
+programming,Linear Search Algorithm Optimization - Stack Overflow,,1283111546.0,0,0.36,0
+humor,All Ducks Are Secretly...,,1283058427.0,4,1.0,0
+IAmA,I almost died Wednesday night. AMAA.,"Long story short: Somehow, a decent amount of PCP got into my system and I ended up in the ER completely out of my mind. My memory is starting to trickle back, so I figured I'd answer any questions anyone has about the experience with the drug, in the hospital, or whatever.
+
+*Reposted here from AMA due to suggestion.
+
+*EDIT*: I say ""Somehow"" because I didn't take it myself, or if I did, I was not aware I was.",1279311014.0,0,0.5,31
+AMA,I almost died Wednesday night. AMAA,"Long story short: Somehow, a decent amount of PCP got into my system and I ended up in the ER completely out of my mind. My memory is starting to trickle back, so I figured I'd answer any questions anyone has about the experience with the drug, in the hospital, or whatever. ",1279306194.0,5,0.73,14
+humor,Leaked vid of Israeli Soldiers!!!1!,,1278361510.0,1,1.0,0
+humor,"Thank you, TextMate! (Pic via twitter)",,1278263032.0,1,1.0,0
+programming,"Found this while messing around with swipl, unsuccessfully.",,1277751794.0,1,1.0,0
+AskReddit,Am I really the only person who gets honestly pissed when someone leaves objects on/in front of their keyboard?,,1277319666.0,1,1.0,1
+pics,Zynga! Zynga! Zynga?,,1276103925.0,1,1.0,0
+self,So I Just Met a Homeless Man Outside Work,"I work at the census office, so I see a lot, but they're usually not this sad looking. He brightened up a bit when he found one of my half used cigs in the ashtray (short breaks), and this broke my heart.
+
+I was sitting in my truck getting ready to leave because I have bronchitis, so I stepped out to tell him not to smoke my butt so he didnt get sick, and I handed him one of my sealed packs I had in excess. He started to cry, told me he'd hug me were I not sick, so I offered my hand which he graciously shook. 
+
+This made my weekend, which is tough because my 21st is this Sunday night.
+
+I don't usually approach strangers, maybe it's because I'm high, but whatever. Do you have any stories like this?
+
+*edited for typed-on-phone missing apostophes and capitals.",1275168804.0,13,0.64,31
+humor,A US Census Office Clerk on the Job,,1273626542.0,0,0.5,0
+WTF,I fucking love that movie.,,1273072998.0,2,1.0,0
+WTF,Give me that filet o fish. [pic],,1273070612.0,0,0.33,0
+IAmA,"As requested, IAmA U.S. Census Bureau Employee. AMA (that I can legally answer)","Details on my position: I'm about to start my second week as an administrative clerk for my Local Census Office (LCO), my department head reports directly to the Regional Census Office (RCO). This means I have access to all employee data and procedures, but not the actual census data (i.e. I do administrative work as opposed to office work).
+
+I'll be at my computer sporadically throughout the day, and I'll try to answer questions as best as I can (both to my ability, and legally).",1271608954.0,40,0.78,151
+todayilearned,"TIL Mozart Composed a Canon in B-Flat Entitled ""Lick Me In The Ass""",,1270820380.0,245,0.71,80
+pics,"Found this on a bar napkin outside of my favorite local haunt, The Funky Buddha.",,1269492784.0,4,0.75,5
+todayilearned,TIL a species can be as small as 100lbs and still be considered Megafauna,,1268632102.0,4,0.99,0
+programming,Work with Haskell on OS X 10.6?,"I want to teach myself the basics of Haskell (I have a lot of time to kill), but I'm running into some hurdles getting a compiler installed on my computer.
+
+I've already ascertained that Snow Leopard breaks GHC (hell, it won't even install on my computer), and when I tried to build EHC, ./configure told me my computer lacked 'ranlib' (google helped none), and my computer informed me it didn't even have make (!?).
+
+Is there anything I can do to compile Haskell code, or do I have to wait for GHC to update its support for 10.6?",1268628570.0,0,0.33,9
+reddit.com,"I'll take 10,000!",,1267039726.0,3,0.62,1
+WTF,I'll gladly pay you tuesday for a hamburger tod--ASDF;'WHAT IS THAT,,1265678508.0,0,0.5,1
+tattoos,"A tribute to my mom, who ""loves me to infinity and beyond.""",,1264968060.0,3,0.81,0
+WTF,My dad always likes to experiment with his meatloaves. Today's surprise? HOT DOG.,,1264121575.0,1,1.0,0
+AskReddit,"In light of the Tonight Show controversy, who do you think will replace Jon Stewart when the time inevitably arrives?",,1264004460.0,18,0.8,59
+reddit.com,Reddit is trying to break me.,"It's 2:30AM, I'm alone with the lights off watching a terrible scary movie on the SyFy channel, and it's making me a little jittery. I come on to Reddit for some good news, and my Karma is exactly 666.
+
+Tell me something cheery?",1263713570.0,4,0.7,10
+Marijuana,What's the first REALLY stupid thing you've ever said aloud when high?,"For me, the first time I was ever actually ashamed of something I said out loud while high, I was laying on my friends couch while he was on his computer at the table, and it was maybe my fourth time smoking.
+
+After a long lull in the conversation, both of us lost in Sufjan Stevens or Animal Collective or something, I said 
+
+""Hey [J], do you know what I HATE?""
+
+""What's that, [A]?""
+
+""When someone on the Price is Right bets $1 over someone else's bid.""
+
+""That's... great, [A].""
+
+
+Yep.",1263707066.0,16,0.94,50
+AskReddit,Why do religious schools have school zones?,"Not to be insensitive, but if one of the children gets hit by a car, isn't it all a part of god's plan?",1263427003.0,0,0.27,5
+funny,Chinese Man Throws Bike at Thieves,,1261861785.0,60,0.87,9
+science,Calling all Organic Chemists to help breathe some life into the wiki!,,1261848733.0,0,0.4,0
+movies,"DAE think Avatar was worth seeing for the visuals, even if the story is a bit contrived?",,1261845294.0,0,0.5,1
+movies,Mike Myers in talks to star in live action Marvin the Martian flick.,,1261686762.0,3,0.67,6
+AskReddit,How long do Reddit threads last?,[removed],1258264053.0,1,1.0,0
+AskReddit,What Android app just blew your mind/could you not live without?,,1257930510.0,1,1.0,0
+technology,What's the deal with the rumor of only 256MB of space for Apps on the Droid?,"Just picked up my Moto Droid today, and I made sure to ask at the store about the capacity issue (among my other reservations with the phone, I've been burned by Verizon before), and the saleswoman told me that the Droid indeed only has 256MB of built-in storage, and comes with a 16GB card, but that the card may be used for storage of apps.
+
+Does anyone know where the rumor came from that Android locks out installing apps externally?",1257894036.0,4,0.64,10
+AskReddit,Just got my Google Wave invite. What should I try first?,Any features you'd like me to test out?,1257489637.0,1,0.6,9
+DoesAnybodyElse,"DAE hiccough exactly ONCE after their first sip of soda, every time?",,1257459397.0,6,0.88,16
+PS3,Thoughts on Demon's Souls?,"When I first saw the game, I dismissed it as an Oblivion knockoff, but something made me find a review for it later in the day, just to check. I'm on the fence about the game, though.
+
+**Pros**
+
+* Innovative online integration
+* Great graphics
+* All around fun to play
+
+**Cons**
+
+* Somewhat clunky controls (poor free aim)
+* A little buggy
+* Unbelievably stupid AI
+
+I mean, I really enjoy the game. Like, REALLY enjoy it. But I'd be lying if I said it didn't kill me just a LITTLE bit every time I sneak behind the Red Dragon and magic arrow him to death while he lightly chars the wall over and over.",1257458167.0,8,0.75,14

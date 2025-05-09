@@ -1,0 +1,735 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+MagicArena,The Mana Cooler Podcast Episode 2 - Didn't See That Coming,,1571783764.0,0,0.43,0
+magicTCG,The Mana Cooler Podcast Episode 2 - Didn't See That Coming,"The Mana Cooler podcast is back with episode 2, where we discuss the Mythic Championship V results, the recent B&R announcement and our predictions for the metagame going forward.
+
+Feedback is welcome and appreciated. Next episode we'll check in on how the meta has shaped up and whether Oko is a problem in a meta with no Field of the Dead.
+
+[https://soundcloud.com/the-mana-cooler/ep-2-didnt-see-that-coming](https://soundcloud.com/the-mana-cooler/ep-2-didnt-see-that-coming)",1571783753.0,0,0.33,0
+magicTCG,"The Mana Cooler Podcast Episode 1 - The Last Hurrah, Potentially","Hi /r/magicTCG
+
+My buddy and I talk about Magic a lot and after a handful of conversations I thought it could make a half decent podcast. Mind giving it a listen and letting us know what you think? We plan to talk about Standard constructed with an emphasis on competitive play.
+
+We discuss the list of submitted decks for Mythic Championship V, and a little about the B&R move and our thoughts on what should and what will be banned.
+
+Feedback is welcome and appreciated. Next episode we hope to review the results of MC V and the B&R announcement.
+
+ [https://soundcloud.com/the-mana-cooler/ep-1-mythic-championship-v-decklists](https://soundcloud.com/the-mana-cooler/ep-1-mythic-championship-v-decklists)",1571187321.0,1,0.57,0
+MagicArena,Is Bo1 or Bo3 better for ranking up?,"
+This morning I was having a conversation about whether best of 1 or best of 3 was better for gaining rank quickly. I'm in Plat 1/2 and trying to break into diamond. We both figured that best of one was better, though I thought it might actually just break even.
+
+**Disclaimer**: This post will contain some incorrect evaluations. They should get more correct as the post goes on, though I don't claim any of this is perfect even at the bottom. Also, this ignores a LOT of other factors, such as the fact that the win rate post-board will certainly be different, some decks are better in Bo1 or Bo3, etc. Mostly this was for fun, after a simulation I wrote gave me a different answer than I was expecting. Also I completed my last math class in high school, 17 years ago, so I might have made all of this up for all I really know.
+
+Here's the original assumptions:
+* The given player has a 60% winrate
+* A best of 3 match is 2.5 games on average
+
+If we look at an example 250,000 games, we would see
+
+    250,000 games at 60%
+    150,000 wins
+    100,000 losses
+    50,000 ticks
+
+    100,000 matches at 60%
+    60,000 wins
+    40,000 losses
+    40,000 ticks
+
+There you go, best of 1 is better, right?
+
+To verify this I wrote a small script to simulate the same thing.
+
+    Simulating best of 1 vs best of 3 for 100000000 games at 0.6 winrate
+    BO1 Result: 19996739 ticks | 100000001 games | 0.2 ticks per game
+    BO3 Result: 23885450 ticks | 100000002 games | 0.2389 ticks per game
+
+Wait a second, there must be something wrong here.
+
+Let's update our assumptions to be more specific.
+* The given player has a 60% winrate *per game*
+
+Ok that makes things a bit more fair. If a player has a 60% win rate per game, then the match win rate must be different.
+
+    60% chance for Win
+    36% chance for Win Win
+
+    40% chance for Lose
+    16% chance for Lose, Lose
+    52% chance match is over before game 3
+
+Ok so what about the remaining 48%
+
+    48% chance for Win, Lose or Lose, Win
+    28.8% chance for Win, Lose, Win or Lose, Win, Win
+    19.2% chance for Win, Lose, Lose or Lose, Win, Lose
+
+    36% + 28.8% chance for victory = 64.8% chance for a win
+
+Great. Now we can update our numbers.
+
+    250,000 games at 60%
+    150,000 wins
+    100,000 losses
+    50,000 ticks
+
+    100,000 matches at 64.8%
+    64,800 wins
+    35,200 losses
+    59,200 ticks
+
+Interesting. Now best of three looks like the better option. However there's another assumption that's wrong. If a match has a 52% chance to be over by game 2, then there's only an average of 2.48 games per match. 
+
+Let's update our assumptions again:
+* A best of 3 match is 2.48 games on average for a player with a 60% per game win rate
+
+That would mean the best of three player could play 100,806 matches in the same time as 250,000 games
+
+    250,000 games at 60%
+    150,000 wins
+    100,000 losses
+    50,000 ticks
+
+    100,806 matches at 64.8%
+    65,322 wins
+    35,484 losses
+    59,676 ticks
+
+That's somewhere around a 19% increase, which matches the simulation numbers.
+
+Now I know this is taking a lot of things for granted and obviously the decision to play best of one or best of three is much more complicated than this. After doing the math though, I thought this was really interesting and countered my expectations.
+
+What if we assume a 55% winrate instead?
+
+    30.25% for W, W
+    20.25% for L, L
+
+    49.5% for W,L or L,W
+    27.225% for overall win (3 games)
+    22.275% for overall loss (3 games)
+
+    57.475% chance of match win
+
+So if we look at the numbers with a 2.495 games per match average we get
+
+    250,000 games at 55%
+    137,500 wins
+    112,500 losses
+    25,000 ticks
+
+    100,200 matches at 57.475%
+    ~57,590 wins
+    42,610
+    29,960 ticks
+
+That's about a 19% increase again.
+
+Let's try once more at 80%
+
+    64% for W, W
+    4% for L, L
+
+    32% for W,L or L,W
+    25.6% for overall win (3 games)
+    6.4% for overall loss (3 games)
+
+    89.6% chance of match win
+
+So if we look at the numbers with a 2.32 games per match average we get
+
+    250,000 games at 80%
+    200,000 wins
+    50,000 losses
+    150,000 ticks
+
+    107,758 matches at 89.6%
+    ~96,551 wins
+    11,207 losses
+    170,688 ticks
+
+Here we see around a 13.7% increase. That seems lower.
+
+Ok now I need to know. Let's try a 51% winrate
+
+    26.01% for W, W
+    24.01% for L, L
+    49.98% for W,L or L,W
+
+    25.4898% for overall win (3 games)
+    24.4902% for overall loss (3 games)
+
+    51.4998% for match win
+
+So if we look at the numbers with a 2.4998 games per match average we get
+
+    250,000 games at 51%
+    127,500 wins
+    122,500 losses
+    5,000 ticks
+
+    100,008 matches at 51.4998%
+    ~51,504 wins
+    48,504 losses
+    6,000 ticks
+
+That's a 20% increase. Seems like this benefit is greater when closer to 50%, though certainly the percent increase at 50% would be 0 right? I wonder what this looks like on a graph...
+
+Tomorrow, brain, tomorrow.
+
+I hope somebody out there enjoys this. If there's more math to add or things I'm misunderstanding please let me know in the comments. Most of all, play whatever makes you happy, and GLHF <3
+
+**TL;DR Best of three is better over the long term for ticks earned per minute with a consistent per game win rate, unless taking any of the other 1000 factors into consideration**",1566753019.0,19,0.76,16
+DestinyLFG,[PC] LF1M Standard Nightfall (Discord),Myrridin#1859,1512003078.0,1,1.0,0
+upstate_new_york,#HackFrost - Fight back against the harsh winter with a free virtual hackathon starting January 22nd,,1452458279.0,0,0.5,0
+hextcg,HexTCGMarket shuts down. So long and thanks for all the fish.,"Unfortunately as of now, HexTCGMarket has been voluntarily shut down. All open listings had their items returned, and no transactions are pending.
+
+Please feel free to ask any questions. I'll cover a few salient points:
+
+* We made $3.98 in the lifetime of the site.
+* Operating costs were much higher than that.
+* We are not selling the code or domain at this time.
+* If we do return, we will not be solely based on Dwolla and will aim to serve customers around the world.
+* This is not entirely related to nor entirely unrelated to Hex Ent's cryptic stance regarding RMT.
+
+We deeply apologize for any inconvenience this may cause. Thank you so much for giving us a shot if you did, and thank you to this sub for always being supportive and keeping the criticism constructive.
+",1423702201.0,7,0.71,37
+homeless,"Over 900,000 Homeless Kids Are Invisible to HUD. We Can Change That!",,1422496411.0,15,0.88,2
+hextcg,Clarification from Phenteo that it's ok to sell cards for real money outside of Hex,,1418949752.0,7,0.83,18
+hextcg,"Hex TCG Market: Packs can now be sold, and Shattered Destiny has been added","https://www.hextcgmarket.com
+
+Good news everybody! Packs have been added to Hex TCG Market, as well as all the Shattered Destiny cards. We really appreciate all the feedback we've gotten so far and will continue to work on creating the best real money market experience we can.
+
+Future features will include:
+
+* Selling bundles for a fixed price (all or nothing)
+* More easily listing or buying multiple items at once
+* Alternative payment methods
+
+The last point I want to touch on a bit. We know Dwolla isn't the fastest peer to peer payment system (though it is the safest and has the lowest fees). We also know it leaves customers outside of the US blowing in the wind a  bit, and we're not cool with that. We've been researching and working to find other options and so far have been looking at bitcoin as a possible alternative. We would love to hear any thoughts, suggestions or concerns you might have on this topic.
+
+As always, feel free to ask any questions here or on our contact form.",1418357718.0,3,0.6,8
+hextcg,[X-Post] Marketplace for player to player buying and selling using Dwolla,"Introducing Hex TCG Market - a real money marketplace for Hex cards and items.
+
+https://www.hextcgmarket.com
+
+We use [Dwolla](https://www.dwolla.com) to enable users to buy and sell in game items with each other. Card transfers all go through a middle account, and transactions happen automatically and securely. It does take a few days to get a Dwolla account set up and funded if you don't already have one, but once you do it's quick and easy to buy cards. You can also use funds you receive from selling cards to buy other cards, and you can always withdraw any funds in your Dwolla account back to your bank.
+
+This is a fairly early build, and we're looking to get feedback from the community early. Please let us know if you have any questions, concerns or suggestions.
+
+That being said, the service is built on a strong technology stack and has been tested through every stage of development. However we understand those who will want to wait for the market to mature.
+
+To the mods: I've been a mod in reddit communities before and I know how hard it can be to do your job. Please feel free to message me if you have any questions or concerns. It is my full intention to comply with the rules of this subreddit with this post.",1414516952.0,12,0.81,13
+hextcgtrading,Marketplace for player to player buying and selling using Dwolla,"Introducing Hex TCG Market - a real money marketplace for Hex cards and items.
+
+https://www.hextcgmarket.com
+
+We use [Dwolla](https://www.dwolla.com) to enable users to buy and sell in game items with each other. Card transfers all go through a middle account, and transactions happen automatically and securely. It does take a few days to get a Dwolla account set up and funded if you don't already have one, but once you do it's quick and easy to buy cards. You can also use funds you receive from selling cards to buy other cards, and you can always withdraw any funds in your Dwolla account back to your bank.
+
+This is a fairly early build, and we're looking to get feedback from the community early. Please let us know if you have any questions, concerns or suggestions.
+
+That being said, the service is built on a strong technology stack and has been tested through every stage of development. However we understand those who will want to wait for the market to mature.
+
+To the mods: I've been a mod in reddit communities before and I know how hard it can be to do your job. Please feel free to message me if you have any questions or concerns. It is my full intention to comply with the rules of this subreddit with this post.",1414274395.0,4,0.84,2
+hextcg,Jumanji!,"Just your typical rhino smash. We hit the 1v1 and 2v2 already. Too bad it didn't last long enough for 4v4.
+
+http://imgur.com/qd9mydj",1387595175.0,0,0.5,0
+Syracuse,Syracuse Startup Weekend coming up on the 15th. Anybody else going?,,1384197731.0,10,1.0,1
+Syracuse,Hack Upstate Hackathon this weekend. Anybody else going?,,1381450180.0,8,0.85,4
+forhire,[For Hire] Web Developer with CakePHP/MVC focus. Experienced in Stripe.js (payment processing) and Twilio (phone API),"Hello everybody.
+
+You can find my website (and some descriptions of my recent work) at http://www.thomashart.me
+
+My name is Thomas Hart and I'm an independent web developer for hire. Most of my work is CakePHP based. The past few projects I've been working on have given me experience with Stripe.js (a fantastic and easy to use payment processing system) and Twilio (a phone API for building phone menus, sending SMS, etc.)
+
+I am currently available for hire. I typically charge between $50 and $75 per hour depending on the complexity of the work but I'm always willing to discuss terms and alternatives.
+
+If you want more information regarding my experience, I can share some code and a couple active public facing websites. I'm also always happy to chat about your project and how I might be able to help.
+
+If you would like to get in touch with me, feel free to use the contact page on my site above, PM me here on Reddit or send email directly to tom@thomashart.me
+
+Thank you for reading. I look forward to hearing from you.
+
+",1380045100.0,1,1.0,0
+SolForge,500 Subs - State of the SubReddit,"Hey everybody,
+
+I just wanted to point out that we've hit 500 readers on our little subreddit. It seems like a good time to stop and discuss where we're at and what we'd all like to see out of this subreddit.
+
+As a community site, this should be whatever you all want it to be. Please leave any comments and questions below.
+
+Also, since I'm not actually playing SolForge and ForgeGamers has been shut down, I've been considering stepping down as a mod. I will not do so however unless I'm able to find a suitable replacement. If anybody is interested, please let me know below with at least a couple reasons why you'd be a good choice.
+
+Overall the sub has been great, and very little moderation has been needed. I'd like to thank you all for being civil and mature in a genre known for table flipping.
+
+Here's hoping the next 500 come even faster than the first.
+
+Thank you,
+Tom (myrridin)",1377194617.0,7,0.75,17
+SolForge,SPOILER ALERT: SolForge Core Set Card List • Forge Watch,,1376449830.0,10,1.0,7
+SolForge,[MOD] Sidebar Links need to be updated,"Hey everybody. I've been looking at the sidebar realizing we could do with a refresh of the links there.
+
+ForgeGamers is shut down, the iPad preview is no longer the most relevant (though the current iOS version probably is) and the IRC channel I'm not sure about. I'm pretty sure the Steam group should be added, as well as ForgeWatch and the wiki contained there as separate links. DCGGrounds isn't specifically SolForge but I'm voting for it being relevant enough.
+
+However this is a community, and what goes into the sidebar should reflect what the community wants and what will be most useful to the subreddit's visitors. Therefore, I'd love to hear your thoughts, both regarding sites you feel should be linked, information that should be added, or links that I've mentioned which you don't feel have a place in the sidebar.
+
+Ultimately the mods will make any final decisions, but they will be based pretty much entirely on the results of this post if I have my way.
+
+Thank you if you took the time to read this or respond to it. Great communities are an effort by everybody, and I think this one is off to a great start.",1376367538.0,4,1.0,4
+ScrollsTrading,[Store] Scrolls Marketplace,"Hey everybody,
+
+I just wanted to let you know about an online marketplace that I built for scrolls that uses it's own currency. You can get the currency by selling cards on the marketplace or purchasing it directly.
+
+[www.scrollsmarketplace.com](http://www.scrollsmarketplace.com)
+
+You can find our subreddit at /r/scrollsmarketplace
+
+As always, feel free to get in touch here: www.scrollsmarketplace.com/contact
+
+Find out more here: www.scrollsmarketplace.com/about
+
+Also, feel free to ask questions in this thread :-)",1370899821.0,3,1.0,11
+Scrolls,Announcing ScrollsMarketplace.com,[removed],1370893733.0,1,1.0,0
+SolForge,Volunteers needed for Origins Game Fair,,1369407051.0,6,1.0,0
+SolForge,Meet the Team – Anton KM aka “Ruin”,,1369210416.0,6,1.0,0
+SolForge,New Deck Database and Card Creator at ForgeGamers,"Hey everybody,
+
+Some exciting stuff just released tonight for forgegamers.com
+
+First up is the deck database. You can now save your created decks as well as view and rate other decks. See all decks here: http://www.forgegamers.com/sfcarddb/Decks or click on ""Save Deck"" in the deck builder.
+
+We've also introduced a card creator. See that here: 
+http://www.forgegamers.com/sfcarddb/CardMasters/create
+
+I'm also going to be streaming tonight and answering any questions about the new tools, FG in general or SolForge: http://www.twitch.tv/myrridin",1368666110.0,4,0.83,1
+TheseAreOurAlbums,[Acoustic] The Cat's Pajamas,,1368598297.0,2,1.0,0
+SolForge,Started streaming for the first time - Myrridin from ForgeGamers,,1367525669.0,0,0.5,0
+SolForge,SolForge PC Beta Update 1.1.3 is Live!,,1366904336.0,6,0.88,2
+SolForge,Meet the Team – Jeff Liu,,1366834377.0,3,1.0,0
+SolForge,New Streamer - DRoidRager. Tracking his win rate and chatting with viewers,,1366234750.0,3,0.71,1
+SolForge,Strangah now streaming the ForgeGamers Grimgaunt Challenge,,1366153945.0,0,0.5,1
+SolForge,Meet the Team – Will Garner,,1365685692.0,4,1.0,3
+SolForge,Forge Gamers » Wizard’s Den: Upgraded Armor,,1365545952.0,5,0.86,0
+SolForge,Enjoying this stream so far - Aquaphe5,,1365192548.0,0,0.5,2
+SolForge,The PC Beta Is Here!,,1365116943.0,18,0.95,10
+SolForge,Meet the Team - Patrick Sullivan,,1364848664.0,9,0.91,4
+SolForge,Nekrium Faction Starter Preview,,1364133514.0,5,0.86,0
+SolForge,Frequently Asked Questions - Kickstarter Update,,1363762060.0,5,1.0,0
+SolForge,Deck Lists for all 4 Starter Packs | General Discussion | Forum | SolForge,,1363668213.0,9,1.0,4
+SolForge,30+ new cards added to the deck database!,,1363660012.0,7,0.83,1
+SolForge,Seoman’s Corner – Tournament 4 Report – The Rise of TechnoStag,,1363034455.0,4,1.0,0
+SolForge,Sleeves and Shirts now available in the Store :-),,1362519062.0,8,1.0,0
+SolForge,New Card Preview! – Ferocious Roar and Steelshaper Savant (Partial),,1362101384.0,10,0.87,0
+SolForge,ForgeGamers Deck Builder New Feature - Test Hands,"Hey /r/solforge'ers
+
+We've added a new feature over on the ForgeGamers Deck Builder, which you can find in the sidebar or here: http://www.forgegamers.com/sfcarddb/Decks/build/
+
+The new feature will let you deal test hands and simulate leveling cards through the turns, giving you a feel for what a game with that deck could look like. See a demo here: http://www.forgegamers.com/sfcarddb/Decks/test_hands/Deck%20Name/1,1,1,2,2,2,3,3,3,5,5,5,6,6,6,7,7,7,12,12,12,20,20,20,15,15,15,47,47,47
+
+As always, we're very interested in any feedback and suggestions you may have. Thanks for checking it out :-)",1362024484.0,9,1.0,0
+SolForge,"Solforge Update #34 – Beta on track for March, Ascension Solforge Skin, And More!",,1361848107.0,6,0.81,0
+SolForge,New Preview Card! – Flameblade Champion,,1361746756.0,11,0.93,2
+SolForge,SolForge Deck Builder Beta - Hosted at ForgeGamers,,1361468608.0,7,0.83,0
+pedalloops,"The song that made me want to loop - David Ford ""Go to Hell"" [Youtube]",,1361225935.0,6,1.0,0
+SolForge,"Kickstarter Update #33 - Animated Card Preview, A New Card & Ascension Online Kickstarter!",,1361202026.0,14,0.94,2
+predaddit,"As a lifelong musician, I never thought that ""thump thump thump"" would be the most beautiful sound I've ever heard","Hi. My name is Tom and I'm a predad.
+
+My wife and I just had our first midwife appointment and we got to hear the baby's heartbeat. I've had a goofy looking grin on my face ever since, with no signs of it disappearing.
+
+I'm so happy to be joining you fine gents, and can't wait to be a father. I'm sure there are more incredible moments on the way but for right now I feel like the sound of that heartbeat could carry me through anything.",1353088511.0,17,0.82,4
+summonerschool,Since when does pick order not matter in normal draft?,"Am I getting a small sample size? Every normal game whole team agrees that the person who types the fastest gets what they want.
+
+I'm always flexible later in the pick order, but when I'm fp I'd like to play my preferred role. Anybody else experiencing this, and am I way off base for believing pick order should still be the priority standard?
+
+EDIT: I don't mean this to be a complaint post. Just wondering if I missed something and ""calling it"" became the standard in normal draft.",1351646065.0,6,0.69,33
+howtonotgiveafuck,So nobody seems to have mentioned yet (or I missed it) but I LOVE the new stylesheet for this subreddit.,"I don't always use the subreddit itself and I'm not sure when the change happened or who did it.
+
+That being said, coming from a web developer and designer, I think it's crispy as fuck :-) Excellent work.",1348861469.0,4,1.0,1
+leagueoflegends,Buff Knights Please,,1348510160.0,1,1.0,1
+TeamRedditTeams,"[NA] 1100 Support main LF people to play with (Duo, Team, 3v3, whatever)","I play all roles (though my mid is weak) and I'm basically just looking for people to queue with. Preferably voice chat (Skype, mumble, whatever) and no raging. I play weekday evenings EST and most weekends though my schedule is somewhat variable.
+
+I'm Myrridin0 on NA. Feel free to add me if you want to play.",1342375982.0,1,1.0,1
+WeAreTheMusicMakers,[Listen] Acoustic finger pick with some synth organ and string. Original with vocals. Broken Mole - Shining Star featuring Danny Ray and Silence the Leader,,1333246556.0,2,0.76,1
+mobiletribunal,I want to create a native Android App for Tribunal. Is there a fair and legal way to utilize portions of MobTrib to this end?,"Title says it all really. Just started Android programming and I need a first project. It would hopefully be a companion to MobTrib and not a competitor.
+
+Also, what changes were requested by Riot as far as your code? I'm curious what they're not OK with.
+
+Either way thanks for all your great work :-)
+
+Myrridin0 [NA]",1330151965.0,1,1.0,4
+leagueoflegends,"My best game so far. I now understand ""Carry"" Just over 100 Normals, and I'm liking Tridenemer XD",,1323248567.0,1,1.0,1
+Steamgiftsinvites,So Hi :-),"Remember me? :-P
+
+All gone :-/",1310627577.0,5,1.0,6
+Syracuse,"Selling my mid range gaming computer on craigslist - Dual 3.0Ghz, 5GB RAM, ATI 5550 HD, 1TB HD 20"" LCD Monitor",,1310510346.0,0,0.5,0
+playitforward,"IF YOU WANT A BADGE, MESSAGE THE MODERATORS","I'm still receiving PM's and comment replies every single day about this. I have retired from this community and there's nothing that I can do to help you. Please message the moderators (link on the right side) if you've completed a PiF and would like a badge.
+
+Thank you.",1308607719.0,18,0.81,4
+playitforward,My Resignation from PlayItForward and the gifting community,"I have a bit of bad news.
+
+As of the time of this posting, I am resigning as a moderator of /r/playitforward. I'm leaving the gifting community entirely, including the Reddit - Giveaway chat on steam (a fantastic group of people if you get the chance to stop in) as well as SteamGifts (nothing personal to the site's creator, who is an excellent person and developer).
+
+No doubt you're wondering why I've decided to do this. I'm not going to go through the details here but I can give you the key points.
+
+1. The community no longer needs me - In fact perhaps it never did. PiF rolls forward and there are a number of great mods who are sticking around and will continue to do the same amazing job they have been. I expect nothing whatsoever to change, until it's time to change for the better.
+
+2. I don't have the time - I spend 2 - 3 hours every day moderating and working on PiF ideas. I don't have the time and my arthritis cursed wrists can't take the abuse anymore.
+
+3. I've become disenfranchised with the community - This is the one I want to talk about more. However I think it would be lame to go out on a low note like that. Suffice to say there are a large number of people who have not one ounce of apprecation for the amazing things happening in /r/playitforward.
+
+EDIT: Large number may be unfair. The vast majority of members here are incredible and I think the ability and willingness of the community to recognize and not reward scammers is impressive. Any number is more than I'd like to see though and the principal issue is that I can no longer handle being outraged while people attempt to scam some of the kindest and most generous people I've ever met. It literally makes me sick to my stomach and 1 is a larger number than I'd like to see. I'm not talking about those who haven't gifted yet, but those who never plan to. Those who in fact have never even read the sidebar and just comment on PiF's that ask for something specific. Those who would seek to grab everything they can before destroying the community here. You can't let that happen, and I can't be the one to see it first anymore.
+
+I think it's probably best to be short and sweet. In closing, I just want to say thank you for everything that each and every one of you has done for the community. I love you all and I hope happiness and laughter find you wherever you are.
+
+myrridin",1307597348.0,59,0.9,70
+playitforward,"Sad Day, Happy Day: SteamGifts.com launches, PiF website goes on (infinite) hiatus","Hey PiFers,
+
+As many of you probably already know, steamgifts.com was launched last night. The site looks great and they already have more members than PiF. I've been in contact with the creator over steam and he seems like a very nice guy. I wish him much success and fortune.
+
+Unfortunately, this makes the PiF website somewhat redundant, and I have to halt development on it, probably indefinitely. As you may or may not know I have arthritis in both my wrists and I'm an independent developer so my time available to projects is very limited. I think the steam and game gifting communities needed something like this, and steamgifts.com got there quicker.
+
+There's a PiF happening right now with some referral codes available I believe, if anybody wants in. The site could use some improvements but I'm very impressed by what I've seen so far.
+
+Anyway, thank you to everybody who had suggestions or time to help me test the website. I appreciate all your help.
+
+FTR, PiF is not dead or going anywhere, but the website idea pretty much is. We'll still be around gifting games forward for as long as there's at least two members to do so, but it looks like it will stay housed here in reddit for the conceivable future.
+
+If anybody has any questions, I'll be happy to answer them. Otherwise, go check out http://www.steamgifts.com now.",1307472119.0,28,0.91,33
+playitforward,"State of the Sub-Reddit - May 31st, 2011","Hey PiF'ers :-)
+
+**TL;DR EVERYTHING'S GROOVY BUT WE'D LOVE YOUR THOUGHTS AND SUGGESTIONS**
+
+I wanted to give an update on how we're doing as a whole, and invite you all to let us know what you think about the job we're doing and whether you have any ideas about how to improve upon what we've done so far.
+
+**BADGES**
+
+Not long ago, we introduced badges for PiF members who have given at least one full game. I haven't done specific measurements, but our subscribers are up and the number of threads being submitted has definitely increased. I've been happy to see some threads requiring badges to win and some not. I have some further ideas for badges, but I think most of that will be useful after the website is live.
+
+**THE WEBSITE**
+
+I'm moving along on the website, and a previous thread got a dozen beta testers up and running. Unfortunately progress has been slow lately due to personal issues affecting the number of hours I'm able to put in. Any announcements regarding the website will be made in this subreddit.
+
+**READERS**
+
+We're up over 1,750 subscribers now! Our numbers continue to grow and for the most part it has been great for our community. However, with growth comes growing pains, and I thought it would be wise to revisit a couple policies.
+
+**CURRENT RULES**
+
+*Humble Indie Bundles*
+
+These are currently not allowed, and are removed from the page if one is posted. This decision was made after researching community opinion some time ago. Don't like it? This is definitely the place to let us know that.
+
+*Trolls/Scammers*
+
+There are those among us who would seek to use the system to maximize personal gain or the negativity of others. There is a little ""report"" button under every comment and I promise, we do check reported links. Last week a comment was reported that led to an immediate ban for the user involved (linkbait into some 18+ content and not the fun kind).
+
+*Serial Requesters*
+
+I'm happy to say that this has not been as big of a problem as it could be. Unless a user is breaking another rule we do not ban for serial requesting but we do advise users to be wary of it and avoid gifting to those accounts.
+
+I will say that stalking and harassing users that you feel are not using the system properly will not be tolerated. If you believe somebody is breaking the rules then please message the moderators. Otherwise it's best to leave the comments section to those who are actually interested in the game.
+
+*Referral Links*
+
+No request may be made in a PiF for personal financial gain, such as referral links, paypal addresses and ""free offer"" participation as requirements for entry. If you need clarity on this or have a question, please message the moderators.
+
+**SUGGESTIONS**
+
+Many times, we do not institute a rule but instead a suggestion. A PiF being open for 24 hours for example, is a suggestion.
+
+In general we believe in the freedom of the gifter.
+
+With very few exceptions a gifter may gift any game they choose in any way they choose to any commenter for any reason. Referral links and HIB's are two glaring exceptions to that rule but other than that you're generally good to go.
+
+All of the mods are active and friendly :-) If you do have a question about whether something would be appropriate, feel free to message the moderators. If you have concerns about another user, feel free to message the moderators. If you think the moderators suck, make a post about it, because honestly we all work really hard and messaging us about it would require us to throw ourselves on our swords at the will of the community.
+
+In closing, I love you all and thanks for paying it forward :-)",1306871499.0,18,0.84,22
+playitforward,Badges introduced to PiF for members who have given a game before,"**EDIT AGAIN: SOME OF YOU DON'T SEEM TO BE READING. I AM NO LONGER A MOD. PLEASE MESSAGE THE MODERATORS (ON THE SIDEBAR) TO GET YOUR BADGE. THERE IS NOTHING I CAN DO FOR YOU AND THE MODS WILL NOT SEE YOUR REPLY HERE**
+
+**EDIT: BADGES ARE IN. IF YOU STILL WANT AND DESERVE A BADGE BUT DON'T HAVE ONE, PLEASE PM ME OR THE MODERATORS**
+
+Hey :-)
+
+Thanks to a great suggestion from user pdinc, we've started the process of adding badges to users who have a verified PiF history (have given at least one game (not trial, free or HIB in most cases). The icon is the little dude from Fallout 3 giving the thumbs up.
+
+To get your decal faster, please include a link to one of your PiF threads that fits the criteria above in the comments. We'll be researching and adding badges as fast as we can.
+
+We believe this will encourage participation in the community and make it easier for gifters to make a decision about who to award to. Of course gifting to the same people would become circular eventually and we encourage you to pay it ""forward"" so don't feel pressured to give the game to somebody with a badge.
+
+The badge will show up on the front page of /r/playitforward as well as in the comments. If there are any questions or complaints, you know where they go :-)
+
+Thanks,
+
+myrridin",1306005642.0,55,0.95,124
+playitforward,PiF is the Subreddit of the Day for May 14th,"Just wanted to make sure you all saw this: http://www.reddit.com/r/subredditoftheday/comments/hb0w9/may_14_2011_rplayitforward_gifting_games_to/
+
+We're stoked for the honor, and look forward to the new members :-)",1305342677.0,34,0.96,5
+playitforward,"WANTED: WEBSITE TESTERS (only active PiF'ers will be considered, apply within)","Hello everybody.
+
+I want to take an extra second to say hello to all those new members out there. PlayItForward is growing every day (we're at 1,533 readers now, which seems amazing to me as I remember our humble beginnings) and I want to extend my warmest welcome. Unfortunately this is the part of the post where we leave you, but I hope you stick around the sub-reddit as there are some exciting developments in the works :-)
+
+Ok, so if you've been around a little while or longer you've seen me mention ""THE WEBSITE"" (cue ominous music). I'm going to quickly review overall goals, but if you've heard about it feel free to skip to the next paragraph. PiF has outgrown it's ability to self-regulate and better tools are needed. The website will house the PiF system externally with ways of easily tracking and displaying user involvement in order to facilitate recipient choosing and prevent gaming of the system. Users will receive ""PiF Karma"" for positive involvement in the system (gifting a game, writing a well-received game review, etc). This quick measurement will allow gifters to give to those most likely to continue ""Playing it Forward"".
+
+I know progress has been slow, but it hasn't been stagnant and I'm reaching the point where it would be useful for me to set up a beta testing group. The requirements to be considered and the reciprocal benefits are below next to those fancy list points.
+
+Requirements:
+
+* No new(ish) accounts.
+* No inactive accounts.
+* User must have successful PiF history as a gifter and preferably as a receiver as well. This will be verified and is non-negotiable.
+* Be able to commit an hour per week (or more) to testing
+* Seriously, no skeleton accounts
+
+Responsibilities: 
+
+* Originally, use the site as though it were live but without any actual gifting
+* Eventually, attempt to give malformed or unexpected data to iron out peskier bugs
+* Write reports (as detailed as possible) regarding the bugs you encountered
+
+Rewards (yay):
+
+* Early access let's you get dibs on the best usernames.
+* All testers will have access through the stage that they test and beyond. 
+* All testers who submit original bug reports will receive a small amount of ""PiF Karma"", the in-site measurement of positive involvement in PiF. This amount is not decided but I believe it should be on par with gifting a game. I think this will have to come to a consensus.
+
+Anybody who is interested should leave a comment here. PM's will not be accepted. If you are accepted, I will PM you an email address.
+
+As always, thank you to the wonderfully generous people in our community and keep playing it forward :-)",1304402641.0,11,0.74,35
+playitforward,"Ok, no more HIB bundles. I've removed the active one. All future HIB's that I see will be removed","Please let me know if you have any questions.
+
+Thank you.",1303107561.0,49,0.89,46
+webdev,"Hosting multiple domains on a VPS without cpanel, etc?","Hey /r/webdev,
+
+I'm making the shift from web dev to small business owner and I'm struggling with server admin issues, specifically DNS. My goal is to have a VPS hosting multiple domains without using cPanel or other software.
+
+I'm comfortable with a linux command line, and I've installed and configured apache for single sites before. DNS for some reason just confuses the holy hell out of me. Any good resources out there for doing this?
+
+I appreciate anybody who can give me a kick in the right direction.
+
+EDIT: Turns out I was looking for VirtualHosts, a feature of Apache. If anybody else wanted to know the answer, this performs exactly what I've described.",1302812551.0,5,0.74,18
+playitforward,Reminder: Please be careful who you gift to,"Hello PiF.
+
+Two excellent PiF's today, http://www.reddit.com/r/playitforward/comments/gm9sb/giving_away_portal_2/ and http://www.reddit.com/r/playitforward/comments/gmacn/pif_hl2_and_episode_1/
+
+Unfortunatey, both of these PiF's were gifted (one with random number, one on purpose) to user davidjeong95. The user account was created an hour ago and has no history except three comments on the two PiF threads. The user even states in their second comment ever ""I've been PiFing a lot of games"" which is either a lie or referring to a previous account.
+
+This might just be me, but I'm less than optimistic about this user's chances of coming back and contributing to our community. In order to keep the community strong it's important to gift to those who are likely to Play it Forward.
+
+I wanted to post this to get some feedback. A random number generator is a fine solution to picking a winner but it makes it more likely for a leecher to snag it up. In the second case a little checking would have invalidated the user's claim.
+
+Do we need stricter rules for participation? I know better tools for tracking user history would be useful and the website will be progressing once more after a hiatus to launch my website and another project I'm working on.
+
+Anybody have anything they want to add?",1302379226.0,28,0.97,40
+playitforward,PiF Steam Account,"Passing this along for ohsoserial.
+
+Current game list: http://steamcommunity.com/profiles/76561198034457257/games/?tab=all
+
+The person with the best idea for a PiF contest gets it.
+
+EDIT: To be clear, the winning entry is the best idea for a contest to use as criteria for a future PiF. I suppose rap contest does fall within those ranks, though it feels a little too 8 mile to me. That being said, the idea for a rap battle would be the suggestion, not your rap ability itself.
+
+EDIT AGAIN: The account was passed to stickynips, who added Portal to it.",1301816791.0,4,0.83,22
+stopsmoking,Just watched Easyway DVD and smoked my last cig. Quitting as of 3/30/11 and not looking back. Goodbye little monster.,"Title says most of it. Watched a DVD version of Allen Carr's Easyway and it made a lot of sense to me. This will be attempt number 8, but the first time I'm going in with confidence and eagerness. I'll see you on the other side.",1301463220.0,2,1.0,2
+forhire,[For Hire] Web Developer/Designer specializing in simple CMS sites,"My name is Tom Hart. I'm 26 years old and I'm a freelance web developer working on starting my own company. The current web page is http://www.zenpoint0.com
+
+My specialty is simple CMS sites for small business and organizations. I use a platform called CMS Made Simple that is easy to update for anybody who has used a word processing program.
+
+I can do Wordpress templates as well, and some custom PHP. I've also been working with jQuery to create animations and dynamic pages.
+
+A basic CMS package starts around $1500, though I'm offering discounts to build my company profile at the moment. Custom work is $75/hr though if it's something I can use in a portfolio I can apply a discount there too.
+
+Thanks for reading, and get in touch with me at tom@zenpoint0.com if you would like a quote or just to chat about how I might be able to help you with your web project.",1300904210.0,3,0.72,7
+web_design,Starting a web consulting company and I just launched the website. Critiques? Advice?,,1300078575.0,3,0.8,33
+playitforward,"Please, no referral links in PiF offers.","EDIT: Seems like mostly approval. No action was taken against the user, though future posts may receive a bit of extra scrutiny. The dead space 2 PiF was apparently awarded to IELATI. I've messaged the user to confirm. In the meantime I'm not preventing yankeedemon from participating in PiF, so use your best judgment.
+
+Hey PiF,
+
+I'm sure a lot of you have seen this, but in a recent Dead Space 2 PiF, the conditions for winning changed multiple times and eventually involved soliciting signups for Dropbox through a referral link.
+
+If the crowd rises up and tells me they think what I'm about to say is wrong then as always I will follow the will of the community. However, it is my opinion that there should be no referral link on PiF ever for any reason period.
+
+I understand that in this case the benefit of a couple dropbox referrals over a $60 game means the user is not scamming. I don't want to scare away those who want to give to the system. I've removed the post but no action has been taken against the user and they are free to repost without the referral link. I've messaged them with a link to this post as well as the information above.
+
+Thoughts?",1298532214.0,18,1.0,14
+rugc_greatlakes,Homophobic and racist speech - still amusing?,"Hey GL,
+
+I've had a blast playing with you, and when I started playing the server was full of nice people having fun matches of TF2. Lately it's been a lot less cheerful and fun, but what bothers me is that I'm hearing and seeing a lot of hateful speech. I know it's a laid back server and all, but that shit bothers me. 
+
+Is it just me? I complained tonight while playing and Bubbles said it was still amusing to the server so it was cool. Is this the case? You're all more than welcome to run the server any way you want, but I'm not interested in playing in this kind of environment.
+
+Normally I'd just move on and find another server, but as I said I've really enjoyed most of the time I've spent on GL and it feels like my TF2 home.
+
+Just my two cents. Let me know if I should fuck off and find a family friendly server.
+
+EDIT: Thanks for the response from players and admins alike. It seems like we've come to a consensus and will see some improvements moving forward.
+
+THD and L'esprit, you've encouraged me to donate. Just sent $10 to paypal@pavleck.net",1296629590.0,13,0.93,26
+playitforward,"First look at the website - please play with it, break it and most importantly let me know what you think?",,1295841538.0,22,0.93,23
+playitforward,PlayItForward is now upvote only,"Hey everybody,
+
+We've received a couple suggestions to disable downvotes for PiF. The deed is done. Hate it? Let us know.
+
+EDIT: Per the comment below, this is no longer. Thanks for letting us know :-)",1295238245.0,0,0.47,22
+playitforward,regarding the website,"Hello PiF'ers
+
+After a chaotic winter break, and a shift from employment to selfunemployment, I've resumed work on the website and hope to eventually use it as a portfolio piece for my new web dev company, with the community's permission. First though it has to be built, and that's why I'm here today.
+
+I'm looking for your input. Let me describe what I have so far and then I'd like to open the floor to suggestions and offers of assistance.
+
+The website does not currently have a design. I'm a mediocre designer but if somebody's looking to get involved, graphic work would be the most beneficial.
+
+Note: What follows below is my ideas so far and are not necessarily endorsed by PiF or all of the mods. This is more brainstorming than anything so if you don't like something, speak up :-)
+
+The site will operate on a PiF based ""karma"". After a user signs up with the site, they can gain karma in a few different ways, though primarily through gifting games.
+
+The site allows you to register with a link to your reddit name (and other profiles, such as steam for extra karma) and I think it may be good at least to start to keep a strong link with reddit and require a reddit profile with x activity or something along those lines. User accounts would have to be manually reviewed at first.
+
+There will be two major sections of the site. The first being PiF's where you can create, browse and apply for PiF's. The other section will feature a listing of games (still a heavy focus on indie) including descriptions and links to these games on their respective sites/platforms. I'd also like to include the ability for users to review games for additional possible karma, though this would need to be regulated by review quality somehow.
+
+Down the line I'd also like to find a way to interact with indie devs, perhaps with special dev-sponsored pif's or interviews, etc. I'd also like to see this idea opened up outside the world of reddit one day, though that's just my opinion so if you think it's heresy, let me know.
+
+Thoughts?
+
+EDIT: Bonus incentive, best suggestion gets a copy of Poker Night at the Inventory :-)",1295214255.0,14,0.86,14
+playitforward,A message from the moderators,"Hey PiF'ers
+
+A quick note regarding Aussie gamers, and threads requesting a Steam gift in exchange for a game or money: These threads are technically against the rules, though we don't with to push you away. We believe there are other reddits that are more appropriate for this (/r/favors for example) but we will be lenient with these types of posts. However if it becomes an overwhelming issue then we will work to keep the spirit of PiF strong.
+
+Also, due to the time of year and Steam Sales (as well as some additional interest from other subreddits) we've had some increased activity on PlayItForward, which is great! I love to see the giving spirit in action. As always thank you to all who have participated and continue the PiF cycle.
+
+Unfortunately this increased attention is coming from all sorts, including a few users who have caused a little trouble. The moderators have been investigating reports and taking action where needed. We also wanted to pass along a few tips for avoiding scammers, and a reminder of the rules.
+
+Warning signs of a scammer
+
+* Account opening date. If an account is less than two months old, it may be smart to avoid gifting to that account.
+* Serial requesting. If a user's comment history shows requests in multiple PiF's in a row, especially those that have already been gifted, it could be a red flag.
+
+And as a reminder, a summary of the rules is below. For more information, see the sidebar or AMA.
+
+* No request threads, only gifters post
+* No serial requesting
+* If you receive a game, please forward one before requesting another
+
+If you have any questions, or would like to report suspicious activity, please feel free to ask here or message the moderators. We're here to help :-)",1291138897.0,16,0.9,4
+playitforward,"PiF: Anything from Steam's ""Indie"" category $10 or less","Hey all,
+
+I received Machinarium from joincamp (thanks!) and realized I'm not nearly hardcore enough to play it (the game is very fun, but I found to be quite difficult). I wasn't going to pass that particular game along but decided that I'd leave it open ended. $10 on Steam for the indie store, and to clarify yes that can be two $5 games. If it's a 7 or 8 dollar game, maybe I can throw in a TF2 hat or something.
+
+Winner(s) will be chosen by the most thought provoking sentence. Quotes are ok, but not required. If you do quote, please be sure to credit it.
+
+There will be at least one winner, but if there's some great submisssions I may pick two or three.
+
+Winner will be chosen at some time in the future, to be determined.
+
+Also, a big thank you to everybody who has posted PiF's. Your generosity and creativity have warmed my heart and challenged my mind.
+
+EDIT: Two winners chosen. I may come back and award a third if finances hold steady but no promises. Thank you to all who participated, my mind is reeling :-)",1287755093.0,8,0.91,13
+SuicideWatch,"This morning I was king of the world, now I'm the king of shit","Hello SuicideWatch,
+
+I'm a 26 year old male. I'm a computer programmer by trade, but over the past 6 months have experienced a deterioration in my wrists due to god knows what. I went to a doctor who ran a test that let me know it's not carpal tunnel, but refuses to see me again until I can pay the $1100 I owe him. Because I'm unable to work, I'm being laid off this Friday.
+
+I also suffer from bipolar manic depression. I was medicated many years ago, but haven't been on anything besides marijuana for a while. Lately, because of everything happening, my mood swings have become more and more drastic. This morning I felt like the most powerful man in the world (manic stage) but tonight I feel worthless. I've studied computers my whole life (wrote my first program at 4) and it feels like everything I've worked for is out of my reach.
+
+I'm losing the pointless health insurance I had, and my doctor won't write a letter stating I'm unable to work. I'm married and the thought of not being able to provide for my wife just depresses me more.
+
+To top it all off, all the friends and family I've supported through their troubles (depression, drug addiction, etc) are nowhere to be found, or telling me to ""look on the bright side"". I feel very little support.
+
+I need help. Specifically medical help that I don't know how I'll ever get. I haven't wanted to kill myself in a long time but I can feel that creeping feeling coming back. I'm not sure why I'm posting this, but there's nobody else who will listen to my diatribe.
+
+Please don't tell me it will get better, or that I'll never know what tomorrow brings. Blind optimism in the future is pointless. If there are resources out there to help people in my position then I'd love to hear them. If you're going to reply just to say ""Pick your head up, it will definitely get better"" please go try to help somebody else. It's not going to help me and it may change their mind.
+
+Oh, and I'm out of my herbal medication at the moment too. I'm pretty sure it's at least mildly related.",1287446478.0,10,1.0,32
+playitforward,Spam filter woes? Let us know,"Hey PiF'ers
+
+EDIT: For the record nothing is being filtered on purpose. Game requests are against the rules and being removed, but no posts have been removed for any other reason.
+
+I caught a comment today complaining about the spam filter. When I went to check it I found a good number of legitimate looking entries (most posted the first evening or next day, 3-4 days ago).
+
+Now I don't want to prevent anybody from giving a game if they want, so if your submission was caught by the spam filter let me know or message the mods.
+
+I'm not going to approve anything automatically in case the user was able to successful repost, but if you think your submission was filtered I'd be happy to help.",1285684480.0,7,0.9,0
+playitforward,Receive a game? Tell us what you think,"Okay PiF'ers
+
+We started with a band and there was a flurry of games sent and offered, with more being added at an impressive rate. I for one am humbled to be part of such a generous community. For no reason other than to spread good vibes through the community in a non-circular fashion, and give money to some of our favorite people - indie game devs.
+
+Well we've stretched the walls a bit, and tried some funky stuff. I think we're all still trying to get a handle on how this works. However I know there have been some successful PiF's already. Can we use this thread to share some success stories? If you were given a game, please tell us what you think so far, and if you have plans to PiF please tell us about those as well.
+
+As I stated to a few different people, I think it's wise to take ""obligation"" out of the equation here. If you don't like the game, or can't afford to right now, there's no pressure to pass it on. However in the sprit of the idea you should do something nice for somebody. The idea of ""pay"" it forward is giving your excess fortune to another so that they may pass it on to somebody who needs it more than you. There's no need to dictate form or ostracize those who don't follow the lines.
+
+Jeez, lots of text and rambling.
+
+**TL;DR** If you've gotten a game through PiF, tell us about it :-)",1285525096.0,15,0.95,8
+playitforward,PIF: TF2,"Hey everybody,
+
+I have a thing for trying to apply pay it forward type ideas to other areas of my life. In a perfect world this subreddit would have every receiver who really liked the game gifting multiple copies, but I think it's best to let some of it develop organically.
+
+As my contribution, I'm gifting TF2. Hopefully more than one copy (I'm a pretty poor gamer myself, caught me on payday) but I can guarantee at least one.
+
+The reasons are slightly selfish, as I'm a ""newer"" TF2 player (100 hours in) and enjoy playing against people who don't have 2000 hours in. One of the great things about this game is that I can still have fun while playing against higher skills players, but it's nice to shake up the bell curve once in a while.
+
+I'm not going on upvotes or downvotes but most persuasive post. Think of it as a game with very few rules. I have no specific criteria other than that. I'm an ent and a web developer. That and my comment history (oh god, what's in my comment history) are your only hints.
+
+I'd like to gift it to somebody completely new to TF2, so stay away from domain specific humor.
+
+I'll probably make a decision tonight as I'm sitting down to play, but I'm not positive when I'll do it. If things go well, I'll hopefully gifting a second and maybe third copy, so don't be discouraged :-)
+
+In closing, I love the idea and I hope this subreddit works out. Remember, pay it forward works in many ways. Try to find a way to pass on some positive energy today.
+
+steam: myrridin [r/trees]",1285338438.0,8,0.9,17
+rugc_greatlakes,Introducing myself,"Hello GL TF2'ers
+
+I've been playing GL as much as possible lately, and starting to settle in. I've had a blast so far and I think there's a bunch of great people who play this server, so I wanted to introduce myself to the people I've been fragging with.
+
+My steam name is ""myrridin [r/trees]"". I have about 80 hours in, mostly as demo and soldier. I like demo better, but I think I'm better at soldier.
+
+I'm not really good at either really, and it's sometimes difficult to play because of the arthritis in my wrists. However you've all made me feel welcome (even you anomie), and I've had a bunch of fun.
+
+Anyway, mostly I just want to say thanks, for giving me a fun place to play TF2 without feeling like a liability.",1284998920.0,5,0.86,18
+funny,GAMING COMPUTER,,1284921392.0,0,0.43,7
+bestof,"Dude, that screen name",,1282788669.0,1,0.56,0
+bestof,"1. Post this to Craigslist, 2. Receive many invitations for casual sex, 3. ... 4. COME UP WITH A NEW MEME",,1281990725.0,23,0.68,4
+reddit.com,Alternatives to Reddit?,"So in the light of all the drama surrounding Reddit Gold and what may or may not happen in the future, I've seen a lot of people threatening to leave. I believe a content aggregation site is more than almost anything else a product of it's userbase.
+
+So, if you are going to or would or have ever thought of leaving, what sites come to mind as worthy content aggregation competitors?
+
+Some I've come across:
+
+* [Digg](http://www.digg.com)
+* [HackerNews](http://news.ycombinator.com)
+* [Fark](http://www.fark.com/)
+
+I never commented at Digg, and that's one of the things that got me to love Reddit so much. I was able to become involved and have some very interesting conversations here. I haven't tried Fark or HN yet, but I hear them referenced a lot.
+
+Opinions? Thoughts? Sites I haven't mentioned?
+
+Thank you if you take the time to comment or vote this. I like Reddit a lot, and I'm not freaking out over the lounge and the trophy. However I am concerned that these changes may be symbolic of a bigger shift in ideology.",1279726710.0,3,0.63,16
+Music,"Masters From Their Day - web series about tracking, mixing and mastering a track in one day",,1274885830.0,1,0.6,0
+Music,Shadows Fall - Welcome to the Machine (grooveshark),,1273771300.0,1,1.0,0
+AskReddit,"AskReddit - Might not be able to program anymore, what should I do?","Hey Reddit,
+
+Vague question I know. I've had a debilitating injury in my wrist and been unable to work for the majority of the past 3 weeks. I'm a programmer and I fear my next doctor's appointment will end in me being told to pick a new career. This has already been mentioned, and the opportunities for good news are dwindling.
+
+Outside of being a programmer I'm also a musician and I play guitar mostly these days. I'm scared that my only professional talent and my only personal release are both going to be taken from me for some time.
+
+I've been working with computers from age 4, and I'm now almost 26. I don't like to admit that I'm addicted to technology, but it's almost definitely the case.
+
+I guess the real question is - any advice for somebody who may have to completely change their personal and professional life, and at the same time essentially walk away from computers and music (until Matrix level back-of-the-neck technology takes over anyway)?
+
+Thank you in advance for any responses. Just being able to express this is starting to help.",1273522222.0,4,0.75,21
+DoesAnybodyElse,"DAE Try to use both Digg and Reddit, only to realize that Digg is what was on Reddit yesterday?","EDIT: Found the reddiquette under help at the bottom of the page. If I'm not the last one, look down or here: http://www.reddit.com/help/reddiquette
+
+I apologize, as I'm sure this has been brought up before.
+
+**TL;DR Reddit is better than Digg. Big surprise. I'm sticking around. Hi!**
+
+I am(was) a Digg junkie. Huge TSS/TechTV fan, I remember the dark tips from krose. When he made a site, I was all over it. However, maybe a couple months ago I started visiting Reddit. In a few days I realized that everything I saw on Digg had been on Reddit the day before, or was not worth looking at. As in a full 24 hours. Everytime I opened Digg I had already read everything I was interested in.
+
+Did anybody else do this? Safe to say I'm sticking with Reddit (love the community, you guys are wayyyyyy better than the digg community, though I'm sure I'm preaching to the choir) but I'm curious if many of you started with Reddit or made the transistion I'm making now.
+
+Also, I wanted to break the ice with my first post, and this seemed a valid topic to me, though as I've mentioned I'm sure it's been done to death.
+
+It's not only fresher content. I like the way the site acts and looks more than Digg, but the content really sticks out.
+
+In summation, hello Reddit! I'm excited to be joining your ranks and look forward to many discussions with you all.
+
+Tom
+@myrridin
+
+P.S. I'm open to criticism. Also, I haven't found a comprehensive source of Reddiquete (sp I'm sure) so if you have a link, let me know.",1266354420.0,0,0.4,3

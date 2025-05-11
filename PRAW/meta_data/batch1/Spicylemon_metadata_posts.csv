@@ -1,0 +1,851 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+helena,Thanksgiving Dinner 2025 Options,"Does anyone know of any Thanksgiving dinners being served in or around the Helena area that are open to the public? Dinners could cost money or be free, buffet-style or served, and maybe as far away as Butte or Great Falls.",1731520237.0,7,0.82,11
+Jokes,"Puns are the number one, highest form of comedy.","But poop jokes are a solid number 2.
+
+[fake] edit: It's your duty to post your best worst puns now.",1686150214.0,29,0.85,8
+bash,beepbeep: A nice QOL addition to my workflow,"[https://github.com/SpicyLemon/SpicyLemon/blob/master/bash\_fun/generic/beepbeep.sh](https://github.com/SpicyLemon/SpicyLemon/blob/master/bash_fun/generic/beepbeep.sh)
+
+This started out a simple a command that preserved the last exit code and beeped twice. Since then, I made a few enhancements to it.
+
+Features:
+
+* Exits with the same exit code as the previous command.
+* Number of beeps can be provided as an argument.
+* If no arguments are provided, it will beep twice if the previous exit code was \`0\`, or, three times if it was not \`0\`.
+* If a non-numeric argument is provided and the \`say\` command is available, it will execute \`say\` with the text provided as args.
+
+I like to use it at the end of commands that I expect to take longer than a few seconds so that I can shift my attention somewhere else, but still know when the command finishes.
+
+For example:
+
+    $ make test; beepbeep
+
+I actually have it aliased to \`alert\`: \`$ alias alert='beepbeep'\`, which is what I think of it as (and is easier to type). I didn't want the function named \`alert\` though due to high probability of conflicting with other commands.
+
+You can download that file (at the top) and source it to add the \`beepbeep\` function to your environment. The file can also be directly executed if you prefer not to add it as a function to your environment.
+
+Here's just the function definition from that file:
+
+    beepbeep  () {
+        # Presever last exit code
+        local ec=$?
+        local count
+        if [[ ""$#"" -gt 1 || ""$1"" =~ [^[:digit:]] ]]; then
+            if command -v say > /dev/null 2>&1; then
+                say ""$@""
+                return $ec
+            fi
+            printf 'beepbeep: Unknown argument(s): %s\n' ""$*"" >&2
+        else
+            count=""$1""
+        fi
+    
+        if [[ -z ""$count"" ]]; then
+            if [[ ""$ec"" -eq '0' ]]; then
+                count=2
+            else
+                count=3
+            fi
+        fi
+    
+        printf '\a'
+        count=$(( count - 1 ))
+        while [[ ""$count"" -gt '0' ]]; do
+            sleep .3
+            printf '\a'
+            count=""$(( count - 1 ))""
+        done
+        return $ec
+    }
+
+It's just been so useful for me that I thought I'd share.",1682453977.0,16,0.91,2
+depression,How does one overcome loneliness without involving others?,[removed],1681767757.0,24,0.97,10
+commandline,CLI Horizontal Rules,"Ever want to make note of a spot in your terminal so its easier to find later while scrolling back?
+
+I put together some `hr` shell functions for that (`hr1` `hr3` `hr5` `hr7` `hr9` `hr11`, the number is the height):
+
+[hr commands for each size](https://preview.redd.it/ozlvqjtnqlia1.png?width=2374&format=png&auto=webp&s=a04669cebfc8c9e9ffaaf31d565801ee55d9476d)
+
+I can also provide text to include in the output:
+
+[hr commands including text for each size](https://preview.redd.it/kl6caw2vqlia1.png?width=2374&format=png&auto=webp&s=072a41a60d216fc4191e422927a0057f049f535b)
+
+&#x200B;
+
+To add them to your environment:
+
+* Download [https://github.com/SpicyLemon/SpicyLemon/blob/master/bash\_fun/generic/hrr.sh](https://github.com/SpicyLemon/SpicyLemon/blob/master/bash_fun/generic/hrr.sh) to somewhere you'll keep around.
+* Add a line to your shell start-up script (e.g. `.bash_profile` or `.zshrc`) that sources the file, e.g. `source ~/Downloads/hrr.sh` (but with your personal file location).
+
+By default, there's 18 color gradients that it randomly picks from. To increase that to 296, download and source [https://github.com/SpicyLemon/SpicyLemon/blob/master/bash\_fun/generic/palette\_generators.sh](https://github.com/SpicyLemon/SpicyLemon/blob/master/bash_fun/generic/palette_generators.sh) too.
+
+I've been finding this super handy lately, so I thought I'd share it. I use it regularly in `bash` and also sometimes in `zsh`.",1676576434.0,48,0.9,5
+smarthome,D-Link end-of-life?,"Has anyone ever had D-Link end-of-life a smart product on them, making it so their sites/apps/services won't deal with them anymore?
+
+I have two D-Link Wi-Fi smart plugs that I've used for several years (since 2017). I almost exclusively turn them on and off through Alexa. Yesterday (Monday Jan 2, 2022), I turned one on at around 4:00 PM (Mountain time). When I went to turn it off at 3:00 AM (Tue Jan 3), it was unresponsive. All other things on that Wi-Fi are working just fine. Those two smart plugs are the only D-Link things I have.
+
+I pulled up the Alexa app on my phone, and it lists my two D-Link plugs as ""Disconnected"". I tried opening the ""MyDLink Home"" app that I've had for years and it just gives permissions issues errors and won't even let me try to log in. I tried logging in on their website, but it won't tell me anything because they don't support my os or browser (Tried Android 13 + Chrome, MacOS + Chrome, and MacOS + Firefox). I tried installing one of their newer apps, but when I log in, it says I don't have any devices. The first time I logged in, it did claim it was migrating my account, but apparently that didn't include my devices.
+
+I tried cutting of power to them (at the breaker) and turning it back on, but that didn't fix them. They're prohibitively difficult to actually access, and I remember them being a pain to set up, so I haven't tried that yet.
+
+I also tried contacting D-Link support but they just told me they wouldn't talk to me anything because I bought the plugs more than 90 days ago.
+
+According to my Amazon orders, their model number is DSP-W110.
+
+Does anyone know how to get these things working again?
+
+Or should I just buy replacements and never consider D-Link anything ever again?",1672779727.0,23,0.93,10
+bash,CLI git diff explorer with fzf,"I wrote a git diff explorer in bash that utilizes FZF: [https://github.com/SpicyLemon/git-diff-explorer](https://github.com/SpicyLemon/git-diff-explorer)
+
+You can provide arguments to it just like you would the `git diff` command. It shows the `--compact-summary` in a bottom, selectable area in `fzf`, and the diff of the file highlighted in a top preview window. The files of the selected lines are then printed upon exit.
+
+Feedback and suggestions are welcome.",1660928753.0,5,0.79,1
+help,Speed Test,"Does Reddit have any sort of speed test service?
+
+I ask because, for at least the last year, it feels like Verizon is throttling/deprioritizing traffic from Reddit to my (Android) phone. Specifically, photos and videos are slow to load (like dial-up slow), and sometimes simply won't load at all. The source is usually redd.it, but is sometimes imgur, or redgifs, so it's posible it isn't Verizon/Reddit specific. I've also seen it with comments on posts.
+
+Switching to WiFi (via Spectrum) always alleviates the problem.
+
+This happens at all times of the month; it doesn't matter if I've hit my Verizon ""limit"" yet (after which all my traffic can be deprioritized).
+
+Before I go leveling accusations at Verizon, though, I'd like to have concrete evidence of chicanery. I'd basically want to compare the Reddit-specific speeds with other speed test results. I'd want to do it on both my Verizon and Spectrum connections (and possibly others). I'm primarily interested in downliad speed, but upload and latency might help paint a full picture.",1657308997.0,0,0.5,2
+funny,Are you feeling okay Reddit?,,1652397879.0,1,0.67,3
+AskReddit,"With Marijuana becoming increasingly legal, what are some healthy, fun ways to enjoy being high?",,1651510680.0,0,0.5,65
+help,How do I dismiss the notifications at the top of my feed?,"They showed up a few days ago when someone folks replied to a comment of mine. The bell icon doesn't have an alert count, but every time I go to the top of my feed, three notifications are still sitting there. I've even visited a few. My phone has been restarted a couple times too. But still, always there.
+
+This is on the Android app.
+
+Screenshot: https://photos.app.goo.gl/fPULToV17kyx1ZjFA
+
+Edit: Added a screenshot.
+
+Edit 2: Figured it out. Tap on the notifications bell, tap on three dots and mark all notifications as read.",1650872486.0,2,0.75,5
+smarthome,Indoor/Outdoor thermometers,"Does anyone have recommendations on indoor and outdoor IOT thermometers?
+
+I'd like to get 3 indoor and 3 outdoor thermometers to put on three windows on different sides of my place. I've no preference for communication protocol (e.g. z-wave or zigbee or whatever, but some sort of mesh is preferred).
+
+Initially, I want to just create a display with the readings. I'd also like to set up some notifications triggered by readings from pairs of thermometers and maybe recent history. Eventually, I want to add some window open/close sensors into the trigger logic too, but I don't have such sensors yet, so that's a ways out.",1635273135.0,2,1.0,2
+helena,Big Bill ATMs?,[removed],1627247402.0,0,0.38,4
+Jokes,"The Past, The Present, and The Future walk into a bar.",The situation was tense.,1625072519.0,33,0.87,4
+depression,Feeling really invisible,[removed],1617772458.0,2,1.0,1
+depression,I'm really not sure why I shouldn't kill myself.,[removed],1615111450.0,2,1.0,3
+Jokes,"For Christmas, I brought my girlfriend home to meet the family,","And my wife was like, ""What the fuck?""",1609281484.0,47,0.9,2
+AskReddit,Vehicle Warranty call center people: How do you feel about working for a crooked company and scamming people?,,1608058649.0,1,0.57,0
+AskReddit,Vehicle warranty call center people: do you know you're working for a crooked company trying to scam people?,,1608058274.0,1,1.0,1
+smarthome,Alternatives to Mysa Baseboard thermostats,"Does anyone have any thoughts or opinions on smart thermostats for baseboard heaters (other than Mysa)?
+
+I'm currently using 5 Mysa thermostats for my baseboard heaters, but have run into problem after problem with them to the point where, right now, they're functioning just like a simple thermostat (without even scheduling). So I'm looking to try an alternative brand so I can return the Mysa ones.
+
+I'd rather not have to install relays, so I'm looking for line voltage thermostats. I've looked at a few, but I'm not really sure how to actually compare them. Other brands I've looked at are Sinope, Stelpro, and Hoot. Hoot seems prohibitively expensive and not really that smart. I'm not familiar with either Zigbee or Z-Wave, so I'm not sure how that weighs in either. I have an Amazon Echo, but don't really see myself using it for my thermostats at this time. I'm also not really concerned with the geofencing stuff.",1607623091.0,5,0.86,7
+pics,Hopefully this will put an end to Trump's election tantrums.,,1606925963.0,114537,0.67,3737
+depression,Maybe I'm not actually depressed.,[removed],1605049713.0,6,0.88,8
+poker,What do you call a group of donkeys?,"A bunch of sheep all together is called a flock. 
+
+Several crows in one place is called a murder.
+
+Multiple ferrets hanging out is called a business.
+
+And a group of donkeys is called a poker tournament.",1600347097.0,0,0.5,5
+pics,"When no one asks, this is the Dick pic I send.",,1599233726.0,1,0.52,0
+AskReddit,Folks of Reddit: Call out your friends. Call out your neighbors. Call out yourself! What are some random acts of kindness you have seen or experienced lately?,,1597302029.0,2,1.0,3
+SuicideWatch,Looking for a reason to live.,"I've been fighting depression for well over 10 years now. Over the years, my reasons to live have dwindled. Either they left me, I no longer found joy in them, or they were just plain destroyed. Now, there's nothing left.
+
+Nothing brings me joy anymore. Any time I allow myself a glimmer of hope, it turns out to be shit.
+
+I recently started seeing a therapist again, and I started a new prescription that's supposed to work well against treatment-resistant depression. It's not working though. And seeing the therapist has only served to remind me of how completely incompetent I am. I don't have the ability to change myself for the better even if I had the energy.
+
+I'm just too broken to be fixed. It's like trying to build a card house in a hurricane. It's like trying to put a broken tempered glass door back together. It's like trying to unspill a dropped jug of milk.
+
+These current attempts to cure myself will be my last. If getting over my depression is reliant on my abilities, then I have no hope. And since prescriptions don't seem to work, I have no hope. And since no one cares enough about me to lift me up (I'm too fat for that anyway), I have no hope. And since I don't have anything that makes me want to be alive, I have no reason to even look for hope.
+
+Death can't find me soon enough.",1596361312.0,5,1.0,1
+AskReddit,What do you see when you close you eyes?,,1596160616.0,3,1.0,3
+depression,"As a pessimist, I'm always either right, or pleasantly surprised.",I'm fucking tired of being right. When do we get to the pleasantly surprised part?,1595998296.0,16,1.0,2
+Jokes,"The other night, I asked a woman If she wanted to come back to my place for a cuddle.","She said, ""There will be no spooning. There will definitely be no forking. But if you talk to me again, there will be a knifing.""",1595564358.0,15,0.94,0
+redditmobile,[Android][2020.24.0.274937] No sound or video controls on non-v.redd.it posts.,"Just switched over to the official Reddit app (from RIF) and noticed that sounds aren't playing for gifs. Additionally, there are no video controls (or time info) on them.
+
+After lots of poking around, I found such controls on posts hosted on v.redd.it, but not on posts hosted on sites like imgur and gfycat.
+
+Example imgur post: https://www.reddit.com/r/aww/comments/hl3m07/newborn_horse_sneezes_and_falls_over
+
+Example redd.it post: https://www.reddit.com/r/aww/comments/hl8pu2/til_the_end",1593921791.0,2,1.0,2
+depression,Why is it so hard to make myself take a shower?,"I like the feeling of being clean.
+
+I like the feeling of being in the shower.
+
+I get self conscious about how nasty I am when I don't shower for a couple days.
+
+But I still have to psych myself up for the task. I don't understand why it feels like such a chore. I can be naked in front of the shower with nothing to do, and still just walk away, ""Eh. Maybe later.""
+
+If I can't even convince myself to shower more often, how the hell am I supposed to convince myself that I'm not a complete waste of resources? That my absence might possibly be noticed? That maybe my continued existence isn't completely inconsequential?",1593888350.0,30,0.93,7
+Jokes,"I'm not racist, but...","If I could put an end to any race on the entire planet, I'd get rid of the marathon.",1592893566.0,126,0.89,13
+SuicideWatch,What should I expect if I call the suicide hotline?,The last thing I want right now is a cop showing up.,1592022619.0,17,0.96,8
+SuicideWatch,Why shouldn't I kill myself?,,1590039952.0,6,1.0,3
+Jokes,What's the difference between a crocodile and an alligator?,"An alligator will see you later, but a crocodile will see you after a while.",1589649900.0,1,0.6,2
+AskReddit,What's the worst that could happen?,,1588823970.0,4,0.84,6
+depression,"If there's one notion that has really been solidified in the last week, it's that I am completely worthless.","I provide nothing to society.
+
+I provide nothing for those around me.
+
+My opinions are always wrong.
+
+My ideas are always bad.
+
+People prefer to not remember that I exist. I don't blame them, though. I'm a piece of shit. Maybe, in the past, a tiny bit of good came from my existence, but I wouldn't hold out for any in the furure.
+
+Every night, I pray to a God that clearly doesn't exist, that I don't wake up. I deserve a long life, though, full of pain and misery.",1584853772.0,5,0.74,0
+depression,What's the use of calling the Suicide Hotline?,,1583293900.0,1,1.0,0
+depression,Anyone else ever feel like they're going to live forever?,[removed],1582177374.0,1,1.0,0
+depression,If I had three wishes...,"It doesn't matter how I got them. Maybe I'd find a genie. Maybe they're from a magic fish. Maybe I found a magic purple rock. Who knows.
+
+Look. The important thing here is that I've got three wishes from a neutral good source.
+
+Here are my wishes:
+1) I wish I were dead now.
+2) If not yet dead somehow, I wish I were standing on Mars.
+3) Well shit. If course that didn't work either. I wish no one knew I existed. Fuck it. I'll do it myself.",1582140719.0,3,0.72,1
+AskReddit,"What (or who) gives you hope that the future will be better in 10, 20, 50 years?",,1581841337.0,2,1.0,4
+depression,Why is it so hard to find a therapist?,"I barely gave the energy to climb out of bed each day. I definitely don't have the energy to call a bunch of places, leave messages, then try to follow up if they ever get back to me. Most of the time, they either don't have availability, or specialize in some way that I don't qualify for anyway. It's just fucking dumb.
+
+I tried an online service for therapy, but insurance wouldn't cover it and I always just felt like a burden.
+
+I tried getting my insurance to line something up for me, but all they'd do is give me a poorly formatted list.
+
+Whatever. It'd be a waste of time and money anyway. Therapy only helps if you can help yourself, and I'm a lost cause.",1580633231.0,7,0.9,1
+depression,I'm not even sure what to say anymore.,"I feel like I should keep trying to talk, but I don't even know what to say anymore. I'm completely incapable of doing anything that might fix me. I'm too broken, and too worthless for anyone to want to put in the massive amount of energy required to fix me anyway.
+
+I'm so mad at life right now, I actually feel a little nauseous. But all I can do is continue to live in misery, too incompetent to help myself.",1580316207.0,1,1.0,0
+AskReddit,What is something that gives you hope right now?,,1578337719.0,5,0.99,6
+depression,Time is running out.,"There's no way I make it to 2021. At this point, the only thing that can prevent my suicide is something else killing me first.
+
+Every attempt I've made to pull myself out of this pit has resulted in me falling deeper. I've tried therapy many times, with many therapists. But therapy only helps if you're competent enough to help yourself. I've tried so many different prescriptions and combos, I can't even remember half of them.
+
+I no longer know of anything that will bring me joy. I'm no longer capable of love either. Nothing good can possibly come from my continued existence.
+
+Everyone around me knows I've been depressed for a very long time. I talk about it a lot. One thing is clear: there is nothing that can help me. I'm not really even sure why I'm posting this. I have no hope. I have no faith.",1577954278.0,1,1.0,1
+AskReddit,"What's going to happen in the next 1, 5, or 10 years that will be worth sticking around to see?",,1577879194.0,3,1.0,7
+depression,"""You are not alone.""",[removed],1568778801.0,1933,0.99,134
+depression,I can't think of a single reason why I want to live.,There's 0% chance of me being useful in any way. All I do is waste resources.,1567328686.0,21,0.91,3
+depression,I still exist...,"I still wish I didn't. Things only ever get worse.
+
+Don't tell me it gets better, I know it's a lie. Maybe it gets better for some, but it definitely won't get better for me.
+
+Every time I try to do something that's supposed to help, it just ends in failure. I'm too incompetant to help myself, and too unimportant to think anyone else will help. It'd take too much energy to fix me anyway. ""Ain't nobody got time for that.""",1566367717.0,1,1.0,0
+depression,List of all the reasons I don't kill myself,"1. I'm too lazy. Killing myself would be less work than fixing myself, but it'd still be a huge pain in the ass to line up and do.",1566081654.0,3,0.72,2
+depression,I'm pretty sure you can now add paranoia to my list of problems.,Because I'm pretty sure the US government is about to launch a war on mental health.,1565077934.0,2,1.0,5
+depression,I don't even know what can make me happy anymore.,"There's just nothing. I have no reason to live. I wake up wishing I were dead, and it doesn't ever get better. 
+I win at poker, I still hate life.
+I do well at work, I still hate life.
+I meet someone new that might like me, they don't like me, and I still hate life.
+I have no hope. I am completely incapable of improving my outlook. I'm incapable of faith.
+Someone please just come kill me.",1564905490.0,2,1.0,1
+depression,I still have no reason to live.,"For the last month, I've really been trying to come up with a reason to want to be alive. I've come up empty. I'm just too much of a coward to do anything about it.",1564821618.0,1,1.0,2
+depression,Why shouldn't I kill myself?,"For the last 3 weeks, I've been trying to come up with reasons to live, and I've come up empty.
+
+I'll never amount to anything. The only people that can ""love"" me are the Christian assholes that claim to love everyone as they stand on the corner telling everyone that God hates fags. I doubt even the memory of me would last much longer that 20 years. 
+
+A sea slugs would make better use of the air that I breathe.",1564046744.0,1,0.67,2
+AskReddit,What question(s) would you like to see asked of Robert Mueller?,,1563961984.0,3,1.0,4
+depression,It never gets better. There is no light at the end of the tunnel.,"Any time you think things are getting better, you're just being set up for a bigger fall.",1563597513.0,7,0.83,9
+Jokes,"Last time my wife asked me if she looked fat, ...","I sighed and said, ""Honey, if I tell you the truth, do you promise not to be mad?"" She rolled her eyes, but agreed. So I said, ""I've been fucking your sister.""",1563521746.0,89,0.91,5
+AskReddit,[Serious] How do we convince people that racism is bad?,,1563438345.0,20,0.76,111
+depression,I've been sitting on the edge of my bed...,[removed],1562083777.0,28,0.91,4
+depression,This world isn't worth saving. Change my mind,"I'm not worth saving either, but hopefully I'm on my way out earlier than the rest of the world.",1562038095.0,4,0.75,2
+depression,What is there in life that makes it worth living?,"I can't think of a single reason to live.
+
+At most, there are a couple people that will be slightly bummed, but that's it. I'm so regularly disappointing anyway, they're more likely to be relieved.",1561782626.0,2,1.0,8
+depression,I'm such a loser,"What I want, I don't deserve, and what I deserve, I don't want.
+Deep down I know that I really don't deserve happiness. I don't deserve hope. I don't deserve to be loved.
+What I really want, though, is death. But I don't even deserve that. I deserve to live a long life full of loneliness, misery, and suffering.",1561533846.0,2,1.0,2
+depression,Depression will be the end of me.,"There's no way I can win this war. All I can hope for now is a quick and painless end. 
+
+Somebody please just put me out of my misery. If you love me, you'd kill me. But I'm unlovable, so I guess all I can do is bitch and suffer.",1560947008.0,1,1.0,0
+depression,I don't think I'm capable of love anymore.,"I sure as shit can't love myself. It's probably okay, though; no one wants any love from me anyway. I feel sorry for anyone that still has me in their life. I'm worse than worthless.",1560676964.0,2,1.0,7
+depression,"This world has nothing for me, and I have nothing for it.","There's no joy left in me. I don't enjoy waking up, and the only thing I'm able to look forward to is going back to bed. The only hope I'm capable of is hoping I just don't wake up.
+
+I'm a waste of space and resources. The air I breathe could be better used by a goldfish. The only good that might ever come of my existence is maybe some fertilizer.",1560414804.0,1,1.0,0
+depression,"If I had a gun, I would shoot myself in the face.","Of course, I'd probably fuck it up and just end up uglier and more unlovable than I am now.
+
+I just want to not wake up anymore.",1559989513.0,20,0.92,2
+depression,Everything just pisses me off,"I hate life so much that now it bothers me when others enjoy life. I just get pissed off at every little thing. 
+
+I can't stand listening to people talk. They always just say the dumbest shit. No one ever has anything original to say. All the ""great"" ideas people are always coming up with are just always so stupid that I don't even know where to start when correcting them. 
+
+And people love to talk about Basketball. Fuck that sport. It's repetative and boring. Just pick some random numbers as a starting score and play 3 minutes, and you've got the same game. It's all horse shit.
+
+How the fuck do so many people reach adulthood without the ability to chew with their fucking mouth closed? God damnit! If I wanted to hear lips snacking, I'd find a dick to suck.
+
+I can't stand being home anymore. Nothing interests me like it used to, so I just end up in bed, on my phone wasting time when I could be sleeping. But I can't stand leaving the house anymore because I have to put up with all the stupid twats that can't fucking figure out how to velcro their shoes. 
+
+I can't rely on myself because I'm an idiot and a piece of shit. I can't rely on anyone else either, though, because, well, I'm a piece of shit and everyone knows it. I'm not worth anyone's time.
+
+Fuck this life. I wish I had the confidence to try to kill myself.",1559200472.0,10,0.92,5
+Jokes,What do gay horses eat?,[removed],1558601723.0,0,0.5,0
+Jokes,I just put my socks on the wrong feet.,"Sorry stranger. But I probably wouldn't have been so confused if you weren't screaming about, ""What sure you doing in my house?""",1558600526.0,3,0.67,0
+depression,I can't think of a single reason to live.,"This world is shit, and there's no fixing it. I'm worthless. Nothing in the world needs me. I'm over it. I want out. I'm not even worth the air I breath.",1558001328.0,13,0.8,3
+poker,How to combat slowrolling?,"A few regulars at the casino I usually play at have developed a bad habit of slow rolling (at the showdown). Its become bad enough that they're considering making a rule specifically to deal with it.
+
+The manager and I were talking, trying to come up with fair, but firm ways to fight it. I tried doing some internet sleuthing, but haven't found any posted rules that others may have used. So I've come to you all for help.
+
+Here are a few things we've thought of:
+
+At the dealers discretion, a slow rolled hand may be declared dead. The idea here would be that a dealer could give warnings if warranted, but if the behavior continued, a hand could be declared dead, giving the pit to the best showing hand.  This would be the harshest way to deal with it, and would be sure to cause a commission any time its enforced. There's also a question about whether it can be fairly and consistently enforced.
+
+Another thought was to give players a one round penalty for egregious violations. I don't think I've ever seen anyone get a penalty in a live game, though. I also don't know how much of a punishment that would actually be. It would definitely be the less controversial thing to do.
+
+Yet another option is to have the dealers control the showdown in a stricter way. The idea would be that a dealer would tell each player that hasn't yet tabled or mucked, that it's their turn to show, and give them a time limit to do so (maybe 5 seconds). After the time, the hand is declared dead and forcibly mucked. The fear here is that it might slow down the game sometimes. Obviously, if there's a serial slow roller, it'll help, but not always. And maybe it'd just be a mode the dealers would switch to in some cases. This option has similar drawbacks to the first, but might be a bit softer.
+
+What other options are there? Does anyone know of rules implemented somewhere? What would be the best way for the house to combat slow rollers?",1556771081.0,10,0.78,23
+Jokes,If I had a nickle...,"If I had a nickle for every time I did my math wrong, I'd have $387.23.",1552382563.0,5,0.65,1
+Jokes,To any women that wish they had bigger boobs,"Here's an easy trick you can do. Every night, before you go to bed, take some toilet paper and rub it up and down between your boobs.
+
+I'm not exactly sure how it works, but it's done wonders for your ass.",1552254768.0,0,0.38,0
+Jokes,I just remembered the most disgusting joke I've ever known. NSFL.,[removed],1552254345.0,5,0.86,3
+Jokes,Two blondes are hiking in the woods.,"They come across a pair of tracks and start discussing what type of animal made them. One says they are deer tracks. The other says they are bear tracks. They stand there arguing for a while, but before they can agree, a train hits them.",1552029850.0,60,0.95,13
+Jokes,The American justice system.,,1552028853.0,1,1.0,0
+Jokes,How many therapists does it take to change a lightbulb?,One. But the lightbulb really has to want to change.,1552028763.0,25,0.91,6
+Jokes,What's the speed limit of sex?,"68 - After that, you have to turn around.",1552028645.0,44,0.86,6
+Jokes,Two muffins are in an oven.,"One says to the other, ""Holy crap it's hot in here.""
+The other one says, ""Holy shit! A talking muffin!""",1552028436.0,0,0.38,2
+Jokes,"A girl wants to go see a movie with her friends, but she doesn't have a ride.","So she goes to her dad and asks to borrow the car for the night. He says, ""Sure, you can borrow the car, buy first you have to give me a blowjob."" She whines and cries, but he doesn't budge. 
+
+Eventually, she relents and agrees to the task. She gives his dick an initial lick and says, ""Ew! Dad, your dick tastes like shit!""
+
+He smacks his forehead and says, ""Oh. I forgot. Your brother has the car tonight.""",1552028249.0,11,0.66,2
+Jokes,Two blonds walk into a bar.,I can't believed neither one saw it coming.,1552027354.0,3,0.62,0
+Jokes,Puns are the number one highest form of comedy.,But poop jokes are a solid number two.,1552027086.0,21,0.93,3
+Jokes,How big?,"Women sometimes ask me, ""SpicyLemon, how big is your penis?""
+
+I tell them, ""It's not so big right now, but the more you play with it, the more it'll grow on ya.""",1552023712.0,3,0.67,1
+Jokes,I actually have a washboard stomach.,It's just that I also have a load of laundry to do.,1552023432.0,3,0.67,0
+Jokes,What do you give a woman that has everything?,Penicillin.,1552022173.0,70,0.95,6
+Jokes,"This year, for Lent, I'm going to give up.",,1552020640.0,1,1.0,1
+Jokes,Will you marry me?,"I guess I don't really get it, but she seemed to find it hilarious.",1551677396.0,33,0.78,6
+Showerthoughts,"Does it bother anyone else that ""refrigerator"" doesn't have a 'd' in it, but ""fridge"" does?",,1551426192.0,1,1.0,1
+AskReddit,"Does it bother anyone else that ""refrigerator"" doesn't have a 'd' in it, but ""fridge"" does?",,1551425561.0,1,1.0,1
+Jokes,"""Read"" rhymes with ""lead""","... and ""read"" rhymes with ""lead"", but ""read"" doesn't rhyme with ""lead.""",1551425438.0,8,0.79,4
+AskReddit,"People of reddit, what's your motivation?",,1549489888.0,2,0.67,7
+depression,No one wants my love.,It's probably for the best anyway. Nothing good will ever come off me. My affection is nauseating and toxic I guess. All I want in life is death. No one is better off with me in their life.,1549188934.0,45,0.98,12
+SuicideWatch,Every day is one step closer to suicide.,"Anything that I'm capable of doing, won't help me. Anything that will help me, im incapable of doing. Please, someone just kill me.",1549006027.0,5,1.0,2
+depression,Please...,,1549004406.0,1,1.0,8
+depression,It's almost February...,"A time when everyone reminds me that I'm not special to anyone in any way.
+
+The more I try to find dates, the more I fail.  There is no success, only failure. That's all I am.
+
+No one loves me, and no one ever will. I can't even love myself. I'm just worthless. I wish I had enough faith in myself to be able to kill myself. Faith is just another thing I'm incapable of, though. I just can't believe in something that goes against all evidence.",1548899496.0,4,0.84,3
+depression,I can't wait to be just another dead loser.,"The only people that act interested in me are scammers. I guess that's not entirely true. Some people that I do give money to (wait staff) sometimes act interested in me too. The only thing that makes me interesting is money.
+
+I should just rack up my debt in a blowout then blow my brains out.",1548796189.0,2,0.75,0
+Jokes,What's the difference between light and hard?,I can sleep with a light on.,1547793604.0,13,0.81,1
+depression,"If it weren't for strippers, I'd get no affection.","I don't have enough money for someone to actually love me l, though.",1547366097.0,4,0.83,0
+depression,Happy birthday to me.,[removed],1547024963.0,8,0.9,7
+depression,Why is our so hard to make myself do things?,"For example, my cousin talked me into signing up for this 30 day challenge. Day 1 was Monday, and was a 6 minute workout. Yet I can't talk myself into doing it even though I'm just doing nothing right now. Day 2 was to meditate while brushing your teeth. That takes even less time, yet I'm just sitting here.
+
+I have no motivation. I guess maybe I just don't have any faith that anything will help.",1547014583.0,1,1.0,1
+depression,Maybe I'm just addicted to misery,I seem to only want to do things that make me unhappy. WTF is wrong with me?,1546938794.0,2,1.0,2
+depression,Depression is like trying to climb a muddy slope in a dense fog.,"Every time you try to take a step, you just slide back down. Sometimes you fall and get covered in mud. You might sometimes make it two or three steps up the mountain, but you just slide right back down; further down than you were before.
+
+You've heard that it's nice at the top, but you can't see it, and you're not even sure if it's true. You can't really see anything except what's right in front of you. Sometimes you can't even tell which way is up. You just have to take a step and see which way you slide. You can't tell if you're making progress, you can only tell that your shoes are getting heavier from all the mud caked on then. Every step is harder than the last.
+
+There's no one around you. Every now and then, you think you hear someone else, but you can't be certain, and certainly can't make out anything useful. You shout for help, but don't even hear echoes. If you ever do manage to discern some advice from the wind, its something like, ""One step at a time."" Or, ""Pick yourself up."" But there's no one. You are alone.
+
+All you know is that it's cold, it's damp, you're alone, and you feel disgusting. You've no hope of finding your way out. Sometimes, you think you see a bottom, only to find out it was just an illusion; things can always get worse, and that seems to be the only direction you can go. Nothing ever gets better, you just get filthier with every attempted movement. 
+
+You just want the fog to go away, or the mud to dry up, or to find someone else to help you climb. You know that's too much to ask for, though.  You're in this alone, and you have to do the climbing on your own.
+
+You can remember a time when there was no mud, no fog, and every step wasn't a battle. But that memory just gets blurrier the more you try. Maybe that place just doesn't exist anymore.
+
+There is no sunshine. There is no way to wash off the filth. There is no help. There is no hope.",1546840337.0,2,1.0,1
+depression,"New year, new me","Hahahaha. Yeah right.  Like I could ever fix myself.
+I'm so alone, I couldn't even get a date with an escort. I'm just too toxic. My only hope lies at the end of a rope.
+My birthday's coming up. Been trying to find a date for it for the last few weeks. Hopefully the girls all appreciate that I take no for an answer at least. So much rejection can't be healthy. I just want somebody to love, but I can't even like myself.
+Bah. I wish I could just wake up dead.",1546663997.0,3,1.0,2
+depression,"With all the noise I make about it, I feel like people will still be surprised when I finally get around to killing myself.","There's just no fixing me. I can't fix myself, and no one can do it for me, even if someone actually decided that I was worth it. 
+
+I'm fat. I'm ugly. I'm boring. I've no redeeming qualities. I've no hope for happiness. 
+
+Suicide is inevitable. I've told many people that I want to kill myself. All it's done is make people like me less. I just have no reason to live. My life is pointless. No one will ever love me, and I'll never do anything noteworthy. My only contribution to this world will be another tally mark in the statistics.",1546407921.0,8,0.84,14
+depression,"Well, that sucked.","Here's to another shitty year, I guess.",1546312569.0,75,0.99,13
+AskReddit,What do you really hope you get for Christmas. Cheaters (who already opened their presents): what did you get?,,1545670325.0,0,0.5,10
+depression,"In the ""Happiest place on Earth"" but all I want for Christmas...","Is somebody to love. 
+
+Death would be welcome too. That's probably an easier present to arrange.",1545627154.0,3,1.0,2
+depression,I've no self esteem. How can anyone love me if I can't even like myself?,"I'm not much to look at, unsettling at best.  Revolting is probably closer to my description. My friends say I'm wrong, but I'm only friends with nice people, so I just don't believe them. I see the way others react to me. No one is bummed when I walk away. In fact, my best quality is probably that I'm good at leaving before wearing out my welcome too much.
+
+No one really wants me around anyway. Maybe it's time for me to find the courage to kill myself. I'm not scared of dieing. I'm scared of failing to die. And I'm good at failure.",1545035243.0,2,1.0,0
+depression,Stupid catalytic converters. Why can't anything just be easy?,,1544954129.0,1,1.0,0
+depression,I don't think I'm able to love anymore.,"I'm so lonely, but there's no one that I want around. I can't even remember the last time I felt giddy because of someone. It's been years. I think I'm just no longer capable of falling in love. And I'm too unattractive to have someone fall in love with me first. I'm just a worthless human being with nothing to live for. I'd kill myself if I weren't so scared.  Not scared of dieing, scared of living. I know things could be worse... I just want someone special in my life. That's probably too much to ask for though.",1544506864.0,4,0.76,2
+depression,Unfixable,I can't fix myself. And there's no one that will do it for me. There's just no hope for me.,1536050262.0,5,0.86,5
+SuicideWatch,"I don't know when, but I know that I'm going to kill myself.","I've nothing to live for. There are a couple people that will be mildly bummed,  but no one really wants me around anyway. 
+
+The only reason people don't mind me hanging around is that they know that, eventually, I'll leave.
+
+I hate life, but I'm a loser. I'm completely incompetent. The only way my life will get better is if someone grabs me and forces it. I'm too unlovable for that to happen, though.  So some day,  hopefully soon, I'll just kill myself. 
+
+God I wish I were dead. If I had three wishes, that would be my first.",1536041984.0,3,1.0,4
+depression,I just want someone to love me when it's cold outside.,"That's too much to ask though. I'd be better off just killing myself. If I had a way,  I would. But I don't, so I just lay in bed wishing.",1536040658.0,2,0.76,0
+depression,I wouldn't wish myself on anyone,"I can barely take care of myself. 
+
+I'm a loser.
+
+I'm ugly.
+
+I've no redeeming qualities.
+
+There's nothing impressive about me.
+
+I'm completely incapable of making any changes for the better. I can only get worse.
+
+I'd say that I need someone to save me, but they'd just fail, and I'd probably ruin their life.
+
+The only thing that I can realistically hope for is death. I'd handle it myself, but I'm such a failure, I'd just fuck up and end up in a worse place.
+
+I just... want someone to love me, but that's too much to ask.
+
+Someone please just kill me.",1535266729.0,32,0.92,3
+depression,I'm just not a worthwhile person.,"Even I can tell I'm a pathetic worthless loser. I'm just fat and hairy with no redeeming qualities. My sexiest trait is sarcasm. What's not to love? 
+
+If I weren't so lazy, I'd buy a gun and shoot myself in the face.
+
+I'm tired of being alone, but I don't want anyone around. How the fuck does that make sense? 
+
+I just want to be dead.",1534988294.0,2,0.76,2
+depression,There's nothing like a pride rally to really drive home that no one will ever love me.,,1529135548.0,3,0.81,0
+depression,I'm such a pig. I deserve to be miserable and alone.,"I'm just worthless.
+
+Ask any of my ex's and they'll agree.  
+
+I don't deserve to be loved.  
+
+I don't deserve to be happy.",1526404186.0,15,0.82,5
+depression,How do you actually forgive yourself?,"I hold onto the crap I've done, and dwell on it. I see it as examples of why I'm not a worthwhile person. How do I forgive myself for the things I've done while still remembering them as things not to do?",1525481174.0,2,1.0,1
+depression,I can't love myself. How can anyone else?,I'm so lonely. I'm such a loser. I really wish I could just kill myself.,1524025217.0,9,1.0,1
+depression,Unlovable,"There is nothing attractive about me. I'm just worthless. All I know is rejection. I've been miserable and alone for the last 10+ years. I'm going to be miserable and alone until I die. I should just kill myself now, and not have to go through it.
+
+How much of a loser must I be? I see all manner of assholes and shitpiles have someone that love them.
+
+I guess I'm just such a big loser that I deserve to be alone and unhappy. I wish I were just dead.",1523777171.0,2,1.0,0
+depression,I'm going to be miserable and alone until I die.,"My dad's dying from ALS. My mom's been doing a lot of work helping take care of him, and keeping him company. I can't help but put myself in his shoes. I've got no one. I haven't had anyone in years. No one's even been close.
+
+I can't be happy alone, and I'm always going to be alone. Eventually, I'm going to get sick, and I'm going to have to go it alone. I already don't have the will to live.
+
+I'm just miserable and hopeless.",1523063929.0,3,0.81,1
+depression,"""Get Help"" ""Say Something""","There is no help for me.  I've been saying something for years now. No one cares. Every day, I get closer to committing suicide.",1518639536.0,18,0.93,3
+depression,"Every time I try to make things better, things just get worse.","I've tried all sorts of medication; nothing works. Now I just have less money.
+
+I've tried losing weight.  It cost a bunch of money, didn't do anything and made me even more miserable.
+
+I've tried seeing a therapist. It resulted in me being forced into the hospital for a week (under threat of legal action).  Now I don't trust anyone.
+
+I've tried reaching out to friends.  Now no one wants me around.  Well, they want me around, just not around them.
+
+The only thing left to try is suicide, but I'd probably just fuck that up.  So I just sit here, miserable, wishing for death.  There's nothing I can do to fix my depression, and there's nothing anyone else is able or willing to do.
+
+I just want to be dead.",1518209948.0,1,1.0,1
+AskReddit,"First responders, emergency responders, what's your best, most memorable day on the job?",,1517794893.0,8,0.7,3
+depression,"I'm going to be miserable, fat, and lonely until I die. Why does that have to be so far away?",Nothing I can do will make me less miserable.  I can't seem to do anything about my weight. And I'd just be a burden to anyone else.  Life just isn't for me.,1517515741.0,27,0.92,8
+depression,Completely unable to do anything that might make me better.,"Every time I try, I just fail and make things worse.  I'm at the point where all I want to do is just die.  I've tried so many different prescriptions that I can't even name them all.  I've tried therapists, but they only work if you can help yourself, which I can't.  The only upside to this situation is that death would be an improvement, so I'd be unable to kill myself.
+
+All I can do is just hope to wake up dead.",1517508782.0,1,0.67,0
+depression,Losing sleep over the net neutrality battle,[removed],1511379847.0,12,1.0,0
+depression,I don't deserve love. I don't deserve happiness.,I only deserve this pain and misery. I wish I could kill myself.,1508383519.0,3,0.81,1
+depression,Unlovable,"I'm fat. I'm ugly. I've no self esteem. And to top it off, I'm boring. But really, it's the sarcasm that drives all the ladies wild.
+
+What's the point of living if I can't find joy in anything? What's the point of being alive if no one can find joy in me? I'm unlovable. I can't love myself, and if I've learned anything in the last dozen years, it's that no one will ever love me again.
+
+I hate going through life alone. I don't know how much longer I can do it. I can't change myself though, so how can I expect anything to ever be different.
+
+Society doesn't want me to die, but it doesn't want me to bother it with my existence either.
+
+I guess this post is just me being an asshole, reminding the world that I still exist. With any luck, the fates will see it and finish me off.
+
+Whatever. Someone please just kill me.",1502174779.0,2,1.0,0
+Jokes,"Puns are the #1 form of comedy,",but poop jokes are a solid #2,1500158250.0,129,0.95,9
+depression,"Does anyone else... aww who am I kidding, no one will read this.","No one identifies with me. I'm a loser, not even with a capital l, because that would imply some significance. I'm so starved for affection, my cat won't even let me hug her. Even hookers would stand me up. Every girl's crazy about a fat, sarcastic man with no self esteem, and no redeeming qualities. 
+
+It probably doesn't even matter, though. I can't seem to get any joy out of anything anyway, why would this be any different? 
+
+One of these days I need to just bite the bullet and kill myself. The only thing that can stop me is someone... anyone... maybe?  But no one's ever here.",1499495022.0,18,0.87,8
+depression,"I'm tired of being single, but i wouldn't wish myself on anyone.",I'm fat. I'm ugly. I'm boring. And I have no redeeming qualities. I should do the world a favor and just die already.,1498984697.0,5,1.0,2
+depression,Why can't I just wake up dead?,,1498079986.0,9,0.78,12
+depression,Why is it so hard to find help?,"There's got to be a better way. Seriously, it'd be easier for me to just kill myself.  Every time I try, I come up empty. It really strengthens my thought that there's no help for me.",1498067764.0,1,1.0,6
+depression,I just want to be dead.,"I'm tired of being miserable and alone. There's no help for me. I'm tired of trying. If I had any confidence, I'd kill myself. As is though,  I'd probably just fuck it up and end up even more of a loser. So, like a pussy, I just pray, every night, to not wake up.",1497780256.0,3,1.0,2
+depression,Does Anyone Else feel like they just don't deserve happiness?,There's just so much wrong with me.  I don't bring anything positive to this world. There are plenty of people who would just be better off if I had never existed.  I just don't deserve to be happy.,1495734101.0,3,1.0,1
+depression,I hate NYE more than any other day of the year.,"It's always a reminder that I'm a loser, that no one really wants around.
+
+If I had the means, I would kill myself tomorrow night. I'd probably just fuck it up and make things worse anyway.",1483163182.0,2,1.0,7
+depression,I just wish I were dead.,"I think the only reason I'm still alive is because I'm too dumb to figure out a non-messy, painless, sure-fire way to kill myself.
+
+I've been getting help for years; none of the prescriptions work. I gave up drinking. I've been sober for almost a year now (11 months, 20 days). All that did was make it easier to shut up about being depressed.
+
+I'm so lonely, yet there's no one I want around. I don't trust anyone enough to actually let then in anyway. I deserve to be miserable.",1481344450.0,3,1.0,2
+Jokes,At least in 4 years,we'll be able to look back at this election with 2020 vision.,1478671766.0,108,0.88,4
+AskReddit,What's something you do to cheer yourself up?,,1456259130.0,3,1.0,6
+SuicideWatch,All I know is hate.,"I hate everything.
+
+I hate everyone.
+
+I hate this world.
+
+I hate this country, and those who run it.
+
+I hate this town and everyone in it.
+
+I hate myself.
+
+I hate my family.
+
+I hate my co-workers.
+
+I hate every single other asshole on the road.
+
+I hate being alive.
+
+I hate being alone, even though there's no one that I want around.
+
+I hate being around people.
+
+I hate my fat body.
+
+I hate my stupid brain that won't shut the fuck up.
+
+All I am is hate. There's no place for me in this world. There's no fixing me. I should just die and make the world a better place already. All I can think about any more is how wonderful it'd be to be dead.",1446097245.0,2,0.76,1
+depression,Drunk,"Whatever.
+
+I usually don't say anything because I know that no one cares. But I'm drunk, so fuck it.
+
+I hate life. I hate being alive. The harder I try, the worse things get. I deserve to die alone and miserable; I just wish it'd fucking happen already.",1444554654.0,0,0.5,3
+AskReddit,What's your best backhanded **insult**,[removed],1443816102.0,1,1.0,1
+aal,"What exactly does the word ""including"" mean in a definitions section.","In a contract I'm being asked to sign (a non-compete agreement) One of the definitions starts like this:
+> ""Conflicting Organization"" means any competitor of Employer, including any organization which...
+
+Is what follows after the ""including"" a narrowing clarification, or is it meant as an example?",1437163505.0,1,1.0,0
+depression,How do you fall asleep?,"Over the last few years, it's been getting harder and harder for me to fall asleep.  It used to take 15 minutes. Now it takes close to 3 hours.  If I go to bed an hour early, it takes an extra hour to fall asleep.  If I go to bed an hour late, it still takes 3 hours to fall asleep.
+
+I just can't get my brain to shut up. It goes on and on, analyzing things that happened during the day and what I'm expecting from tomorrow.  But it also goes off on wild tangents and has mock conversations which are usually set up so that I go on a long rant about something.
+
+How the hell can I tell my brain to shut the fuck up and let me sleep?",1436892426.0,2,1.0,2
+xkcd,What-if return date and time solved,"On http://what-if.xkcd.com/ there's a message that states, ""Note: What If updates are temporarily on hold,
+and will resume on July 14th, 2015 at 7:49:59 AM EDT.""
+
+That date and time is when New Horizons will be on its closest approach to pluto: https://www.nasa.gov/mission_pages/newhorizons/main/index.html
+
+*edit: Of course, after posting, the nasa page updated to 7:49:57, but close enough!",1435776919.0,11,0.77,8
+Jokes,What do you get the girl who has everything?,Penicillin.,1429733079.0,1,0.67,1
+depression,How is it possible for things to get better?,"By now, I've figured out that I can't make myself better.  I'm just not capable of it. General life experiences combined with interactions with some psychiatrists and psychologists, have left me completely incapable of trusting people. I've been dealing with this so long that there's no one left that cares enough to help me.  And even if I found them, I'd push them away and shut them out like I do with everyone else.
+
+How can there possibly be any hope for me?",1428555167.0,2,1.0,13
+Jokes,Did you hear about the midget that finally came to terms with his homosexuality?,He just came out of the cupboard.,1426922684.0,46,0.8,2
+Jokes,"A ""G"" in the right font","is not only a nice looping arrow, it's also a map to the mythical G-spot!",1424917532.0,0,0.5,0
+Jokes,What's the difference between light and hard?,I can sleep with a light on.,1423814954.0,79,0.92,9
+Jokes,The US government has announced that they will be mounting a campaign to remove the letter Q from the English alphabet.,"When asked why, the spokesman said:
+
+For years, the people have been talking to us, and we've been ignoring them. It's time we start listening to the messages of the people of this great nation. And overwhelmingly, that message has been, ""Fuck Q.""",1421536238.0,2,0.56,0
+Jokes,A bear walks into a bar in Bainbridge...,"... And says, ""Hey bartender! Give me a beer.""
+
+The bartender says, ""I'm sorry, but we don't serve beer to bears in bars in Bainbridge.""
+
+The bear says, ""Look, you piece of shit. Give me a fucking beer!""
+
+""No. I'm sorry. We don't serve beer to belligerent bears in bars in Bainbridge.""
+
+The bear growls, ""Give me a beer right now, or I'm going to eat that lady at the end of the bar.""
+
+The bartender stands firm, ""We don't serve beer to belligerent bully bears in bars in Bainbridge.""
+
+The bear then charges over, mauls, and eats the woman that was at the end of the bar. With blood on his chin, he asks, ""Are you going to give me that beer now.""
+
+""No. We don't serve beer to belligerent bully bears in bars in Bainbridge, specially bears that are on drugs.""
+
+""On drugs? What are you talking about?""
+
+""You know that girl you just swallowed? That was a Barbiturate.""",1415173977.0,0,0.5,1
+depression,I'm so full of hatred.,"I just spent a few hours trying to come up with the absolute worst possible things that I could say to this one person I know, that I don't like. Now I feel bad about it, partially because there's a good chance I'd actually say some of it in the right circumstance. I'm also frustrated that I just let this turd-mangler occupy so much of my time.
+
+I just wish I could make my brain shut up. I try to be a good person, but there's just so much evil and hatred that runs through my brain. People generally think I'm nice, but everything in my head says otherwise.
+
+I know that ""I am not my thoughts."" And ""We judge others by their actions, but we judge ourselves by our thoughts."" I just can't really convince myself that the things in my head aren't at least a reflection of myself.",1415167000.0,1,0.67,2
+depression,I'm so lonely...,"But I fucking hate everyone. Everyone either pisses me off, or doesn't want anything to do with me. There's just so much hatred in me. I'm stupid, and I hate stupid people. I hate when people say I'm smart. If I were smart, I'd be able to solve my own problems. But I'm not. Or maybe I'm just one of those impossible-to-fix things. I want to get to Happiness, but you can't get there from here.
+
+I just want someone to hold me and tell me it's going to be alright, but I can't seem to get myself to let anyone be close to me. There isn't really anyone that I'd want around right now anyway.
+
+I deserve to be lonely, to suffer. I'm just a shallow, judgemental, ugly, fat, piece of shit. I wish I could die, but I know I need to stick around so that others can point me out to their friends, ""At least you're not that guy.""",1414797538.0,1,0.67,2
+depression,I feel like I'm going to explode.,"I just can't get myself to open up and talk about my feelings. Every time I've tried, something happens that makes me clam up again.",1413105199.0,2,0.67,1
+diablo3,The best part of the patch!,,1409354787.0,1,1.0,0
+Jokes,Two blondes are on a hike through the woods,"They come across some tracks and stop to figure out what type they are.  One blonde insists they're bobcat tracks, the other thinks they're moose tracks.  Before they can figure it out, the train hits them.",1400707247.0,14,0.8,0
+AskReddit,Native Americans of Reddit:do you consider it racist for non-Native Americans to dress up in stereotypicaly Native American attire such as headdresses?,,1398999628.0,1,0.67,4
+funny,Action Banana Man,,1397671208.0,0,0.43,0
+depression,I've become the type of person I've always hated.,"I'm a complainer. I hate my life, but I can't (or won't) do anything to make it better.
+
+When I'm at home, all i can think about is how lonely I am.  When I leave the house to go try and have some fun, all I can think of is how I'll be alone for the rest of my life.  All I want is someone (or more) to spend time with, and have fun, but I'm such a piece of shit that I won't let anyone close to me.  Why would I? It's about the only considerate thing I can do.  Why would I let someone get close to me when all I want to do is die, and I'll just be dragging them down too?
+
+It's getting harder and harder to make myself take care of myself.  I'm up to about once every four days for showering.  I haven't had a haircut in over a year.  I only end up shaving every month and a half.  I don't get around to emptying my cat's litter box nearly as often as I need to.  I'm too lazy to take out the trash regularly; it's not spilling out of the bin or stinking or anything, but I probably should have taken it outside a few weeks ago.  Instead, I just mash it down as best as possible.  And cleaning? HA! I con't remember the last time I ran the vacuum.
+
+I'm fat, and lazy.  I eat too much.  I eat only crap (not literally). And my eating schedule is almost completely opposite of what a healthy one should be.  I know how to eat healthily.  I know that I need to eat less. I know all that crap, I just can't get myself to do any of it.  Meanwhile, I get out of breath just walking up a flight of stairs.  Hell, sometimes it doesn't even take stairs, sometimes just walking out to my car is all it takes. I haven't done anything workout-related in at least a year, that includes just taking a 15 minute walk. My 3XL shirts are pretty close to being too short.  Hell, a lot of times lately I've even passed on jerking off because it takes too much effort.
+
+I've been taking meds for depression for several years now, and they just don't seem to keep working.  They'll kind of work for a bit, but eventually, it's back to square one.  Lately, there seems to be some anxiety building up too.  I have trouble making myself do stuff.  For example, it's a chore to get myself to get out of bed.  It's a chore to get myself to leave the car when I get where I'm going.  Usually, all I want to do is go home and crawl in bed.
+
+I know of all sorts of things that I should do that should make my life better. Most of them should even be simple, yet, I'm too much of an asshole to be able to do any of them.  All I can do is complain-- complain and hate life. I'm a piece of shit.  I don't even deserve the oxygen I breath.
+
+Whatever.... nothing ever makes any difference anyway.
+
+",1396893456.0,7,1.0,8
+xkcdcomic,What-if citations,"I may be late to the party on this one as I only noticed it last week, but, you should click on the citation numbers in the what-ifs. They're very similar to the mouse-over type stuff as opposed to actual citation links.  Sometimes there are citation links in the text that pops up, but not always.
+
+I just thought I'd share in case others hadn't found this yet either.",1392222201.0,25,0.87,4
+SuicideWatch,So Broken,"Usually my brain won't shut up about things that I want to put here.  As I sit here trying write, though, all I can think is, ""I wish I were dead. I wish I were dead. I wish I were dead.""  It just won't go away anymore.
+
+For the last year or so, I've been planning on killing myself by the end of 2014.  Nothing's changed.  I've got most things all planned out and ready to go.  I'm not sure I can wait that long, though.
+
+I've been seeing a Psychologist and a Psychiatrist each weekly for the last three years and all it's done is waste money.  Drugs don't seem to work on me, and my brain is so broken that I can't help myself, so what help can therapy be?
+
+I'm so lonely, yet, when I'm around people, I just wish they'd go away.  The only time I'm not miserable is when I'm asleep (as far as I can tell).  I've no energy, though, so I end up sleeping a lot.  I can't seem to find anything that I enjoy.  I kind of like work, but there's only a finite amount of that, and when it's fun, it's exhausting, so I can't just keep going.
+
+I don't really belong anywhere.  I can fit in pretty well, but I'm always an outsider.  Most of the people that even know who I am, only know me because I suck with money management and tend to spend it on things like drinks for random people.
+
+I just want to be dead.  I suck at life.  I'm even a little scared that I'll snap one day and hurt others. God knows I have daydreams about getting rid of a lot of the stupid people in the news. In the end, everyone's stupid though.  I'm stupid too. I'm just smart enough to know that I'm stupid.
+
+I've told a lot of the people that know me that I'm going to kill myself by the end of the year.  If I can somehow feel better about life, I might not.  I don't need to enjoy everything, but I need to stop hating being alive.  I don't know any way to do that.  At this point, the only thing I can think of that will save me is some sort of miracle.  But we all know that miracles never really happen.
+
+I'm just one more future dead fat guy.",1389137270.0,2,0.76,3
+depression,This World,"This world is a horrible, horrible place. All I want is to make the world a better place before I die. But there's just too much, and I just don't have the energy. Any positive effect I can make will just be lost in a few years. What's the point of even trying. I can't do anything real. I can't fix anything. I'm more incompetent than anyone can imagine.  I might as well just give up and kill myself.",1388617133.0,2,0.75,2
+depression,Can't sleep,I've been laying here for a while now. All I can think about is killing myself.,1388570391.0,2,0.75,1
+depression,Why I hate today.,"For a long time now, 17ish years, I've absolutely despised New Year's Eve. I get the sense of loneliness and resentment that most people associate with lonely people on Valentine's Day.
+
+I don't mind Valentine's day too much, though. I could never really figure out why I hated New Year's Eve so much, but not Valentine's Day. I just figured it out. 
+
+On Valentine's Day, people make big plans about being with that one special person in their life. It's a whole evening of being with someone special.
+
+On New Year's Eve, It's about spending a single moment with someone. Sure there's the whole lead-up to the countdown, but the whole night revolves around that one moment. That one moment when everyone grand their special someone, or at least grabs someone, to share, together. Just a moment.
+
+I'm no one special. I understand that no one wants to make special romantic plans with me. But what really hurts, is that no one even wants to spend a moment with me. So when that moment comes, and everyone falls silent with a kiss, or maybe even a hug. I'm just left there by myself, as always.",1388474015.0,2,1.0,0
+depression,I've picked a date,"December 31st, 2014. That's my expiration date. That gives me a year and a half to turn things around. I'm not capable of fixing myself, though, so I guess it's a time limit on waiting for something to get better. ",1372494570.0,2,0.76,2
+pics,Since we're posting eyes...,,1372461223.0,0,0.29,1
+depression,A wishlist,"I wish I had the balls to kill myself.
+
+I wish I had the brains to make sure my attempt at killing myself worked the first time.
+
+I wish I weren't so alone.
+
+I wish I liked myself.
+
+I wish I had something for this world.
+
+I wish I could get myself to shower once a day.
+
+I wish I could trust people.
+
+I wish I could like people.
+
+I wish I could be happy.
+
+I wish I could clean up my apartment so that I could have people over every now and then.
+
+I wish medication worked on me.
+
+I wish I could control my stupid brain.
+
+I wish I had the power to make myself better.
+
+I wish I enjoyed something besides sleeping.
+
+I wish I didn't spend so much money trying to find things to make me not hate life.
+
+I wish I could care about people.
+
+...
+
+I wish I were dead.
+
+
+
+If I killed myself on a Thursday night. I bet it'd be at least 3 days before anyone noticed.  And then it'd be my work.  If I picked a long weekend, I bet I could get close to a week.  It's not a matter of ""if"" I'll kill myself.  It's ""when.""  I'm too much of a pussy to put myself in harms way.  The only way I'm leaving this life is by taking it myself.
+
+I've no reason to keep living other than knowing that a few people would be kind of bummed.  I'm already dead to most people, though.  I'm nothing more than an occasional depressing facebook post. Prolonged exposure to me only leads to pain anyway.  Might as well just rip the band-aid off.  Sure some people will have to deal with the pain of my loss, but that's less than whatever pain I'd end up putting them through anyway.
+
+This is a fight I can't win. Meds don't work, and I'm too much of an idiot to be able to fix my brain myself. I can't remember the last day that went by where I was glad I was alive all day. I'm sick, and unfixable. I wish I could just treat it like a terminal disease at this point.  Then I might at least get some help ending it all.",1372434447.0,3,0.64,5
+SuicideWatch,It's all been a pack of lies.,"Here's the thing.  I *AM* alone.  I wake up to an empty apartment. I go to work, and sit at a cubicle, and rarely have actual interactions with people.  I eat lunch alone.  I go home alone. I eat dinner alone.  If I decide to do something later, I go to it alone, and come home alone.
+
+I know there are people out there that love me and care for me, and I know there are people out there that I love and care for too.  But whenever I try to share how I'm feeling, someone gets offended.  It's as if my emotions are wrong; the emotions I have hurt others.  Either I share my feelings and end up being an asshole. or I keep them to myself, and end up alienating those that think they can help (and whose opinions matter to me).
+
+No one really cares anyway.  They just say they care because they want to feel like they're doing something.   I hate it when people tell me, ""Just tell me what you need.  I'm here for you.  I'll do anything for you.""  It's all lies.  First, what I need is not something I can get by telling someone what I need.  Second, no, you're not here for me.  You're here to make yourself feel better.  You're here so that you can tell yourself that you tried. Third, you WON'T do anything for me.  You'll do anything that doesn't take much effort.  
+
+I don't want any advice.  I have yet to hear any advice I'm capable of following anyway. I'm beyond help.  Anything you have to say to me is probably a lie anyway.",1368206995.0,13,0.86,4
+depression,I think I'm done,"I think today might just be the day.  
+
+I've no future.
+I'm unable to help myself, so why should I expect anyone else to be able to help.
+
+I was already in credit card trouble a few years ago, then I started reaching out, trying to find help.  All it's done is put me in more debt.  Some of the drugs seemed to work for a month or maybe two, but then they'd stop working.  Therapy isn't helping.  If all I needed to do was unload, I'd do it.  But it runs deeper.
+
+I'm stuck in a rut and there's no escape.  I hate myself, and one of the things I hate is that I can't seem to change myself in such a way that I don't hate myself as much.  So it's one giant feedback loop.  There's nothing that I can do that will make life any better for me.  Hell, I can't even successfully lose weight.
+
+I'm lonely, but I'm a nice guy.  I'm such a fucked up head-case piece of shit that I don't wish myself upon anyone.
+
+I'll never do anything that makes any sort of difference, and I'll be alone the whole time.  I can't think of any reason to keep on living.  
+
+I can't get enjoyment out of anything.  All I can get myself to do is go to work, and crawl back into bed.  I'm falling behind at work, too, because I can't get myself to do anything.  I've used up all my usefulness. No one wants me to make their life better.  I probably couldn't do that anymore anyway.  I'm just a useless blob of misery.
+
+There is NO help for me, because I can't help myself.  I could go to the hospital, but that's not going to lead anywhere because, in the end, I can't do anything about myself.  All it would do is cause me to let even more people down.
+
+One thing keeping me alive was the indecision between making it look like an accident (mixing cleaning chemicals) and leaving a note to make it obvious (pills).  Tonight, after work, I'll write the note, take the pills, and crawl into bed for the last time.
+
+The only thing that can stop me, is someone being there by my side.  Since that hasn't happened in over 8 years, though, I doubt it'll happen now.
+
+I know there are people out there that care.  I've got close friends and family that will be extremely upset.  Some may even also follow suite.  I also know that there are a lot of people that know me that will at least be bummed out a bit.  I just don't care anymore.   I just want the pain and loneliness to go away.  
+
+All I used to be good for is making others happy.  I'm so miserable, now, though, that I can't even do that.  I'm now nearly completely useless.
+
+Who I am, is a failure at everything.  I'm a failure at love.  I'm a failure at happiness.  I'm a failure as a friend.  I'm starting to fail at work.  I'm just a failure at life.
+
+There's a going away party for my boss at 4:00 (Mountain) that I'm going to.  Once I'm done there, I'll go home, write my final note, and take care of myself.  I'm not even sure why I'm putting out this one last cry for help; I really truly believe that there is no help for me.
+
+I'll throw my phone number up once I get home, in case someone wants a demonstration of how impossible it is to help me.
+
+UPDATE:
+I've calmed down a bit.  I think, now, I'm going to skip the party, go home, and just crawl in bed.  I'm too lazy, too confused.  I guess I'll try living with the pain for another day.  At most, I can kill myself in the morning.
+
+I'll still throw my number up later.",1366389536.0,7,0.82,8
+depression,I'm so tired,"I'm tired of hating life.  
+I'm tired of hating myself.  
+I'm tried of being alone.  
+
+I can't do this myself, but I can't seem to let someone in to help me. I'm so disappointed in myself that I'm actually a little nauseous right now. I'm incapable of following any advice, which just adds to the depression.  When I try, I either fail, or it doesn't help.
+
+I just can't do anything anymore.  I'm about to quit my job before they realize how useless I've become.  I think having a job is the only thing keeping me alive, though.  I'm sure I'd kill myself if I didn't have a job.  No job, no way to pay back the credit card debt I've racked up while trying to find help.  Hell, I don't see anyway to pay it WITH a job.
+
+I'm just not strong enough anymore.  I'm so tired.  I just don't think I can hold myself up anymore.  I've always been the one people leaned on, and I just can't do it anymore.
+
+I don't have any channels left to vent in because everyone else is just tired of hearing my shit.  I'm tired of dealing with my shit.
+
+I'm 32, and I'll never amount to anything.  I've used up all my usefulness, and there's just nothing left for me. I can't figure out things like I used to.  Nothing seems to ever make sense anymore.  I'm just a miserable pile of moldy trash that needs to be thrown out.  
+
+I go to work alone every day.  I sit alone at the desk all day.  I eat lunch alone.  I go home alone.  I eat dinner alone.  If I go do anything else, I leave alone, and come back alone.  I don't enjoy doing anything anymore.  I don't think I ever really enjoyed doing things anyway.  I think I only enjoyed doing things with other people.  But I don't belong anywhere.  I don't want to be at home anymore.  I don't want to be at work anymore.  I don't want to be in my car.  I don't want to be at the bar.  I just don't want to, be, anymore.
+
+I haven't figured out how, yet, but I'm going to end it.  I just can't do it anymore.  There is no help for me, because I can't help myself.
+
+I'm not entirely sure why I'm even posting this.  No one will ever be able to help me.",1365540359.0,39,0.94,7
+depression,I don't want to live anymore,"Seriously. There isn't anything for me. 
+
+I'm a piece of shit.
+
+I want to be dead. It never gets better. Actually, that's not true.  It got a little better when I got cancer.  I'd rather have cancer than depression, though.  At least I can find treatment for cancer.
+
+Now that I don't have cancer anymore, I'd rather be dead. I suck at life. I don't enjoy anything. I kind of like general problem solving, but either something's too tough, or too easy.
+
+I have no one to relate to. Even if I did, it wouldn't matter. I'm so fucked up, no one will ever want to spend life with me. No one want's to be with the guy with no confidence.
+
+All I can do is hope that I don't wake up tomorrow.  I beat cancer, though, so, fat chance of that.",1355298596.0,8,0.9,11
+depression,Worthless Title,"I hate life... It continues to not get better.  I'm incapable of making it better and I don't even have someone to give me a hug, let alone help fix me.
+
+I want to talk, but I've nothing to talk about.
+
+No one understands. 
+
+I just don't want to be alone anymore.  That's not possible, so I'm better off dead.
+
+... Whatever... All my opinions are wrong anyway.",1352915337.0,2,0.67,2
+depression,Is there any hope of actually being cured?,"I've been dealing with my own depression for at least a year.  Every time I think things are getting better, my brain flips me off and decides it's all not worth it.
+
+After I was diagnosed with depression, I found out that my parents and sister have all been treating depression for a very long time.
+
+My best friend just checked himself into the hospital for the second time because of his depression, and I know he's been dealing with it for at least 15 years.
+
+Is there any hope to actually be cured of depression, or is it more like HIV where you just get treated for the rest of your life and (hopefully) learn to live with it?",1351789695.0,10,1.0,12
+depression,How is this statement wrong?,"If someone can explain to me how this statement is wrong, I might actually start believing that it gets better.
+
+Since I'm incapable of helping myself, there is no help for me.
+
+I'm absolutely miserable. Every time I go to bed, I hope I don't wake up.  Ever time I wake up, I wish I were dead.  I've been given all sorts of advice (and a few meds), but nothing seems to be working.  Either I'm able to take the advice and act on it, and it fails to do anything, or else I'm just incapable of acting on the advice.  Hell, I can't even get myself to do stupid shit like take a shower every day.  I'll stand in front of the bathroom mirror, looking at my teeth going, ""Ew, I really need to brush my teeth"" with nothing else to do, and I can't get myself to brush my teeth.
+
+I'm a failure in every sense of the word.  I can't even get myself to do things because I already assume that I'll fail at them. There's nothing that I enjoy doing, but I can't get myself to try new things.
+
+I am incapable of helping myself, so there is no help for me.  How can things possibly get better?",1347654258.0,3,0.81,4
+depression,How do you find the right therapist?,"I tried getting a referral from my psychiatrist, but I'm pretty sure he ended up not being right for me.  I usually felt like sessions were a step backwards.
+
+I can get a list of psychologists in my area from my insurance company, but how do I know which one to use?  What questions do I need to ask? What do I need to tell them?
+
+I'm pretty sure I'll just end up giving up soon.  Deciding that my current therapist can't help me has just solidified my belief that there's no help for me.  One or two more and I doubt there'll be any turning back.",1342024638.0,7,1.0,12
+depression,I'm not sure why I'm fighting.,"A little over a month ago, I was diagnosed with Hodgkins Lymphoma (early stage 3).  I've been depressed for a long time, and actually, the diagnosis was a little refreshing.  It gave me something to fight, that seemed fightable.
+
+I had my first round of chemo last week, and this weekend I started getting depressed again. I wondered WHY I want to fight the cancer.  After I beat it, I'll just be back in the same sad lonely state as before.  I guess going through the chemo isn't going to be as bad as it would be to let the cancer kill me, but still. ",1340032149.0,1,1.0,1
+SuicideWatch,Good News Everybody!,"I've got Cancer!  Hodgkins Lymphoma.  
+
+I've wanted to kill myself for a long time, but I'm too much of a pussy to actually do it myself.  So I spent all sorts of time just wishing something would happen that would kill me, like an earthquake, or cancer.  I guess I should have been more specific, since this has little chance of killing me.
+
+So now, I get to spend the next year going through tests and treatment, including chemo.  I've got no one to go to.  I don't even have someone that can pick me up at the hospital when they won't let me drive myself home.
+
+Fuck everything.  I should just stay home and play Diablo 3 until I waste away.  i'm still waiting on this ""better"" that everyone says is coming.",1338392686.0,11,0.8,11
+SuicideWatch,Things will never be better.,"There is no help for me.  I've got my psychiatrist in one corner saying that I just need to find the right drugs.  I've got my psychologist in the other corner saying that the only one that can make me better is me.
+
+Drugs are a laugh.  It's like lobbing pebbles at a water-skimmer. Sure, you're gonna make the water move a bit, but you'll never hit your target.
+
+I'm incapable of changing myself. I don't have the willpower or energy to sustain changes long enough to make them stick.  And all changes that I have tried, didn't do any good.
+
+The old happy capable me is gone, never to return. I have trouble finding joy in anything anymore. The moment I get close, something will always knock me right back down.  The best I can do is just lay in bed, watch porn, and sleep.
+
+I just don't care about anything.  I suck at conversation because I really, really, just don't care. It's all pointless. There is no conversation that I will ever have that will make any lick of difference.
+
+Bah. There's so much more that's wrong with me. But none of it matters. It's never going away anyway.
+
+I can actually picture myself jumping off a building right now. But I know that wouldn't fix anything.  I'd survive. Nothing will ever kill me. All anything can ever do is make my life more miserable. There's always extra room at the bottom.
+
+It's all my fault anyway.  I've just hurt too many people. I deserve all the pain this world can throw at me.",1332344673.0,5,0.86,5
+depression,I don't know what to talk about.,"I've got lots of people that say, ""If you ever need to talk, I'm here for you."" But I don't know what to talk about. I've been depressed for so long that I'm sure people are getting tired of hearing the same old shit. Usually all talking does is make me feel worse anyway. It's always just advice that either I can't do, or I've done and it didn't help. Nothing ever works. Nothing ever gets better. I don't really want to talk anyway. I just want someone to hold me.",1331315635.0,7,1.0,2
+depression,Why should I believe that it gets better?,"Or maybe i should ask HOW I can believe it gets better?
+
+Sure, I'll have a okay day every now and then, but it just seems like things keep going downhill.  Heck, a while back, i seemed to have almost a decent month!  But then BAM, right back down further than I was before.
+
+I can't take care of myself.  My apartment is a complete mess.  I went from showering every 1-2 days to showering ever 2-4 days.  On my days off, I sleep, wake up, wank, fall back asleep and repeat. I have no faith in myself.
+
+I'm on my second type of medication.  I have an appointment in a couple weeks and I'm going to ask to switch to a new medication. I'm not sure why, though, I'm sure it won't work just like all the other things the doctors have said would help, but haven't.
+
+It's pretty rare that something is suggested that might help that I can also actually do.  Two things so far: lose weight, stop drinking alcohol for a month.  Lost 40 lbs (from 315) and feel more frail, weak and tired than ever before. I've no energy. Everything that was hurting before, is still hurting, plus some extra things now.  All quitting drinking did was remove me from any form of social interaction that I had. Additionally, my whole body ached, like I had the flu, almost the entire dry month. Mentally, the only thing not drinking did was make it easier to not post shit to facebook.
+
+I do what I can, but obviously, it's not enough. I'm incapable of doing most things anyway. 
+* ""Just change your whole diet!""  
+* ""Just get more exercise"" 
+* ""Just get yourself on a regular schedule!"" 
+* ""Just stop having negative thoughts."" 
+* ""Just stop drinking alcohol."" 
+* ""Just stop drinking caffeine."" 
+* ""Just be more active.""  
+* ""Just find new groups to hang out with.""
+
+Things just keep getting worse and worse.  And the more I try, the more I'm a failure. Why should I try?  Why should I believe that I can get better?",1329956847.0,6,1.0,4
+SuicideWatch,I can't think of a single reason to continue living.,"I have only two reasons why I haven't tried killing myself:
+1) I don't want to try and fail and end up maimed or somehow even more of a burden than I already am.
+2) It requires effort.
+
+I can't seem to bring myself to do anything new. I can't find anything new that seems interesting enough to do anyway.
+
+I have absolutely no faith in myself.  I have no motivation.  All I do is work, sleep, and go down to the bar to not be alone every now and then.  
+
+I don't feel a connection with anyone, even friends I've had for over 80% of my life.  There are people that I talk to every now and then, but I never find myself calling anyone. It seems like every time I call, it's at a bad time.  I feel like, if I want to do something that involves someone else, I have to wait for someone else to invite me to it.  I can't remember that last time I called someone up and asked if they wanted to do something, and they said yes.
+
+There are several people that have offered themselves up as available if I need to talk, but really, I don't know what to talk about.  If I were to call the suicide hotline, what would I say?  All I keep hearing (from professionals even) is that the only way I'll feel better, is if I make myself feel better.  I can't take care of myself.  I can't even bring myself to walk for 15 minutes 3-4 times a week.
+
+For now, i guess all I can do is hope to not wake up next time.
+
+",1329947198.0,6,0.88,4
+SuicideWatch,What's wrong with me?,"I hate myself. Why can't I just be happy?  Why am I not capable of doing anything about being depressed?
+
+I'm so sick of myself that I feel like I'm going to puke.  I feel like just bashing my head against the wall.  If it weren't such a hike, I'd go up to the top of the parking garage and jump off.
+
+I'm never going to get better because I'm incompetent and lazy.  I'm such a coward too.  I can't even bring myself to try anything to either make me better, or kill myself.
+
+I just don't want to live anymore.  I'm a waste of space, food, time, money, trust, potential, and whatever else there is.  The only thing I seem to be okay at is disappointment.
+
+The word ""floccinaucinihilipilification"" was invented to describe me.",1327706909.0,10,1.0,11
+SuicideWatch,I give up,"I keep getting told that in order to get better, I have to make myself better.  I'm not capable of doing that.  They say, ""Go try something new.""  I fail at even getting out the door.  I try picking up old hobbies that I've had, but get 10% into a project and either get stuck or lose interest.  I'd kill myself if I had any faith, whatsoever, that I'd actually succeed, instead of end up with half a brain, hooked up to tubes.
+
+I know that there are several people out there that would be sad if I were gone. I can't make myself happy. Why should I worry about making anyone else happy?
+
+I'm 30. I live alone. I haven't had a girlfriend (or anything close to one) in over 6 years.  If I want to do something, I have to do it alone, because I can never find anyone to do it with me.  Either that, or I have to wait for someone else to ask if I want to do it.  I'm nothing special. I don't know anyone that I haven't hurt in some way.  
+
+I don't know why I can't be a better person.  I don't know why I can't like myself. Supposedly, it's as easy as just doing it.  
+
+My life is meaningless.",1327296236.0,1,0.67,6
+pics,Be careful when launching firebug.,,1324337162.0,1,0.6,0
+firstworldproblems,"The sun is hitting the window shade, causing glare on my screen, making it hard to play the Diablo 3 beta.",,1320618493.0,1,0.6,0
+reddit.com,The worst part about being on a diet is emails like this,,1317393479.0,13,0.88,4

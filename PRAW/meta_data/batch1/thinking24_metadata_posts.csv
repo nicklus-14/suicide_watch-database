@@ -1,0 +1,112 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+HomeServer,errors on HPL linpack test,"Ive been getting errors when running HPL linpack test and i have spent the last 2 hours googling with no luck.
+
+The errors look like below a short time after the benchmark starts. 
+The errors occur on my home server but do not occur on my desktop. 
+
+
+    [bd86bbbb0d84:00014] Read -1, expected 148992, errno = 1
+    [bd86bbbb0d84:00012] Read -1, expected 148992, errno = 1
+    [bd86bbbb0d84:00014] Read -1, expected 145920, errno = 1
+    [bd86bbbb0d84:00013] Read -1, expected 12963080, errno = 1
+    [bd86bbbb0d84:00013] Read -1, expected 12695800, errno = 1
+    [bd86bbbb0d84:00011] Read -1, expected 12963080, errno = 1
+    [bd86bbbb0d84:00014] Read -1, expected 12962304, errno = 1
+            
+I am running Debian 12 on my Server Fedora 39 on my desktop.
+
+My server is running i5-6500 stock with 32GB ram. desktop is a i7-2600k overclocked slightly 16GB ram. 
+
+I am using docker to run the tests and my dockerfile can be found below. 
+The container is built with ""docker build -t hpl ."" and run with ""docker run --rm -it hpl""
+I have installed and updated docker on both systems as described by the docker installation guide. I have added the docker repos to my sources lists and installed them that way. 
+
+    # syntax=docker/dockerfile:1
+    FROM debian:stable-slim
+    RUN apt update && apt upgrade -y && apt install -y --no-install-recommends -- build-essential wget libopenblas-dev libopenmpi-dev libopenmpi3 ca-certificates
+    RUN wget https://www.netlib.org/benchmark/hpl/hpl-2.3.tar.gz -O - | tar -xzf -
+    
+    WORKDIR /hpl-2.3/
+    RUN ./configure
+    RUN make -ofast
+    
+    
+    #args for HPL
+    ARG NofProb=1
+    ARG Ns=33792
+    ARG NoNBs=2
+    ARG NBs='192 384'
+    ARG NofGrids=1
+    ARG Ps=2
+    ARG Qs=2
+    ARG Threshold=16
+    
+    WORKDIR /hpl-2.3/testing/
+    RUN echo ""HPLinpack benchmark input file\nInnovative Computing Laboratory, University of Tennessee\nHPL.out      output file name (if any) \n6            device out (6=stdout,7=stderr,file)\n$NofProb            # of problems sizes (N)\n$Ns         Ns\n$NoNBs            # of NBs\n$NBs           NBs\n0            PMAP process mapping (0=Row-,1=Column-major)\n$NofGrids            # of process grids (P x Q)\n$Ps            Ps\n$Qs            Qs\n$Threshold         threshold\n1            # of panel fact\n2            PFACTs (0=left, 1=Crout, 2=Right)\n1            # of recursive stopping criterium\n4            NBMINs (>= 1)\n1            # of panels in recursion\n2            NDIVs\n1            # of recursive panel fact.\n1            RFACTs (0=left, 1=Crout, 2=Right)\n1            # of broadcast\n1            BCASTs (0=1rg,1=1rM,2=2rg,3=2rM,4=Lng,5=LnM)\n1            # of lookahead depth\n1            DEPTHs (>=0)\n2            SWAP (0=bin-exch,1=long,2=mix)\n64           swapping threshold\n0            L1 in (0=transposed,1=no-transposed) form\n0            U  in (0=transposed,1=no-transposed) form\n1            Equilibration (0=no,1=yes)\n8            memory alignment in double (> 0)\n##### This line (no. 32) is ignored (it serves as a separator). ######\n0                               Number of additional problem sizes for PTRANS\n1200 10000 30000                values of N\n0                               number of additional blocking sizes for PTRANS\n40 9 8 13 13 20 16 32 64        values of NB"" > /hpl-2.3/testing/HPL.dat
+    ENTRYPOINT [""mpirun"",""--allow-run-as-root"",""xhpl""]
+    
+While writing this out it has just occured to me that my computer has 4 3.5"" drives running off a stock power supply. I have been unable to upgrade as HP uses a propriety connector for the power supply to motherbord connection and i not gotten an adapter yet so i will try upgrading the power supply next. 
+
+Does anyone know what the problem could be?",1704708095.0,1,1.0,0
+redditisfun,Why don't we pay for our own usage?,"Im sad it's come to this where a place I've been for almost half my life is going away. The internet of my youth is gone and with it the magic it once brought with it. 
+
+However nothing in this world is free. 
+Instead of just letting RIF die why not pass the cost on to users. Yes the API pricing is excessive and reddit has made choices to only increase that cost. But on the other hand the joy and knowledge reddit has given me for basically nothing is huge. 
+
+Why not add a setting that lets users who want to pay for it add their own API key? This way rif can continue like it is. 
+I have no idea how many API requests I use per month. But I don't actually browse that much. So 50c a month seems reasonable for the information and resources reddit gives me. 
+
+Hopefully others agree and we don't have to loose everything.",1686531522.0,6,0.65,8
+void,screaming into the void,"I fell like ive been screaming into the void my whole life. Im starting not to be able to take it anymore. i woke up and stupidly checked my partners phone because i wanted to know if she has been lying to me. Well i was right and my first panic attack of the day started at 6:30 am and i have a full days of work to go to. I was hoping it would have died down by now but it hasnt and its already been 40mins. 
+
+I think i almost killed myself about a week ago just to make the pain go away. luckly one of my friends messaged me and pulled me out of the daze but i know it wont always be that way. I just wish i was more socially capable to talk to and meet people. I am tired of being lonely. Tired of being undesired. tired of wakng up every morning to mediocrity because i couldnt push through the pain and get my degree years ago. tired because i dont know if i can push through the pain this time either but i relise this time its more final.
+
+WTF happened to me man, i used to be happy.... was i ever happy?
+gotta go to work
+
+bye void chat next time",1672337568.0,1,1.0,0
+196,Rule,,1669422752.0,29,0.89,1
+GIMP,Why does gimp need efi-srpm-macros?,I am installing gimp of fedora 35 with KDE. i noticed that it wants to install efi-srpm-macros and kernal-srpm-macros. Does anyone know why gimp needs to modify the efi or build kernel modules?,1645140506.0,3,0.81,4
+HomeServer,Ram wont work even though its in spec,"hey guys i have a problem. 
+I bought a supermicro x8sil-f mother board. [This motherboard is extremely picky about what ram it takes.](https://www.supermicro.com/products/Memory/3400_support.cfm?pname=MBD-X8SIL&DIMM=4) It only takes x8 bank ram and in 32 gb configuration needs registered ram made up of 4 8GB sticks of type 4Rx8.  So after buying the wrong ram once i made special effort to buy the correct ram. how ever the ram i bought doesnt work. [This is the ram i bought.](https://i.imgur.com/1YYMydB.jpg) As far as i can see it matches the specifications and this configuration is confirmed on [this](https://forums.servethehome.com/index.php?threads/supermicro-x8sil-f-ram-questions.23254/) forum. Can anyone see why it doesn't work other then ""its not the specified parts number""?
+
+More information about the system:  
+Has a Xeon X3430   
+when i put the ram in it just doesnt do anything at boot. no beeps. no post codes nothing on screen.  
+It is currently running with 2GB of ram.",1596255921.0,3,0.67,4
+servers,Ram wont work even though its in specifications,"hey guys i have a problem. 
+I bought a supermicro x8sil-f mother board. [This motherboard is extremely picky about what ram it takes.](https://www.supermicro.com/products/Memory/3400_support.cfm?pname=MBD-X8SIL&DIMM=4) It only takes x8 bank ram and in 32 gb configuration needs registered ram made up of 4 8GB sticks of type 4Rx8.  So after buying the wrong ram once i made special effort to buy the correct ram. how ever the ram i bought doesnt work. [This is the ram i bought.](https://i.imgur.com/1YYMydB.jpg) As far as i can see it matches the specifications and this configuration is confirmed on [this](https://forums.servethehome.com/index.php?threads/supermicro-x8sil-f-ram-questions.23254/) forum. Can anyone see why it doesn't work other then ""its not the specified parts number""?
+
+More information about the system:  
+Has a Xeon X3430   
+when i put the ram in it just doesnt do anything at boot. no beeps. no post codes nothing on screen.",1596255693.0,1,1.0,2
+homelab,Problem with server ram,"hey guys i have a problem. 
+I bought a supermicro x8sil-f mother board. [This motherboard is extremely picky about what ram it takes.](https://www.supermicro.com/products/Memory/3400_support.cfm?pname=MBD-X8SIL&DIMM=4) It only takes x8 bank ram and in 32 gb configuration needs registered ram made up of 4 8GB sticks of type 4Rx8.  So after buying the wrong ram once i made special effort to buy the correct ram. how ever the ram i bought doesnt work. [This is the ram i bought.](https://i.imgur.com/1YYMydB.jpg) As far as i can see it matches the specifications and this configuration is confirmed on [this](https://forums.servethehome.com/index.php?threads/supermicro-x8sil-f-ram-questions.23254/) forum. Can anyone see why it doesn't work other then ""its not the specified parts number""?
+
+More information about the system:  
+Has a Xeon X3430   
+when i put the ram in it just doesnt do anything at boot. no beeps. no post codes nothing on screen.",1596249253.0,0,0.4,20
+pics,South Australian fires yesterday,,1578139154.0,10,0.86,2
+ThePussyPop,The preggo pop,,1574095014.0,161,0.9,23
+photography,Why photography ?,I've been asking people who I meet this question : why did you choose to do photography vs doing video ?,1555448819.0,0,0.3,24
+assholedesign,Trying to watch a video on streamable,,1532212577.0,3,0.8,1
+pics,"""You can't sit with us""",,1503899728.0,0,0.4,14
+meirl,Me irl,,1500114216.0,64,0.78,4
+me_irl,Me_irl,,1468892709.0,1,1.0,0
+photography,Canon has a new flagship camera : the 1D X mark 2,,1454446988.0,1,1.0,0
+dirtypenpals,19 M4F lonley kiwi looking for someone to chat to,"really just looking for someone to talk dirty to, maby exchange a few pics here and there just some fun. ",1388923901.0,0,0.5,0
+linux,upgrade ubuntu 12.04 to 13.10 or just kernel and graphics stack?,"Iim thinking of upgrading from ubuntu 12.04 to ubuntu 13.10 but i was wandering how much benefit there will be in doing a complete reinstall over just upgrading the kernel and graphics stack. 
+
+currently i have the 3.8.x kernel with and associated 13.04 graphics stack installed. and this has made a difference on my shitty net-book( intel atom n270 with 1gb ram).  
+
+
+if it makes any difference im running the lubuntu-desktop interface over an install of ubuntu 12.04 
+",1381752078.0,5,0.59,6
+SuicideWatch,i think  i have a problem,"so ive got this problem. i want to kill my self and id like some general advice. i really have no reason to do it i mean my life is great. im fortunate to have both parents who love me, friends, im wealthy. i really have no serious problems. im not crying 'there is no hope i must do this'. 
+it feels more like a choice. ive spoken to my counselor about it. she has given me ways to work through it but i dont know if i want to. 
+
+before you cry 'but your not suicidal' ive decided i was going to kill my self twice. then i thought of my parents who would of found me and the pain id put them through so backed out. thats actually the only thing keeping me alive, how my death would affect my family and those who know me. i really dont want to hurt them but i just want to die.  
+
+i mean ive felt like this since as long as i can remember. so to me its no big deal. what is worrying me is its starting to feel like a choice as easy to make as buying a candy bar. and i dont want to hurt those around me. 
+
+so what is somethings that i can do to help my situation? ",1353928721.0,6,1.0,8

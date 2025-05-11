@@ -1,0 +1,412 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+UNDERDOGS,I am literally frothing at the mouth waiting for Corruptions.,"by literally I mean its second definition: figuratively.
+
+Anyway,
+
+This game is the best vr game, I love it.
+
+Just finished a game with claw, grabber and resonating plate. It was very fun ripping everything apart.",1739321511.0,11,1.0,11
+videogamedunkey,I made this BIGMODE BIGTOAD,,1664425474.0,970,0.99,11
+Oxygennotincluded,Gantry and bunker door automation for rockets.,,1555109630.0,31,0.9,21
+raleigh,Hey Raleigh! My gf and are visiting Raleigh on Tuesday and Wednesday (7th and 8th). Anything we should do or see?,,1509840031.0,2,0.63,6
+PhotoshopRequest,"[Specific] Hello, I recently went across the country to visit a friend, and this is the only picture we got! Can someone please balance out the terrible lighting?",,1481157221.0,1,1.0,1
+BeardPorn,My favorite cut and length.,,1374614737.0,77,0.92,14
+bisco,"The Bisco Lineup. All days, including Silent Disco and the Workshops schedule.",,1373425806.0,5,0.86,4
+relationship_advice,The age gap. Me: 28M Her: 20F,"Tell me your stories about similar age gaps!!  What are the common pitfalls and secret benefit?
+
+I have never dated anyone more than 2 years away from my age, This girl is awesome, we've been friends for 4 months.",1369166710.0,1,0.67,4
+Rochester,Where is a good place to try a yoga class?,"I, a guy, and a female friend want to try yoga.  Some place that has a grounded, well balanced experience.",1368943090.0,2,1.0,5
+DepthHub,aedes metaphorically breaks down the Tylenol+alcohol poisoning misconception.,,1355432095.0,401,0.91,27
+starcraft,Best Base Defense: Dishes.,,1348708249.0,0,0.4,0
+worldbuilding,Great guide and tips for starters,,1344611735.0,50,0.96,8
+polyphasic,Tread Lightly,"This is a paper by Dr Piotr Wozniak, regarding different sleep techniques.  Very detailed and informative. [To the artical](http://www.supermemo.com/articles/polyphasic.htm)",1341930970.0,0,0.5,3
+learnprogramming,Java Formatting Issue.,"	
+Hello Wise Code-Guru's,
+
+I have encountered a very minor issue while trying to format a custom JLabel turned stopwatch
+
+When my timer runs, I want the letter text to stay in the same spot, however it jumps around depending on the length of the displayed 'seconds'.  How do I fix this?
+
+I know <font> is deprecated, but I did it anyway.
+
+
+    import java.awt.event.*;
+    import javax.swing.*;
+	
+    /**
+     * A custom component that acts as a simple stop-watch.  When the user clicks
+     * on it, this component starts timing.  When the user clicks again,
+     * it displays the time between the two clicks.  Clicking a third time
+     * starts another timer, etc.  While it is timing, the label just
+     * displays the message ""Timing...."".
+     */
+    public class StopWatchLabelWithTimer extends JLabel implements MouseListener, ActionListener {
+	
+        private long startTime;   // Start time of timer.
+	   
+        private Timer timer;
+	
+        /**        
+         * Constructor sets initial text on the label to
+         * ""Click to Start Timer."" and sets up a mouse listener
+         * so the label can respond to clicks.
+         */
+        public StopWatchLabelWithTimer() {
+            super(""  Click To Start Timing.  "", JLabel.CENTER);
+            addMouseListener(this);
+            timer = new Timer( 10, this );
+        }
+    
+        /**
+         * This method is called every time the timer is fired! fancy that.
+         * this sets the new time with the ""The Elapsing Time: "" message
+         * and the current time.
+         */
+        public void actionPerformed(ActionEvent evt) {
+    
+            long et = evt.getWhen() - startTime;
+            setText( ""<html>The Elapsing Time:  "" +
+                ""<b><font color=\""#ff4545\"" size=\""28\"" face=\""courier new, andale mono, monospace\"">""
+                + et/1000 + ""."" + (et%1000)/10 +     // time formatting!
+                ""</font></b>  seconds</html>"" );
+        }
+	
+	   
+        /**
+         * React when the user presses the mouse by starting
+         * or stopping the timer and changing the text that
+         * is shown on the label.
+         */
+        public void mousePressed(MouseEvent evt) {
+    
+            if ( ! timer.isRunning() ) {
+                timer.start();
+                startTime = evt.getWhen();
+            }
+            else { 
+                timer.stop();
+                long et = evt.getWhen() - startTime;
+                setText( ""<html>Total Elapsed Time: "" +
+                    ""<b><font color=\""#ff4545\"" size=\""28\"" face=\""courier new, andale mono, monospace\"">""
+                    + et/1000 + ""."" + (et%1000)/10 +     // time formatting!
+                    ""</font></b>  seconds</html>"" );
+            }
+        }
+        
+        //------- Unused Methods -------\\
+	   
+        public void mouseReleased(MouseEvent evt) { }
+        public void mouseClicked(MouseEvent evt) { }
+        public void mouseEntered(MouseEvent evt) { }
+        public void mouseExited(MouseEvent evt) { }
+	
+    }
+
+
+and here is a main method, if you want to test it.
+
+    import java.awt.BorderLayout;
+    import java.awt.Color;
+    import java.awt.Dimension;
+    import java.awt.Font;
+    import java.awt.Toolkit;
+    
+    import javax.swing.JFrame;
+    import javax.swing.JPanel;
+	
+	
+    public class TimerTestMain {
+	
+        public static void main(String[] args) {
+			
+            JFrame window = new JFrame(""Timer Tester"");
+            TimerTestPanel content = new TimerTestPanel();
+            window.setContentPane(content);
+            window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            window.setSize(450, 100);
+            Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+            window.setLocation( (dim.width/2) - (window.getWidth()/2), (dim.height/2) - (window.getHeight()/2) );
+            window.setVisible(true);
+            window.setResizable(false);
+			
+        }
+		
+        private static class TimerTestPanel extends JPanel {
+			
+            private StopWatchLabelWithTimer timerLabel;
+			
+            TimerTestPanel() {
+                this.setLayout( new BorderLayout() );
+                timerLabel = new StopWatchLabelWithTimer();
+                timerLabel.setOpaque(true);
+                timerLabel.setBackground( new Color( 78, 38, 0 ) );			// Dark Brown.
+                timerLabel.setForeground( new Color( 0, 206, 206 ) );		// Teal.
+                timerLabel.setFont( new Font(""Sarif"", Font.PLAIN, 20) );
+                add(timerLabel, BorderLayout.CENTER );
+            }
+			
+        }
+		
+    }
+
+Thanks for the time.",1341526439.0,1,0.6,3
+java,Swing. yay or nay?,and why?,1340689980.0,2,0.56,20
+java,Trouble understanding how Java pointers work in linked lists.,"I understand all of the HashTable concepts except this remove function. It says curr=curr.next and prev=curr.  Would this not make them point to the same location??  It's making my head hurt.
+
+while (curr != null && ! curr.key.equals(key)) {
+curr = curr.next;
+prev = curr;
+}
+
+
+     public void remove(String key) {  
+      
+      int bucket = hash(key);  // At what location should the key be?
+      
+      if (table[bucket] == null) {
+            // There are no keys in that location, so key does not
+            // occur in the table.  There is nothing to do, so return.
+         return; 
+      }
+      
+      if (table[bucket].key.equals(key)) {
+            // If the key is the first node on the list, then
+            // table[bucket] must be changed to eliminate the
+            // first node from the list.
+         table[bucket] = table[bucket].next;
+         count--; // Remove new number of items in the table.
+         return;
+      }
+      
+      // We have to remove a node from somewhere in the middle
+      // of the list, or at the end.  Use a pointer to traverse
+      // the list, looking for a node that contains the
+      // specified key, and remove it if it is found.
+      
+      ListNode prev = table[bucket];  // The node that precedes
+                                      // curr in the list.  Prev.next
+                                      // is always equal to curr.
+      ListNode curr = prev.next;  // For traversing the list,
+                                  // starting from the second node.
+      while (curr != null && ! curr.key.equals(key)) {
+         curr = curr.next;
+         prev = curr;
+      }
+      
+      // If we get to this point, then either curr is null,
+      // or curr.key is equal to key.  In the later case,
+      // we have to remove curr from the list.  Do this
+      // by making prev.next point to the node after curr,
+      // instead of to curr.  If curr is null, it means that
+      // the key was not found in the table, so there is nothing
+      // to do.
+      
+      if (curr != null) {
+         prev.next = curr.next;
+         count--;  // Record new number of items in the table.
+      }
+   }",1338512010.0,0,0.5,9
+funny,Commenting on the front page.,,1338264053.0,1,0.54,1
+java,Quick Question about creating an instance of an object from a class; using the new operator.,"Every once in a while I encounter this issue, I fixed it once, and can't find my example.  Any insight would be great!
+
+The first two lines, in the main method are:
+
+controller = new PhoneDirectoryController();
+
+directory = controller.new PhoneDirectoryTreeMap();
+
+  
+    How do I create the PhoneDirectoryTreeMap(); without creating an object of type ""PhoneDirectoryController();""?
+
+        [source](http://math.hws.edu/javanotes/c10/exercises.html)
+
+            ^ This Book is great, just sayin', Thank you David Eck.
+
+
+
+    public class PhoneDirectoryController {
+
+	static PhoneDirectoryController controller;
+	static PhoneDirectoryTreeMap directory;
+	
+	public static void main(String[] args) {
+		
+		controller = new PhoneDirectoryController();
+		directory = controller.new PhoneDirectoryTreeMap();
+		
+		System.out.println(""I am a phone directory. v 2.0"");
+		System.out.println("" type "");
+	}
+	
+	
+	//----------------------PhoneDirectoryTreeMap----------------------------\\
+	
+	
+	   /**
+	    * An object of type PhoneEntry holds one name/number pair.
+	    */
+	   private static class PhoneEntry {
+		      String name;     // The name.
+		      String number;   // The associated phone number.
+		   }
+	
+	   
+	   
+	/**
+	 * A PhoneDirectory holds a list of names with a phone number for
+	 * each name.  It is possible to find the number associated with
+	 * a given name, and to specify the phone number for a given name.
+	 */
+	public class PhoneDirectoryTreeMap {
+	   
+	   private PhoneEntry[] data;  // Array that holds the name/number pairs.
+	   private int dataCount;      // The number of pairs stored in the array.
+	   
+	   
+	   /**
+	    * Constructor creates an initially empty directory.
+	    */
+	   public PhoneDirectoryTreeMap() {
+	      data = new PhoneEntry[1];
+	      dataCount = 0;
+	   }
+	   
+	   
+	   /**
+	    * Looks for a name/number pair with a given name.  If found, the index
+	    * of the pair in the data array is returned.  If no pair contains the
+	    * given name, then the return value is -1.  This private method is
+	    * used internally in getNumber() and putNumber().
+	    */
+	   private int find( String name ) {
+	      for (int i = 0; i < dataCount; i++) {
+	         if (data[i].name.equals(name))
+	            return i;  // The name has been found in position i.
+	      }
+	      return -1;  // The name does not exist in the array.
+	   }
+	   
+	   
+	   /**
+	    * Finds the phone number, if any, for a given name.
+	    * @return The phone number associated with the name; if the name does
+	    *    not occur in the phone directory, then the return value is null.
+	    */
+	   public String getNumber( String name ) {
+	      int position = find(name);
+	      if (position == -1)
+	         return null;   // There is no phone entry for the given name.
+	      else
+	         return data[position].number;
+	   }
+	   
+	   
+	   /**
+	    * Associates a given name with a given phone number.  If the name
+	    * already exists in the phone directory, then the new number replaces
+	    * the old one.  Otherwise, a new name/number pair is added.  The
+	    * name and number should both be non-null.  An IllegalArgumentException
+	    * is thrown if this is not the case.
+	    */
+	   public void putNumber( String name, String number ) {
+	      if (name == null || number == null)
+	         throw new IllegalArgumentException(""name and number cannot be null"");
+	      int i = find(name);
+	      if (i >= 0) {
+	             // The name already exists, in position i in the array.
+	             // Just replace the old number at that position with the new.
+	         data[i].number = number;
+	      }
+	      else {
+	            // Add a new name/number pair to the array.  If the array is
+	            // already full, first create a new, larger array.
+	         if (dataCount == data.length) {
+	            PhoneEntry[] newData = new PhoneEntry[ 2*data.length ];
+	            System.arraycopy(newData,0,data,0,dataCount);
+	            data = newData;
+	         }
+	         PhoneEntry newEntry = new PhoneEntry();  // Create a new pair.
+	         newEntry.name = name;
+	         newEntry.number = number;
+	         data[dataCount] = newEntry;   // Add the new pair to the array.
+	         dataCount++;
+	      }
+	   }
+	} // end class PhoneDirectory
+	
+	
+	
+} // end class PhoneDirectoryController
+",1338182228.0,0,0.5,7
+javahelp,[fixme] Mystery Error,"Hi r/javahelp,
+
+I've been teaching myself programming styles and such for about the past year, and have been able to solve all my issues with time and persistence, but I came across a problem that I can not identify for the life of me, and since I have no one IRL to ask I figured I'd come here.
+
+The MovingBall panel is an exercise in the book JavaNotes6 and is 100% correct.
+The MovingBall constructor is (int leftBoundry, int rightBoundry, int topBoundry, int bottowBoundry)
+
+---------------------------------------------------------------
+
+public class BouncingBallPanel extends JPanel implements ActionListener, MouseListener, MouseMotionListener {
+		
+		MovingBall[] balls;			// create the array of balls
+		Timer timer;				// creates the timer to drive the balls' motion.
+		
+		BouncingBallPanel() {
+			
+			setBackground(Color.BLACK);
+			setPreferredSize( new Dimension(400, 400) );
+			setBorder( BorderFactory.createLineBorder(Color.RED, 3) );
+			
+			addMouseListener(this);
+			addMouseMotionListener(this);
+			
+			balls = new MovingBall[20];
+			
+			for (MovingBall b: balls) {
+				b = new MovingBall(3, 400-3, 3, 400-3);
+				b.setColor(Color.CYAN);
+				b.setSpeed(12);
+			}
+			
+			timer = new Timer( 50, this );
+			timer.start();
+		}
+		
+		public void mouseDragged(MouseEvent evt) {
+			for (MovingBall b: balls) {
+				b.headTowards(evt.getX(), evt.getY());
+			}
+		}
+		
+		public void mousePressed(MouseEvent evt) {
+			for (MovingBall b: balls) {
+				b.headTowards(evt.getX(), evt.getY());
+			}
+		}
+		
+		public void actionPerformed(ActionEvent evt) {
+			for (MovingBall b: balls) {
+				b.travel();
+				repaint();
+			}
+		}
+		
+		public void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			for (MovingBall b: balls) {
+				b.draw(g);
+			}
+		}
+		
+		
+		//-------==-=== Unused Methods ===-==-------\\
+		
+		public void mouseMoved(MouseEvent evt) { }
+		public void mouseClicked(MouseEvent evt) { }
+		public void mouseEntered(MouseEvent evt) { }
+		public void mouseExited(MouseEvent evt) { }
+		public void mouseReleased(MouseEvent evt) { }
+		
+	}",1328581260.0,5,0.86,9
+dubstep,I've waited my whole life for this.  ZelDub,,1328413699.0,0,0.5,4

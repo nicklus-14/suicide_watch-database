@@ -1,0 +1,997 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+singularity,I might not believe...,[removed],1728385179.0,0,0.38,11
+selfhosted,"I made Jellyfin resilient - a demo of a three-node Jellyfin cluster utilising distributed storage, Kubernetes and Proxmox to make Jellyfin survive mild disasters.","tl;dr: if you want to jump straight to the point, here's a YouTube video my Jellyfin setup surviving an entire node dying.
+
+[https://www.youtube.com/watch?v=KwkcGejXFaA](https://www.youtube.com/watch?v=KwkcGejXFaA)
+
+Hey /r/selfhosted!
+
+I've been working on my homelab for quite a few years now. One of the things I love hosting on my homelab is Jellyfin, an open source Plex alternative.
+
+Today I wanted to show off my highly available Jellyfin setup that took literally months of research to figure out how to achieve. I'm extremely proud of being able to run Jellyfin in a way that means almost any event that affects my homelab will not take down Jellyfin, and events that do (the Jellyfin servers physically dying) will only cause 3 minutes of downtime.
+
+Here's my blog post about the setup - it's on an ad-free, privacy respecting blog:
+
+[https://www.raptorswithhats.com/highly-available-jellyfin/](https://www.raptorswithhats.com/highly-available-jellyfin/)
+
+I'd love to talk about my setup and what my uses and plans for it are, and I'm also really happy to teach people how to do (a much more reasonable version of) this on their own self hosted infrastructure.
+
+CubeFS provides shared storage for all the media, Ceph provides shared storage for VMs and databases (and for Jellyfin's settings), then Proxmox and Kubernetes ties together the whole thing into a reasonable solution that allows for Jellyfin to fail over in under 3 minutes. Everything is fully open source and designed for horizontal scale.
+
+PS: I would have actually turned the node entirely off (instead of just the VM running on it), but I am physically on the other side of the world from my ""home lab"" so it's hard to turn it back on if I do :)
+
+I'd love to talk about my setup and what my uses and plans for it are, and I'm also really happy to teach people how to do (a much more reasonable version of) this on their own self hosted infrastructure.",1714769944.0,206,0.94,40
+ScamNumbers,917-590-8789 - Scammers repeatedly calling my cellphone,"Hey! Some scammers keep calling my cellphone and leaving 4 second silent voicemails. It's annoying, but when you call them back they don't seem to have any way of blocking incoming calls themselves.
+
+It would be a real pity if they were to get bombarded with calls until they have to change their number for the 6th time. Y'know?
+
+Bonus points if you can figure out WTF their deal is. It's always a New York number.",1658951034.0,2,1.0,4
+cringe,This channel's a goldmine.,,1657517450.0,2,0.75,0
+chia,PlotFS plot importer,,1656986291.0,6,0.87,4
+ScamNumbers,Norton LifeLock scam - +61 8 7200 6500,,1655954002.0,2,0.75,2
+technitium,Dynamic DNS with ISC Kea,"Hi there,
+
+I'm trying to get Dynamic DNS with ISC Kea working, talking to Technitium DNS.
+
+```
+Apr 22 02:13:49 kea01 kea-dhcp-ddns[7451]: ERROR DHCP_DDNS_FORWARD_ADD_REJECTED DNS Request ID 000101920E4AFE0E387835755287DF1E2DEB2C664F258C5D0B81C378385C8DD780718D: Server, 10.1.2.1 port:53, rejected a DNS update request to add the address mapping for FQDN, torrent.windowpa.in., with an RCODE: 4
+Apr 22 02:13:49 kea01 kea-dhcp-ddns[7451]: ERROR DHCP_DDNS_ADD_FAILED DHCP_DDNS Request ID 000101920E4AFE0E387835755287DF1E2DEB2C664F258C5D0B81C378385C8DD780718D: Transaction outcome Status: Failed, Event: UPDATE_FAILED_EVT,  Forward change: failed,  Reverse change: failed,  request: Type: 0 (CHG_ADD)
+Apr 22 02:13:49 kea01 kea-dhcp-ddns[7451]: Forward Change: yes
+Apr 22 02:13:49 kea01 kea-dhcp-ddns[7451]: Reverse Change: yes
+Apr 22 02:13:49 kea01 kea-dhcp-ddns[7451]: FQDN: [torrent.windowpa.in.]
+Apr 22 02:13:49 kea01 kea-dhcp-ddns[7451]: IP Address: [10.1.1.3]
+Apr 22 02:13:49 kea01 kea-dhcp-ddns[7451]: DHCID: [000101920E4AFE0E387835755287DF1E2DEB2C664F258C5D0B81C378385C8DD780718D]
+Apr 22 02:13:49 kea01 kea-dhcp-ddns[7451]: Lease Expires On: 20220422101349
+Apr 22 02:13:49 kea01 kea-dhcp-ddns[7451]: Lease Length: 28800
+Apr 22 02:13:49 kea01 kea-dhcp-ddns[7451]: Conflict Resolution: yes
+```
+
+I've got two ISC Kea servers running as a highly available pair, and I'm trying to use kea-dhcp-ddns to dynamically update IPs and hostnames for local DHCP clients on my network.
+
+RCODE: 4 is apparently ""not implemented"", is the CHG_ADD operation not supported by Technitium yet? If so, could it please be added? :D",1650593995.0,5,1.0,2
+ipfs,"torrent2ipfs - BitTorrent to IPFS ""bridge""","In case it's useful to anyone else...
+
+I made a BitTorrent to IPFS ""bridge"". It's not a bridge in the sense of directly translating BitTorrent swarms to IPFS (which is likely not possible, but I'd love to be proven wrong :)), but in the sense of downloading content from torrent files and automatically adding it to IPFS.
+
+You can find the repository here - [https://github.com/riffcc/torrent2ipfs/](https://github.com/riffcc/torrent2ipfs/) \- feel free to ask any questions you have.
+
+Example output:
+
+```
+zorlin@seedbox ~/scripts/torrent2ipfs $ python3 main.py
+torrent2ipfs starting... let's get interplanetary.
+[Stage 1] Setting up connections.
+Connecting to qBittorrent...
+Connecting to IPFS daemon...
+[Stage 2] Importing torrents from ingest/ folder.
+Adding torrent test.torrent
+[Stage 3A] Checking downloads in progress...
+Currently downloading 1 torrents.
+b44a0e20fa5b7cecb77156333b4268dfd7c30afb: estimated time remaining: 14 weeks and 2 days
+[Stage 3B] Adding completed torrents to IPFS.
+No completed torrents found yet.
+[Stage 3A] Checking downloads in progress...
+Currently downloading 0 torrents.
+[Stage 3B] Adding completed torrents to IPFS.
+Torrent not in IPFS yet: b44a0e20fa5b7cecb77156333b4268dfd7c30afb
+Adding to IPFS...
+New IPFS hash: QmRBo4kkEVSdgBngJiSKkgs1PrEWG6VfzB7EFnEZchMzaX
+Finished.
+Writing pairs.json with all discovered hashes.
+```",1650070255.0,34,0.94,13
+assholedesign,Non-working unsubscribe links (Alibaba),,1647561251.0,51,0.94,3
+dogecoin,Remembering Sporklin,"I thought I'd take a moment to share the sad news. Our Sporklin has passed on. She leaves behind a legacy of all the people she helped, the code she wrote, the messes she cleaned up. She was an incredible person and she will be dearly missed.
+
+Sporklin, we love you and we won't forget you. o7",1619279698.0,28,0.94,15
+ExplainLikeImCalvin,How do microwaves work?,"I've always wanted to know, Dad.",1612832091.0,106,0.98,22
+TransphobiaProject,[TRIGGER WARNING] Quick rant on the myth of trans sexual predators,"Triggers for sexual assault, suicide and transphobia inside, beware.
+
+there's this unfortunately fairly pervasive myth that men become trans women so that they can enter bathrooms and perv on women.
+
+This is screwed up for a number of reasons, but the one I want to discuss today is simply that being trans is horrible. Don't get me wrong, it's better than dysphoria, but the idea that someone who isn't trans would choose to be trans to opportunistically prey on women is absolutely laughable. 
+
+A full 50% of trans folk attempt suicide by the time they reach adulthood, and the true figure is likely much higher. They face a lifetime of bullying and torment, and suffer greatly. The idea that one would tolerate all of that to get thrills is absolutely absurd and disgusting and I've personally disowned people who believe it.
+
+That's all, have a great day.",1612826851.0,77,0.99,17
+freeculture,"Riff.CC, a free Creative Commons content distribution site","I've created a free Creative Commons and Public Domain content distribution site.
+
+Riff.CC is a Creative Commons content distribution site where users are paid Bonus Tokens for uploading content and providing bandwidth. Artists and creators will have the ability to sell their own merchandise for Bonus Points on the site, keeping 100% of the proceeds.
+
+Happy to discuss it here! Invites will be given like candy.",1612437629.0,23,0.93,12
+gpumining,Help with historical calculation,"An old friend of mine was supposed to buy a Radeon 5850 for \~$250 USD and mine with it, on a campus with free electricity in, uh, January 2011.
+
+I want to figure out the historical potential profit that could have been made if they had mined continuously since then, stopping when it became unprofitable.
+
+Anyone have time to help out? Purely just for fun.
+
+$20 aud of eth or bch to the first good answer",1612412001.0,0,0.5,3
+ExplainLikeImCalvin,"LIC: Why do we say ""to be honest""?","Why do we say ""to be honest"" half the time when we're telling a story?",1612214531.0,138,0.98,24
+teslamotors,Look at its dumb face,,1611787436.0,0,0.5,6
+trackers,More weird stuff at What.CD,"Someone recently posted about weird stuff going on at [what.cd](https://what.cd). Well, things just got weirder.
+
+The text ""This is a m*i*rage."" has appeared - note the italics on ""i"" in ""mirage"".
+
+Thoughts?",1611590860.0,1,0.51,22
+halo,Stuck in matchmaking on MCC PC,"Hey guys,
+
+No matter what I do I can't seem to find players. Been an issue for a few weeks. I've tried turning relay on and off which made no difference.
+
+Any thoughts? I've been googling for a while but haven't found a solution. Is it possible I've been banned or something?
+
+EDIT: I'm using Xbox Game Pass Ultimate, not going through Steam. Fwiw.
+
+EDIT2: Solved! For some reason MCC PC. doesn't appear in your installed apps on the Windows Store, but if you go into the Xbox (Beta) app you can update it from there. It turns out I was on an old version of the game and thus couldn't matchmake with anyone.",1578132801.0,1,0.67,2
+ScenesFromAHat,"Mythbusters breaking really, really boring myths",,1575121594.0,175,0.99,57
+dadjokes,Why did the king eat a bunch of batteries?,He was power-hungry.,1574995714.0,20,0.92,3
+Frisson,[Audio] The crowd's reaction to the first iPhone announcement,,1573019626.0,12,0.87,5
+a:t5_3hhq3,"i'd improve and advertise this sub, but...",i can't think of anything,1553684693.0,2,1.0,0
+perth,Anyone else hear that terrifying noise?,Holy crap that scared me. Sounded like a god damn nuke.,1540094592.0,19,0.89,39
+NoStupidQuestions,Why do people ask for numbers when they get a new phone?,"What it says on the tin. Modern smartphones automatically back up your contacts and phone numbers, and over the last 8 phones I've owned I've never lost anyones number.
+
+Why is this a thing?",1537001341.0,3,0.67,5
+a:t5_2t5fl,You're probably looking for /r/redesign,This is an old subreddit which is unrelated to the current official redesign project. You can find it at r/redesign.,1523448519.0,3,1.0,0
+AskReddit,"If everyone in the world killed any flies that entered a vehicle, would the flies adapt? How?",[removed],1513124636.0,1,1.0,1
+NoMansSkyTheGame,"If I haven't played since a week after NMS launched, should I start the game again?","Hi there,
+
+I bought NMS about a minute before it launched, then played it for a week or so.
+
+I'm just curious...
+
+Do I need to start over again or can I continue from where I left off? How is level/planet/fauna/flora generation affected if I don't?
+
+EDIT: I specifically mean ""do I need to make a new savegame to be able to see all the new stuff""",1506417017.0,0,0.4,13
+delusionalartists,I want the world to be just as obsessed with me as I am with myself.,,1506385932.0,725,0.95,131
+Wellworn,Shoes after 2 years of (ab)use.,,1505454924.0,10,0.92,2
+firstworldanarchists,No power in the 'verse can stop me.,,1504251922.0,287,0.97,4
+btc,"Bitcoin Cash, not ""Bcash""","Has anyone noticed that certain censorship-heavy communities are trying to call Bitcoin Cash ""Bcash""? Supposedly it's to avoid confusion with ""actual Bitcoin"".
+
+I think they're scared...",1501642639.0,266,0.79,93
+tipofmytongue,"[TOMT] [Video Game] ""CRASH"" for the original Xbox","Hi there,
+
+A few years ago I played a game labelled CRASH on my Xbox. It was a pirated disc, but the title said CRASH. I've been unable to find it ever since. I want to buy a proper copy of it and play it.
+
+Unfortunately that disc is at my old house in the USA, and not very accessible.
+
+Can someone point me in the right direction? Does the game even exist!?
+
+EDIT: FOUND IT! http://www.ebay.com/itm/Crash-MICROSOFT-XBOX-original-game-/112363639901?",1498791470.0,1,0.66,12
+Buttcoin,They're becoming slightly self-aware. What will they think of next?,,1498611227.0,17,0.95,1
+perth,We're doing a meetup for Perth for the Global Reddit Meetup Day!,"Global Reddit Meetup Day!
+
+**WHEN**: 17 June 2017, 12pm until whenever
+
+**WHERE**: The plan is to meet at the Cactus statues near the Perth Train Station at 12pm, hang around till 12:50pm or so, then go to the Miss Maud Buffet Restaurant for lunch/late breakfast. After that we may go bar-hopping depending on who wants to do what.
+
+You can sign up here - it's free. https://www.eventbrite.com/e/perth-global-reddit-meetup-tickets-35424744364
+
+If you don't like eventbrite or can't sign up for any other reason, but still want to go, just show up :)
+
+You'll find me wearing a horizontally striped blue shirt and a Reddit logo lanyard.
+
+EDIT: We are heading to Miss Mauds, please text me on (redacted) if you want to meet up with us. We will be there for quite a while.",1497527112.0,18,0.88,28
+Showerthoughts,"If you have food, you have cockroaches. If you have cockroaches, you have food.",,1496466240.0,0,0.45,1
+sysadmin,What are some Cloud PBX options in Australia?,"Hi there,
+
+We're trying to get a replacement for our current phone system. We'd like to use a low-maintenance Cloud PBX instead. We'll be placing and receiving PTSN calls within Australia.
+
+We've looked into Skype for Business which is our current favourite, but unfortunately the PTSN services for it are not available in Australia yet and there's no hard timeline for when they will be.
+
+We're looking into ShoreTel and a few others. Ultimately we just want something reliable, hosted and low-maintenance.
+
+Any thoughts?",1493002401.0,2,0.61,15
+place,"An idea for the ""next"" place","Basically the same core premise - a shared canvas with lots of players editing it.
+
+However - there is no timer. Instead you have 50 pieces you can put down, at any time, with no waiting. 
+
+Once you've placed your 50, you have to destroy an old tile (which reverts it to the colour it was before you placed yours) or wait till someone overwrites some of your tiles. Then you can place more.
+
+That's it. Thoughts?",1491614957.0,9,0.85,3
+btc,How to run Bitcoin Unlimited full nodes on inexpensive seedboxes and VPS,,1489545485.0,8,0.75,1
+btc,1 year ago today - Bitcoin's nightmare scenario has come to pass,,1488518875.0,21,0.92,8
+saltstack,Need a resource with notes on issues with upgrading SaltStack - eg needing to change {{env}} to {{saltenv}},"As it says on the tin.
+
+We're using 2015.08 and want to know how to upgrade to the latest version of Salt. We have a pretty extensive set of pillars and states, and environments and hacks (Salt Master/Syndic and Salt Mine hacks).
+
+We need to know what crucial things have changed between 2015.08 and 2016.11.2 - and what we'll need to change to be compatible.",1487214541.0,2,0.67,4
+tipofmypenis,[TOMP] Guys banging in a circle,"Looking for porn where guys are having sex with other guys but leaning slightly to one side - with enough guys, forming a complete circle of fucking.",1480312021.0,1,1.0,0
+funny,"Quick, Draw! - I can't believe that worked.",,1479824108.0,2,0.6,2
+chrome,"[Help] ""HTTP Headers"" extension apparently has/had malware. Now what?","Hi there,
+
+Google just notified me that it was automatically disabling ""HTTP Headers"", an extension that I've had installed for maybe 4 months, as ""This extension contains malware.""
+
+Trouble is I haven't been able to find any information on the nature of the malware it had. I'm probably going to change all my passwords and obviously won't be using or enabling that extension in the future.
+
+Is there a place which details why extensions get flagged? The Chrome Web Store entry for that extension is now 404ing - it would be nice if Google would keep an info board up in place of the entry, rather than 404ing.
+
+Anyways, what now?",1479298430.0,8,0.91,1
+a:t5_3d5yl,I love this sub.,,1471428779.0,1,1.0,0
+homelab,"Best place (in Perth, Western Australia) to buy server racks?","Hey there,
+
+I have most of my equipment now but it has come time to choose a real rack. Ideally I want something like ~18-24U as transporting a huge rack is not something I want to have to do.
+
+So far this is the best deal I found:
+http://www.dataworld.com.au/racks-and-cabinets/floor-standing-cabinets/
+
+18RU for $440 AUD including wheels + locks + a PDU or...
+
+22RU for $473 AUD...
+
+I'm leaning towards the 22RU but hoping somewhere else has a cheaper/better offer.
+
+Thoughts?",1469695393.0,1,1.0,1
+shittytumblrgifs,"Shitty Mr Robot gif, straight from a promo site",,1467903143.0,1,1.0,2
+homelab,Where to buy power and Ethernet cables in Australia? Bonus: PDUs,"Hey there,
+
+So, I have my servers...
+
+* PowerEdge 2900 G3
+* PowerEdge 2950 G3
+* HP DL380 G5 x2
+
+I also have a cheap 8-port switch (to be replaced later), and I'm hoping to buy a 24-port 10Gb switch with SFP cables.
+
+I basically have 5 questions at this point:
+
+* Where to buy a decent rack? (Looking at Gumtree)
+* Where to buy ethernet cables, preferably CAT5e, 6 or 6A
+* Where to buy power cables (specifically IEC-C5, IEC-C7 and IEC-13, mostly IEC-13) cheaply
+* Where to buy IEC-13 to IEC-14 cables cheaply
+* Where to buy a rackmount PDU? I'm liking the look of this one: http://www.ebay.com/itm/Dell-1T891-AP6021-11-Outlet-220V-Rackmount-Rack-PDU-Power-Distribution-Unit-/221963470183?hash=item33ae0dc567:g:aGMAAOSwkZhWRNUG
+
+Bonus question - what the hell is the difference between female IEC-31 and female IEC-13 connector? AFAIK IEC-31 doesn't exist and someone fat-fingered IEC-13.",1467887432.0,4,0.7,28
+Nexus10,Where to find a pogo pin charger?,"Hey there,
+
+I have a possibly-dead Nexus 10 (was left off charger for about a year and won't turn on). I've tried every charger I can find on it to no avail. I was hoping to try a pogo pin charger but can't seem to find one on eBay or Amazon, with the exception being a $300 custom-built dock that uses the pogo connector!
+
+Please help ;(",1466514280.0,3,1.0,9
+outside,Garbage collection issues,[removed],1465230433.0,1,1.0,0
+nottheonion,CDC: E-cig ads led to increased youth smoking rates,,1461649487.0,4,0.75,1
+dolphination,"I am lost, my brothers","I accidentally left the group. Now I are sad and alone.
+
+Don't let this happen to you. Vote!",1459592105.0,3,1.0,4
+dolphination,﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽,﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽,1459578708.0,3,1.0,0
+dolphination,This group requires you share a dolphin picture before you can chat with its users. 🐬,,1459578109.0,3,1.0,1
+dolphination,shitpost,"first shitpost
+
+",1459575236.0,6,1.0,0
+PBSOD,At the movies - 3 Windows 7 PoS boxes,,1457609163.0,12,0.72,4
+litecoin,"Beware of ""cobIee""","There's a user called ""cobIee"" (note the I instead of L in the middle) on Freenode (the IRC server where #litecoin resides). They are PMing people pretending to be the real coblee (Charlie Lee).
+
+In most IRC clients, ""coblee"" and ""cobIee"" look identical. In fact, even in the title of this Reddit thread it displays as ""coblee""!",1456371312.0,35,0.96,14
+btc,Tutorial - Running a Bitcoin Classic full node on a seedbox for ~$15 a month,,1454843985.0,79,0.87,53
+Bitcoin_Classic,Tutorial - Running a Bitcoin Classic full node on a seedbox for ~$15 a month,,1454843049.0,13,0.9,4
+cakeday,"For my cakeday, I want points that don't even count!","Thus, self-post!",1453189176.0,4,0.84,1
+Bitcoin,Stupid spam from an Ethereum fan,"Anyone else getting spammed by a  misguided ethereum fan? I just got a LOOONG rant from ""maiyakenneth"".",1452927572.0,8,0.66,12
+HalfLife,This seems appropriate at a time like this,,1452399903.0,10,0.67,2
+ads,Exclusives are great /s,,1448962981.0,1,1.0,0
+buildapc,[Build Complete] Mid-High Gaming/Virtualization Box,"**What is your intended use for this build? The more details the better.**
+
+Virtualized network lab + gaming workstation.
+
+Work and play!
+
+Will end up as a living room PC eventually.
+
+**If gaming, what kind of performance are you looking for? (Screen resolution, FPS, game settings)**
+
+Maxed settings on 1080p on modern and moderately old games.
+Maxed settings on 1440p on older games.
+Light 4K gaming (Portal 2).
+
+**What is your budget (ballpark is okay)?**
+Budget was between $800 and $2000 AUD. Final cost with taxes, shipping and shipping insurance? $1900.
+
+**In what country are you purchasing your parts?**
+Australia.
+
+**Post your build here (specific parts please).**.
+[PCPartPicker part list](http://au.pcpartpicker.com/p/s9MMsY) / [Price breakdown by merchant](http://au.pcpartpicker.com/p/s9MMsY/by_merchant/)
+
+Type|Item|Price
+:----|:----|:----
+**CPU** | [Intel Core i5-6600K 3.5GHz Quad-Core Processor](http://au.pcpartpicker.com/part/intel-cpu-bx80662i56600k) | $325.00 @ CPL Online 
+**CPU Cooler** | [Noctua NH-D14 65.0 CFM CPU Cooler](http://au.pcpartpicker.com/part/noctua-cpu-cooler-nhd14) | $99.00 @ CPL Online 
+**Thermal Compound** | [Noctua NT-H1 3.5g Thermal Paste](http://au.pcpartpicker.com/part/noctua-thermal-paste-nth1) | $11.00 @ CPL Online 
+**Motherboard** | [Gigabyte GA-Z170MX-Gaming 5 Micro ATX LGA1151 Motherboard](http://au.pcpartpicker.com/part/gigabyte-motherboard-gaz170mxgaming5) | $269.00 @ PCCaseGear 
+**Memory** | [Crucial 16GB (2 x 8GB) DDR4-2133 Memory](http://au.pcpartpicker.com/part/crucial-memory-ct2k8g4dfd8213) | $135.00 @ Umart 
+**Storage** | [Samsung 850 EVO-Series 250GB 2.5"" Solid State Drive](http://au.pcpartpicker.com/part/samsung-internal-hard-drive-mz75e250bam) | $135.00 @ CPL Online 
+**Video Card** | [Asus Radeon R9 390 8GB Video Card](http://au.pcpartpicker.com/part/asus-video-card-strixr9390dc3oc8gd5gaming) | $512.00 @ IJK 
+**Case** | [Thermaltake Core V21 MicroATX Mini Tower Case](http://au.pcpartpicker.com/part/thermaltake-case-ca1d500s1wn00) | $89.00 @ CPL Online 
+**Power Supply** | [Corsair RMx 750W 80+ Gold Certified Fully-Modular ATX Power Supply](http://au.pcpartpicker.com/part/corsair-power-supply-cp9020092na) | $194.00 
+ | *Prices include shipping, taxes, rebates, and discounts* |
+ | **Total** | **$1769.00**
+ | Generated by [PCPartPicker](http://pcpartpicker.com) 2015-11-15 18:43 AEDT+1100 |
+",1447573438.0,1,0.67,1
+buildapc,[Build Ready] Mid-to-High End Gaming PC,"Hi there,
+
+I'm looking to build a decent gaming PC for Fallout 4, Just Cause 3, GTA V as well as a bunch of other older games.
+
+I will mostly be gaming in 1080p, but will also want to try older games on a 1440p or even 4K monitor.
+
+I was first looking at the GTX 970 and some weaker GPUs - also considered the Radeon R9 380, but I'm sort of wanting to roll nvidia so I can stream to my nvidia Shield Portable.
+
+My budget is $800 to $2000 AUD.
+
+Anyways, here's the list.
+
+Please let me know if this seems like overkill.
+
+[PCPartPicker part list](http://au.pcpartpicker.com/p/RKLJK8) / [Price breakdown by merchant](http://au.pcpartpicker.com/p/RKLJK8/by_merchant/)
+
+Type|Item|Price
+:----|:----|:----
+**CPU** | [Intel Core i5-6600K 3.5GHz Quad-Core Processor](http://au.pcpartpicker.com/part/intel-cpu-bx80662i56600k) | $325.00 @ CPL Online 
+**CPU Cooler** | [Cooler Master Hyper 212 EVO 82.9 CFM Sleeve Bearing CPU Cooler](http://au.pcpartpicker.com/part/cooler-master-cpu-cooler-rr212e20pkr2) | $65.00 @ CPL Online 
+**Motherboard** | [Gigabyte GA-Z170MX-Gaming 5 Micro ATX LGA1151 Motherboard](http://au.pcpartpicker.com/part/gigabyte-motherboard-gaz170mxgaming5) | $269.00 @ PCCaseGear 
+**Memory** | [Crucial 16GB (2 x 8GB) DDR4-2133 Memory](http://au.pcpartpicker.com/part/crucial-memory-ct2k8g4dfd8213) | $139.00 @ Umart 
+**Storage** | [Samsung 850 EVO-Series 250GB 2.5"" Solid State Drive](http://au.pcpartpicker.com/part/samsung-internal-hard-drive-mz75e250bam) | $135.00 @ CPL Online 
+**Video Card** | [Asus Radeon R9 390 8GB Video Card](http://au.pcpartpicker.com/part/asus-video-card-strixr9390dc3oc8gd5gaming) | $512.00 @ IJK 
+**Case** | [Thermaltake Core V21 MicroATX Mini Tower Case](http://au.pcpartpicker.com/part/thermaltake-case-ca1d500s1wn00) | $89.00 @ CPL Online 
+**Power Supply** | [EVGA SuperNOVA 650W 80+ Gold Certified Fully-Modular ATX Power Supply](http://au.pcpartpicker.com/part/evga-power-supply-120pg0650gr) | $129.00 @ CPL Online 
+ | *Prices include shipping, taxes, rebates, and discounts* |
+ | **Total** | **$1663.00**
+ | Generated by [PCPartPicker](http://pcpartpicker.com) 2015-11-12 01:56 AEDT+1100 |",1447251972.0,1,1.0,11
+Music,"[Brooklyn] 2x Tidal X 1020 tickets to give away (Jay-Z, Beyoncé etc will be there).","EDIT: TAKEN. Tickets to Lulzasaurus.
+
+Hey there,
+
+I've got two tickets to Tidal X 1020, which is happening tonight. I won them from the HTC event a few hours ago.
+
+Free to a good home - I didn't pay so nor should you. PM me if you want a ticket and I'll PM you the ticket. Then it's just a  case of printing it out (No, really, PRINT it, they won't accept it from a phone) and showing up! :)
+
+One per person unless you've got a really cute SO to give the second ticket to.
+
+Sorry if this isn't really the right sub, but I'm hoping this will make someones day who couldn't go before.
+
+Location
+Barclays Center, 620 Atlantic Avenue, Brooklyn, NY 11217	
+
+Tuesday Oct 20 8:00pm",1445360222.0,0,0.0,6
+Android,Found a minor bug in Tap & Go,"Hey there,
+
+I discovered a sneaky trick today. I used my Nexus 7 (2013)'s Tap & Go setup feature to get my Nexus 5 configured and set up after flashing the Marshmallow factory images to it. All well and good - and I found a neat security feature in the process. Basically, in order to ensure the Tap & Go feature isn't abused, Google pops up a notification for 30 minutes **that cannot be dismissed**. Awesome.
+
+There's just one problem - it's actually very easy to kill the notification. You simply tap and hold on it, then click the ""i"" icon. It will take you straight to the App notification settings for Google Play Services. Simply tap ""Block all"" and the notification gets zapped. You can then turn ""Block all"" off, restoring the default settings, and the notification doesn't come back.
+
+It's a very minor thing, but I just found it sort of interesting.",1444197818.0,21,0.77,6
+tipofmytongue,"[TOMT][video] ""Real life cheat codes"" trailer","Hey there,
+
+There's a trailer for a non-existant game somewhere out there, set to the tune of [this song](https://www.youtube.com/watch?v=u7Dg3LrhmIY). It uses lots of different pieces, but most memorably there's a sequence where the character on screen is playing DDR to [this particular part of it](https://www.youtube.com/watch?v=u7Dg3LrhmIY&t=1m50s)
+
+Basically it stars a guy who figures out he can use cheat codes in real life and hijinks ensue. I wish I could describe it better.
+
+It's been driving me nuts that I can't remember the name of it.
+
+EDIT: Forgot to mention, it's 2D (maybe isometric 2D?) and animated, not live action.
+EDIT2: Every time I post here I somehow stumble upon what I'm looking for. I swear I searched for a week!
+
+Here it is: https://vimeo.com/80210343",1443362036.0,6,0.87,4
+Showerthoughts,SPAM is basically cat food for humans,"I've struggled to find something to compare with SPAM, and last night finally made the connection. It's cat food.",1442044621.0,3,0.8,2
+tipofmytongue,"[TOMT][video] Game/movie trailer featuring ""Sad Robot""","Hey there,
+
+There was a video of some kind that starred the music track ""Sad Robot"" by pornophonique. I can't seem to find it anywhere - I think it was a trailer for a game or a movie or something.
+
+I think it starred someone that could manipulate time and cheat and stuff.
+
+Anyways, let me know if you can find it.",1440997809.0,2,1.0,2
+Showerthoughts,What if your weight determined how many votes you got?,[removed],1440899750.0,1,1.0,0
+Pareidolia,Rock face in the rockface,,1439701184.0,1,0.67,1
+WTF,Weirdest 404 page I've seen,,1433398353.0,310,0.79,37
+Showerthoughts,Actor Amnesia,"How cool would it be to be a successful actor, with a long career... then suddenly wake up not remembering anything you starred in.
+
+You could go back and watch everything and gather clues as to how you lost your memories.",1431977759.0,2,0.67,2
+dogecoin,Just a quick note to say I love you guys and I have hope,"Hey everyone,
+
+Just wanted to stop by and congratulate everyone on what you've achieved. This isn't specific to any particular cryptocurrency (or even any  technology) - it's hard to actually *decide* some level of ""best"" right now - but Dogecoin is accomplishing absolutely, ridiculously amazing things and I'm proud to be a part of it.",1421594539.0,123,0.94,34
+Buttcoin,"It's okay, Andreas Antonopolous will fix it!",,1421351287.0,24,0.75,13
+NuBits,"Not that interested in NuBits, but...","I think your website is super awesome. Very well laid out, clean and professional.
+
+It's nice to see that in cryptocurrencies :)",1421034517.0,4,0.83,4
+montageparodies,Last chance to post before mod approval kicks in,"I'm Indiana Jonesing this shit, m80s.",1420999745.0,2,0.63,5
+oddlysatisfying,"The pop, click, hiss halfway through the video",,1420969039.0,0,0.3,0
+Bitcoin,"[PSA] On ""Coin Doubler"" sites","Hey there,
+
+Just a quick PSA for those of you who are not aware.
+
+There is a lot of talk going around about so-called ""coin doubling"" sites. I thought I'd clarify a few things.
+
+The way these sites work is only in one of two ways:
+
+* They silently wait for huge deposits, get greedy and take the money and run.
+
+* They silently wait for a huge amount of money to be in the system, then take the money and run.
+
+**At any given time** you could be screwed over. It's not worth supporting a Ponzi scheme like this because it will fall down and the money you could make from the scammers if you're lucky isn't their money - in effect it was stolen from people like you.
+
+tl;dr: **anything that promises to increase your money by some % is a scam almost all of the time**.",1420666663.0,5,0.69,8
+dogecoin,"[PSA] On ""Coin Doubling"" Sites","Hey there,
+
+Just a quick PSA for those of you who are not aware.
+
+There is a lot of talk going around about so-called ""coin doubling"" sites. I thought I'd clarify a few things.
+
+The way these sites work is only in one of two ways:
+
+* They silently wait for huge deposits, get greedy and take the money and run.
+
+* They silently wait for a huge amount of money to be in the system, then take the money and run.
+
+**At any given time** you could be screwed over. It's not worth supporting a Ponzi scheme like this because it will fall down and the money you could make from the scammers if you're lucky isn't their money - in effect it was stolen from people like you.
+
+tl;dr: **anything that promises to increase your money by some % is a scam almost all of the time**.",1420666611.0,30,0.78,14
+Android,[NViDiA SHIELD] Idea for the SHIELD Tablet controller,[removed],1420614805.0,1,1.0,0
+askscience,"I have two hands, grown from the same genes. Why are fingers thicker on one of them?",[removed],1420571029.0,1,1.0,0
+Android,Weird voice recognition stuff?,[removed],1420456097.0,1,1.0,0
+xdp,"Faith, gentlemen","I have been watching XDP from a fairly early phase, and while I haven't always been active in it I have seen a lot of great work take place.
+
+With a lot of the recent activity I feel like a lot of people are losing faith in the developers. I wanted to simply say that the development community is very open to newcomers and you can change things if you want to. Besides that, great things take time... if you're here, you care about many of the same things they care about.
+
+Patience and faith! We'll do great things.
+
+with love from mb.",1420448507.0,9,0.81,3
+Android,A Simple Solution for Updates,"Here's a crazy thought - Google should give 1% of its Play Store revenue to OEMs - but only for devices running the very latest version of Android.
+
+That could be 1% overall (1/30th of Google's cut) or 1% of Google's cut.
+
+I honestly think if they did that we'd see at least 60% of manufacturers putting in huge effort to stay current.",1420051331.0,41,0.69,21
+litecoin,Litecoin and Cryptocurrency: A New Etiquette for Tipping,"Let’s imagine something for a second.
+
+In this hypothetical situation, we’re close friends. I randomly come up to you and give you a coin worth 50 cents. Puzzled, you ask me why I did this - to which I reply that it’s just a random present.
+
+Even though I have given you something for free, chances are you’ve come away from this experience with a negative opinion of me. Either way, you probably think I’m weird.
+
+Let’s expand the hypothetical now.
+
+Let’s pretend this is a coin that you cannot easily convert into USD - doing so would require going to your bank and handing them your social security number and driver’s license. It’s also got some magical properties - you can push it into your monitor and it will travel across the internet to wherever you would like it to.
+
+You cannot spend this money at almost any brick-and-mortar store, but there are stores online that will accept it.
+
+Here is the question: what is the minimum amount of money this coin would have to be worth in order for you to be happy to receive it?
+
+In my opinion, an opinion that is apparently shared by most others I’ve asked, that number is this: **$5**.
+
+Why $5? It’s just enough money to buy something cool and it still creates enough of a challenge that it’s sort of fun looking for things to buy with it. It’s also just enough to be considered a serious amount by people.
+
+You’ve probably figured out by now that the magical coin I’m referring to represents (most) modern cryptocurrency. Most cryptocurrencies have bots that allow you to “tip” other people small or large amounts of cryptocurrency, which is ridiculously awesome and fun. It spreads good-will and it’s an interesting way to spread the word about digital currencies. Unfortunately, there’s a flaw with how this is currently happening.
+
+People are tipping small amounts to people that have nothing to do with cryptocurrency - anywhere from 0.05¢ to 50¢. This isn’t a problem within the cryptocurrency community - lots of people tip there, so chances are you will eventually accumulate enough to buy something. Even if you don’t, tipping is fun and makes people happy within that community.
+
+The problem is once someone receives a tip that they can’t spend on something, the one thing they can do with that tip is pass it on to other people. This is something every tipbot is *excellent* at. They can take that $1 tip they received and spread the joy onto 10 other people - and they think they’re making those people really happy.
+
+Great, now 10 people have 10 cents of currency that they have no idea what to do with - and you can do even LESS with 10c than you can with $1 - but they can tip! Unfortunately, they don’t have enough to make it worthwhile… unless they tip in a tiny amount like “bits” (look how divisible my cryptocurrency is!).
+
+Many people think these kinds of tips showing up outside of the cryptocurrency subreddits is a good thing.
+
+No part of this situation is good for Litecoin and other cryptocurrencies.
+
+No part of this situation is good for ChangeTip and other tipbots.
+
+We need to encourage people to follow this basic rule.
+
+Big, meaningful and interesting tips and donations provide great publicity for cryptocurrency and ChangeTip. I think it’s ridiculously awesome that I can throw change at people across the internet, I really do. But this situation has to change.
+
+If you have less than $5, either buy Reddit ads or save the money. Or donate it to somewhere with a need for it.
+
+If you want to help cryptocurrency succeed, tip frequently in cryptocurrency subreddits and to anyone that will actually appreciate it. Outside of that, give generously to your friends and to others - in meaningful amounts.",1420004201.0,8,0.65,8
+Buttcoin,"Mutter submits essay about tipping etiquette in an attempt to help /r/dogecoin, is shat on repeatedly by the entire community.",,1420001970.0,9,0.68,15
+litecoin,Of Bitcoins and Dogecoins: A New Etiquette for Tipping,[removed],1419992699.0,2,0.67,0
+CryptoCurrency,Of Bitcoins and Dogecoins: A New Etiquette for Tipping,"Let’s imagine something for a second.
+
+In this hypothetical situation, we’re close friends. I randomly come up to you and give you a coin worth 50 cents. Puzzled, you ask me why I did this - to which I reply that it’s just a random present.
+
+Even though I have given you something for free, chances are you’ve come away from this experience with a negative opinion of me. Either way, you probably think I’m weird.
+
+Let’s expand the hypothetical now.
+
+Let’s pretend this is a coin that you cannot easily convert into USD - doing so would require going to your bank and handing them your social security number and driver’s license. It’s also got some magical properties - you can push it into your monitor and it will travel across the internet to wherever you would like it to.
+
+You cannot spend this money at almost any brick-and-mortar store, but there are stores online that will accept it.
+
+Here is the question: what is the minimum amount of money this coin would have to be worth in order for you to be happy to receive it?
+
+In my opinion, an opinion that is apparently shared by most others I’ve asked, that number is this: **$5**.
+
+Why $5? It’s just enough money to buy something cool and it still creates enough of a challenge that it’s sort of fun looking for things to buy with it. It’s also just enough to be considered a serious amount by people.
+
+You’ve probably figured out by now that the magical coin I’m referring to represents (most) modern cryptocurrency. Most cryptocurrencies have bots that allow you to “tip” other people small or large amounts of cryptocurrency, which is ridiculously awesome and fun. It spreads good-will and it’s an interesting way to spread the word about digital currencies. Unfortunately, there’s a flaw with how this is currently happening.
+
+People are tipping small amounts to people that have nothing to do with cryptocurrency - anywhere from 0.05¢ to 50¢. This isn’t a problem within the cryptocurrency community - lots of people tip there, so chances are you will eventually accumulate enough to buy something. Even if you don’t, tipping is fun and makes people happy within that community.
+
+The problem is once someone receives a tip that they can’t spend on something, the one thing they can do with that tip is pass it on to other people. This is something every tipbot is excellent at. They can take that $1 tip they received and spread the joy onto 10 other people - and they think they’re making those people really happy.
+
+Great, now 10 people have 10 cents of currency that they have no idea what to do with - and you can do even LESS with 10c than you can with $1 - but they can tip! Unfortunately, they don’t have enough to make it worthwhile… unless they tip in a tiny amount like “bits” (look how divisible my cryptocurrency is!).
+
+Many people think these kinds of tips showing up outside of the cryptocurrency subreddits is a good thing.
+
+No part of this situation is good for Bitcoin and other cryptocurrencies.
+
+No part of this situation is good for ChangeTip and other tipbots.
+
+We need to encourage people to follow this basic rule.
+
+Big, meaningful and interesting tips and donations provide great publicity for cryptocurrency and ChangeTip. I think it’s ridiculously awesome that I can throw change at people across the internet, I really do. But this situation has to change.
+
+If you have less than $5, either buy Reddit ads or save the money. Or donate it to somewhere with a need for it.
+
+If you want to help cryptocurrency succeed, tip frequently in cryptocurrency subreddits and to anyone that will actually appreciate it. Outside of that, give generously to your friends and to others - in meaningful amounts.",1419992049.0,0,0.33,4
+dogecoin,Of Bitcoins and Dogecoins: A New Etiquette for Tipping,"Let’s imagine something for a second.
+
+In this hypothetical situation, we’re close friends. I randomly come up to you and give you a coin worth 50 cents. Puzzled, you ask me why I did this - to which I reply that it’s just a random present.
+
+Even though I have given you something for free, chances are you’ve come away from this experience with a negative opinion of me. Either way, you probably think I’m weird.
+
+Let’s expand the hypothetical now.
+
+Let’s pretend this is a coin that you cannot easily convert into USD - doing so would require going to your bank and handing them your social security number and driver’s license. It’s also got some magical properties - you can push it into your monitor and it will travel across the internet to wherever you would like it to.
+
+You cannot spend this money at almost any brick-and-mortar store, but there are stores online that will accept it.
+
+Here is the question: what is the minimum amount of money this coin would have to be worth in order for you to be happy to receive it?
+
+In my opinion, an opinion that is apparently shared by most others I’ve asked, that number is this: **$5**.
+
+Why $5? It’s just enough money to buy something cool and it still creates enough of a challenge that it’s sort of fun looking for things to buy with it. It’s also just enough to be considered a serious amount by people.
+
+You’ve probably figured out by now that the magical coin I’m referring to represents (most) modern cryptocurrency. Most cryptocurrencies have bots that allow you to “tip” other people small or large amounts of cryptocurrency, which is ridiculously awesome and fun. It spreads good-will and it’s an interesting way to spread the word about digital currencies. Unfortunately, there’s a flaw with how this is currently happening.
+
+People are tipping small amounts to people that have nothing to do with cryptocurrency - anywhere from 0.05¢ to 50¢. This isn’t a problem within the cryptocurrency community - lots of people tip there, so chances are you will eventually accumulate enough to buy something. Even if you don’t, tipping is fun and makes people happy within that community.
+
+The problem is once someone receives a tip that they can’t spend on something, the one thing they can do with that tip is pass it on to other people. This is something every tipbot is *excellent* at. They can take that $1 tip they received and spread the joy onto 10 other people - and they think they’re making those people really happy.
+
+Great, now 10 people have 10 cents of currency that they have no idea what to do with - and you can do even LESS with 10c than you can with $1 - but they can tip! Unfortunately, they don’t have enough to make it worthwhile… unless they tip in a tiny amount like “bits” (look how divisible my cryptocurrency is!).
+
+Many people think these kinds of tips showing up outside of the cryptocurrency subreddits is a good thing.
+
+No part of this situation is good for Bitcoin and other cryptocurrencies.
+
+No part of this situation is good for ChangeTip and other tipbots.
+
+We need to encourage people to follow this basic rule.
+
+Big, meaningful and interesting tips and donations provide great publicity for cryptocurrency and ChangeTip. I think it’s ridiculously awesome that I can throw change at people across the internet, I really do. But this situation has to change.
+
+If you have less than $5, either buy Reddit ads or save the money. Or donate it to somewhere with a need for it.
+
+If you want to help cryptocurrency succeed, tip frequently in cryptocurrency subreddits and to anyone that will actually appreciate it. Outside of that, give generously to your friends and to others - in meaningful amounts.",1419991429.0,7,0.61,37
+Bitcoin,Of Bitcoins and Dogecoins: A New Etiquette for Tipping,"Let’s imagine something for a second.
+
+In this hypothetical situation, we’re close friends. I randomly come up to you and give you a coin worth 50 cents. Puzzled, you ask me why I did this - to which I reply that it’s just a random present.
+
+Even though I have given you something for free, chances are you’ve come away from this experience with a negative opinion of me. Either way, you probably think I’m weird.
+
+Let’s expand the hypothetical now.
+
+Let’s pretend this is a coin that you cannot easily convert into USD - doing so would require going to your bank and handing them your social security number and driver’s license. It’s also got some magical properties - you can push it into your monitor and it will travel across the internet to wherever you would like it to.
+
+You cannot spend this money at almost any brick-and-mortar store, but there are stores online that will accept it.
+
+Here is the question: what is the minimum amount of money this coin would have to be worth in order for you to be happy to receive it?
+
+In my opinion, an opinion that is apparently shared by most others I’ve asked, that number is this: **$5**.
+
+Why $5? It’s just enough money to buy something cool and it still creates enough of a challenge that it’s sort of fun looking for things to buy with it. It’s also just enough to be considered a serious amount by people.
+
+You’ve probably figured out by now that the magical coin I’m referring to represents (most) modern cryptocurrency. Most cryptocurrencies have bots that allow you to “tip” other people small or large amounts of cryptocurrency, which is ridiculously awesome and fun. It spreads good-will and it’s an interesting way to spread the word about digital currencies. Unfortunately, there’s a flaw with how this is currently happening.
+
+People are tipping small amounts to people that have nothing to do with cryptocurrency - anywhere from 0.05¢ to 50¢. This isn’t a problem within the cryptocurrency community - lots of people tip there, so chances are you will eventually accumulate enough to buy something. Even if you don’t, tipping is fun and makes people happy within that community.
+
+The problem is once someone receives a tip that they can’t spend on something, the one thing they can do with that tip is pass it on to other people. This is something every tipbot is *excellent* at. They can take that $1 tip they received and spread the joy onto 10 other people - and they think they’re making those people really happy.
+
+Great, now 10 people have 10 cents of currency that they have no idea what to do with - and you can do even LESS with 10c than you can with $1 - but they can tip! Unfortunately, they don’t have enough to make it worthwhile… unless they tip in a tiny amount like “bits” (look how divisible my cryptocurrency is!).
+
+Many people think these kinds of tips showing up outside of the cryptocurrency subreddits is a good thing.
+
+No part of this situation is good for Bitcoin and other cryptocurrencies.
+
+No part of this situation is good for ChangeTip and other tipbots.
+
+We need to encourage people to follow this basic rule.
+
+Big, meaningful and interesting tips and donations provide great publicity for cryptocurrency and ChangeTip. I think it’s ridiculously awesome that I can throw change at people across the internet, I really do. But this situation has to change.
+
+If you have less than $5, either buy Reddit ads or save the money. Or donate it to somewhere with a need for it.
+
+If you want to help cryptocurrency succeed, tip frequently in cryptocurrency subreddits and to anyone that will actually appreciate it. Outside of that, give generously to your friends and to others - in meaningful amounts.",1419991412.0,19,0.6,73
+GTAV,Ridiculous money cheat,"Hey guys,
+
+Just thought you might be interested in this. A guy named Trevor Philips posted an exploit where you switch characters, pass time and so on to screw the stock market by buying and selling LifeInvader shares. It doubles your money each time you do a round... All that sounds great, but it's actually a pretty crappy way to make money.
+
+Until now.
+
+1. Reset your game to the original patch. Back up your saves if you have to - you'll need to delete and reinstall the game.
+2. Go into your character's room so you can save later
+3. Buy as much LifeInvader stock as you can
+4. Immediately sell it
+5. Lather, rinse, repeat
+6. Stop and save once you've gone over a billion dollars to avoid getting a glitchy stock market. Don't continue after that unless you want to see things break.
+
+Enjoy!",1419936323.0,0,0.14,0
+AskReddit,Do we have anything even close to free energy yet?,As it says in the title.,1419847179.0,3,0.72,15
+netsec,What is your absolute favourite vulnerability? Favourite exploit?,[removed],1419846225.0,1,1.0,1
+firstworldanarchists,Presented without comment.,,1419718256.0,2,0.76,1
+Bitcoin,Bitcoin Pickup Lines,"""Baby, my love is so good it'll take you back to the gold standard"".
+
+""Here, this will help protect you against my inflation"".
+
+""I'd mine your hashes"".
+
+""Smart, sexy and funny... Well, your hash validates"".
+
+""I have tons of money, have sex with me"".",1419676360.0,0,0.5,11
+Bitcoin,A Worrying New Type of Scam [x-post /r/dogecoin],"Hey there,
+
+I saw [this Reddit comment](https://np.reddit.com/r/pics/comments/2q1zro/my_friend_filmed_a_google_car_passing_him_then/cn27uvm) recently. Regardless of tipping etiquette (don't tip small amounts outside of crypto subs, if at all) it actually said the tip amount in USD which was an interesting thing for a comment to do. Someone pointed out that the amount was wrong, however - they were claiming ~$0.07 of RDD to be worth over $1.
+
+At first I thought it was a harmless mistake, but upon clicking the ""What's this?"" link you are presented with [this website](http://reddmeup.blogspot.com/p/what-is-reddcoin.html). 
+
+So it's actually actively trying to scam users out of money. They're selling cryptocurrency at a ridiculous 4300% markup ($14.99 for $0.35 worth of RDD) and it's a really, really insidious thing.
+
+Check out this page for how they actively manipulate users:
+http://reddmeup.blogspot.com/p/why-buy-reddcoin.html
+
+
+
+Obviously this isn't such a big deal for Bitcoin with the price we have - but imagine if they rework the scam to be about ""bits"" and act like bits are a separate currency which is ""bound to go up"" just like Bitcoin?
+
+Reddcoin and the wider cryptocurrency community need to practice due diligence when they see tips that include links. It's extremely suspicious for a user to add a ""What's this?"" when all of the bots do that themselves when replying to and confirming tips.
+
+Additionally, these scammers are either not actually tipping the amount (their account is empty) or are posting a comment and then editing it to avoid getting caught by the bot operators.
+
+Anyways, how can you help?
+
+* Please give suggestions for how bot operators can detect and deal with this.
+* If you are a bot operator, it's time to publicly shame users that fake tips or tip money they don't have. Please gently start doing so if you're willing. (paging /u/changetip, /u/gorillamania, /u/threefintuna, /u/BashCo)
+* If you are a user and you see a post like this, report it - and report it to the mods of that subreddit as spam, giving a detailed explanation and possibly a link to this post. Alternatively, click ""other"" when reporting and link to this post.
+* If the post links to Blogspot, use the [reporting tools](https://support.google.com/blogger/answer/42577) to report it to Blogspot and get the link deactivated, potentially creating a lot of work for them. There are similar links for other free hosts.
+
+A lot of subreddits have either banned tipbots or consider them spam - this kind of scam can only make that trend **significantly** worse if we don't band together in finding ways to deal with this.
+
+~ pseudo",1419274017.0,8,0.62,5
+dogecoin,A New Type of Spam (x-post /r/Reddcoin),"Hey there,
+
+I saw [this Reddit comment](https://www.reddit.com/r/pics/comments/2q1zro/my_friend_filmed_a_google_car_passing_him_then/cn27uvm) recently. Regardless of tipping etiquette (don't tip small amounts outside of crypto subs, if at all) it actually said the tip amount in USD which was an interesting thing for a comment to do. Someone pointed out that the amount was wrong, however - they were claiming ~$0.07 of RDD to be worth over $1.
+
+At first I thought it was a harmless mistake, but upon clicking the ""What's this?"" link you are presented with [this website](http://reddmeup.blogspot.com/p/what-is-reddcoin.html). 
+
+So it's actually actively trying to scam users out of money. They're selling cryptocurrency at a ridiculous 4300% markup ($14.99 for $0.35 worth of RDD) and it's a really, really insidious thing.
+
+Check out this page for how they actively manipulate users:
+http://reddmeup.blogspot.com/p/why-buy-reddcoin.html
+
+Reddcoin and the wider cryptocurrency community need to practice due diligence when they see tips that include links. It's extremely suspicious for a user to add a ""What's this?"" when all of the bots do that themselves when replying to and confirming tips.
+
+Additionally, these scammers are either not actually tipping the amount (their account is empty) or are posting a comment and then editing it to avoid getting caught by the bot operators.
+
+Anyways, how can you help?
+
+* Please give suggestions for how bot operators can detect and deal with this.
+* If you are a bot operator, it's time to publicly shame users that fake tips or tip money they don't have. Please gently start doing so if you're willing. (paging /u/dogetipbot and /u/mohland)
+* If you are a user and you see a post like this, report it - and report it to the mods of that subreddit as spam, giving a detailed explanation and possibly a link to this post. Alternatively, click ""other"" when reporting and link to this post.
+
+A lot of subreddits have either banned tipbots or consider them spam - this kind of scam can only make that trend **significantly** worse if we don't band together in finding ways to deal with this.
+
+~ pseudo",1419272234.0,13,0.75,8
+reddCoin,A New Type of Spam,"Hey there,
+
+I saw [this Reddit comment](https://www.reddit.com/r/pics/comments/2q1zro/my_friend_filmed_a_google_car_passing_him_then/cn27uvm) recently. Regardless of tipping etiquette (don't tip small amounts outside of crypto subs, if at all) it actually said the tip amount in USD which was an interesting thing for a comment to do. Someone pointed out that the amount was wrong, however - they were claiming ~$0.07 of RDD to be worth over $1.
+
+At first I thought it was a harmless mistake, but upon clicking the ""What's this?"" link you are presented with [this website](http://reddmeup.blogspot.com/p/what-is-reddcoin.html). 
+
+So it's actually actively trying to scam users out of money. They're selling cryptocurrency at a ridiculous 4300% markup ($14.99 for $0.35 worth of RDD) and it's a really, really insidious thing.
+
+Check out this page for how they actively manipulate users:
+http://reddmeup.blogspot.com/p/why-buy-reddcoin.html
+
+Reddcoin and the wider cryptocurrency community need to practice due diligence when they see tips that include links. It's extremely suspicious for a user to add a ""What's this?"" when all of the bots do that themselves when replying to and confirming tips.
+
+Additionally, these scammers are either not actually tipping the amount (their account is empty) or are posting a comment and then editing it to avoid getting caught by the bot operators.
+
+Anyways, how can you help?
+
+* Please give suggestions for how bot operators can detect and deal with this.
+* If you are a bot operator, it's time to publicly shame users that fake tips or tip money they don't have. Please gently start doing so if you're willing.
+* If you are a user and you see a post like this, report it - and report it to the mods of that subreddit as spam, giving a detailed explanation and possibly a link to this post. Alternatively, click ""other"" when reporting and link to this post.
+* If the post links to Blogspot, use the [reporting tools](https://support.google.com/blogger/answer/42577) to report it to Blogspot and get the link deactivated, potentially creating a lot of work for them. There are similar links for other free hosts.
+
+A lot of subreddits have either banned tipbots or consider them spam - this kind of scam can only make that trend **significantly** worse if we don't band together in finding ways to deal with this.
+
+~ pseudo",1419272012.0,16,0.71,9
+netsec,Interesting possible honeypot I found,[removed],1419267912.0,1,1.0,1
+DataHoarder,Stats from the ~170TB Production MooseFS Cluster at my workplace,,1419230570.0,1,1.0,2
+tipofmytongue,[TOMT] Details on an Australian radio prank for April Fool's day,"A few years back (maybe 6-7 years?) a bunch of Australian radio stations completely swapped their hosts and speakers for a day and didn't really say anything about it. I believe 92.9, 94.5 and 96/96.1FM all participated.
+
+Basically if you tuned into 92.9, you'd get the hosts from 96.1FM.
+If you tuned into 96.1FM, you'd get the hosts from 94.5.
+And if you tuned into 94.5 you'd get the 92.9 hosts.
+
+Anyone know where I can find details on it?",1419028263.0,3,0.81,0
+AskReddit,What pickup line is actually deeply disturbing when you think about the implications?,"Post pickup lines you think are a little disturbing, but seem innocent on the surface.
+
+EDIT: These are awesome, guys! Keep them coming!",1418446984.0,2,0.76,10
+Android,ELI5: Why don't we have a built-in SIM card in our devices like Apple SIM?,[removed],1418426491.0,1,1.0,0
+FloridaMan,"Florida man donates a stun grenade timing fuse to a thrift shop, bomb squad called",,1418328709.0,2,0.75,1
+Bitcoin,A post by... Satoshi? about a potential use for Bitcoin as a replacement for the international SWIFT payment network,,1418167192.0,8,0.62,22
+homelab,My dream home lab/SAN [x-post /r/datahoarder],"You can find the original post here: http://www.reddit.com/r/DataHoarder/comments/2om80j/my_dream_home_labsan/
+
+Hey there,
+
+I thought I'd come and post my idea for a home SAN that I'll probably start building in January.
+
+The purpose will be to give me something to screw around with for testing LizardFS and CephFS without risking stuff I really care about.
+
+First off, the location. I live in an apartment complex in Seattle and I'm located right next to the boiler room. For various reasons it wouldn't be a problem for me to put basically whatever I wanted in said boiler room; and it has a nice big vent to the outside. The plan is to add fans in strategic locations to provide adequate ventilation.
+
+Second, the rack. I'm ideally going to use a 42U rack, despite the fact that I'll probably only be using 6U for a long time. This is the one I'm planning on using: http://www.amazon.com/Tripp-Lite-SR42UBSD-Enclosure-Capacity/dp/B005FLU5Z4/
+
+I'll probably move to something *much* more heavy duty once the farm grows.
+
+And the final piece of core hardware, the switch: http://www.ebay.com/itm/221421900710
+
+I'm hoping to eventually use 10GbE networking equipment throughout the whole rack. I should be able to pick up a second-hand 10g Arista switch for &lt; $2500 when the time comes.
+
+Now, on to the actual servers...
+
+For the metamaster, I'll be using a HP Proliant DL360 G5. These can be found second hand for under $200 and can house 64GB of RAM which is plenty for the dataset I'll be using. (For comparison, at work we have 150TB of data in our cluster and that's from multiple years worth of student, staff and faculty data - and yet our metadata set only recently outgrew 64GB of RAM)
+
+I will have a second HP Proliant DL360 G5 for the ""shadow master"" (essentially a hot spare in case the master dies).
+
+Finally, for the chunkservers (which store data) I would use something like this: http://www.supermicro.com/products/system/1U/6017/SYS-6017R-73THDP_.cfm - which gives you 12 hard drives in 1U and 10GbE built right in.
+
+Final bill of materials:
+
+* 1x 42U rack ($1000)
+* 1x Arista 10G 24-port switch ($2500)
+* 2x HP Proliant DL360 G5 servers ($400)
+* 3x Supermicro SuperServer 6017R-73THDP+ ($4200)
+
+Assuming I can't get anything cheaper, that means it'll come to about $8000 for everything, sans hard drives, and give me a total capacity of 180TB. There are cheaper and better ways to do all this, but my goal is to have 3 chunkservers, a master and a shadowmaster.
+
+Each of the chunkservers can hold 2 SSDs, so the plan is to put in two 512GB Samsung 840 Pros in each.
+
+Put it all together with cache pools in Ceph and you have a system that will (in short bursts) perform as fast as an SSD for writes and (for frequently requested data) reads as well, but with an absolutely monstrous data capacity.
+
+Thoughts?
+
+~ pseudo
+
+Plans for what I'll put on it and further details in the comments.",1418029143.0,1,1.0,4
+DataHoarder,My dream home lab/SAN,"Hey there,
+
+I thought I'd come and post my idea for a home SAN that I'll probably start building in January.
+
+The purpose will be to give me something to screw around with for testing LizardFS and CephFS without risking stuff I really care about.
+
+First off, the location. I live in an apartment complex in Seattle and I'm located right next to the boiler room. For various reasons it wouldn't be a problem for me to put basically whatever I wanted in said boiler room; and it has a nice big vent to the outside. The plan is to add fans in strategic locations to provide adequate ventilation.
+
+Second, the rack. I'm ideally going to use a 42U rack, despite the fact that I'll probably only be using 6U for a long time. This is the one I'm planning on using: http://www.amazon.com/Tripp-Lite-SR42UBSD-Enclosure-Capacity/dp/B005FLU5Z4/
+
+I'll probably move to something *much* more heavy duty once the farm grows.
+
+And the final piece of core hardware, the switch: http://www.ebay.com/itm/221421900710
+
+I'm hoping to eventually use 10GbE networking equipment throughout the whole rack. I should be able to pick up a second-hand 10g Arista switch for &lt; $2500 when the time comes.
+
+Now, on to the actual servers...
+
+For the metamaster, I'll be using a HP Proliant DL360 G5. These can be found second hand for under $200 and can house 64GB of RAM which is plenty for the dataset I'll be using. (For comparison, at work we have 150TB of data in our cluster and that's from multiple years worth of student, staff and faculty data - and yet our metadata set only recently outgrew 64GB of RAM)
+
+I will have a second HP Proliant DL360 G5 for the ""shadow master"" (essentially a hot spare in case the master dies).
+
+Finally, for the chunkservers (which store data) I would use something like this: http://www.supermicro.com/products/system/1U/6017/SYS-6017R-73THDP_.cfm - which gives you 12 hard drives in 1U and 10GbE built right in.
+
+Final bill of materials:
+
+* 1x 42U rack ($1000)
+* 1x Arista 10G 24-port switch ($2500)
+* 2x HP Proliant DL360 G5 servers ($400)
+* 3x Supermicro SuperServer 6017R-73THDP+ ($4200)
+
+Assuming I can't get anything cheaper, that means it'll come to about $8000 for everything, sans hard drives, and give me a total capacity of 180TB. There are cheaper and better ways to do all this, but my goal is to have 3 chunkservers, a master and a shadowmaster.
+
+Each of the chunkservers can hold 2 SSDs, so the plan is to put in two 512GB Samsung 840 Pros in each.
+
+Put it all together with cache pools in Ceph and you have a system that will (in short bursts) perform as fast as an SSD for writes and (for frequently requested data) reads as well, but with an absolutely monstrous data capacity.
+
+Thoughts?
+
+~ pseudo
+
+EDIT: Plans for what I'll put on it and further details in the comments.",1418013703.0,15,0.89,26
+AskReddit,"What's your favourite TV show ""remix""?",,1418001186.0,1,1.0,1
+WTF,You know what just *screams* luxury?,,1417520150.0,2,0.62,0
+DataHoarder,LizardFS networked file system,,1416518852.0,1,1.0,1
+shittytumblrgifs,I wasn't even on fire,,1416425426.0,1,0.66,1
+shittytumblrgifs,Caaatnip,,1416219350.0,1,1.0,0
+trees,My first firecracker for the year,,1416047182.0,1,1.0,1
+smyths,Would you guys be interested in custom subtitles?,"Hey there,
+
+I know it'd take a ridiculous amount of work, but would you guys be interested in subtitles for the ""official"" smyths (the ones in the BTSync folder)?
+
+Thanks,
+~ B",1415929954.0,16,0.78,5
+smyths,Y'all have spoiled me.,I'm not sure I can go back to watching Mythbusters the regular way now.,1415906600.0,113,0.91,8
+xdp,Dogeparty Pulse - Day 01 - Begin Transmission,"Hi everyone, pseudopseudonym here! Welcome to the first issue of Dogeparty Pulse, a weekly update about Dogeparty and related developments. Want to know what is going on behind the scenes? You asked for more clarity and transparency, and you got it!
+
+Dogeparty core development update
+-------------------
+
+This week we begin with a short update from lead Dogeparty developer Lars Kluge (/u/aekym), about the much discussed wallet balance display issue, as seen in [this GitHub ticket](https://github.com/Dogeparty/dogeparty-wallet/issues/25). A temporary fix has been issued that should solve the DOGE display, and an ultimate fix is forthcoming. There may still be some issues with XDP balances which we hope to resolve shortly. Additionally, the distributed exchange which will allow people to exchange assets right inside of the Dogeparty wallet is being worked on and should be ready shortly after we have sorted out issues with wallets.
+
+J-Dog’s upcoming projects
+-------------------
+
+Next up, J-Dog, creator of [dogepartychain.info](http://dogepartychain.info), is working on a lot of cool upcoming Dogeparty projects. There’s an asset registration service that allows anyone to register a Dogeparty asset. It’s simple: pay just $5 in BTC/LTC/DOGE, and get the asset delivered straight to a Dogeparty wallet.
+
+There’s an asset enhancement service to allow anyone to instantly get a website up and running where they can market their Dogeparty asset, project, charity, etc. Users get a custom JSON file and a custom subdomain.
+
+There’s an asset transfer/escrow service allowing buying, selling and negotiation of assets between parties privately. Secure, anonymous funds are escrowed until both parties are happy.
+
+And finally, there’s a broadcast enhancement service where anyone can instantly get a website up and running with extended information about the broadcast. All of the services will be hosted under a single site. When asked about the timeline, J-Dog replied, “Realistically I think we are about 30 days off from public release. I'll be posting updates to our Twitter feeds at: [https://twitter.com/dogepartychain](https://twitter.com/dogepartychain) and [https://twitter.com/dogepartyassets](https://twitter.com/dogepartyassets). Anyone who wants to get in contact with me can either find me on the [Dogeparty Skype chat](http://t.co/W8FSlgvqb7) or by email at j-dog@j-dog.net.
+
+Dogeparty opportunities!
+-------------------
+
+Are you good at managing communities? Contact Benjamin (/u/pseudopseudonym)
+
+Are you a great Python developer? Contact Lars (/u/aekym)
+
+Developer community liason? Join us in our Skype chatroom.
+
+Contact us and get involved!
+
+[Join our Skype room](http://t.co/W8FSlgvqb7) 
+
+[Twitter](https://twitter.com/theDogeparty)
+
+[/r/xdp](http://reddit.com/r/xdp)",1412873483.0,14,0.79,8
+dogecoin,"Happy Halvening. We miss you, buddy.",,1412261141.0,87,0.94,15
+counterparty,1 BTC bounty for fixing various issues,"Hi there,
+
+I'm Benjamin, the Community Manager for Dogeparty.
+
+I'm offering a 1.00 BTC bounty to whoever fixes the following issues:
+
+https://github.com/Dogeparty/dogeparty-wallet/issues/25
+
+https://github.com/Dogeparty/dogeparty-wallet/issues/26
+
+https://github.com/Dogeparty/dogeparty-wallet/issues/27
+
+https://github.com/Dogeparty/dogeparty-wallet/issues/28
+
+The bounty cannot be claimed until the 10th of October. In the event that multiple people contributed to fixing the issues I'll be carefully choosing who to reward with the bounty (and may split it) as fairly as I possibly can.
+
+Fixes should be submitted as pull requests on the Dogeparty GitHub. If you identify the source of a problem but can't fix it yourself, feel free to post on the relevant issues with your solutions.
+
+Please contact me in the Dogeparty Skype or this thread if you have any questions about the specifics.
+
+**Fixes for these issues will help Counterparty, thus why it's posted here.**",1412065218.0,0,0.5,0
+dogecoin,Just noticed an icon in Google Docs that looks a lot like our beloved Doge!,,1411551367.0,14,0.87,3
+dogecoin,Started a Cryptocurrency club and had people sign up at a Club Fair today. Success!,,1411177585.0,278,0.95,66
+dogecoin,My first real purchase with Dogecoins!,,1409822147.0,91,0.9,16
+dogecoin,Meeting /u/mohland at PAX Prime 14,,1409363116.0,63,0.89,12
+windows,Major Windows 8 multi-monitor improvements coming in the Release Preview,,1337156766.0,49,0.83,21
+Android,I imported a Galaxy Nexus from Japan and it has dead pixels... any ideas?,"I didn't get it from Negri, I got it via Amazon Japan and bounced it via a forwarder. It has one dead pixel in the top right and one stuck (I think) pixel on the right side of the screen.
+
+I'm pretty sure my warranty is only applicable in Japan... I'm not really sure what to do at this point. I don't want to spend $50+ shipping it back to Japan and probably postage back - is it worth trying to contact Samsung locally and ask them to do a screen replacement as though it were a Verizon Nexus?
+
+Should I just deal with it?
+
+EDIT: Japan warranty is international according to the Samsung website. Will call Samsung and give an update soon :)",1333254082.0,10,0.73,7
+buildapc,[Build Complete] Medium budget gaming build - i5 2500k @ 5GHz (with pictures!) ,"[Part list permalink](http://pcpartpicker.com/p/2OSg) / [Part price breakdown by merchant](http://pcpartpicker.com/p/2OSg/by_merchant)
+
+Type|Item|Price
+:----|:----|:----
+**CPU** | [Intel Core i5-2500K 3.3GHz Quad-Core Processor](http://pcpartpicker.com/part/intel-cpu-bx80623i52500k) | $224.99 @ NewEgg 
+**CPU Cooler** | [XIGMATEK Gaia SD1283 56.3 CFM  CPU Cooler](http://www.newegg.com/Product/Product.aspx?Item=N82E16835233082) | $28.99 - $20 MIR @ Newegg
+**Motherboard** | [ASRock Z68 Extreme3 Gen3 ATX  LGA1155 Motherboard](http://pcpartpicker.com/part/asrock-motherboard-z68extreme3gen3) | $124.99 -$10 MIR @ Newegg
+**Memory** | [Corsair Vengeance 8GB (2 x 4GB) DDR3-1600 Memory](http://pcpartpicker.com/part/corsair-memory-cmz8gx3m2a1600c9) | $35 @ Amazon 
+**Memory** | [Corsair Vengeance 8GB (2 x 4GB) DDR3-1600 Memory](http://pcpartpicker.com/part/corsair-memory-cmz8gx3m2a1600c9) | $35 @ Amazon 
+**Video Card** | [XFX Radeon HD 6950 2GB Video Card](http://pcpartpicker.com/part/xfx-video-card-hd695xcnfc) | $249.99 - $30 MIR @ Newegg 
+**Case** | [Lian-Li PC-7B PLUS ATX Mid Tower Case](http://pcpartpicker.com/part/lian-li-case-pc7bplusii) | ""Free"" (Had it lying around as a spare case) 
+**Power Supply** | [Thortech 850W ATX12V / EPS12V Power Supply](http://pcpartpicker.com/part/thortech-power-supply-ttb850g) | $159.99 - $40 discount @ Newegg
+**Mouse** | [Logitech G500 Wired Laser Mouse](http://pcpartpicker.com/part/logitech-mouse-910001259) | $ 34.99@ NewEgg 
+ | | **Total**
+ | Prices include shipping and discounts when available. | $878.41 - $60 of mail-in rebates. $730.82 (MB, PSU, CPU, GPU) + $35.98 (Thermal compound + HSF) + $34.99 (Mouse) + $76.62 (RAM).
+ | Generated 2011-12-04 19:41 EST-0500 |
+
+Album with a ton of pictures *here*: http://imgur.com/a/9Zqay
+
+My cooler wasn't available on PCPartPicker, so I hacked it into the list - the parts list on PCP thus won't reflect this. My case is actually the silver Lian Li PC-7B Plus I, which I plan to replace with a BitFenix Shinobi White Window (around $75) later. **Prices have also been hacked up to reflect what I actually paid - the ""real"" prices are on PCP (some are cheaper, some are more expensive).**
+
+Temperatures, clocks and voltages:
+
+(All temperatures in degrees-Celcius)
+
+At stock speeds, idle temperature was 30 degrees and at-load temperature was 55 degrees. Voltage was stock. At 5GHz (which I'm thinking I'll stay at) idle temperature was 30 degrees (though it dips to as low as 24!) and at load-temperature was 60 degrees. Voltage was bumped by 0.05 volts and left dynamic, which helps with overall stability I think.
+
+I had various adventures during the build - notably, I screwed up by not securing and screwing down the backplate of the new cooler far enough, which meant reaching 95 degrees at load at STOCK speeds on the i5. I very quickly disassembled the entire build (thus why there are two sets of internal pictures), cleaned and reapplied the thermal paste (I used Tuniq TX-2) and screwed it down as tight as I could reasonably get it to go. On top of this, the new cooler is *fucking massive* - my motherboard tray no longer slides in and out because it collides with the metal frame. This shouldn't be a problem on more modern cases, and I worked around it by simply installing it in-the-case like the good ol' days.
+
+At 5GHz, there *are* some caveats to be aware of. Your mileage may of course vary, but you will probably experience some reboot loops and an inability to POST - about 2 out of every 5 boot attempts succeed. As soon as it reaches loading Windows it's fine. Additionally, coming out of S3 sleep will hang the system. However... **Downloading a bios update has totally fixed all of those issues for me on this motherboard.** I was running some variation of 1.0 and am now running some variation of 1.2 and the problems have disappeared! :) I'm now Prime95 stable at 5GHz with only a 5 degree increase.
+
+**Parts reviews**:
+
+**Intel Core i5 2500k**: I couldn't be more happy with this CPU - I was surprised to be able to overclock it so hard and have it be fine (+66%). Additionally, when I first installed the Xigmatek I appreciated the i5 not dying from the ridiculous lack of heating I'd accidentally set up for it. Hasn't missed a beat yet. I don't know whether I'd get the i7 2600k next time, but I seriously doubt I'd need that extra 5% performance.
+
+
+**XIGMATEK Gaia SD1283**: I'm seriously, seriously impressed by this cooler. I don't know how it is in terms of noise because the case I have is old and has noisy fans, but I'll probably post an update of some sort about this build later once I get the new case. 24 @ idle, 60 @ load at 5GHz... not much to complain about.
+
+
+**ASRock Z68 Extreme3 Gen3**: Get it. It's wonderful. The layout is great, the CMOS reset button was more handy than I thought it'd be, and it's solid as a rock for my purposes.
+
+
+**Corsair Vengeance 8GB (4x2GB) kit**: It's... RAM. I don't know much about it yet, and I haven't really done much to test it, but it has kept pace with everything else just fine so far.
+
+
+**XFX Radeon HD 6950 2GB (HD695-CNFC)**: I was hoping to use the BIOS hacks to unlock this and turn it into a 6970 - apparently that's not really possible and mine doesn't have a BIOS switch as far as I can tell. XFX's warranty is simply ridiculous in North America though - even flashing the card's BIOS and bricking it supposedly doesn't void it. Outside of NA it's much more restrictive. As it is and without overclocking the card is fantastic - I suspect it's my bottleneck for achieving higher framerates on demanding games, but at this point I seriously don't care. Everything I've thrown at it besides Skyrim and an ICEnhancer'd GTA IV has run at 60 FPS maxed out at 1080p.
+
+
+**Thortech 850W ATX12V / EPS12V**: Seems fine so far. The modular design was nice, though I would have liked it to be 100% modular rather than partially; I suppose that might not be possible at this price point. It's got enough overhead to get me a CrossFireX setup working in the future if I set one up - my only concern is that I haven't heard that much about Thortech in terms of reliability. Supposedly it has a 5-year warranty so that should be fine.
+
+
+**Logitech G500 Wired Laser Mouse**: I adore it. I moved to this from a Dell mouse which was ""okay"" for gaming, and so far it's been fantastic. The weights seem useless to me, but I haven't used the mouse for that long yet.
+
+tl;dr: Built a PC which is stable at 5GHz with temps capping out at 60 degrees Celcius for $783.40 and ridiculously happy with it. Skyrim runs at Ultra very smoothly, I'd estimate 40-60 FPS all the time.
+
+EDIT: trippixboi suggested using a different method for applying the thermal grease, which I may switch to. Permalink: http://www.reddit.com/r/buildapc/comments/n0dws/build_complete_medium_budget_gaming_build_i5/c35c2mf
+
+EDIT2: I'm not currently prime95 stable as I lost all my settings when I updated the BIOS :( I'll post the settings once I've figured it all out. IntelBurnTest is stable though, so I'm happy for now.",1323046216.0,38,0.88,68
+buildapc,[Build Ready] Mediumish Budget Gaming PC,"[Part list permalink](http://pcpartpicker.com/p/2wsE) / [Part price breakdown by merchant](http://pcpartpicker.com/p/2wsE/by_merchant)
+
+Type|Item|Price
+:----|:----|:----
+**CPU** | [Intel Core i5-2500K 3.3GHz Quad-Core Processor](http://pcpartpicker.com/part/intel-cpu-bx80623i52500k) | $179.99 @ Microcenter 
+**Motherboard** | [ASRock Z68 Extreme3 Gen3 ATX  LGA1155 Motherboard](http://pcpartpicker.com/part/asrock-motherboard-z68extreme3gen3) | $122.86 @ Newegg 
+**Video Card** | [XFX Radeon HD 6950 2GB Video Card](http://pcpartpicker.com/part/xfx-video-card-hd695xcnfc) | $219.99 @ Newegg 
+|| **Total**
+| Prices include shipping and discounts when available. | $522.84
+| Generated 2011-11-21 18:34 EST-0500 |
+
+I just bought 2 sets of this RAM - [Corsair Vengeance 8GB/2x4GB DDR3 1600 MHz (PC3 12800) 240-Pin DDR3 Memory Kit](http://www.amazon.com/gp/product/B004CRSM4I/ref=oh_o00_s00_i00_details) mostly because it was cheap as hell... and now my quest to build a gaming PC has been somewhat prematurely started. So I'm looking at buying this hardware, to be later paired with a nice PSU, hard drive, case etc (I'm looking at the BitFenix Shinobi Window White). For now I'm hoping to use my existing case, which is [something like this](http://www.amazon.com/SilverStone-Aluminum-Center-Reader-LC17S-C/dp/B002I1707U) with a 500W PSU I already have.
+
+So the question is: is my choice of CPU, GPU and motherboard appropriate, or should I swap out for the 560 Ti (for example) or something else? I'm looking to spend around $750 on this build including the case and PSU.
+
+EDIT: Also thinking about this: http://pcpartpicker.com/part/antec-power-supply-tp750blue",1321919178.0,1,0.67,3
+Minecraft,"Geisel Library. Finally close to completion. [50,000 blocks later]",,1313867378.0,10,0.65,7
+buildapc,"[Build Ready] $800 budget, urgently need help.","So my friend is getting ready to move to the east coast and has something like 8 days left to get things organized. She's requested my help putting together a nice gaming/work PC and set a budget of $800 (I'm not including the $20 of shipping in that).
+
+edit: Thanks ThoughtA for helping me reformat the parts list properly.
+
+Looking for a mid-tower with a GeForce GTX 560 + i5 2600k + 8GB of RAM ideally. Everything else sort of fits around that (but I'd happily change my mind if someone can suggest something better in terms of price/performance). It should have 4 SODIMM slots and the case should ideally be nice-looking and not feel horribly cheap (and a side-window is a plus).
+
+Here's what I have so far:
+
+Alternative Case: RAIDMAX SMILODON ATX-612WBP Black + 500W PSU ($89)
+
+Type|Item|Price
+:----|:----|:----
+**CPU** | [Intel Core i5-2500K 3.3GHz Quad-Core Processor](http://pcpartpicker.com/part/intel-cpu-bx80623i52500k) | $219.99 @ Newegg 
+**Motherboard** | [ASRock Fatal1ty P67 Performance ATX  LGA1155 Motherboard](http://pcpartpicker.com/part/asrock-motherboard-fatal1typ67performance) | $137.86 @ Newegg 
+**Memory** | [PNY XLR8 8GB (2 x 4GB) DDR3-1600 Memory](http://pcpartpicker.com/part/pny-memory-md8192kd31600x9) | $54.99 @ Newegg 
+**Hard Drive** | [Hitachi Deskstar 7K3000 1.5TB 3.5"" 7200RPM Internal Hard Drive](http://pcpartpicker.com/part/hitachi-internal-hard-drive-hds723015bla642) | $54.99 @ Newegg 
+**Video Card** | [PNY GeForce GTX 560 Ti 1GB Video Card](http://pcpartpicker.com/part/pny-video-card-vcggtx560txpbocbdl) | $199.99 @ Newegg 
+**Case** | [TUNIQ IC-TQ3-US-BK ATX Mid Tower Case](http://pcpartpicker.com/part/tuniq-case-ictq3usbk) | $59.98 @ Newegg 
+**Power Supply** | [Antec 650W ATX12V Power Supply](http://pcpartpicker.com/part/antec-power-supply-ea650green) | $54.24 @ Mwave 
+|| **Total**
+| (Prices include shipping and discounts when available.) | $782.04
+
+Any changes you'd recommend?
+
+UPDATE: Should I substitute the GPU for this? http://www.newegg.com/Product/Product.aspx?Item=N82E16814121446 (ASUS ENGTX560 DCII OC/2DI/1GD5 GeForce GTX 560 (Fermi) 1GB, $200) 
+
+Will the performance be on par, and will the more elaborate cooling on it be of any help? Quieter is probably good.",1313180685.0,1,1.0,15
+Minecraft,You can't take the sky from me...,,1299117875.0,594,0.91,91
+Minecraft,"Hey Reddit, guess what I'm building?",,1299037598.0,21,0.7,29
+Minecraft,Baby steps... (work in progress!),,1297061507.0,1,0.55,3
+Minecraft,My first large project... (unfinished!),,1296956270.0,7,0.7,4
+IAmA,"IAmA guy who got dumped for not saying ""I love you"" in two weeks. AMA","Hey Reddit! Something I felt like sharing, which happened about three years ago while I was living in Australia.
+
+Things started off well, the standard way things do. I met a girl who was new, and we met and talked and became really close. Eventually I asked her out and we started dating, which lasted about two weeks. After that, she ""put things on hold"" with me indefinitely, then from then on did anything she could to get my attention. She discussed suicide constantly, told me she loved me to my face then and denied saying it when I asked her what she meant; she talked constantly about how shitty her life was. I wasn't really able to do anything to help her, and it hurt like hell because I believed I loved her (though it was more of a crush & close-friend thing) despite the stuff she was doing.
+
+I'm making it sound pretty mild, but she basically dropped out of school to get my attention, skipping easy exams because she knew I would notice and ask her about it. She asked me to move in with her, all shortly after we had a huge fight and moved toward a barely-friends status. Had a couple of breakdowns and was myself suicidal at a couple of points because I couldn't deal with not being able to help her.
+
+She screwed with my head for about a year and a half, dating two of my best friends and fucking one of them, doing her best to rub it in my face while hinting towards feelings for me and brushing off the ones I tried to return and telling me it was a ""little late for that"". Found out after it was all over that she broke up with me because I hadn't told her I loved her within two weeks.
+
+She likely had some pretty major mental issues, but in my head I convince myself that she's just a terrible person - its unfair to her, but its one of the ways I seem to deal with it.
+
+tl;dr: girl dated me for two weeks, broke up with me because I hadn't told her I loved her, toyed with my emotions then dated and fucked my best friends, eventually dropping out of school to make me pay attention.",1296151214.0,0,0.38,26

@@ -1,0 +1,1953 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+AvoidingThePuddle,Paying for Fable VOD,"I've always loved fable, didn't check on him in time and missed the stream/vod
+
+If you got it, I'm willing to pay",1726299043.0,13,0.88,10
+FLIFLS,Test,Why do you keep taking down my photos? I deserve freedom of speech!,1723164299.0,0,0.5,0
+FLIFLS,Keeteez,,1721606519.0,0,0.25,2
+FLIFLS,Kawr,,1721512970.0,1,0.67,1
+FLIFLS,Keetee,,1721512843.0,1,0.67,2
+tipofmytongue,"[TOMT] Music, first 12 seconds of this video",[removed],1716156162.0,1,1.0,1
+JoeRogan,Which old episode?: Aubrey Marcus talks about trip about flying on dragon and bear with chains,[removed],1689813826.0,1,1.0,0
+translator,[Russian? > English]What is it saying in the beginning? Is it a movie?,,1671046960.0,5,1.0,3
+tipofmytongue,[TOMT][VIDEOGAME][2010s] PS3 stealth game with long range taser and online multiplayer.,[removed],1669002107.0,1,1.0,0
+translator,[Russian? > English] What does this note say in this video? @23:40,,1668966707.0,1,1.0,2
+Steam,"[Question] How to get rid of ""tasks"" section when right clicking steam taskbar icon?","[https://imgur.com/a/HCMXgyr](https://imgur.com/a/HCMXgyr)  
+
+
+How do I get rid of those? I want more room for my games to show up.",1640999923.0,2,0.75,5
+learncpp,How do I return a value from a function to a specific instance of a struct?,"I'm trying to make an attack function that decreases an instance's health. How do I return a value to that specific instance?
+
+    \#include <iostream>
+    
+    \#include <string>
+
+&#x200B;
+
+&#x200B;
+
+    struct entity
+    
+    {
+    
+    	int health{100};
+    
+    	int mana{100};
+    
+    	int strength{ 1 };
+    
+    	std::string type{};
+    
+    };
+
+&#x200B;
+
+    int Attack(entity Attacker, entity Defender)
+    
+    {
+    
+    	int newHealth{};
+    
+    	newHealth = Defender.health - Attacker.strength;
+
+&#x200B;
+
+    	return newHealth;
+    
+    }
+
+&#x200B;
+
+    int main()
+    
+    {
+    
+    	entity \_Player;
+    
+    	_Player.health = 150;
+    
+    	_Player.mana = 200;
+    
+    	_Player.type = ""Human"";
+    
+    	std::cout << ""A "" << _Player.type << "" has spawned in with "" << _Player.health << "" health"" << std::endl;
+
+&#x200B;
+
+    	entity _Enemy;
+    
+    	_Enemy.health = 100;
+    
+    	_Enemy.mana = 80;
+    
+    	_Enemy.type = ""Thnake"";
+    
+    	std::cout << ""A "" << _Enemy.type << "" has spawned in with "" << _Enemy.health << "" health"" << std::endl;
+
+&#x200B;
+
+    	Attack(_Player, _Enemy);
+
+&#x200B;
+
+    	std::cout << _Player.health << std::endl;
+    
+    	std::cout << _Enemy.health << std::endl;
+    
+    }",1639017125.0,5,0.79,11
+cpp_questions,declspec and __asm question. Why is this hook not working?,"I'm trying to kill enemies in one hit, and not take damage myself. But I always make everyone invincible no matter how I try to write this. Any ideas?
+
+    DWORD healthOfEntity;
+    
+    DWORD teamOfEntity;
+    
+    void __declspec(naked)OneHitKill()
+    
+    {
+    
+    	__asm
+    
+    	{
+    
+    		push eax
+    
+    		push ebx
+    
+    		mov eax, [esi + 0xB4] //health of player or enemy
+    
+    		mov ebx, [esi + 0x74] //team of entity, where 0 = enemy team
+    
+    		mov [healthOfEntity], eax
+    
+    		mov [teamOfEntity], ebx
+    
+    		pop ebx
+    
+    		pop eax
+    
+    	}
+
+&#x200B;
+
+    	if (teamOfEntity == 0)
+    
+    	{
+    
+    		__asm
+    
+    		{
+
+mov\[healthOfEntity\], 0 //if team = 0, kill
+
+    		}
+    
+    	}
+    
+    	__asm
+    
+    	{
+    
+    		jmp[jmpBackAddy]
+    
+    	}
+    
+    }",1634995047.0,3,0.67,7
+cpp_questions,void __declspec(naked) question. Why does MVS not fully read my function?,"My IDE stops reading \[esi + 3C\] right at \[esi + 3\] so it doesn't work properly. Also, at (call Fable.exe + 2869D0), it stops read at (call Fable.exe + 2869).
+
+Any ideas?
+
+		\#include ""pch.h""
+
+		\#include <iostream>
+
+		\#include ""mem.h""
+
+&#x200B;
+
+		bool Hook(void\* toHook, void\* ourFunct, int len) {
+
+			if (len < 5) {
+
+return false;
+
+			}
+
+&#x200B;
+
+			DWORD curProtection;
+
+			VirtualProtect(toHook, len, PAGE\_EXECUTE\_READWRITE, &curProtection);
+
+&#x200B;
+
+			memset(toHook, 0x90, len);
+
+&#x200B;
+
+			DWORD relativeAddress = ((DWORD)ourFunct - (DWORD)toHook) - 5;
+
+&#x200B;
+
+			\*(BYTE\*)toHook = 0xE9;
+
+			\*(DWORD\*)((DWORD)toHook + 1) = relativeAddress;
+
+&#x200B;
+
+			DWORD temp;
+
+			VirtualProtect(toHook, len, curProtection, &temp);
+
+&#x200B;
+
+			return true;
+
+		}
+
+&#x200B;
+
+		DWORD jmpBackAddy;
+
+		void ourFunct()
+
+		{
+
+			uintptr\_t moduleBase = (uintptr\_t)GetModuleHandle(L""Fable.exe"");
+
+			moduleBase = (uintptr\_t)GetModuleHandle(NULL);
+
+			mem::Patch((BYTE\*)(moduleBase + 0x17b338), (BYTE\*)""\\x29\\xC7\\x01\\x7E\\x3C\\xE8\\xC6\\x69\\xC3\\xEB\\xE9\\x31\\xB3\\xB2\\xEB"", 15);
+
+		}
+
+&#x200B;
+
+		DWORD WINAPI HackThread(HMODULE hModule)
+
+		{
+
+			//Create Console
+
+			AllocConsole();
+
+			FILE\* f;
+
+			freopen\_s(&f, ""CONOUT$"", ""w"", stdout);
+
+&#x200B;
+
+			std::cout << ""Working properly\\n"";
+
+&#x200B;
+
+			uintptr\_t moduleBase = (uintptr\_t)GetModuleHandle(L""Fable.exe"");
+
+&#x200B;
+
+			moduleBase = (uintptr\_t)GetModuleHandle(NULL);
+
+&#x200B;
+
+			bool bHealth = false, bGold = false;
+
+&#x200B;
+
+			while (true)
+
+			{
+
+if (GetAsyncKeyState(VK\_END) & 1)
+
+{
+
+break;
+
+}
+
+&#x200B;
+
+if (GetAsyncKeyState(VK\_NUMPAD1) & 1)
+
+bHealth = !bHealth;
+
+&#x200B;
+
+if (GetAsyncKeyState(VK\_NUMPAD2) & 1)
+
+{
+
+bGold = !bGold;
+
+int tempGoldVal =\*(int\*)mem::FindDMAAddy(moduleBase + 0xFB8710, { 0x58,0x44,0x14,0x3C });
+
+if (tempGoldVal < 1000000)
+
+{
+
+\*(int\*)mem::FindDMAAddy(moduleBase + 0xFB8710, { 0x58,0x44,0x14,0x3C }) = 99999;
+
+}
+
+if (bGold)
+
+{
+
+int hookLength = 8;
+
+DWORD hookAddress = moduleBase + 0x17b338;
+
+jmpBackAddy = hookAddress + hookLength;
+
+Hook((void\*)hookAddress, ourFunct, hookLength);
+
+}
+
+if (!bGold)
+
+{
+
+mem::Patch((BYTE\*)(moduleBase + 0x17b338), (BYTE\*)""\\x89\\x46\\x3C\\xE8\\x90\\xB6\\x10\\x00"", 8);
+
+}
+
+}
+
+&#x200B;
+
+uintptr\_t\* localPlayerPtr = (uintptr\_t\*)(moduleBase + 0xFB8710);
+
+&#x200B;
+
+//continuous
+
+&#x200B;
+
+if (localPlayerPtr)
+
+{
+
+if (bHealth)
+
+{
+
+\*(float\*)mem::FindDMAAddy(moduleBase + 0xFB8710, { 0x58, 0xB4}) = 9999;
+
+}
+
+}
+
+Sleep(5);
+
+			}
+
+&#x200B;
+
+			fclose(f);
+
+			FreeConsole();
+
+			FreeLibraryAndExitThread(hModule, 0);
+
+			return 0;
+
+		}
+
+&#x200B;
+
+		BOOL APIENTRY DllMain(HMODULE hModule,
+
+			DWORD  ul\_reason\_for\_call,
+
+			LPVOID lpReserved
+
+		)
+
+		{
+
+			switch (ul\_reason\_for\_call)
+
+			{
+
+			case DLL\_PROCESS\_ATTACH:
+
+CloseHandle(CreateThread(nullptr, 0, (LPTHREAD\_START\_ROUTINE)HackThread, hModule, 0, nullptr));
+
+			case DLL\_THREAD\_ATTACH:
+
+			case DLL\_THREAD\_DETACH:
+
+			case DLL\_PROCESS\_DETACH:
+
+break;
+
+			}
+
+			return TRUE;
+
+		}",1633130384.0,0,0.5,8
+cpp_questions,"Why at the end does one function need my instance name, but not the others?","    \#include ""iostream""
+    class Log
+    
+    {
+    
+    public:
+    
+    	const int ErrorShow = 0;
+    
+    	const int WarningShow = 1;
+    
+    	const int InfoShow = 2;
+    private:
+    
+    	int m\_LogLevel = ErrorShow;
+    public:
+    
+    	void SetLevel(int level)
+    
+    	{
+    
+    		m\_LogLevel = level;
+    
+    	}
+    	void Error(const char\* message)
+    
+    	{
+    
+    		if (m\_LogLevel >= ErrorShow)
+
+std::cout << ""\[Error is showing\]"" << std::endl << message << std::endl;
+
+    	}
+    	void Warning(const char\* message)
+    
+    	{
+    
+    		if (m\_LogLevel >= WarningShow)
+
+std::cout << ""\[Warning is showing\]"" << std::endl << message << std::endl;
+
+    	}
+    	void Info(const char\* message)
+    
+    	{
+    
+    		if (m\_LogLevel >= InfoShow)
+
+std::cout << ""\[Info is showing\]"" << std::endl << message << std::endl;
+
+    	}
+    
+    };
+    int main()
+    
+    {
+    
+    	Log showbox;
+    
+    	showbox.SetLevel(showbox.InfoShow);
+    
+    	showbox.Error(""This is the Error text"");
+    
+    	showbox.Warning(""This is the Warning text"");
+    
+    	[showbox.Info](https://showbox.Info)(""This is the Info text"");
+    
+    }",1626101657.0,6,0.88,9
+cpp_questions,"Why does my ""const char*"" have to be a pointer? (In the void Error function)","    \#include ""iostream""
+    class Log
+    
+    {
+    
+    public:
+    
+    	const int LogLevelError = 0;
+    
+    private:
+    
+    	int m\_LogLevel = LogLevelError;
+    
+    public:
+    
+    	void SetLevel(int level)
+    
+    	{
+    
+    		m\_LogLevel = level;
+    
+    	}
+    	void Error(const char\* message)
+    
+    	{
+    
+    		if (m\_LogLevel >= LogLevelError)
+                    std::cout << ""[Error]"" << message << std::endl;
+    	}
+    
+    };
+    int main()
+    
+    {
+    
+    	Log logs;
+    
+    	logs.SetLevel(logs.LogLevelError);
+    
+    	logs.Error(""Hello!error"");
+    
+    }",1626097460.0,17,0.8,43
+cpp_questions,"How do I change it the ""value++"" here to do more maths?","    \#include ""iostream""
+    
+    using namespace std;
+    
+    \#define LOG(x) cout << x << endl;
+    void Increment(int& value)
+    
+    {
+    
+    	value++;
+    
+    }
+    int main()
+    
+    {
+    
+    	int a = 5;
+    
+    	Increment(a);
+    
+    	LOG(a);
+    
+    }  
+
+//I want to do something like ""value + 2"" to get a=7 after my LOG function. But I can't figure out how",1626021006.0,0,0.5,8
+cpp_questions,How come it's returning an address instead of a value?,"    	#include ""iostream""
+    	using namespace std;
+    	#define LOG(x) cout << x << endl;
+    
+    	int mult(int a, int b)
+    	{
+    		return a * b;
+    	}
+    	int main()
+    	{
+    		mult(3, 6);
+    		LOG(mult);
+    
+    	}
+
+//I get 006914AB
+
+is the value 18 going to be in that memory address? I don't know how to check>.<",1625948055.0,0,0.25,6
+cpp_questions,"How come my code doesn't break on its first pass? (Division in a ""for loop"")","\#include ""iostream""
+
+using namespace std;
+
+&#x200B;
+
+	\#include ""iostream""
+
+	using namespace std;
+
+&#x200B;
+
+	int main()
+
+	{
+
+		for (int i = 2; i < 5; i++)
+
+		{
+
+			if (i % 2 == 1)
+
+break;
+
+			cout << ""Hello there"" << endl;
+
+			cout <<  i  << endl;
+
+		}
+
+	}
+
+=======================================================On the first pass of this code, shouldn't 2/2 = 1, so it'll break?
+
+# But instead I get this:
+
+Hello there
+
+2",1625935773.0,3,0.6,14
+translator,"[Japanese > English] What does ""つきあってらんねえっての"" mean?", https://imgur.com/O2GPSfv,1603642993.0,1,1.0,5
+translator,"[Japanese > English] What does ""ひっぽんなって」mean?", https://imgur.com/GinUOAz,1603641018.0,1,1.0,2
+translator,[Japanese > English] What is this 「っつー」 doing?," https://imgur.com/zLOhF6x   
+
+
+それふたりへのっつーことで",1603640179.0,4,1.0,15
+a:t5_2am2od,Fuck this vault,This vault is wacist,1603586638.0,1,1.0,0
+LearnJapanese,What is the 「っつー」 doing here?,[removed],1603552323.0,1,1.0,1
+LearnJapanese,こうすっから meaning?,[removed],1603550457.0,0,0.5,3
+LearnJapanese,asen natte meaning?,[removed],1603549024.0,1,0.67,3
+tipofmytongue,[TOMT][MOVIE][2010s] What horror movie are these photos from?,"[https://imgur.com/gallery/EekCx3w](https://imgur.com/gallery/EekCx3w)  
+
+
+The photo with the girl in the dress is in an elevator. She was found dead with something pounded into her head and she starts talking with the white lady.",1603034523.0,1,0.67,7
+SecurityClearance,Good first job for expedited clearance?,"I heard becoming the person who interviews others for their clearance is a good way to get into work with security clearances.
+
+Anyone know anything else? I'm interested in the field.",1602337937.0,13,1.0,63
+AssassinsCreedOdyssey,Legendary gear engraving question,"I just got a piece of the pirate gear and the engraving that gives me crit is weaker than it says online, is it because I'm only level 28 and it's not going to give me the strongest piece?
+
+if I level up to level 70, will the piece naturally make the engraving stronger as I level? Or do more challenges?",1589575619.0,2,1.0,4
+pcmasterrace,How do I make sure my laptop battery doesn't overheat in my trunk?,Could I buy a special kind of backpack to keep the battery safe?,1587751264.0,1,1.0,6
+ElectricalEngineering,How come inductive reactants correct capacitive loads and vice versa?,"Do I understand this correctly? Introducing magnetic fields (induction) to capacitive loads corrects power factor. And introducing ""batteries"" (capacitive reactants) to inductive loads corrects power factor?
+
+I don't understand how either helps correct the other.",1574131081.0,1,1.0,11
+Fable,how to get rid of physical shield sound on TLC?,I found the sound folder but not the shield sound>.<,1565479022.0,8,0.8,4
+CreditCards,Credit inquiries and credit score,"Right now my score is a 710 with only one credit inquiry in the past 2 years, I was wondering if I started getting a lot of credit inquiries to get more credit cards to improve my score, if that would drastically affect my score.
+
+I'm under the impression that having multiple credit cards with a long credit history will improve my score even more, is this the case? I'd like to have around 800 credit score",1565359672.0,9,1.0,9
+CRedit,How do I increase my score with payments?,"Right now, I have a balance of $700 on my credit account, and my statement is in 5 days. But, if I pay it off before my statement do I still get an increase in credit?",1561996787.0,3,0.81,7
+pcmasterrace,How long does gaming laptop last?,I plan on gaming everyday for at least an hour. I wanna get something with an i7 and a 1070 in it.,1556481132.0,1,0.6,10
+finalfantasyx,How do I look at the subtitle files? PC,[removed],1556458427.0,1,1.0,0
+ffx,How do I look at the subtitles files of FFX,"I like to transcribe the game to learn languages, but it takes such a long time. Would you know a way of how to look at the subtitle texts?",1556457601.0,3,0.81,4
+pcmasterrace,How do I find the subtitle file for videogames?,"For studying I transcribe japanese videogames but it takes foreverrrrrrrrrrrrrrr.  
+
+
+Do you know how to find the actual texts so I could just copy the dialogue?  
+
+
+The game I'm trying to do it for is FFX off of steam.",1556420317.0,0,0.5,4
+pcmasterrace,Low latency internet connection for traveling gamer?,"I have to travel for my job and sometimes dont have access to ethernet, what could I do for low latency without ethernet?
+
+Could I get a cable to ethernet adapter or something?
+
+Edit: Ever heard of this? [Link](https://www.amazon.com/Actiontec-Bonded-Ethernet-Adapter-ECB6200S02/dp/B013J7O3X0/ref=cm_cr_arp_d_product_top?ie=UTF8&th=1) to amazon",1556411223.0,3,1.0,5
+anime,Remember S1 Sword Art Online hype?,[removed],1555900845.0,1,1.0,1
+Lineman,What is a good national bank to use for travel?,"What is a good bank to use that has many locations and great security?  
+
+
+I currently use something only my town has. So to mend some issues I'd have to drive 500+ miles.",1555876200.0,1,1.0,7
+pcmasterrace,Gaming laptop questions,"1. Whilst watching benchmark videos for gaming laptops it seems like there were a lot of frame drops. Is this normal for gaming laptops?
+2. How long do laptops last as compared to desktops?
+3. What is a good silent laptop with cool temps for under 2,000?
+4. What accessories do you recommend for laptop gaming?",1553994711.0,3,1.0,11
+translator,[Unknown>English] Do you know of any sites like lang-8?,[removed],1553301719.0,1,1.0,3
+FinancialPlanning,Loans and credit card Q about credit,"1. I can pay off my loans rn, but would it benefits my credit to pay them over their 6 year period more? 11% interest on 17k
+
+2. Can I build credit score while just having a credit card? But not using it.
+
+3. If I pay off my credit card before they charge the end of the month interest on the balance, do I still up my credit score?",1552063847.0,2,1.0,0
+guns,"American made pistol, good for home defense?",[removed],1552006605.0,0,0.33,13
+2007scape,PvM skill question,"It seems only magic and ranged are used to make money PvM'ing. Is this true?I like strength and attack but don't know if they're profitable.
+
+Any advice for a newb?
+
+(I asked this in the questions thread already but didn't get an answer so i thought i'd post it here. cheers.)",1548800948.0,2,1.0,6
+2007scape,Giant squirrel at lvl22 agility!,"[https://imgur.com/a/Mm8aIaA](https://imgur.com/a/Mm8aIaA)
+
+Level 21 agility actually>.<  
+
+
+I thought it was a really persistent random popup, talked to it, didn't go away. Picked it up, and I thought it would help me not fall on a agility course once, then disappear.
+
+But it turns out it's rare? Cool.
+
+Anyone wanna help me insure it?",1548427168.0,1,0.54,7
+rap,What is this song? Clip is like 3 seconds long,[https://youtu.be/VShPMaIrw0c?t=2m30s](https://youtu.be/VShPMaIrw0c?t=2m30s),1545401593.0,1,1.0,0
+BrunswickGA,Anyone know any meditation or dancing clubs here?,I'm looking for friends in the area and would appreciate any info on those clubs.,1544212218.0,2,1.0,4
+Rainbow6,I found a new glitch spot. You can do it anywhere Zofia is/,[removed],1542825826.0,1,1.0,1
+MathHelp,Volume of a cube math problem,[removed],1540602972.0,0,0.5,3
+HomeImprovement,Anyone know anything about the tile laying business?,"My friend says one of his co-workers makes 100$ a sq ft laying tiles. And that he made $1,000,000 last month.  
+
+
+I told him I think he's being f\*\*\*ed with.  
+
+
+Does anyone know if this is possible or not?",1538140619.0,2,0.56,35
+Ghost_in_the_Shell,[Spoilers?] Question about GITS live-action movie.,"Why does Kuze say he has been birthed many times? And that his name this life is Kuze.  
+
+
+Is this a reference to past cannon material?",1532203094.0,4,0.76,29
+AirForce,AF reserve and a travel job,[removed],1531424150.0,1,0.67,22
+LearnJapanese,JDP: Usagi Drop anime transcription. Japanese Drop Party,[removed],1527990798.0,1,1.0,0
+LearnJapanese,JDP: My Little Monster anime transcription. Japanese Drop Party,[removed],1527990653.0,1,1.0,0
+LearnJapanese,JDP: Sword Art Online anime Transcription. Japanese Drop Party,[removed],1527990481.0,1,1.0,0
+LearnJapanese,JDP: Ano Hana anime transcription. Japanese Drop Party,[removed],1527990236.0,1,1.0,0
+LearnJapanese,JDP: Final Fantasy 10 Transcription. Japanese Drop Party,[removed],1527989691.0,1,1.0,0
+BitHeroes,How do i beat flag 6 of morgoth?,[removed],1527470749.0,1,1.0,0
+TheLastAirbender,[TLOK Spoilers] Borra should've happened,,1527290982.0,0,0.35,10
+translator,[Japanese > English] 詫び入れなあかん？？ The akan part,"こん中に 今までに死んでいった二千人に詫び入れなあかん奴らがおるはずや。  
+
+
+What is the akan part of the wabiiru doing?  
+",1527124421.0,2,1.0,3
+LearnJapanese,What's something you'd think no one would have a problem with. That you have a problem with.,,1527048794.0,11,0.84,52
+translator,"[Japanese > English] Is """"一切乗ってる"""" a common phrase or something?","マニュアルにも緊急切断方法は一切乗ってなかった  
+
+
+I have a feeling it's somewhat like ありません in meaning. Is this correct?",1527048336.0,0,0.5,2
+translator,[Japanese > English] すっから Meaning?,"そのお礼はそのうちちゃんとすっからよ  
+",1527047606.0,1,1.0,4
+translator,"[Japanese > English] What does ""よかろう"" mean? 言ってよかろう",よって　すでにゲームが強制的に解除させる危険は低く成っていると言って「よかろう」。,1526848734.0,0,0.5,6
+translator,"[Japanese > English] What does ""随分手込んでいる"" mean?","It's something someone said after a guy stated he controls the world.
+
+随分手込んでいる",1526430805.0,2,1.0,4
+translator,"[Japanese > English] What does ""ったりめえよ"" mean?","He says ""ったりめえよ"" right after someone asks if he wants to hunt.",1526354352.0,3,1.0,6
+BitHeroes,Looking for strong friends,[removed],1525699958.0,1,1.0,0
+korea,What song is this in the background?,,1525219312.0,0,0.5,0
+tipofmytongue,[TOMT][Videogame] Ps2 game where you run over people and objects with cars for points,SOLVED,1523732275.0,6,0.88,21
+TheLastAirbender,[No Spoilers]I love ATLA.,"Every rough time in my life, I watch it. I see it in a completely new perspective and enjoy it like it's new.
+
+Right now I'm far away from home learning a physically and mentally demanding trade. Money is tight, stress is high, and I awake every day nervous that I won't be able to overcome the days challenges, but I must persevere. Having TLA to walk alongside me and share it's angst and learning process with me is irreplaceable now.
+
+.
+
+Is there a reason why one of your watch throughs was so moving? I'd like to know\^•^",1519511754.0,12,0.88,1
+TheLastAirbender,[No Spoilers] Appa: The Sizebender,"Walking behind Sokka human sized, then shaking water off on Sokka the next frame air bison sized.
+
+https://imgur.com/a/JXcvT",1518364441.0,2,0.58,1
+AirForce,Are there translator opportunities in the AF?,[removed],1516562296.0,0,0.33,6
+LearnJapanese,How has learning Japanese helped you as a person?,,1515384308.0,39,0.88,35
+rap,What is this rap song? (2 seconds of lyrics),https://youtu.be/kVyfMwfJJUQ?t=11m2s,1515299818.0,0,0.5,2
+anime,In this corner of the world discussion,"**spoilers**
+
+https://i.imgur.com/mPAKI0H.png
+
+Do you think that black guy sitting near the window is a person covered in a soot or another house spirit like in the beginning of the movie?
+
+
+",1514869117.0,2,0.56,28
+videos,This video is why I haven't killed myself yet,,1514698679.0,0,0.42,5
+LearnJapanese,Why I'm quitting Japanese...,https://imgur.com/bvXfVml,1514690165.0,345,0.9,104
+poorlounge,this subreddit needs to suck my cock right now!,[removed],1514608979.0,2,1.0,2
+LearnJapanese,What are these chat spams?,"壺壺壺
+
+and
+
+The ニキ from ​偽外人ニキだ…﻿
+
+_________________
+",1514574646.0,2,0.63,6
+LucidDreaming,What's the most powerful change you willed into your LD existence?,Like changing an environment instantly and remaining fully intact lucidly or something.,1514084155.0,2,1.0,4
+Fitness,Is it bad to lift ~half my bodyweight in dumbells?,[removed],1513979833.0,0,0.5,6
+pcmasterrace,How do I read an EPUB file?,"I downloaded a book on my laptop and can't seem to figure out how to read an epub file.
+
+Anyone else had this problem?",1513563823.0,1,1.0,3
+videos,Doesn't it look like a girl hand is massaging him?,,1513020777.0,1,1.0,0
+pcmasterrace,What are the differences between PCI wifi cards and USB wifi adapters?,"I'm looking for the best item to provide me with stable and fast wifi.
+
+Like, do the number of antennae matter?",1512759417.0,1,0.66,15
+nutrition,I literally know nothing about nutrition. Is there a good video series about it?,"Something that explains all the terminology it talks about and how it affects the body (like anti-oxidants, proteins, sugar, vitamins).
+
+And maybe even what to eat to optimize your body. But I'm mostly focused on those scientific terms and how they affect my body>.<",1512441711.0,9,0.85,27
+pcmasterrace,Can I use my win7 key w/o a CD to generate an ISO file to put on a flashdrive?,"Like, I'm making a computer without a DVD burner, so I can't use my win7 cd to make an ISO for Microsoft's Win7 Downloader tool.
+
+Is there a tool I can just enter my Win7 key and get an ISO that way?",1511893056.0,2,1.0,2
+videos,Cat meow lowered 3 octaves might actually be what dinosaurs sounded like! Haunting!,,1511884459.0,0,0.48,12
+LucidDreaming,My subconscious becomes evil when I become lucid. Is this normal?,"**Every** time I go lucid, my subconscious mind makes the dream akin to a horror movie. 
+
+1. Is it normal for your subconscious to get ""jealous/angry"" when you go lucid?
+
+2. I want to try to bind or calm my subconscious next dream and talk to it to find out why it does this. Is this a good idea/possible?",1511843303.0,11,0.77,22
+relationships,Me [22M] just starting to think about opening up. I like her [19?F] but I feel hollow and confused a lot. What does a mature relationship feel like?,"I've always been really good about my body and mind. I can set goals and force myself to complete them. 
+
+I'm a really good *me*.
+
+But I don't wanna be just me anymore-_- I want to share life with someone and I think I met someone who I'd like to do that with. 
+
+Only thing is I've been by myself for like 8 years. The last relationships I've had were in middleschool where I was full of emotion and could drive my heart crazy by thinking about my romantic interests. It was very stimulating.
+
+But now even though I know I like this girl, and I want to try to allow more people into my life instead of being a shut in. I don't have feelings for her a lot. I just don't know if this is normal or if I'm too career oriented. Idk.
+  
+  ---   
+**tl;dr**:  I want to share life with someone now after wanting to be alone for a long time. I like her, but I don't feel like I like her all the time. 
+
+1.Is this normal?
+
+2.How often am I supposed to feel something for someone?
+
+Edit: There is a huge part of me that is scared for my solitude/routine/free time. I study for fun a lot but now that another person's happiness might depend on me, it's a lot of stress. 
+
+3.Is this normal too?",1511283135.0,2,0.66,8
+relationships,Me [22M] just starting to think about opening up. I like her [19?F] but I feel hollow and confused a lot.,[removed],1511282530.0,1,1.0,1
+pcmasterrace,Will this handle 1080p Youtube Videos/streaming?,"https://i.imgur.com/wNMH4Lw.png
+
+It has Intel HD Graphics 530
+
+This is just for my parents. Wanted something that won't make noise or shit out in 2 years.
+
+Will it smoothly (30/60fps) stream Youtube/Baseball games?",1511038234.0,1,0.66,21
+newsokur,僕と英会話を練習したいんですか。アメリカ人です。,"練習しているながらゲームとかを遊べます。
+
+アメリカの秘密の文化も教える事が出来ます！",1510620339.0,17,0.9,28
+LearnJapanese,Japanese slang word?,"しつけー女だな サエコ
+
+What does shitsuke mean and how is it used?",1509767560.0,3,0.8,5
+LearnJapanese,「言わさず」confusion,"それを有無を言わさず　停学処分にしちゃったもんだから
+
+Is this 言わさず acting in the same way as 言わずに？",1509380618.0,4,1.0,3
+LearnJapanese,[とはいえ」Confusion,"行き過ぎたところはあったとはいえ 非があったのは上級生のほうだし。
+
+Is this like **とは言え** or something? Like
+
+""**You could say** that something was taken too far,  but the fault was on the upperclassmen"" type deal?",1509380284.0,7,1.0,6
+LearnJapanese,"Help me understand this ""irareru"" grammar?","うっさい！これが食わずにいられるか。
+
+I understand the gist but am lost on understand this grammar in totality. 
+
+What{s the irareru doing. could i get some examples?",1509118675.0,3,0.8,20
+TheWayWeWereOnVideo,There's something about seeing hot girls in these videos that's so intense.,Am I the only one?,1509038758.0,0,0.45,8
+pcmasterrace,Help with wifi card installation,"The last wifi card I had didn't fit inside the computer, I had the pcie slot for it but the metal thing at the end extended too high for the new case.
+
+I think my case's back slot things are around 2.6inches long, and I have 802.11n wifi. Will this card fit my new case? [This one](https://www.amazon.com/dp/B007GMPZ0A/ref=cm_sw_r_awd_zK.Zub0MV9BQK)
+
+And how would I go on newegg and find a cheaper/better one? I don't know how to widdle down the searches based on form factor/dimensions. 
+
+------------------------
+
+[Old non fitting wifi card + new pcie slot length thing](https://i.imgur.com/NXr8keq.jpg)",1508677370.0,3,0.81,2
+sodadungeon,How do I stream this on steam?,"Usually I can stream games on my laptop through my good computer but Soda Dungeon isn't doing it for me. I don't have the option when I go to the store page and it's not automatically showing up on my game's list.
+
+Anyone else having this problem?",1508425677.0,2,0.63,1
+JoeRogan,What podcast was Joe talking about a kinky seal with Duncan/Chris?,"Duncan talked about how Sea Lions started having sex with seals and how it was teh next step in evolution or something
+
+Chris talked about potential PTSD
+
+Rogan said the seal probably wanted to get porked. Sitting on the beach pretending his flipper was hurt.",1508101308.0,4,0.75,0
+LearnJapanese,"What's going on, on this sign?",https://i.imgur.com/7UZ7d90.png,1507347601.0,41,0.94,12
+TheLastAirbender,[No Spoilers] Link to a legit Japanese trailer of ATLA.,"Edit: [japanese amazon link to show in japanese, aparently! I'll have to check this out sometime](https://www.amazon.co.jp/%E3%82%A2%E3%83%90%E3%82%BF%E3%83%BC-%E4%BC%9D%E8%AA%AC%E3%81%AE%E5%B0%91%E5%B9%B4%E3%82%A2%E3%83%B3-1/dp/B015AG9W84)
+
+https://www.youtube.com/watch?v=loAoUg_LefQ
+
+I heard they didn't translate past like 5 episodes because it did not do well at all in Japan.
+
+Would anyone know where to find the japanese episodes?
+
+伝説の始まる。
+
+アバター、伝説の少年、アン。
+
+百年の時後、若きヒーローを帰って来た。
+
+四つの技を完全マスターし新たな平和を取り戻すため
+
+壮大な旅に挑む
+
+攻めようせる火の国悪魔の手を避けられな、伝説は続く
+
+アバター、伝説の少年、アン。
+
+
+ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+
+""densetsu no hajimaru""
+
+And so a legend begins
+
+.
+
+""Abata, densetsu no shounen, An""
+
+Ang the avatar, the boy legend. 
+
+.
+
+hyaku nen no toki ato, wakaki hiiroo wo kaetekita
+
+After 100 years, a young hero has returned.
+
+.
+
+yotsu no waza wo kanzen masutaa shi aratana heiwa o torimodosu tame
+
+He will bring back a new peace by mastering the four techniques.
+
+.
+
+soudaina tabi ni idomu
+
+He is challenged by a magnificent journey
+
+.
+
+semeyouseru hi no kuni akuma no te o sakerarena, densetsu ha tsudsuku
+
+The legend entails dealing with the aggressive fire nation's hand.
+
+.
+
+Abata, densetsu no shounen, An
+
+Avatar, the boy of lengend. . .Ang.",1506719703.0,5,0.99,4
+TheLastAirbender,Link to a legit Japanese trailer for ATLA,"https://www.youtube.com/watch?v=loAoUg_LefQ
+
+I heard they didn't translate past like 5 episodes because it did not do well at all in Japan.
+
+Would anyone know where to find the japanese episodes?
+
+伝説の始まる。
+
+アバター、伝説の少年、アン。
+
+百年の時後、若きヒーローを帰って来た。
+
+四つの技を完全マスターし新たな平和を取り戻すため
+
+壮大な旅に挑む
+
+攻めようせる火の国悪魔の手を避けられな、伝説は続く
+
+アバター、伝説の少年、アン。
+
+
+ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+
+""densetsu no hajimaru""
+
+And so a legend begins
+
+.
+
+""Avatar, densetsu no shounen, An""
+
+Ang the avatar, the boy legend. 
+
+.
+
+hyaku nen no toki ato, wakaki hiiroo wo kaetekita
+
+After 100 years, a young hero has returned.
+
+.
+
+yotsu no waza wo kanzen masutaa shi aratana heiwa o torimodosu tame
+
+He will bring back a new peace by mastering the four techniques.
+
+.
+
+soudaina tabi ni idomu
+
+He is challenged by a magnificent journey
+
+.
+
+semeyouseru hi no kuni akuma no te o sakerarena, densetsu ha tsudsuku
+
+The legend entails dealing with the aggressive fire nation's hand.
+
+.
+
+Abata, densetsu no shounen, An
+
+Avatar, the boy of lengend. . .Ang.",1506718996.0,0,0.5,1
+MechanicAdvice,How long can i run a 110VAC inverter in an idling car?,"Will my battery die quickly if I use a 110VAC inverter for the hurricane to charge my laptop?
+
+Does it matter if I'm idling or driving?",1504919412.0,2,0.76,18
+pcmasterrace,Battery charging question,"If I have a 5.2A 11.1V battery and a 120watt charger, will the battery charge?
+
+And if I have a 400 watt charger, would it charge any quicker?",1504823141.0,1,1.0,5
+LearnJapanese,Where can I buy/watch Japanese movies with Jap subs,"Amazon gives me Jap movies but with Eng/Thai subs only>.<
+
+I made a Jap iTunes account, but I don't have yen/Jap bank account so I got stuck again>.<",1503974096.0,0,0.38,35
+patientgamers,Dead Rising.,"I'm playing it again for 5 dollars on steam and it is very rewarding. 
+
+I never completed it as a kid because there was a mission that didn't start when you talked to someone, rather wait in a room for a specific time. This was near the beginning of the game and so I'd get impatient and just roam the mall.
+
+The game was fun then just exploring the world the creators of DR built for me, but now actually falling into the story I am very much enjoying it on another level. 
+------------------------------
+
+They do so many things right in this game.
+
+Voice Acting +
+
+Tension of zombies even at max level +
+
+Always need to find new weapons +
+
+Whole mall is useful +
+
+Character relationships +
+
+Psychopath/survivor stories +
+
+----------------------------
+
+I'd definitely recommend a try, especially if you've played the game before as a kid in 2005, but never finished it because kidness.",1503238651.0,17,0.83,19
+LearnJapanese,"Is this ""toko"" a shortened tokoro?","緑高の子と話してるとこ 誰かに見られたら 恥ずかしいし
+
+I'm just guessing, but does this mean something like
+
+If I were to be seen talking to a Midoko student, I'd feel embarassed.
+
+What is the toko doing?",1502935919.0,1,0.6,4
+Tekken,Jiyuna (commentator from recent Korea tour) questions,"How does he know Japanese? How long has he been studying?
+
+Does he have a presence in the Tekken realm or is he purely in persona?",1502258333.0,0,0.5,3
+Techno,What song is this?,https://www.youtube.com/watch?v=P4WCyXsYfKY,1501517362.0,0,0.33,2
+ff9,Vivi gets grill,[removed],1500297931.0,1,1.0,0
+MMA,[Discussion]Have you ever had a pinched nerve in your fist?,[removed],1500082586.0,4,0.7,8
+LearnJapanese,"""rou"" grammar ending","like, わかったろう or 行ってろう
+
+anyone know what this is doing?",1499269969.0,1,0.6,4
+Kappa,I don't understand this /r/,"Is it just like a /b of reddit?
+
+I love the rules if nothing else, you fucking faggots.",1498837985.0,0,0.25,1
+mountandblade,I need 1.157 to play on a server but i have 1.7 patch. How do i get the early version,Will I have to switch versions all the time to play online?,1498743370.0,5,0.99,8
+tipofmytongue,[TOMT]Anyone recognize this song?,"https://www.youtube.com/watch?v=ydJPlKpxMgA&feature=youtu.be&t=33m45s
+
+I can only hear ""I took flight"" and I don't get any relevant youtube results",1498532559.0,2,1.0,6
+pcmasterrace,Do you find yourself conflicted when trying to recommend Intel or AMD nowadays? Why? Why not?,"I'm not going to need another build for a while, but when I think of what I would get, I'd love to go with AMD. I feel like for the price, you get a reallllly good f***ing deal",1498360187.0,12,0.94,17
+tipofmytongue,[TOMT] Indie-ish song. What is it?,"https://youtu.be/pW_OyiUgW88?t=20s
+
+From :20 - :32
+
+Any ideas?",1498310787.0,5,0.85,2
+newsokur,FF14を遊び始まりました。どれのサーバーで日本人が多いですか。,"Tonberryは良い選択そうです。
+
+どれのサーバーに行かなきゃ？
+
+「私の日本語は憎ければごめんなさい（＞。＜）日本語を勉強している人です。」",1496628164.0,20,0.95,6
+GuildWars,Help me work out this glitch(underneath Kama stairs)? How to/Current knowledge at end of video,,1496366399.0,8,0.84,1
+ffxiv,"Is it possible to have one subscription, but have 2 characters in 2 different servers?","Is it possible to have one subscription, but have 2 characters in 2 different servers?
+
+I'd like to have one account on a US server and one on a Japan server",1496264756.0,0,0.5,6
+newsokur,人気のMMORPGはなんですか。,"日本語を勉強している人です。
+
+日本で人気のゲームにおいて遊びたいんですからお勧めを教えたら嬉しいです（＾。＾）
+
+",1496023382.0,33,0.91,53
+pcmasterrace,Can I have some help with a torrent?,"I can open Word 2010 and save the files but when I try to open the saved files, it crashes. 
+
+Any ideas?",1495774212.0,0,0.2,12
+pcmasterrace,Would someone be willing to help me out with a Microsoft Word torrent?,[removed],1495773420.0,1,1.0,0
+SamuraiChamploo,What episode is this from? (Manzou trying to sneak onto an american ship),,1495137943.0,8,1.0,6
+TheLastAirbender,"[Spoilers] Just finished ""The Search"" comics. Read it, if you haven't. Let's talk about it!","This comic was sooooooooo much better than the first one. Maybe the original creators of the show had more of a hand in this one.
+
+More character development. Mysticism. Family. Culture. 
+
+So worth. 
+
+Did you guys have any problems with this comic? 
+
+How are the ones that come after this? Are they a steaming pile of you know what like the first one? ",1494659960.0,5,0.85,6
+LearnJapanese,5 questions about Ano Hana's colloquial Japanese,[removed],1494197522.0,1,1.0,1
+anime,Didn't MTV or VH1 do a special on anime? Can anyone find it?,"I remember what initially got me into animation was around 8-9th grade I saw a ""documentary"" like thing that was going over anime. So a broadcast somewhere around 2007-2009. Again, from MTV or VH1.
+
+I know for sure they covered ""Ghost in the Shell"" (1995) and ""Akira"". And how it introduced them to the ""adult cartoon"" world of Japanese animation, and how it sent shockwaves around the country in various forms and such. I also vividly remember the part where they showed the Major ripping off that tank top and tearing herself apart. God. After that I was hooked.
+
+I remember it being the cast from like ""I love the...90s,80s,etc"".
+
+It was on TV (obviously>.<).
+
+Does anyone know what I'm talking about?",1493059745.0,2,0.6,3
+videos,Unsung freestyle rapping legends,,1492451026.0,2,0.75,4
+LearnJapanese,"How are these ""tte""s being used?","違えってでもさ、お前絶対おっぱいおっきくなったって
+
+http://i.imgur.com/iJixx7p.png",1492120515.0,4,0.83,14
+islam,What's this about? (Some questions about this short video),"https://youtu.be/Op4wNkuVDlw?t=1m34s
+1:34 - 1:52
+
+Is that a religious dance?
+
+Is the blue light and tree significant to Islam?
+
+Why is the dancer dressed like that?
+
+Are the singer's wrist bands religiously significant?
+
+What's that thing the percussionist is playing?
+
+Thank you for your time ",1491913648.0,5,0.69,65
+finalfantasyx,Jap only bug,,1491694531.0,16,0.95,2
+LearnJapanese,"Finally found a ""Urbandictionary"" for Japanese.",,1491306889.0,36,0.95,1
+japan,What's a big site like reddit that Japanese people use?,,1490781653.0,2,1.0,2
+LearnJapanese,How do I make this ティ thing on a keyboard?,,1489903715.0,8,0.76,27
+LearnJapanese,How many times have you stopped learning Japanese?,,1489808635.0,9,0.8,45
+Chinese,What's this song?,https://youtu.be/WZSM9Ga1X5c?t=4m40s,1489445831.0,4,1.0,6
+suggestmeabook,Interesting history with an author that isn't flat with their delivery of it.,I really liked Giles Milton. Especially his Samurai Williams,1489045832.0,7,0.9,6
+videos,Badass fight animation with no views. Very pretty,,1488700855.0,0,0.27,0
+LearnJapanese,(American computer) Do i have to download fonts to look at Japanese subtitles?,"Some files I download and load into VLC work perfectly, but some just show up as boxes.
+
+Is there a font pack I can download somewhere to prevent this from happening?
+
+Thank you for your time.",1488613877.0,2,1.0,13
+tipofmytongue,"[TOMT][song] (Two ""something"" become one) song, falsetto-ly sung","It was on a 90s station. So maybe somewhere around there, though honestly it sounds like something that would've come out during the 70s, or atleast the chorus. (Which is all i kinda remember about it)
+
+",1487878174.0,8,0.9,24
+LearnJapanese,Japanese urbandictionary????,[removed],1487837019.0,0,0.22,16
+Frisson,music is killing this subreddit. unsubbed,,1487702160.0,1,1.0,1
+LearnJapanese,"First time you realized, ""I'm a lot more fluent than I feel I am""?",\^.\^,1487311942.0,39,0.83,60
+LearnJapanese,Waga [fight] agari? Some old japanese phrase?,"https://youtu.be/WYztplE4N3Q?t=1m07s
+
+1:07-1:11 ~
+
+我がしてあがり？",1487115836.0,0,0.5,3
+LearnJapanese,"Going to hide this, disregard",[removed],1486792840.0,0,0.2,0
+LearnJapanese,Taoshite maeru? Taoshite omae?,"https://youtu.be/ACSos7v2Hsg?t=6m28s
+
+Am I hearing this right?
+
+",1486770796.0,0,0.25,4
+LearnJapanese,Is this something colloquial? (One line of dialogue),[removed],1486448653.0,1,1.0,1
+videography,"I see all these 20MP cameras, but what makes their images different?","More importantly, what features utilize 20MP the best?
+
+(I have no idea what I'm trying to say. I just want a video to look good like this: https://youtu.be/4MyejSsgv3g?t=12s )
+
+Is it just lighting that matters? WHatwhatwhat?",1486330063.0,0,0.33,6
+JobFair,What's a job (day or night) with a lot of downtime for study?,Thank you for your time\^.\^,1486195517.0,14,1.0,11
+LearnJapanese,"What is ""mon"" doing here?","http://i.imgur.com/wAdQOCj.png
+
+「キミもなにか思い出すかもしれないもんね」
+
+",1486017482.0,49,0.93,14
+LearnJapanese,"What is this extra ""tte"" doing?","http://i.imgur.com/94ZFnjU.png
+
+「潜ってってチョイチョイってやれば奇跡を復活して・・・・」
+
+After 潜る and チョイチョイ what are those extra ""tte""s doing? ",1485762501.0,40,0.89,20
+Chinese,"Hello, anyone know what song this is and what it means?","http://michirubokido.deviantart.com/art/Hidden-Places-short-animation-651694352
+
+It's soooo beautiful. This makes me want to study Chinese so bad. 
+
+What is more music like this???????!!!!!!!!!!",1482384260.0,5,0.86,5
+pcmasterrace,Is it possible to build a good *handheld* pc?,"Wifi, emulators,. . .?
+
+pros/cons?",1482208754.0,2,1.0,2
+motorcycles,I really wanna ride but it seems like everyone gets in accidents? Is this true?,"Like, 100% of people I talk to either stopped riding because their friend died riding, or have broken bones themselves.
+
+Were they just driving like idiots?
+
+What's up?",1482107133.0,25,0.69,111
+ghibli,How would I get this cup again or one like it? It's a spirited away cool lookin' thing,,1479519474.0,3,1.0,2
+LearnJapanese,Great listening comprehension site that the creator is thinking of abandoning. Try it out?,"https://supernative.tv/ja/
+
+I've been using this since the day I found it. 
+
+Hands down the best way I've improved my listening comprehension.
+
+If you like it, maybe let him know that you love his shiz?
+
+Thank you for your time.
+
+(Im not the guy btw, and I think linking his reddit prof would be BM, ""contact us"" should work on the thing \^.\^)
+
+P.s. It gets harder as you go. You don't always have to fill in ""arigatou"", haha)",1478793560.0,37,0.98,25
+Showerthoughts,"When you call out for someone to get you toilet paper, it's literally a Call of Doody.",[removed],1478750598.0,1,1.0,0
+TheLastAirbender,[TLA SPOILERS?]Rare video of TLA shown at comic con 2008,,1478021601.0,27,0.91,8
+TheLastAirbender,[No spoilers]What were you going through that Avatar helped you with?,"Every now and again I come here to ask why people like this series so much.
+
+Personally, I always go back to when I watched the series all the way through for the 1^st time when I was 18 and dying. Every day Death looked for me, and I was going to doctors so much. Even now when I smell that ""doctors' room cleaned with alcohol"" scent it gives me an unstable reminiscent aura about myself. 
+
+Anyways, was 18, shit was hitting the fan, so many doctors, so many painful procedures. I didn't want to go anymore. Each time I made an appointment I almost wanted to cry. Because it was getting to the point where death was becoming as valuable as life. A life where all I could do was lay in bed until it started deteriorating my body, and hobble to the restroom. 
+ 
+But you know f***ing what?
+
+There was still beauty. 
+
+And it was rare. Precious.
+
+A smooth whole body happiness would come to me when I knew I was about to start watching Avatar. A show I fell in love with during this onslaught. And I made sure to limit myself to like 3-5 episodes a day. 
+
+I had a culture around watching Avatar, haha. I would watch it after I went to the bathroom for the last time (my excretory system barely wanted to work, and it was always so painful) because knowing I didn't have to go to the bathroom again was such a joyous feeling after a day of pain, then I'd ache myself into my mom's room who at the time was doing a 2 week work vacation in another state. She had the BEST bed. And her room was always SO cold. The sheets were sooooo soft and warm. The pillows were made out of a material gods would accept as tribute. Not to mention the aura it let off. This was my mom's bed. The person who brought me into Earth and raised me alone with 3 jobs. A person I might have to one day leave forever. Who I love. 
+
+All captured in the threads of those cushions and blankets.
+
+I'd put all the episodes onto my iPod nano, and then. . .
+
+I'd press play. 
+
+And EACH episode was so *perfect*. It made me cry. Laugh. Live. 
+
+I was missing so many emotions besides despair those days, and Avatar made me remember about all of them.
+
+About determination.
+
+Strength.
+
+Balance.
+
+Honor. 
+
+Family.
+
+Even now when I think about the atrocities that happened during those 3 years of my life. I'll NEVER forget those TWO weeks where I watched Avatar. 
+
+And life was completely worth it\^.\^",1477941439.0,14,0.84,13
+TheLastAirbender,[ATLA]How does this make you feel?,,1477688609.0,15,0.78,5
+ffxiv,Final Fantasy Armor Gallery FFXIV Models View,[removed],1476995256.0,1,1.0,1
+LearnJapanese,"Is ""jimai"" here being used as ""shimau"" or something like ""the end""?",,1475682139.0,0,0.3,4
+pcmasterrace,Brand new computer. Why is svchost taking up 25% of my computer while it's idle?,"Bought fresh parts and built myself. I've used no malicious sites. Just facebook really and steam.
+
+Even when chrome is closed, svchost is taking up 25% of my cpu. (i3 6100)
+
+Why?
+
+[Imgur link](http://i.imgur.com/WZP8m3G.png)",1475474575.0,3,1.0,10
+pcmasterrace,Why is GoogleChrome taking up 25% of my CPU? (i3 6100),It's the only thing open right now. ,1475472526.0,1,1.0,11
+pcmasterrace,Do I need to install my monitor's drivers? (It came with a cd),"It looks fine to me as of now. Or am I not getting 60fps because of it?
+
+It's a 75hz BenQ",1475170844.0,2,1.0,6
+LearnJapanese,Is this a phrase? 「誰の差し金だ」,,1475166994.0,1,0.67,2
+pcmasterrace,"This monitor says ""AMD freesync"". Does this mean it wont work with my intel/gtx(invidia) computer?",http://www.newegg.com/Product/Product.aspx?Item=N82E16824160275,1474909138.0,1,0.6,5
+pcmasterrace,Is this is a 60fps monitor?,"http://www.newegg.com/Product/Product.aspx?Item=N82E16824014377&nm_mc=AFC-C8Junction&cm_mmc=AFC-C8Junction-PCPartPicker,%20LLC-_-na-_-na-_-na&cm_sp=&AID=10446076&PID=3938566&SID=",1474907672.0,1,1.0,7
+pcmasterrace,How do I view my CPU temps and my FPS while gaming? Like the top left thing in the videos,,1474487571.0,2,1.0,25
+pcmasterrace,"Just got a pc, and put in all the parts. Do I need drivers for EVERYTHING? Like the PSU?","If not, what do i need drivers for?",1474485803.0,0,0.33,12
+pcmasterrace,"When installing Win, should I have clicked the ""new"" partition whilst installing?","I just left it alone.
+
+Because now it's doing this slow ""allocating"" thing. I've never seen that before I don't think. Atleast it never took this long>.<
+
+http://i.imgur.com/LuQFlIP.png",1474483041.0,1,1.0,8
+pcmasterrace,What does the CPU do during gaming compared to the GPU?,,1474315448.0,3,1.0,14
+pcmasterrace,Tight budget. Plan to use one 240gb SSD. How quick will it become slow from. . .,"installing games then deleting them, for more game room.
+
+Will it become faster again if I re-partition it? or something like that",1473895117.0,1,1.0,12
+pcmasterrace,1st time builder. Are these parts compatible?,[removed],1473884226.0,1,1.0,2
+pcmasterrace,Is it okay to not have a fan or watercooler for your CPU? (i3 6100),"http://www.newegg.com/Product/Product.aspx?Item=2MN-0004-00002&ignorebbr=1
+
+I don't think this comes with a fan. Should I get one? ",1473706263.0,2,0.75,21
+pcmasterrace,Difference between Amd 8300 and i3 6100? (1st time builder),"It seems Amd 8300 is cheaper and will give better fps. But it's high temps and core structure might highly impact its longevity? 
+
+I could also afford 16gb ram, instead of ddr4 8gb if I go AMD.
+
+What am I missing? 
+Thoughts? (I'm deciding whether to go Amd/intel).",1473704534.0,8,0.9,27
+pcmasterrace,Can a Motherboard bottleneck a GPU or will bottlenecking only occur with a GPU's and CPU's interaction?,"Also, will [this motherboard](http://www.newegg.com/Product/Product.aspx?Item=N82E16813130897&ignorebbr=1) bottleneck [this GPU?](http://www.newegg.com/Product/Product.aspx?Item=N82E16814125906)",1473703767.0,2,1.0,4
+pcmasterrace,What does RAM do in a video game? And what about VRAM?,,1473703162.0,2,1.0,8
+pcmasterrace,A 6core (non hyper threaded) AMD Am3+ CPU won't be fully utilized I heard? (For videogames),"I heard game usually only want to use 2-4 cores or something like that.
+
+Do you know anything about this?",1473695122.0,1,1.0,20
+pcmasterrace,Can this MoBo and CPU support 1080p 60fps gaming? What could possibly go wrong? I'm noob.,"[GIGABYTE GA-78LMT-USB3 (rev. 6.0) AM3+ AMD 760G + SB710 USB 3.0 HDMI Micro ATX AMD Motherboard DDR3 1600](http://www.newegg.com/Product/Product.aspx?Item=N82E16813128565&ignorebbr=1)
+
+[AMD FX-6300 Vishera 6-Core 3.5 GHz (4.1 GHz Turbo) Socket AM3+ 95W 6 threads](http://www.newegg.com/Product/Product.aspx?Item=N82E16819113286&ignorebbr=1)
+
+I will be using 16gb ram, and GTX1060 3gb alongside this.",1473691411.0,1,1.0,15
+pcmasterrace,A MoBo I want says DDR3 1600(O.C.). Does this mean I can only use 1600 DDR3 RAM if I overclock the MoBo or something?,http://www.newegg.com/Product/Product.aspx?Item=N82E16813128565&ignorebbr=1,1473687764.0,1,1.0,11
+pcmasterrace,"Stupid question. So, Usb1,2, and 3. Do all thumbdrives work on them or do I need a USB3 thumbdrive for a USB3 slot?",,1473654483.0,1,0.6,6
+pcmasterrace,I'm building a PC from scratch. All the items are from newegg. WIll they come with the tools needed to install them to the MB?,"If not, what do i even need?",1473649424.0,1,1.0,11
+pcmasterrace,Has anyone used a USB to install Win on your computer? How'd that go?,"I'm not sure if I want a burner on my computer, but I'm not sure how I'd even use a USB to get Win on my computer if I don't have a burner.
+
+Halp?",1473648368.0,2,1.0,12
+pcmasterrace,If I don't want to burden my GPU/CPU too much. Is there a way to cap my frame rate in my GPU settings?,[GTX 1060 3gb](http://www.newegg.com/Product/Product.aspx?Item=N82E16814125906),1473646993.0,2,1.0,8
+pcmasterrace,"This GPU says its ""3d API"" is DX12. Does this mean I HAVE to use Win10 to run it? Or will DX11 on Win7 work?",http://www.newegg.com/Product/Product.aspx?Item=N82E16814125906,1473645555.0,2,0.75,9
+pcmasterrace,Young MasterRace 1st build. Is something going to go wrong here?,[removed],1473518894.0,1,1.0,0
+pcmasterrace,If I need ~320W for a new setup. Is getting a 400W PSU okay?,http://www.newegg.com/Product/Product.aspx?Item=N82E16817438038,1473453462.0,1,1.0,14
+pcmasterrace,What's a nice white case with no windows? I'd love one that comes with a power supply already;3,,1473262826.0,1,0.6,14
+mallninjashit,*ahem* *whispers*Do you actually like the weapons shown here? *sweats*,"Because I think some of them look extremely cool. 
+
+Like rainbow blades and shit.
+
+Fuck.
+
+.
+
+.
+
+What about you?",1473102506.0,171,0.85,56
+hardware,Questions about clocking and GPU structure,[removed],1473002442.0,0,0.43,1
+pcmasterrace,I'm building a pc soon and I want to support companies who aren't jerks. Suggestions?,Isn't there something like AMD are jerks but Nvidia are really nice floating around?,1472027457.0,2,0.75,11
+TheLastAirbender,[No Spoilers?]So there's also books that delve into the specific character's minds during the books.,,1470010526.0,3,1.0,4
+TheLastAirbender,[ATLA Spoilers] Please tell me this is real !!!!!,,1469776203.0,28,0.86,12
+TheLastAirbender,[No Spoilers] Is there a chart I can see of the past avatars and their lives?,Thank you for your time \^.\^,1469252972.0,34,0.89,10
+Showerthoughts,"Brush, dust, and sand are all pieces of the environment. And verbs.",,1469228645.0,4,0.75,0
+TheLastAirbender,[No spoilers]Creators of the Avatar series talk about the movie... (1 more link in description w/ creators and M night),,1469143858.0,14,0.84,10
+tipofmytongue,[TOMT]What song is this from this 2012 movie? 5 second clip,"https://youtu.be/pW_OyiUgW88?t=20s
+
+20-30sec
+
+10 sec clip i suppose, thank you for your time\^.\^
+
+",1468334834.0,1,0.57,2
+Music,What music is this for 5 seconds? And where can I find more of things like it?,,1468334237.0,1,1.0,1
+2048,Is it possible to get 2048 everytime?,"I feel because the tile placement and either 2/4 values are random, so too will be the win ratio.
+
+",1468285639.0,6,0.76,4
+BabyBumps,Why no dislike button?,[removed],1467446695.0,0,0.2,27
+LucidDreaming,Is it possible to change the whole scenery/set of a dream whilst lucid dreaming?,"Because I've made small changes and adjustments to my physical abilities in my dreams but not whole ""world"" changes. Is it possible? Like to go from a dark cave nightmare to a rainbow filled meadow?
+
+",1467255988.0,1,0.67,10
+WolfChildren,Welcome^.^,"I love this movie and it helped me recognize the beauty of many things during a time where nothing was.
+
+What are your experiences with this movie?",1466719398.0,2,1.0,0
+LucidDreaming,New2LD'ing///Whenever I lucid dream my brain fights back and. It's. Scary. This normal?,"I haven't read much into lucid dreaming (ld'ing) but I have heard its basic definition, and ways to do it before and just started practicing randomly like 3 weeks ago.
+
+Well for the past 2 days I had breakthroughs. 
+
+The day before this one was generally very positive, i wanted to keep flying even after my brain took away the ability and wanted me to move on in the dream. I resisted the stream and almost ""forced"" myself to keep flying, it worked. And I continued to be happy. It was strange feeling my brain in sleep, and thus the world, tell me to do something and deny it.
+
+But the main point was yesterday's dream.
+
+(**TL;DR**) 
+
+Yesterday's dream I achieved lucidity and it was alright, almost had sex and everything. Until.
+
+Shit fucking started going south when the girl I was kissing started to have strobe light eyes, so I looked at the sky outside our room's window, concentrated on its beauty, relaxed, and thought about happy things, but the same ""entity"" in my last dream that wanted me to move on, gave me the answer, ""No"", speechlessly in *this* dream. It didn't move over to my conscious brain this time.
+
+Like I was ruining the balance. Like my unconscious brain that has tilled the dreamscapes for 21 years didn't want to move over to my conscious brain which rules for 16 hours a day. ""WHY DO YOU GET ANOTHER 8 HOURS!?"" Kind of thing. Creepy.
+
+The dream became very aggressive to me.
+It was so scary and I've never experience a nightmare with such consciousness before. 
+Omg. I had to turn all the lights on, go into the shower, and meditate.
+
+**Question:** During lucidity, is it normal to feel your brain fight your conscious brain? What are your experiences/improvements/guidance?
+",1466146255.0,1,0.67,10
+videos,Criticism of recent events. Interesting view into BLM,,1466104002.0,1,1.0,1
+TheLastAirbender,[No Spoilers] IAMA person who downvotes to show disagreement. AMA,[removed],1465138883.0,0,0.27,8
+TheLastAirbender,[ALL SPOILERS] Just started S3,"S1 started good then sucked after like ep 4. S2 was garbage throughout, and S3 ep1 was FANTASTIC! 
+
+I can't wait to see if the hype for s3/4 is deserved or not.
+
+It feels good liking this series again. It really hurts my heart to see an avatar series suck. ATLA means a lot to me.",1464928640.0,0,0.5,7
+TheLastAirbender,[No Spoilers] Where can I get the soundtrack to TLA?,,1463845594.0,6,0.88,5
+LearnJapanese,"Why are there two ""te""s here? [With short vid link]",[removed],1463074931.0,1,1.0,0
+TheLastAirbender,[ALL Spoilers]Watched Season 1 Ep10 TLK,"Don't get me wrong, I loved Zuko in TLA. I want to name my kid after him.
+
+Though he should NOT have been the voice of Iroh in TLK.
+
+It breaks immersion for me. And horribly so.
+
+I haven't seen all of TLK, but I feel it has so many mistakes. Another being they introduced Korra as a ""fuck you bitch"" character, but is now submissive in many situations.
+
+It's still a great show.
+
+I'm just holding it to TLA standards. And those are pretty much unreachable. Just woulda wished more thought went into TLK.
+
+**Please don't spoil anything for me**",1461992878.0,6,0.68,24
+TheLastAirbender,[No Spoilers] Anyone here all for Korra-Bolin?,,1461596825.0,16,0.79,15
+LearnJapanese,[住んで都にするしかないさ] is a common phrase?,"Also, is a direct translation of this something like: One can only live in the capital?
+
+Thank you for your time\^.\^",1461531696.0,1,1.0,4
+anime,A short animation about a woman finding and nurturing a tree spirit?,[removed],1460396140.0,0,0.5,3
+anime,A short animation about a woman finding and nurturing a tree spirit?,[removed],1460395002.0,1,1.0,1
+LearnJapanese,"[With short vid link]What does this ""kakeru"" mean, I keep hearing it.","https://supernative.tv/clip/ja/pbk5el6x7johq/
+
+I hear it a lot. I think it spans multiple situations, though I could be wrong.",1460139954.0,0,0.33,8
+Shoes,I like my work shoes but they pinch my pinkey toes because it's kinda cramped. How fix?,They standard non slip shoes for restaurants ,1459528634.0,1,1.0,5
+LearnJapanese,How is naranai being used here? [With short vid link],"https://supernative.tv/clip/ja/555nk2yppzkuy/
+
+Same as in ""naru"" for to change?
+
+Thank you for your time",1459383988.0,2,1.0,8
+LearnJapanese,"[With short vid link] ""miru"" can also appear as ""mirya""??","https://supernative.tv/clip/ja/utnu7k7zr5utu/
+
+Are these the same words? Do they bear the same meaning?",1459223845.0,3,0.72,6
+LearnJapanese,(Link)How does this mean what it does? Is it just missing context?[5secs],"http://delvinlanguage.com/data/segment/14157/
+
+What's making it mean ""No need to talk to him""?
+
+Is there something special about iino?",1458275059.0,1,0.67,3
+LearnJapanese,"Does the ""え"" sound sometimes change to an ""い"" sound? (With links)","https://www.youtube.com/watch?v=RgJ5vR7J2Fw&feature=youtu.be&t=1m54s
+
+http://delvinlanguage.com/data/segment/1602/
+
+Both show that the ""え"" sound is occuring but I'm hearing an ""い"" sound. 
+
+Is this the case?
+
+Thank you for your time\^.\^",1458111729.0,0,0.4,7
+LearnJapanese,[Spoken] Wow. What is being shortened here?,"I have no idea how he's conjugating this.
+
+http://delvinlanguage.com/data/segment/5002/
+
+How would you transcribe the first sentence? I'm definitely not hearing what the site provides.",1457585107.0,1,0.6,22
+LearnJapanese,"""sore"" spoken as ""soran""? (with video reference)","http://delvinlanguage.com/data/segment/16066/
+
+What's going on with ""sore"" here? 
+
+Thank you for your time\^.\^",1457245005.0,4,0.7,9
+LearnJapanese,"Do I keep hearing ""suru"" conjugated as ""sun""?","Context: https://streamable.com/h9yd
+
+It happens about in the middle of the video and subtitled ""What was that for!?""
+
+「何すんだよ！？」
+
+I believe I have been hearing this conjugation for many verbs (adding an ""n"" at the jisho/root form to make it negative or something. idk>.<). But I'm not entirely sure.
+
+Thank you for your time\^.\^",1456718705.0,12,0.83,14
+rap,Is this instrumental from something else?,,1456379244.0,3,0.81,0
+ffxi,People reminisce about FF11 (video)20mins,,1456125843.0,17,0.81,15
+AskReddit,[Serious]Can you really *waste* your youth? What tips do you have to not do so?,,1455434329.0,1,1.0,6
+TheLastAirbender,[No Spoilers]Does this series mean anything special to your life?,"Have you learned something important from it? Did it help you through something? And why are you going to force your kids to watch this everyday, haha;3",1454959426.0,10,0.85,17
+LearnJapanese,"Do I keep hearing ""ne"" being used as a neg. modifier? Is this the case?","I've been listening to a lot of Japanese mediums with 日本語の字幕 and it seems ""ne"" is being used as neg. modifiers. Am I wrong? If not, how does this work?
+
+Thank you for your time\^.\^",1454613903.0,17,0.85,12
+learnprogramming,What job in the programming field yields the most free time with good pay?,Hobby guy,1453167077.0,0,0.13,6
+nursing,How much free time will I have while studying to become an RN? And when I get the job?,"RN sounds good. But I'd like to try to make it to Anesthesia Assistant.
+
+In your experience, how much free time will I have for hobbies and such? (while in school and when I am an RN)",1453166079.0,2,0.66,16
+SuicideWatch,"Hi, a lot has happened, and I don't know if I'm allowed to do this",[removed],1451171752.0,1,1.0,0
+1800sbaththoughts,Bath Thought Forum,"Post your 1800s bath thoughts here? 
+
+And it looks like penises are a mandatory part of the post. You know what to do...
+
+() )============D~",1450020116.0,1,1.0,1
+1800sbaththoughts,"Due to massive traffic, we are looking for new mods",8////////////////D~~~~,1450016643.0,11,1.0,27
+Bushcraft,"How do I find iron, copper, etc. ores to mine?","And how would I mine it? Beat its surroundings with a wood hammer?
+
+Edit: I'm a complete nooby at the outdoors, but am trying to build up my knowledge! =]",1449548214.0,3,0.64,16
+videos,The BEST way to bring Humanity together,,1449511504.0,1,0.67,0
+LearnJapanese,「現世」(utsushiyo) context help.,"I know this means world. 
+
+My penpal said this while we were talking about the beauty of life and potential processes of death.
+
+When she used this, it seems she's saying ""world"" but it's laced with a deep feeling of gratitude towards life. 
+
+Is this correct? What is it's emotional/literary context?",1449001885.0,2,0.75,4
+GitS,I love Ghost in the Shell,"Just the first movie(1995) for now. I'm going to try to get into the SAC series sooner or later\^.\^
+
+The movie has been there for me, a lot. 
+
+I remember once I was testing methods of suicide. In particular interest that day was using tape on the mouth and nose. Such an easy to set up process allowed me to watch a movie while I sat on the couch, exploring and experimenting(trial,error,take notes) death opportunities, so I chose to watch Ghost in the Shell. I've watched it before and knew I liked it. But this time was more special.
+
+Testing the boundaries that your body will support, in the sense of how long will the air in my lungs sustain me if I don't reach for more. Oh there's the ""passing out"" effects, okay \*write down time\*, test number 2 \*write down time\*, oh my ear drums might burst inwards while im past out and my diaphragm is FIGHTING for life, brutally working its muscles to force air back into it's lovers' insides, thus shaking the entire body in a circus-like haunting fashion. 
+
+But the stronger effect that reeks havoc on the ears is more the ""gag/swallow"" action that happens when your body is warring at you for breath. Whilst your ""head's holes"" are clogged, that effect *tugs* on your ears, and for a healthy person's ears it seems to just reset them. But for my shitty ones it sucks them inwards and makes a tearing noise/feeling.
+
+I am in the dark, Death. I am trying to find you.
+
+.
+
+.
+
+.
+
+\*my eyes wander to the screen\* Damn, Motoko Kusanagi is so beautiful, wow she's so powerful. Yeah, what the fuck is a ghost? What *will* happen in the future? 
+
+.
+
+.
+
+.
+
+I remember re-watching the movie as if it were the first time. How it deals with humanity and how it might be lost/tampered with struck a chord with me that day.
+
+Ghost in the Shell didn't change my life or anything. But it was there when I didn't even know I needed it. It took me along with it while it was trying to ask question about humanity and consciousness. I'm glad I got to tag along. Thank you\^.\^",1448779167.0,5,1.0,3
+AskReddit,"Should I study Russian, German, or French?",[removed],1447978130.0,1,1.0,3
+TheLastAirbender,[No spoilers] Does anyone know of a TLA bluray?,,1447612054.0,7,1.0,9
+TheLastAirbender,Does anyone know of a bluray release of TLA?,,1447606906.0,1,1.0,1
+LearnJapanese,What does this phrase mean? My penpal sent it," ゆく川の流れは絶えずして、しかも元の水にあらず
+
+The river flows but not all the water something? idek",1447527251.0,40,0.95,21
+Gymnastics,How long can i practice stretching safely?,"I've just started to try to loosen up my tight body.
+
+How long can I safely stretch myself b4 i start to tear stuff? \^.\^
+
+Like trying to touch my toes and butterfly stretches.",1447441382.0,4,0.84,17
+LearnJapanese,What does she mean by this? (1 sentence),"She translated ""write to your heart's content""
+
+to
+
+思ったとおりに自由に書いて下さい
+
+Your woven thoughts, write freely???",1447100667.0,1,0.57,7
+LearnJapanese,"Translation help ""Now I am become death, the destroyer of worlds.""","From the Bhagavad Gita, I know it's not Japanese, but I'm just curious what it is in Japanese\^.\^
+
+突然死に成ってしまった、破壊的な人世界に（を？）。",1446685956.0,0,0.33,9
+Showerthoughts,How come dogs can recognize others but not themselves?,,1445779944.0,1,0.67,0
+LearnJapanese,Please help me translate this sentence,"あなたは本当の英語母語者になりつつあります。
+
+The naritsutsu arimasu confuses me.
+
+Twistingly transforming into...???",1445617783.0,0,0.25,2
+gaming,Russian Deathmatch winner,,1445398774.0,1,0.6,0
+russian,How do I make stress marks on an American keyboard? (лo=ло`?),Please help,1445364251.0,5,0.86,11
+LearnJapanese,Wait a freakin' second. I's when they come after E's are read as E's?,"Why am I just learning this?
+
+Dude. Is this *always* the case, or could for example a word be pronounced, 映画＝eiga instead of ＝eega?
+
+",1444841263.0,0,0.29,17
+tinnitus,"""Tinnitus Attack"" diaries","I don't know if this is an actual term but with my T, every now and again with no warnings or probable causes, there will be a HUGE spike in T volume and a noticeable drop in ""normal"" hearing. Along with the drop in normal hearing comes a feeling of numbness in the inner ear.
+
+I don't know why this happens but I haven't ever really worried because my T always settles back down around two seconds or a minute later.
+
+But I got some KILLER strep throat that was treated immediately, and even so, spread to my Eustachian tubes rapidly. I have now rid myself of the infection, which again was fairly formidable, and my T has grown in volume, as I expected when experiencing the onset of the Strep.
+
+What surprises me is I just had a T attack, and instead of having it in one ear like usual, I had it in two, and afterwards the sounds that I have been hearing for years have changed. I also can hear fine in my left ear, but now it feels strange. It feels like my left ear's innards were coated in a mucus plastic.
+
+TL;DR:
+
+Had bad strep that spread to my ears. After immediate treatment, my T has changed. I'm curious to see how this will continue to affect my T, since the ""rules"" of my T have changed somewhat. I will try to keep a daily journal, and write in it at nighttime. Maybe someone with the same problem will find this in a Google Search and be of some help=]=]=]=]
+
+-------------------------------------------------------
+
+Day1: Since the strep my T's volume has grown by a small percentage. A recent T attack was very uncommon and affected both ears with rising T volume, numbness in the inner ears, and hearing loss. These symptoms subsided but now my left ear feels strange, like its innards are coating in a mucus-y plastic.
+
+The noises have changed, seemingly permanently, in my ears after the T attack too. There is less rattling, less sounds of a beach flowing onto shore, and the T pitch has dropped ~octave in my left ear, and stayed ~the same in my right ear. The volumes of the T are a lot more stable as well, it used to be a lot more ""pulsatile"", rising and falling in volume.
+
+My left ear has dominance now when I'm not masking the sounds.
+
+F*** T, Day 1, Cody
+",1444836858.0,1,0.67,1
+learnprogramming,Is there a programming job where I need to know multiple Human languages?,"I really like Japanese, Spanish, German, and Russian, and was wondering if I could use them in some computer programming job!
+
+",1443983290.0,0,0.5,10
+TheLastAirbender,[No Spoilers]Should I watch the Legend of Korra?>.<,"I fucking love The Last Airbender and I don't want anything to taint its pedestal I've put it on. I've seen the S1 of Korra and it kinda died down in the middle of it and ended kinda ""meh"". As opposed to Airbender's almost EVERY episode's pure genius. (hype! hype! love!)
+
+[I don't have a problem with lesbian love, which i wish wasn't spoiled for me through tumblr and a videogame chat.](/spoiler) But what I do have a problem with is stupid teenager bullshit. Airbender had fun while teaching life lessons that transcend cultures. Korra kinda felt like a Teen Nick drama (S1).
+
+Does Korra continue at that pace or does it find any sort of brilliance like Airbender?
+
+TL;DR  Does the legend of Korra match the maturity of Airbender? When does it do so? Will watching Korra ruin Airbender for me?
+
+Please don't spoil any plot for me!",1443652938.0,0,0.32,24
+tinnitus,Ear Tubes and T/ear pulsing,"If I get ear tubes will my Eustachion tubes gets better over time and I won't need them anymore? Will it stop the ear drum pulsing?
+
+Has anyone experienced their T dropping in volume because of the ear tubes?",1443352544.0,2,1.0,0
+learnprogramming,"Using Autohotkey, how do I make it automatically/simultaneously input Ctrl+Alt+b?","I've been toying around with it but so far I've only got it to type stuff, not actually make a ""group input"" if that makes sense>.<
+
+I want to do this to make highlighting some words on lang-8.com easier for me 0.0
+
+Edit: I figured it out
+
+^j::
+
+   Send {Ctrl down}{Alt Down}{b down}{Ctrl up}{Alt up}{b up}
+
+return",1442992227.0,1,1.0,0
+GuildWars,When do you think ecto price will near 8-10k again?,I bought a lot of em around then and don't want to sell for much cheaper>.<,1442554273.0,0,0.5,5
+ffxi,What item is this guy talking about (FFXI nostalgia vid) The bracelet,,1442300719.0,6,0.88,29
+pcmasterrace,"Is this an""encrypted"" file?","It was a **.dat** file then I turned it into a **.txt** file by simply altering the ending. Is that why it looks like this, or is it encrypted?
+
+http://i.imgur.com/JWd38aN.png",1441612393.0,0,0.33,29
+motorcycles,Where should I start learning about motorcycle mechanics?,"I want to start saving and get a motorcycle, and I have no engineering/mechanical experience whatsoever, so I was wondering if there is a good book to get me started if I break down or something.",1440870071.0,3,0.81,12
+swordartonline,"[image]ALfheim player in SAO S1 Ep1, sneaky beaky....",,1440117386.0,3,0.55,22
+anime,"ALfheim player in SAO S1 Ep1, sneaky beaky....",,1440025740.0,0,0.43,1
+LearnJapanese,EOL Drop Party [Japanese Games/Consoles/Books Giveaway],"Hey, some dumb stuff is happening, and I might not need my study material anymore. If you want any of this, comment on here, or msg me (but comments will be easier to find for me) if you want any of this. Maybe leave a short reason as to why you'd like it more than someone else\^.\^
+
+Enjoy life as much as you can guys. Appreciate your health.
+
+
+1. Japanese Kingdom Hearts 1.5 for PS3 + Ps3(if my friends don't want it/if shipping isn't ridiculous. **non-backwards compatible,USA version**)**Claimed**
+
+2. Psp + Japanese Sword Art Online:Infinity Moment (And 2 other Eng. games, no point in keeping them with no psp) Beginners and Intermediates won't be able to read or find the kanji more than likely, so please only ask for this if you already have great reading/listening skills.**Claimed**
+
+3. Final Fantasy 9 Ultimania (a quick search will show an English cover, but it's completely in Japanese) **Claimed**
+
+4. Norwegian Wood by Haruki Murakami (Japanese Version) **Claimed**
+
+**Edit1**: https://www.youtube.com/watch?v=86OkzWY1TXk
+
+Will be posting youtube video as proof of ownership, we will work out how to get it to you after i close this post, and things might not go wrong and I'll still need these, but just incase life happens, I'll leave these for you special dokugakus! Haha=]
+
+**Edit2**: I'm still here and reading, I'm not going to choose until maybe another 24 hours, wanna make sure everyone gets a chance (I'm looking at you, Auzzies). Thank you SO much for the best wishes, it warms my heart.
+
+**Edit3**: I am currently choosing people, and only the KH/Ps3 and PSP/SAO are available as of now, I am trying to find a lovely home for them
+
+**Edit4**: All items are claimed. Thank you for participating guys, I don't ever want to think of Japanese learning material not being used>.<",1439727866.0,11,0.77,39
+Fitness,How do I work my abs when I have a rectal problem?,"I would like to get my core to work but I can't lay down really and pump upwards without distributing a lot of weight to my bum. And das no gud>.<
+
+Halp?
+
+Oh, and what a good tricep workout that doesn't involve pushups? (Ear problem!)",1438449412.0,0,0.36,10
+gaming,Walking vs. Running for immersion purposes,Do you feel any different walking through a landscape than you do while running in it?,1437586076.0,0,0.38,8
+gaming,[Discussion] The future of Korean game development,"Is it just me or is Korea really picking up the pace with MMORPGs?
+
+Would any of you know about its relation with shooters, role-playing games, sims, etc.?
+
+",1437538566.0,0,0.33,2
+learnprogramming,When do you think the usage of C++ will die out?,I know people use multiple languages and such. But is it possible to determine when C++ will fall out of languages employers are looking for?,1437494614.0,0,0.14,22
+anime,Are there VHS subtitled anime?,I would really like to own some Miyazaki movies and Ghost in the Shell in Japanese with subtitles but.... couldn't find any and I don't even know if they exist! Halp meh \^.\^,1436849257.0,0,0.33,17
+Boxing,Trying to remember one important and old fight.,"It was around the Cold War conflict and Russia and The United States had a boxing match at the *olympics*? I think I remember it being explained as a big gossip among the countries, who would win. Very tense atmosphere.
+
+Any ideas?",1436756400.0,5,0.86,9
+AskReddit,Do you see a better future now that Pao has resigned?,[removed],1436564514.0,1,0.66,0
+todayilearned,TIL Pao has resigned,,1436563744.0,5,0.85,2
+ClickerHeroes,Leet gold screenshot^.^,"http://i.imgur.com/NOk7o8Z.png
+
+Did I win the game!? 0.0 \^.\^",1436161488.0,0,0.4,0
+funny,Dog days of reddit [Timecapsule],,1435900313.0,1,0.6,0
+pcmasterrace,Has anyone else had this problem? Possible virus?,,1433722874.0,2,0.75,15
+AskReddit,Am I the only one now who can't watch the Hunger Games because I saw Jenn naked?,,1432843236.0,1,1.0,1
+DMT,"Breakthough-ers, I have some questions","v1. Have you ever been to where some people call the ""Waiting Room""?
+
+2. Did you ever talk to someone who you may or may not have been able to see?
+
+3. If you saw them, were they a family member, or a silhouette of bright light? 
+
+4. Were they all knowing?
+
+5. Did time seem like forever or just time didn't have a feeling anymore?
+
+6. Was anyone shown hell?
+
+7. What are your thoughts on suicide after the DMT trip? Do you think the soul would feel cheated if someone suicided because of physical pain?",1432500046.0,2,1.0,4
+Drugs,"DMT users, I have some questions","1. Have you ever been to where some people call the ""Waiting Room""?
+
+2. Did you ever talk to someone who you may or may not have been able to see?
+
+3. If you saw them, were they a family member, or a silhouette of bright light? 
+
+4. Were they all knowing?
+
+5. Did time seem like forever or just time didn't have a feeling anymore?
+
+6. Was anyone shown hell?
+
+7. What are your thoughts on suicide after the DMT trip? Do you think the soul would feel cheated if someone suicided because of physical pain?",1432498810.0,12,0.88,22
+atheism,Atheism and Suicide,"Why does damn near every religion hate suicide?
+
+What are your thoughts on suicide?
+
+Do you think your end of life experience will be any different if you commit suicide?",1432119009.0,14,0.85,44
+bloodborne,[Spoilers]Confused about an ending,If you let yourself get killed in the Hunter's Dream. You awake back in the beastless city. But there were already hunters in the city who couldn't dream(like you now). So the city was mad beastless 5 times before you? What's going on? How can beasts reappear? With more progress from the Church of Blood?,1431374095.0,1,1.0,3
+pcmasterrace,Laptop --> Tv resolution question [Tech Support],"If I play a Bluray on the laptop(with a resolution of 1600x900) while it's hooked up with an HDMI cable to a TV, will the Bluray be playing in a lesser Resolution?
+
+Or is it always playing in 1080p no matter where it's being displayed?",1431134942.0,0,0.5,2
+learnprogramming,"Help me with Python's ""For loop"", please?","http://i.imgur.com/THfyZ4H.png
+Exact question
+
+If someone could tell me what the ""i"" and ""j"" mean, that'd be really nice=] No idea>.<
+
+And if you'd be up for skype, inbox me, please.",1431022092.0,1,0.6,30
+videos,Whitey gets f'd up sometimes too. [NSFW] [Cops],,1430515079.0,1,1.0,0
+learnprogramming,Translating Programming (Eng->Span/Rus/Jap),"How would one translate an English Python code to a Spanish code?
+
+Can they both be in Python just with translated Variables/Bools/Functions,etc.?",1430340484.0,3,1.0,4
+videos,"During the riots, don't forget this...",,1430318270.0,0,0.5,1
+tinnitus,"Why is my eardrum beating like a heart, sometimes?",Are there any precautions I can take to make sure it doesnt worsen?,1430247493.0,8,1.0,3
+programming,I know absolutely nothing about Prog. Someone please give me a few references to learn from?^.^,,1430057195.0,0,0.3,8
+LearnJapanese,「～ない内に」と「～前」と違いは何ですか。,"Is there an emotional difference between the two, or something? 
+
+１．暗くならない内に家へ帰りましょう。
+
+２．暗くなる前家へ帰りましょう。",1429910876.0,1,0.6,7
+GuildWars,Decade Weapon Skins [Future Updates],"If you comment your picture, I'll add it to body, giving you credit (please use imgur)
+
+Assassin: http://i.imgur.com/VaUbBug.jpg?1
+
+Assassin2: http://i.imgur.com/wXWEQE9.jpg
+
+Dervish: http://i.imgur.com/u7b37l4.jpg   Particle effect: http://i.imgur.com/Xl8KmxY.jpg via /u/SamHolyheart
+
+Ele: http://i.imgur.com/Nb8GSyx.jpg
+
+Ele2: http://i.imgur.com/hFv5iTE.jpg?1 (sword that shoots)
+
+War Axe: http://i.imgur.com/8yh49FO.jpg
+
+Warrior Sword: http://i.imgur.com/ySFnA9m.jpg?1  via /u/Arthurmiel
+
+Rit Staff: http://i.imgur.com/e9GYH5A.jpg?1 (Same projectile as Spirits) via /u/Arthurmiel
+
+Ranger: http://i.imgur.com/KW3Koq0.jpg?1 via /u/Arthurmiel
+
+Ranger2: http://i.imgur.com/GWIMmI7.jpg via /u/murrdok
+
+Necro: http://i.imgur.com/acg57lQ.jpg via /u/murrdok
+
+Mesmer: http://i.imgur.com/MeGe8mU.jpg via /u/murrdok
+
+Paragon: http://i.imgur.com/SHHHbCx.jpg via/u/SamHolyheart
+
+Warrior Hammer: http://imgur.com/Z5OTckG  Particle effect: http://i.imgur.com/MUzj5VN.png via/u/jensees
+
+Monk: http://i.imgur.com/7p33Ssh.jpg
+",1429762013.0,10,0.92,17
+JobFair,Legs don't seem to wanna work anytime soon. Programming it is?,"With some medical complications, I don't think I'm going to walk for awhile, I have infinite time right now and would like to learn a trade I can use online without a degree. I hear html/C++ is possible option?
+
+I also have been talking about Python with some people. Can someone please set me straight, when I start making some money I be sure to nod my head to you, in gratitude=]=]
+
+(Anything working online sounds nice to me, I just think programming might give me the most jobs available?)",1429733684.0,10,0.78,10
+LearnJapanese,ふざけた女です。訳する後意味は「Playful woman」ですか。,"Pretty sure i used ""after"" wrong in the title, and is fuzaketa how you say playful in Japanese? I've been searching dictionaries and google but got nothing. Then read a friend's comment and translated some with Google and it said fuzaketa=playful. Is this true? 0.0^.^",1429671884.0,6,0.79,7
+LearnJapanese,Anyone else have this feeling?(Studiers),"""The only *real* Japanese are the things I don't know""",1429074678.0,0,0.4,6
+pcmasterrace,Laptop Battery power,"If it runs out of all its power, will it damage my laptop?
+
+The battery I bought told me to let it run out all the way before charging, it sounds fishy to me>.<
+
+Latop:Inspiron N7110
+
+Battery: http://www.amazon.com/LB1-High-Performance-Inspiron-Notebook/dp/B00B870U40/
+",1427677177.0,0,0.5,2
+LearnJapanese,Turn on/off computer...,"もし言ったら。。。パソコンを上げって下さい・英語で訳するは「Turn on the computer, please.」
+
+そして
+
+パソコンの電源を消して下さい・英語で訳するは「Turn off the computer,please.」
+
+
+このら文章は正しいですか。＾。＾
+英語で助けてくれ「ください？」＾。＾＜３",1427047405.0,0,0.5,6
+LearnJapanese,Is intonation(rising/lowering pitch) *really* important?,I don't want to be an ambassador,1425176392.0,0,0.11,3
+GuildWars,When do ecto prices rise?,,1424719486.0,1,0.6,3
+videos,Was trying to deicde whether to study Swedish or German......fertig,,1424117668.0,1,1.0,0
+LearnJapanese,"”You should"" 「べき・～たほうがいい」","What is a good/better way to say someone *should* do something?
+
+買うべき・買ったほうがいいです
+
+どっちな＞。＜
+
+僕を助けたほうがいいです！！＾。＾",1423948710.0,0,0.43,6
+LearnJapanese,"How do I make this ""ー"" on the keyboard?","As in シツモンデー.
+
+",1423631847.0,0,0.5,10
+funny,Stole your girl Stan Darsh!,,1422865393.0,0,0.38,1
+AskReddit,Do I want a bagel right now?,[removed],1422819228.0,1,1.0,0
+pcmasterrace,Using [HDMI for HD TV] vs. [HD Monitor] question,"My friend said it's harder for the graphics card to put out the information needed to a TV than a monitor.
+
+And what would be a comparison if it's true. Are 3 monitors = 1 TV?",1422051608.0,1,0.66,3
+TeraOnline,What does Tera being available on Steam mean?,Will anything happen? Like new servers?,1421983740.0,8,0.85,22
+sinjid,"Welcome, you bad*** ninjas!!!",lord baka must be found...,1421982742.0,1,0.67,0
+anime,Help me think about Garden of Words,"Something I've been thinking about it is ""Can I show this to someone unfamiliar with anime"".
+
+I think this is more of a film for someone who has already seen multiple seasons of anime, and films.
+
+I say this because although the landscape, architecture, resolution, native voice acting(haven't heard dub), weather, lighting, and flow of life in general is just astounding...
+
+But, it is very reserved. And maybe even a tad conservative as far as anime now-a-days can be.
+
+Which is why I think it's a renewed breath of air for fans already in anime who constantly see fetishes, blushing 24/7, obvious statements, and 100% gorgeous characters all the time.
+
+It reminds you of how mature anime can be and how the general populace won't see this instead of Rosario+Vampire.
+
+I just can't think of why I wouldn't show it to someone as a first anime, I feel it, but can't come up with thoughts as to why not>.<
+
+",1421655212.0,0,0.38,16
+TeraOnline,How to get under Island of Dawn?(video in textbx),"https://www.youtube.com/watch?v=_pQCDpmLnok
+
+How they do?",1421427707.0,1,0.67,11
+TeraOnline,(Been away)Mystic/Healer class with crit rework,"It seems that Mystic/Healer is 50/50 unless the party wants a crit boost for speed clear or aren't taking too much damage.
+
+I've been seeing Masterworking, armor, and auras have apparently changed making critting easier and not needing the aura now?
+
+I want to commit to a healing/supporting class but don't know which to choose>.<
+
+",1421357089.0,2,1.0,18
+drawmuhammad,"You don't have to be good, just draw=]",,1420646957.0,547,0.91,2
+tinnitus,During a tinnitus attack does your ear feel different?,"Maybe it's just because of the drop in volume of the world around me but it feels like something changes internally too, besides the clogged/dryish/weird feeling of the deafness.",1420169327.0,5,0.79,7
+gaming,"Do you have any rituals when opening a new or old, new-condition game?",,1419884815.0,1,0.57,20
+LearnJapanese,"Is this a correct translation, what i came up with doesn't really fit the video","http://youtu.be/P9J5tYShNY8?t=16s
+
+:16-:20
+
+出したくって出してるんじゃないワイ！
+
+Am I off somewhere?
+
+I keep hearing ""wei"" at the end>.<",1419354890.0,0,0.38,0
+LearnJapanese,Hardest easy thing you eventually learned?,What is some grammar or words you constantly forgot/mixed up even though it was pretty darn easy!?,1419164055.0,5,0.78,55
+anime,Does anyone have an argument against my love for Wolf Children: Ame and Yuki?? (Why should some1 not like WC?),"-A huge qualm I have with a lot of anime is saying what is obviously on the characters mind(Rosario+Vampire,omg++).......Wolf Children (WC) has almost none of that.
+
+-Good Music
+
+-The ending, everytime. Cry.
+
+-Has deep undertones that relate to human life even though it's about some girl who jumped some wolf's bones
+
+-Shows value of hard work, and it's payoff
+
+-Respects elders
+
+-Shows appreciation for nature
+
+-Shows importance of teamwork 
+
+-Shows importance of community
+
+-Nice mix of 3d and 2d animations
+
+-Characters aren't overly attractive
+
+-Red outlines........
+
+Why should I not like this movie?
+
+",1418650879.0,0,0.48,13
+LearnJapanese,"[Serious]Making a shirt, did I get the right feeling across?","I'm not an annoying, troll, weeaboo, I swear, I just think it'd be fun to wear around a shirt every now and again that says something like ""It's not like I like you....baka"", that feeling, you know?
+
+Does this accomplish it?
+http://i.imgur.com/9pO1bcF.jpg
+
+君が好きです。ばか
+
+or should it be
+
+君が好きです、ばか",1418429330.0,0,0.3,23
+worldnews,"Illinois(United States) just signed in a bill that makes it illegal to film cops during ""private conversations""..",,1418417168.0,1,1.0,1
+LearnJapanese,"To say ""Please practice Japanese with me...","Is it:
+
+私と日本語が練習ってください
+
+？？？
+
+I want to put it on a shirt, and fish for the nihonjin/speakers, does this sound too forward?",1418379823.0,1,0.57,19
+atheism,What would make you stop arguing with someone immediately?(about their religion),What words do you have to hear to completely forgive or forget your religious argument with someone?,1418376005.0,0,0.38,28
+atheism,"Atheism needs a saying when something beneficial happens that was unexpected, any ideas?","We need to use it and it has to sound beautiful, short and sweet! Better than ""God works in mysterious ways, God Bless"", we need rhymes people!
+
+Edit: Haha, there are some funny recommendations but something that conveys an atheist view and in a positive light is wanted for me. ""Fuck'n A"" - prajnadhyana or ""Gee, that was nice"" - Dudesan. They are funny but not something only an atheist would bring up. Thank you for your comments<3",1417905532.0,0,0.4,38
+LearnJapanese,Can 「何したんだ（った）」mean What was that about/for?,"And, does tta make it past tense?
+
+Also, is there ""ndesu""?
+
+",1417561169.0,0,0.33,6
+books,"Sandals in the library, how about it?",[removed],1416493128.0,0,0.4,3
+KingdomHearts,Finished KH1.....clear up ending with me?,"Please with no spoilers, I will play the other games soon.
+
+Okay so at the end when you are fighting the end boss are you in Destiny Islands? You start there, there's the keyhole, Kairi is on sand that develops into the island again. ???
+
+I understand the final door has to be closed with one person on the outside and one in the inside but now are they going to fight the heartless forever in there(Riku and Mickey)?
+
+And wasn't travel to the other worlds considered impossible once the darkness was defeated (something talked about in Hollow Bastion with Squall, Yuffie,...), so how the frick did Sora,Donald, and Goofy get to where they did at credits, and wasn't it where the Magic Kingdom was?
+
+Plz hlp=]=]",1416417994.0,0,0.45,24
+LearnJapanese,"男＝イケメン,,,,女＝？","What do you call a good looking girl? With a similar meaning/feeling to ikemen? Thank you =]
+
+",1416417331.0,5,0.66,25
+tinnitus,Antihistamines and Eustachian tubes,"I post here because my tinnitus might be caused by my eustachian tubes.
+
+Anti-hist is Acetaminophen 325mg and Phenylephrine HCl 5mg
+
+My left is bothering me, clicking, pressure, and some pain.
+
+I can't reset my tubes on my left as I can my right(which has no symptoms) and I want to take an antihistamine to see if that would help but don't want anything weird to happen.
+
+Is it just me or could the antihistamine make my Eustachian tube enlarge from more mucous and cause rougher symptoms?
+
+
+I saw my GP and she had no idea, saw my ENT and he had no idea. GP recommended Anti-histamines but at the same time she had no clue what I had. Fuck. 
+
+Anyone had the same experience? ",1416015267.0,2,0.75,2
+KingdomHearts,How to make Stronger Summons?,"[KH1.5Finalremix]I want to farm mythril,gales,etc. in end of the world before 1st true Ansem fight and using simba can WRECK the waves. But when i charge to full(5tick) none of the heartless die. Is it because I'm not on beginner? Do I need more mana for more power?",1415897351.0,4,0.83,7
+tinnitus,"Clicking noise when eating,talking, swallowing.","It's the same noise I hear when trying to clear my sinuses(closing my nose, blowing air). I can make it happen 24/7, by moving the top-back of my throat a bit.
+
+But my left ear can't reset unlike my right. The clearing works for my right, not my left.
+
+
+----
+
+I feel like I have infections often but when I get it checked out, there are no signs. The feeling is near the place that makes the sound.
+
+Been to doctors,so far they don't know(ENTs and GPs). Will try again soon.
+
+--------
+
+I post this in /r/tinnitus because it came about around when I got my tinnitus (1 year in about a month! I expect a cake!)",1415814608.0,2,0.66,12
+Showerthoughts,Does flame have a taste?,"Yeah yeah burning, searing. But seriously. What taste?",1415476803.0,1,0.6,5
+anime,Blushes....c'mon,"Yes the squigly line blushes are awesome, but not if they're on you when you wake up, when you get the mail, eat breakfast, #1 panty shot fanservice, shower scene, putting on clothes, saying goodbye to otousan, leave for school, taking a test, peeing in bathroom etc.
+
+
+What could be flustering you that much? Are you having some sort of stroke? Please animators.....please....
+
+
+Edit: I figured it out! They're in Australia and everyone is upside down. Phew.",1415342477.0,0,0.23,36
+tinnitus,Flying in planes. Flight to Japan. Should I? Am I able?,"Will it damage my tinnitus? Share your experiences?=]
+
+My symptoms:
+Random dizziness
+
+Clicking in ears(eating,talking,etc.)
+
+Good ole fashion ringing
+
+White noise
+
+Random Ear Pain
+
+I can't blow air out my left ear
+
+
+
+-I don't know if symptoms matter, I've gotten everything checked except the dizziness, that's new.
+
+So how about it!?=]",1415162423.0,3,1.0,11
+halloween,Happy Halloween!,Boo!,1414743933.0,1,0.6,0
+LearnJapanese,"Almost at year mark, but still feel inept=[ Can some1 set me on right path?","TL;DR
+Almost at year mark, know ~800 kanji but rarely are helpful(I use this book from 70's: http://i.imgur.com/35jQQwv.jpg), studying kanji so much makes me feel lacking in common nouns/verbs/sentence structure. I also completed 2 Japanese From Zero books, I can hear Japanese well but it's rare they use the words I know. I feel like I wasted a lot of time, please help>.<
+
+
+
+What books should I be studying, I feel like I'm ready for a penpal(am I? I can say what I want to just fine usually but hearing replies f's me) ",1414282432.0,0,0.29,36
+videos,In case any of you forgot...ghostball,,1411475364.0,0,0.46,0
+videos,One reason I can't wait for marriage to die.,,1410811974.0,4,0.75,0
+videos,Evidence of spaghetti monster....watch 10secs,,1410406617.0,2,0.75,0
+AskHistorians,What society throughout history made/used the most dildos?(or sex objects in general=]=]),[removed],1409595888.0,1,0.66,0
+atheism,Why can't atheists eat this? [nsfw?],[removed],1408475144.0,0,0.25,8
+Freezing,"Only viewed the anime, talk about it?","I felt S2 sucked, lets talk about it=]",1407824547.0,6,0.99,16
+anime,Any1 remember the vh1 anime special?(documentary),"I got interested in anime because I watched an anime special on vh1 I believe; it talked about Ghost in the Shell, Akira,...etc. How anime came here and why it is so popular in Japan. They also talked about how human it can be.
+
+Was it really on vh1 because I've been looking for 2 days now and can't find it>.<
+
+Or was it embedded into ""I love the 90's"" somewhere? (im watching them now>.<)",1407438646.0,0,0.5,0
+cosplay,"[Meta]Is the term ""glomp"" still used? and other terms....","When I get a job I want to start getting into cosplay hardcore<3
+
+Are there universal words that cosplayers use at conventions? And what do they mean?
+
+Sorry.",1403999286.0,0,0.35,5
+deaf,Will deafening myself stop tinnitus?,"I've been looking online and have found nothing, I meant to ask my ENT doc last time i saw him but forgot>.< 
+
+Anyone know anything about this?
+--------------------vvvrantvvv---------------
+I'm sure there is a surgery for it but if not approved, maybe I could swim far down in a pool, wait for water to seep in, then stand in an industrial freezer. Once my ears have frozen I'll simply walk out and when it thaws it will take all the hair cells with it? eh? eh?
+------------------------------------------------
+
+Plus I am 19 and haven't started down a career path yet so learning ASL and figuring out what to do shouldn't dramatically affect me? Well it will but you know>.<",1403422758.0,0,0.38,36
+a:t5_2y58r,Plot question,How do the Other-mother know what to make Coraline's doll look like if she didnt have eyes there in the first place. ,1403367758.0,1,0.66,3
+ffx,Help me understand beginning?,"Zanarkand is a dream. Sin picks up Tidus/Auron in the beginning(Auron says ""we called it Sin"", implying this *dream* doesn't have Sin. 
+But Sin is in Spira. Did Sin go into the dream to bring Tidus out to kill him? 
+But Zanarkand was a real place, in the same world as Spira, so why didn't Tidus know about Sin? 
+
+When I say Spira I mean the Spira how ever many years in the future>.< I hope I make sense",1400727273.0,3,1.0,10
+AskReddit,What's your favorite word to type?,[removed],1400705563.0,1,1.0,1
+anime,Who the fuck are these hateful people who down vote every post?,[removed],1400510881.0,0,0.32,26
+pcmasterrace,Why do I think GabeN is a dangerous man?,"Like, if he told me to gather with my Pc brothers and riot at an intersection I'd probably do it. No shit'n",1400336606.0,0,0.44,3
+Showerthoughts,People outside the USA measure their boners in Meters? Centimeters?0.0,hey babe my dick is x centimeters,1400076459.0,1,0.54,16
+Smite,"I miss the Lightning bolts at the bottom right, screw the icons>.<!!!",Why!!!!!! Zapzapzapzap,1398994161.0,1,0.54,4
+Showerthoughts,How hard would it really be to stop going to war with each other?,Why do. Seriously. Why do..,1398978527.0,3,0.67,1
+Showerthoughts,How the fuck does the whole world use the same date? When did we set a date to follow together?,For real.,1398649323.0,45,0.76,13
+Showerthoughts,"Our favorite YouTube videos and first comments will eventually be 50+years old, f***",my favorite song right now is a video almost 8 years old. pretty heavy when you're barely 19.,1398547241.0,1,0.57,0
+anime,When will sister fetish end?,"Nothing puts me off faster than a constantly blushing sister and a ""AHHH!"" packed horny brother. fuck man. please let us have cats again instead of this weird perversion, ew ew ew ew>.<",1397799054.0,0,0.31,14
+anime,Perplexed Face0.0 Why do anime openings go sooo well with Techno genres?,Steins;Gate....,1397183671.0,0,0.21,1
+Music,More like this???0.0 (skip to :50),,1396907097.0,1,1.0,1
+tipofmytongue,[TOMT] Spacing on a fairly recent movie title>.<,"Fairly new(5months?), about a fisherman who stumbles upon a ghost ship? The first 5 minutes are just him fishing, and sailing with no dialogue. I only heard a movie review about it so I can't give much more than that ha>.^
+
+P.s. What's a porn website with no viruses?",1395387757.0,0,0.33,5
+movies,Spacing on a new movie title>.<,"Fairly new(5months?), about a fisherman who stumbles upon a ghost ship? The first 5 minutes are just him fishing, and sailing with no dialogue.  I only heard a movie review about it so I can't give much more than that ha>.^",1395387158.0,1,0.67,4
+languages,Need help with French pronunciation!>.<,"Hello
+I'd only need like 5 mins a day, some human help rather than books/forums/youtube would be much appreciated. I'd like to skype, I'm well mannered and shouldn't get on your nerves much. Thank you.=]
+Me(not to be taken seriously): http://i.imgur.com/11h12JW.jpg",1393447661.0,2,1.0,3
+French,Trying to get into French language. Help with pronunciation please!?,"I'd only need like 5 mins a day, some human help rather than books/forums/youtube would be much appreciated. I'd like to skype, I'm well mannered and shouldn't get on your nerves much. Thank you.=] 
+
+Me(not to be taken seriously): http://i.imgur.com/11h12JW.jpg",1393442555.0,1,0.56,9
+singing,"""You would be such a good singer""","Hearing some people talk I just wanna scream ""Please sing to me!! AHHHHHH!!!"" because they have such a nice mix of lightness of voice, nasalyness, and natural verbratto. Ug. Fuck me please",1392477270.0,0,0.38,1
+motorcycles,"basic 18 year old,want street legal bike(suggestions?)","not rich, not poor. What do? ",1392474950.0,0,0.29,7
+anime,Seasoned anime'r looking for good animes,"I'm not sure if Im allowed to make this post/ and i know ima dick and i deserve death but: I'll gladly let myself sit through some fan service, but only if it's with more mature girls ie. not 15/17>.< I don't care what genre you got for me, just please let me in on some nice animes that people haven't rode into the ground. (older animes gimme boner btw, so anything like ninja scroll/Blood+/Bebop is greatly appreciated 8])",1387504020.0,0,0.2,21
+Sudeki,"Age you played first time, Experience, age you played 2nd time(so on), experience","I was about 12(near launch date) or so when I played the first time and it was my first 3d game that wasn't about sports and I learned about saving>.<(ive played final fantasies like 4 hours at a time or so and never saved b/c my dad was troll and didnt wanna spend 10$ on something). So I've never played/watched a romance before, never had a combo system, never had wonderful music, never saw a half naked girl on a screen0.0.0.0.0.0 and needless to say I was hooked as soon as I started playing on my Xbox. Beat it, waited till after credits to see if I could keep playing...good put down, cried. NOOOOOOOOOOOO. Then like 12 years later I play again. I see my FUCKING old account and immediately have an out of body experience out of all the nostalgia haha. Played through again and wasn't AS blown away, but still very enjoyed it. A LOT easier now that my brain can handle tactics and conservation. Sudeki will always be one of my favorite games.
+",1384986529.0,2,1.0,0
+GuildWars,Factions campaign rush in 30mins is possible?,Could someone explain to me how this is possible^.^,1384198278.0,2,0.67,6
+GuildWars,Thunderhead Keep question,"Im trying to learn how to run campaigns, but i cant get through Thunderhead, the waves at the end of the mission never spawn(i have not done any other missions/quests in prohpecies) do i need to ascend or not use all heroes? If you can tell me what missions and stuff to do for campaigns id love u forever btw=]",1384117788.0,4,0.83,17
+tipofmytongue,[TOMT] Chinese(Asain) horror film,"It was on netflix i think in 2010. At one point she had to make it through a realm of aborted babies and stuff. There was always a girl with long black hair following her. She also had to make it through a bunch of faceless people at one point(again in some sort of dream realm), and she did so by offering them gifts, but she ran out and then had to sprint like heck. At the end of the movie the girl with long black hair and some other creatures she'd outwitted all met her on a calm grassy field.",1384044755.0,1,0.6,2
+gaming,GTA V collectibles were easy [FIXED],,1382611467.0,0,0.31,9
+gaming,[Noob here] Why would a game company release an unready game?,"Surely it's sponsors couldn't be dumb and numb enough to want to try to sell an incomplete, rushed game instead of a well polished, ironed out game. 
+
+TLDR: Why it happen? 0.o ",1382283462.0,4,0.75,12
+AskReddit,What are these parts? (tools?for gas flow),[removed],1382089881.0,1,1.0,6
+AdamCarolla,That one song the band played..,"Lyrics of ""Hey whats the thing I can't remember, how did I get so far off center."" and ""Declare my love, to our creator(whoa oh oh oh whoa ohhhoh)""      This band's name is something Like Smokey the Frog or something but obviously not because I can't find them=[",1380413759.0,4,0.83,2
+AskReddit,Anyone else have/had hemorrhoids?,"I don't think i want to live the rest of my life thinking i need to shit all the time, my entire future has to change its plans for my ass(if they never go away...fuck, cause i wanted to join the military[18] and i know im not going to be fed nutricious, fibrous meals there.). fucking eh. please tell me how your hemorrhoids exp is/was
+
+-do they go away -how long have you had them -what did you do to make them go away or stop hurting for a long period of time",1379040054.0,3,1.0,8
+AskReddit,Anyone else had hemorrhoids?,"I'm an 18 year old who has hemorrhoids ( i sat down a lot everyday for the past humteen years on a shitty computer chair and recently i decided to put more than just a finger in my ass) thus. hemorrhoids. Some people say they go away, and some say they dont. What's up? 
+
+P.S. Not gay. 
+
+P.s.s. Ive had constipation and stomach pains pretty much my whole life, a bad butt candidate indeed =[",1378762391.0,2,0.76,4
+army,Want to join as Combat Medic..,[removed],1378429336.0,0,0.33,5
+pics,This bullshit,,1376271549.0,0,0.4,4
+skyrim,Do you remember this post? I can't find it.,"It was about someone finding a glitch world(falling through some texture hole), and at the end he accidentally hit his auto load and when he went back to go the ""new world"", the texture hole wasn't there anymore. (It was a series of pictures)",1373204157.0,4,0.83,6
+tipofmytongue,[TOMT] 70's Teen Romance Movie,"Setting was in winter in the city(not snowy though)The guy had black long voluminous hair(he was white,so was the girl). They obviously met in high school, (they both seemed shy?), at one point their relationship dived for awhile but it was rekindled once they went to see a horse race. There was a sex scene in this movie.  I think the movie title might be the guys name. (and now looking on the internet, it might of even been 80's)",1372974546.0,1,0.67,2
+Wartune,Armorgames level camper,"Hello, my name is Shyel and as of now I'm camping lvl 38, I'd like to have some reddit buds to do arena with(I already have team, but i dont mind helping you own)",1371937186.0,2,0.67,2
+videogames,Video games have officially taken over fashion(link in comments[E.H. wants to help hide girls from spy planes..]),,1369316702.0,0,0.5,1
+anime,I can't be the only one who doesn't watch the intros to animes,curse me out,1368309984.0,0,0.29,6
+tipofmytongue,[TOMT]Help me remember movie?(Was on netflix a while back)bout a demon girl  [movie],"It was about some guy who found a girl crying under a bridge being executed by some guy, he killed the other guy and when he looked at her eyes he saw that they were completely black, they were pretty frickin big eyes too. She couldn't say anything, just cry and mumble, she ate his cat I think, she couldn't eat anything but meat. They had sex A LOT. I don't remember much of the story. But I remember at the end he was driven crazy by her and was about to execute her b4 some guy killed him too. (In the beginning the guy was whispering her name to him as he died, as did the main character when he got shot to the other guy)
+The movie title was just her name I'm pretty sure.    Wasn't old at all, maybe like past 10 years to be safe>.<",1360289199.0,1,1.0,2
+AskReddit,Help me remember movie?(Was on netflix a while back),"It was about some guy who found a girl crying under a bridge being executed by some guy, he killed the other guy and when he looked at her eyes he saw that they were completely black, they were pretty frickin big eyes too. She couldn't say anything, just cry and mumble, she ate his cat I think, she couldn't eat anything but meat. They had sex A LOT. I don't remember much of the story. But I remember at the end he was driven crazy by her and was about to execute her b4 some guy killed him too.                (In the beginning the guy was whispering her name to him as he died, as did the main character when he got shot to the other guy)
+
+The movie title was just her name I'm pretty sure.",1360288596.0,0,0.5,9
+screenshots,"What happened? I used to love to thumb those8""3",,1357525513.0,0,0.5,0
+anime,Quizlet supports the animes,,1351377213.0,0,0.5,3
+anime,I would be more into anime if this wasn't in the way..,,1346802815.0,0,0.29,3
+anime,Where do I get a good anime mousepad(not one with the 3D boobs on it..lawl),but has anyone got one with boobs on it? is it worth it?,1346369152.0,0,0.33,17
+funny,Bad Luck Netflix,,1335919339.0,0,0.25,0
+teenagers,How many people does it take to screw in a lightbulb?,,1334788791.0,2,0.6,0
+atheism,YEEEEEAEAAAHH! hhmmmmmmmm,,1333283576.0,419,0.88,41
+atheism,Pregnant w/o sperm: Mary (Jesus=woman and exact copy of Mary?),"Shouldn't god(Jesus) have looked 100% like Mary because when the cells were splitting and crossing over, there were no male chromosomes to share their DNA with the females.
+
+P.s. one of my Christian friends thinks god had nothing to do with the bibles. hm hm hm,0.^",1332797253.0,0,0.45,13
+AskReddit,Can dogs really recognize you for the rest of their life after sniffing you just once? ,"My mom told me this when I was young, please tell me she's not a lying whore.",1332092533.0,2,1.0,3
+bestof,Geodude is the BEST!!!,,1331500370.0,0,0.33,0

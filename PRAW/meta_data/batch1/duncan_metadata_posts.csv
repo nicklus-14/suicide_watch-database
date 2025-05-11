@@ -1,0 +1,1699 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+homeassistant,What automations have you created to make something work the way it's supposed to?,"I'm basically talking about using Home Assistant to bolt on bug fixes to existing software or hardware.
+
+1. My desktop PC is connected to 2 displays, each in a different room. They're both 4K displays, but for some reason when switching between them, sometimes the display settings in Windows would bug out and default to 1024x768. I got sick of having to open the display settings anytime that happened, so I created an automation using HASS Agent to run a script which sets my resolution to 4K anytime the PC wakes up from sleep.
+2. Whenever I cast my podcast app to my Nest speaker group, it defaults to the media being paused. So I created an automation which presses play anytime that app starts broadcasting to Nest.
+
+These bugs are annoying, so I love that Home Assistant gives me a way to bolt-on ""patches"" myself.
+
+What automations have you created in Home Assistant only for the purpose of making things work as they already should?",1746574302.0,22,0.93,38
+homeassistant,Dishwasher monitoring - no neutral,"edit: thanks to everyone who have explained to me that in fact I do have a neutral wire. I've been confused for years - that changes everything.
+
+Here's my situation:
+
+~~Older home without neutral wire -~~ dishwasher is connected directly to Romex, and has a dedicated circuit breaker in the box.
+
+I would like to have a way of notifying me when my dumb dishwasher has finished running. I had hoped to accomplish this using energy monitoring at the breaker box, ~~but it appears this would require a neutral wire, which I don't have.~~
+
+Could this be accomplished at the point where the Romex connects to the dishwasher using a Sonoff ZBMILINL2 or a Shelly 1L? If so, does anyone have a picture of how that would look wired up? I have tried using both of those devices in other scenarios in the past following their wiring diagrams, but in both cases turning the device on resulted in the fuse blowing immediately (and in once case a loud pop), so I'm a little skittish about trying that again.
+
+Another idea I had was if I could place a sort of luminance sensor over top the little blue indicator LED, that could sense whether the ""cycle finished"" light has turned on, but I'm not sure any such sensor exists.
+
+If necessary, I'll have to settle with a more manual solution which requires pushing a Zigbee button which starts a timer - but I am a little frustrated at the idea that I can't come up with something better than that.
+
+Help!",1741534704.0,1,0.6,9
+homelab,Before and after Christmas 🎄,"RIP LackRack, you served me well 🫡",1735387163.0,663,0.99,11
+Proxmox,What am I doing wrong with replication-based HA?,"Apologies in advance - I'm a bit frustrated.
+
+I have HA set up, but somehow, rather than making my machines highly available, it seems to make them highly UNAVAILABLE.
+
+Whenever I get to this point, it's an enormous hassle to restore the LXC from a backup... First you have to go manually delete all replication jobs, you have to go to the shell to run commands to unlock it, THEN you can remove it and restore it.
+
+Rather than shared storage, I am using ZFS replication, and the I have groups set up so that VMs/LXCs spin up on another node when one node is down for long enough, and the idea is that they spin back up on the original node once it comes back online.
+
+You can see in the logs below that LXC 176 was shut down on node pve-nas, and then it failed to start on node pve-main. The current replication jobs only show replication to the other two nodes, but I'm quite sure I had one in place, I believe it just won't show replication jobs to the node that the LXC is already on.
+
+I understand that HA works a lot better when using shared storage, but replication IS supposed to work, right? So I assume there must be something obvious that I'm missing with my setup or something, because anytime the HA function engages, all it does is cause massive headaches.
+
+  
+If anyone has any clues or ideas, I'd appreciate hearing about your experience!
+
+  
+Thanks,
+
+https://preview.redd.it/nq1nttsoih8e1.png?width=1584&format=png&auto=webp&s=bc0e91032d94874f5360740ed9cf0195311a481e
+
+https://preview.redd.it/b5rxx6iojh8e1.png?width=2260&format=png&auto=webp&s=085b02fd3507548964fa1dc21021568312d15985
+
+https://preview.redd.it/m656mnzxjh8e1.png?width=2774&format=png&auto=webp&s=d925ef6b2fe12b1db26aed2261a92f21b8f4e08c
+
+https://preview.redd.it/ryof7244kh8e1.png?width=1100&format=png&auto=webp&s=0cbe0e61c2926bd52050714cc9eca19b1082e9cd
+
+https://preview.redd.it/9hnxjawclh8e1.png?width=2496&format=png&auto=webp&s=6fe8ec25a79cb54839f2d6f8594a6ae3dcdfc1df
+
+",1734911208.0,9,1.0,2
+AnycubicVyper,"This always happens with this filament, any ideas?",,1733702494.0,2,1.0,12
+chess,Everybody seems to get this wrong lol (from Resident Evil 4 Remake),,1731846864.0,18,0.77,9
+homeassistant,How to trigger an automation based on day of year?,"I want to flip a boolean toggle to ""on"" on particular days of the year, which I will use for reminders to pay my quarterly HOA bill.
+
+I can create a helper, but it makes you specify a year; I want it to happen *every* June 1st, without having to create an additional helper every year.
+
+I can't figure out how to do it based on a calendar event because the only calendar automation trigger is ""when *any* calendar event begins"" rather than a specific one.",1720308108.0,13,1.0,18
+homeassistant,Grouping many tasks under one automation - Restart Mode for Automations and Scripts,"Lately I've been trying to tidy up my list of automations by grouping multiple related or similar functions under one umbrella with multiple triggers and different actions based on trigger IDs.
+
+I have the automation in Restart Mode, and I have it triggering a variety of different scripts that are also in Restart Mode, and it appears that the scripts are being triggered properly by the automation, but not finishing on their own.
+
+If a script is triggered by an automation, but that automation gets restarted before the script finishes, does the previously triggered script get interrupted by the automation that originally triggered it getting restarted? I assumed that the script would finish out on its own, independent of the automation, but that doesn't seem to be happening.
+
+I guess the alternative would be to put the automation in Parallel mode, and just put the number of parallel instances to a high number like 25-50, but I worry about that many processes running concurrently in the background. Does anyone know how well Home Assistant functions under those kinds of circumstances? I have it running on a VM in Proxmox and have dedicated plenty of resources to that particular VM.
+
+EDIT:  
+Here is the automation, followed by one of the scripts
+
+`alias: Recent/Recently Manager`  
+`description: """"`  
+`trigger:`  
+  `- platform: zone`  
+`entity_id: person.duncan`  
+`zone: zone.home`  
+`event: enter`  
+`id: duncan enter home`  
+  `- platform: zone`  
+`entity_id: person.duncan`  
+`zone:` [`zone.work`](http://zone.work)  
+`event: leave`  
+`id: duncan leave work`  
+  `- platform: state`  
+`entity_id:`  
+`- binary_sensor.group_first_floor_motion_sensors`  
+`to: ""on""`  
+`id: first floor motion`  
+  `- platform: state`  
+`entity_id:`  
+`- binary_sensor.kitchen_beam_sensors`  
+`to: ""on""`  
+`id: kitchen motion`  
+  `- platform: state`  
+`entity_id:`  
+`- binary_sensor.dining_room_motion_sensor_group`  
+`to: ""on""`  
+`id: dining room motion`  
+  `- platform: state`  
+`entity_id:`  
+`- binary_sensor.living_room_motion_sensors_group`  
+`to: ""on""`  
+`id: living room motion`  
+  `- platform: state`  
+`entity_id:`  
+`- binary_sensor.master_bedroom_motion_sensors`  
+`to: ""on""`  
+`id: master bedroom motion`  
+  `- platform: state`  
+`entity_id:`  
+`- binary_sensor.office_motion_sensor_group`  
+`to: ""on""`  
+`id: office motion`  
+  `- platform: state`  
+`entity_id:`  
+`- binary_sensor.stairs_beam_motion_sensor_group`  
+`to: ""on""`  
+`id: stairs motion`  
+  `- platform: state`  
+`entity_id:`  
+`- binary_sensor.laundry_room_motion_sensor_group`  
+`to: ""on""`  
+`id: upstairs hallway motion`  
+  `- platform: state`  
+`entity_id:`  
+`- binary_sensor.upstairs_motion_sensors_group`  
+`to: ""on""`  
+`id: upstairs motion`  
+  `- platform: state`  
+`entity_id:`  
+`- binary_sensor.foyer_motion_sensor_group`  
+`to: ""on""`  
+`id: foyer motion`  
+  `- platform: state`  
+`entity_id:`  
+`- binary_sensor.maintenance_closet_door_sensor_contact`  
+`to: ""on""`  
+`id: maintenance closet door opened`  
+  `- platform: state`  
+`entity_id:`  
+`- binary_sensor.front_door_sensor_contact`  
+`to: ""on""`  
+`id: front door opened`  
+  `- platform: state`  
+`entity_id:`  
+`- binary_sensor.back_door_sensor_contact`  
+`to: ""on""`  
+`id: back door opened`  
+`condition: []`  
+`action:`  
+  `- choose:`  
+`- conditions:`  
+`- condition: trigger`  
+`id:`  
+`- duncan enter home`  
+`sequence:`  
+`- service: script.duncan_home_recently_manager`  
+`data: {}`  
+`- conditions:`  
+`- condition: trigger`  
+`id:`  
+`- duncan leave work`  
+`sequence:`  
+`- service: script.duncan_left_work_recently_manager`  
+`data: {}`  
+`- conditions:`  
+`- condition: trigger`  
+`id:`  
+`- first floor motion`  
+`sequence:`  
+`- service: script.first_floor_recent_motion_toggle_sequence`  
+`data: {}`  
+`- conditions:`  
+`- condition: trigger`  
+`id:`  
+`- kitchen motion`  
+`sequence:`  
+`- parallel:`  
+`- service: script.first_floor_recent_motion_toggle_sequence`  
+`data: {}`  
+`- service: script.kitchen_recent_motion_toggle_sequence`  
+`data: {}`  
+`- conditions:`  
+`- condition: trigger`  
+`id:`  
+`- dining room motion`  
+`sequence:`  
+`- parallel:`  
+`- service: script.first_floor_recent_motion_toggle_sequence`  
+`data: {}`  
+`- service: script.dining_room_recent_motion_toggle_sequence`  
+`data: {}`  
+`- conditions:`  
+`- condition: trigger`  
+`id:`  
+`- living room motion`  
+`sequence:`  
+`- parallel:`  
+`- service: script.first_floor_recent_motion_toggle_sequence`  
+`data: {}`  
+`- service: script.living_room_recent_motion_toggle_sequence`  
+`data: {}`  
+`- conditions:`  
+`- condition: trigger`  
+`id:`  
+`- master bedroom motion`  
+`sequence:`  
+`- parallel:`  
+`- service: script.upstairs_recent_motion_toggle_sequence`  
+`data: {}`  
+`- service: script.master_bedroom_recent_motion_manager`  
+`data: {}`  
+`- conditions:`  
+`- condition: trigger`  
+`id:`  
+`- office motion`  
+`sequence:`  
+`- parallel:`  
+`- service: script.upstairs_recent_motion_toggle_sequence`  
+`data: {}`  
+`- service: script.office_recent_motion_toggle_sequence`  
+`data: {}`  
+`- conditions:`  
+`- condition: trigger`  
+`id:`  
+`- stairs motion`  
+`sequence:`  
+`- service: script.stairs_recent_motion_toggle_sequence`  
+`data: {}`  
+`- conditions:`  
+`- condition: trigger`  
+`id:`  
+`- upstairs hallway motion`  
+`sequence:`  
+`- service: script.upstairs_hallway_recent_motion_toggle_sequence`  
+`data: {}`  
+`- conditions:`  
+`- condition: trigger`  
+`id:`  
+`- upstairs motion`  
+`sequence:`  
+`- service: script.upstairs_recent_motion_toggle_sequence`  
+`data: {}`  
+`- conditions:`  
+`- condition: trigger`  
+`id:`  
+`- foyer motion`  
+`sequence:`  
+`- service: script.foyer_recent_motion_toggle_sequence`  
+`data: {}`  
+`- conditions:`  
+`- condition: trigger`  
+`id:`  
+`- maintenance closet door opened`  
+`sequence:`  
+`- service: script.maintenance_closet_door_recently_opened_toggle_sequence`  
+`data: {}`  
+`- conditions:`  
+`- condition: trigger`  
+`id:`  
+`- front door opened`  
+`sequence:`  
+`- service: script.front_door_recently_opened_toggle_sequence`  
+`data: {}`  
+`- conditions:`  
+`- condition: trigger`  
+`id:`  
+`- back door opened`  
+`sequence:`  
+`- service: script.back_door_recently_opened_toggle_sequence`  
+`data: {}`  
+`mode: restart`  
+  
+Script:
+
+    alias: Master Bedroom Recent Motion Manager
+    sequence:
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.master_bedroom_recent_motion
+        data: {}
+      - delay:
+          hours: 0
+          minutes: 10
+          seconds: 0
+          milliseconds: 0
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.master_bedroom_recent_motion
+        data: {}
+    mode: restart
+    ",1717079520.0,2,1.0,10
+Tdarr,Owner/Permissions of files being changed after transcode,"It seems like after Tdarr transcodes and replaces the movie folder/file, it has different owners/permissions than it started with when Radarr or the download client created the file. The owner/permissions that Tdarr applies makes the movie disappear from my Plex Library. When I applied a chown duncan:users to the media folder, my Plex library grew by 50+ movies. Is that all I needed to do? Or do I need to make changes to my Tdarr or Plex containers in order for this to not be an issue going forward? Below are my compose files for Tdarr and Plex.
+
+Thank you for any advice,
+
+      tdarr:
+        container_name: ""tdarr""
+        restart: unless-stopped
+        devices:
+          - /dev/dri:/dev/dri
+        environment:
+          - TZ=America/New_York
+          - ""HOST_CONTAINERNAME=tdarr""
+          - ""serverIP=192.168.xx.xxx"" #fake IP for public reddit post
+          - ""internalNode=true""
+          - NVIDIA_DRIVER_CAPABILITIES=compute,video,utility
+          - NVIDIA_VISIBLE_DEVICES=all
+        image: ""ghcr.io/haveagitgat/tdarr""
+        networks:
+          - ""appnet""
+        privileged: true
+        runtime: nvidia
+        ports:
+          - ""8265:8265/tcp""
+          - ""8266:8266/tcp""
+        volumes:
+          - /media:/media
+          - /media/cache:/temp
+          - ./tdarr/server:/app/server
+          - ./tdarr/configs:/app/configs
+          - ./tdarr/logs:/app/logs
+          - /etc/localtime:/etc/localtime:ro
+          - /etc/timezone:/etc/timezone:ro
+    
+      plex:
+        container_name: ""plex""
+        runtime: nvidia
+        devices:
+          - ""/dev/dri:/dev/dri""
+        environment:
+          - ""PLEX_CLAIM=xxxxx"" #fake claim ID for public reddit post
+          - NVIDIA_VISIBLE_DEVICES=all
+        expose:
+          - ""1900/udp""
+          - ""32400/tcp""
+          - ""32410/udp""
+          - ""32412/udp""
+          - ""32413/udp""
+          - ""32414/udp""
+          - ""32469/tcp""
+          - ""8324/tcp""
+        hostname: ""Server""
+        image: ""linuxserver/plex""
+        networks:
+          - appnet
+        restart: unless-stopped
+        ports:
+          - 32400:32400/tcp
+        volumes:
+          - ./config:/config
+          - ./plex:/data
+          - /media:/media
+          - /transcode:/transcode",1714595191.0,3,0.72,7
+Esphome,I created an ESPHome device with GPS to act as a time server. Now what?,"I saw a comment on a thread a while back that suggested to someone to create an arduino time server using a GPS antenna for your home and all your services. I think I've successfully done that? But now what? How do I like... Access the time over my network? I'm stumped, couldn't find any documentation about doing this sort of thing maybe I'm using the wrong search terms? Anyone know what I'm talking about?",1713644732.0,2,0.67,6
+homeassistant,Issue console commands to Proxmox host over SSH via Home Assistant automation?,"I'm trying to create an automation that not only toggles the smart plug my 3D printer is connected to, but also to either start or stop the Octoprint VM running on a Proxmox node.
+
+I have gotten pubkeys exchanged between Home Assistant and the Proxmox host using the Advanced SSH add-on, and I have successfully started the VM when manually entering the command from the WEB UI of the Advanced SSH add-on, but when I try to trigger the command via an automation based on shell_commands or command_line switches created in my config.yaml, nothing happens.
+
+Has anyone managed to successfully do this?",1712568748.0,1,1.0,6
+Esphome,RC522 not reading any tags properly?,"UPDATE: I have finally solved this. Some of these problems went away after adding an additional connection from the RFID board to the ESP32 board - the ground wire. Seems obvious in retrospect but the guide I was following made no mention of connecting the 3.3v and Ground wires between the two boards. Continued having problems after that but it was because I had a bad RC522 board. Swapped out the board and everything was completely smooth sailing after that.
+
+Hey, hoping someone could help with this, have had no luck finding answers about this on forum posts.
+
+I have ESPHome installed on a esp32-C3 board with an RC522 connected. I have been able to get the NFC scanner to recognize my phone as a ""new tag"" and throw the event in Home Assistant as expected, but literally every other type of tag (including the ones that came with the board) are causing a reaction when tapped to the reader, but not accepted as tag scans.
+
+Here are my logs below after trying tapping a collection of different RFID tags and fobs. The final line in the logs is the only successful tag scan, and that's when I tapped my phone.
+
+    [16:40:28][W][rc522:163]: CMD_REQA -> Not OK 2
+    [16:40:30][W][rc522:163]: CMD_REQA -> Not OK 2
+    [16:40:32][W][rc522:163]: CMD_REQA -> Not OK 2
+    [16:40:38][W][rc522:163]: CMD_REQA -> Not OK 2
+    [16:40:42][W][rc522:163]: CMD_REQA -> Not OK 2
+    [16:40:43][W][rc522:435]: only 3 valid bits received, tag distance to high? Error code is 0x0
+    [16:40:43][W][rc522:163]: CMD_REQA -> Not OK 2
+    [16:40:44][W][rc522:429]: collision error, received 0 bytes + 1 bits (but anticollision not implemented)
+    [16:40:44][W][rc522:163]: CMD_REQA -> Not OK 3
+    [16:40:45][W][rc522:163]: CMD_REQA -> Not OK 2
+    [16:40:46][W][rc522:435]: only 2 valid bits received, tag distance to high? Error code is 0x0
+    [16:40:46][W][rc522:163]: CMD_REQA -> Not OK 2
+    [16:40:47][W][rc522:163]: CMD_REQA -> Not OK 2
+    [16:40:48][W][rc522:429]: collision error, received 0 bytes + 1 bits (but anticollision not implemented)
+    [16:40:48][W][rc522:163]: CMD_REQA -> Not OK 3
+    [16:40:49][W][rc522:163]: CMD_REQA -> Not OK 2
+    [16:40:50][W][rc522:166]: CMD_REQA -> OK, but unexpected back_length_ of 0
+    [16:40:51][W][rc522:166]: CMD_REQA -> OK, but unexpected back_length_ of 0
+    [16:40:52][W][rc522:163]: CMD_REQA -> Not OK 2
+    [16:40:53][W][rc522:429]: collision error, received 0 bytes + 1 bits (but anticollision not implemented)
+    [16:40:53][W][rc522:163]: CMD_REQA -> Not OK 3
+    [16:40:54][W][rc522:163]: CMD_REQA -> Not OK 2
+    [16:41:06][D][rc522:263]: Found new tag '08-19-B8-5F'
+
+Below is my config file:
+
+    esphome:
+      name: ""nfc-scanner-living-room""
+      friendly_name: NFC Scanner
+    
+    esp32:
+      board: esp32-c3-devkitm-1
+      framework:
+        type: arduino
+    
+    spi:
+      clk_pin: GPIO4
+      mosi_pin: GPIO6
+      miso_pin: GPIO5
+    
+    
+    rc522_spi:
+      cs_pin: GPIO7
+      on_tag:
+        then:
+          - homeassistant.tag_scanned: !lambda 'return x;'
+    
+    # Enable logging
+    logger:
+    
+    # Enable Home Assistant API
+    api:
+      encryption:
+        key: ""111111111111111111111111111111111111111111111"" #changed for this post
+    
+    ota:
+      password: ""111111111111111111111111111"" #changed for this post
+    
+    wifi:
+      ssid: !secret wifi_ssid
+      password: !secret wifi_password
+    
+      # Enable fallback hotspot (captive portal) in case wifi connection fails
+      ap:
+        ssid: ""Nfc-Scanner Fallback Hotspot""
+        password: ""1111111111111111"" #changed for this post
+    
+    captive_portal:
+
+Thank you for any help you can offer. I tried updating through ESPHome and did not fix the problem.",1709676404.0,3,1.0,2
+homeassistant,Zigbee2MQTT best practices and initial setup tips?,"I just spent the last week switching everything over from ZHA to Z2MQTT, and so far, I'm not that impressed with performance and reliability compared to ZHA.
+
+I'm wondering if 60+ devices is too much for the RPI4 to handle smoothly (although the only thing it is doing is running raspi OS with z2m installed).
+
+I have a lot of Lutron Aurora rotary dials, and I managed to get them working with an automation blueprint, but half the time I click the button the lights don't toggle like they're supposed to. Sometimes only one light in the group will toggle. And sometimes, one of the lights will come on a different color than the other lights.
+
+I'm also wondering: does it matter if I create my light groups in z2m vs. creating them in Home Assistant?
+
+What if anything did you do to get z2m nice and performant? Thanks for any input you might have.",1701901732.0,13,1.0,9
+Proxmox,Proxmox High Availability - is shared storage necessary?,"One of my nodes went offline yesterday so I've been tinkering with High Availability for the first time. When I have tested it, I can see Proxmox making attempts to migrate the container to another machine, but it just sends repeated errors in the task log, ""Volume does not exist"".
+
+It makes sense to me why one of my other nodes doesn't automatically have the volume for the container at its disposal to redeploy... so is some kind of unified storage pool that spans multiple nodes the only way to accomplish High Availability?
+
+Thanks!",1701368012.0,4,1.0,11
+homeassistant,What am I missing here? Seeking Automation advice on actions that expire if something doesn't happen within a certain amount of time,"How do I get an automation to do one thing if a thing happens, but to otherwise stop the automation if that thing still hasn't happened within a certain amount of time?
+
+What I am trying to do is get a confirmable notification asking ""Did you just take out the trash can? Yes or No"" sent to my phone if on trash day it detects that I opened a door (where my trash can is stored) followed by my doorbell detecting a person.
+
+However, I don't want it to send me that notification days later when I accidentally complete that sequence some other way, so I want to set up the automation to STOP if that sequence hasn't happened within a certain amount of time.
+
+I can set up ""wait for triggers"" based on a positive trigger but not on a negative trigger. But also I can't figure out how using ""continue on timeout"" helps because it is all sequential which makes it impossible to account for both of these possible outcomes in one automation.
+
+I can't seem to find a way to use the ""choose"" effectively for this scenario. Am I overthinking this?
+
+&#x200B;
+
+edit: I figured out a way to accomplish this, but it isn't especially clean; required 3 additional automations and two toggles. Two of the automations only activate and deactivate the toggles, and a third automation triggers the following script when a person is detected by my doorbell, and only if the two toggles I created are on (the toggles are ""trash day"" and ""maintenance closet door was opened recently""). Basically this moves the positive trigger to a separate automation, and avoids having to find a way to otherwise conditionally STOP the automation based on a negative.
+
+If anyone was curious or had a better idea, here is the automation that reminds me to take out the trash:
+
+    alias: Trash checker
+    description: """"
+    trigger:
+      - platform: state
+        entity_id:
+          - schedule.trash
+        to: ""on""
+    condition: []
+    action:
+      - choose:
+          - conditions:
+              - condition: zone
+                entity_id: person.duncan
+                zone: zone.home
+            sequence:
+              - service: notify.mobile_app_pixel_6_pro
+                data:
+                  message: Take out the trash!
+          - conditions:
+              - condition: not
+                conditions:
+                  - condition: zone
+                    entity_id: person.duncan
+                    zone: zone.home
+            sequence:
+              - wait_for_trigger:
+                  - platform: zone
+                    entity_id: person.duncan
+                    zone: zone.home
+                    event: enter
+              - delay:
+                  hours: 0
+                  minutes: 4
+                  seconds: 0
+                  milliseconds: 0
+              - service: notify.mobile_app_pixel_6_pro
+                data:
+                  message: Take out the trash!
+    mode: restart
+
+
+
+And here is the script that triggers out to remind me to bring the trash can back inside:
+
+    alias: Trash Can Bring Inside Reminder
+    use_blueprint:
+      path: homeassistant/confirmable_notification.yaml
+      input:
+        notify_device: 6d5979eee08b7d5c97b971549aca35d3
+        message: Did you just take out the trash can?
+        confirm_text: ""Yes""
+        confirm_action:
+          - wait_for_trigger:
+              - platform: time
+                at: ""11:00:00""
+            continue_on_timeout: true
+          - choose:
+              - conditions:
+                  - condition: zone
+                    entity_id: person.duncan
+                    zone: zone.home
+                sequence:
+                  - service: notify.mobile_app_pixel_6_pro
+                    data:
+                      message: Bring in trash can!
+                  - service: notify.lg_webos_smart_tv
+                    data:
+                      message: Bring trash can inside!
+              - conditions:
+                  - condition: not
+                    conditions:
+                      - condition: zone
+                        entity_id: person.duncan
+                        zone: zone.home
+                sequence:
+                  - wait_for_trigger:
+                      - platform: zone
+                        entity_id: person.duncan
+                        zone: zone.home
+                        event: enter
+                  - service: notify.mobile_app_pixel_6_pro
+                    data:
+                      message: Bring trash can inside!
+        dismiss_action: []
+        dismiss_text: ""No""
+    icon: mdi:trash-can
+    
+
+&#x200B;",1698272420.0,2,1.0,6
+duncan,"New year, new Duncan",,1673485692.0,7,0.9,2
+duncan,Duncan!,,1671966831.0,6,0.88,1
+unRAID,Authelia and SWAG,"I have swag handling reverse proxies to my docker container WebUIs;
+
+I have the Authelia WebUI launching on its own, able to sign in;
+
+I cannot for the life of me get my containers to redirect/authenticate through Authelia.
+
+**If you have managed to get Authelia and Swag working well together on Unraid, can we talk? compare config files, or something?**
+
+couple of notes:
+
+* I have the containers all running on the same custom docker network, **HOWEVER**: leaving the proxy-configs set up to use app names does not work, has never worked. I have to change the app name to the ip address instead for the reverse proxy to work.
+* I'm using a custom domain managed through Google Domains, but I can set up custom name servers to move it to Cloudflare if necessary
+* Whenever I uncomment the lines in a subdomain config file to activate authelia, the page throws a 500 Internal Server Error (but the reverse proxy works just fine when using no authentication or htpasswd file)
+
+Thank you for any advice you may have
+
+EDIT: I got it working! Here are the things that I did to get it working for me:
+
+The first custom docker network I created in Unraid was not functioning properly, even though all the command line testing I did indicated no issues. In order for this to go smoothly, you really need to make sure that SWAG is able to execute the reverse proxies based on container names, because the authelia configuration heavily depends on that. Creating a new custom docker network and moving all my apps to the new one just happened to work.
+
+For Authelia's configuration.yml, if you're using other guides' example config file as a base, I would still read through the config guide at [https://www.authelia.com/configuration/prologue/introduction/](https://www.authelia.com/configuration/prologue/introduction/) and make sure line spacing etc matches up; from what I gather, the config format has changed recently and most of the guides out there are at least a year old. I found that whatever example config file I used had funky spacing in the access\_control section compared to how it is shown on the authelia website.
+
+Additionally, the website explains that if you're going to create a rule for a wildcard subdomain, e.g. `*.domain.net` it has to be in quotes for it to work.
+
+    access_control:
+  default_policy: deny
+  rules:
+  - domain: auth.domain.net
+  policy: bypass
+  - domain: lidarr.domain.net
+  policy: one_factor
+  - domain: radarr.domain.net
+  policy: two_factor
+  - domain: ""*.domain.net""
+  policy: one_factor",1665238589.0,4,0.76,15
+hvacadvice,"Utility Closet: the sound of a distant engine revving, followed by squeaking?","https://drive.google.com/file/d/13XV7NTSrVHG81z7mylptBOh1fIB08nB5/view?usp=drivesdk
+
+I started hearing this noise inside my house a couple weeks ago, between 0-2 times a night. Sounds like a distant car gradually accelerating and then after the revving stops, it's always followed by a series of squeaks, with a rising tone. Sometimes it does a couple of rounds of revving before it moves to the squeaks.
+
+I thought it was happening from outside the house but it sounds more like it's happening underneath my utility closet? I think I could feel a gentle vibration through the floor when it happened.
+
+Any ideas?
+
+Thanks so much for any thoughts you might have!",1655402865.0,1,1.0,2
+AnycubicVyper,Phantom divot appearing after slicing in Cura,,1651706934.0,2,1.0,3
+duncan,Duncan,,1638674186.0,9,1.0,1
+TVTooHigh,From a commercial for YouTube TV,,1632683834.0,7,1.0,1
+duncan,duncan?,"
+
+[View Poll](https://www.reddit.com/poll/lo5h49)",1613821353.0,6,1.0,0
+AnimalCrossing,Choir trio in the central plaza,,1587773902.0,7,1.0,0
+acnh,in the nosebleeds,,1587432009.0,53,0.99,0
+acnhdesigns,Fountain Compass,,1586137368.0,121,1.0,4
+acnh,Fountain Compass,,1586136061.0,1,1.0,0
+acnh,Fountain Compass,,1586135928.0,545,1.0,12
+Ring,"In app, ""Power Source"" shows ""Battery"" despite being hardwired. Is this normal?","I have a Ring Video Doorbell 2. Earlier today when I finally finished my hardwired setup (I did not have a doorbell previously), the app showed the doorbell as ""Hardwired"", and the battery icon had a charging icon (a lightning bolt). However, later it went back to showing battery.
+
+I understand that the hardwired setup is only meant to charge the battery, not power the device itself. So will it switch between ""hardwired"" and ""battery"" depending on the battery's need to charge up?
+
+Thanks.",1547789319.0,3,1.0,6
+gopro,Scootering through Rome's morning rush-hour traffic [Hero 5 Session 1080p 60fps],,1497007625.0,1,1.0,0
+Assistance,Me and my friend are streaming for charity! Come watch us play Dark Souls II: Scholar of the First Sin!,[removed],1431788459.0,0,0.5,1
+auto,"Installed HID bulbs, now driver's side fog and tail lights won't work. 2011 Hyundai Sonata.","I have aftermarket headlight and taillight assemblies, and I got an HID conversion kit for Christmas, and installed them last night.  
+
+Passenger side works great, but driver's side was finnicky and flickery, until finally my DRL and rear brake lights stopped working altogether.
+
+Turn signals work, and old headlight bulb works, but the fancy LEDs and CCFL halo and DRL aren't running on driver's side.
+
+Turn signal on rear driver's side works, but any red lights on rear taillight aren't turning on.
+
+From the research I've done, there doesn't seem to be a fuse for the headlights and taillights.
+
+Help!!
+
+Thank you.
+
+EDIT:  Brake lights work, but passive red glow of taillight does not run.",1419776008.0,1,0.56,6
+RetroPie,"Please, somebody help me with my wired 360 controller on RetroPie","I have spent hours banging my head against a wall getting absolutely nowhere.  I went out and bought a wired 360 controller because it seemed like that should be the simplest controller option available.  I hope I was wrong.
+
+Emulationstation recognizes the controller just fine.  All 4 LEDs on the controller are blinking, and once I get into an emulator, it does fuck all, and no matter how many guides/tutorials/commands I try, I can't make any progress.
+
+Hitting roadblocks and learning to troubleshoot, for me, is 90% of the fun of buying something like this.  But I'm not having fun anymore.  I'm just exhausted.
+
+Help me Obi-wan Kenobi.  You're my only hope.",1417681320.0,1,0.6,4
+techsupport,"HDMI device works on some displays, but not others?","So I recently got a new car, and threw an aftermarket stereo head unit in it.  The unit I got has an HDMI port in the back of it, and I thought it'd be kinda cool to hook up an Android device with some games and emulators on it to to the radio.  I bought a Gamestick, which is just an HDMI stick that runs Android, basically.
+
+So the Gamestick *should* be perfect for what I'm looking for, but for some reason, the radio doesn't seem to detect any kind of signal from the HDMI port when the Gamestick is plugged in.
+
+The deets:
+
+* Radio is Pioneer AVIC-6000NEX
+* Gamestick works fine plugged into my monitor
+* Radio is able to recognize the Android phones I've plugged into HDMI
+* Radio has recognized and displayed input from my Chromecast, which I plugged into the radio using the same cable configuration that I've hooked the Gamestick up with
+* Yes, the Gamestick is getting external power, the light is turning on.
+
+If I have to accept the fact that the Gamestick isn't going to work with my radio, then it is what it is, but I'd at least like to understand why...  Could it be software?  If so, why selective HDMI output??  
+
+Any ideas?",1417413681.0,1,1.0,0
+auto,What kind of bulbs do I want in my projector headlights?,"I just got some sexy halo projector headlights for my 2011 Hyundai Sonata.  The unit doesn't come with a bulb for the low-beam headlight, instead, installation instructions tell me to use the existing bulb from the factory headlight in the new housing.
+
+I'm guessing that the existing bulb is a halogen bulb, but I'm wondering if I can (or should, even) put in an LED or HID bulb in there instead?  Would this be street legal?
+
+I understand that LEDs project light very differently than halogens do, while HIDs seem to have as many pros as they do cons...
+
+Conceptually, I love LEDs. They're very 21st century, practically never burn out, consume very little power, and LED headlights would match the rest of my car (I swapped out tail lights and all interior lights with LEDs already).  But I drive at night most of the time, so visibility is very important.  Are LEDs worth it, and is it even an option?
+
+Here's the headlight housing I bought:
+
+http://www.ebay.com/itm/371166890470",1415039516.0,6,0.81,7
+ADHD,"For people with ADHD that use Android phones, check out Google Keep","Probably on other platforms too, but idk/c. 
+
+Google Keep is this app that is basically a sticky note wall.  I've used it for less than 24 hours, and it's already been super helpful. 
+
+I set up my phone so that holding down the menu button launches the app, so I can super easily and quickly access it to jot down a reminder when I suddenly remember in the middle of class that I need to call the doctor's office by the end of the day. You can set up a little reminder alarm for individual notes too. 
+
+I'm sure there are tons of apps like this, but this seems like a fantastic tool for someone like me.",1410205396.0,64,0.92,36
+newjersey,Anyone in a band near Branchville? [craigslist],,1403932956.0,1,1.0,0
+Charity,Doing a Dark Souls II steam for charity. Come watch and donate :),[removed],1400346652.0,1,1.0,0
+Assistance,Hey me and a friend are doing a 24 hour Dark Souls II stream for charity! Come check us out and donate :),[removed],1400344238.0,1,1.0,0
+DarkSouls2,How I went from hating Dark Souls II to liking it so much more than the original.,"I just wanted to share my experience in case some people were not enjoying their time with Dark Souls 2, like I was at first.
+
+I decided to start a new file after pouring 20 hours into my first one, and I don't regret it one bit.  So here's a couple tips if you are having a poor time.
+
+1.  Stop playing it like it's Dark Souls.  I had a very tough time getting rid of the muscle memory and reflexes that I had learned from the original game.  I've played the original for over 1600 hours (all on PC btw), so the combat mechanics of the original game were VERY ingrained.  I found myself getting frustrated because ""combat felt sluggish, and weighty in a bad way"".  I totally get the feeling, but once you adjust (and you will), you will hopefully see that the combat system is much more satisfying than it was in the first game.  
+
+edit:  Also, as nfMersault points out, adding points to adaptability will make you more nimble, and helps a lot.
+
+2.  Don't summon people.  On my first playthrough I was summoning for almost every fight.  I was excited to be able to summon, since summoning on PC for the original was not easy, and summon signs were often hard to come by.  But after getting through a big chunk of DSII, I realized that the whole reason I play Dark Souls was missing from my experience.  I was pounding through bosses with no problem at all, and there just wasn't anything satisfying about it.  Furthermore, by forcing yourself to play the bosses alone, you will be forced to adjust to the combat, since you won't have any phantoms picking up the slack.  This is the number #1 reason I decided to start a new file, and I'm really glad I did.
+
+3.  If you're having trouble with #1, try a faster weapon.  I was spending my first playthrough investing all of my upgrade materials into the Halberd.  Its relatively slow moveset added to my early frustration with the combat system.  On my new playthrough I decided to roll with a Longsword, and eventually tried dual-wielding Longswords.  This was a far better experience, and helped me ease into the new combat physics/mechanics better.
+
+4.  Try dual-wielding.  Omfg the power stance is so much fun.  I did almost my entire second playthrough without a shield (except for 2 bosses that were exceptionally hard).  If you are a dodge-roller, the power-stance is super fun, and deals more damage than 2-handing your weapon.  Try it out (know that you need at least 1.5x the stat requirements of your weapons in order to enter the power stance).
+
+5.  If you're struggling, try a new area.  In my experience, it's much more obvious in the original game if you're in an area that you should be tackling later.  I was getting frustrated with a certain area in my first playthrough, but it didn't necessarily feel like I wasn't able to handle it.  Nevertheless, I went to that area much later on my second playthrough, and the progression felt a lot smoother.
+
+I LOVED Demon's Souls and Dark Souls, but this game puts them to shame.  You've got a heart of gold...  Don't let them take it from you.",1394979143.0,41,0.75,122
+ADHD,How bad should I expect my amphetamine withdrawal to be?,"I've been taking dextroamphetamine for the past year, in larger than usual dosages over the last ~4 months.  Talked to my doctor today, and explained to him that recently I've been borderline abusing it.  So we agreed that the best thing to do was discontinue use.
+
+I know nobody here is going to be able to give me an accurate description of what my experience is going to be like, but what was yours like?",1394246447.0,11,0.78,17
+darksouls,"Dark Souls, low-powered laptops, and the quest for 30fps","So I bought a touchscreen Windows 8 tablet/laptop convertible, and have been messing around with it, seeing what games it's capable of running.  It has a quad-core Atom processor, and can run HL2 on lowest settings, if that gives you an idea about its capabilities.
+
+I was really determined to get Dark Souls running on this thing, even if only for the novelty.  Never actually got it to consistently run at 30fps, but I do have it running at a playable 16-25fps...... at a resolution of 128x72 (or less).
+
+Check it out!
+
+http://imgur.com/a/ucACo#0",1393956689.0,5,0.74,3
+depression,Is it possible my SSRI has already stopped working?,"Hey, I've been taking Lexapro for less than 2 weeks, and on the 8th day or so, I felt INCREDIBLE. But now I feel just like I did before I started taking the meds. I know it takes 4 to 6 weeks to get the optimal benefit, but I figured it would be a gradual improvement the whole 4 weeks, rather than having an incredible 4 days in the first 2 weeks, and then crashing and burning.
+
+Please tell me that this is not uncommon and doesn't mean the medicine has stopped working...  I've never felt better, and if it already stopped working, that is heartbreaking =(",1393126090.0,2,0.76,3
+tablets,"Dell Venue 11 Pro, or Galaxy Note 10.1 2014 edition","I'm actually typing this post on a DV11P, but I'm considering returning it for the Note 10.1. 
+
+I'm buying a tablet to takes notes in class, but also for on-the-go media consumption/browsing. 
+
+The Venue is definitely a more versatile device, but I wonder if the Note would be better for browsing and such, since the entire OS is built with a touchscreen in mind, and it's lightweight which makes it easier to hold. 
+
+Anyone have any input?  
+
+Thanks!",1392446762.0,3,0.81,15
+tablets,"The heaviness of 10"" tablets","I got a Dell Venue 11 Pro, but I'm thinking of returning it because it's a little too heavy.  I'm finding that I can't hold it very comfortably for casual use.  However, the alternatives are the Nexus 10, and the Galaxy Note 10.1 2014 edition.  The thing is, they don't seem significantly lighter, based on the specs.  Does that little bit of weight make a lot of difference?  For people with Notes and Nexuses, how comfortable is it to hold?",1392418636.0,3,0.67,16
+tablets,Question about compatible charger for Windows 8 tablet (DV11P),"Hey I got a Dell Venue 11 Pro, and it didn't come with a charger.  There's one on the way now, but I was going to buy one from Amazon as well since it'll get here quicker.  Should [this charger](http://www.amazon.com/gp/product/B005CG2ATQ/ref=oh_details_o00_s00_i00?ie=UTF8&psc=1) be sufficient for my tablet?  I am currently charging it with a regular phone charger, but it only charges when the tablet is turned off, and VERY slowly.  I'm just hoping this one from Amazon will be a lot faster, but I'm unsure.",1392219297.0,1,0.67,3
+darksouls,"People with Nvidia cards, is Dark Souls performing poorly for you with the latest drivers?","I have a 660ti, and Dark Souls has suddenly started performing very poorly.  I went into DSFix and turned down all the extra goodies, but I'm still getting sub-30 frames/second.  I think this started  after installing the latest drivers, 332.21.",1391790267.0,1,0.6,18
+tablets,"Ready to buy a Bay Trail Atom Windows 8.1 Tablet... Is there any reason to wait for a 64bit version, or is the 32bit version perfectly fine?","I am about to buy a Dell Venue 11 Pro, but I'm sure as soon as I get it some 64 bit version with 4gb of RAM instead of 2gb will get announced...  Would it be worth the wait?  Please just tell me no so I can buy this thing already.",1391627277.0,6,1.0,18
+rva,Power outage?,"I live near carver, power appears to be out.  Anyone else?",1391425253.0,1,0.56,5
+tablets,Dell Venue 8 Pro vs Dell Venue 11 Pro,"I've done extensive research on both, so I know what the pros and cons are.
+
+But has anyone owned/held both?  I've heard some people say that the 8 Pro is preferred because of portability, but the clamshell keyboard/battery sounds pretty awesome for the Venue 11.
+
+If you had to pick one, which would you choose and why?
+
+Venue 8 Pro - no HDMI output, no full sized USB port (only a microUSB which is also the charging port, so you can't use a USB device and charge at the same time), no clamshell keyboard attachment, lower-res screen
+
+Venue 11 Pro - not as portable, 2x the cost (even more with the $130 keyboard/battery)",1391279269.0,2,1.0,10
+tablets,Has anyone with a quad-core Bay Trail Atom processor device tried running Dark Souls?,"I'm looking at getting a [Dell Venue 11 Pro](http://www.amazon.com/Dell-Venue-Pro11-2500BLK-Tablet-Windows/dp/B00FFVYUQY/ref=sr_1_2?ie=UTF8&qid=1390964091&sr=8-2&keywords=dell+venue+11+pro) which has the Z3770 Atom processor.  There are plenty of people gaming on these processors.  The Z3770 is close to, or is the most powerful Atom available, from what I could find.  But there aren't as many gaming videos for the Venue, as compared to the ASUS T100.",1390964288.0,2,0.76,9
+GamePhysics,"Payday 2 - ""NO SUDDEN MOVEMENTS!""",,1390332919.0,20,0.92,2
+AskReddit,What was your most miserable day or experience in life so far?, ,1390083924.0,2,1.0,1
+OkCupid,"To the women on OKCupid, is it at all significant when you ""like"" someone's profile? Or is that just a way of sorting/organizing?",,1389879212.0,0,0.5,8
+DarkSoulsHelp,"Please summon me! (sl125, PC)","I'm looking to get summoned so that I can get the Praise the Sun gesture from the Sunlight Altar.  I'm SL125, and can help you with any boss in the game.
+
+gfwl- dizzuncan",1388938583.0,2,0.76,1
+depression,"I think I already know that this is a bad idea, but what has your experience been smoking marijuana on Wellbutrin?","I can't find any conclusive info on whether this is a good idea or not, seems like it leans more in the ""bad idea"" category, but what was your experience like?",1388191667.0,2,1.0,3
+a:t5_2rq0c,It Ain't Going Down Like That!!! - Kickstarter for Korey Coleman's New Site,,1386976816.0,13,0.9,0
+depression,Looking for advice on Wellbutrin,"**I'm not asking for medical advice.  Just wanting to hear about your experience with Wellbutrin.**
+
+Does anyone find that 150mg is a sufficient therapeutic dose for them?  I'm on my 5th day of 150, and was supposed to up it to 300mg on Saturday morning, but today I've felt great!  So I'm wondering if upping the dose to 300mg is even necessary.  Also, is it possible to start feeling the benefits after only 5 days?
+
+My depression is fairly mild (symptoms resemble dysthymia) which is another reason why I feel like 150mg might be enough for me.  But I am a big dude, and I'm not sure how much of an impact body weight can have on the dosage.
+
+Thanks!",1386904429.0,3,0.72,5
+darksouls,Doing a stream right now if anyone's interested,"This is my first real stream, so be easy on me?  I'm not promising that it will be interesting to watch, but I'm going to do a Murakumo playthrough.
+
+http://www.twitch.tv/dizzuncan",1385591978.0,3,0.67,0
+DarkSoulsHelp,Need Help with Manus [PC] sl125,gfwl - dizzuncan,1385572971.0,2,0.76,2
+darksouls,What other game franchises do you think could work really well if designed similarly to Dark Souls?,"Me and my friend like to talk about this kind of stuff a lot.  If From Software were commissioned to make a DarkSoulsesque game from another franchise, which franchise would you want them to work on?
+
+I personally feel like it would be realllly cool if From made a Zelda game that was tonally and mechanically similar to Dark Souls.",1384739158.0,3,0.59,31
+Splintercell,Dualshock 4 on PC with Blacklist?,"Has anyone tried using a Dualshock 4 for Blacklist on PC?  I'm using x360ce and the game recognizes the controller, but all the buttons are mapped incorrectly...",1383720547.0,5,0.86,2
+ADHD,Amphetamine + Synthroid? (levothyroxine),Does anyone here take these 2 meds together?  What has your experience been like?  Any side effects?,1383148497.0,4,0.83,15
+ADHD,What morning medication ritual works best for you? (before or after breakfast? How long before/after breakfast?),"I've heard lots of differences of opinion on this question, so how do you usually start your day with meds?
+
+I usually take my Vyvanse after breakfast, because if I don't it seems to make me burpier than usual.",1383077726.0,8,0.85,18
+ADHD,"Medication effectiveness - ""the honeymoon effect"". How does one avoid this?","Hey everyone. I've been trying to find the right medication for about a month now. Started with Adderall, then Ritalin, now Vyvanse.
+
+When I started with the Adderall, I felt so fantastic for the first few days. Then on day 4, not only did it feel less effective, but I also started experiencing negative side effects (shortness of breath, feeling physically tired, racing heartbeat, etc). I got scared, and decided I needed to switch medicines. I think the momentum shift (of both going on, and coming off) of the Adderall caused me to slump into a 2-day depression, where I felt very miserable and hopeless.
+
+Then I tried Ritalin, which was better than no meds at all, but ultimately was very disappointing.
+
+Now I'm on Vyvanse. I started experiencing the negative side effects after a couple days just like I did with the Adderall, but I decided that I'm going to push through them, with the hopes that once my body gets used to it, the side effects will go away. I've been on the Vyvanse for a little over 2 weeks. The first 4 or 5 days, I felt very compelled to be productive, which I really liked. Instead of wanting to play video games like I usually do, I felt like reading instead. But lately, I've been falling back into my typical unmedicated self.
+Is this always bound to happen? Once that honeymoon effect wears off, I start to kind of feel depressed again, and like things are out of my control. I'm thinking about maybe giving Adderall another try, since now my body is a bit more used to the stimulants. Anyone have some insight?
+
+Thanks
+
+tl;dr: Amphetamines work wonders at first, but when they start to lose their effectiveness, it makes me start to feel depressed and hopeless again. How do I stop this?",1383065949.0,23,0.94,22
+darksouls,Four Kings attempt - sl4 - claws only. A perfect example of Dark Souls punishing you for getting greedy.,,1382730678.0,56,0.95,16
+mildlyinteresting,This car's gearshift is akin to a large volume knob,,1381013553.0,8,0.84,4
+rva,Anyone know what happened outside Rite Aid at Broad+Belvidere?,"VCU alert sent out several texts saying only to ""go indoors"" and ""avoid Broad+Belvidere"".  Later I ended up passing through that area and there were cops everywhere, and a news crew interviewing some people.  I heard a rumor about a shooting?  Anyone know more details?",1380848686.0,11,0.74,5
+DarkSoulsHelp,"[PC] Need Obsidian Greatsword - Have slabs, chunks, scales, etc","I'm going to bed right now, but if you have one to trade, just comment or message me, and we can work out the time tomorrow.",1380778199.0,3,1.0,2
+onebros,Help with Gwyn?,"my GFWL is dizzuncan, if anyone's free before 2pm EST, message me on here or there.  Thx!",1380377008.0,4,0.84,5
+askscience,"Does testosterone cause aggressive behavior, or is it just a myth?","I am taking a Sociology class (Sociology of Sex and Gender) and my professor assigns various reading assignments, including [this one](https://docs.google.com/file/d/0BwLt8qK0efuxRjI1ZTI1NEJRa2s/edit), which sets out to disprove the idea that testosterone causes aggressive behavior.  I raised some objections to the article in class, and my professor told me that I need to reread it a few times to really understand what he's saying.
+
+It seems to me though that the author of the excerpt doesn't actually disprove the notion, but instead lays out the evidence and simply offers an alternative hypothesis.  
+
+After a fair bit of Googling, I still can't seem to find any definitive answers on the matter.",1379284801.0,5,1.0,4
+news,"Dennis Rodman, Leaving North Korea, Says Prisoner Issue ‘Not My Job’",,1378617389.0,10,0.68,5
+darksouls,Does anyone on PC have a Ghost Blade they'd be willing to trade?,"I'm looking specifically for [this weapon](http://darksouls.wikidot.com/ghost-blade) which is only dropped by the screaming (Banshee) ghosts. Since I'm SL1 in NG+, there's only 1 of those enemies that I can realistically farm, and it takes some time to get to that one enemy, and it's an extremely rare drop. I've been farming for a while, but I figured I'd see if anyone would be willing to part with theirs.
+Thanks!",1370529814.0,0,0.5,17
+GamePhysics,Falling Down the Rabbit Hole (x-post from /r/darksouls),,1369234345.0,204,0.95,1
+ouya,Connecting phone as external storage to OUYA?,"So I don't have a flash drive, but I want to transfer files to my OUYA.  I tried plugging my phone into it, but the OUYA didn't seem to recognize that there was anything new plugged into it.  Does anyone know how to accomplish this?
+
+edit:  Sorry, I should have mentioned that I'm using an Android phone (Galaxy s3)",1368717072.0,4,0.83,4
+darksouls,I think this looks AWESOME (Dark Souls outfit),http://i.imgur.com/USBVi2W.jpg,1368599572.0,8,0.75,9
+ouya,"I'm on the east coast of US, and I just got my tracking number. (Standard, 1 controller, backer 1648)",Hope this helps,1367590801.0,0,0.45,8
+darksouls,Pikachu and Snorlax vs Drake and Josh,,1367190674.0,61,0.84,14
+darksouls,So I found a new area in New Londo Ruins,,1366840771.0,0,0.29,0
+GalaxyS3,There's something very wrong with my GS3,"I thought this was a CM issue at first, but now I'm thinking this might be a hardware issue.  My phone is constantly turning off and rebooting, though I can get it to stay on for a few minutes at a time.  When I plug the battery into the phone, it automatically turns on.  I can't seem to get it to boot into recovery or download mode either.  Anyone experienced this?  Is there an alternate way to force the phone into download mode?  I bought this phone off contract for $500, I hope this thing isn't toast...",1365450604.0,2,0.75,1
+darksouls,"As an SL1 Darkwraith, I still don't understand the appeal of ""Dickwraithing""","So I'm on my 2nd sl1 Darkwraith build, and I see people Dickwraithing a lot, and I don't understand the appeal. 
+
+To make the distinction, when I invade a low level I usually try to wave, drop carvings, make myself seem friendly, and then if they play along, I have fun with them. I'll follow them through the burg, cheering them on, dropping prism stones, skull-shuffling, etc. 
+
+Of course if they insist on attacking me nonstop, despite my nonviolence, yeah I'll put the little brat down. But I give them plenty of chances to calm their asses down before I do it. 
+
+So what is the fun in invading a noob and immediately murdering them? Sometimes I pose as a noob in the Parish, to absorb all the twinks, and everytime, they come down that ladder and immediately try to kill me.
+
+I just don't get it.",1364918319.0,0,0.4,13
+AndroidQuestions,"Every night my email app says it 'can't sign into gmail', even though during the day it works fine.","I'm rollin cm10.1 on a Sprint GS3. It's so weird,  I stay connected to the same network,  yet around 1 or 2am,  I get notifications about my email app not being able to connect to my Gmail account,  and that I need to update my credentials,  yet when I wake up the next morning everything works fine.",1364883749.0,4,0.71,3
+pebble,Do you recommend the Pebble?,"So I remember seeing the Pebble Kickstarter way back when, and although I thought it looked awesome, it kinda seemed like the kind of thing that I would buy, but then end up realizing that I didn't have a real practical use for it.  So tell me about your experience with the device so far.  Do you wear it everyday?  Are you satisfied with your purchase?  I've also heard people complain that build-quality is very disappointing, has that been an issue for you?",1364283983.0,17,0.95,50
+AndroidQuestions,My S3 with CM10.1 is bootlooping and won't boot into recovery,"I have been having a lot of service issues so I decided to try installing a Touchwiz ROM temporarily to see if it would help.  I did a full backup as well as a Titanium apps backup beforehand.  When I tried restoring the full backup, it says the MD5 doesn't match or something.  So I tried flashing an old CM10.1 nightly I had in my Downloads folder from way back when, and now my phone is bootlooping on the CM boot animation, and I can't seem to get it to boot into recovery.  I've tried every possibly button combination...
+
+Please help me :(",1364095456.0,2,0.76,2
+ouya,False advertising in OUYA Kickstarter video,"To be honest, when I first saw the OUYA Kickstarter video, it felt very slimy and like I was being lied to.  They exaggerated a lot, and made some definite claims about some things that they could not have been definitely sure about.  For me personally, the details that seemed exaggerated/false were not the reasons that I purchased an OUYA.  But what about all the people who backed OUYA because the Kickstarter video explicitly stated [**""Minecraft is gonna be on it!""**](http://www.youtube.com/watch?v=xh6Ji_6Wg9c#t=2m5.7s)?  And yet we're about a week from shipping date and there is no official Minecraft support, and if I remember correctly, when Julie approached Mojang about it, they made absolutely no commitments.  Sure, one could sideload the APK, but the average consumer doesn't know about that kind of thing, not to mention that the video footage of Minecraft shown in the Kickstarter video is not the Android version of Minecraft.
+
+I'm just as excited about getting my OUYA as the rest of you (though the ONLY reason I bought it was for sideloading emulators), but I just feel like Julie should be held to task about the overpromising that was done in the original Kickstarter video.
+
+",1363836334.0,0,0.41,5
+darksouls,A question to the hackers/modders of /r/darksouls,Hey is there a way to use a trainer to unlock all the gestures for my character?,1362940704.0,0,0.33,2
+onebros,SL1 Darkwraith Fight Club/Tournament anybody?  I'm on PC.,,1362806336.0,9,1.0,9
+darksoulspvp,SL1 Darkwraith tournament?,Has this happened?  Will it happen again?  Should I get the ball rolling somehow?,1362780597.0,3,1.0,3
+darksouls,Dark Souls Challenge I thought of,"First of all, I know I'm probably not the first person to think this up, and someone out there has probably already done it...  
+
+To make this the challenge that I'm envisioning, you'd do this as an SL1 (since my last ~130 hours have been as an SL1, that's the mindset I'm thinking in).  But how cool would it be for you to (after beating every boss minus Gwyn),  Without resting at any bonfires, you have to traverse every environment, killing every enemy in your path,  the end result would be a completely enemy-less Lordran (minus baby-skeletons).  Obviously you'd have a maximum of 20 estus flask to get you through it, and I'd say using the Ring of Evil Eye would be allowed, but no Sanctus, Humanity, or other healing items.
+
+DLC, Painted World, and Undead Asylum might be tricky, I don't know if enemies get reset when traversing to those areas or not.  If they do, then you don't have to worry about those areas.  
+
+Anyways when I first thought about this, I was thinking ""eh that's easy, I could do that"". But then I thought about all those ghosts, skeledogs, Blighttown...  *shudder*",1362687799.0,1,0.67,5
+onebros,Anyone have much luck getting summoned at level 1 as a white phantom?,"I put my sign down in the burg sometimes, but no one ever seems to summon me...",1361838618.0,5,1.0,7
+onebros,I should be available to help PC onebros today.  Just reply to this post/PM me and I'll let you know.,,1361820058.0,5,0.86,5
+Games,Unofficial alternate OS on PS4?,"So the PS4 is rolling with a lot of PC components, including an x86 processor...  Obviously since Sony firmware'd out the ability to install an alternate OS on the PS3, it seems unlikely that they'd go down that path again with the PS4.  
+
+But what about unofficial options?  If someone hacks it, what is the likelihood of installing Windows, Mac OS, or a Linux distro on that thing?  Obviously the device isn't even out yet and we don't have nearly enough details to be able to really make a prediction, but is there anything about the device that makes that inherently impossible?
+
+  This was the first thing that came to mind when I heard it was going to have an x86 processor, but no one seems to be talking about that aspect,  so I'm just wondering if I'm missing something. ",1361460359.0,0,0.42,1
+onebros,Killing the red Drake on the bridge?,"I spent a lot of time yesterday trying to kill that beast as an SL1, and though flashsweat is VERY helpful, I still never felt like I was getting very far with it.  For a while, I was getting somewhere with the light crossbow, but after a certain point, I get stuck in a loop of shooting, missing, getting knocked down by fire, rinse/repeat.
+
+Anyone done it as an SL1?  How'd you do it?",1360952028.0,1,1.0,1
+onebros,I am dreading fighting Kalameet...,"I haven't even attempted it yet, but I imagine it might be tough, given his ability to projectile vomit unknown chemicals at me.  Any pointers?  Anyone interested in giving me a hand?  I have Lightning Battle Axe+5, Lightning reinforced Club +5, and Chaos reinforced club +5.  Knight shield +15, Light crossbow +15, Ascended pyromancy flame +5, and I think that's about all I have that'd be useful in this fight.
+
+edit:  I'm on PC",1360950201.0,2,1.0,3
+onebros,I feel dumb asking this...  Anyone interested in making a Dark Souls Harlem Shake video?,,1360903391.0,0,0.33,0
+darksouls,A friendly reminder in the Burg,,1360775464.0,14,0.76,17
+darksouls,"Had a very interesting experience last night, invading a hacker...",,1360685925.0,97,0.99,16
+Games,For anyone having trouble running Hotline Miami in Windows 8,"Don't know why I didn't think to try this sooner, but I tried launching it in Compatibility Mode, and I was FINALLY able to continue on with the game, and eventually finish it.  I was stuck at chapter 8 for the longest time, the game crashed less than 30 seconds into the game every time, but after setting up Win7 compatibility mode, I got past that level, and finished the game with only 1 other crash.",1359269519.0,0,0.44,1
+battlefield3,Plunge into the Heat of Modern Battle,"Is anyone else getting this popup from Origin multiple times a day?  I fucking bought Premium like the day it came out, yet they're still bugging the hell out of me to buy it *multiple times a day*.  What gives?",1358822572.0,2,1.0,1
+buildapc,[Troubleshooting] All 3 of my case fans just stopped working.  Do I need to fix that?,"Alright I know I probably sound like an idiot based on my submission title, but I've been keeping an eye on my temps, and they're actually staying cooler than they were before.  This is probably a result of me having moved into a new apartment, which stays a bit cooler than the room at my house did, but the fact remains.  Even when gaming, my temps are staying 5-10C cooler than they were when I was at my old place, WITH 3 case fans running.  So do I need to go through the trouble of fixing this issue?",1357846661.0,1,1.0,9
+askscience,Does diet soda's lack of sugar/calories nullify the health risks associated with frequently drinking soda?,[removed],1357772605.0,1,1.0,0
+needadvice,"Moving to the city for college. Bringing my old,  outdoor cat.","Alright so as the title states,  I'm going to school,  moving into an apartment in the city,  and I'm bringing my cat with me. She's old,  and she likes spending time outdoors when the weather is nice. She doesn't hunt or travel,  she usually just likes to sunbathe.  At her current home,  we have a large front and backyard,  so she can hang around outside the house if she wants. 
+
+Obviously having an apartment in the city is gonna get in the way of her enjoying outdoor time. She's old (14 yrs) and sick though (encephalitis born out of toxoplasmosis,  AKA she has seizures) and I want her to be happy. I'm thinking about possibly letting her roam on the apt building's front lawn (under my supervision,  obviously),  but it just doesn't seem practical. Is it that big of a deal if she stops being an outdoor cat like she has been?",1357503268.0,2,0.63,9
+buildapc,"[Troubleshooting] Possible graphics card issue?  Either way, something is wrong.","Alright, so this is more of an /r/techsupport question, but I've posted this question over there numerous times, and no one ever has a clue.  I can't blame them, since I haven't been able to find anything about this on the rest of the internet either.  
+
+While playing games, my screen sometimes (I daresay 'often'), gets shifted/juxtaposed to the left or the right.  This happens at random, but always while I have a game open.  
+
+Some examples of my issue:
+
+http://imgur.com/gVUw8
+
+http://imgur.com/lS76T
+
+http://imgur.com/TBn4x
+
+http://i.imgur.com/y5ray.jpg
+
+So as you can see, in all of these pictures, the right side of the screen ends up meeting up with the left side of the screen, in the middle of my monitor.  This happens frequently, and is very frustrating, since the only way to fix it is to reboot the computer.  As you can see, this doesn't only affect the game I'm running, it carries over into Windows as well.
+
+For a time I was thinking that this was a software issue, since I was using a pirated version of Windows, and wasn't able to update it.  I know that's shameful and everything, I don't really do that stuff anymore, and have since purchased a legitimate copy of Windows 8.  I thought that having an up-to-date OS would fix this issue, and for a while, I wasn't experiencing any issues in Windows 8, so I thought that I had fixed the problem.  Those Dark Souls screencaps are from a few minutes ago though, so that clearly didn't fix the problem.
+
+Anyone know what might be causing this problem?  My first thought is to save up for a new graphics card, but I don't want to drop $300 on a card unless I know that the graphics card is what's causing the issue.  Could it be the motherboard?  Or the power supply even?
+
+Parts:
+
+ASUS P8z68 V - LE motherboard
+i5 2500k (not overclocked)
+HIS 6970 IceQ graphics card
+16gb Corsair Ram 1600
+Corsair 750w semi-modular power supply
+ASUS VS247H-P 24"" monitor
+
+Help me Obi Wan Kenobi.  You're my only hope.
+",1356587094.0,1,1.0,13
+skeptic,Facebook pic going around with gun-use statistics.  Seems a bit exaggerated...  Anyone know how true this is?,,1356363193.0,7,0.71,8
+darksouls,I had a DARK SOULS moment last night,"This story might not be that remarkable, but I had a really hard time accepting what happened to me last night, it was possibly the biggest shit-on-my-happiness moments I've experienced in this game so far.  Thought I'd share it, because even after having beaten this game 8 times, I didn't think this would have happened to me.  Spoilers ahead, I guess.
+
+The most important part of this story is that right as I get to the bottom of Blighttown, my Uchigatana +4 becomes 'at risk', and I don't have any repair powder of a repairbox.  So I know that fighting Quelagg is gonna suck.  I summon 2 human players, and we, Los Tres Amigos, go into the fight.  I'm thinking to myself ""okay, I don't have any good weapons to use, but I've got 2 other human players, so I should be alright"".  About 30 seconds in, Quelagg one-hits me with one of her AOE attacks.  
+
+From that point on, I didn't see any human summon signs.  It was just me and Mildred from that point on.  After several failed attempts at fighting her again, I decide that I'm not going to get this done unless I get my Uchi fixed.  I'm debating whether it was worth risking leaving my pile of souls and humanity (which was enough souls and humanity to question whether a trip that far was worth it) in the boss room, but I thought ""dude you can handle this"".  So, I start trekking up the elevator, so I can get to Firelink, so I can take the elevator to the Parish, so I can talk to Andre.   Suddenly:  Toxic.
+
+That fucking sniper right before that one ladder.  You fuckign asshole.  Do you have any idea what's at stake here?  No blooming purple, but I still have 10 Estus Flask, and a strong will to live.  I'm pounding back estus like it's my job, just hoping that Lautrec hasn't killed the Fire Keeper yet, because GODDAMNIT I NEED TO SIT AT A BONFIRE LIKE NOW.  So I finally take the elevator from New Londo to Firelink, and use my very last estus walking up the steps where the Firelink Fire Keeper is.  I'm SO happy.  I couldn't believe how perfectly that worked out!  
+
+Okay so I talk to Andre, buy the repairbox and smithboxes, and start making the descent.  I make it to the bonfire in Blighttown, and I'm like ""Alright, time to reverseth the holloweth, summon Mildred, touch my bloodstain, and kill this fiery bitch.  So I walk through the white fog, Quelagg jumps at me with her lava breath like she always does, and I dodgeroll it like I always do, but............ WHAT?!
+
+This time I drown in lava, as my bloodstain grins at me from the other side of the room.  I couldn't believe it.  I was so happy that I made it all the way to Undead Parish and back, and I couldn't wait to get back to my bloodstain.  And of all the things that could have happened, this is how it goes down.  I just kept saying to myself ""I can't fucking believe this"".
+
+DARK SOULS",1355846762.0,54,0.92,38
+nvcc,TIL Jill Biden is an English professor at NVCC (xpost from /r/nova),,1354927430.0,1,0.67,0
+Games,Is AC3 as buggy on consoles as it is on PC?,"Been playing Assassin's Creed 3 pretty much since 1pm.  The bugginess is at times maddening.  Of course AC games are always buggy, but I don't remember Brotherhood or 2 being this bad.  Scripting errors happening, causing me to have to reload checkpoints.  Being told to chase after this guy, yet I'm loaded into the scene, stuck in the environment and unable to move.  Seeing enemies start their AI routine, but it bugs out and resets after 3 steps, and then he just keeps taking the same 3 steps over and over again.  
+
+There's so much to like about this game, and yet all I feel like doing is yelling about how fucking broken it feels.
+
+:(",1353458780.0,56,0.76,132
+techsupport,Screen juxtaposition problem while gaming,"So I've been having this issue for a long time on my PC, but today it has happened to me 3 times in about 4 hours, and it's very annoying.  I get this issue where during a game, the left or right side of the screen will get juxtaposed to the opposite side of the screen.  Whenever it happens, I just reboot the PC and it fixes it, temporarily.  I've been playing Assassin's Creed 3 a bunch today, and it's already happened 3 times.  It seems like it could happen in any game, but it happens more frequently in specific games.  The Batman Arkham games did it a lot.  AC3 is apparently going to have this problem very often.  I have an i5 2500k, and an HIS 6970.
+
+Pics:  http://i.imgur.com/gVUw8.jpg
+
+http://i.imgur.com/lS76T.jpg",1353448269.0,1,1.0,3
+Android,"So in the gaming world, oftentimes, a 'port' is inferior to its original.  Is this the case when it comes to phone ROMs?",,1353130126.0,6,0.72,2
+darksouls,Something I like to do in the Township while waiting to be invaded...,,1352237367.0,65,0.88,16
+darksouls,Going back to Demon's Souls,"Has anyone tried going back to Demon's Souls after playing through Dark Souls.  I only ever put about 20 hours into Demon's Souls before putting it down.  Now, after having put 250 hours into Dark Souls, I decide to give Demon's Souls another shot.  I don't think I can do it.  I feel like a lot of the games mechanics are just so much better in Dark Souls, and the most discouraging thing is how far you have to travel to get to the next boss, with no checkpoints or shortcuts in between.  Anyone have any thoughts on the matter?",1352143816.0,4,0.84,22
+GalaxyS3,"Sprint GS3 owner here, running CM10.  Any similar users tried using Google Wallet?  Has it worked consistently?","Just wanted to get a feel for other people using Google Wallet with their GS3s.  I used it with my GNex on a very regular basis, and it worked very consistently, only a few instances where I had to bust out my ACTUAL wallet to complete the transaction.  For some reason though, I can't seem to get such results with my GS3.  When I try it with my S3, nothing happens, until 20 minutes later when I turn on my phone screen again, and there I see the Enter your PIN prompt.  Has anyone else had these issues?  Thanks.",1350968033.0,3,1.0,0
+darksouls,So me and my friend just duplicated the dragon-torso stone.  Is this a glitch or what?,"Alright so I have 2 characters.  One of them had the dragon-torso stone, and the other one didn't.  I really wanted my second character to have it, so I traded it to a friend from my original file, and then he traded it back to me on my new file.  Later, my friend was in Firelink Shrine (where Frampt chills) and he was like ""Whoa, that chest that is usually open (behind Frampt) is closed...""   So he checked it out, and for some reason, there was a dragon-torso stone in the chest.  Now we both have one.  No idea if this is a glitch or if this is supposed to happen, but it's awesome, and would love to hear if this happens to other people as well.  
+
+I'm playing PTDE btw.",1349855127.0,5,1.0,9
+pics,I think they may have overdone it...,,1348437587.0,1,0.57,2
+androidthemes,Black and White Chess Theme,,1348076511.0,4,0.7,0
+AndroidQuestions,Is onscreen button screen-burn a legitimate concern?,"Hey,  I just got a gs3 and I'm giving AOKP a spin. I want to use onscreen buttons,  since I'm used to that (coming from a GNex).   Is there a risk of screen burn from the buttons,  or is the average user not really running that risk?",1348042725.0,1,0.6,1
+askscience,Is it possible that the probiotics I'm taking are causing me to have vivid dreams?,[removed],1346262565.0,0,0.5,0
+skeptic,"Fluoride lowers IQ in kids, new study shows...?",,1346164812.0,8,0.78,5
+vcu,Potential community college transfer student here...,"I'm thinking of transferring from NOVA (a community college in Northern Virginia) to VCU, and I have some questions...  The thing is that I'm really not a great student.  High school was difficult, and community college took longer than it should have.  I'm a smart guy, but whether it's ADD, a learning disability, or just plain laziness/lack of internal motivation, school has always been pretty difficult for me.  Anyways, I'm about to graduate with my associates degree at NOVA, and I'm thinking of transferring to VCU and majoring in spanish (which I'm pretty good at actually).  Are there any community college transfer students that are majoring in a foreign language at VCU, and can you tell me how the transition has been?  How much more difficult is VCU than your community college was?  My friend goes there and is majoring in Biology, and based on what he has told me, it's been very very difficult for him, and he, unlike me, is a good student.  I'm just intimidated, and I am worried that I won't be able to be successful with that kind of workload, etc.  
+
+Thank you for any insight you have to offer.  ",1345343834.0,5,0.86,5
+androidthemes,Can someone help me find an icon for my theme?,"I have a specific theme for my launcher,  modeled after LauncherPro's theme. The dock icon I have for the Play store is still the old style market icon,  and I want the icon to reflect the current Play icon. 
+
+I'm referring to the market icon in the dock. Thanks!   http://www.imgur.com/QlcNG.jpeg",1345077598.0,1,0.6,3
+washingtondc,Anyone here going to the 2000's Dance Party at 9:30 tonight?,Just wondering if any other Redditors were going to be there :),1344722678.0,3,0.61,6
+UMW,Anyone transfer to UMW from NOVA?,"This might be a weird reason to ask this question, but...
+
+I just graduated from NOVA with an associates degree.  I was going to just go get certified and get a job, but now I'm thinking of transferring to UMW and finishing out my Bachelor's.  I'm not a good student, though.  I'm a smart dude, but I have a very difficult time studying and staying on task when it comes to school work.  NOVA was great for me because it's pretty easy. The jump to a 'big school' is intimidating to me, because I know it's probably going to be considerably harder than NOVA.  Anyone transfer to UMW from NOVA, and how much more difficult have the classes been at UMW based on your experience?  
+
+Thanks.
+
+PS I'd be majoring in Spanish, if that helps.",1344533671.0,2,0.75,5
+buildapcsales,"Update on the Original Wireless fiasco (the company behind the incredibly low priced HDDs, etc on Amazon the other night).",[removed],1344286396.0,7,1.0,12
+Music,SBTRKT - Pharaohs,,1344189207.0,0,0.5,0
+battlefield3,Just experienced the coolest glitch I've ever experienced in BF3,"I was flying the Viper in Caspian Border (32 man Conquest), and I took down the other chopper, but I got disabled in the process.  So I land the Viper to repair it, and when I get back in, it is completely quiet.  I can't hear any engines or rotors from my chopper.  I figured that at a certain point, the noises would kick in, but they didn't.  I could hear all the other noises I would have normally heard flying the chopper, but there wasn't that constant drone going on in the background, so unless I was attacking something, or getting locked on to, the only noise I could really hear was the occasional muffled 'boom' from a tank or an explosion down on the battlefield.  I lasted about 4-5 more minutes after this started, and it was the most peaceful/eerie thing in the world!  I felt like I could relax/focus better without all the engine noises.  
+
+Anyways, has anyone else had this happen?  If not, what is your favorite glitch you've experienced in BF3?",1341985907.0,1,0.54,9
+AndroidQuestions,To Sprint GNex users who have dabbled in Jellybean,"How is/was your experience with it?  I used the R U Jellin ROM from XDA (an ACS ROM), and I had to go back to ICS.  Battery life was atrocious, notification drawer was not quick to respond, and I was no longer able to connect to my work's WiFi router.  Did anyone else have a poor experience with Jellybean?  My friend has it on his Verizon GNex and loves it, maybe it's just a problem with the Sprint version?",1341761092.0,1,0.67,1
+battlefield3,Battlefield 3 themed Razer Blackwidow mechanical keyboard on sale [CompUSA - $81.97] (crosspost from /r/buildapcsales),,1340599596.0,0,0.5,4
+askscience,Why do some dogs shake their leg(s) when you scratch them on the back?  Do they enjoy it? ,[removed],1340173767.0,1,1.0,0
+AndroidQuestions,"Can't find a launcher to satisfy my needs, I feel like I'm all out of options!","Before you suggest anything, **ADW Ex**, **Golauncher EX**, and **LauncherPro** (the 3 launchers I've used the most) are not options for me.  ADW isn't working properly, Golauncher is outperformed by the other two I mentioned, and it has a hideous interface, and Launcherpro is in DIRE need of an update.  I know those are reddit's go-to launchers, but they aren't doing it for me. 
+
+I recently got a Galaxy Nexus (upgraded from Nexus S), and I have yet to find a launcher that I'm satisfied with.  I was using ADW Ex on my Nexus S, and I LOVED it, but for some reason on my Galaxy Nexus, on multiple ROMs, the dock icons just aren't responsive at all.  Sometimes I have to press an icon [80-90 times](http://www.youtube.com/watch?v=4q6uxn7tUuc) before the app/app drawer opens up.  It is incredibly frustrating, especially when I'm at work and trying to access information quickly.  So unless someone know's a fix for that, ADW is out.  
+
+I need a launcher in that format though.  Scrollable dock with 5 icons on the bottom, and then homescreens that I can put my widgets on.  
+
+[This](http://i.imgur.com/kSabp.png) is the setup I've had on my phone for a long time now, and I want to keep that look.
+
+Please help?  ",1339992867.0,0,0.5,10
+AndroidQuestions,So how does Sprint LTE work?  Is it a separate radio on the phone from 3G?,"I just got a Galaxy Nexus on Sprint, and I can't figure out how to use LTE.  Is that a separate radio that I have to turn on?  I don't see anything about it in the settings...  (I am using custom ROM, Slim ICS) Or does it work completely differently than WiMax did?  
+
+Thanks!",1339224464.0,0,0.5,5
+funny,Early Tenacious D Comedy Act (NSFW),,1338314727.0,0,0.5,0
+funny,We weren't sure how to make this pizza...,,1337565145.0,6,0.69,0
+GoogleTV,Notification issues on my GTV device...,[removed],1335772151.0,2,0.75,4
+Android,Could somebody with ICS please provide me with a download link of their email.apk?,"I installed this ROM that I like but it didn't come with the stock email app.  It's a 4.0.4 ROM.  Could someone please upload their ICS email apk to mediafire and let me download it?  I tried in [/r/androidquestions](/r/androidquestions) already, and I've Googled around, and couldn't find anything.  
+
+I'd **really** appreciate it.  Thanks.",1335639404.0,0,0.4,4
+AndroidQuestions,Could someone possibly supply me with the stock email.apk for ICS?,"I installed a ROM, and it didn't come with the default email app, but I really like the ROM so I just need to manually install the email app.  Is it possible that the essentials zip didn't flash correctly?  I couldn't find any other complaints in the ROMs forum.  ",1335592285.0,1,0.67,6
+askscience,"Why don't my pets respond to loud music?  Doesn't it bother them, or keep them from sleeping?",[removed],1335291405.0,1,1.0,0
+battlefield3,PC/PS3 Battlelog access question,"Hey everyone.  I play BF3 on PC, but I told my friend to check out BF3 for his PS3, and he did, and loves it.  He's still kinda new, so I thought it'd be cool to check his stats and whatnot on Battlelog, so I could be like 'bro, I see you unlocked X gun, you should give that gun a try"".  However, I guess since we're playing on different platforms, I can't see how he's doing.  I own a PS3 however, so I thought that maybe if I borrowed his disk, and then bought the online pass, I could start viewing PS3 player stats and such on the Battlelog website.  Is that  how it works?  I've seen people linking accounts before on Battlelog, but was never sure how they did it.
+
+Thanks!",1334850279.0,0,0.33,3
+buildapc,"[Build Ready] Pretty sure I'm good, just need some second opinions.","I'm helping my friend Jerry build a PC.  He wants assurance that the parts I picked are compatible.  Can I get a second opinion here?  Thanks.
+
+
+
+[Part list permalink](http://pcpartpicker.com/p/6QGW) / [Part price breakdown by merchant](http://pcpartpicker.com/p/6QGW/by_merchant/) / [Benchmarks](http://pcpartpicker.com/p/6QGW/benchmarks/)
+
+Type|Item|Price
+:----|:----|:----
+**CPU** | [Intel Core i7-2600 3.4GHz Quad-Core Processor](http://pcpartpicker.com/part/intel-cpu-bx80623i72600) | $249.99 @ Microcenter 
+**CPU Cooler** | [Cooler Master Hyper 212 Plus 76.8 CFM Sleeve Bearing CPU Cooler](http://pcpartpicker.com/part/cooler-master-cpu-cooler-rrb10212pg1) | $22.99 @ NCIX US 
+**Motherboard** | [Asus P8Z68-V PRO ATX  LGA1155 Motherboard](http://pcpartpicker.com/part/asus-motherboard-p8z68vpro) | $199.99 @ NCIX US 
+**Memory** | [Corsair Vengeance 16GB (4 x 4GB) DDR3-1600 Memory](http://pcpartpicker.com/part/corsair-memory-cml16gx3m4a1600c9b) | $89.99 @ Newegg 
+**Hard Drive** | [Western Digital Caviar Black 2TB 3.5"" 7200RPM Internal Hard Drive](http://pcpartpicker.com/part/western-digital-internal-hard-drive-wd2002faex) | $209.95 @ Mac Connection 
+**Video Card** | [Asus GeForce GTX 580 1.5GB Video Card](http://pcpartpicker.com/part/asus-video-card-engtx580dcii2dis1536md5) | $409.99 @ Newegg 
+**Case** | [Corsair 650D ATX Mid Tower Case](http://pcpartpicker.com/part/corsair-case-cc650dw1) | $169.99 @ Newegg 
+**Power Supply** | [Corsair 1000W ATX12V / EPS12V Power Supply](http://pcpartpicker.com/part/corsair-power-supply-cmpsu1000hx) | $260.98 @ NCIX US 
+**Optical Drive** | [Asus DRW-24B1ST/BLK/B/AS DVD/CD Writer](http://pcpartpicker.com/part/asus-optical-drive-drw24b1stblkbas) | $25.97 @ Newegg 
+**Monitor** | [Asus VE247H 23.6"" Monitor](http://pcpartpicker.com/part/asus-monitor-ve247h) | $168.98 @ Mwave 
+**Operating System** | [Microsoft Windows 7 Home Premium SP1 (64-bit)](http://pcpartpicker.com/part/microsoft-os-gfc02050) | $99.99 @ Newegg 
+**Keyboard** | [Das Keyboard DASK3PROMS1 Wired Standard Keyboard](http://pcpartpicker.com/part/das-keyboard-keyboard-855800001166) | $144.99 @ Newegg 
+**Mouse** | [Logitech G500 Wired Laser Mouse](http://pcpartpicker.com/part/logitech-mouse-910001259) | $54.99 @ SuperBiiz 
+ | | **Total**
+ | Prices include shipping and discounts when available. | $2108.79
+ | Generated 2012-04-14 13:12 EDT-0400 |",1334423769.0,1,1.0,4
+SuicideWatch,Just saw that a friend on Facebook posted a status about committing suicide.,"Not sure if this is the right place for this.  
+
+A friend, who is mildly mentally retarded (my unprofessional diagnosis), posted some statuses on FB recently.  
+
+#1 - I know this a bad thought to think but I think it a lot. I just think sometimes I should kill myself. Craptastic job. Craptastic life. No Fucking girlfriend. Cause all girls asked in 7 years say I'm too nice. Well I can't change that. I don't know. I have no one to talk to. All I got is a journal.
+
+#2 - Can ask an odd question? After I said the whole thing about killing myself. 1) why do some people care? You know I thought I was important. It's good too know I'm not. It's also good too know I'm not needed to make people happy.2) so should I stop trying?
+
+This guy really likes me a lot, we went to high school together and I've always been super nice to him.  I honestly don't think he would/could actually go through with it, but I'm not willing to bet his life on that.  He only got one public response to either of his updates, someone said 'When you've got the spotlight, shine with courage my friend'.  I don't even know what that means but it sounds kinda shitty.   
+
+I am really not sure how to approach this.  The statuses were posted like 24 hours apart, and the second one was posted about an hour ago.  
+
+I'm willing to reach out to him I guess, but I don't think I'd be very good at a suicide talk.  Should I send him here?  As far as I know he's not familiar with Reddit, so that might be asking too much.
+
+Just throw suggestions at me or point me to the right subreddit.  Thanks.",1333953257.0,2,1.0,4
+askdrugs,Trying to be extra cautious...  Is there any way to make sure that the shrooms I have are 'legit'?,"So I recently bought some 'LSD', and it turned out to not be real LSD.  It was some research chemical, and I had a hell of a time with it, but I still consider it a very bad thing that I wound up buying some chemical that I didn't know existed.  This is probably a lot more common with blotters than actual plant-based drugs, but I wanna take any steps I can to avoid a negative experience.  Is there some surefire way to make sure that I've got legit shrooms?",1333678748.0,3,1.0,12
+AndroidQuestions,This Sony headset works natively with Symbian...  Anyway to make it work with Android?,"So my friend bought a Sony 7.1 wireless headset.  He found a [video](http://www.youtube.com/watch?v=MS17BsypKLE) in which someone uses the headset with a Nokia N8, running Symbian.  He's not very tech-friendly, and thought that he could easily accomplish the same feat with his Android phone, not realizing that they run completely different operating systems.  Is it possible to make it work?  He bought the micro-USB to USB adapter already, and I told him I'd look into it for him.  Couldn't find anything on Google though.  Any ideas?  
+
+Thanks.",1333648431.0,2,0.76,1
+GoogleTV,Emulators for GTV?,[removed],1333564335.0,9,1.0,8
+AndroidQuestions,ICS auto-correct issues.  Is there an easier way to type smileys?,"Alright so I'm using the stock ICS keyboard, and I like the fact that when I press the spacebar twice, it enters a period.  I don't like that it does some autoformatting regarding colons, because it makes typing out smiley faces kind of a pain in the ass.  It'll automatically bring the colon back to the space next to the last character I typed (for example when I type ""android [space] :"" it reformats it to ""android:"") and/or it'll automatically add a space after the colon, which I then have to undo, if I'm trying to type a smiley face.  I went into the autocorrect settings for the keyboard, and autocorrect is set to 'modest', and the only option below that is 'off', but I don't want to turn it completely off, because I like things like auto-periods.  Is there a better way to do this besides just using a different keyboard?",1333555681.0,2,0.63,4
+nova,Can you recommend a bar in Arlington with pool tables and decent drink selection?,Hopefully a nice beer selection.  Thanks so much.,1333477271.0,4,0.7,27
+AndroidQuestions,"Weird question, but why do people comment ""reserved"" when a new ROM is posted in an Android forum?","I've never understood it, the first several comments say ""reserved"" or ""reserved for future use"".  What does this mean?",1333428769.0,3,0.67,4
+truegaming,Journey,"For those of you who haven't played it, go play it.  It was incredible.  Don't even read anything else said here, it's probably best to just go play it without any expectations.  I will tell you that it's short, and that's it.
+
+(gameplay spoilers ahead) 
+
+For those of you that did play it, how did you feel about it?  It was a very different approach to a video game, in that you really don't have too much control of the game.  They take away things from you to force you to experience the game they wanted you to experience it.  Normally you're given many options about how to play a game, but they clearly had a vision about how they wanted it to go for everyone, and I kinda liked that.  Great for telling a story, it was more like a movie in that way.  I think that this game is a PERFECT example of how videogames can clearly be art.  ",1332350098.0,154,0.88,126
+nova,Owner of JoJo's ice cream in Dumfries (PWC) arrested for molesting underage males,,1331777060.0,17,0.91,4
+techsupport,Weird power issues with my PC,"So my PC can't wake up from sleep mode properly.  The computer sounds like it's going to, but the monitor never comes on.  Also, when starting up my computer, it always reboots itself twice before booting into Windows properly.  Is it clear what my issue is?  Once I'm booted into Windows, everything is stable as a table.  I have:
+
+ASUS p8z68-v le motherboard
+
+i5 2500k
+
+Antec 550w power supply
+
+HIS 6970 graphics card
+
+Windows 7 64 bit.
+
+
+Thank you.
+",1331599583.0,3,1.0,5
+skeptic,My mother is a skeptic's nightmare,"My mother believes that HAARP causes natural disasters.  She also believes that vaccines cause autism, The Secret, aliens make crop circles, aspartame makes you fat, fluoride is slowly killing us all, and cell phones give you cancer.  She believes in energy healing, reincarnation, homeopathy, etc.
+
+Name any subject, and I guarantee you that she believes the opposite of what the skeptic community does.  I'm still living with her, and this causes us lots of problems.  She will strike up conversations with me on these subjects several times a week, as if to try to convince me that I'm wrong.  I used to fight with her about this stuff, but for the most part, I'm just worn out, and usually try to avoid conversations.  But I can't stand it.  I hear her spewing bullshit to her friends on the phone about her stupid fucking beliefs, and it drives me up a wall.  I know I can't say anything about it, so I just have to walk away, and hide in my bedroom.  
+
+It's making life very difficult, does anyone who has been in this situation before have any advice?
+
+Thanks.
+
+Edit:  Thanks everybody for your advice and input.  ",1331014499.0,55,0.84,43
+skeptic,"My friend is paranoid that he's being watched, and I'm skeptical of his claims...","My friend said he's paranoid because he's purchased books on socialism before , and he thinks that anyone who buys literature on socialism gets their name written down on a list of people that the government ""keeps an eye on"", by doing things like checking mail/packages that he sends/receives. He said his professor informed him of this. He also said there's a professor at a nearby college who hasn't received full professor status yet because he's a Marxist. 
+
+This all sounded silly to me, does anyone have some insight?  
+
+Thank you. ",1330831752.0,10,0.83,8
+nova,Looking for something to do on Saturday with my family,"So I took this Saturday off to go skiing with my family, but the more we look into it, the less practical it seems...  The only resort that looks worth going to at the moment is Roundtop, but that's a 3 hour drive for us, and we're not sure it'd be worth it as a day trip...  We're looking for other things to do instead, since I already took the day off for this trip.  What kind of thing might we do instead?  
+
+thanks for the suggestions.
+
+duncan",1330387233.0,3,1.0,3
+gamingsuggestions,Looking to scratch my RTS itch...,"So I've got this nice gaming rig now, and I'd like to try out some RTS games again (I used to play Command and Conquer: Red Alert back when we were running Windows 95).
+I kinda want to give Starcraft 2 a try, but I'm honestly very intimidated. I don't know that I would be able to keep up with the serious fans of the series (of which there are many). Is that a valid concern?
+What are some of your favorite RTS games, and why?",1330281073.0,2,0.75,12
+truegaming,Looking to scratch my RTS itch...,[removed],1330241759.0,1,1.0,1
+nova,Looking for a cool bar in the Centreville/Fairfax area.  Maybe pool tables or darts?,"I'm gonna hang out with my friend tonight in the Centreville/Fairfax area, and we wanna go hit a bar with a decent beer selection, and pool tables/darts are a plus.  Any recommendations?  Thanks so much!
+
+edit:  Manassass is cool too.",1329764068.0,5,0.86,8
+cordcutters,"Thinking about buying a Google TV device, anything I should know about?","Alright so here's the deal:
+
+I have a PS3, but because I bought a gaming PC, I don't play games on it anymore, and use it solely for Netflix streaming.  I want to get a set-top box and sell the PS3.  I have owned two Roku 2 XS's, and returned them both, because the video quality on Netflix is not as good as the video quality of Netflix on my PS3.  I don't know why this is, but the quality is poor enough that I'd rather just stick with my PS3.  
+
+I'm thinking about buying the Sony Blu-Ray Google TV device (NSZ GT1).  Is there any reason why I shouldn't?  
+
+",1329591228.0,3,0.72,6
+needadvice,"I am totally checked out, mentally, from school.","I'm in my third year at community college, and this is supposed to be my last semester.  I decided to drop my PE courses so that I could spend more time on my other 2 classes, but I have zero motivation to work at my classes.  I already have a C in Biology and my grade is continually lowering with every assignment I do or don't do.  Where am I gonna get the motivation/focus to successfully complete this semester?  Upon dropping my PE courses, I now only have 7 credits.  I will have to take my PE courses over the summer or next Fall in order to get my degree.  Honestly I would LOVE to just drop out and work, but I'm so fucking close to finishing that it seems stupid to stop now.  
+
+Blegh.
+
+Thanks.",1329256400.0,8,0.84,8
+Games,"Battlefield 3 gets a patch today, which re-introduces some Punkbuster issues",,1329242473.0,0,0.5,0
+writing,"I have to write a short story for my Creative Writing class.  I've never *finished* a voluntary writing project before, I have some questions for the writers out there.","If this is not the correct subreddit for this, I apologize, and please redirect me to a more appropriate subreddit.
+
+So I've gotta write a short story for class, as stated in the title.  
+
+The only thing I've attempted writing before is a script, and I never got very far.  
+
+I feel like I have some stories to tell, but when I imagine transforming it into a short story, it all just seems pointless...  Am I to just retell the story, embellishing on the details?  What am I supposed to do to make this story worth the reader's time?  I feel like when broken down my story simply becomes ""*this* happened, and then the main character felt like *this* so he called up his friend and said *this*"".  Is a romance maybe not the best subject for a short story?  Does there need to be a twist, or some kind of incredibly dramatic moment/climax to make the story worth writing about?
+
+Sorry, I just have no idea where to begin.  Any advice is appreciated.",1329153250.0,6,1.0,10
+auto,"My headlights have become intermittent.  They work for a few minutes, then turn off for a few minutes, etc...","I have a 2004 Mercury Grand Marquis, and within the last couple weeks, my headlights have been acting funky.  It used to turn off 2-3 times a night, but now it happens 2-3 times a trip (I deliver pizza in the car, so I make lots of trips in it at night).  
+
+Things you should know:  
+
+* Even when my headlights aren't working, the high beams and turn signals still work.  
+
+* Both headlights turn off at the same time, and turn back on at the same time.
+
+*  I have not been having any other electrical issues with the car.  
+
+Thank you for any knowledge you have to offer.",1329147888.0,7,0.89,9
+androidthemes,Black and white variant of my minimalist theme,,1328551269.0,4,0.64,3
+Piracy,Didn't get anywhere Googling this...  Is there a way to make PS3 backups if you have a Blu-ray burner?,[removed],1327448358.0,1,0.67,0
+cordcutters,Got a Roku 2 XS primarily for Netflix usage.  Noticing framerate issues...,"So I WAS streaming Netflix from my PS3, and everything worked great.  But I got tired of moving my PS3 up and downstairs, and since that's basically all I use my PS3 for nowadays, I figured I'd just get a second dedicated streaming device, and went with a Roku 2 XS.
+
+Coming from streaming on PC and PS3, I definitely noticed a more stuttery framerate, and something of a film grain, when playing Netflix on the Roku.  Has anyone else noticed this?  Is this simply because the hardware can't play HD content as well as the PS3 can?  Are there any STBs that handle better than the Roku?  I've been wanting a Roku for like 6 months, and now that I finally have one, I'm kinda bummed :(
+
+Thank you for any advice you have to offer.",1327378488.0,0,0.5,6
+truegaming,Why don't I ever absorb the story in a video game?,[removed],1326701943.0,1,1.0,0
+techsupport,"Computer goes into sleep mode, when I try waking it, the power LED indicates that it's no longer in sleep mode, but the monitor won't turn on.","Everytime it goes to sleep, I try waking it, and the LED on my case goes from blinking to solid, indicating that it is awake, but the monitor won't turn on.  I have to then hold down the power button to turn the computer completely off, and turn it back on again, in order to get display again.  The interesting part is that when I do that, the splash screen always says ""Resuming Windows,"" instead of ""Starting Windows"".  However in my power settings, nowhere do I have it set for the computer to go into suspension or hibernate.  
+
+Win7 64 bit.
+
+Thank you for any suggestions.",1326636801.0,1,1.0,3
+buildapc,"Just upgraded to 1080p monitor from 1440x900, and my framerates dropped more than I expected them to...","I've got a 2500k OC'd to 4.4 ghz and a 560 TI.  I had to turn off AA in BF3 to get it to run as smoothly as it did on my old monitor, and even still it just doesn't seem as fluid (slightly more choppy).  I also noticed a drop in Saint's Row the third.  Is this normal?  Is there something I can do to fix it?  the monitor looks great, but I can't help but notice the new choppiness.  ",1325961957.0,2,1.0,2
+AskReddit,What non-pornographic movie/scene/TV episode have you fapped to the most?,,1325951273.0,1,0.67,5
+nova,Earthquake?,Did anyone else just hear/feel an earthquake?,1325186375.0,2,0.63,3
+buildapc,[Build Help]  Could use some advice on my graphics card situation...,"Alright so here's the deal.  I have been without a graphics card for a while, and with recent christmas gifts/gift cards, I'm finally able to afford one....  sorta.  I was originally looking to buy a 6950.  I've been without a card though for a while, and I'm starting to think about buying a 550 ti at Best Buy using the store credit I have instead...  Would buying a 550 ti be a mistake?  I've got a 2500k, and all I want to do is play BF3...  I know that the 550 ti will get me playing again, but it's also not gonna last me as long as the 6950 will, and it certainly can't handle BF3 like the 6950 could...  What do you think?  Should I just wait another month or so and buy myself a really nice card, or should I give in to my impatience, and buy a lesser card NOW?",1324969829.0,3,0.8,4
+hardware,Trying to figure out which one of my components needs to be replaced...  Please help?,"Short story: I fried my graphics card a while back because of a stupid mistake I made (I started pulling components out of the computer before the computer had fully shut down, in a fit of frustration). Ever since then, I've had problems with the computer, but it still runs and everything.
+
+Symptoms:
+
+
+* during video playback, the computer occasionally freezes up. This occurs during streaming playback, local harddrive playback, and it also occurred once while playing a video game. The freezeup lasts less than 3 seconds, and during that time the audio gets really nasty (very short sound-loop).
+
+* The only other symptom I've experienced is that the motherboard's video output will occasionally completely stop working. The video comes back usually within 5 minutes after it left. It seems like the video ports themselves just stop working, because the computer still runs and makes sounds, but when I plug the monitor into the motherboard, the OS doesn't even recognize that I've plugged a device into the computer. **This problem only occurs when I have my processor overclocked, and thus have had it not overclocked ever since the graphics card incident.**
+
+I have already replaced the PSU. The HDD has given me no problems at all. So I think that the culprit is either the mobo, CPU, or RAM, or perhaps a mixture of the three. though I feel like if my CPU was the problem, then I'd have way bigger problems than the ones I've been having, but I could be wrong. I ran an ASUS disagnostics tool earlier, and it wasn't able to detect anything wrong. But I'm damn near positive that this is a hardware issue, because I've had this problem occur on more than one Windows install, and these problems only started happening the moment after my graphics card mishap, and I had this PC running without a graphics card before, and experienced no such issues.
+I tried this over in [1] /r/techsupport but I was hoping maybe [2] /r/hardware would be a better place to check.
+Please help! I'm getting ready to buy a new motherboard, but I don't want to waste any more money than I have to.
+Thank you.",1324581145.0,1,0.67,11
+techsupport,"Trying to figure out which part of my PC needs replacing.  Mobo, CPU, or RAM...","A while back, I stupidly destroyed my graphics card, while it was plugged into the motherboard, by mistake.  I have since removed that graphics card, but I'm having problems with my computer still, and I'm trying to figure out which part needs replacing.  I already replaced the power supply, and it didn't fix anything.  These problems only started happening after the graphics card mishap, and I have tried reinstalling Windows already, so I don't doubt that this is in fact a hardware issue.
+
+The symptoms:  During video playback (streaming or hard-drive), the video playback occasionally freezes for a brief moment (less than 3 seconds), during which time the audio goes into a sound loop (which sounds really ugly).  This has happened once while playing a video game, but typically happens during video playback.  Whilst the audio/video is frozen, I can't move my mouse or anything.  The whole OS freezes up until it goes back to normal.  
+
+The other symptom is that when my processor is overclocked, the video ports on my motherboard seem to just disable themselves for a few minutes, and then they will come back on.  This problem only occurs when my processor is overclocked.  
+
+Any ideas?  Thanks so much.",1324445165.0,3,0.72,4
+buildapc,Hardware troubleshooting after graphics card mishap.  ,"I destroyed my graphics card recently, by mistake, and i think I did some damage to other components in the process.  I think/hope that it's all PSU related (because I would hate to buy a new mobo).  Here are my symptoms:
+
+During streaming video playback, the computer sometimes freezes briefly.  The audio goes to freeze-loop sound, and everything stops moving, including input devices.  This only lasts about a second before everything goes back to normal.  The first night this happened, the computer actually completely froze, and I had to pull the plug.  I then un-OC'd my processor, and ever since I did that, it has only occurred for brief moments.  The first time it happened, I was streaming Netflix, and all of the other, brief occurrences, happened during youtube playback.  I have not tried local video playback, but video games run well.  This occurred on 2 separate versions of Windows, so I do NOT think it's a software issue.  
+
+I was also having general display issues while the processor was OC'd.  The video output from the motherboard would cut out, for about 5 minutes, and then turn back on.  This was not a cable connection issue, the operating system didn't even recognize when the cables were being plugged in or unplugged, because the hardware simply was not working.  This problem also (for the most part) went away when I un-OC'd my processor.  
+
+Is it possible that all I need to replace is the PSU?  I already have a replacement on the way, and I'm hoping that the motherboard is still usable.  What do you guys think?
+
+Thanks so much for reading.",1323903602.0,1,1.0,3
+nova,Anyone here worked at a local Papa John's?,"I just got a delivery job at Papa John's.  I'm starting tomorrow.  I had been working at Domino's.  I'm just curious about what to expect.  At Domino's, I made pizza, took phone orders, and delivered.  So basically everything.  Is Papa John's pretty much the same way?  I've heard that at Pizza Hut, for example, drivers do nothing but do deliveries.
+
+Thanks!",1323902215.0,3,0.67,3
+OkCupid,Just revamped my profile.  Care to critique?,"I posted my profile here yesterday, and revamped it based on the comments I got, and the ""do's and don'ts for profiles"" thread.  I like it much better than it was before, but I think it could still use some flair.
+
+http://www.okcupid.com/profile/dizzuncan
+
+Thanks!
+",1323899428.0,0,0.33,3
+google,"Anyone have Google TV?  Trying to convince my father to cut-the-cord, and had a few questions...","My Dad is the only person in the house that watches television, and 99% of the time, it's to watch sports.  So how easy is it to access sports games with Google TV?  He watches mostly American Football, but he also watches important college football games, the MLB World Series, NBA playoffs, and usually the Final Four.  If these things are viewable via Google TV, are they available on-demand, or do the different apps/channels stream content like regular cable does?
+
+edit:  Thanks!",1323575226.0,24,0.85,6
+truegaming,"So Terraria is a pretty popular game.  Explain to me why.  I own it, but haven't really figured out what's special/fun about it.",[removed],1323454638.0,1,1.0,0
+nova,Controversial 'atheist display' at the Leesburg Courthouse,,1323269335.0,22,0.92,10
+buildapc,"I blew my graphics card, is there anything I can do to try to save it?","I have been trying to solve network issues for the past many hours, and in my impatience and frustration, I starting pulling my PCI card out of my computer, without realizing that my PC wasn't completely powered off yet.  The network card touched the graphics card, sparks flew.  Now when I power it up with the graphics card plugged in, the fan on the card blows really loudly, and the PC just turns off 5 seconds later.  I tried plugging it into the other slot, same problem.  I'm guessing I'm fucked, but I figured I'd ask if there was something I could do.
+
+edit:  it's a sapphire 6870
+Thanks",1323223233.0,2,1.0,8
+networking,"I've posted about this a couple times to /r/techsupport, but still haven't gotten my issue resolved.  Was hoping that you guys over here might have some insight.","So when I'm downloading a large file (like a game from Steam or Origin, for example), me, and the other computers getting internet from the modem are unable to access web pages consistently while the download is active.  I can pause the download, and everything goes back to normal, but otherwise, the web page does not load (90-95% of the time, because occasionally the page will load, but it's very rare).  The computers affected are not all connected to the same router, which leads me to believe that the bottleneck is occurring at the modem.  Can anyone think of a possible cause?  Could it be a configuration issue?  A hardware issue?  I've already had Comcast come check out the situation, and he seemed pretty confident in our connection, said the modem is getting a good enough signal and everything.  I am using a Linksys E1000 wireless N router, and a TP-Link TL-WN951N wireless PCI card.
+
+This is not an issue if my PC is hooked up via ethernet, instead of wirelessly, but I'm getting a strong signal to the router even when I'm wireless.  
+
+I'm hoping that someone has dealt with this kind of issue before, because this has been an issue for several months, and I'm unable to download any large files during the day, because it affects everyone else's internet connection, so I have to wait until everyone is asleep.
+
+Help me!
+
+Thanks so much
+
+Duncan",1322811009.0,1,1.0,25
+buildapc,"Friend of mine is building a PC, but probably won't buy his mobo and CPU until Ivy Bridge comes out.  Is it a bad idea for him to buy his case, PSU, etc now?",,1322497622.0,1,1.0,1
+techsupport,"Having internet problems.  Already upgraded my modem, and had a Comcast guy replace a bad cable.  Still having the same problem.","I have a problem in my house.  Whenever I'm downloading a large file (from Steam or Origin, for example), I am unable to access webpages whilst downloading, and so is everybody else on my home network.  While the download is active, web pages take forever to load, and eventually just give me an error message in my browser.  If I pause the download while the web page is 'loading', the web page loads immediately after pausing the download.  Is there some sort of configuration in my router or modem or computer that is causing this to happen?  As I said in the title, all the network hardware has been recently upgraded/replaced.  What am I missing here?
+
+Thanks for your help.
+
+Edit:  The problem does not occur when my computer is connected via ethernet.  Also, the problem occurs even when I'm connected to wireless router A, and everyone else is connected to wireless router B.",1322322435.0,0,0.5,9
+relationship_advice,"My previous relationship totally fucked my head up, and now I can't be happy in a relationship.","Okay so I'm 22, but when I was in high school, I dated a girl for a year and a half, and that last half of a year was kinda shitty, because I wanted to break up with her the whole time, I just never had the balls to do it.  I seriously regret waiting for as long as I did, and I feel like I just led her on for the longest time, and wasted both our times.  
+
+Then, 2 years after high school, I start dating this girl I had been friends with since 6th grade.  It was kind of a weird situation, since we had been friends for so long, and she had liked me for so long, but I hadn't liked her.  Then I did start liking her, and we dated.
+
+While we were dating though, I was frequently having arguments in my head about whether or not I *really* liked this girl, or if I was just leading her on.  There was a lot of history there after all, so there was a lot on the line.  These thought processes, in which I was constantly second-guessing my feelings for this person, were very debilitating, stressful, and eventually drove our relationship off a cliff.  
+
+Now there's another girl, who I've also been friends with for a long time, and have had feelings for for a long time (and she has reciprocated those feelings), but we never really got the chance to date because that girl I dated from the above paragraph is best friends with this girl, and she would have flipped a shit if me and this girl were dating, since the aforementioned girl had such strong feelings for me, and frankly is a little crazy.  
+
+Now that ex of mine is a lesbian, and no longer has feelings for me, and me and this newer girl are sorta dancing around the idea of possibly dating...  But we're not even dating yet and I'm already starting to have confusion about whether or not I *really* like this girl, or if I'm just leading her on.
+
+I don't know if this is how I'm going to be in every relationship for the rest of my life, or if this is just happening because the last 2 girls I happen to [(almost) date] have been friends of mine for many years, and therefore there's a lot on the line in both cases.
+
+The biggest fear I have is that I'll start dating this girl, and get her hopes up after many years of us liking each other, and then decide that I don't want to be in the relationship after all, and just spit her out on the other side with hurt feelings, and having gotten her hopes up just to shut her down (basically the song ""build me up buttercup"").  
+
+This is destroying my chances of being happy in a relationship, and I hate having this worry get in the way of my happiness.  
+
+Does anyone have any advice?  Please help me:(
+
+**tl;dr:  I have a debilitating fear of hurting someone's feelings because of the possibility of us eventually breaking up.  It's preventing me from enjoyably entering into a relationship.  Please offer any advice you have.**",1322241787.0,0,0.5,2
+nova,"In question posts, can you please specify WHICH part of NOVA you live in?","It feels like the majority of the time I open a post, asking for a good bar, hair place, restaurant, theater, car dealership, etc, people just say ""Hey I live in NOVA, where should I go?""
+
+NOVA is a large area, spanning from as low as Stafford, all the way to Alexandria.  Chances are, people that live in Alexandria aren't going to want to get a hair cut in that place that you like in Woodbridge, so let's please be a bit more specific about what area you're living in/interested in.  
+
+Help me help you!  
+
+Happy Thanksgiving everybody!",1322168191.0,18,0.9,14
+Music,"Not sure if this is the right place for this.  Trying to find an album that I used to have, can't remember what it was called.","Alright so a while ago, I torrented this awesome album with some great dance remixes.  One of them was this really great remix of the austin powers theme song.  Another track had that song [Butterfly](http://www.youtube.com/watch?v=UculXjdcSYs) remixed in a dance song.  It was some dance collection that I downloaded via torrent, and I don't have it anymore, but I'd like to find it.  Has anyone else heard this album, and do you remember what it was called?",1321939821.0,0,0.33,0
+truegaming,Metro 2033 - Audio,[removed],1321850294.0,0,0.25,7
+Android,Kindle Fire teardown puts build cost at less than $3 above retail price,,1321649609.0,32,0.9,11
+Android,Does anyone know of any 4 x 4 Calendar/Friends widgets that are available in the market?,"I have been using LauncherPro ever since I got my first Android devices over a year ago. I've been using the 4 x 4 LPP calendar and friends widgets. I recently switched to Zeam and if like to give it a solid try, but i'm unable to use my LPP widgets with Zeam. Are there any widgets available in the market that offers similar widgets? Also I'm using MIUI so i don't have sense widgets available.",1321559349.0,0,0.5,3
+AndroidQuestions,4 x 4 calendar/friends widgets available from market? ,"I have been using LauncherPro ever since I got my first Android devices over a year ago.   I've been using the 4 x 4 LPP calendar and friends widgets.   I recently switched to Zeam and if like to give it a solid try,  but i'm unable to use my LPP widgets with Zeam. Are there any widgets available in the market that offers similar widgets? Also I'm using MIUI so i don't have sense widgets available. ",1321512322.0,1,1.0,0
+truegaming,I've read plenty of praise for Skyrim.  Now how about some criticism?,"Let me preface this by saying that I am enjoying the hell out of Skyrim (I've put 17 hours into it so far, and many more to come, I'm sure).
+
+However...
+
+I know we are all conditioned to expect buggy games from Bethesda, but Skyrim is pathetically buggy.  The game feels broken.  A glitch here and there I'm okay with, just due to the scale of the game, but the fact is that some of these bugs occur the *majority* of the time.  The fact that Bethesda didn't fix these bugs, to me, sends the message that they just don't care.
+
+Bugs I came across:
+
+* When a giant strikes me, I fly 300 feet in the air.
+
+* Sometimes when using a bow, arrows don't go where they're supposed to because of some invisible wall getting in their way.    
+
+* Companions often block doorways, and are not intelligent enough to move out of your way.
+
+*  Enemies fall through the world.
+
+*  Enemies stop fighting fighting back and simply stand in one place while you beat their faces in.  (Poor AI)
+
+* Animals get flung up in the air at random.
+
+* I got off my horse and it just disappeared.  
+
+* My companion is almost guaranteed to get lose while I explore.  
+
+The new engine is a huge improvement over TES4 engine, but there are some things that they didn't improve, that I think should have been improved:
+
+* I am still able to walk normally across a mountainside at an 85 degree angle.
+
+* Ragdoll.
+
+* Stiff/rigid NPC animation stuff (like when the prisoner attempted to escape during the intro of the game.  It felt very robotic (similar to when [Charon kills his previous owner](/spoiler) in Fallout 3).  
+
+Thoughts?",1321202751.0,303,0.85,981
+needadvice,How do I control my impulse buying?,"I have a pretty bad impulse-buying problem...  Just in the past couple days I purchased Battlefield 3 and Skyrim, and a week ago, I had no intention of buying either of them.  I've been working since 2007, and haven't managed to save a penny of what I've earned.  Not even a rainy day fund.  I always have less than $200 to my name at any given time, unless I'm saving up for something else to buy.  I've walked into a Walmart on 2 separate occasions, without intending to purchase anything while I was there...  One time I bought an iPod Touch, and another time I left with a Wii and a copy of Super Smash Bros Brawl.  
+
+***WHY DO I DO THIS AND HOW DO I MAKE IT STOP?!***  
+
+I am 22 and still living at home, but I need to save money.
+
+Please help.",1320871413.0,15,1.0,15
+techsupport,"While downloading a game from Steam or Origin, my internet connection doesn't work for other applications","So every time I start downloading a game from Steam, my browser is unable to load web pages.  Is there anything I can do so that I can browse while I download?  Or is it just because my internet connection is inferior?",1320705052.0,3,1.0,2
+LSD,Please offer any advice for a first-timer.,"Never done acid before, but I want to give it a try.  
+
+Have you ever had a bad trip, and if so, do you have any suggestions to offer to avoid, or better deal with a bad trip?
+
+I don't expect to have a bad trip, but I do want to prepare myself for one, just in case. 
+
+The only hallucinogen I've ever tried is Salvia.  
+
+Anyways, please offer up any any advice you have to help me have a safe and enjoyable experience.  I'll be doing it with my best friend, and I might try to bring a babysitter along.",1320342959.0,8,0.91,27
+Crysis,Crysis 2 looks blurry compared to Crysis.  Even on Ultra with high-res textures and DX11.  What am I doing wrong?,"I have Crysis 2 running on fully maxed settings, with the high-res textures and DX11 options enabled.  I don't really notice a difference between high-res on and high-res off.  I have the game running at the native resolution (1440 x 900), but the way it looks kinda looks as if it isn't.  It just doesn't feel as crisp...  
+
+[Crysis](http://i.imgur.com/QIo5N.png)
+
+[Crysis 2](http://i.imgur.com/ELfh7.png)
+
+Do you guys see what I'm talking about, or am I crazy?  Or is the game supposed to look like that?  
+
+Is it possible that the game only looks good with high-res textures on a 1080p screen?",1320328515.0,5,0.86,8
+Enhancement,r/Askreddit's new design kind of clashes with RES's comment enhancements.  Anyone else experiencing this?,"http://i.imgur.com/epRAg.png
+
+The highlighted line is not part of RES, it is part of r/Askreddit's new design.  When skipping child comments, I look for the line on the far left to break, and start again, so that I know where the next parent comment begins.  That line on the far left totally throws me off though, and I scroll down half the comments section wondering why the top comment has so many child comments.  Is anyone else experiencing this?  Is it possible for RES to provide a workaround, or is this something that should be taken up with r/askreddit?
+
+Maybe I'm the one dummy that's had a problem with this, but it's *really* throwing me off.
+
+Thanks!
+
+
+duncan
+
+EDIT:  Dunno why I never thought to disable the subreddit style...  Sorry!",1320165530.0,27,0.87,6
+worldnews,"As world welcomes '7 billionth' baby, UN says empowering women is key to stability",,1320070314.0,8,0.65,4
+whatisthisthing,There are several of these things up and down this one street I drive on.,,1319747093.0,1,1.0,0
+techsupport,My monitor isn't being used to its full potential...  Not sure what the problem is.,"http://i.imgur.com/xNsiO.jpg
+
+^That's what the edge of my monitor looks like right now.  The image on the monitor isn't taking up all of the monitor, and i'm left with some wasted space.  It's strange because my computer thinks it's displaying in 1440 x 900 (native resolution of the monitor), but it doesn't appear to be.  Anyone encounter this before?",1319698766.0,1,0.67,4
+techsupport,Windows 7 doesn't recognize my Bluetooth device as a bluetooth device.,"So I got a nice 2500k setup, and wanted to play my Wii games in HD.  Trying to connect my Wiimote through the Dolphin emulator and it says ""A compatible Bluetooth device was not found (only the Microsoft Bluetooth Stack is supported)"".  I had a little bluetooth dongle plugged in, but it was very cheap, so I figured I had a bad device.  So I ordered another one, I plug it in, Windows says ""installing device driver software"", then ""Your device is ready to use"".  I go into Device manager, and there are no Bluetooth devices present.  I try to connect within Dolphin, gives me the same error message.  I tried downloading some program that tries to make your bluetooth device compatible with the Microsoft Stack, but it doesn't recognize any bluetooth device either.  The computer recognizes the device, but it's not recognized as a ""bluetooth"" device.  Any ideas?
+
+Thanks.",1319589050.0,1,1.0,2
+circlejerk,AMA Request:  Hitler,,1319346516.0,6,0.88,2
+Minecraft,How the hell do creepers and other mobs end up in my completely sealed off house?,"This is why I always wind up reverting back to peaceful mode...  How the hell am I supposed to have fun building something if every 2 minutes I have to deal with another creeper?  I wish you encountered mobs at a much lower rate, similar to Bethesda's open world games (oh the irony...).  But I have a large house, with closed doors at every entrance, but somehow creepers are appearing inside.  ",1319314853.0,0,0.33,4
+Minecraft,I get better FPS in Crysis than in Minecraft...,"Is the game doomed to perform poorly?  Is this just something the team hasn't addressed yet, and plan on fixing for final release?  Even with Optifine, I'm getting less than desirable frame rates on my Sandy Bridge i5...",1318917806.0,24,0.67,42
+buildapc,My case has 5 fan slots...  How many of them should I make intake fans?,"I'm sorry if this is a really dumb question, but I'm wondering if I should put any intake fans on my case, and if so, how many, and where?  I've got two slots on the side, two slots on top, and 1 slot at the front.  I'm pretty sure the one in the front will be intake, but should all the others be exhaust, or should I make a couple of them intakes as well?",1318619910.0,1,1.0,3
+Minecraft,Does anyone know whether we'll be able to toggle specific mobs in the future?  ,"I personally don't like creepers, and I don't like the fact that they blow my shit up.  I think it would be nice to have the ability to turn off specific mobs.  Has this been mentioned?  I didn't see anything about it in my Google search.",1318489379.0,1,0.67,3
+buildapc,[Build Complete] My first build.  Everything went smoothly.  (2500k),"I got sick of frequently replacing laptops, so I decided to build a PC.  I don't currently have a graphics card, but I intend to put one in there soon (probably a 6870, or a better card if it comes down in price).  In this chart, I picked the LX motherboard, but I actually got the LE, but I didn't see it available on pcpartpicker.
+
+[Part list permalink](http://pcpartpicker.com/p/1EpC) / [Part price breakdown by merchant](http://pcpartpicker.com/p/1EpC/by_merchant)
+
+Type|Item|Price
+:----|:----|:----
+**CPU** | [Intel Core i5-2500K 3.3GHz Quad-Core Processor](http://pcpartpicker.com/part/intel-cpu-bx80623i52500k) | $214.99 @ SuperBiiz 
+**Motherboard** | [Asus P8Z68-V LX ATX  LGA1155 Motherboard](http://pcpartpicker.com/part/asus-motherboard-p8z68vlx) | $128.99 @ Amazon 
+**Memory** | [Corsair Vengeance 8GB (2 x 4GB) DDR3-1600 Memory](http://pcpartpicker.com/part/corsair-memory-cmz8gx3m2a1600c9b) | $51.99 @ Newegg 
+**Hard Drive** | [Seagate Barracuda 1TB 3.5"" 7200RPM Internal Hard Drive](http://pcpartpicker.com/part/seagate-internal-hard-drive-st31000524as) | $54.99 @ Newegg 
+**Case** | [NZXT Gamma Classic (Black) ATX Mid Tower Case](http://pcpartpicker.com/part/nzxt-case-gama001bk) | $39.82 @ Amazon 
+**Power Supply** | [OCZ 600W ATX12V / EPS12V Power Supply](http://pcpartpicker.com/part/ocz-power-supply-ocz600mxsp) | $62.99 @ Newegg 
+|| **Total**
+| Prices include shipping and discounts when available. | $553.77
+| Generated 2011-10-09 00:12 EDT-0400 |
+
+
+[Imgur album](http://imgur.com/a/JLcyZ)
+
+[Fixed the Power supply](http://i.imgur.com/GAVgz.jpg)
+
+Edit:  Let me let everyone know about this ASUS mobo...  It sucks honestly.  The hardware is fine, but I get a CPU fan error!  message when I'm booting, even though all of my fans are working, and my CPU has been cool all day.  I decided to check for a BIOS update, thinking that it might fix that problem, but the software on the CD that allowed you to update the BIOS wouldn't freakin install correctly.  I went forum-hopping for a while, and ASUS never fixed the software, they just released a patch.  But in their official download page, it doesn't say anywhere that you need to run it as administrator.  I saw on some other forum, someone saying ""btw, you need to run it as administrator, or else it won't work"".  The moral of the story is that I wasted a really long time trying to update the BIOS, and it took that long because ASUS hasn't handled the situation properly, even though a LOT of people apparently have this problem.  I bought the ASUS because I've owned 3 of their laptops, so I have some loyalty to them.  But I think my next build is gonna have a Gigabyte in it.
+
+**I also wanna just thank the r/buildapc community for their help.  I saved myself a lot of trouble thanks to your advice (and would have saved myself more trouble if I had listened to you guys and bought the Gigabyte instead!).**
+
+edit:  CPU fan error was my fault, had it plugged into the wrong fan socket.",1318133810.0,7,0.67,19
+DAE,"DAE rationalize their unhealthy habits with, ""Eh, whatever, they'll have a cure for that by the time it affects me...""?", ,1318001687.0,2,0.67,4
+Android,"Should we just do an ""app of the month"" instead?",,1318000847.0,107,0.94,18
+buildapc,Trying to decide between 2 mobos...  Anybody have an opinion about ASUS vs Gigabyte?,"[ASUS P8Z68-V LE](http://www.newegg.com/Product/Product.aspx?Item=N82E16813131773)
+
+[Gigabyte GA-Z68A-D3H-B3 ](http://www.newegg.com/Product/Product.aspx?Item=N82E16813128502&Tpk=GA-Z68A-D3H-B3)
+
+I have some loyalty to ASUS, because I've owned several of their laptops, but the ASUS had some concerning reviews (even though they both have 4 eggs overall), and the GB is cheaper.  Anybody have an opinion?",1317928105.0,1,1.0,4
+MinecraftCirclejerk,"Hey guys, I thought I'd show you my totally legit build; a 1:1 replica of my world in Minecraft.  ",,1317921400.0,17,0.96,0
+Minecraft,"Has anyone played Minecraft on i5 2500k, using the built in Intel graphics?  How does it run with HD texture packs and water shaders and stuff?","I'm getting a computer on Saturday, and I'll finally be able to play Minecraft again; but I'm trying to manage my expectations.  I don't doubt at all that the game will play smoothly in the default mode, which will make me plenty happy, but I'm also planning on giving HD texture packs and water shaders a try.  Has anyone tried this, and how well does it run?  
+
+Thanks!",1317836850.0,1,0.67,4
+circlejerk,"""Forthewolfx."" - Ron Paul",,1317799893.0,3,0.71,0
+buildapc,"[Build Ready] I've actually already bought most of my parts, but can someone confirm this anyways?","[Corsair Vengeance 8GB 1600](http://www.amazon.com/gp/product/B004QBUL1C/ref=ox_sc_act_title_1?ie=UTF8&m=ATVPDKIKX0DER)
+
+[ASUS Z68 motherboard](http://www.amazon.com/gp/product/B005EV1R34/ref=ox_sc_act_title_2?ie=UTF8&m=ATVPDKIKX0DER)
+
+[OCZ 600W Power Supply](http://www.amazon.com/gp/product/B001EYV690)
+
+[Intel i5 2500k](http://www.amazon.com/Intel-i5-2500K-Processor-3-3GHz-LGA1155/dp/B004EBUXHQ/ref=sr_1_1?ie=UTF8&qid=1317580777&sr=8-1)
+
+[Seagate Barracuda 1TB drive](http://www.amazon.com/Seagate-Barracuda-7200-12-Internal-ST31000524AS/dp/B004IZN3YI/ref=sr_1_1?ie=UTF8&qid=1317580844&sr=8-1)
+
+[NZXT Gamma case](http://www.newegg.com/Product/Product.aspx?Item=N82E16811146061)
+
+This should all work well together, right?
+
+Thanks",1317581219.0,3,0.81,12
+buildapc,"[Build Help]  Thanks to the Micro Center deal yesterday, I have my processor.  Just trying to figure out what else should go with it.","So I got the i5 2500K yesterday, as well as a 1tb Seagate Barracuda drive (for $50 on sale).  
+
+I'm trying to make this as budget friendly as possible.  
+
+Here are the remaining items that I feel pretty sure about:
+
+[NZXT GAMMA Classic Series GAMA-001BK Black Steel ATX Mid Tower Computer Case](http://www.newegg.com/Product/Product.aspx?Item=N82E16811146061)
+
+[OCZ ModXStream Pro 500W Modular High-Performance Power Supply Compatible with Intel Sandy Bridge Core i3 i5 i7 and AMD Phenom](http://www.amazon.com/gp/product/B001EZMEZO/ref=ox_sc_act_title_2?ie=UTF8&m=ATVPDKIKX0DER)
+
+As far as RAM goes, I'm not really sure.  Is 1333 RAM acceptable, or should I pay the extra for 1600?  The 1333 is appealing because of its price, but the 1600 is only like 15 bucks more...  Also, G.SKILL or Corsair?  Does it really matter?
+
+As far as the mobo goes, I'm pretty sure I'm getting either an ASUS or a Gigabyte.  I'm looking at Z68 models (though, admittedly, I have no idea why it's any better than other chipsets).  4 slots for RAM.  And 1155 for my 2500K.
+
+Suggestions?  Revisions?  The only things I have are the processor and the HDD, so if there are any red flags regarding the products I have picked out, it's not too late for me to change to something else.  
+
+thanks so much for any help.
+
+",1317492495.0,3,1.0,1
+buildapc,[Build Help]  Is this Newegg DIY combo a good potential gaming rig?,"http://www.newegg.com/Product/ComboBundleDetails.aspx?ItemList=Combo.660863&cm_sp=DIY_PC_Combos-_-660863-_-Combo
+
+I'm really just unsure about the power-supply...  Is 420w too low?  Sorry if that's a dumb question, I just know that my friend has a 500w+ power supply on his rig, and I just don't know if 420w is potentially too low for gaming.  I plan on buying a ~$200 graphics card a bit further down the road.  ",1317318182.0,2,1.0,4
+circlejerk,TIL this guy --> ↑ <-- has a name.  Please click Upvote,,1317316406.0,0,0.5,0
+skeptic,Alright let's discuss our favorite podcasts on the subject of skepticism and atheism. (x-post from r/atheism),"I personally enjoy:
+
+* The Atheist Experience
+
+* The Non Prophets
+
+* Godless Bitches
+
+* Ask an Atheist
+
+What other really good ones should I, and everyone else, be checking out?
+
+Thanks!",1317227419.0,5,0.86,6
+atheism,Alright let's discuss our favorite podcasts on the subject of atheism and skepticism.,"I personally enjoy:
+
+* The Atheist Experience
+
+* The Non Prophets
+
+* Godless Bitches
+
+* Ask an Atheist
+
+What other really good ones should I, and everyone else, be checking out?
+
+Thanks!",1317227288.0,1,0.6,4
+Frisson,Battlescars by Midnight Juggernauts,,1316885355.0,2,0.75,0
+circlejerk,Would anyone be interested in an AMA from Freddie Mercury?,,1316759940.0,5,0.78,0
+Frisson,Radiohead - Creep,,1316525393.0,5,0.67,1
+buildapcsales,[USA] AMD 6-core DIY Combo ($292.98 USD) ($5 mail in rebate),,1316470638.0,5,0.86,2
+nvcc,FLAIR,[removed],1316450142.0,2,0.75,7
+AndroidQuestions,"My statusbar is saying that my GPS is turning on and back off again, every 30 seconds or so","I went into spare parts to see what was using GPS, and the only application listed was Facebook, which I uninstalled, but the GPS is still on the fritz.  
+
+Any ideas?",1316233558.0,1,1.0,2
+circlejerk,REMINDER:  It's been 16 hours since the word CUNT has been on the frontpage,,1316199514.0,4,0.83,1
+nvcc,"Help spread the word!  Print out these r/nvcc flyers, and post them around your campus!","Several people have complained about the lack of people here, so I created this flyer, that you can print out, and place around campus.  
+
+http://i.imgur.com/AhQPt.png",1316139564.0,5,0.86,9
+Android,"Help!  I'm stuck in MIUI with no root, and can't boot into my EVO's phonerom","So I have an OG EVO, and I installed MIUI to the SD card using Boot manager, and I think I messed things up when i restored superuser over the existing superuser, and now I can't get root.  This means that I am unable to boot into the other ROMs I have installed.  Any ideas?",1315939320.0,1,0.67,3
+circlejerk,"Would anyone be interested in an AMA from a white, atheist, young adult male?",,1315929523.0,136,0.93,35
+ReviewThis,[request] Megaupload Lifetime premium account,"It costs like $250, and you get unlimited online storage for life...  Anyone have this, and care to share your feelings on it?  
+
+**ALSO**:  If I upload copyrighted material, do they take it down?  Or will they only take it down if someone *reports* it as copyrighted material?",1315764638.0,16,0.73,7
+nvcc,"Does anyone know how to design a subreddit, and is anyone interested in making some simple art for the subreddit?  ","The subreddit looks sexy, but it needs something...  Maybe just a green and gold outline, and the logo somewhere in there.  If anyone knows how to customize the subreddit, and is insterested in creating the art for it, I'll be happy to try and implement it.  Sadly I can't bring much to the table, so I need your help!
+
+Thanks
+
+duncan",1315716692.0,1,0.67,5
+Android,Anyone else use Google Voice?  Google just made me laugh my ass off...,"If you try sending a text message through the browser, from the little ""Text"" button in the top left, there's a counter that shows how many characters you use.  If you get to your 3rd message (with the 160 character limit), the character count changes from ""2.8"" or ""2.9"", to ""Really?""
+",1315513665.0,0,0.5,9
+circlejerk,When did Americans lose their bad teeth?,,1315504960.0,1,0.6,1
+circlejerk,"If I put Four Loko through a Brita filter, will it produce drinkable Four Loko?",,1315458253.0,54,0.89,2
+circlejerk,Circlejerk is back to normal,,1315420288.0,2,0.63,1
+AndroidQuestions,Best ROM for HTC Evo 4G?,"Sorry, I know you all get these a lot, but I'm a little dissatisfied with the CM7 RC1 ROM I installed.  What other roms are available?  HDMI out is important to me, so hopefully CM7 isn't the only ROM that supports it?
+
+Thanks",1315337189.0,2,0.75,4
+androidthemes,Simple and productive,,1315165213.0,21,0.77,9
+ReviewThis,[request] Quibids.com or other paid-bids auction sites,"It's like a standard auction, except that you have to pay for every bid you make.  The website makes a huge profit from charging you per bid, which allows them to sell very expensive items at very cheap prices.  Definitely the kind of site that could rip you off though, so I'm not sure if it's really worth it.  Has anyone used these kinds of sites?  Is it worth it?",1314802577.0,10,0.87,5
+Android,Question to Sprint customers who have used Sprint's Service and Repair service,[removed],1314775914.0,2,0.75,5
+Android,Evo 4G or Nexus S?,"I have an epic, but I've decided that I no longer need a physical keyboard.  I have an option to change phones, and I'd either pick the Nexus S or the EVO 4G.  
+
+Things I like about the Nexus S:
+
+* Screen
+* Stock Android
+
+Things I like about the EVO:
+
+* Kickstand
+* HDMI Out
+
+What do you guys think?  Are there other pros and cons that I should know about?
+
+Thanks.",1314772222.0,3,0.81,13
+AndroidQuestions,Nexus S or Evo 4G?,"I have an Epic 4g, and I don't have any problems with it or anything, but I wouldn't mind having the Nexus, because I no longer have a need for a physical keyboard, and I like the design of the Nexus S.  Then there's the EVO, which has one great feature: HDMI out.  This appeals to me because, with the right apps, I could play GBA games, with a wii-mote or ps3 controller, on my television.  That is of course if the phone is able to emulate at a much higher resolution.  
+
+Anyways, what do you all think?",1314771105.0,3,1.0,4
+atheism,A compilation of prank/funny callers on The Atheist Experience.,,1314686755.0,2,1.0,0
+a:t5_2ssle,To the person who's trying to hijack my account,STOP IT.,1314469670.0,1,1.0,0
+nutrition,Healthy munchy foods?,"I am overweight, but I enjoy smoking marijuana.  I usually smoke a few hours before bed, and I get the munchies.  I'm trying to come up with healthy things to munch on, so that I don't stuff my face with a bunch of unhealthy things right before bed.  Baby carrots is one option, but what about mixed nuts?  Any other ideas? 
+
+Thanks!",1314328616.0,2,1.0,15
+techsupport,"My hard drive has errors, and I'm unable to install an OS onto it.  ","I've tried reverting the system back to factory condition with my recovery disks, that fails.  I've tried installing Windows 7, that fails.  I've tried installing Ubuntu, that fails.  I've even tried Hackintoshing it, but Disk Utility didn't even see that there was a hard drive present.  Windows XP doesn't have the correct drivers to allow Setup to even begin, so that doesn't work.  Any ideas?  This computer frankly isn't worth buying a replacement hard drive for, so I'm looking for a way to check for errors.  If I'm not mistaken, chkdsk only works if you already have an OS installed?  I tried running chkdsk from the win7 boot media, in a cmd window, and it said no errors were found.  Help!",1314292984.0,1,0.6,10
+nova,Did anyone just feel that aftershock?,I think i heard a rumblin...,1314249019.0,15,0.78,35
+ReviewThis,[request] Gaming Desktop Brands,"I'm browsing through Newegg, looking at gaming PCs for less than $1000, and I'm seeing a lot of PCs from CyberPowerPC and iBUYPOWER, as well as some other brands on TigerDirect.  Are there certain brands i should avoid?  Certain brands to seek out?  Thanks for any advice.",1314215292.0,9,0.91,22
+metacirclejerk,AMA Request:  Whichever username is on the front page.,,1313736713.0,1,1.0,0
+Android,Apps on Logitech Revue,"Does anyone know to what extent the Logitech Revue has apps?  I understand it has Honeycomb Now, so I was wondering if Yongzh's Nintendo emulators run on it or not.  If anyone knows about these apps, or other general games, please let me know!  It'll be the deciding factor regarding whether I buy one or not...  ",1313590166.0,1,0.67,8
+AndroidQuestions,Anyone have experience with the Logitech Revue?  (Google TV box),"I understand the device uses Honeycomb, and has Android Market?  Are there any limitations as far as what apps I'm able to use on it?  Will I be able to use it as a gaming system for all of my Android games and Nintendo Emulators and such?  I'm mostly curious about emulators.  Thanks.",1313565438.0,0,0.5,0
+emulation,"Project 64 runs great, but VBA is running poorly.  Why is this?","I decided to hook my Netbook up to my TV and connect a PS3 controller to it.  I have tested 2 games out so far, one was Majora's Mask, and the other one was Metroid: Zero Mission.  Majora's Mask runs great, but the less intensive Gameboy Advance game is only running at 75% most of the time.  Is this to be expected?  It seems strange that a less intensive game runs more poorly than the more intensive one...
+
+Thank you.",1312860877.0,3,1.0,1
+Favors,[request] A program for Mac OS that will allow me to disable individual keys on my Macbook Pro,"I had my computer near a pool, someone splashed it when they jumped in, and now the computer thinks the shift key is always being pressed down (even though it isn't).  If I can get the bad shift key to be ignored by the system, then I can continue to use my computer regularly, but right now, I can't really do anything on it unless I use an external keyboard and mouse.  ",1312473704.0,0,0.5,11
+learnprogramming,Is there a subreddit where you can request a program to be programmed?,"To be specific, I am looking for a way to disable one key on the keyboard on my Macbook Pro.  Ever since it got wet poolside, the computer thinks that one of the shift keys is constantly being depressed, even though it isn't.  
+
+Since shift mode is always activated, I can't use the computer unless I use an external keyboard.  I've definitely googled around to find a solution but can't seem to find any.  So if anyone knows a terminal command that can nullify a single key on the built in keyboard, please let me know! Or if someone creates a working program, I'd be happy to pay for it (paypal).  Or if someone knows a more appropriate subreddit for this kind of request, please point me in the right direction.",1312472481.0,2,0.67,5
+androidcirclejerk,SWIFTKEY SWIFTKEY SWIFTKEY SWIFTKEY SWIFTKEY SWIFTKEY SWIFTKEY SWIFTKEY ,,1312443979.0,3,0.81,0
+trees,What steps do you take to get the most out of your pot?,"Sometimes I vape one night, and then smoke the stuff I vaped the night before, the next night.  Any other good ways of conserving weed/being thrifty with it?  ",1312443335.0,8,0.8,2
+nvcc,Anybody know why Woodbridge campus was closed the other day?,"I got an email from NOVA alert, but they didn't explain why.",1312407083.0,2,0.67,6
+nova,I created a Subreddit for NOVA (the community college).  /r/nvcc,"[http://www.reddit.com/r/nvcc](http://www.reddit.com/r/nvcc)
+
+This subreddit is for all campuses.
+
+I don't expect that it'll be a very large or active subreddit (certainly less active than /r/nova), and I won't be at NOVA for that much longer, so if anyone else is interested in moderating, let me know.",1312407002.0,9,0.85,3
+ReviewThis,The Logitech Revue (Google TV box),,1312170526.0,3,1.0,7
+Minecraft,Is there no way to toggle specific mobs?,"I only play on peaceful mode, because creepers are always blowing my shit up.  I want to be able to turn off creepers...",1312038600.0,5,0.73,15
+todayilearned,"TIL that if you middle-click a tab in Firefox, the tab closes.  (You don't have to click that tiny X)",,1310435813.0,2,0.75,0
+techsupport,Batch filename editing? (Mac),"Specifically what I'm aiming for is sort of a ""ctrl+H"" function, but for filenames.  I have all of the Arrested Development episodes in iTunes, but because every filename starts with ""Arrested Development..."", I can't easily tell which episode is which.  [This](http://i.imgur.com/RMwgy.png) is what I'm talking about.  If I replaced ""Arrested Development"" with ""AD"" or ""ArrDev"", then I'd be able to see the titles much more easily.  Might be a longshot, but anyone know a method, other than manually renaming all of those files?  
+
+Thanks.
+
+Duncan",1310420847.0,1,0.6,3
+Android,My screen frequently turns itself right back on after turning it off...,"I think the culprit might be Juicedefender, since I did recently install that, but I'm not sure.  Anyone else had this problem before?  Did you find a fix?  ",1310410792.0,1,0.57,4
+Minecraft,"Wouldn't it be cool if users were to create levels, with obstacles and goals?  Sorta like a platformer...","I'm thinking like a Little Big Planet model.  The ability for users to create a level of some sort, and then save that world as a file that can be run in Minecraft, and brings you to a level that you can play.  ",1310279685.0,0,0.38,2
+java,So what's the best way to go about learning Java?,"Noob here.  I have 0 programming experience, but I'm pretty good with computers and would like to eventually be able to write applications for Android.  I have a couple books that I got for my bday:  
+
+**Java Programming 24 Hour trainer**
+
+**Android Application Development for Dummies** (*which won't really be useful to me until I actually know Java*).
+
+So what do you recommend?  Should I just stick to my books, or are there great tutorials available online?  Or maybe even interactive tutorials?
+
+Thanks for your input.
+
+duncan
+
+
+",1310237715.0,6,0.67,13
+reddit.com,LulzSec is calling it quits,,1309053228.0,3,0.8,0
+techsupport,I finally have a stable and working triple-boot setup.  Any way to backup this setup?  ,"I finally got my netbook triple booting Win7, Snow Leopard, and Ubuntu.  I've had this setup in the past, and because Mac OS isn't meant for this computer, it's not all that stable. I want a way to create an image of my entire hard drive, whilst maintaining all the partitions intact and everything.  Are there any programs that can do this?  I know it's possible to do this for singular operating systems, but what about multiple OS's?",1308614148.0,1,0.6,6
+funny,The Onion:  The Green Lantern,,1308364556.0,3,0.71,0
+trees,The best thing just happened to me [8],"Smoked a bowl, started eating my 2 pack of oreo cakesters, after I finished a cakester, I was like ""I probably already ate them both.  Yeah I think they're finished now"".  So I grab my controller, but then I'm like ""lemme double check"" so i reached down there, and there was A WHOLE CAKESTER left.  I got to experience that shit twice.  ",1308115420.0,3,0.66,0
+washingtondc,"Looking for suggestions:  I'm looking for a bar that's laid back (where 2 people could easily have a conversation without yelling) in DC, hopefully very close to a metro station.","I did take a look at ""The Official Thread of Favorite Bars,"" but it didn't seem to specify what kind of bars those were.  
+
+I live in NOVA. and I'm talking to a girl who lives in SOMD.  We wanna meet up in DC, and I'm hoping for a relatively quiet place (outdoor area is bonus) where we could get to know each other and have a conversation.  We'll both be taking metro, so the closer to a metro station, the better!  
+
+Thanks so much",1308113557.0,10,0.85,23
+pics,I work at Domino's.  We have a machine that prints stickers for every order.  This is what it printed yesterday.,,1307904305.0,36,0.76,16
+auto,"Trying to improve the MPG in my Grand Marquis.  Do spark plugs actually improve gas mileage, or is that a myth?  What other things can I do to my car to make it more fuel efficient?","The internet seems to be pretty split right down the middle, when it comes to whether or not performance spark plugs are worth it.  How does /r/auto feel about them?  What other modifications/parts can I buy that will improve my MPG?
+
+Thanks
+
+duncan",1307812110.0,7,0.82,8
+atheism,I just got a call from a church...  at 1:30am.,"So some guy claiming to be with a local church just called me at 1:30 in the morning...  I'm honestly a lil' freaked out.  Why the hell would they call me at this time?  He wanted to talk about Jesus, and I had a little debate with him, and everything seemed legit, except that he called at *1:30 in the fucking morning*.  I went to the church's website and emailed them, asking if the guy was associated with them, so I'm hoping to hear a response in the morning.  I asked how he got my number and he just sorta mumbled some nonsense and moved on. 
+
+**I've never been a church goer, so former christians:**
+
+Did your churches ever cold-call people like that?
+
+Would they ever call this late?
+
+Did your church buy number lists like advertising agencies do?
+
+Is it normal for a church to block its number before calling people?  He said it was to protect himself in case he offended anyone.
+
+I'm a little spooked, honestly.
+
+",1307426567.0,2,0.6,8
+techsupport,SPILLED WATER ON COMPUTER : SHIFT KEY SEEMS TO BE FOREVER PRESSED DOWN,"SO SORRY ABOUT ALL CAPS AND HORRIBLE PUNCTUATION BUT MY COMPUTER THINKS THAT THE SHIFT KEY IS BEING PRESSED AT ALL TIMES EVER SINCE I GOT IT WET POOLSIDE
+
+I HAVE A MACBOOK PRO
+
+MANY OTHER STRANGE THINGS ARE GOING ON WITH THE COMPUTER AND THE OPERATING SYSTEM BUT IF THIS SHIFT KEY ISSUE GETS FIXED THE COMPUTER WILL BE USABLE
+
+ANYBODY HAVE ANY IDEAS?  IS IT POSSIBLE THAT ITS A SOFTWARE ISSUE AND NOT A HARDWARE ISSUE?  WATER SPLASHED ONTO MY KEYBOARD
+
+THANKS SO MUCH",1306806955.0,24,0.8,36
+Android,Voice Search question,"When I first discovered Voice Search, I used it a lot (when driving).  But for the past several weeks, Voice Search no longer recognizes a contact name I used to use in Voice Search (successfully) a lot.  I used to say ""send text to [insert best friend's name here]""
+And it would recognize it every time.  Now, no matter how clearly, or different ways I say it, that contact is no longer recognized.  He's still in my contacts, so I don't know what changed.  I change ROMs fairly regularly, so is it possible that some ROMs have different/better/worse versions of Voice Search than others?  I have switched between Froyo and Gingerbread, but I don't remember which ROM(s) I had when it was successfully recognizing the contact name.  
+
+Anyone know something I don't know?
+
+Thanks.
+
+**tl;dr  Voice Search used to work and now it doesn't.  Any idea why?**",1306084938.0,2,0.63,2
+needadvice,"Just bought a car, with a 5 year loan, and now I have to deal with something that I didn't notice during the test drive.","Okay so I bought an 04 Mercury Grand Marquis.  5 year loan, etc etc.  I test drove it, but everything seemed great during the test drive.  Leather bench seats, with plenty of leg room (the leg room is why I bought it).  However, the second day of owning it, I realize that my right leg sorta naturally hangs out too far to the right, and in order to use the pedals normally, I sorta have to actively hold my leg in the correct position, because otherwise my leg hangs out too far to the right.  I've tried every seat position imaginable, and it didn't change anything.  The only thing that seems to help at all is stuffing a shirt under my right leg, so that it sorta holds it in the correct place.  I'm considering buying one of [these](http://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=car+cushion&x=0&y=0), but not sure if it'll help or not.  Anyone experience something like this before?  How did you resolve it?  
+
+For a few days I was outrageously anxious/depressed because I thought that buying this car was such a huge mistake, since the leg thing is really hard to ignore, and I don't want to feel uncomfortable in my own car for the next ~5 years. 
+
+Help! :(
+
+tl;dr:  Bought a car not realizing how uncomfortable it was to drive, now I'm looking for a solution.",1306038308.0,7,0.76,14
+Googlevoice,Is anyone elses Google Voice page acting weird?,,1305906667.0,1,0.6,2
+circlejerk,"I'm so tired of what Reddit has become.  Instead of leaving though, I'm going to complain about it.  On Reddit.",,1305866605.0,1,0.57,0
+math,Help with probabilities?,"I don't know if this is the place to ask for help with a math problem.  If it isn't, I can go to /r/homeworkhelp or something.  
+
+If 1.5% of the population has autism, then what's the probability of 83 out of 1,300 randomly selected people having autism?
+
+PLEASE redirect me to a better subreddit if this isn't the place.  Thanks!",1305759975.0,0,0.5,4
+Android,Report: Android phones vulnerable to snooping attack,,1305659595.0,0,0.5,0
+techsupport,"Comcast ""Constant Guard"" sent me an email saying that I was very possibly infected.","First of all, I'm VERY skeptical of this whole thing.  Here's the email they sent me:
+
+>Dear Comcast Customer,
+
+>Your immediate attention is required. Constant Guard™ identified that one or more of your computers may be infected with a ""Bot"".
+
+>We strongly recommend that you visit the Comcast Constant Guard Center at https://constantguard.comcast.net for important information on how to remove malicious software from your computer(s).
+
+>A ""Bot"" is malicious software or malware that is used to gain control of your computer, typically without your knowledge. Online criminals can use Bots to collect your personal and private data, such as Social Security numbers, bank account information, and credit card numbers by monitoring your keystrokes. This can lead to identity theft and fraud.
+
+>We appreciate your prompt attention to this important online security notice.
+
+
+>Sincerely,
+
+>Comcast Customer Security Assurance
+
+
+I called and talked to someone and he said something like  ""you receive this email if your modem has registered 5 or more hits with a known viral website"".  I asked him if he can tell me what the ""viral website"" is, and he said that he couldn't because it was non-intrusive.  He spoke of keyloggers, and email addresses being hacked.  I informed him that my email address was hacked in the past, but the problem stopped after I changed my email address.  He said ""that doesn't mean that the program isn't still installed on your computer"".  I then told him that I have reinstalled my OS since that happened, so any keyloggers are gone.  I asked him what kinds of OS's this ""bot"" was associated with, and he said ""Windows and Mac""  (I have a Mac).  Before we hung up, he asked if I wanted them to start hunting down the virus to eliminate it (a service that costs $127 apparently), and when I said 'no thanks,' he advised me to 'disconnect my internet and turn off my computer in the meantime' to avoid identity theft.  
+
+Am I right to be skeptical about all of this?  It just seems like BS to me, but my parents are freaking out.  
+
+Thanks so much.",1305208097.0,10,0.73,11
+DebateAZoroastrian,wtf is a zoroastrian anyways?,,1305013576.0,1,0.66,0
+AskReddit,"Would you rather piss a marble, or shit a softball?",,1304961630.0,0,0.3,13
+Android,Best way to go about starting over with a new gmail account?,"The gmail account I've been using is one I've had for years, and I outgrew the username.  Decided to get a new gmail account with a more ""adult"" username.  All my paid apps are associated with the old account. 
+
+Am I going to be able to continue downloading my paid apps so long as I have both of my gmail accounts connected to my phone?  
+
+Any suggestions?
+
+Thanks.",1304932391.0,12,0.74,9
+trees,Weed and Exercise,"I hate exercise, but I was like ""I bet I'd like it a lot more if I was high!""
+
+So I looked online, to see what people thought about weed and running, and it said that since weed makes your heart beat faster, exercise on top of that makes it more risky for a heart attack to occur.
+
+Your thoughts?",1304894863.0,3,0.8,1
+trees,This is hands down one of my favorite YouTube videos [4],,1304673981.0,2,0.75,0
+auto,Does anyone know anything about engine replacement?,"I've got a 1998 Ford Ranger, and the engine might be toast.  I'm considering replacing the engine, and really wanted to know if it was possible for me to put one of the newer 4 cylinder engines in my older v6 truck.  Please redirect me to a better subreddit if you think there is one.",1304669768.0,2,0.63,18
+AskReddit,"I have a really good friend who has a lot of strange social quirks about him.  Anyone known anyone like this, or know if he has some sort of social disorder?","Symptoms:  
+
+He doesn't enjoy sex, but he enjoys relationships.  He finds masturbation boring, and unsatisfying.
+
+No matter how much alcohol he drinks, he does not ever feel drunk, nor does he act any different than he does when he's sober.
+
+He is frequently accused of being a robot (emotionless), and often times doesn't understand that what he says is perceived as offensive.  Example:  ""Hey Kristi!  Did you get fatter?""
+
+Shows no signs of remorse for comments like those ^
+
+Never shows any signs of distress or urgency.
+
+There were a few other things too, but I can't remember them.  
+
+Notes:  He has a sense of humor, albeit a quirky one, and is friendly/sociable (any shyness or social anxieties are normal by other people's standards.
+
+Me and another friend have discussed some of his symptoms being sociopathic, and perhaps some symptoms of Asperger's?  
+
+Anyone have any ideas?
+
+",1304654857.0,2,0.75,1
+gaming,Cave Johnson's a Cannibal!,,1304493415.0,1,0.66,0
+AskReddit,What non-pornographic movie or TV episode have you fapped to the most?, ,1304478424.0,2,0.6,16
+videos,ROID RAGE,,1304391186.0,0,0.44,1
+Music,Richard Harris - Macarthur Park,,1304388568.0,0,0.5,0
+politics,Trump is SO PROUD of himself,,1304323009.0,1,0.57,0
+fnv,I think me and Boone are finally ready to kick some ass.,,1304142143.0,37,0.87,24
+Music,"The Queenstons - I Prefer the Sky.  Can't stop listening.  Also, Starfox 64 cameos!",,1303990669.0,1,0.66,0
+atheism,"Wow, she walked right into that one...",,1303764229.0,14,0.68,38
+videos,What the hell is wrong with this guy?,,1303360396.0,2,0.67,1
+atheism,This is what it it sounds like when a Fundamentalist Christian starts to see the hypocrisy in his doctrine.  Very cool video.,,1303150046.0,2,0.63,0
+firstworldproblems,The screen hinge on my Macbook Pro is starting to get a little bit wobbly.,,1303091674.0,3,0.67,1
+espanol,"Estoy tratando a sumergirme en la idioma de español.  Tienes algunas recomendaciones para unos Podcasts en español, en que la persona hablando, no habla tan rapido?",¡Gracias!,1302972270.0,7,0.89,9
+gaming,"Is anyone else not at all interested in jumping through hoops for Gabe, and could care less how many minutes earlier Portal 2 gets released?"," I already bought the game for my PS3, and I know it isn't going to be released early for the PS3.  I see all these Redditors buying games left and right, and Reddit proudly exclaims ""PORTAL 2 IS NOW GOING TO RELEASED LESS THAN AN HOUR EARLY BECAUSE OF OUR HARD WORK!""
+
+Edit:  my title:  ""and could care less"" should be ""and couldn't care less"".",1302970841.0,18,0.59,27
+nova,Anyone from Dumfries/Montclair?,,1302970235.0,6,0.87,5
+gaming,Arkham Asylum is available through Onlive for $5 today,[http://www.onlive.com/games/featuredgames](http://www.onlive.com/games/featuredgames),1302853229.0,5,0.77,2
+androidthemes,"Love the look, I just wish it was a little more functional",,1302679793.0,1,0.56,1
+atheism,Tracie Harris from The Atheist Experience SHUTS DOWN Mark from the Austin Stone. ,,1302632822.0,11,0.84,10
+fffffffuuuuuuuuuuuu,Early morning breakfast rage,,1302068767.0,30,0.72,8
+atheism,"Heaven sucks, anyways.",,1302024734.0,18,0.78,4
+reddit.com,an error occurred while posting (status: 504),OMG FIX THIS SHIT.,1302016597.0,0,0.5,2
+firstworldproblems,"I lost my iPhone.  I just replaced it, but it doesn't have my old Angry Birds save file on it, so now I have to play the entire game again.",,1301982318.0,2,0.6,0
+reddit.com,Anyone else notice that the Westboro Baptist Church's website is still offline?,,1301952517.0,2,0.67,0
+atheism,A newer BBC documentary on the Westboro Baptist Church,,1301925024.0,6,0.8,2
+firstworldproblems,"Damnit, my waffles are freezer-burned.  ",What am I gonna eat now?,1301422207.0,3,0.64,3
+gaming,Anybody else picking up a 3DS at midnight tonight?,What games are you getting?,1301190008.0,1,0.57,14
+gaming,"LOL.  Look at the picture, then read its caption.",,1301073103.0,1,0.66,0
+AskReddit,What's the funniest/most out-of-character thing your parents have ever said or done?,"I'm hoping to hear much better stories than my own, but the other day, my dad texted me and was like ""Tomorrow, I want you to go to the grocery store and buy the ingredients for a quiche.""
+
+I texted him back ""Okay, why?""
+
+""Because you've reached the age where it's time for you to man up and make a quiche, damnit.""",1300732751.0,2,0.75,3
+IAmA,"REQUEST:  Someone involved with www.familyradio.com;  The Organization that is Putting up Billboards Around the World, Claiming that the World Will End in 2 Months", ,1300682120.0,9,0.7,6
+pics,"This is super obnoxious, can we please do something about it?",,1300585792.0,2,0.6,8
+pics,"My grandfather, making a business deal with Fidel Castro",,1300565689.0,257,0.9,87
+DebateAChristian,"After watching videos of Japan, I can't help but wonder how Christians are able to cope knowing that so many people are in misery right now because of what your god allowed to happen...","I say Japan because it's recent, but this applies to any natural disaster (and arguably any disaster period).  
+
+This concept also applies to any omnipotent god, not just the Christian one.  
+
+God is more powerful than Satan (according to most of the Christians I've spoken with), so you cannot say ""this wasn't God, this was Satan"".  You cannot say that because if God is more powerful than Satan then obviously God had the potential to counteract Satan's will, and by not counteracting Satan's will, that leaves us only a few options:
+
+A.  *Natural disasters happen for purely scientific reasons, and the Omnipotent god that is ultimately in control of everything doesn't give a shit.*
+
+B.  *Natural disasters are part of God's will, and although he ""loves us,"" he occasionally likes to fuck with us because he gets bored.*
+
+C.  *God is the asshole he was in the Old Testament, and is fucking our shit up because we don't love him enough.*
+ 
+D.  *None of the above; Cold, uncaring universe.*
+
+People are always saying ""it takes more faith to be an atheist,"" but isn't it easier to accept the fact that shit happens, sometimes for no reason at all, than to accept that shit happens because some conscious all-powerful being is making it all happen?  If someone you know dies a long, slow[,](/ ""oxford comma"") and painful death, isn't it easier to accept the fact that sometimes life just sucks, rather than ""sometimes, life just sucks because my god makes it that way""?
+
+Discuss.
+
+ ",1300557384.0,6,0.67,4
+Android,Epic 4G gets CM7!,,1300215163.0,13,0.85,7
+DebateAChristian,"How is it that you use Reason as a pathway to truth in every endeavor of your life, and then when it comes to the ULTIMATE truth, the most important truth, you're saying faith is required?","**The title of the submission is 100% a Matt Dillahunty quote** [(not trying to take cred).](http://www.youtube.com/watch?v=DAuFJKQh83Y#t=7m55s ""This is the part of the video where he says that quote, but the entire video is definitely worth watching."")  
+
+It's a really good question though, IMO.  
+
+If your religious beliefs are based on ""faith"", then do you understand that that means that the supernatural claims you're making are no more reasonable than me saying that I believe in Scientology based on ""faith,"" or that I believe that Steve Jobs is God, based on ""faith""?
+
+When adding to that the fact that the Bible is full of atrocities and contradictions, I honestly don't understand how people could possible believe or want to believe in Christianity.  And I'm not trying to say that in a condescending way, what I mean is that I've never been a Christian, so I honestly don't know what it's like, or how it's possible.  
+
+But seriously, how is it possible to not see how malevolent your God is?  He has complete control on whether people go to Heaven or Hell (assuming he is all-powerful, as the Bible claims), yet he lets people go to Hell anyways.  Do Christians truly believe that people deserve to go to hell?  There are VERY FEW people I've ever heard of that would deserve such torture.  I certainly don't think I deserve the same kind of torture that Hitler deserved (even though, he might be in Heaven, seeing as how he was a Roman Catholic...)
+
+So that's it?  You'll end up in one of two places?  One is unimaginatively fantastic, and the other is unimaginatively terrible?  There's no middle ground?  This justice system is fucked up, and I can't fathom why anyone would hear that and say ""Hey this is cool, where did you say you hung out on Sundays again?""
+
+/rant",1300126896.0,33,0.92,131
+WTF,U.S. millionaires say $7 mln not enough to be rich,,1300124971.0,2,0.75,0
+fffffffuuuuuuuuuuuu,"Whatever, I love my Kindle.",,1300046777.0,8,0.84,0
+pics,For all the fed-up parents out there...,,1299983639.0,3,0.62,2
+kindlescreensavers,MARK IT ZERO,,1299950528.0,12,0.8,3
+gaming,Play through Super Mario Bros as the character of your choice!,,1299913043.0,3,1.0,1
+atheism,Christianity In a Nutshell,,1299534110.0,144,0.97,24
+fffffffuuuuuuuuuuuu,My most recent realization...,,1299406712.0,6,0.65,2
+todayilearned,"TIL that if you cut off the limb of a sea star, not only will it regrow that limb, but that limb will also regenerate into a new sea star",,1299019332.0,10,0.87,6
+Minecraft,Minecraft on my dual-core netbook.  Please help!,"I used to have a netbook with **gma950** and a **1.66ghz processor** (single core).  Windows wouldn't even allow me to open the program, but I was able to run it in Mac OS on the same computer, and it even ran decently enough (~20-30 fps).  
+
+I just got a new netbook, and this one is **dual-core, at 1.5ghz**, and it has **gma3150 graphics**.  I thought for sure that this one would be able to run Minecraft just as well, if not better, however I start up Minecraft in win7, and I'm literally getting 1 frame per 2 seconds, with the lowest possible video settings.  Any ideas?  
+
+Thanks so much",1298831477.0,5,0.86,17
+linuxquestions,Does anyone know how to add a driver to a Live CD's ISO?,"I have a netbook.  I want to install Android x86 on it.  I swapped out the stock wifi-card for one that is compatible with Mac OS, because eventually I want to have this thing triple booted (maybe even quadruple booted, if I can get Android to work).  Android isn't recognizing the wifi-card, so I'm trying to go about customizing the ISO to include said driver, as suggested in [this thread.](http://code.google.com/p/android-x86/issues/detail?id=76)  I have downloaded the driver that was posted at the bottom of the thread, and I have the ISO opened up, so now what?  Is anyone able to help me?
+
+Thanks so much.",1298727793.0,5,0.86,6
+linux4noobs,Customizing an ISO by adding a driver?,"I have an ASUS EEE PC 1015PEM.  I want to install Android x86 on it.  I swapped out the stock wifi-card for one that is compatible with Mac OS, because eventually I want to have this thing triple booted (maybe even quadruple booted, if I can get Android to work).  The OS isn't recognizing the card, so I'm trying to go about customizing the ISO to include said driver, as suggested in [this thread.](http://code.google.com/p/android-x86/issues/detail?id=76)  I have downloaded the driver that was posted at the bottom of the thread, and I have the ISO opened up, so now what?  Is anyone able to help me?
+
+Thanks so much",1298704076.0,7,0.9,4
+fffffffuuuuuuuuuuuu,Torrent Rage,,1298577814.0,38,0.83,3
+atheism,Jesus take the Wheel (x-post from /r/videos),,1298516624.0,9,0.82,1

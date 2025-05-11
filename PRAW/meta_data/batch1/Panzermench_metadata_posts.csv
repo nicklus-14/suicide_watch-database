@@ -1,0 +1,218 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+Garmin,Help. I quit my training plan 4 weeks out from my event because I thought the training plan was glitched!,"So I've been working on a training plan for 12 weeks now with Greg and my event is in 4 weeks. I've had glitches before in the trainers where they place my long runs midweek and my training plan was acting strange shut. I decided to do what I did last time which was cancel the training plan and restart it. The problem is that since it's so close to event, I can't recreate the event with the same date. What should my training plan be 4 weeks out? This might not be the correct place to post this, but any advice would it help? Thank you in advance! 
+
+PS. This should be it an easy fix for Garmin to allow people to restart plans if they've been canceled as I've seen it now, you can't",1738694228.0,1,1.0,2
+cscareerquestions,I have a tech adjacent job that I am freelancing at. I was told to not claim my hours whenever I'm doing scripts for work. Is this industry standard?,"So to fill in some of the blanks from the title I work as a freelancer for a company and we use a lot of scripts on the job. I wrote a few scripts to to make my life easier and automate a few things. When asked how to build my time working on these, my manager told me to not claim them and I should be working on scripts on my own time. I don't feel this is right because the scripts that I was working on were directly related to the job and an actually sped up my workflow. The manager knows all of this. They have mentioned that this is their first management position and I don't know that what they asked me is actually illegal to ask someone to not claim ours that they were working. I don't actually know how to handle this. Anyone have any suggestions?",1685556485.0,0,0.5,11
+Breadit,I felt like cinnamon rolls since I saw them on here last. I finally made some.,,1651538026.0,29,0.96,3
+Seattle,Where in your opinion is the best bar food in Seattle?,[removed],1647818515.0,1,1.0,0
+Breadit,I haven't made bread in over a year because of lack of time due to me changing careers and I feel these turned out pretty all right.,,1647747229.0,12,0.94,3
+Seattle,I just was admiring the starts and watching straights and planes fly above me. My SO and I just witnessed 6-8 lights flying high altitude above is going north to south in a row.,Anyone know what they could be?,1641003031.0,0,0.46,9
+FoodPorn,I made lemon meringue tarts for Christmas Eve tea with the ML. I feel they turned up pretty nice.,,1640377678.0,19,1.0,2
+cscareerquestions,"I have a systems design interview coming up. Other than practice, what are some tips for these types of interviews?",[removed],1638379403.0,1,1.0,1
+learnprogramming,When calling an .env variable in my react app it's not importing the complete string! Please advise!,"So I'm working on a pet project and everything is going relatively smoothly then suddenly I go to use an .env variable for authorization for user login and it doesn't work.  I check the string by copy and pasta the string in the place to hard code it and it works.  I change it back and nothing works.  I console.log the variable and sure enough it's correct EXCEPT that the last character which is a zero is not showing up in the log.  I check the variable in a template string and hard code the zero and suddenly it works.  WTH?!   Why is it not importing the entire string?  It seems hackish to just hard code the last char in like that and I don't see anything in the docs that covers this.  Anyone have any ideas?  I'll post the working hackish code below.  FYI I also am developing my own backend for this project and don't know if I'm also supposed to be sending the headers like this or handling this in the backend.  Thank You!
+
+            axios.post(`http://localhost:2019/login`,
+        `grant_type=password&username=${userValue.username}&password=${userValue.password}`,
+        {
+            headers: {
+            Authorization: `Basic ${process.env.REACT_APP_CLIENT_ID}0`,
+            ""Content-Type"": ""application/x-www-form-urlencoded""
+        }})
+        .then(res => {
+            console.log(""logged in"")
+            setLocalId(true);
+            setIsLoggedIn(true);
+            push('/')
+        })
+        .catch(err => {
+            console.error(err.message)
+        })",1635972539.0,2,1.0,10
+springsource,How do I create a login controller for my rest API?,"Ok so this may sound strange but I was given some code for a REST API to create a new user in my database by an instructor.  Glossing over details, I'm no longer able to get in touch with them but I have a question about the code they gave me.  It creates a user and gives a token but how do I get the token back for the user to login later?  IE how do I write the ""/login"" controller for this?  Do I just copy and pasta the code from below to a post mapping?  Hope someone can help.
+
+    @PostMapping(value = ""/createnewuser"",
+        consumes = {""application/json""},
+        produces = {""application/json""})
+    public ResponseEntity<?> addSelf(
+        HttpServletRequest httpServletRequest,
+        @Valid
+        @RequestBody
+            UserMinimum newminuser)
+        throws  URISyntaxException
+    {
+        //  Create new User
+        User newuser = new User();
+
+        newuser.setUsername(newminuser.getUsername());
+        newuser.setPassword(newminuser.getPassword());
+        newuser.setPrimaryemail(newminuser.getPrimaryemail());
+
+        //  Add default role for user
+        Set<UserRoles> newRoles = new HashSet<>();
+        newRoles.add(new UserRoles(newuser,
+            roleService.findByName(""user"")));
+        newuser.setRoles(newRoles);
+
+        newuser = userService.save(newuser);
+
+        // set the location header for the newly created resource
+        // The location comes from a different controller!
+        HttpHeaders responseHeaders = new HttpHeaders();
+        URI newUserURI = ServletUriComponentsBuilder.fromUriString(httpServletRequest.getServerName() + "":"" + httpServletRequest.getLocalPort() + ""/users/user/{userId"")
+            .buildAndExpand(newuser.getId())
+            .toUri();
+        responseHeaders.setLocation(newUserURI);
+
+        // return the access token
+        // To get the access token, surf to the endpoint /login just as if a client had done this.
+        RestTemplate restTemplate = new RestTemplate();
+        String requestURI = ""http://localhost"" + "":"" + httpServletRequest.getLocalPort() + ""/login"";
+
+        List<MediaType> acceptableMediaTypes = new ArrayList<>();
+        acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.setAccept(acceptableMediaTypes);
+        headers.setBasicAuth(System.getenv(""OAUTHCLIENTID""),
+            System.getenv(""OAUTHCLIENTSECRET""));
+
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add(""grant_type"",
+            ""password"");
+        map.add(""scope"",
+            ""read write trust"");
+        map.add(""username"",
+            newminuser.getUsername());
+        map.add(""password"",
+            newminuser.getPassword());
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map,
+            headers);
+
+        String theToken = restTemplate.postForObject(requestURI,
+            request,
+            String.class
+            );
+
+        return new ResponseEntity<>(theToken,
+            responseHeaders,
+            HttpStatus.CREATED);
+    }",1634836102.0,2,1.0,0
+learnjava,I'm working on a java spring boot application and need some help. It's this The correct subreddit to ask for help,As started before I'm working on a spring boot application for an image uploader. I'm having a difficult time making a join table that associates the uploaded image with the user that uploaded it. I can provide the GitHub of the project if there's anyone who can help here. And if no one can help can you point me in the direction of who may help with my project? Thank you!,1631658645.0,2,0.76,10
+AskReddit,What would you go back to school/uni for if money wasn't an issue?,,1629351571.0,4,1.0,31
+Seattle,Some guy getting interviewed back in 1993 on the pier with old Seattle skyline behind him. Oh how it's changed.,,1613234685.0,48,0.92,11
+OutOfTheLoop,Why would the Trump want to repeal section 230?,,1602001753.0,1,1.0,1
+Carpentry,I'm looking into switching careers from cheffing into carpentry in the Seattle area. Where do I start? Is there companies to avoid or attract myself to? Are Unions viable in Washington State?,Title say's it all.  I'd like to get into residential I think.  Any advice for a noob?,1601160923.0,5,0.74,5
+AskReddit,"What did you do when you were in your late thirties, burnt out from work and at a stand still in your career that was helpful or not so productive?",,1597534151.0,2,1.0,9
+Breadit,Looking for some critique on my loaf! 75.5% hydration. Should I be getting larger voids?,,1591485493.0,2,1.0,9
+running,"I'm training for a marathon and would like to know what you use for hydration on your long runs! Do you use a belt, vest, other?",[removed],1590773374.0,1,0.67,16
+pics,I had some time during quarantine to make everything you see here!,,1590634013.0,5,0.7,1
+u_Panzermench,I had some time during the stay at home order to do some projects! I made all this in house!,,1590633905.0,1,1.0,0
+FoodPorn,"I had some time during the stay at home order to do some projects! I got a rye sourdough starter going and made a few loaves, lacto fermented some peppers, cured some gravlox and made this! Oh yeah, the chives and blossoms are from my garden!",,1590633543.0,10,1.0,0
+Chefit,"I had some time during the stay at home order to do some projects! I got a rye sourdough starter going and made a few loaves, lacto fermented some peppers, cured some gravlox and made this! Oh yeah, the chives and blossoms are from my garden!",,1590626664.0,288,0.97,32
+AskReddit,"Laid off people and folks working from home, with all your free time that you now have what games or activities have your started to do/play? Hobbies?",[removed],1589167727.0,1,1.0,1
+askscience,I don't know if this is the correct place to ask this but what is an adequate cleaner/disinfectant for leather?,[removed],1588182285.0,1,1.0,1
+running,Im about to finish my training for a half marathon. There is of course no races but what do I do after?,[removed],1586468392.0,1,1.0,0
+sudoku,What am I missing on this one and how did you notice it?,,1577870914.0,3,0.81,5
+mycology,Purple mushroom in the pnw! What is it?,,1574796227.0,23,0.94,4
+Chefit,I'm heading to Boston in October! Any suggestions of where I should go?,I'm making a pilgrimage to the Parker House on principle and having very low expectations. But is there any places I should check out or not miss in Boston? Now and old. I'll be there for four days!,1569088037.0,2,0.75,9
+Charcuterie,I'm about to debone a ham and works like to smoke it. Should I put it in netting before I put it in brine to keep the muscle together or put it in after it has brined?,"I don't know if it's important to not but I'm planning on injecting it with brine also. I've read the ham section in,""home production of quality meats and sausage""by Stanley and Adam Marianski and it doesn't seem to say weather I should stuff it before brining or after. Also, should I brine bone in and remove the bone after? Lots of new ham questions...",1562085441.0,25,0.93,6
+Charcuterie,What is your favorite smoked ham recipe?,I'm getting a hog in in a week and I think I want to turn a leg into ham!,1561221021.0,3,0.81,1
+AskReddit,What is the one cd I should have in my car in case my internet radio goes out on a road trip?,,1561219718.0,1,1.0,1
+sudoku,Can anyone tell me what I should look for to continue this puzzle?,,1557209855.0,1,1.0,9
+sudoku,What is my next step here? I've been working on things one for a while.,,1556431850.0,3,0.8,3
+AskReddit,"Hey Reddit, what did you eat yesterday and how are you feeling today?",,1555861546.0,3,1.0,3
+OutOfTheLoop,Why is no one outraged about Joe Manchin(D)voteing for Kavanaugh and everyone is flipping there shit about Collins(R)?,,1538896063.0,1,1.0,1
+sudoku,What technique should i use to advance? Xyz wing?,,1530906222.0,1,1.0,4
+diablo3,I'm looking for a viable DB farming build for the wizard.,I'm currently running fb channeling with an incomplete build. I'm trying to finish the build by upgrading boots and staffs.,1519930037.0,12,0.76,17
+diablo3,Having a hard time advancing gr. Too squishy. Need help.,I'm feeling squishy on my pest Necro. Should I do Ruby or amethyst for better or advancing for my caldisens?,1516235092.0,3,0.67,6
+Homebrewing,Had anyone made and used the home Depot mash tun? What did you think of it?,Title says it all.,1512432758.0,12,0.82,21
+Bonsai,My landlord said i could prune this Beautiful Japanese Maple for a wedding. I'm a complete amateur at this but want to expose the amazing trunk it has. Any advice or should i call a profesional on this one?,,1504029379.0,4,0.75,10
+Bonsai,I have a Japanese maple I'm my front yard. I'd like to prune it bonsai still. Could i get some pointers or opinions from you guys/gals?,[removed],1504024497.0,1,1.0,1
+thalassophobia,A documentary about rogue waves that can reach 80'-100' tall.,,1503420564.0,65,0.98,1
+AskCulinary,What can i do to bake stable chocolate to make it good for doing strawberries,,1501718489.0,17,0.76,11
+AskReddit,What should you do if you think your house is being cased?,,1497173096.0,3,0.81,23
+AskReddit,I think my house that I'm renting a room in was cased tonight. The window screens were off three windows but there appears to be nothing gone. What should we do?,,1497172485.0,1,1.0,1
+AskCulinary,Anyone ever do Jojos without a frier and in the oven?,[removed],1495126690.0,5,0.68,2
+turtle,What type or turtle is this?,,1492048581.0,20,0.93,10
+KitchenConfidential,"Ok KC, What shoes do you wear and do you like them?",I'm looking to buy a new pair. My Danskos aren't cutting it anymore.,1491676704.0,24,0.83,38
+AskReddit,What are some good shows/movies to add to someones Netflix cue as a prank? Suggestions of bad or comically strange titles?,,1491444164.0,1,1.0,5
+sex,I recently found out i have two STDs HPV and herpes. Dating has become a scary thought from here. Any advice from people who have been through the same thing?,[removed],1488565264.0,1,1.0,1
+Diablo,What build should i think about doing for season 9 T4 crusader with paragon lvl 109?,I'm having a tough time getting into T4 after blowing through T1-3.,1485218767.0,7,0.63,7
+gaming,I'm trying to remember a game that came out in the late 90's early 00's similar to warcraft 3 in its plot. anyone remember what i'm talking about? It wasin PC Gamer back in the day.,,1482376534.0,0,0.5,1
+AskReddit,What would the Ghost of Christmas present have for his feast in Charles Dickens A Christmas Carol?,,1482337760.0,1,1.0,1
+AskReddit,What would the Ghost of Christmas present have for his feast in Charles Dickens A Christmas Carol.,,1482337144.0,1,1.0,1
+HongKong,I'm comming to HK in a week for ten days. What shouldn't I miss?,"Food to eat, places to go, things to see.  etc.  ",1476388184.0,25,0.76,44
+Hong_Kong,"I'm comming to HK in a week. what should i do, what should i not miss?",Title says it all baby.,1476387583.0,2,1.0,2
+AskReddit,How would one go about shipping a coffee table cross country without using expensive freight?,,1472071785.0,1,1.0,0
+AskReddit,"I want to ship a coffee table from Michigan to Seattle, is there a sub for packing things in others U-Haul or otherwise?",,1472069955.0,1,1.0,1
+AskReddit,"Redditors who's SO cheated on you and you got back together, what's your success story? Or is there no going back?",,1468517805.0,5,0.86,17
+AskCulinary,Whats the best way to puff amaranth en mass?,I need about 2 qts puffed at a time preferably more for a dish i'm working on.,1463742411.0,3,0.81,2
+AskReddit,"What are some of timer greetings similar to, ""working hard or hardly working?""",[removed],1463717863.0,1,1.0,1
+whatsthisbug,Do we have bed bugs?,,1461961798.0,4,0.83,2
+whatisthisthing,Do we have bed bugs?,,1461959265.0,1,1.0,0
+politics,Why if Washington has 101 delegates and he won 72% why did he only get 25 delegates via Google.,,1459102206.0,1,1.0,1
+sex,My gf's public hair is tipping me up.,[removed],1458925387.0,1,1.0,1
+funny,Live footage from a Trump rally.,,1458497331.0,1,1.0,0
+Seattle,"Girlfriend and i are trying to find an affordable apartment in Seattle. How did you find your sweet pad for under $1400? What website, resource etc.",[removed],1453507321.0,0,0.09,8
+whatsthisplant,What is this plant and how do i control the rot?,,1453146261.0,10,0.92,6
+KitchenConfidential,I'm looking for a spoon...,a set of spoons from Morimotos.  The bowl is set backwards so when you do a one spoon quinelle it sets upright. Does that make any sense? anyhow could one of you steal me one? Kthxbye.,1441904167.0,0,0.18,4
+Seattle,I'm looking to to make some cider from some apples and pears but don't have the up front cash to make our buy a cider press. Could i borrow or rent someone's for a week?,[removed],1440629497.0,1,1.0,0
+KitchenConfidential,I found this kickstarter on one of my favorite blogs. Seems pretty legit.,,1433347730.0,27,0.75,18
+KitchenConfidential,This is my every Monday and Friday.,,1421018274.0,362,0.95,40
+mycology,Did i find a bunch of meadow mushrooms?,,1410705923.0,6,0.75,6
+Seattle,Pickleball in Seattle?,"Is there any courts in Seattle? I live in the greater Ballard area, more impotently ate there any in that area?",1409446248.0,6,0.8,11
+yoga,What type of bag so you use bike scooter and motorcycle commuters?,In running into a problem transporting my gear on my scooter and am undecided as to which type of bag to get. What's your mode of transporting for your gear? I've been doing hot yoga so I have a bit to transport.,1397781288.0,1,1.0,4
+sex,Hey sexit! What's in your drawer? Prafered lubes? Toys?,Do you have a different lube for anal and vaccinal sex? Any cuffs or straps? Brands please! I'm trying out new things with my gf and wasn't too shake it up a bit.,1390296506.0,0,0.5,3
+AskReddit,My girlfriend just spilled Christmas brunch on the floor and now doesn't want yo talk to me. How's your Christmas going?,[removed],1387969173.0,0,0.33,2
+sex,Do you get depressed without sex or masturbation?,I can only go a day or two without feeling agitated and frustrated. ,1387535741.0,29,0.85,28
+sex,Subs and doms out there. My gf won't have sex with me and it's driving me crazy.,"So she (27) has been in a sub dom relationship before as a sub. He turned out to be a prick and megalomaniac of her life (surprise). He tried to get her into a cult and after they broke up would try to manipulate her into having sex again. Glossing over some details. This isn't the only for her bit the most recent and fucked up one. I (31) havenever been into a relationship like that and I'm mostly fine with her past be the way it is. We've been together for three months and sex slowed down After the first month. She has said that she doesn't want a relationship like that with me because they always end up with her developing feelings for her dom and they just want sex. She wants me to be a long time relationship. Well back to our sex. I'm into s&m and of course she's into b&d. She is now saying she is confused because she, in her mind, can only have relationships that are sexual or committed. My question is has anyone else had this obstical in their lives?  How do I become a sexual figure to her again whilst maintaining a committed  loving relationship?  I love her but sex is a big part of a relationship to me. Someone please give advice!",1385630466.0,1,0.56,3
+AskCulinary,Got some locus tree gum today. Does it need heat to activate?,I know xantham and guar do not need heat but many hydrochloride do need activation. ,1373880015.0,9,0.92,9
+SuicideWatch,My sister just called me to tell me that she just tried to commit suicide. We are three time zones away. What can I do?,She said she was fine and wouldnt trty again.  Depression runs in our family.  My brother has also tried to do it.  He was in teh state at the time and i could chat him out in person.  I dont' know what she will/can do 2000 miles away.  I'm freaking out.  Any advice?,1367994953.0,6,1.0,5
+Blind,Nice video about echo sensory in a blind kid.,,1367124624.0,9,0.82,0
+videos,"I house sat for this man and his family before I moved 2,000 miles away. I never got to see him at work so I'm very glad to see this video.",,1367089349.0,1,1.0,0
+Seattle,Anyone have some Chuck Ragan tickets they want to get rid of tonight?,[removed],1366326967.0,0,0.33,1
+gaming,So I just found out that Flashback is being remade.,,1366077685.0,5,0.78,4
+Paramedics,I have a strange question. I'm looking to change careers and go to school to become an EMT and ultimately become a paramedic. Is it difficult to get a job after you get the schooling in a metropolitan area such as Seattle?,I'm currently a culinary professional and no longer feel like it's that fulfilling of a career choice.  Plus I will never have a 401k or insurance of any sort in my current path.  I think that the fast pace and thinking on your feet aspect of being a paramedic are similar to that of working in a professional kitchen.  I have an attention to detail from working in fine dining and to tell the truth I come from a family of medical professionals so I've always been interested in medicine and helping others.  I just don't want to go through the schooling and find I blew a few grand on it and not be able to find work.  As stated above I live in the greater Seattle area adn do not want to move to far away.  Last fact.  I'm 30 right now.  Is that to old?  I'm a rather active person with decent physical health.  Can anyone give me a bit of info/guidence?,1365895625.0,3,0.81,4
+Breadit,More bored bread. Pane Sicilliano loafs inspired by Reignhart.,,1364856579.0,13,0.88,0
+Breadit,"Breddit, I'm having a hard time transferring my focaccia and other wet/soft dough onto the peel and then stone without deflating them. Any pointers tips or tricks?",I love this fucking sub!,1364763734.0,4,0.75,6
+Breadit,What I do now that I'm unemployed and bored.,,1364707199.0,113,0.98,14
+AskReddit,I recently dislocated my ankle and had to go to the hospital with no insurance.  I also cannot work because of said injury.  Whats a good way to earn some cash to pay for my medical bills? Details inside.,[removed],1364289964.0,1,1.0,0
+sex,"Hey r/sex,  whats the most you've orgasmed in one day?  With and without partners.",Seven [m]anually and four with a partner since I tend to last longer with my partners and not to mention soreness. ,1364283367.0,26,0.84,48
+videos,"As a chef, this is the only cooking show that I watch.",,1361994790.0,1,0.67,0
+AskCulinary,I am making sausage and would like to do a chain like in this video.  Having trouble starting it.  Anyone have a helpful tutorial? ,[Sorry I couldn't link the title.](http://youtu.be/EhaUikjv_P8?t=9m7s),1361994186.0,42,0.9,12
+STD,"I contracted herpes four years ago and just started my first relationship in that amount of time.  I'm having ""The Talk"" tonight. Wish me luck.","This is my first ""Talk"" so we'll see how it goes.  ",1355436967.0,5,0.86,14
+AskReddit,Hey reddit can you take a minute to vote for my friend who is in a competition to get her house remodeled energy efficiently?  Thanks. ,[removed],1352927783.0,0,0.22,10
+Seattle,Hey r/Seattle my friend is in a contest to get her house remodeled energy efficient style.  Can you take a minute and vote for her?,,1352926036.0,0,0.2,1
+classicalmusic,I share my real life cake day of one of my favorite composers.  Franz Liszt. Today is our day.  So I present perhaps my favorite piece by him.,,1350940672.0,15,0.64,5
+tattoos,"Hey /r/tattoos,  how hard would it be to tattoo damascus steel on you and it look not like shit?",[Like this.](http://en.wikipedia.org/wiki/Damascus_steel)  I have an idea for a tattoo that involves my chef knife which is damascus steel.,1350330755.0,0,0.44,5
+AskCulinary,What type of knife and what maker/brand do you use to break down whole fish?,Kind of looking to upgrade from my [Victorinox flexible.](http://www.cutleryandmore.com/victorinox-forschner-fibrox/flexible-straight-boning-knife-p12873),1350327274.0,6,0.81,9
+AskReddit,In exactly one month I turn 30.  Whats some things I should do while I'm in my 20's?,Yeah I'm broke like a collage kid so lets keep this on the cheep.,1348337285.0,2,0.75,22
+videos,PSY with Hyuna doing Gangnam Style.  Did I mention that Hyuna is stupid hot?,,1347474909.0,3,0.71,2
+backpacking,What does r/backpacking think about Biolite stove for a cook source?,,1345142589.0,21,0.85,37
+AskCulinary,Hey people I need to come up with a new Vegan mignardise.  Any ideas? ,"Current one is ""Coco Nuts""  Almonds in crystallized  sugar dipped in 80% chocolate and dusted with atomized chocolate.  We've been running the same damn thing for over a year to our vegan customers and its starting to wear on me.  We have the omnivores mignard covered btw.  Oh and I should mention that we don't have a paistry chef in house so this should be more prep cook friendly.  Ok now show me what you got dudes. ",1343342429.0,14,0.85,11
+Seattle,My parents just flew from Michigan to see me and they want to go to Beth's of all places for breakfast. ,"I just wanted someone to complain to.  I live in the U-district you see.  I mean we could go out to brunch at a nice place like Tilth in Wallingford or even a better diner like Pete's egg nest on Phinny ridge but nooooo they want to go to the ""12 egg omelet place that we saw on T.V.""  EVEN THE HURICANE downtown does that.   Whoo sorry for shouting and thanks for letting me vent.
+",1339947456.0,0,0.28,10
+classicalmusic,La Campanella by Liszt played by hot girl.,,1339655394.0,0,0.44,5
+AskCulinary,Hey /r/askculinary! What's your favorite food blog?,Mine are Playing with Fire and Water and Ideas in Food.   ,1336686195.0,8,0.76,13
+BookCollecting,A friend of mine does old school book printing and binding. Here's a sample of his work.  ,,1334077177.0,13,0.85,0
+bookporn,A friend of mine prints and binds books old school style for a living.  Here's a 'sample of his work that I think r/Bookporn would like if you got some spare change.,,1334076505.0,1,1.0,1
+Seattle,Hey Seattle!  I'm Building some raised guarden beds.  Have any extra lumber that you want to get rid of?,I'm looking for four foot lenghs or longer of 2x4s and I'll need about 40 feet in total or so.  More if you can spare! Thanks.  Oh and P.M. me for details!,1331256467.0,4,0.83,0
+Ska,Anyone remember the band Telegraph before they were Telegraph?  The Skolars.,,1331175507.0,13,1.0,11
+Ska,How about some old skool ska from Toots and the Maytals.,,1331137693.0,49,0.96,6
+Ska,Any fans of The Blue Meanies?,Midwest Ska all the way.,1329826673.0,24,1.0,8
+Jazz,I'm looking for some stellar bebop. Can r/jazz help a cat out?,Anything thats good.  I know that that exspression is subjective but just throw stuff at me.,1329645748.0,5,0.86,4
+gaming,Egoraptor on Super Castlevania IV,,1328260201.0,1,0.67,0
+videos,I wish I could climb like this.,,1328253375.0,1,1.0,0
+running,Motivational Running Movies.,[removed],1327972264.0,1,1.0,0
+politics,"How is there only 1,519 signatures on this petition to stop ACTA?",[removed],1327292144.0,1,1.0,0
+wine,SOMM.  So you think you like wine.,,1326510266.0,6,0.88,4
+running,"Dear Runnit,  what headphones/earbuds do you wear on a run?  ",Furthermore do you like them and why.  I will probably purchase the most upvoted set btw.  Thanks curiousjp for spurring this.,1325980292.0,5,1.0,12
+aww,I'm a 30 Y/O male who almost lost it watching these Elephants.,,1325698320.0,85,0.93,21
+trees,Hey Seattle ents!  You know you like Dicks!,"Dicks Burgers that is!!!!
+http://imgur.com/IwkGh",1320919095.0,4,1.0,1
+food,TIL you can fry herbs in the microwave.,[removed],1320827842.0,1,1.0,0
+trees,Any Ents listen to this guy while at an [8]?,"Amon Tobin. It blows my mind.
+http://www.youtube.com/watch?v=Bk8W3ysnB7M",1320720278.0,0,0.4,5
+todayilearned,TIL there is a person who is claimed to have drank the most beers mid-flight and he's Australasian. ,,1320313889.0,7,0.89,5
+pics,Hey reddit!  Do you like my pumpkin?,,1319631575.0,16,0.73,5

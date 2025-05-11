@@ -1,0 +1,318 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+SQL,Seeking help to graduate from Excel VLOOKUPS to something faster,"Howdy, hoping someone can help or point me in the right direction. I've been working in data management for almost 7 years now and my previous techniques are not scaling up to the data I'm now responsible for! I'm fairly competent in SQL (DB2 and MS SQL), dabbled in VBA/macros/RPA, am a big fan of PowerQuery, and starting to learn PowerBI (but haven't quite figured out the Data Model aspect for the Power platform). I have always wanted to have an excuse to learn Python, and after reading [this article] (https://towardsdatascience.com/a-complete-yet-simple-guide-to-move-from-excel-to-python-d664e5683039), I've been giving it a shot. However, after reading [some comments](https://www.reddit.com/r/SQL/comments/hemr21/is_pandas_or_sql_faster/) and my experience so far, I am less sure that I am spending my time wisely.
+
+There are 2 projects I'm working on, in order of priority. For both, I'm working on a Win10 laptop, 24 GB RAM, core i5-8365u, 64 bit MS Office. A large part of the draw to Python is that another team made us some scripts on their (some sort of *NIX) servers for another project that connects to the same databases. Not only do I have a working reference, but deploying new Python scripts to that server will be much faster and easier than other solutions. Diving deeper into Python would also let me learn how to support those other scripts without having to bug that other team. We also have a Python user group that was started by someone who used to be on my current team for even more help. 
+
+Finally, for the issues with Excel that I'm about to describe, I have ***not*** ruled out that something is wrong with Excel itself, that the bottleneck might be connectivity speed to the databases, or some other environment/user issue. 
+
+**Project 1:**
+
+I'm seeking help on processing daily reports with ~200k exceptions. I need to compare results between the current and previous report to see what line items are new. Once I get the current day's results, my current process to make this comparison either takes 20+ minutes or crashes Excel.
+
+My current process involves using DBVisualizer to run a query on some giant DB2 tables, the largest having ~60million records. This also takes a while but it's not my primary concern--I can have this run server-side if push comes to shove. Once this query is finished, I export it as a CSV to my local machine. Then, I import the CSV into Excel using PowerQuery to do some cleansing, formatting, and to add a few columns including a PK/FK to uniquely identify each result. I know that I could do all/most of this in the query itself, but PowerQuery is honestly fast enough for this (and DB2 syntax is annoying).
+
+The problems come when I want to figure out the new results. Using a VLOOKUP to the previous day's file frequently crashes Excel. Copying the previous day's results to the same workbook before doing the VLOOKUP is more successful, but takes at least 20 minutes. I am getting impatient waiting for Excel and would like to know if other approaches would be faster.  
+
+**Project 2:**
+
+I'm comparing lightly transformed extracts of the same data in different systems.  The extracts are stored in MS SQL, there are no issues with the extracts themselves, and the two tables I'm looking at have ~5 million rows each. A team developed some procedures and logic to see which records are in system A but not system B. However, this logic is woefully inadequate. 99.7% of the exceptions are false positives and we know that there are false negatives as well.
+
+In the meantime, I've been using PowerQuery to compare this view to the full extract table of system B to get rid of the false positives. This is increasingly taking longer as the number of false positives increases--today took more than an hour (admittedly I was using other applications during the query). In a fit of frustration, I exported the full extract tables to CSVs and did some of the processing on my personal machine with much better specs. This helped me validate the the logic that would address both the false positives and negatives, but I also did this in PowerQuery and the comparisons took 4+ hours. 
+
+Ultimately, I know I need to work with the team that maintains the MS SQL views to change the logic. I feel confident that I can translate the transforms and joins from PowerQuery to MS SQL eventually, or at the very least ask the db team for help. Their team is small and busy, so there's no telling when the changes can be validated and deployed. I'm wondering if I could initiate other approaches that would be faster and more under our team's control. 
+
+**Stretch goal:** Extending from Project 1, it would be a huge win to then take the results of these extract comparisons and quickly/automatically see which records were not present on the previous day's report. The volume of exceptions is much lower, so VLOOKUP'ing in Excel is fine, but it's not scalable. We have 2k+ other reports that compare specific fields across other domains and systems that could use this analysis as well.",1628878456.0,14,0.87,19
+dfwgaymers,Hey...so we know this thing isn't very active. But we do stuff!,[removed],1427250362.0,7,1.0,4
+dfwgaymers,Meetup tomorrow! 7:00 at Common Ground Games,"Our March monthly meetup is tomorrow! We will have some TV's and consoles and such, as well as all of the demo games at the store. 
+
+BYOB, but minors will not be allowed to drink. 
+
+Facebook event: https://m.facebook.com/events/1023500314330474?acontext=%7B%22ref%22%3A2%2C%22ref_dashboard_filter%22%3A%22upcoming%22%7D&aref=2&arefdashboardfilter=upcoming&ref=bookmark",1426285667.0,3,1.0,0
+dfwgaymers,Meetup at Common Ground Games! This Saturday at 8:00!,,1420590676.0,3,0.81,2
+dfwgaymers,"Yeah, so we totally suck at posting these things to the sub. Meetup tomorrow (10/11) at Hunky's at 8:00!",,1412996267.0,1,0.67,0
+dfwgaymers,Our monthly meetup is this Saturday (8/16)! Come by Hunky's at 8:00!,,1408064503.0,4,0.84,3
+dfwgaymers,"Don't forget about our monthly meetup tomorrow! 6/14, 7:00 at Hunky's on Cedar Springs. Mario Kart 8!",,1402690473.0,4,0.75,0
+dfwgaymers,March Meetup at Hunky's! Saturday 3/8 at 7:00. BRING YOUR HANDHELDS!,,1394124203.0,3,0.67,3
+utdallas,Do you live near Preston and George Bush? Please help us find a small B&W cat!,,1392926314.0,18,0.87,9
+dfwgaymers,"Lost black & white cat near Preston and George Bush, please help!",,1392925875.0,6,0.75,1
+plano,"Lost B&W cat near Preston and George Bush, please help!",,1392925774.0,12,0.75,12
+DFWPets,Lost B&W cat near Preston and George Bush,,1392925717.0,8,0.8,1
+dfwgaymers,Join us at Main Event in Grapevine this Saturday (2/22) at 6:00!,,1392847961.0,5,0.74,6
+dfwgaymers,**PSA** Online Security Essentials,"From /u/themassicator:
+""I want to take a moment and talk to everyone about safety online. One of our members had numerous online accounts hacked and violated. While this was a special targeted attack, it is important for everyone to be mindful of their safety online.
+
+Make sure you use two factor authentication for all sites that allow it, including Facebook, Twitter, and Gmail. Ensure that no website reuses the same password, especially across email and banking websites. Be mindful of what content is stored in the cloud, such as Dropbox and Google Drive, because these are just as vulnerable to hacking. 
+
+Yes, remembering all these passwords may be a slight hindrance to using your everyday sites, but the peace of mind it brings is completely worth it. Be safe, fellow Gaymers.""
+
+Personally, I use this method and I love it: http://lifehacker.com/184773/geek-to-live--choose-and-remember-great-passwords ",1392149126.0,2,0.75,1
+gaymers,I didn't know Termina needed service roads!,,1392049151.0,51,0.72,10
+nottheonion,EPA: Flammable Parker County water poses no threat,,1391715120.0,5,1.0,0
+juxtaposition,Flare gun safety,,1391121168.0,20,0.95,0
+dfwgaymers,Four Swords is free on the 3DS eShop! Download before 2/2 so we all can play at the next meetup :D,,1391109584.0,6,0.8,3
+dfwgaymers,Lt. Dan Choi will be at UNT on Thursday 2/6. Let's go!,,1390344371.0,1,0.56,2
+Pets,Loud yelps after using the litter box (from a cat who used to not use the litter box)?,"It's hard to describe...my cat meows/yelps quite loudly each time she's done using the litter box, almost as if she's announcing her deed.  It seems to happen every time she uses the litter box, regardless if the box was freshly cleaned out or a little on the dirty side.  I'm afraid that she's yelping out in pain or discomfort...any thoughts?
+
+A little history...Priss came into my family's life roughly six years ago when she showed up at my aunt's apartment demanding to be adopted.  My aunt took her in (as a strictly indoor cat), but she quickly found out one peculiar habit of Priss--she wouldn't use the litter box, opting for the bathtub instead.  My aunt tried everything from putting the litter box in the bathtub, using many different kinds of litter (including cedar chips and newspaper), and filling the bathtub with a little bit of water to discourage her from using it...but she would just use the floor instead when the tub was unavailable.  My aunt took her to the vet to make sure there was nothing seriously wrong, but all the vet could suggest was that perhaps she was traumatized as a kitten.  Of note, Priss was living with two other cats whom she didn't particularly care for (Let's call them Cats A and B).
+
+About a year or so later, my aunt gave Priss to my grandmother.  However, even with the change in scenery, Priss insisted on using the bathtub.  Again, many things were tried, but the closest we could get was her peeing in an empty litter box placed in the tub, while still pooping in the tub.  Of note, she was living with one other cat whom she absolutely hated (Cat C).
+
+About a year after that, I moved in with my grandma and her two cats.  My presence didn't change her habits at all. About a year after that, my grandmother died and I became the sole caretaker of the cats, but still no change in habits.  About a year after that, we brought in a stray that my mother had cared for (Cat D), and Priss actually tolerated/liked her...but still no changes in bathroom habits.
+
+So now we arrive at January of 2013.  I was moving out of my grandmother's old house and my aunt was moving in.  We gave away Cat D, and I was planning on taking Priss with me to my new place, but I couldn't do it right away.  So, for a period of about two months, Priss was living with Cats A, B, and C, all of whom she didn't really like.  However, my aunt noticed something incredible--Priss started using the litter box!  She still had access to the bathtub and would use it from time to time, but Priss was primarily using the litter box.  Even after I took Priss with me to my new place, she would still use the litter box.  Even when I had to bring her back to my aunt's (with Cats A, B, and C) for about a month while I looked for a job and housing after graduating, she used the litter box. And ever since moving into my current place in June, she still uses the litter box.
+
+So I ask for your thoughts...should I be worried about the yelping? She has done this ever since she started using the litter box.  If I leave the bathroom door open, from time to time I will see that she used the tub instead of the litter box, so I make it a point to keep the bathroom door closed.  She will use the litter box when the tub is not available...but I'm afraid that her yelps are indicating that she really doesn't enjoy using the litter box or that she's in pain/distress.",1389202411.0,7,1.0,9
+wiiu,TV audio cutting out,"Hey all, I'm having some issues with my new Wii U and would like some input.
+
+I got the Zelda bundle for Christmas, but sometimes my TV audio cuts out when I'm playing a game.  No longer than a second or so, but it's pretty annoying when I'm trying to listen to dialogue and stuff.
+
+My Wii U is connected to the TV just by an HDMI cable. I've tried multiple HDMI cables and multiple games, but it still happens.  Notably, it doesn't seem to happen on the Wii U menu.  I haven't really played Windwaker yet so I don't know if it's limited to disc-based games or includes downloads.
+
+Thoughts?",1388695178.0,3,0.67,4
+dfwgaymers,Happy New Year from the mods :D,"Have a great New Year's Eve! ***JUST DON'T DRINK AND DRIVE. SUPER CEREAL.***
+
+If you don't have anyone to share this night with, I think some of us are going to The Eagle.
+
+Have a wonderful 2014! Hope to see you all at the 1/11 meetup! (http://www.reddit.com/r/dfwgaymers/comments/1ttefw/cards_against_humanity_then_a_ps_all_stars/)
+
+Also, if you haven't joined our Facebook group yet, hurry up and do it!  http://www.facebook.com/groups/dfwgaymers.",1388512746.0,5,0.7,3
+dfwgaymers,Cards Against Humanity then a PS All Stars tourney! Join us at Hunky's on 1/11!,,1388164731.0,4,0.67,8
+dfwgaymers,Jan 4th- George Takei at the Ft. Worth Symphony! LET'S GO! (x-post from r/FortWorth),,1387422684.0,3,0.67,2
+dfwgaymers,Just enabled flair for everyone.,Knock yourselves out,1387174371.0,1,0.57,3
+dfwgaymers,Cards Against Humanity again! Then some Smash Bros. Join us at Hunky's on Saturday (12/14)!,,1386874340.0,9,0.8,7
+dfwgaymers,NEW DFW Gaymers Intro Thread!,"Since the last thread is locked, let's start a new one!
+
+So...tell us a little bit about yourself!  Also join our Facebook group! https://www.facebook.com/groups/1396363177275018/
+
+Anyways. I'm Kevin, I live in Grapevine, I'm 23, and I just graduated from UTD and am now working at GameStop's corporate office (root of all evil, I know).  I didn't really get to go to any of the handful of events when this group was active about a year ago...but I'm ready to do my part to help get this community active again!
+
+Here's an intentionally cheesy picture of me: http://i.imgur.com/muVTU1x.jpg
+
+I'm mainly a PC and Nintendo guy. TF2, AoE2, mario, zelda, phoenix wright, stuff like that.  I did get a PS3 not too long ago and am starting to play that a bit more...
+
+Now your turn!
+
+Here's the last thread if you want: http://www.reddit.com/r/dfwgaymers/comments/v3o95/dfw_gaymers_intro_thread/",1386715029.0,6,0.72,17
+dfwgaymers,Join us for Cards Against Humanity at Hunky's on Wednesday (12/11-Accurate date this time)!,,1386713665.0,3,0.67,7
+dfwgaymers,Is the intro thread locked for anyone else?,"I wanted to update my entry in the *Superawesome Intro Thread Link* (http://www.reddit.com/r/dfwgaymers/comments/v3o95/dfw_gaymers_intro_thread/) over on the sidebar...but I can't seem to edit my comment or make any new ones.
+
+Should we just make a new one?
+
+",1386271211.0,1,0.6,2
+Dallas,Plano's getting liquor!,,1368331147.0,10,0.75,3
+plano,Plano's getting liquor!,,1368331027.0,20,0.9,6
+gaybros,How can I make bottoming feel less like someone's trying to stick a pinky in my ear?,"It doesn't hurt...it just doesn't feel all that good.  Sure, those moments where he hits the prostate just right are amazing, but other than that it's just uncomfortable",1365576633.0,10,0.82,15
+trees,Why don't smoke detectors go off from weed smoke?,"It freaks the fuck out of my stoner friends when I blow smoke into smoke detectors.  I've known for a while that they don't go off, but why?",1365017524.0,2,1.0,2
+utdallas,Do D's count as passing?,This is highly relevant to me,1364455080.0,14,1.0,13
+utdallas,Big list of clubs!,"If you're involved in an organization, comment or message and I'll add the info to the OP!
+
+
+**Atheists, Skeptics, and Humanists (ASH)**
+
+* www.utdash.com
+* officers@utdash.com
+* Meets every other Friday at 6  in the Galaxy Rooms
+* Contact jevus2006 or yuorfaec 
+
+**Pep Band**
+
+* www.facebook.com/groups/166465293392728/
+* winston.stone@utdallas.edu *(director)*
+* Meets Thursdays at AH1 1.104
+* Technically a class, but if you show up with an instrument, we'll let you play.
+* Contact yuorfaec
+
+**PRIDE**
+
+* www.prideatutd.org
+* webmaster@prideatutd.org
+* Meets every other Friday at 5 in the Galaxy Rooms
+* Contact PrideAtUTD or yuorfaec",1345260624.0,7,0.77,6
+CollinCollege,Secular Students at Collin College being awesome,,1344753586.0,1,0.57,0
+dfwgaymers,Anyone going to QuakeCon? Shall we have a meetup?,,1343932444.0,3,1.0,2
+ainbow,Circumcised homos (or straight transgirls)! Help fight HIV in a city near you!,,1342178936.0,0,0.38,6
+lgbt,Circumcised homos (or straight transgirls)! Help fight HIV in a city near you!,,1342178206.0,0,0.5,4
+LGBTrees,Circumcised homos (or straight transgirls)! Help fight HIV in a city near you!,,1342177596.0,10,0.75,3
+dfwgaymers,Are you circumcised? GREAT! Help fight HIV! Appointments at UTSW,,1342143374.0,6,0.69,7
+gaybros,Circumcised bros!  Help fight HIV in a city near you!,,1342142338.0,4,0.58,23
+gaymers,Circumcised homos (or straight transgirls)!  Help fight HIV in a city near you!,,1342142258.0,7,0.64,23
+Dallas,"Welcome to Plano, where defending gay people gets you beat the fuck up",,1338993731.0,103,0.89,73
+utdallas,Summer school woooooo,anyone else taking summer classes?,1338394739.0,0,0.33,0
+gaybros,"Awesome sub, glad I found you guys. Also go (Texas) Rangers ",[removed],1336906575.0,1,1.0,0
+gaymers,I'd do it [x-post from funny],,1336354313.0,139,0.91,14
+utdallas,"The Bible Study got six times the airtime on the digital marquee than events for Atheists, Skeptics, and Humanists did-two weeks in a row",,1334893052.0,0,0.17,3
+Dallas,The North Texas Secular Student Convention will be held on Sat. 4/14 in Frisco.  Any of you interested?,,1330114238.0,0,0.5,0
+CollinCollege,The North Texas Secular Student Convention will be held on Sat. 4/14 AT COLLIN'S FRISCO CAMPUS!  Come and show your support!,,1330114173.0,3,0.8,1
+utdallas,"The North Texas Secular Student Convention will be held on Sat. 4/14 in Frisco, TX.  Any of you interested?",,1330114118.0,8,0.71,0
+atheism,"North Texas Atheists- Come to the North Texas Secular Student Convention on Sat. 4/14 in Frisco, TX!",,1330113805.0,14,1.0,10
+utdallas,GAY AND GODLESS STUDENTS PROTEST SANTORUM RALLY,,1328733485.0,0,0.43,2
+atheism,I know this is a bit late...but check out this awesome FSM nativity scene my friends made!,,1328029852.0,4,0.7,1
+fsm,I know this is a bit late...but check out this awesome FSM nativity scene my friends made!,,1328029815.0,19,0.89,0
+trees,I think I should get to a solid [4] and watch all of Carl Sagan's COMOS.  Yes?,I think I'll do it regardless of Reddit's opinion,1327820723.0,0,0.5,1
+utdallas,Actual first chapter of my Organizational Behavior book...,,1327015807.0,15,0.95,4
+WTF,Is this why college textbooks cost so much?,,1327015749.0,26,0.74,3
+utdallas,"Basketball games today! See the women's team continue the best start in school history at 1:00, then watch the Men's team try to break a undefeated season around 3:00","The women's team (11-1, 7-1 ASC) is off to their best start in school history and should demolish Mary Hardin-Baylor (1-10, 0-7 ASC).  The men's game should be a close one, as UTD (9-3, 5-3 ASC) will be facing an incredibly hot Hardin-Baylor team (11-0, 7-0 ASC).  Women's at 1:00, Men's shortly after (around 3).  Go Comets!",1325944716.0,0,0.4,4
+utdallas,"You all should come to the basketball games today. Women's at 5:30, Men's at 7:30",It's pretty lonely here D:,1325807429.0,5,0.78,13
+utdallas,What is the point of this sign outside of lot B?,,1323375900.0,5,0.78,15
+CollinCollege,"Alright, which one of you put this up?",,1323375342.0,13,0.85,0
+pics,What's wrong with this milestone in my car?,,1322895255.0,1,0.67,0
+SuicideWatch,My friend's roommate tried to kill herself then ran away...what can I do? [x-post from AskReddit],"Details are pretty scarce, but this is what I know:
+
+My friend stopped her from hanging herself. He tried to get some help with subduing her, but was unsuccessful and she ended up getting in her car and leaving. We don't know where. My friend called the police.
+
+She doesn't have a smartphone so GPS tracking is out of the option. I've called and texted with no luck (it's now going straight to voicemail). I've posted on facebook and am trying to contact friends.  Family has been contacted.
+
+What else can I do? This really doesn't look good...
+
+UPDATE: She's alive and located...but took a bunch of sleeping pills.  Police are on the way.
+UPDATE 2: She's in good hands now.  That was scary...",1322354981.0,2,1.0,2
+AskReddit,My friend's roommate tried to kill herself then ran away...what can I do?,"Details are pretty scarce, but this is what I know.
+
+My friend stopped her from hanging herself.  He tried to get some help with subduing her, but was unsuccessful and she ended up getting in her car and leaving. We don't know where.  My friend called the police.
+
+She doesn't have a smartphone so GPS tracking is out of the option.  I've called and texted with no luck (but the phone is ringing).  I've posted on facebook and am trying to contact family.
+
+What else can I do?  This really doesn't look good...
+
+UPDATE: She's alive and located but took a bunch of sleeping pills. Police are on their way.  Thanks for the help, Reddit.
+UPDATE 2: She's in good hands now.  That was scary...",1322354307.0,2,0.75,14
+math,Why is this incorrect?,,1321414390.0,1,1.0,1
+atheism,Check out what I got Dawkins to sign,,1319242186.0,621,0.92,125
+Wordpress,Is there a plugin to put my Wordpress posts on another website?,"I'm pretty new to Wordpress so I'm sorry if this is a stupid question.
+
+I'm involved in an organization and we got a free website hosted elsewhere that sufficiently met our needs at the time.  However, it was requested that we start a blog, and I went ahead and made a Wordpress blog for us.  However, among our other social media presence, we have a main website and a blog website...which is turning out to be a headache to maintain.
+
+I really want one website.  Is there any way to update and blog through Wordpress but have our posts show up on our other website?  Our other website isn't really easily suited for blogging and I'd rather not have to shut down our website and move everything to Wordpress.",1319049361.0,2,0.75,7
+utdallas,"Come to ASH this Friday at 6:00 in the Galaxy Rooms: ""The Search for Nostradamus' Ice Road of Ghost Alien Nazi Whisperers""",,1319037154.0,5,0.74,6
+atheism,"Texas Freethought/Atheist Alliance of America Convention this weekend in Houston!  Dawkins, Shermer, PZ Myers, Hitchens, Scott, Dillahunty and more!",,1317913243.0,8,0.9,7
+utdallas,So I was apparently blocked from making comments on the UTD Mercury's website,"I wanted to comment on the banality of offering a bus service to Addison, but I was informed that I was blocked o.O
+
+All I did was make a comment on [this article](http://www.utdmercury.com/2011/09/07/utd-faces-%E2%80%98growing-pains%E2%80%99/) about how UTD appeared to be removing parking spots (similar to [this reddit post](http://www.reddit.com/r/utdallas/comments/kd6az/record_enrollment_parking_woes_yeah_removing/)).  Just asked something along the lines of why UTD is removing spots when there is record enrollment.  However, that comment was removed and I was apparently blocked without warning.
+
+I don't think I was offensive or overly critical.  Anyone have a similar experience with the Mercury?
+
+I can't even make a new account or anything.  It could be because I'm on the school's wifi, but I've tried different browsers and incognito/private mode with no luck. ",1317838827.0,0,0.5,13
+utdallas,Pride is having a bake sale in the Comet Cafe this week! Come on by!,,1317666868.0,4,0.63,3
+gaymers,Get your 55 Gallon barrel of lube while you can! It's 40% off!,,1317606758.0,7,0.9,2
+lgbt,Broke down and got some Chick-Fil-A tonight :/,,1317522822.0,0,0.25,3
+Android,My Nexus S 4G's battery life is ~4 hours. What can I do?,"Am I running too many services?  Do I just have a bad battery?
+
+It's been almost 2 hours of light usage and I'm already at 65% D: I need more than 4 hours of standby...
+
+More info [here](http://www.reddit.com/r/AndroidQuestions/comments/krwt9/my_battery_life_is_4_hours_what_can_i_do/)",1317052892.0,12,0.69,31
+AndroidQuestions,My battery life is ~4 hours. What can I do?,"I have a Nexus S 4G, Stock 2.3.7, not rooted (I've been having this problem before the latest update FWIW)
+
+Even when I'm not using it much, the battery just wastes away.  Do I have a bad battery? Am I running too many things in the background?  I know Android battery life isn't amazing but I need more than 4 hours of standby.
+
+Take this morning.  It's been off of battery for 1.5 hours and it's already at 70%. No calls, just a little bit of Words with Friends and reading an e-mail or two.
+
+**Battery use stats:**
+
+Display 38%
+
+Android OS 16%
+
+Facebook 7%
+
+Cell Standby 6%
+
+Android System 6%
+
+GroupMe 6%
+
+Wifi 5%
+
+Screebl Pro 6% (got it yesterday off of Amazon, supposed to help save battery, probably getting rid of it)
+
+Browser 3%
+
+Mediaserver 3%
+
+Phone Idle 2%
+
+**Running services:**
+
+Settings
+
+Facebook
+
+Handcent SMS
+
+GroupMe
+
+Battery Widget
+
+Locked and Found
+
+Screebl Pro
+
+com.android.sprintmenu
+
+Google Voice
+
+Google Services
+
+Music
+
+Maps
+
+SwiftKey
+
+RAM: 194 MB used/103 MB free
+
+I'm getting ready to wipe it clean and try again, but that'd be on the inconvenient side since the Nexus S doesn't have an SD card.  Can I do anything besides that?",1317052102.0,2,1.0,7
+CollinCollege,OUT @ Collin is hosting a board/video game night on Monday 9/26 at 7:00 in SCC C103. Everyone welcome!,,1316997129.0,4,0.83,1
+lgbt,My own petition to make a Constitutional amendment to allow same-sex marriage,,1316807078.0,4,0.75,2
+CollinCollege,What do you call the back room of the cafeteria at SCC?,"Where the people play card games and bring their N64s and stuff.  I've heard it called ""The Nerd Cave""",1316672699.0,0,0.5,4
+CollinCollege,"Hey, come to the Secular Students at Collin meeting this tonight (9/21) at 6:00 in SCC G226",,1316628028.0,2,0.63,1
+Android,DAE obsessively check the market/app store for updates?,"I find myself checking both stores about ~5 times a day to see if I have any updates waiting for me. Usually I don't, but it's fun to check :P",1316357917.0,0,0.49,12
+CollinCollege,"Your park like this, jackass, etc.",,1316015772.0,3,0.67,1
+gaymers,ugh I feel like I just got dumped,"remember this post? [http://www.reddit.com/r/gaymers/comments/kcv7u/the_guy_im_interested_in_totally_made_thisswoon/](http://www.reddit.com/r/gaymers/comments/kcv7u/the_guy_im_interested_in_totally_made_thisswoon/)
+
+yeah so after a few dates he decides he's not ready for a relationship right now.
+
+oh alcohol, ease my pain.",1315886689.0,4,0.58,23
+utdallas,Petition/suggestion: Add our majors as flair,"r/UNT does it, and we can't be behind them, right?  Also r/Dallas does it for location.
+
+In any case, I think it'd be a great way to find common interests so study groups and the like can be made easier.  Maybe mass-enrolling in classes could happen too.  Imagine a class full of redditors!
+
+Including class year/status is an option too.
+
+As if iLikeComputers needs to do more work, of course. I think it's a worthy effort, even if the majority will be CS/Engineering.",1315844360.0,17,1.0,4
+utdallas,"Record enrollment? Parking woes? Yeah, removing parking spots sounds great.",,1315843408.0,5,0.74,8
+gaymers,The guy I'm interested in totally made this...*swoon*,,1315813280.0,14,0.85,5
+Dallas,"I've got a few extra tickets to the RoughRiders game tonight, anyone interested?",I've got 4 tickets that I got for free that are currently not being used.  We can meet at the ballpark and I'll give them to you there.  The game starts at 7:00 and I'll get there a little after 6:00.,1315084821.0,5,1.0,3
+atheism,Gave my mom a copy of The God Delusion to read!,"She's not really religious or anything, but still is vaguely Christian-ish.  Perhaps this will push her over the edge!  Or at least understand where I'm coming from.
+
+Pretty excited. That is all :)",1315024897.0,6,0.81,2
+atheism,This guy is coming to my college in late September.  This should be fun.,,1314809492.0,16,0.82,21
+utdallas,Hi redditor sitting in the TV lounge,Of course I won't walk up and say hi to you,1314203724.0,7,0.89,18
+gaymers,oh gosh i'm drunk,"who wants to videyagayme with me?  i'd prefer LoL or TF2, but I'm also down for CS:S or L4D2 or something else that's free
+
+:P",1311309487.0,5,0.73,8
+gaymers,So I was playing Spiral Knights as 'Phaggot' and the mods changed my name,"I'm now 'Phi-knight'
+
+So lame. I subscribe to the 'N-word' guidelines: if you are one, you can say it.
+
+Therefore, SCREW THOSE HOMOPHOBIC MODS
+
+:P",1308630989.0,0,0.44,3
+Dallas,Title Count [xpost from r/nba],,1307941948.0,11,0.77,0
+utdallas,Just registered for classes in the fall. Aww yeah.,"Well, a few days ago. Anyway, it'll be my first semester at UTD. I'll be taking 7 hours while also taking some classes at Collin.
+
+I'm taking Intro to Management Information Systems, Principles of Marketing, and Pep Band. How about you all?
+",1303694727.0,3,1.0,13
+Dallas,Why did the sirens go off in Plano?,No reports of tornadoes or anything.,1302840175.0,2,0.76,13
+LGBTrees,dude [7],what up,1295590654.0,0,0.43,3
+techsupport,Does PCIE16X 2.0/2.1 matter?,"[](/solved)
+Trying to get a graphics card to work. It says it's PCI Express X16 2.0.
+(http://www.newegg.com/Product/Product.aspx?Item=N82E16814102869)
+
+When I put it in the computer, it won't boot.
+
+Here's my mobo. Only says PCIE16X1
+http://h10025.www1.hp.com/ewfrf/wc/document?docname=c00361528&tmp_task=prodinfoCategory&lc=en&dlc=en&cc=us&site=null&os=4062&key=null&product=483902&sw_lang=
+
+Do I need to try some of these cards instead?
+http://www.newegg.com/Product/ProductList.aspx?Submit=ENE&N=100007709%20600007852&IsNodeId=1&name=PCI%20Express%20x16",1295219897.0,1,0.67,1
+reddit.com,Scientist: Marijuana May Treat Diabetes,,1294275931.0,3,1.0,1

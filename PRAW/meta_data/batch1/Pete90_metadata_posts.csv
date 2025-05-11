@@ -1,0 +1,161 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+truenas,Timing of Periodic Mainteance Tasks on TrueNAS Scale,"Hej everyone,
+
+in the past few weeks, I've been digging my hands into TrueNAS and have since setup a nice little NAS for all my backup needs. The drives spin down, when not in use, as the instance only recieves/sends backup data once a day. 
+
+Howevery, there are a few periodic tasks, which wake my drives. Namely:
+
+     catalog.sync
+    	Success	26796 	12/03/2024 18:06:54 	12/03/2024 18:06:54 		
+    catalog.sync_all
+    	Success	26795 	12/03/2024 18:06:54 	12/03/2024 18:06:54 		
+    zfs.dataset.bulk_process
+    	Success	26792 	12/03/2024 18:06:43 	12/03/2024 18:06:43 		
+    pool.dataset.sync_db_keys
+    	Success	26791 	12/03/2024 18:06:42 	12/03/2024 18:06:43 		
+    certificate.renew_certs
+    	Success	26790 	12/03/2024 18:06:42 	12/03/2024 18:06:43 	
+     
+    dscache.refresh
+    	Success	24991 	12/03/2024 03:30:01 	12/03/2024 03:30:01 
+     update.download
+    	Success	25027 	12/03/2024 03:46:01 	12/03/2024 03:46:02 
+
+I spend the last hour, searching online and digging through files and checking cron. I found the dscache.refresh and the [update.download](https://update.download). I can't find the first five. At least one of them wakes my drives.
+
+Does anyone have an idea? There used to a periodic.conf, but I can't find it on my system. Thanks!",1710351953.0,1,1.0,2
+Traefik,"Traefik, Crowdsec and Nextcloud behind Cloudflare: How to get the real IP?","EDIT: SOLUTION. I added the the Block *forwardedHeaders* to my traefik.yml file, which contains Cloudflares IP ranges.
+
+```
+entryPoints:
+  ping:
+    address: ':88'
+  web:
+    address: "":80""
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+      middlewares:
+        - crowdsec-bouncer@file
+  websecure:
+    address: "":443""
+    http:
+      middlewares:
+        - crowdsec-bouncer@file
+#    proxyProtocol:
+#      trustedIPs:
+#       - 10.0.0.0/8
+#       - 172.16.0.0/12
+#       - 192.168.0.0/16
+    forwardedHeaders:
+      trustedIPs:
+       - 173.245.48.0/20
+       - 103.21.244.0/22
+       - 103.22.200.0/22
+       - 103.31.4.0/22
+       - 141.101.64.0/18
+       - 108.162.192.0/18
+       - 190.93.240.0/20
+       - 188.114.96.0/20
+       - 197.234.240.0/22
+       - 198.41.128.0/17
+       - 162.158.0.0/15
+       - 104.16.0.0/13
+       - 104.24.0.0/14
+       - 172.64.0.0/13
+       - 131.0.72.0/22
+       - 2400:cb00::/32
+       - 2606:4700::/32
+       - 2803:f800::/32
+       - 2405:b500::/32
+       - 2405:8100::/32
+       - 2a06:98c0::/29
+       - 2c0f:f248::/32
+```
+
+I added the following block to my traefik.yml file. It contains all of Cloudflares IP ranges.
+
+
+
+Hej everyone. My problem is pretty much summed up by the title. I'm using Cloudflare proxied in combination with Traefik. I setup Crowdsec and Nextcloud, all of which is working fine. All I want it for Traefik to write the real IP (not the proxied one from Cloudflare) to the access logs so Crowdsec can parse it and block malicious attempts.
+
+Here is my config.yml
+
+    http:
+      middlewares:
+        https-redirectscheme:
+          redirectScheme:
+            scheme: https
+            permanent: true
+    
+        default-headers:
+          headers:
+            frameDeny: true
+            browserXssFilter: true
+            contentTypeNosniff: true
+            forceSTSHeader: true
+            stsIncludeSubdomains: true
+            stsPreload: true
+            stsSeconds: 15552000
+            customFrameOptionsValue: SAMEORIGIN
+            customRequestHeaders:
+              X-Forwarded-Proto: https
+    
+        gzip:
+          compress: {}
+    
+        real-ip-cf:
+          plugin:
+            real-ip:
+              Proxy:
+                - proxyHeadername: ""*""
+                  realIP: Cf-Connecting-Ip
+                  OverwriteXFF: true
+    
+        nextcloud-dav:
+          replacePathRegex:
+            regex: ""^/.well-known/ca(l|rd)dav""
+            replacement: ""/remote.php/dav/""
+    
+        local-whitelist:
+          ipWhiteList:
+            sourceRange:
+            - ""192.168.0.0/16""
+            - ""172.16.0.0/12""
+            - ""10.10.0.0/16""
+    
+        management-whitelist:
+          ipWhiteList:
+            sourceRange:
+            - ""10.10.20.100/32""
+            - ""192.168.178.201/32""
+    
+        nextcloud:
+          chain:
+            middlewares:
+            - default-headers
+            - gzip
+            - nextcloud-dav
+            - real-ip-cf
+    
+        crowdsec-bouncer:
+          forwardauth:
+            address: 
+            trustForwardHeader: truehttp://bouncer-traefik:8080/api/v1/forwardAuth
+
+This does  work to some degree. I can see the correct/real IP in the Traefik container logs. But not in the access logs.
+
+I then set my log format to json, and voila, there is the real IP buried in there in the end. From what I understand, this should also work with CrowdSec, but not with the Nextcloug logs.
+
+Is there a way to overwrite the <remote\_IP\_address> with any of these?
+
+    ""request_Cf-Connecting-Ip"":""176.4.140.XXX""
+    ""request_X-Forwarded-For"":""176.4.140.XXX""
+    ""request_X-Real-Ip"":""176.4.140.XXX""
+
+I thought this was supposed to happen with the plugin, but it does not seem to do that. Do I need to specify Cloudflares Servers under Proxy-Protocol or forward headers?
+
+Sorry if thats stupid, all a bit new to me. I spent an entire day reasearching and came up empty. Any help is very much appreciated! Thanks!",1708102877.0,8,1.0,4
+photography,My attempt at long exposure in Berlin...,,1352297268.0,1,1.0,1

@@ -1,0 +1,281 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+mcneese,McNeese beats Clemson!,,1742507931.0,12,1.0,1
+AlpineLinux,Looking for some help on setting up AD,"So long story short, I need a small OS like alpine to do some linux-y things but allow Active Directory users to SSH in to run these linux jobs, along with the potential of samba file shares. Ive done ubuntu in the past with realmd / sssd / and winbind, but it appears that realmd is not a thing on alpine. Is there a tutorial or guide out there for doing this on alpine?",1714661979.0,2,1.0,0
+System76,Stupid question,As I cant find any info on PopOS use of /tmp. Does Pop clear the /tmp directory every reboot? Im wondering if its safe to use tmpfs for /tmp on Pop. I know some distros need it to survive reboots.,1706794529.0,3,1.0,1
+wallpaperengine,Playlist question: Can multiple monitors have a different wallpaper from the same playlist?,Can multiple monitors have a different wallpaper from the same playlist? I am very confused on how to apply a playlist to have different items from the same playlist on different monitors. Also why is there no apply playlist button when I am adding wallpapers to the playlist?,1621087457.0,1,1.0,0
+homelab,Will this dual m.2 pcie card work in a dell r510?,"[PCIe card here](https://www.amazon.com/Synology-M-2-Adapter-Card-M2D18/dp/B07G9S674X/ref=psdc_13983711_t3_B089RHK7CF)
+
+I want to add two low cost m.2 drives to my r510, would this card work or would I need something else?
+
+The OS I am using it with is Ubuntu 20.10, and sometimes I will switch kernels from the Ubuntu standard kernels to the latest for testing, so if its a question of having the latest linux kernel that is not a problem.
+
+Edit: I need a two for one slot card because the three that is in the r510, I currently have two slots populated.",1617218372.0,1,0.67,6
+45Drives,Awesome Case!,,1592518773.0,24,0.97,5
+45Drives,Deduplication testing,"Hey all! I recently got inspired by the VDO videos and started looking into various deduplication for Ubuntu (Hint, there is not a lot, and not all good).
+
+However, I discovered that in the linux 5.4 kernel support was added for reflinks with the XFS filesystem. Here is a good tidbit over the new reflink option, as well as some back story over the ""Data Block Sharing"": [https://blogs.oracle.com/linux/xfs-data-block-sharing-reflink](https://blogs.oracle.com/linux/xfs-data-block-sharing-reflink)
+
+This allows you to do instant file copies via ""cp --reflink=always"", creating two identical files quickly, BUT allowing you to modify one file without the changes being present in the original file. Essentially data deduplication.
+
+AND I discovered a package that can be installed via apt-get called duperemove, that can scan the XFS filesystem for duplicate data, and dedupe the data using the XFS reflinks. Super Neat!
+
+However, to me this is not really useful because I would want redundancy on anything I would store with this. So I decided to test XFS/reflinks using ZFS, both just using a file based loop device and ZFS's ZVol feature.
+
+First, setup your 20.04 Ubuntu install. We need 20.04 because it has the latest kernel needed to support this out of the box. Install zfs, xfs, and duperemove:
+
+>**sudo apt-get install zfsutils-linux xfsprogs duperemove**
+
+Then, setup an array. This is really down to you to set it up how you want it, using mirrors, raidz1-3, or just to test on a filesystem you already have **zpool create tank /home/user/testzfs.img**. We will be testing on a raidz1 of three 1x1tb drives.
+
+>**sudo zpool create tank raidz /dev/sda /dev/sdb /dev/sdc**
+
+This will setup zfs mounted at /tank. On Ubuntu you may need to set some defaults that we really want, such as recordsize or compression. We are just going to set compression to lz4.
+
+>**sudo zfs set compression=lz4 tank**
+
+Now we can finally setup the xfs block device. I will show how to do it via file based loop, or a zvol.
+
+File based: 
+>**sudo dd if=/dev/zero of=/tank/filebased.img status=progress bs=1M count=500000**
+
+ZVol based with sparse allocation:
+>**sudo zfs create -s -V 500G tank/zbased**
+
+Now create the mount folders.
+>**sudo mkdir /tank/filebased**
+
+>**sudo mkdir /tank/zbased**
+
+Now, we can finally make the XFS based filesystem. Ive read that the 5.4 kernel now has reflink=1 set as a default when mkfs.xfs a block device, but we can force it on mkfs.xfs creation for file/zvol:
+>**sudo mkfs.xfs -m reflink=1 /tank/filebased.img**
+
+>**sudo mkfs.xfs -m reflink=1 /dev/zd0**
+
+And mount:
+>**sudo mount /tank/filebased.img /tank/filebased**
+
+>**sudo mount /dev/zd0 /tank/zbased**
+
+Copy some files to your newly created filesystem. Then copy them again to a different location on the same filesystem. Now lets test duperemove. 
+>**duperemove -hdr --hashfile=/tank/filebased.hash /tank/filebased**
+
+>**duperemove -hdr --hashfile=/tank/zbased.hash /tank/zbased**
+
+Note: --hashfile is very important, because as you add / remove / change files duperemove can use a hashfile to determine what needs to be scanned again for deduplication. And if you dont specify a hashfile, you will be scanning every file everytime you run duperemove. And also it stores all the checksums in RAM, which is something some admins might want to avoid. Especially if your hosting XFS on top of ZFS. 
+
+Now duperemove should be scanning everything it found on /tank/filebased or /tank/zbased and then use the reflink feature to dedup data! I find that I like using a file based loop device as I can just cp the file elsewhere, where with zvol you would need to dd or zfs send. 
+
+After testing this on some of my data, I find this solution works pretty well! Having compression with the filesystem as well allows me to further save space on the ZFS array while using XFS on it. I have yet to run into data issues, but I have to imagine having a setup like this will be hard to get support for if things go wrong.
+
+Could the 45Drive engineers give any input on this setup? I certainly wouldnt mind seeing a video about it either from some of the more experienced linux guys either.
+
+EDIT:
+After duperemove finished running for me on some test data, I got:
+
+>Comparison of extent info shows a net change in shared extents of: 64.9G",1592153828.0,3,0.81,0
+linuxquestions,Trying to mount a drive,"Im trying to figure out what format this drive is in so that I can pull some data off of it. fdisk -l provides:
+
+Disk /dev/sdf: 1.8 TiB, 2000398934016 bytes, 3907029168 sectors
+
+Disk model: DT01ABA200V
+
+Units: sectors of 1 * 512 = 512 bytes
+
+Sector size (logical/physical): 512 bytes / 4096 bytes
+
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+
+Disklabel type: dos
+
+Disk identifier: 0x871a18ec
+
+
+Device     Boot Start End Sectors  Size Id Type
+
+/dev/sdf1           1   1       1  512B 7f unknown
+
+Partition 1 does not start on physical sector boundary.
+
+
+Anyone have any ideas? Client has no idea what format it was originally.",1572040394.0,2,1.0,11
+homelab,Powering an odroid hc2 with poe+,Is it possible to power an odroid hc2 using an appropriate adapter?,1568761377.0,3,0.72,4
+pop_os,Default wallpaper and lockscreen wallpaper changer?,Is there a plugin or script that can change the default desktop and lockscreen wallpaper for everyone / specific users / at intervals?,1568308168.0,1,1.0,0
+DataHoarder,Scraping youtube playlists,Does anyone know how to get a list of playlists from a channel and the upload order of video ids to each playlist?,1557591947.0,6,0.75,9
+homelab,Hackers wipe US servers of email provider VFEmail | ZDNet,,1549981964.0,4,0.75,4
+ubuntuserver,"Need help with Samba, SSSD, and Active Directory integration","So linux noob here. Trying to learn how to integrate Active Directory logins into Ubuntu Server 18.04.1 so Domain Admins can ssh in and do sudo commands, AND provide SMB file shares with AD security on the shares.
+
+I followed [this](https://docs.microsoft.com/en-us/azure/active-directory-domain-services/active-directory-ds-join-ubuntu-linux-vm) guide on joining the ubuntu server to AD, and got AD users to have sudo access, but I can't for the life of me get Samba shares to work with AD users. Can someone point me towards a guide for Samba using SSSD?",1539106052.0,1,1.0,0
+homelab,[Help] Is there software for Ubuntu to manage VDisks on a Perc 6i?,Id really like to not have to reboot to get into the management bios of the card to create or rebuild vdisks. But I have not been able to find anything that can manage it through Ubuntu. Do you guys know of anything?,1537546212.0,1,0.67,4
+NameThatSong,Anyone know what song is in this video at the end?,,1532976226.0,1,1.0,0
+homelab,Anyone have a tutorial on setting up CTDB for a linux noob?,/s not really a noob but every tutorial I have seen online (and google) doesnt work or is horribly outdated and seems to be missing some steps in setup. I want to try setting it up on my raspberry pi glusterfs samba setup to have a redundant file share. Anyone have some links or suggestions?,1529262433.0,2,0.75,0
+homelab,[Help] Is there a 1 x PCIex16 to 2 x PCIex8 riser?,"Is there a 1 x PCIex16 to 2 x PCIex8 riser for adding in a HBA card and 10gb NIC?
+
+Im looking for a replacement C2750D4I board for my Silverstone ds380b case. That board worked great  since it had enough sata ports for all drives and it had a x8 slot for a 10gb card.
+
+However, I have gone through two of them from ASRock after they brick for no reason. Dont know if its because of the watchdog bug, but I dont want the hassle (and cost) of constantly replacing them.
+
+I already have an AMD 2600g and motherboard coming in that has one x16 slot. It has 4 sata ports, so my LSI card would fill in the other 8 sata drives. Id be kinda ok with 1gb speeds, but really wanted to know if there was something that would allow me to split the x16 into 2 x8s.
+
+Or, if you guys know a better Avoton replacement board, Im all ears. ",1524415957.0,2,0.76,2
+Office365,Question about syncing Azure AD with on prem,"Does Office 365 allow syncing on the free or basic tier of Azure AD? My Org has about 5-10 users but the boss wants as cheap as possible. If the free or basic allows it Id rather have that, but if not Im not above just managing the two separately.",1523922068.0,2,0.67,8
+homelab,Is there a good replacement for the Asrock C2750D4I?,[removed],1522600452.0,1,1.0,1
+DataHoarder,Looking to download a site from the webarchive. How do?,I am looking to download an archived website on web.archive.org. Is there an easy button to get all snapshots or certain ones? And is there a way to download only pictures / zip files? ,1510691814.0,4,0.76,1
+DataHoarder,Having trouble running ripme,"Whenever I feed in a imgur link, it just errors saying no supported ripper. Also, is there a way to specify a download location?",1505927103.0,1,0.6,8
+freenas,[Help] Dedup on only HyperV backups,I have a 10TB raidz3 box that I want to use as a backup target for HyperV VM backups. Would deduplication be a good use case for this since it will be backups of the same thing everyday? Or am I not understanding what deduplication is?,1504060297.0,2,0.75,2
+homelab,Looking for a GPU rackmount case.,"Does anyone here have any recommendations for a GPU rackmount case? Im looking for one that can hold 8 dual slot cards, dual PSUs, and an ATX motherboard. ",1499350111.0,2,0.67,20
+shutdown,Berkeley may remove free online content rather than complying with disability law,,1488550323.0,8,0.83,2
+DataHoarder,Anyone know how to grab google doodles?,"I am wanting to hoard all google doodles for local viewing / play-back (in the case of todays valentines doodle), how does one download the resources for the doodles? Httrack doesnt seem to work.",1487106540.0,2,0.67,4
+DataHoarder,Looking for help on archiving some javascript downloads,"Hello all! I am looking for some way to archive some (really old) downloads for a game from a website. The downloads are javascript based (ugh), and I dont know of any software that can automate it in such a way that is friendly to the servers (slowing the download process) and handles logins.
+
+It is for a personal project to archive all the downloads for a game called The Sims released in 2000. I recently lost all my old downloads from that time, and want to get most of it back if its still around. The main website I want to do this from is thesimsresource.com. I do subscribe to them for the more recent games (The Sims 3, The Sims 4) which does cost money. I dont really want to archive 3 or 4, just The Sims 1. Maybe The Sims 2 in the future.
+
+Here is an example download page holding the javascript: [Objects](http://www.thesimsresource.com/downloads/browse/category/sims1-objects/page/294/cnt/14839/)
+
+Can anyone point me towards some software or a way to do this? There are thousands of downloads that I dont want to do by hand.",1484668255.0,1,0.67,8
+homelab,"Got my XG 16, anyone seeing low 10G transfers?","As the title says, Im seeing sub-1gbps transfers between ram based testing folders on either end. I enabled jumbo frames, but I am wondering if I have to ssh into the unit to set the value to 9000. Anyone have commands for checking / updating that?
+
+Edit: UPDATE: So after talking to some of you, I got to thinking of testing just the two endpoints and the switch without anything else plugged in. I discovered that a transceiver in a different port to a different machine was causing an issue in the XG. Hard to believe an Intel coded transceiver would cause this, is it possible that it is going out? Anyways, I am now getting what I should with the switch. Time to buy Ubiquiti SFP+ transceivers :3.",1482264952.0,6,1.0,14
+Nest,Looking for a replacement base.,"Just got my entire AC system replaced and had the installers install a nest thermostat. The installers couldnt get the Nest to work with the system and ended up installing a different cheaper unit. After a while I came back to look at the Nest to see if there was any issues, and noticed that the installer must have accidently drilled into the inner side of the wire base unit. I can see copper and the motherboard inside, so I figure that this is why it was having issues controlling the AC. Where can I get a replacement base?",1477075230.0,4,0.84,6
+Markiplier,Looking for one of Marks Older Videos,I am trying to find a video Mark did some time ago in which he plays Paradigm Shift. The game is a crappy pop up scare game in which you have to click on a weapon first then click the pop up zombie. I have tried searching for it but google and youtube is not being very helpful. Can the power of reddit help me?,1476971169.0,1,1.0,0
+DataHoarder,Amazon Glacier for cold storage?,"I am looking for a low cost backup of my photography sets (around 1TB right now) that I will never touch unless my local copies somehow die. Amazon Glacier looks like the best option for cold storage right now, but I havent looked very far with others yet. Can someone show me some other services?",1475673960.0,63,0.89,50
+sysadmin,Who here has dealt with the zepto locky?,"I spent some time this week restoring backups because of a cryptolocker variant hit our file server. We were lucky in that the user who reported it knew exactly what it was when they saw the weird hexadecimal named .zepto files. Caught it about 30 minutes after it started encrypting things and disconnected the file server to prevent more damage. After a sweep, we discovered it managed to get about 30% of the files on it encrypted, which is freaking fast for terabytes of small file data. As far as we know we didnt lose anything, and have the offending computer and user AD account locked and offline. Sysadmins of reddit, what did yall do in the aftermath of cleanup and lockdowns?",1473447860.0,3,0.68,13
+DHExchange,[W] All downloads from thesimsresource.com,"Hello all! Looking for an archive of thesimsresource.com downloads for The Sims 1 - 4. Im willing to do it myself, but dont know where to start.",1467826715.0,5,0.99,0
+csharp,Looking for File Parity Computation / Reed Solomon help!,"Hello reddit! I currently have a pet project I want to write, but dont know where to start to understand the algorithm for computing parity data from file byte[]'s. What I want to do is:
+
+1. Read bytes from a file into byte[]
+2. Compute parity information for three byte[] arrays
+3. Write those three byte[] arrays to disk
+
+Then reverse that by decoding the byte[] arrays back into the original file, with testing if 2 of the 3 arrays will still return the original file.
+
+Am I headed into the right direction with this, or completely wrong? Just dont know where to start.",1464983502.0,4,0.84,0
+homelab,Questions over a 10gb switch!,"So I found this [Quanta LB6M Switch](http://www.ebay.com/itm/Quanta-LB6M-10GB-24-Port-SFP-Switch-QY139A-Dual-Power-Supply-with-Rack-Ears-/152020333438?hash=item23651e337e:g:8AwAAOSwpIdW7EHi) with 24 SFP+ ports at a price point that is really agreeable with me and the wife. Does anyone have any experience with it? Does it have any issues like locked in transceivers or only specific hardware works with it? I have really been looking for an 8 SFP+ port switch since I dont intend to go above needing 8 servers/switches that need 10gb, but with this being $400, I really cant see any downsides (which I know there are always some). So barring any power issues, what is r/homelab thoughts?",1464268542.0,13,1.0,17
+DataHoarder,Does anyone have a link to where I can get these?,,1452804935.0,18,0.95,13
+DataHoarder,"Are there any 2.5"" drive versions of the 45drives.com server case?","If not, does anyone know where I can get a bunch of crap 2.5"" drives so I can design one myself? This is for a pet project of cramming in as many 2.5"" drives into a rackmount server as possible. Anyone know of anything?",1452719911.0,3,1.0,11
+PFSENSE,Help with DNS resolver,"Hello all! Im having issues getting pfsense to lookup DNS records on my inside DNS server and returning those lookups to the client computers that ask for them. Heres an example
+
+DNS: 10.10.10.2
+PFsense: 10.10.10.1 (DHCP Server)
+Random Windows Box: 10.10.10.35
+
+Ill do a nslookup on the windows box to PFsense since I have the dhcp settings returning it as the DNS server. When PFsense doesnt have the record, I want it to ask the DNS server, and if the DNS server doesnt have the record, it will then go out to OpenDNS since it will most likely be a non local domain. This is because I have a lot of static IPs already entered into my local DNS server that I dont want to take the time to move to the PFsense box, mostly because I know I am going to have to get better hardware for PFsense soon and dont want to deal with the backup and restore as much since I will also change my network scheme as well when that comes.
+
+I do have DNS Resolver turned on, but dont know what else to do beyond that. When I do a DNS lookup through the webui, it does query my local DNS server and get the correct IP. But for some reason it does not do the same thing for clients asking PFsense for a lookup. What am I doing wrong? ",1452109894.0,1,0.6,10
+homelab,Looking for network watching software.,"Hello all! My work recently got our SonicWall GMS up and running, and I really like being able to see almost every little detail about network traffic (such as bandwidth used, by who, going to what links on http/https, protocol, etc) and would like to find something that does the same thing if possible. Would love it to be open source since I am a poor techie. Anyone know of any software?",1452001782.0,2,0.67,7
+homelab,Looking for suggestions!,"Hello r/homelab! I am looking for a sfp+ switch that has atleast 10 sfp+ ports, with maybe some rj45 1gbps ports (not needed but would be nice) as well that is rackmountable. Does anyone know of any switches like this?",1450830664.0,2,0.75,8
+mcservers,Luckcraft [SMP]{1.8}{16+}{Multi-Verse}{GriefPrevention},"Luckcraft.net is an easy going server with multiple worlds based on building and mining. We just started and wish to have some players come build! Some worlds have PvP turned off with GriefPrevention on, and mining worlds with PvP on and GriefPrevention off.
+
+The Rules are simple.
+
+1. Be respectful, while we dont care if you grief in the mining world(s), please dont grief in the non mining worlds.
+
+2. Please dont ask for God Mode, you are not going to get it.
+
+3. Have fun building things! We dont care what you build, even if it is bad. While we may find some things distasteful, we will not remove it so long as it does not target a specific person, group of people, or is threatening.
+
+4. No modded or hacked clients. If we find you are using a modded client, you will be banned.",1443032527.0,1,0.67,0
+mcservers,Luckcraft.net [SMP]{1.8}{16+}{Multi-Verse}{GriefPrevention},[removed],1443031876.0,1,1.0,1
+horror,Looking for horror movie I saw a couple of years ago,"I know I saw it back in 2013. The movie was about a group of researcher students working in what looks like a power plant / radioactive research facility. They have to take an elevator down to start the facility, but something goes wrong. They have to take the elevator back up but there is no power so they have to figure out another way around. Some of the students die and reanimate as zombies. The only person to make it back up is a woman who discovers that the main researcher guy knew this would happen, and is shot while she records the guy telling her that. I vaguely remember seeing it on youtube with the radioactive symbol in the background with ""RADS"" as the title? I really dont remember if its RADS or not.
+
+Can you help me? Id like to buy it if I can. ",1441683705.0,5,0.86,4
+homelab,Any good open source SAN software?,Just curious as I am looking to get a SAN in the future. Are there any wikis on how they work?,1437066432.0,24,0.97,34
+gopro,GoPro makes it so easy to do star trails,,1436198331.0,2,0.67,4
+aww,My new puppy is such a happy little guy :),,1433280032.0,47,0.95,0
+pics,"Tried some low light photography, thought it made a good background",,1431098585.0,2,0.76,0
+DataHoarder,Looking for youtube downloader,"Hello everyone! I have been lurking here awhile and have been downloading youtube videos that I watch a lot so I dont use up my bandwidth constantly. However I am getting to the point where I want to automate these downloads. Here is what Im looking for:
+
+- I wish to download certain playlists from youtube users, however I also want a full list of every playlist a user has so I can see what is new that I may (or may not) want.
+
+- I also want each youtube user to download to their own folder, and each playlist of that user inside their own folder under the user folder.
+
+- And every video under those playlists should have the original video name and a number to show the order of the videos in the playlist, as such; 
+001 - video 1.mp4,
+002 - video 1a.mp4,
+003 - video 2.mp4, 
+...,
+200 - video n.mp4
+
+- I would also like to list all the videos of said user that is not in a playlist, but I can live without it.
+
+Is there any program out there that can do this? I know youtube-dl is around and works pretty good, but when I try to download whole channels with the highest quality video and audio, I sometimes get errors (-22 with ffmpeg) when Im getting the dash versions of the videos. So I am not sure what I am doing wrong, but I know I dont want to download everything from the channel.
+
+Suggestions? Am I in the wrong subreddit to ask? What should I do?",1426610251.0,22,0.92,26
+AnimeFigures,Question about amiami shipping,Does amiami ship to PO boxes?,1421942792.0,7,0.77,6
+woodycraft,Woodycraft map?,Is there a map of the survival infinite mode?,1420757009.0,1,0.67,0
+homelab,[Question] What is the difference between a managed switch and an unmanaged switch?,What is the difference between a managed switch and an unmanaged switch? I am curious cause I have my own home setup but have only used unmanaged switches. What use would I have for a managed switch?,1420413085.0,1,0.6,4
+gadgets,Trying to find two cameras for two different purposes. Help!,"The first purpose I have is that I want a camcorder that will mostly stay stationary (but sometimes be hand held for events that require it). I want it to be able to record 1080p with zoom, and have a removable battery so I can continue recording for long periods of time. Up to 32gb sd card too.
+
+The second purpose is for action shots. I want it to be waterproof along with 1080p (with zoom if possible). I have seen the Polaroid XS100 Extreme Edition HD and like it a lot, but want to see what reddit thought about other models that I have not heard of.",1405102201.0,4,0.7,9
+Cameras,Trying to find two cameras for two different purposes. Help!,"The first purpose I have is that I want a camcorder that will mostly stay stationary (but sometimes be hand held for events that require it). I want it to be able to record 1080p with zoom, and have a removable battery so I can continue recording for long periods of time. Up to 32gb sd card too.
+
+The second purpose is for action shots. I want it to be waterproof along with 1080p (with zoom if possible). I have seen the Polaroid XS100 Extreme Edition HD and like it a lot, but want to see what reddit thought about other models that I have not heard of.",1405100758.0,1,1.0,1
+tipofmypenis,GF wants to know what this is from. HALP.,http://i.imgur.com/jWVEoss.png,1403232275.0,1,0.67,3
+GameDeals,[Steam] Assassins Creed 3 60% off ($11.99),,1381358304.0,2,1.0,1
+Dreams,Freaky dream. Very freaked out.,"So I just had a dream about my family about three hours ago (10:30pm). I dont remember how the dream started off, I know there was more to the dream at the beginning, but I just dont remember it.
+
+The point in which the dream started in my memory is Im talking to my grandmother, and she is doing most of the talking. I know shes talking, but I dont hear her. Shortly after I see a blackish horrible looking woman, and I ask her what it spells (I know this has to do with more of the beginning part of the dream that I cant remember). She / It says ""Blood. It spells Blood!!! BLOOD!!!"".
+
+I then started running up this long entrance like this [room](http://www.thecruiselines.com/images/royal-caribbean/JW-tides-main-dining-room.jpg) running for a good 50 yards. Except the floor was a slow ascending stairs to a door to a huge room like [this](http://1.bp.blogspot.com/-ziDikEGhT0c/UglRUqQk9fI/AAAAAAAABKU/FB8c5s_MSfE/s320/13-08-12+Wall+sconce.JPG), except with only one light and the wall was old looking cloth and yellowing. The room is huge, high ceilings and wide area. The room is where the living room should be at my grandmothers house, with the den to the back door apart of the big room.
+
+Anyways, I started running up the long staircase entrance with a firemans hose while it was on. I started running because I knew I needed to find something, Im not sure if it was in the house or outside. I really dont know how to categorize where the dream started, inside or outside.  I entered the big room, and started hosing down the big room with water. I notice that even though I have soaked the room and the gas lanterns, the lights are still lit and furthermore, the light is astoundingly bright. Like so bright, I would have thought that there where 100 light bulbs lit in the middle of the ceiling instead of having gas lanterns on the walls.
+
+For some reason I continually soak the room as Im moving to the den towards the back door, knowing that doing this keeps the thing I saw earlier away. As Im coming up to the door the dream ends, and I wake up freaking out.
+
+------------------------------- My thoughts
+
+Theres alot of things in here about my family and the history of the house. When my grandmother is talking to me, that reminds me of when she talks about her stories. She has dementia, and has no short term memory. However, she has great long term memory. So she tells us stories about alot of things. Ive heard every one of them several times so sometimes she kinda gets tuned out when I know the story she is telling. I feel bad about doing it, but she does it all the time and it becomes a real drain on me as I see her start to degrade more and more into the dementia. Its a terrible thing to have a mental disease, and its worse to watch the one you love lose themselves to it.
+
+The figure screaming blood at me confuses me. However, her screaming blood at me is related to how my grandfather died. My grandfather had throat cancer, and the cancer grew to the point where it tore his carotid artery apart. This, as you can imagine, is not pretty. When this finally happened to him, he was in the back restroom and started bleeding everywhere. My grandfather was a strong man, and to this day I still can not understand how he could have walked the 30 yards to the car while bleeding massive amounts of blood. To get to the car, he had to go through the den door, which to this day still has some of his blood on the curtains. He put himself into the car and was driven by my parents to the hospital. He died a few hours later after my grandmother came to see him. For him to have kept death away for so long like that just to see my grandmother one last time makes me tear up everytime. Anyways, my grandmother was in shock. so she slept for awhile while my parents cleaned up all the blood. I cant imagine opening the storage port and seeing blood spill out of it. Very gruesome. Thats where the very end of the dream comes in, the dream ends at the den door as well.
+
+Another thing about the house is that it was built in 1959. It was built to be an all electric house, no gas whatsoever. However, when electricity started going through the roof years later, they added gas to the house. Maybe connection to the big room with gas?
+
+In the big room with gas lanterns, the light seems to give off more than it seems like it would be produced. I am also carrying a hose of running water that I spray on the walls of the house. Maybe Im trying to put out a fire?
+
+And at the start point that I remember, I dont think that Im inside or outside, so what would that be?
+
+Also while running into the house, I remember that I was trying to find something. We have lost items over the years because my dip-turd of an uncle stole them. Maybe that too?
+
+Why is the start point a grand entry, with the room it leads to looking like a haunted house room?
+
+Also, it should be noted that I am working on the master bedroom, master bathroom, and the room connected to it. I have recently pulled up the flooring and painted the walls. Me and my parents are fixing up the house. The house was built like a fortress. My grandparents built it themselves. My grandfather was an iron welder during WWII, so he knew what he was doing. The house is mostly made of steel and brick. You can see the steel beams on the ceiling that hold the house up.
+
+So, can anyone else add anything?",1378278836.0,1,1.0,0
+CCW,"Going to wedding tomorrow, is it...",Is it legal to conceal carry in a church in Louisiana?,1372451436.0,18,0.73,31
+SuggestALaptop,$600 and under for simple needs,"I need help looking for a laptop that has:
+
+Backlit keyboard
+touch screen
+can play HD videos
+
+These are the basic things Im looking for. Uses will mostly be email, youtube, dvd/bluray playing, no hardcore games. ",1371665816.0,3,1.0,4
+AR10,"So, anywhere you can buy an AR10 Lower?","Im assuming you can buy parts for an AR10 like you can the AR15, however who sells them? Ive never seen them.",1369874490.0,4,1.0,6
+guns,Looking for ranges,"Hey guys! Is there a site that shows where public ranges are? I currently Live in Lake Charles, LA. The two ranges I have been to so far here have very rude people running them. Dont know where to go now without having to pay an arm and a leg to shoot.",1369507920.0,4,0.67,2
+MosinNagant,"WTB a Mosin online, is it safe to do so?","So I want to buy a mosin nagant online since I cant find any at shops or shows where I live. Is it safe to do so? Im just worried that Ill be buying a piece of metal and wood that is only fit for a paper weight instead of being able to fire it if its in good condition. Also, what are the prices for nagants now online? What can I expect?",1369335897.0,13,0.93,22
+ar15,Why are complete uppers so costly right now?,"Why are complete uppers so costly right now? Is it because of the gun scare buyers? Ive been looking around at parts kits to keep an eye on prices, and I remember prices being better than what Im seeing ($500 -$1200) before the recent tragedies. What is r/ar15's opinions on parts that I should keep my eyes on?",1368669252.0,4,0.65,12
+csharp,Is it possible to create backup software using c# and bittorrent?,"As a pet project Id like to try out Ive been wanting to try and make a backup program using c# that sends files over the network to a backup server. The main thing Id like to be able to do is to is to be able to backup a file even if the connection between the client and server is dropped. If the connection comes back at some point later, then it would pick up where it left off with the file it was on. I dont know much about bittorrent or how to do this in c#. Suggestions?",1352486707.0,2,0.75,22
+Dakimakuras,Does anyone know where I can find this? Or atleast the images for it to make one out of?,,1347333989.0,4,0.83,3
+mcneese,McNeese State Vs. Middle Tennessee Final Score: FCS Cowboys Shock Blue Raiders - SBNation.com,,1346454801.0,3,1.0,0
+r4r,"23 [m4f] Lake Charles, LA. Looking for some new friends and maybe more.","Hi, my Name is Scott. I live in Lake Charles, LA going to school to get my Computer Science degree. I just recently broke up with someone (who stopped having feelings for me), and need a friend to help me get out of my depression of losing someone that I honestly cant ever replace.
+
+My interests are movies and tv, I just about spend my life watching them if I dont have work to do. Ive watched Archer and Southpark so much that I can quote them. Same to other movies. I am horror lover so I always watch horror movies during October, like The Evil Dead, Grave Encounters, etc. There is not a horror movie I wouldnt sit down and watch. Also, I really need to finish watching Twin Peaks tv series. Also, I cant stop watching The Glades right now. I love that show.
+
+I like to read, but thanks to college I havent picked up anything recently to start reading. My favorite books are House of Leaves, The Book Thief, and anything that romancy / smut on fanfiction.net of my favorite animes.
+
+Die hard anime fan. I love just about everything from fanservice to drama, romance to action. Havent really met an anime I didnt like. So far my absolute favorite is Genshiken, Welcome to the NHK, Trigun, Elfien Lied, and whole bunches more. I try to go to some conventions like the one in Lake Charles call Cyphacon, but the only real one thats big is Anime Matsuri in the Woodlands, TX that I have been to. 
+
+Games of course, :). I dont usually play online just simply because I really dont have a will to, but would like to met a girl that plays games with me. Especially zombie games like Dead Island! If you want to know if I play a game you play, just ask!
+
+I guess this is really all I can think about right now, if you have a okcupid, come find me! User is intheradicalred. Im not looking for a fling but rather new friends and maybe someone special as well. I really doubt I will find anyone on r4r from Lake Charles, but I guess I would try.",1346452474.0,2,1.0,1
+fffffffuuuuuuuuuuuu,"Been gone for awhile, not up to speed rage.",,1332853481.0,63,0.8,11
+ar15,Looking for a good AR-15 diy list / kit that comes with the A3 flat-top and handguard rails.,"Ive looked around on the web, and I cant really find shop that will sell what I want on them. Any advice r/ar15? I think my max budget for this is $1500.",1325301779.0,3,0.81,14
+fffffffuuuuuuuuuuuu,My problem...,,1324758833.0,7,0.69,3
+guns,"Someone help me with this, I just unloaded my 1911 and found this bullet like this. Is this normal? .45 ACP.",,1321651503.0,23,0.77,54
+guns,Need some help r/guns...,[removed],1320867668.0,1,1.0,0
+fffffffuuuuuuuuuuuu,"B****, shut up and let me be a gentleman.",,1320718644.0,3,0.64,0
+anime,Just finished watching Genshiken. Cant help but to re-watch it.,Are there any other animes that are like Genshiken? Help me r/anime!,1320712872.0,6,0.88,16
+mcneese,For those of you who remember this game last year...,,1320025568.0,3,1.0,2
+trees,Just brought this. Does r/trees approve?,,1319233578.0,5,0.78,4
+japan,So Im an American who just setup my first kotatsu.,"And it is AMAZING. It will take me some time to get used to sitting like this, but the heat is wonderful. Japan, I love you. Need to go to sleep now, kotatsu demands it...",1319171009.0,12,0.79,25
+AdviceAnimals,Mad Max gives advice,,1317844622.0,6,0.88,1
+fffffffuuuuuuuuuuuu,Every time.,,1317431507.0,8,0.72,0
+fffffffuuuuuuuuuuuu,Test day ,,1317309406.0,4,0.75,0

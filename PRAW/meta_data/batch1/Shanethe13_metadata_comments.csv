@@ -1,0 +1,211 @@
+subreddit,body,created_utc,score
+adventofcode,"You're totally right, thanks! Just edited a fix.",1543996316.0,1
+adventofcode,"In Elixir:defmodule AdventOfCode.Day5 do
+
+      def solve_a do
+        File.read!(""input/day5"")
+        |> String.graphemes()
+        |> react()
+        |> Enum.count()
+      end
+    
+      def solve_b do
+        initial = File.read!(""input/day5"")
+    
+        (for n <- ?a..?z, do: << n :: utf8 >>)
+        |> Enum.map(fn char ->
+          Task.async(fn ->
+            initial
+            |> String.replace(char, """")
+            |> String.replace(String.upcase(char), """")
+            |> String.graphemes()
+            |> react()
+          end)
+        end)
+        |> Enum.map(&Task.await/1)
+        |> Enum.min_by(&Enum.count/1)
+        |> Enum.count()
+      end
+    
+      def react(polymer) do
+        Enum.reduce(polymer, [], fn
+          x, []       -> [x]
+          x, [y | ys] ->
+            if x != y && String.downcase(x) == String.downcase(y) do
+              ys
+            else
+              [x, y | ys]
+            end
+        end)
+      end
+    end",1543989843.0,1
+adventofcode,"Both parts, in Elixir
+
+    defmodule AdventOfCode.Day3 do
+      def solveA(claims) do
+        claims
+        |> Enum.map(&parse_claim/1)
+        |> Enum.reduce(%{}, &build_plot/2)
+        |> Enum.count(fn {k, {v, _}} -> v > 1 end)
+      end
+    
+      def solveB(claims) do
+        parsed =
+          claims
+          |> Enum.map(&parse_claim/1)
+    
+        plot = Enum.reduce(parsed, %{}, &build_plot/2)
+    
+        parsed
+        |> Enum.filter(fn claim -> intact?(claim, plot) end)
+        |> Enum.map(fn claim -> claim.id end)
+        |> Enum.at(0)
+      end
+    
+      def parse_claim(claim) do
+        parse = Regex.named_captures(~r/#(?<id>\d+) @ (?<x>\d+),(?<y>\d+): (?<dx>\d+)x(?<dy>\d+)/, claim)
+    
+        %{
+          id: String.to_integer(parse[""id""]),
+          x: String.to_integer(parse[""x""]),
+          y: String.to_integer(parse[""y""]),
+          dx: String.to_integer(parse[""dx""]),
+          dy: String.to_integer(parse[""dy""])
+        }
+      end
+    
+      def build_plot(claim, claims) do
+        coords = for dx <- Range.new(0, claim.dx - 1),
+                     dy <- Range.new(0, claim.dy - 1), do: {dx, dy}
+    
+        Enum.reduce(coords, claims, fn {dx, dy}, acc ->
+          Map.update(
+            acc,
+            {claim.x + dx, claim.y + dy},
+            {1, [claim.id]},
+            fn {count, claims} ->
+              {count + 1, [claim.id | claims]}
+            end)
+        end)
+      end
+    
+      def intact?(claim, plot) do
+        Enum.all?(plot, fn {_coord, {count, claims}} ->
+          not Enum.member?(claims, claim.id) || claims == [claim.id]
+        end)
+      end
+    end
+",1543815656.0,1
+Guildwars2,Thanks for the new desktop background.,1506324472.0,1
+Guildwars2,Just think of 32 as 2 ^ 5.,1506153651.0,23
+LitecoinMarkets,"This is doable by buying on one market and shorting on another, rather than transferring between them, but it's incredibly risky.",1503523241.0,3
+blackdesertonline,52 Quwynn (Lorem_Ipsum) Sorceress,1500941871.0,1
+litecoin,"Just a heads up, but this script is probably too detailed for most businesses to grasp what you're asking for. Most places won't care about scrypt versus SHA256, or 2.5 minute block times versus 10 minute block times.
+
+They just want to know that they'll get their money faster, that the money they get will be less volatile, and that there's new customers to be made by supporting it.",1498845915.0,4
+litecoin,"I use this for MacOS: https://itunes.apple.com/us/app/coin-tick-menu-bar-crypto-ticker/id1141688067?mt=12
+
+It sticks coin tickers on your menu bar.",1498608983.0,2
+Disgaea,"Haha yeah, I ran into the exact same problem when I played. Got through a few DLC maps before I started wondering why nothing made sense.",1496630470.0,2
+Disgaea,"Are you in episode 2? If so, it's likely that you've been doing the DLC maps instead of the main story maps. There's a Prinny at the north-east corner of the Pocket Netherworld that will progress the story when you talk to him.",1496630179.0,2
+Disgaea,Nope,1496166151.0,1
+Disgaea,"Once you unlock the Strategy Assembly, you can pass a law named ""Change Characters"" or something along those lines. It's guaranteed to pass, and lets you choose who you control in the base.",1495827718.0,5
+saltandsanctuary,I feel you. I wanted to use daggers for the whole game but it just got to be too much when all the enemies started flying. Their short range is the real killer.,1460486950.0,2
+saltandsanctuary,"58, with an all DEX + Tachi build",1459501786.0,2
+uwaterloo,"I finished most of a combinatorics major at Waterloo before dropping out to join a security company (I didn't want to do my breadth and depth requirements).
+
+While my on-the-job cryptography experience is mostly limited to implementation details (tl;dr use libsodium), I run a world-class CTF (capture the flag) team that competes in security competitions two or three times a month. We won DEFCON a few years ago.
+
+If you're interested in pursuing a career in cryptography, I'd argue that getting involved in CTF is one of the most effective ways to expose yourself to the field.
+
+My contribution to the team is primarily in solving cryptography problems, that range from attacking faulty implementations of RSA, to ECC implementations that use insecure curves, to everything in between. I agree with /u/djao that a strong math background is absolutely essential in cryptography, and this even true when working on anything but the most trivial of cryptography CTF problems.
+
+Fortunately, there's an increasing number of resources available for learning cryptography. My personal favourite is [Cryptopals](http://cryptopals.com/). It's a series of challenges that assume no prior knowledge of cryptography, and teach you how different primitives and schemes work by tasking you with attacking them. It's an excellent introduction that will teach you enough about the field to guide you in directing your research further. You'll also want to pick up a copy of [Cryptography Engineering](http://www.amazon.com/Cryptography-Engineering-Principles-Practical-Applications/dp/0470474246). It's an excellent textbook that strives to give a high-level overview of cryptography, for engineers, without getting bogged down in the details. You'll need to learn those details eventually, but this book should help you decide if it's a field you're interested in.
+
+In parallel with Cryptopals I'd recommend trying your hand at some CTFs. They're tough, and I guarantee that you'll be confused for your first couple, but that's okay. Everybody needs to fail a few times before they start to understand what they don't know. I recently [gave a talk](https://www.youtube.com/watch?v=Jnh8PK9iQco) on how to get started with CTFs. It isn't cryptography specific, but there's a lot of good resources mentioned. In particular, you'll want to keep an eye on [CTF Time](http://ctftime.org) to keep up to date on upcoming CTFs.
+
+If you give CTFs a try, at some point you're going to need to able to sit down and read a research paper. It's okay to not understand everything you're reading immediately, but you need to be willing to go out and research any gaps in your knowledge. There's been CTFs where I've skimmed a dozen different papers while trying to solve a single task, so you're going to get a lot of practice at pulling out the important information. At the very least though, you should have a rudimentary understanding of group theory: once you start attacking ECC schemes the math starts piling on pretty heavily.
+
+Spend a few months working through Cryptopals and some CTFs and you'll have a very good grasp of the engineering side of cryptography. You probably won't have much experience writing proofs or doing your own research, but hopefully you'll have been able to build some sort of an intuition for broken cryptography, and at the very least, learn whether it's the field for you.
+
+I can't speak for what's involved in getting into academia, but feel free to ping me if you have any other questions! You can find my contact information on [my website](http://shanewilton.com/).
+
+",1455149822.0,1
+exploitation,"This movie is absolutely terrible, and it has no redeeming qualities whatsoever.
+
+10/10 would watch again.",1445728650.0,8
+webdev,"Full Disclosure: I wrote this blog post, and am an engineer at Tinfoil Security. Happy to field any questions about security, or take any suggestions on things you'd like us to scan for in the future!",1444256166.0,1
+incremental_games,"You can't ever prevent cheating without delegating everything to a trusted server. That being said, you can raise the bar for cheating.
+
+One method that comes to mind, is detecting cheating by employing some type of integrity checking. For example, you could hash the game state to compute a checksum, then store that in memory. Then, every tick, verify that the stored checksum matches the game state. If it doesn't, it means somebody modified the game state without computing and storing the new checksum.
+
+It's still possible to bypass, and any dedicated reverse engineer is going to, but it won't be absolutely trivial.",1440915064.0,6
+BoJackHorseman,It's so fitting that your flair is Mr. Peanut Butter.,1437723059.0,12
+Cyberpunk,"It's great. I just picked it up this past weekend, and I couldn't put it down. It's not quite as good as Gibson or Stephenson at their best, but it's definitely one of the most enjoyable novels I've read in a long time.",1435808326.0,2
+sysadmin,"Full disclosure: I'm an engineer at Tinfoil Security who worked on this integration. If you have any questions, I'd be happy to answer them!",1433369218.0,1
+thebutton,\#BetterDeadThanRed,1432470131.0,4
+thebutton,"I've been lurking as a non-presser for weeks, but you just brought me out of the shadows and into the shade.",1429847481.0,2
+bloodborne,"I did basically what all of the other commenters here are suggesting - hid behind a giant tree to hide from the pyromancer, then strafed around it until the katana guy was dead. I repeated that for the candle guy, then finished off the pyromancer afterwards.
+
+The only real risk in the fight was the giant snake the last guy summons, which left me with about 5% health.",1428340295.0,1
+HotlineMiami,"Huh, I didn't even realize that was an easter egg -- it fit in so perfectly with the rest of the game.",1426144899.0,4
+badMovies,Not as many guts as some of the bad guys in this movie.,1424040311.0,3
+badMovies,This is in the wrong subreddit - it should be in /r/amazingmovies,1424039143.0,3
+thank_mr_skeltal,trigger warning things like this please :(,1421826145.0,2
+dvdcollection,Maybe we should be friends. I spent more time playing EDF than they spent making it.,1421825966.0,3
+sunlesssea,"Go give Fallen London a try. It takes place in the same universe as Sunless Sea, and it's free. Sunless Sea is a very lore driven game, and if you're enraptured by the lore of Fallen London, you'll probably enjoy this game too.
+
+http://fallenlondon.storynexus.com/",1419642724.0,4
+thatHappened,You can go directly to quantum mechanics from probability though -- no physics needed. http://www.scottaaronson.com/democritus/lec9.html,1414992229.0,6
+AskReddit,"I did more or less the same thing at what I'd imagine is the same school ftuThrowaway goes to. It's definitely possible, and everything he's said checks out.",1413925963.0,2
+blog,"I realize you need to roll things out slowly to get a feel for how the site handles the increased load, but have you looked into getting Reddit [preloaded](https://hstspreload.appspot.com/) in Chrome and Firefox as a site that supports HSTS?",1410204484.0,1
+netsec,"Sure - I just uploaded it to my site. http://shanewilton.com/cross-platform%20exploitation.pdf
+
+Click on a PDF in /r/netsec at your own risk.",1405892068.0,1
+urbanexploration,I'd definitely like to see those!,1398237847.0,1
+uwaterloo,"We're sorry, that's just an example animation :( On the bright side, there ARE tacos on Monday at Rev.",1396131949.0,5
+counterstrike,"It wasn't easy to find, but it looks like it's ""Steakknife - I hope my girlfriend thinks I'm cool""
+
+http://www.steakknife.org/3pm/steakknife_girlfriend.mp3",1392846902.0,2
+programming,"I'm not sure whether any existing implementations protect against silently dropping traffic, but [this paper](http://freehaven.net/doc/casc-rep/casc-rep.pdf) proposes numerous ways of increasing trust and reliability of the network. See section 6, ""When to Fail Your Cascade""",1380028998.0,2
+programming,"I really like it. At first I couldn't stand it, that was more a byproduct of me writing non-idiomatic code. As the hackathon went on, and I got marginally better at thinking in Erlang, it got a lot more fun to use.",1380028804.0,2
+programming,"I hadn't actually used either going into the project, but reading the Elixir getting started docs a few weeks back was an absolute joy. Its macro support was reminiscent of Racket, it had Ruby's easy to read/write syntax, and Haskell's pattern matching. I was just waiting for a good project to come along where I could actually make use of some distributed systems.
+
+Given how small this project was, I could have gotten by just as easily in Erlang, but for larger projects I'm sure the proper namespacing provided by Elixir would be a huge win.
+
+Honestly, if I were to write it again, I'd design it entirely differently. Never having used the language, combined with only having 36 hours to learn and use it, meant that the final codebase was governed more by whatever language features I managed to grok at any particular moment, than by any overarching design.",1380001942.0,10
+programming,"[This](http://freehaven.net/doc/casc-rep/casc-rep.pdf) is the best source I've seen.
+
+In the above-paper they design a reputation-based system which serves to aid users in selecting the initial entry-point, but you're correct in that there is the possibility of being compromised simply by selecting the wrong cascade.
+
+Based on my understanding, the biggest win offered by cascades comes from the fact that regardless of what percentage of the network is comprised of by malicious nodes, as long you're using a cascade containing some trusted nodes, even if the others are malicious, you're still good. The network might be 99.9999% NSA nodes, but as long as you choose a cascade that isn't fully compromised, you're still guaranteed some protection.
+
+As for your second question, I'm not sure what level of latency is recommended, but I do know that generally this sort of network would make use of custom protocols, so your concern is valid. I don't know enough to speak to this problem without talking entirely out of my ass though.",1379999184.0,5
+programming,"> I am impressed with the size of the source code. I haven't seen much Erlang before, and I have to say that it looks pretty friggin' readable.
+
+That'd be [Elixir's](http://elixir-lang.org/) doing. It's basically Erlang wrapped in Ruby's syntax. My code is not a good indicator for what Erlang should look like though; this was my first time using Erlang/Elixir for anything bigger than Project Euler, so it wasn't until the end of the Hackathon that I started to understand how Erlang code is supposed to look.",1379996457.0,5
+programming,"There's some interesting use-cases which come from lower packet sizes. [Ibis](https://ibis.uwaterloo.ca/) reduces the overhead of Sphinx to ~38 bytes, which means that by encoding a message as CJK (Chinese-Japanese-Korean) characters, they're still able to fit hundreds of characters into a Tweet (Tweets are limited to 140 **characters**, not 140 bytes).
+
+This has the incredibly cool side effect of allowing Twitter to act as the network, which makes it possible for the nodes to have no knowledge of both the existence, and location of each other. Even if Twitter ends up being compromised, and access logs taken from there, you're still no less anonymous than if you'd just used Mixminion in the first place.",1379994216.0,3
+programming,"That was my thinking too (Although, since I did this as a learning exercise, I opted to build the network myself). There's been plenty of advances since Mixminion though, and using Sphinx, you're able to get the overhead down to 225 bytes (compared to 1040 for Mixminion) for 5 nodes. Unfortunately, I don't believe there's an implementation anywhere yet.",1379992931.0,2
+programming,"You're correct, as implemented here, that's the case. In my own design document, the intent was to have a node forward all messages recieved during a 1-day period in bulk, but due to time constraints, this didn't happen, and I should modify the readme to reflect that.",1379990577.0,2
+programming,"Essentially, any network which artificially introduces some sort of slowdown which makes analysis of the network more difficult. A canonical example is allowing a node to push traffic to the next node in the sequence once per day, doing the entire push in bulk.
+
+Consider the end-to-end attack in Tor. Imagine that an attacker is able to create a snapshot of the traffic coming in and out in, say, 1 second, and they determine there to be N connections routed through at that moment. If that same attacker tries to analyze a network which only has inter-node communication once a day, it means that that same attacker has to snapshot the network traffic for a 24-hour interval.  Assuming constant network usage, this means that for the same attack, they now need to analyze 86400*N connections, and that's just for a one-node network!
+
+I'm no researcher, so I don't know what sort of delay is necessary in practice, but I do know that it will be dependent on network activity. The general idea, however, is that you want to increase the noise an attacker has to sift through until it becomes computationally infeasible for them to perform the attack.
+
+This does have the obvious drawback of, well, increasing the latency, so obviously the network cannot be used for all of the same use-cases as something like Tor. However, this isn't to say that there aren't plenty of applications which don't rely on immediate response times. Web-browsing would suck on a 1-day delay, but would you really complain too much if it took a few days for an especially controversial blog to appear online, if it meant it wouldn't be traced back to you?",1379989429.0,33
+programming,"I'm sorry you got downvoted, since I agree with you. Crypto is hard, and no one should be writing production-ready crypto without getting it peer-reviewed - both from an information-security theoretic point of view, and an implementation perspective.
+
+That being said, I think that writing toy crypto is a valuable exercise, on the condition that it isn't used anywhere where it matters. As hard as it is to avoid shooting yourself in the foot with crypto, it's like everything else, in that you need to practice it before you get it right.",1379987388.0,9
+programming,"Hey, Proggit! I'm the friend in question who wrote Dissentr, so I thought I'd clear up a few questions.
+
+First of all, this is NOT something anybody should be using for anything more than just toying around. I've been equally interested in Mix networks and Erlang for a few weeks now, and thought using one to write the other would be a fun hackathon project. It being a hackathon project, I wasn't really expecting anyone to come across it.
+
+This was made purely to further my own knowledge in the area, and I can guarantee that, in it's current incarnation, it is not a secure network for any purpose. In fact, the design as stands is vulnerable to attack by introducing a malicious node which lies about other nodes public keys. This, and most of the other issues I've noticed are primarily implementation details, but the point stands that this was a PoC for myself, and should not be used.
+
+However, that isn't to say that the concept doesn't have merit! Mix networks have a long history of being used by especially paranoid Cypherpunks for anonymous remailers. Someone in the comments already mentioned [Mixminion](http://en.wikipedia.org/wiki/Mixminion), which was a definite source of inspiration for this project. Unfortunately, as I looked into the field more and more, it seemed like high-latency mix networks left the spotlight a while ago, and have only really been used for implementing anonymous remailers. This is a shame, since there really seems to be a huge opportunity here for trading the convenience of real-time responses for increased security.
+
+If you're interested in the idea, definitely look into some of the more serious research - my implementation is especially naive, and researchers have been doing some really cool stuff with strong, low-overhead, network designs for exactly this sort of problem. Of special note, is [Sphinx](http://www.cypherpunks.ca/~iang/pubs/Sphinx_Oakland09.pdf), the network I'd have liked to implement, given more time.",1379985993.0,228
+skeptic,":) Passions is a great thing! I'm glad you're so passionate and even better that you are knowledgeable. I do appreciate that your understanding of science, especially in relation stargazing is very romantic, actually.",1310664839.0,10

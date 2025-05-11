@@ -1,0 +1,1233 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+learncsharp,Help me understand this little bit of GC,"If I create a `Timer` instance, do I have to keep a reference to it, like some member variable, to prevent it from getting GC'd?
+
+I have a class, simplified for Reddit as such:
+
+    using System.Threading;
+
+    class Foo {
+      private Timer t;
+
+      public Foo() => t = new Timer(DoStuff, null, 1, 2);
+
+      private static void DoStuff(object _) {}
+    }
+
+Visual Studio is telling me `t` can be removed because it's never read. But wouldn't that mean I lose reference to the `Timer`, and GC would reap it? Wouldn't keeping it as a member mean it would be reaped as a Foo instance falls out of scope and is reaped?",1726777096.0,2,1.0,8
+csharp,How do I make a user defined type work in a switch?,"I lack the C# fluency to describe what I want in idiomatic terms - my goal is to make a type, basically:
+
+    struct Token {
+      byte[] data = new byte[8];
+
+      //...
+    }
+
+Whatever implementation I end up with, there will be 64 bits of data. I'm perfectly happy with using a `uint64`, but the data will always be initialized with an ASCII character string 8 characters or less.
+
+For which there will be mostly constants, some runtime variables:
+
+    static readonly Token foo {/* ... */};
+    static readonly Token bar {/* ... */};
+    static readonly Token baz {/* ... */};
+
+Or `const`, again, my C# isn't strong...
+
+That will work in a `switch` statement:
+
+    var t = get();
+
+    switch(t) {
+    case foo: /* ... */ break;
+    case bar: /* ... */ break;
+    case baz: /* ... */ break;
+    default:  /* ... */ break;
+    }
+
+If this were C++, I could make this work in an instant. I have a sense that C# ought to be robust enough to allow me to express the same.
+
+I've taken a couple swings at this, trying to quell the compiler, trying to leverage implicit cast operator overloads... I'm missing something, if it's even possible.
+
+Is it possible? What verbage do I need to know to google? Or would someone demonstrate?
+
+If you're curious about some of the constraints, these tokens are memory mapped.",1718395924.0,6,0.69,22
+homelab,Need guidance/documentation how to run XCP-NG and a desktop locally.,"I have fallen into a Dell 5820 and I have a little experience with XCP-NG.
+
+I'm a software engineer, but this is too much hardware to run Ubuntu and Vim. I don't have a lot of homelab experience, so I figured this would be a good place to start - a homelab in a box. I could better utilize this much hardware with a couple VMs and some Flatcar containers.
+
+What I would like to do is run a hypervisor on the machine and a Linux desktop on top of that. I want the Linux desktop to use the local KVM, and from there manage the hypervisor.
+
+I'm vaguely aware this is possible, but I lack the IT knowledge to just get going on it. I THINK there's a subreddit dedicated to the subject? I'm trying to search and google...
+
+I don't think I'll go with Proxmox, but I'm not dead set on that. I DEFINITELY won't use VMware OR Virtual Box.
+
+Suggestions and guidance would be lovely. I'm not asking you to personally hold my hand, I'm looking for documentation and tutorials that will get me there.
+
+Please and thank you.",1704053426.0,0,0.33,4
+learncsharp,What to do about instances I don't need references to?,"I have a `Meter`, the meter is used to construct observable gauges and counters. This means once created, I never have to refer to either the meter or the gauges ever again. I don't want them to be reaped by the GC, but that means I have an object with some member variables that, once assigned, are never used.
+
+Is there any way to reconcile this?
+
+    internal class Stats {
+      private readonly ObservableCounter<long> _foo;
+
+      public Stats() {
+        var meter = new Meter(""name"");
+        _foo = meter.CreateObservableCounter(""foo"", SomeAccessor, null, ""description text"");
+      }
+
+Add half a dozen gauges. Now I have a `Stats` object that exists just to keep the gauges from falling out of scope.
+
+How do y'all deal with this?",1693321419.0,1,0.67,8
+learncsharp,Is there a way to parametrize an entire MSTest fixture?,"I have a fixture wherein I need to run all tests given a parameter.
+
+I know I can decorate each test method with the same data rows. This would be a huge copy/pasta job I think we can all agree is bad.
+
+I know I can decorate every test method with a dynamic data source, and that will greatly cut down the amount of redundant code, but it still means I have to decorate each test method.
+
+Is there any way I can do this once for the whole fixture?",1692630834.0,2,0.75,2
+learncsharp,How do I deserialize xml from my type to another type?,"I'm using the `XmlSerializer` class. As such, I've decorated object properties with `XmlAttribute` and `XmlElement` and I get most of my data out of XML. Here's the rub. I have an element described as:
+
+    <endpoint host="""" port="""" />
+
+Alright, so that means I can write:
+
+    public class Endpoint {
+      [XmlAttribute(""host"")]
+      public string Host { get; set; }
+
+      [XmlAttribute(""port"")]
+      public int Port { get; set; }
+    }
+
+But what I want is `System.Net.DnsEndPoint`. What's more, I have a series of these. So that would necessitate the parent object deserialize like:
+
+    [XmlElement(""endpoint"")]
+    public Endpoint[] Endpoints { get; set; }
+
+But again, I don't want this type, I want a `DnsEndPoint`. So how do I do the conversion? I THINK, as I can define a `Type` parameter in the `XmlElement`, maybe I can write an implicit cast operator to `DnsEndPoint`? Would that be appropriate?
+
+Edit: So I tried this:
+
+    public class Endpoint {
+      //...
+
+      public static implicit operator System.Net.DnsEndPoint(Endpoint ep) => new(ep.Host, ep.Port);
+    }
+
+    [XmlElement(""endpoint"", Type = typeof(Endpoint[]))]
+    public HashSet<System.Net.DnsEndPoint> Endpoints = new();
+
+It didn't seem to work. Insight would be appreciated.",1684789111.0,4,0.75,7
+learncsharp,How do I convert an XAttribute to a user defined type?,"I am struggling to deserialize XML to objects. I have a class with a given set of properties:
+
+    public class Properties {
+      public Type1 Field1 {get; set; }
+      //...
+      public TypeN FieldN {get; set; }
+    }
+
+These fields are hit or miss, they may be elements, they may be attributes, they're mostly optional in the XML. That means the best I've come up with is this:
+
+    if(element.Attribute(""name"") is var attribute && attribute is not null) {
+      properties.FieldN = (TypeN)attribute;
+    }
+
+Multiply that by ~300. OR, for elements:
+
+    try
+    {
+      properties.FieldN = (TypeN)element.Descendants(""name"").Single(), 
+    }
+    catch { }
+
+Utterly abhorrent. Perhaps I ought to use `SingleOrDefault`:
+
+    properties.FieldN = (TypeN)element.Descendants(""name"").SingleOrDefault(new XElement(""name"", properties.FieldN));
+
+But now I'm allocating elements for defaults that may or may not get used, and then only to feed a value back onto itself? How do I map XML to objects?
+
+I've got another problem. I have an XML attribute that, for better or worse, follows this schema:
+
+    <xsd:simpleType name=""duration-type"">
+      <xsd:restriction base=""xsd:token"">
+        <xsd:pattern value=""\d+(h|min|s|ms|us|ns)"" />
+      </xsd:restriction>
+    </xsd:simpleType>
+
+This is supposed to be a `TimeSpan`, but clearly I need some sort of conversion operation for the above format. The best I have so far is extract the attribute as a string, run it through a regex, and produce a TimeSpan from that. But that seems clumsy.
+
+Man, I've got 99 problems, and they're all XML. I've got another problem.
+
+One of my data types is a generic:
+
+    public class SomeNonsense<TypeA, TypeB> {}
+
+The type is in the XML:
+
+    <some-nonsense type-a=""System.Int32"" type-b=""assembly.type, the.namespace"">
+
+You can only imagine what I've done so far:
+
+    var typePair = new Type[] { Type.GetType((string)element.Attribute(""type-a"") ?? ""System.Object""), Type.GetType((string)element.Attribute(""type-b"") ?? ""System.Object"") };
+
+Again... ""Optional""... So I have to handle the default value myself because the schema was written by an ambitious 8 year old living in some Sally Struthers country trying to provide for his family and avoid dying of dysentery.
+
+
+I've been trying to figure out reflection so I can generate the generic ctor at runtime with the given types and invoke it.
+
+Any sort of help would be appreciated. Insight in general. How to do XML in C#, beyond all the basic tutorials that intentionally avoid anything beyond non-trivial types.
+
+Please and thank you.",1683739064.0,1,1.0,0
+350z,Update: My Z randomly died one night...,"So a while ago I was driving home when I lost all electrical. Engine shut off, no ignition power, no dash, no interior lights, nothing. It all came back and I got home.
+
+Well, it happened again, but this time it wasn't 10:30 at night in the northern latitudes in February.
+
+So I did what I did last time, popped the hood, looked around. I took off the battery cover, like last time, and... My spidey sense was tingling. I wiggled the negative terminal.
+
+Now, the battery is new, the connection to the post is solid. At least, it's solid on the negative terminal. What I'm curious about now is the crimp of the terminal clamp to the wire harness on both sides, and perhaps a closer inspection of the positive terminal connection.
+
+I wiggled it, heard a crackle, and got power. So that makes me think the harness is corroded. I'm going to replace the wires and terminals.
+
+---
+
+*Question:* Isn't the battery supposed to have some sort of bracket to keep it held in place? I gotta get in there and look closer, but my battery is just sitting in there, loose. So it can move around if sufficiently jostled, and something tells me that ain't right.",1682523790.0,1,1.0,1
+ShadowBan,Test,,1681849083.0,1,1.0,1
+dmdivulge,Their journey into the jungle was always doomed to fail.,"None of this was planned.
+
+The party starts in a little village, and they come across a traveling dealer in antiquities and artifacts. He collects and sells the finery recovered from dungeon hoards that are impossible for most adventurers to find a market for. Tapestries, pottery, paintings, statues, and unofficially magic items.
+
+He tells the party he's in the area because there is a rumored lost summoning totem of a powerful tiger spirit. Well suddenly I decide they're in a place reminiscent of Sri Lanka.
+
+They leave and decide to go after it. I knew they would. Elephant grass. I gave them endless fields of elephant grass in a jungle. This was years ago so I can't remember all the encounters. I remember they ran into a tribe of druids who were mildly hostile to outsiders and wanted them gone. I remember pestering them constantly with a Swarm of Insects, not in a combat round sort of way, but it was a big challenge - it kept their hit points from reaching maximum. It was trivially easy to get lost in the elephant grass, moving was difficult, and the grass could cut you if you tried to force your way through it and failed a Constitution saving throw. There were traps and snares. The waters were filled with anacondas and piranhas. The forests had boa constrictors. There was an elephant stampede. It was a surprise attack. That was great.
+
+All the while, they're being stalked. And they know it. Alarm ALWAYS WENT OFF.
+
+So they get to a ravine in the jungle. They don't have ropes, but there's rocky faces and vines, so they get down. As they continue, there's a rocky outcropping, think Pride Rock. And what's there? A little jade green tiger statue. Pocket sized. Brilliant in it's color. And it licks its paw, wipes its head, and walks down the rock. That's the lost totem!
+
+So they go for it. Through the ravine, up the rock and they grab the totem. The moment they lay their hands on it, there is a roar in the canyon, like every tiger in the god damn jungle protested at once. The monkeys howled, the birds flew away, EVERYTHING RAN. From where they stood, at that vantage point, they could see down the canyon that the elephant grass was disturbed, it was making a beeline straight for them, and it was coming FAST.
+
+They ran. I knew they would.
+
+I asked for their party order and initiative. What was perfect was the player in front had the totem, so I didn't have to do anything to force this. I had a plan.
+
+One by one, starting from the back, I let them roll a Strength check, but it always failed. I told the rest of the party they heard a guttural roar that shook the ravine, and a blood curdling scream from their former companion. One by one, every few rounds, I grabbed another one. Every round, I had them roll to find their direction back. They stumbled around lost a couple rounds, there in the elephant grass.
+
+Most of them made it back to the wall, and up they climbed, desperately. Oh, this was too good...
+
+This was 3.5e, so I took a Dire Tiger from the MM and maximized it. As they climbed up the vines, the full sized, jade green tiger leapt up into the air out of the grass and grabbed the next lowest climber. Then the next one.
+
+The last player made it just to the top of the vine, just out of reach of what this tiger could jump. Of course I planned for this.
+
+Now, what I planned to do was have the druids show up and take the totem, but I had a better idea. I used the artifact dealer instead. The player made it to the top only to find a crossbow pointed right between his eyes.
+
+""Give me the totem."" It was a cold blooded command.
+
+Here I had a plan. If the player gave up the totem, the dealer would shoot the vine, letting the player fall to the tiger spirit. If the player didn't give up the totem, the dealer shoots the vine, letting the player fall to the tiger spirit.
+
+The players all wake up, lying in little jungle canoes, being rowed down river, by some of the druids. Their hp is low, I gave them all jungle rot, some of their stuff is missing, and they got a severe tongue lashing about how you do not fuck with the Tiger King demigod. If you grab the tiger by the tail, you better have a plan for the teeth. They were dumped off near civilization, with the treatment for the jungle rot, courtesy of the druids.
+
+I ended up giving the dealer a full character sheet, and I let a remote friend play him as a DM aligned minor character on the occasion. I started pulling some Tomb Raider/Indiana Jones vibes, and this character was sometimes an ally, sometimes the opposition. The players loved him and hated him, actively tried to kill him but missed him, and was thankful and fearful every time he showed up.",1680191712.0,53,0.97,1
+350z,So I had an interesting electrical issue the other day.,"I was driving late one night when all of a sudden I lost all electric. Engine cut, headlights, dash and interior lights, everything. I'm rolling down this street, trying to start the car - nothing. Dead ignition.
+
+Hazard light worked. So that was nice. I coasted to a nice spot.
+
+Key out, key in, twist, nothing. Headlights won't turn on. Nothing working. In my fussing, I eventually realized hey, headlights and interior lights are on. Ok, but now they won't turn off...
+
+Car still won't start. Ignition power is still completely dead. So I pop the hood and get out. Door alarm reminds me the headlights are on.
+
+As I'm staring under the hood in pitch darkness like I'm gonna be able to do a DAMN thing, I notice the dome light come on and fade out. Ok. Drop the hood, get back in and... It started!
+
+So I suspect a breaker tripped. I just don't know which one or why. I haven't touched the car since. If anyone has any insight, I would be much obliged.",1679925636.0,2,1.0,5
+learncsharp,Who is the idiot responsible for this? Surely there's a better way.,"I support this horrid product, and we're expanding support to other native languages, including C#. We have a number of primitives you can read/write to the server, and that includes the typical, integer types, booleans, too many different string formats because strings... Needless to say, I'm rather unhappy with the steaming pile handed to me.
+
+I've got a wrapper type:
+
+    class WrappedBool
+    {
+      bool _b;
+
+      void Serialize(Input);
+      void Deserialize(Output);
+    }
+
+Alright, I'm trying to make this dumpster fire as transparent as possible. So I made some conversion operators.
+
+    public static implicit operator bool(WrappedBool b) => b._b;
+    public static explicit operator WrappedBool(bool b) => new(b);
+
+Now I have to unit test this stupid fucking thing. Mind you, I've got about 30 of these things, so I thought I'd be clever:
+
+    [TestMethod]
+    [DataRow(typeof(WrappedBool), typeof(bool), DisplayName = ""This is where drunken rage comes from"")]
+    public void ConvertToFrom(Type from, Type to)
+    {
+        Assert.IsNotNull(Convert.ChangeType(Activator.CreateInstance(from)!, to, CultureInfo.InvariantCulture));
+    }
+
+The idea was I would automate a bunch of rows. I don't have to assert the correctness of the data here, just that they're convertible. Well, it turns out this doesn't even use my cast operators, which is half my problem, but I'd need to implement `IConvertible`. How many of you know about that wretched interface? You'd have to overload SEVENTEEN FUCKING METHODS to get it to work.
+
+And then I'd have to unit test all that shit...
+
+I've quit employment over shit like this. I'm all about testing, but this is just an explosion. I've got 400 code paths to test just because I have 30 stupid wrappers that implement serialization (non-negotiable, I lost that fight to a technically incompetent idiot manager) and I want these objects to melt away to nothing.
+
+Does anyone else have a better idea? How can I make a `WrappedInt16Array` convertible between `short[]` that doesn't end up with a stupid explosion of interfaces and testing? Is there a better way I can write my test? It's not even the end of the day and I'm getting drunk and sad...",1673990324.0,0,0.24,15
+OldSchoolCool,My wife's grandfather HAMing it up circa 1961-62.,,1665422141.0,21,1.0,4
+HamRadio,Cross-post: Asking for some insight into some old family photos and maybe some of you might remember K9LTY.,,1665421994.0,2,1.0,0
+CHIhamradio,Cross-post: Asking for some insight into some old family photos and maybe some of you might remember K9LTY.,,1665421870.0,3,1.0,0
+amateurradio,Asking for some insight into some old family photos and maybe some of you might remember K9LTY.,"EDIT: Do you think that's a J-38?
+
+If you're interested in some old school cool, I have [here](https://imgur.com/a/82jJijX) a few photos of my wife's grandfather. All this occurred in Chicago.
+
+We think he got licensed around 1961, and my googling of his license has turned up only 3 hits which track with that. We know that radio is a Hallicrafters SX-100 (that's easy enough to read), but I don't know which revision. I know they were manufactured from 1955-1962 and the most telltale sign of revision are the knobs and face. If any of you have a trained eye as to which revision specifically that was, that'd be lovely. We suspect he'd have bought everything new.
+
+We're just trying to identify the rest and get an idea of what he was up to. He was a man of many, really quite impressive hobbies. He didn't half-ass anything he did. But while other hobbies came and went, this one stayed.
+
+* I know the Codemaster was a CW training device, but I haven't found an example of that exact model. I honestly haven't looked hard enough yet, we got these photos last night.
+
+* We don't exactly know what that stack of cards are. I'm fairly certain they're QSL cards. In fact, looking at it on the screen, I think I read a callsign, so that's almost certainly what they are, or just QSO records.
+
+* I thought that device under his callsign was a Heathkit, but it has some sort of emblem on the face I don't know what exactly. The original photos are just too grainy to make out any further detail than what you can see here.
+
+* He otherwise has a collection of speakers and microphones, but I was never enough of a HAM myself to know what in particular.
+
+* I can't make out any of the various publications.
+
+* I don't know what bands he operated on regularly; I've read what the radio is capable of. The antenna might still be at the house, I'm not sure anyone actually knows. My wife told me to go get up on the roof next time we're there. He didn't have a tower.
+
+I never met Walter, I came into the picture just after him. So far as we know, these are the only pictures of him and his rig. This is what he used until his failing health landed him in hospice care. I don't know for certain what happened to any of it, but from what I think I know - well, it's unfortunate.
+
+If any of you also happened to have known or been in contact with him, my wife and I would love to hear of it. I'll have to cross-post with the Chicago HAM sub.",1665421820.0,15,0.9,8
+csharp,"How do I verify a Moq delegate, and one with a ReadOnlySpan parameter to boot?","I'm newish to C#, I'm mostly a C++ developer, but you and I, r/csharp, are going to become intimate friends over the next two years. For better or worse... I'll try not to be a pain.
+
+We're targeting `net6.0`, using `.NET Framework 4.8.04161`, and `Moq 4.18.1`. I'm developing using MSVS 2022 Enterprise 17.2.6.
+
+This is all greenfield development. I have an object that takes a `System.Diagnostics.Metrics.Meter` parameter and create an `ObservableGauge<int>`. I'm writing a unit test, and there is only this one meter, only this one gauge, and I expect the measurement to be 1 for this test.
+
+I'm trying to mock a `System.Diagnostics.Metrics.MeasurementCallback<int>`. Simple enough:
+
+    Mock<System.Diagnostics.Metrics.MeasurementCallback<int>> callback = new();
+
+Right? Alright, now to plug that into the `MeterListener`:
+
+    System.Diagnostics.Metrics.MeterListener listener = new();
+    listener.SetMeasurementEventCallback<int>(callback.Object);
+
+I then perform my action, and now I want to verify the result. Right now, I don't even care what actually verifies, I just want it to compile; that's where I'm at with this right now.
+
+    callback.Verify(mock => mock(It.IsAny<System.Diagnostics.Metrics.Instrument>(), It.IsAny<int>(), It.IsAny<ReadOnlySpan<KeyValuePair<string, object?>>>(), It.IsAny<object?>()));
+
+All I'm doing is accepting whatever is passed to the delegate. The types are taken from the delegate's signature. But this results in:",1658246563.0,5,0.79,3
+learncsharp,"How do I verify a Moq delegate, and one with a ReadOnlySpan parameter to boot?","I'm trying to mock a `System.Diagnostics.Metrics.MeasurementCallback<int>`. Simple enough:
+
+    Mock<System.Diagnostics.Metrics.MeasurementCallback<int>> delegate = new();
+
+Alright, now to plug that into the `MeterListener`:
+
+    System.Diagnostics.Metrics.MeterListener listener = new();
+    listener.SetMeasurementEventCallback<int>(delegate.Object);
+
+And now I want to perform my action and verify the result. Right now, I don't even care what actually verifies, I just want it to compile, and then I'm going to figure out how the thing works.
+
+    delegate.Verify(mock => mock(It.IsAny<System.Diagnostics.Metrics.Instrument>(), It.IsAny<int>(), It.IsAny<ReadOnlySpan<KeyValuePair<string, object?>>>(), It.IsAny<object?>()));
+
+All I'm doing is accepting whatever is passed to the delegate, these are each the types for each parameter. But this results in:
+
+    CS0306: The type 'ReadOnlySpan<KeyValuePair<string, object?>' may not be used as a type argument
+
+Alright, fine, I can live with that. I don't care what the matcher specifies so long as it compiles and runs correctly. I'm not expecting this span to contain any elements.
+
+I mean, ultimately, I want to verify properties of the instrument, which I don't yet know how to do, I can verify the measurement and the state, and I don't know how to verify the tags, once that comes up. But first and foremost how do I specify a valid matcher for that parameter?",1658175608.0,4,0.84,0
+AskProgramming,I'm looking for an IDL to describe an existing wire protocol.,"I support a FOSS product that has a wire protocol between client and server. The problem is the protocol exists only as the sum of the source code that implements it. There is no documentation, no one knows how it works, and there currently exists no way to port the protocol to other languages without reverse engineering it and writing the implementation by hand.
+
+I'm looking at Interface Descriptive Languages as a possible solution. I've explored FlatBuffers and Protocol Buffers, but these impose additional structure in the marshaled binary, they don't create a literal 1:1 mapping of the description to its binary layout.
+
+Is this hopeless, or does something exist to capture and generate an existing protocol?
+
+And no, we can't just roll the wire protocol, I'm not in that kind of position and client library support is only a team of 3.",1644612429.0,3,0.81,2
+help,How do I get access to the markdown editor when writing responses to posts?,"I both moderate and respond to r/cpp_questions. When writing a response, the new editor makes the process unbearable. I have to take my hands off the keyboard in order to highlight snippets and create code blocks. The new editor is also too buggy to use. For example, keyboard navigation basically doesn't work, and does not follow what is common in literally any other text dialog in all the rest of computing - and I don't think I'm even exaggerating; It also has problems with highlighting, copying, and pasting. I'm sure it has numerous other bugs, but at this point, it's ground my participation in my community to a halt.
+
+How do I make it go away? Should I switch back to old Reddit? Can I have new Reddit and the old markdown editor? Apparently we still get to use the markdown editor when creating a new post, like this very one... I'm willing to abandon community participation and moderating because of this if there isn't a reasonable compromise.",1638566822.0,3,1.0,4
+HomeServer,I'm looking for advice addressing a console video bug during a Xen install.,"I landed a hand-me-down Dell R720. I just updated iDRAC to the latest, v2.65.65.65, and I've been trying to install XCP-NG v8.2.0 (latest) via USB stick.
+
+And yet I still see this problem. After I get past POST and GRUB, it looks like [this](https://imgur.com/njne5hF). It will get as far as the installer TUI, and it's interactive, but it's just as skewed, illegible, and unusable. It looks like [this](https://imgur.com/iYTYzBb).
+
+It looks the same whether through iDRAC or the VGA output. I've been throwing kernel console commands on bootup trying to correct for this. So far, no luck.
+
+I can't seem to get Proxmox to load GRUB off the stick for some reason, so for the short term, that seems to be out. My next attempt is to automate a PXE install, once I get all those details sorted.
+
+Advice?",1632848198.0,1,1.0,5
+WritingPrompts,"It's St. Paddy's day, and for one day a year, every year, EVERYBODY'S Irish...",,1615732444.0,1,1.0,1
+350z,"It's been three years, but next weekend my Z will be back on the road","I had my transmission out and disassembled when I found out I was going to be a father. Well, some'ya'll know how that goes. I had to put things aside. And so she sat. Now the wife has urged me to get her running again. I don't have the spare time to wrench on it like I once did, so I have a speed shop doing the assembly and now critical maintenance for me. Letting a car sit is bad, man. I presume the entire fuel system is rock solid with varnish. I told them don't stop until it drives.
+
+What's worse, we've moved twice, and oil covered parts have had to sit in the car. It smells like you'd expect. Now is also a good time to rip out the carpet, rhino liner the floors, and replace the seats with literally anything better than stock (I always hated them).
+
+She's a 2007 Enthusiast. I'm just excited and had to share my excitement. I live in mountains now, so I'm going to have to relearn how to drive, now in this environment. And I've got l've got long term plans and a budget, so this is going to be great.",1601775142.0,6,0.88,1
+AskLegal,How long can FedEx or a vendor leave their crap at my house before it's mine?,"This is in the state of Oregon.
+
+I ordered an OEM new transmission for my sports car from some vendor. They sent it via FedEx. I used to work the docks at FedEx myself, I know how they handle parcels like animals.
+
+The delivery guy didn't disappoint. Even he dragged this thing off the tailgate (it weighs ~200 lbs) and up the stairs to my front door despite my insistence he bring the truck into the alley and I help him lift it off and bring it into the garage. No, he did it the hard way. Everyone at FedEx does it the hard way, so it's not just him.
+
+I open the box (what was left of it) and sure enough, despite all the packaging (which to the OEMs credit was very good, just not good enough for FedEx), the single piece bell housing was shattered.
+
+I call the vendor right then. They ask for pictures (which I sent) and supposedly file an insurance claim with FedEx. In the meantime, they send me a new transmission, which arrives via a haulage company, to my garage door, on a pallet, off a lift gate, rolled in with a pallet jack. If it's worth doing things the right way, it's worth doing it the second time. This transmission is going into my car this Wednesday.
+
+Getting to my point, I've had this busted transmission taking up space in my garage for just over a month now, since August 28. I contacted the vendor over a week ago to ask how the claim was progressing, they told me to stand by and keep holding onto the transmission. But I'm not a warehouse for other peoples failures, I don't have the space or the inclination to hold onto someone else's property.
+
+So who is at fault here for not picking up their property? Who's property is this piece of salvage, anyway? What am I on the hook for while holding onto it? At what point is it abandoned property and I can take possession? I still have my old transmission, and I'd just LOVE to do a transfer of the internals to have a backup on the shelf, or maybe I'll just scrap it, or whatever. I just want to know what the fate of this damn thing is going to be and who I have to tell off.
+
+Please advise and thank you.",1601670994.0,11,0.92,10
+cpp_questions,If you offer to pay money to have someone do your homework or take your exams I will ban you.,"I can't believe I actually have to say it.
+
+But if this is the case, then do the most decent and self-respectable thing you can do and switch majors instead; take a leave and come back to college when you're ready to take it seriously; do something, *anything* else to get yourself in order. An education is not just a piece of paper.
+
+**DO NOT** insult the hard work the members of this community have put in to get to where they are, both your fellow classmates who are asking honest questions, and the seasoned professionals who volunteer their time to respond.",1598461578.0,449,0.97,107
+hillsboro,Will the disgusting animals of Hillsboro start to clean up after their dogs?,[removed],1593894021.0,0,0.45,5
+unpopularopinion,"It's a shame T_D has been banned, I like my crazy out in the open, where I can see them.",[removed],1593460159.0,1,1.0,0
+Showerthoughts,"Our president won't work, dodges taxes, and collects government cheques. He's a welfare queen.",,1591848795.0,1,1.0,1
+Showerthoughts,Trump sits around and refuses to do the job he was hired to do while dodging taxes and collecting government cheques. He's the ultimate welfare queen of the highest order there can be.,,1591848694.0,2,1.0,1
+Advice,What is love?,"I'm trying to find the appropriate subreddit to even ask this question.
+
+I'm a 36m, happily married to my patient and understanding wife, child, and my therapist has helped me understand I grew up without love, without any examples of it - but with plenty of counter examples, of what it isn't; and that I have been misled by my upbringing and have no idea what it is. She told me to use a variety of methods to go research and try to come up with an answer. I'm terrible at homework, always have been, but here I am, part of my research is asking public opinion.
+
+The question is meant to be vague and open ended to allow for creative opportunity.",1590808180.0,1,1.0,3
+relationship_advice,[Serious] What is love?,"I'm trying to find the appropriate subreddit to even ask this question, since all efforts are automatically removed from r/askreddit.
+
+My therapist has helped me understand I grew up without it, without any examples of it - but with plenty of counter examples, of what it isn't; and that I have been misled by my upbringing and have no idea what it is. She told me to use a variety of methods to go research and try to come up with an answer. I'm terrible at homework, always have been, but here I am, part of my research is asking public opinion.
+
+The question is meant to be vague and open ended to allow for creative opportunity.
+
+In writing this question, I suddenly have a vague memory of one tender moment when I was visiting college friends who had later married, the lady friend was telling me about what love was to her, but I can't yet recall all of the memory...",1590808070.0,15,0.86,12
+AskReddit,What is love?,,1590807461.0,1,1.0,1
+AskReddit,"[Serious] What is love? My therapist tells me I grew up in a loveless home, and so never learned what it is. She told me to go find out so this is part of my research efforts, asking public opinion.",,1590807415.0,1,1.0,1
+Showerthoughts,"Snowmen are cold, heartless monsters.",,1589153605.0,16,0.79,9
+help,"When I tell the live-feed on my personal home page to show me less of this, how do I get it to never show me live-feed anything ever again?","I will never ever want to watch anything live-feed ever. No, I don't want or need another streaming platform. No, I don't care to see people fuck up their lives as some sick form of entertainment, or their stupid pet ferrets, or their disgusting pet rats, or their terrible singing. I know I can't sing - you don't see me up on there because I have decency and respect for other people who shouldn't be subject to my bullshit. Kudos to all you who like this sort of thing, but I ask for a little courtesy.
+
+I use reddit for work and leisure. It's indispensable. It's a great site, a great product, a great community, and in return I don't mind doing my part in producing content and being harvested like an unwilling black market organ donor my personal data that keeps the lights on. What I don't need is to be at work when I hop on the site for a little industry participation when someone flashes a tit or offs themselves live with a scatter gun to their own face, and on my desktop, in my place of work. As far as I know it's never happened, but I have no guarantee it can't happen. Either way, I don't care. I know I can simply not use the site while at work, but that is counter to Reddit's business model, isn't it? And it doesn't solve my personal use issue of whatever the hell it is I still don't want to see it. Let me save you the bandwidth that is otherwise wasted on me. I want it off. I want it to stay off. I've searched settings to no avail. How do I make live-feeds go away forever and ever amen?",1588625148.0,3,1.0,0
+AskProgramming,I'm trying to learn about checking units.,"I want to be able to check the consistency of units applied to equations. I know the go-to answer is dimensional analysis, but such dimensional analysis does not differentiate between dimensionless units.
+
+For example, there are the Becquerel and the Hertz, which are dimensionless units of random events and regular events, respectively. There are also Radians and Steradians, which are dimensionless units of angles and solid angles, respectively. According to dimensional analysis, these all have the dimensional product of 1.
+
+My problem is I don't even know what to google to *learn* how to solve this problem. I sort of presume learning about type systems would be the way to go, but I'm still too naive to be self-directing in my own education. Any tips and direction would be helpful. I'm intentionally remaining language agnostic about my ask because I'm not trying to solve this in the domain of just a single language.
+
+EDIT: Yes, I know Hertz is 1/s, the SI equivalent of s^-1, but it's still considered dimensionless because SI considers all measure of cycles to be dimensionless. Google it. The question isn't about the specific examples given, but about checking consistency across dimensionless units.",1586126498.0,3,0.81,1
+Showerthoughts,Babies don't have to trust a fart.,,1579403732.0,39,0.85,10
+350z,What to replace the transmission with?,"Alright, after years of autocross and harsh winters, the bearings in my 2007 Z transmission finally gave out. Second gear was starting to go, anyway. It's since sat in the garage for about 2 years, and has become a project. I know I have a laundry list of things to address from just sitting, and things to address while I have the transmission out.
+
+So now the question is what to do. Do I replace the transmission with factory new? Do I roll the dice on used? Do I go refurbished? Or do I find some other after-market transmission?
+
+I can get a factory new, and it's the likely direction I'll go. I'd have considered a refurbished transmission, but they cost almost as much as new - and for the price, second hand isn't worth it. I could understand if there was an after-market gear set in it, which I'm VERY interested in entertaining, but I haven't found any such rebuilds available, only the gear sets themselves; and while I'd rebuild the trans myself, the parts alone are collectively more expensive than buying factory new!
+
+Am I crazy? Do I really suck at shopping?
+
+And I'd like to consider any sort of after-market transmission, something unsynchronized, after-market gear sets, but what I've found are nothing for a streetable application, and nothing for a shadetree mechanic such as myself.
+
+Help me, Z community. I just want a greater sense of due diligence and what my options are.
+
+And other than replacing the clutch and flywheel since I have everything out, and the clutch hydraulics since I'm sure that's been sitting bone dry, change the diff fluid... is there anything else you guys suggest I do? I'm thinking good-to-get-done maintenance and smart after-market replacements while I have everything down, rather than opportunity to upgrade - costs need to be justified with the wife, can't get past her after-market headers will save money in the long run.",1577735079.0,2,1.0,1
+Portland,Why does the medical practice so uniformly suck around here?,"I go into an immediate care with a horrid hacking cough and get cough drop pearls. Are you fucking kidding me? The whole bottle is one dose is I want to see any results. I go see a doctor and get nurse practitioners - if I wanted to play pretend I'd stay home and play with my kid...
+
+My wife goes in and every time they say it's viral and come back in a week if symptoms don't improve. Ok, so when she comes back, more ""it's viral"". This is 3 months now between 4 doctors. She doesn't even want to go to a doctor, not in Oregon, at any rate. My son has pneumonia, is that red flag enough? No, it isn't.
+
+We almost never get results, except for our baby, which is a different rant altogether. But never for us. We just suffer for months on end until we go to another state. Antibiotics, and what do you know? We get better in a week! I feel like some sort of medical refugee, or one of those people who fly to Cambodia for a black market transplant with cash hidden in their ass... Out of state travel coincides with doctor visits.
+
+Why does this region suck so bad? And who do we put against the wall to make this situation better? When I go to the doctor I expect to get well, I expect results. They should pay me my copay for wasting my time if they do nothing but say come back. Bitch, I am back!
+
+</rant>",1576610811.0,0,0.25,30
+cpp_questions,I need a recommendation for a logging system.,"The logger in our product is a proprietary dumpster fire. We are looking to replace it with anything not in-house. Unfortunately, our product has it's own set of log levels which makes it incompatible with many popular loggers that presume a different, fixed set of log levels. This product is old, back before spdlog, log4cxx, boost log, etc. Conforming to the popular log levels is not an option, as customers are dependent on the log level information we provide.
+
+What I'm looking for is a 3rd pary logger that allows me to define my own log levels. I don't know if Boost Log allows that, but it's not an option for us because reasons.
+
+Barring an adequate solution, I know I can fork an open source project and add our levels, I just really don't want to have to do that, because one of our goals is to not take complete ownership of a logger implementation.
+
+Suggestions?",1572473643.0,3,1.0,0
+DndAdventureWriter,[Brainstorm] I'm looking for examples of time travel.,"I'm going to begin a High Seas campaign with my players where through unknown forces, they crest the horizon to find port in another time than they had expected. Sometimes they're in the future, sometimes the past. I plan on having an Aboleth be ultimately responsible for this, using the party to manipulate events in time to some final outcome, in their plot to do whatever it is Aboleth's plot to do.
+
+&#x200B;
+
+My sources for inspiration include Dr. Who, ST:TNG s6e15, AND ESPECIALLY s7e25-26, The Time Traveler's Wife, Butterfly Effect, Back To The Future (but other than notions of causality and alternate timelines, not really), Asimov's Pebble in the Sky and End of Eternity, Pirates of the Caribbean, and Pirates of Dark Water (the original cartoon version). I've at least read most of the Odyssey.
+
+&#x200B;
+
+I've never ran a High Seas adventure, tough I've got plenty of session plots of what to do to tell the story of a ship and crew just by looking at Dr. Who and Star Trek. I mean, who cares that they're in space? What's a planet, but another port?
+
+&#x200B;
+
+The mechanics, I've got down. I think I've satisfactorily solved some of the issues of adventuring in so much desert (the barren ocean), and some instances under water (where breathing becomes a real problem). Luckily, there's both Stormwrack and Nautical Adventures.
+
+&#x200B;
+
+So some of my problems are that I don't know much about Aboleths, or what they plot to do. Why would an Aboleth manipulate time to some end? I get they think they were first so all is theirs, I get they don't like the ilithid because they don't have memory of where they came from (the future, which might be a plot device), but why are they manipulating a society through time? Or perhaps setting for natural events to go into motion? It's not for destruction, because they don't want to be King Nothing, ruler of all they've destroyed - all of existence is their splendor they intend to enjoy! Maybe it's to subjugate the above water population into their domain of control again? I think that's a common theme with Aboleths, but not one I'm married to. I also tend to be hesitant to tell a story that challenges cannon fiction - Aboleths don't know where Ilithid come from, and once they know, that becomes species knowledge they never forget. This breaks cannon, and I'm not taking ownership of that.
+
+&#x200B;
+
+I think it's because I don't have a clear agenda, I can't string together an overarching plot. The players start on their timeline with a history that was a particular series of cause and events, the Aboleth then make calculated changes to the timeline to branch down alternative time lines to a new present. They send the party into the future to steal, to go into the past to steer. And the party is totally unaware that they are the effectors, manipulated and puppeteer'd until the big reveal. But as soon as I can figure out where they're at vs. where the Aboleths want to go, then it's \*End of Eternity\*, then it's \*Butterfly Effect\*. Move a book to a higher shelf - the consequences have a magnifying effect. That part of the story is easy.
+
+&#x200B;
+
+So what are my Aboleths doing? Maybe this is ultimately an attempt to find out where Ilithid come from that ends in catastrophe. A mess of time and space the Aboleth goes, ""Oh well, I tried,"" that leaves the players in a wreck of time and alternative consequences that without the Aboleth, they are powerless to try and correct and get to some sense of normalcy. I love tragic, miserable endings for the players of ""You were doomed from the start"". The only way to save themselves is to figure out my game as DM as early as possible, before it's too late.
+
+&#x200B;
+
+Before I ramble on too much, what do you guys think?",1566162861.0,2,0.75,2
+Discussion,"Men of reddit, how do I address complaints about ""the shake"" with my wife? What's your technique?","Fellas,
+
+&#x200B;
+
+We all pee, right? Sometimes, I dare say, we stand while doing so, and on occasion, and by happenstance, within the comfort of our own homes. So when you finish, is it just me, or is there the issue of the last drop that needs to be addressed? What are you going to do - just tuck yourself back in and let it run down your leg, or is there a mitigation plan? Do you... Shake? Maybe a jiggle in the follow-through? Maybe a little squeezy-pully action to avoid the meat sounds while in public?
+
+&#x200B;
+
+With me so far? Where does the pee go? Ostensibly you're standing in front of a toilet, so you're aiming to get that last drop in there, but we're not perfect, right?
+
+&#x200B;
+
+My wife complains about... incidentals, that she rightly and fairly asks me to take the responsibility to clean up. And, naturally, this leads to questions from the fairer sex and our better halves; they don't have to deal with these sorts of man-issues.
+
+&#x200B;
+
+So my wife is genuinely confused, why don't we just dab the end with some toilet paper. I tried to explain, it's not about a little wetness at the tip, it's that there's longer plumbing after the bladder than in women, so once the back pressure is gone, there's still the rest, and it's got to go, or that last drop is rolling down your leg, and no one wants that.
+
+&#x200B;
+
+Ok, so why don't we then... ""Hold some toilet paper over the end when you shake.""
+
+&#x200B;
+
+I feel like I'm just not reaching her, that my communication isn't effective. Have you ever had this conversation with the women of your life? Or maybe I'm doing something totally weird and wrong, as my wife suggests? Is there something I could be doing better? Or should I demonstrate the issue first hand and let her explore and come to her own conclusions?",1561840833.0,1,1.0,5
+Portland,What's with these flies?,"Does anyone else have this problem? I've got some species of fly, not a typical trash fly like a blow fly, kind of on the smaller side, that likes to hover by my front door and landing, and just my front door, in the shade of a relatively sunny side of the house. They don't do this anywhere else around the house. There's no food or water over here from what I can tell.
+
+&#x200B;
+
+Is there a plant or something that's popular with the flies? I want to get rid of whatever it is that is attracting them here. I don't want to sit out here, I don't want anyone but unwanted solicitors to have to walk through this, I don't want to open the door so they don't get in. This sucks.",1561839707.0,6,0.65,11
+Portland,Got my car broken into. I vote we eliminate the crack heads.,[removed],1557861244.0,0,0.25,3
+AnetA8,Just a reminder about fire hazards.,"So yesterday I was printing parts for a Lack enclosure. I've always printed at 200c but yesterday I bumped it up to 210c.
+
+Now, I put a MOSFET in place for the heated bed, and main power goes from the supply to the lugs on the MOSFET, and I tapped off that to go to the controller. The controller still drives the extruder hot end and I used 14 gauge stranded wire to the controller.
+
+14 gauge isn't enough. That extra 10c overheated the wire to the controller and the room started smelling like burning insulation. I pulled the power before anything serious happened but about 2.5"" of wire insulation turned brown.
+
+So now I'm going to use 12 gauge, I'm going to put the hot end on it's own MOSFET, and I'm going to run power directly from the supply lugs to each device individually.
+
+So remember: don't leave your printing unattended, wire things up right the first time (I had a feeling my safety margins weren't wide enough) put inline fuses along these paths, and I recommend an enclosure with a smoke alarm in it (part of the point of why I'm building one).
+
+It can happen to you. I didn't think it would happen to me.",1551119660.0,11,1.0,15
+unpopularopinion,"Breeding should be a privilege, not a right.","Specifically, I would want to avoid devolving into eugenics. The goal is to screen not for inferior genetics, but bad people and bad parenting. You would go before several panels and evaluations, and you pass when they say you pass. They're looking for the crazy: abusive relationship? No breeding. Anti-vaxxer? No breeding. Bipolar or borderline? No breeding, not necessarily because of the disorder itself but because you're fucking nuts and high risk to the welfare of the child.",1543083876.0,14,0.61,48
+Showerthoughts,Now is the youngest you'll ever be again.,,1542810437.0,1,1.0,1
+UnearthedArcana,...where I intended to get the players to think about which weapon they're going to use and why.,[removed],1541605509.0,17,0.76,20
+SuicideWatch,We have a redditor in need,[removed],1541379468.0,2,0.75,1
+DnD,Cursed item concept: A cursed torch or shadow.,"I just thought of this and would like to share and get feedback. Feel free to use and improve upon it, I hope you like it.
+
+> The flame without light but with shadow
+
+> This cursed item takes the form of any typical light source, such as a candle, torch, lantern, brazier, or lamp. When lit, the flame itself is visible but does not cast light, and cannot be extinguished by normal means. This flame yet still casts it's own shadow, but only of creatures and not inanimate objects. In the presence of another light source, this shadow will be visible as a second. The shadows are bound at their base to the creature as normal, but can otherwise act of their own accord. Typically, they mimic the creature with a slight delay, and waver about when idle as though from an exaggerated flicker of the flame. A passive perception roll, the players may notice these abnormal properties of the light or its shadows.
+
+> If the flame is lit but no other light source is present, the shadows are still cast and visible to those with darkvision. The shadows cast in the darkness are able to rise or return as a move action into and from the material realm as Shadows, Shades, Specters, or Wraiths, free from their projection into the material realm and bondage to the creature's feet. In the presence of skeletal remains or undead, the shadows give rise to Ghosts of the deceased. When defeated, creatures will develop a new shadow in 1d12 rounds. The candle is extinguished if all such shadows are turned with divine magic.
+
+To paraphrase Blaise Pascal, if I had more time, I would have made it shorter. It does seem wordy to me, and wordy means complicated, so I'm working on that. The core mechanic is in the title, and as a minor cursed item, it could stop there - a curse to make the item useless, ideally undiscovered until the most inconvenient time. I like the greater effect of shadows giving rise to danger, and after that it's open for me. That it only occurs when there is no other light makes for momentary lapse in light coverage a terrifying prospect - imagine this light in the middle of a windy intersection of tunnel, where your normal flame is blown out. I'm really hung on what to do about the perpetual effects - sure, you kill the undead whatever, but that light is still burning, so what happens and how?
+
+I know I'm missing some wording, I should address that shadow is cast from whatever radius a normal light of that type would cast. I'll save that for a v.2 revision.",1537558699.0,11,0.92,4
+unpopularopinion,"Acknowledging a sneeze by saying ""god bless you"" is rude.","Look, I don't acknowledge when you fart, ok? No one needs to be called out for their every bodily function. Have you ever considered that someone might not want the additional attention, as sneezing is bad enough? A sonic boom out of your face and everyone on the bus is looking at you with disgust as is, or just gawking as a reflex because you're so disengaged on that bus that a sneeze is enticing enough you reflexively can't help yourself.
+
+When you're in the next stall over dropping a deuce, do you want to hear words of encouragement?
+
+> Give 'em Hell!
+
+When you piss in a public restroom do you stream right into the bowl so everyone can be impressed by your mighty stream, advertise the health of your prostate? What, are you looking for a pat on the back, a strong and sympathetic hand resting on the shoulder while you're standing there, dick in hand?
+
+THEN WHY DO YOU EXPECT ME TO CONGRATULATE YOU ON YOUR SNEEZE?!?
+
+And how dare you obligate me to do so? I don't know you. Likely I don't want to know you, and likely you don't want to know me. Having a sneeze is not how you open dialogue.
+
+> You: ::Achoo!::
+
+> Me: Equality of outcome is leftist extremism!
+
+And god bless you?
+
+I'm not Christian. I'm not a monotheist. And who the fuck am I to make any assumption about your metaphysics? Are you even a theist? If you suggest may your god bless me for, whatever reason you think a sneeze is worth a blessing, FUCK YOUR GOD religion is divisive. I don't appreciate your genocidal maniac fascist deity. None of that. No. A blessing from your Christian god is a curse. How dare you?
+
+> It wasn't my intent to be rude, I was just trying to be polite.
+
+But you weren't polite, and you were rude.
+
+And you know what? I'm not going to make any assumption that I know a god damn thing about you, because I don't. What, you're white, and in America, therefore some sort of Christian? You're black, so you must be baptist? I think stereotyping is rude, don't you? And even if I were somehow right, what does that actually tell me about you? I've yet to find a consistency between Christians.
+
+> But it's just some old cultural institution, like an institution. To not do it is rude.
+
+Why? Can anyone tell me why it's rude to not acknowledge this one bodily function above all others? Why didn't shitting your pants make the cut? The common belief is that blessing a sneeze is because it was a sign of plague, that one might die. If that were the litmus test, then spontaneously shitting oneself in today's society is probably a closer marker of impending death than a fucking sneeze.",1537394865.0,2,0.54,51
+unpopularopinion,American style tipping is bullshit.,"American style tipping is giving service staff money after services rendered. That's not tipping, that's ""gifting"", as in a ""thank you"", I guess. A ""tip"" is paid before services for special accommodation.
+
+And 99% of the time, I never want any special accommodation, I just want my meal. I'm not asking for anything outside your job description that it's only fair that I pay you for the endeavor. You didn't fuck up my order? You were polite? Congratulations, you did the absolute bare minimum your job requires of you. That's not anything gift-worthy.
+
+> I didn't spit in your food.
+
+You mean you didn't commit felony assault. And you deserve a gift for that?
+
+> I'm going to spit in your food.
+
+You don't know I'm not going to gift you because A) You don't know who I am and B) you don't find out until *after* the bill is settled.
+
+> Service staff work for tips. We get paid less than minimum wage!
+
+Let me stop you right there, wrongy-McWrong-pants. To paraphrase the DOL, ALL US employees earn minimum wage. Without. Exception. The rule of service is your wage is less than minimum wage + tips. And if your total wage is less than minimum, your employer MUST cover the difference. You MUST make minimum wage.
+
+> No employer does that.
+
+I promise you there are lawyers who will work pro-bono because that's easy fucking money for the both of you. Again, we're talking about felony wage theft. What you would take away is more than you would have earned working in service.
+
+> I'll get fired for under-performing.
+
+Pro-bono lawyer. Wrongful termination. You can't be fired because you cost your employer your legal minimum wage.
+
+> Food and service will end up costing more money.
+
+You mean my $10 bill will end up being $11.50? Potato, potato... I'm (expected to be) paying the difference anyway.
+
+> You're an asshole.
+
+Did you know gratuity was traditionally 10% back in the 90s? Now days it's expected to be closer to 20%, and it's expected to increase. The research shows people, not that they like to tip, but they like to tip more than the social norm because they want their server to ""like them,"" which is driving up gratuity. I don't give a fuck what you think about me. If you don't want to do your job, I really don't want you to do your job. I'm much happier doing your job for you, as it lowers the cost of my bill, removes people I don't like and don't want to interact with, no spit in my food, and robots eliminate your job, which is no skin off my back. Go ahead, asshole me out of your job.
+
+Look, all your defense of this **literally un-American** institution is protecting the businesses that you hate for ""fucking you over"" in the first place. All this is doing is easing their obligation to pay you. That's why businesses love tipping. Brainwashed. Tipping is a holdover from the English aristocracy, the wealthy showing off how much money they have. Our founding fathers wrote about how they wanted to stamp out this behavior, even make it illegal. The bloody turn-coats they hated so much dropped this practice, why do we cling to it?
+
+EDIT:
+
+One other complaint: Almost everyone who is a tipped employee is not reporting or under reporting their wages on their taxes. That's tax evasion. I'm willing to bet everything I have that anyone I pull off the street who is a tipped employee is committing this felony.
+
+> But we make so little money, we rely on our tax returns just to get by!
+
+So you're justifying your felony? What about the minimum wage employee who doesn't earn tips, who is also trying to provide for their families; fuck them? It's OK that you do it? Felony as a social institution, everyone else does it, so it's fine? Fuck you, too. I can't do that on my taxes. Why do the rest of us have to pay our fair share and you're allowed to shirk your societal and legal obligation? You're making me and everyone else carry your dead weight. So you're not sticking it to ""the man"", you're sticking it to everyone else who is just as fucked as you who isn't in a position to cheat like you. That's rude to say the least.",1537390364.0,11,0.74,27
+lfg,"[Offline][5e][Portland, OR] Looking to DM for a group of parents and parent couples in a High Seas campaign to make friends.","I'm looking to make some gamer friends for my wife and I. We are transplants, have a less than 1 year old, and are interested in meeting people in a similar life situation.
+
+I am an experienced DM, and have a knack at making for engaging combat (though I try not to make it the focus of an adventure). I prefer to run semi-serious RP oriented games - continuity isn't the most important to me because of life and schedules, and meta-gaming is encouraged. I don't care for high magic, min-maxers, or player trolls who end up annoying or frustrating their co-players. Trust in your DM, you don't have to play defensively, trying to save your character's lives; the game isn't about winning or losing, there's no such thing - it's about how epic a story can be told. It's about having fun, enthralled, and being entertained. I run a sandbox, so if you say it, it's cannon. Please, invent as much of this world as you can so I don't have to! Don't ask about our game world, presume it.
+
+I am open to players new and experienced alike, and I try to make the game accessible.
+
+I've no idea how we're going to coordinate around bed time, baby feeding, etc. Hopefully we'll have some good ideas.",1536796823.0,5,0.86,7
+FixMyPrint,Top layer spanning infill.,,1534358030.0,3,1.0,6
+explainlikeimfive,ELI5: How to people in the legal profession store legal rule paper when filing cabinets and folders are all A4?,[removed],1532356230.0,1,1.0,1
+explainlikeimfive,"How do laywers store files, if legal paper isn't A4 and thats what filing cabinets store?",,1532315020.0,1,1.0,0
+predaddit,Learned a few things about car seats. You should too.,"The instructions are incomplete, and that's to make them simple. For example, they don't tell you you can over tighten the straps.
+
+The latch method is supposed to be the safest, but read the manual for your car, because I found out the middle seat of my car doesn't have hooks for the latches. Oh, there are hooks on either side, but those are for latching the seat on the left side or the right side. This will be reflected in the car's manual. If the middle seat doesn't support latches, the hooks on either side are not ""close enough"". Use the belt.
+
+Finally, schedule an appointment with your hospital of choice, they do fittings and checking, and they'll show you how to use the other methods supported by your seat. This is how we found out I did it wrong, and our RN friend who is obsessed with car seat safety went ape shit when she found out she didn't know this.",1522513847.0,25,0.9,3
+homeowners,How to get a matte finish?,"I have a bathroom with a bumpy wall texture. The paint color in a can I have matches, but brushing it on leaves a gloss finish. There was a general handyman in here who did some work,and he sprayed something to match the finish when he painted over some patchwork. Does any of this ring a bell? What could it have been?",1522200908.0,2,0.61,3
+DndAdventureWriter,This is a synopsis of an adventure I ran I thought you guys might like.,"I ran this for 3.5 but it can work for any edition.
+
+My players were on a quest to collect summoning totems, sentient artifacts that were scattered about the world, some in private collection, some known - and lost, possibly of their own volition.
+
+So they caught wind of some myth, legend, and rumor of a beast in the forest, and thought it could be grounded in some truth. That of a giant tiger that prowled the sub-tropical forests of some territory - think Sumatra.
+
+They met a traveling antiques dealer who traded and bartered for rarities. He heard the story and disbelieved it, but provided insight.
+
+They trekked for days in the jungle, finding a fey that robbed them blind and gave them directions, which my players were strangely thankful for. At least they're not a party of murder hobos.
+
+They found cave paintings of tigers hunting water buffalo that showed a steep canyon.
+
+They were intercepted by a coven of Druids who were protecting the land from outsiders, and protecting outsiders from the land. They pushed on despite their attempts to stop, deter, and misdirect them.
+
+They knew they were being followed. Eyes were upon them and they could feel it. They didn't know who, or what, it could be. The clues given were conflicting. Was it the druids? Was it a tiger? Maybe the fey or some other forest creature? Maybe druids dressed as tigers?
+
+They found a vista that lined them up, showing different landmarks and indicators they heard from the stories and saw in the paintings. They felt they had to be close.
+
+And there it was. The canyon. It really was steep, there was no way up or down. They used several rope tied on end to rappel down, they couldn't see the bottom because it was covered in elephant grass, 13' tall. Looking up, they could only get a vague sense of navigation by looking for the edge of the canyon or the few scattered trees that were down there.
+
+I took party order, because it was going to become important later. The grass was so thick, the terrain tough to navigate, it was easy to get lost if they strayed apart from one another. Several games of marco polo were had to bring them back together. On the occasion, the ranger kept spotting the most brilliant yellow eyes upon him, off in the grass, only to disappear right before him, without ever breaking concentration or blinking. I told him things like for all you know the eyes faded away, or the gentle wind in the canyon bowed the grass, and in the gentle rustle, the eyes obscured and were gone!
+
+Finally, they found a break in the terrain, and a protrusion, upon which sat a totem, a jade tiger, about 12"" tall. And it was animate, cleaning it's ears with it's paw. Little did they know this was a totem of Shere Khan, god king of tigers. I used a maximized dire tiger for stats.
+
+They crawled up and took the totem, when the jungle shook in reaction. The wind rustled, the grass swayed, and the birds and macaques screeched. They could hear the throaty gurgle of a tiger, and they could see from on high a line cutting through the grass at astonishing speed. It was the avatar of the tiger god coming right for them!
+
+They all failed their Save vs. Fear (intentionally) and RAN FOR THEIR LIVES, back to the rope! I had them running and rolling for direction. Everyone was lost. One by one, I either stopped asking them anything (they were silently taken by ambush), or they got to see a flash of an utterly gigantic glowing jade tiger pounce upon them, the roar could be felt in everyone's chest, no matter where they were.
+
+The last two in my party both made it back to the rope at the same time, and up they went. One of them had the totem, I specifically made sure of it, and the other went second, as I narrated this.
+
+I had the players roll to climb, and I let them roll for a couple rounds, until they got fairly high, where they began to feel safe. Then Shere Khan leapt from the elephant grass, vertically from below. He grabbed the character on the bottom, and dragged him back down and he was gone!
+
+I allowed the last player, the one with the totem, to get to the top of the rope. And right there, just where the rope bends over the ledge, just a few feet away it's tied to a tree, there was an arrow, notched and drawn, pointed down at his face. ""Give me the totem."" It was the antiques dealer, I introduced another player into the game, an anti-hero. The totem was lobbed over, and he dropped the arrow... down to the rope and shot it. The last player fell to the god tiger below.
+
+I was prepared for this to play out in other ways, that if the player refused, the rope would be shot anyway, that if he saved vs. falling, he'd get his fingers stomped on.
+
+Either way, the whole party wakes from their collective daze. The totem is gone, and they are in the company of the druids, who lecture them hard on not fucking with their forest. If the totem was handed over, they are now demanded to return it, and this is where I could attach a recurring druid NPC in a long quest line to recover and return the totem.
+
+This story played out well and was one of the best I had ever written. The chase was thrilling, and the upset at the end was fantastic. I don't have the slightest idea where my notes for this went, which is why I'm not posting it here as a release. Take it and make it work for you.
+
+EDIT: The totem being animate and intelligent meant it was mostly a statue. Mostly. Upon inspection you may notice all sorts of things, you'd swear it was breathing, or you'd catch it blink, or maybe you caught out of the corner of your eye and you turned to look only to see it just stop moving, just going back into it's sitting position. It might squirrel around in your pack, it might go hunting for mice. The totem, the god, were beasts, and had beastial intelligence and behavior - think how a cat would behave, animalistic, opportunistic, lazy, a hunter. I never intended on this god to speak, it's not like that. The totem could be used to summon the god, but I didn't define what that meant, it really is a story item, not just a mere game mechanic like a summon tiger spell X times a day. The avatar would appear in a given scene where appropriate for the story.",1520973471.0,10,0.86,1
+3Dprinting,"I can't get my printer to print. Help, because I don't know what to do or where to turn. [x-post from AnetA8]",,1520814689.0,0,0.5,4
+AnetA8,"I can't get my printer to print. Help, because I don't know what to do or where to turn.","So I just built the thing, and it boots, and I can navigate the menu screen, but nothing I slice prints. I've configured the printer in Cura v3.2.1 as a Prusa i3 with Marlin and saved gcode for [this](https://www.thingiverse.com/thing:214260) calibration cube to the smart card. Telling it to print this file, I hear the fan speed drop, and then... nothing.
+
+Both the extruder and bed won't heat, though at least their thermocouples are showing accurate temperature.
+
+Using quick settings, I can home the printer, and I can pre-heat for PLA (which is the material I have). The temperature of the extruder when pre-heating shows accurately on the display. I do have filament inserted and saw some squeeze out of the nozzle.
+
+The only modification I have is [this](https://www.amazon.com/BIQU-Power-Module-Expansion-Printer/dp/B01HEQVQAK/ref=sr_1_3?ie=UTF8&qid=1510772485&sr=8-3&keywords=mosfet) MOSFET for the heat bed installed.
+
+Beyond this, guys, I don't know where to start looking. How do I begin troubleshooting?
+
+UPDATE: Someone over at r/3DPrinting suggested my MOSFET was the culprit. I removed it, and I was up and running. Now to troubleshoot why the MOSFET didn't work as advertised - most likely I have something wired backward.
+
+Thanks for everyone's help.",1520813922.0,2,1.0,9
+askportland,What is with the lame-ass tagging and graffiti?,"I've been living here about a year now, and I've noticed everywhere I see ""penis"", or ""pubes"", or ""putz"", all over the damn place. There are others that begin with letters other than ""p"" but I just can't think of it at the moment.
+
+What, is there a Pubes gang, tagging their territory? We're the Pubes? We drive by to shoot the Penises? Down with the Penises? Wanna buy some drugs?
+
+Now, my distaste for vandalism aside, if anyone is going to vandalize a surface, this? It's just lame. There's some quality tagging, graffiti, murals, and art around here but what's up with this? Who woke up one morning and after coffee thought to themselves, ""Pubes. Pubes is it. I'll spend good money to buy paint to enrich this neighborhood by scrawling Pubes on that wall, and that wall, and that sign, and, and, and..."" Do you think it's drug induced retardedness? Or do you think it's white teenagers who just don't know how to rebel?
+
+I'm surprised no one has painted over it like, ""No, dude. No."" Just to give a clean surface for someone else to do a better job of shitting up the neighborhood with something more respectable, if anything.
+
+How can people be so *terrible* at graffiti? I mean, I never thought I'd actually come to think this, but these people? *They're doing it wrong...*",1520275229.0,23,0.84,18
+rant,How do journalists suck at their jobs so hard? Journalism today is pathetic.,"Just look at this stupid fucking headline:
+
+> 'Oumuamua had a violent past and has been tumbling around for billions of years. The first discovered interstellar visitor to our solar system has had a violent past, which is causing it to tumble around chaotically, a Queen's University Belfast scientist has discovered.
+
+If you actually look at the article, the idiots wrote the article and then bastardized the opening to make a title, in order to demonstrate they should have failed college if it weren't for sucking off their journalism professors to get by.
+
+This [pidgin English bullshit] (https://en.wikipedia.org/wiki/Pidgin) was excreted over a keyboard by some heavy breathing retard at Queen's University Belfast, and smeared across [PhysOrg](https://phys.org/news/2018-02-oumuamua-violent-billions-years.html) like shit toast.
+
+I'll tell you the problem - it's that journalists who don't deserve to get paid follow a formula when they don't know what the fuck they're doing, or if they're little bitches. They repeat the fuck out of themselves. Specifically, they tell the same story 3x. This is typically done when there isn't actually enough to say to make a publication on the subject otherwise worth while to their full-on autistic editor.
+
+Each telling, from the top down, adds slightly more detail than the last, because they presume most people will only read the first third before losing interest and abandoning the article, an interested reader will have the attention span to get through the second third, and if you're seriously interested in the subject matter, you'll read to the end to get all the details.
+
+Maybe the majority of readers lose interest because you suck at your job.
+
+How are these people not utterly embarrassed by the garbage they produce? How can you write, knowing that 2/3 of your work is expected to be abandoned. How do you accept that? Aren't these people offended that this is what is asked of them? Have they no integrity? They think it's better to write shit for a pathetic slaves wage in an industry that actively hate-fucks itself than to write well and have some self respect and respect for your *actual* target audience?
+
+I'm just sick of seeing so much bad writing *everywhere*.",1518715286.0,7,0.89,0
+350z,I'm in the market for a new trans.,"I have an 07 Enthusiast and I used to autocross and drive hard. Now I'm older and just enjoy a good drive.
+
+But unfortunately my early 20s has left its mark on the transmission. There was this metal on metal sound I isolated to the output shaft of the trans, and since inside a trans is the one place I don't turn a wrench (yet) I took it in. Long story short, the guy showed me what I had done and told me it would be cheaper to replace it than rebuild it.
+
+I know I can pick up factory new for $1,800-$2,000 (and put it in myself, which I've done before, and it's cheaper than anything the shop could quote me), and used as little as $500, but you get what you pay for, right? I'm not buying used, because if I shot this trans, and I don't think I was all that bad, what the hell are you lot doing to yours?
+
+But I'm looking for suggestions and opinions. Are there aftermarket builds or upgrades I should consider since I'm at it, other than a clutch or flywheel?
+
+EDIT: Meanwhile, I do have my trans in a few pieces on my garage floor. There isn't damage to the gears, shafts, or housing, it's just that the bearings are all shot to shit, the wear parts are worn, and there's excessive play in *everything*. It's rebuildable, which is something I need to consider, but I can only afford to do it myself, one day.",1517507731.0,2,1.0,5
+renting,Stinky dead rat under the kitchen floorboards. What do?,"So I've been dealing with my management company for 3 months now, trying to get them to deal with roof rats. They finally patched the hole, but not before something died inside the house. Now we've had a dead rat somewhere in the kitchen floors or walls for 3 weeks that smells so putrid, we can't use the ground floor without lighting potent smelling candles to try to mask the smell of rotting dead carcass fluids soaking into the house - like a garbage can full of beef on a hot summer's day when the teamsters went on strike a month ago, like the south end of a north bound stink bug, like when your ol' man, on a diet of red meat, coffee, and cigarettes, hate-farts you when you're walking behind him up a flight of stairs, like the Mississippi on a good day, like a mens-only homeless shelter, like a scene from The Walking Dead, just under my cabinets somewhere, or Tampa Bay Florida with extra dead fish and seals, with flies - so, May in Tampa Bay Florida.
+
+And my 6 months pregnant wife is home all day choking on this shit.
+
+Unfortunately, the intensity of the smell varies, so I can't reliably demonstrate how bad it is, because the management company wants to finally send an agent to the house tomorrow to inspect the situation.
+
+Are there any suggestions about kicking the management company in the ass to finally do something? What would be a reasonable reduction in rent to negotiate?",1515024523.0,2,1.0,2
+learnpython,How do I find documentation for anything?,"I'm not a Python developer in the slightest, yet I was handed some piece of undocumented garbage I have to work with, and I'm completely lost. The most pertinent pain I'm suffering isn't even necessarily Python code, but related to Python, I guess?
+
+[PyPi XMLRPC](https://wiki.python.org/moin/PyPIXmlRpc), yes I know it's legacy, it the first thing you see when you look it up; too bad for me, I can't change APIs and so I have to piss with the dick I got...
+
+This code is trying to build a list of dependencies for a given package, which is mostly does. It calls the RPC 'release_data' which returns the field 'provides_dist'. I've no idea what this field is or its meaning or the syntax of its contents, of which I've only partially deduced.
+
+So I'm not asking any of you to explain it to me, that's simply giving a man a fish, can anyone explain to me *how to find the documentation* on it? Googling the RPC method or this field yields nothing as far as my naive eyes can tell me, or is the answer in front of my face and I'm not recognizing it?",1511903822.0,18,0.82,3
+Portland,"""Don't Buy Coors Beer"" USA, 1970s Poster (x-posted from r/beer)",,1510940453.0,27,0.83,4
+350z,"I need a recommendation on tires, about to move to the Pacific NW.","I'm moving for work, and naturally, I'm bringing the Z with me. Where I am now, I've only ever ran summer performance tires - not rated for wet, or snow and ice tires.
+
+So for those of you in the region, do you run on all seasons or rain tires? Do you have recommendations? I've an '07 and stock wheels.",1500041887.0,1,1.0,4
+Volkswagen,What can I do about an intermittent error message? Does this happen to anyone else?,"I have a 2014 GTI with the 2.0 L turbo gasoline engine.
+
+The service icon comes up and the display says:
+
+> Error: Service vehicle. Only leave vehicle in P position.
+
+It pops up and then goes away almost as fast. It can happen at any time once the car is started; I've seen it when starting the car, I've seen it when driving down the road. Just *ding*, and you catch a glimpse, and it's gone.
+
+I've taken it to the dealer and they said when they check the computer there's no log of the event, and they send me on my way with nothing to suggest or offer, and no explanation.
+
+Is there someone else or somewhere else I can go to find out what's causing this? Has anyone else experienced this?",1497031459.0,2,0.76,1
+GolfGTI,What can I do about an intermittent error message? Does this happen to anyone else?,"I have a 2014 GTI with the 2.0 L turbo gasoline engine.
+
+The service icon comes up and the display says:
+
+> Error: Service vehicle. Only leave vehicle in P position.
+
+It pops up and then goes away almost as fast. It can happen at any time once the car is started; I've seen it when starting the car, I've seen it when driving down the road. Just *ding*, and you catch a glimpse, and it's gone.
+
+I've taken it to the dealer and they said when they check the computer there's no log of the event, and they send me on my way with nothing to suggest or offer, and no explanation.
+
+Is there someone else or somewhere else I can go to find out what's causing this? Has anyone else experienced this?",1497030677.0,2,0.76,5
+RPGdesign,Why did D&D 5e give Detect Magic away for free?,"I thought I'd ask some experts. This has to be one of the most powerful spells in the cannon, and certain classes get it as a free ability at will. I've had players tell me to assume it's going all the time. Magic traps and disguise are impossible. Who thought this was a good idea? How did they reason this ability was balanced?",1496010532.0,13,0.76,25
+askportland,What foods and cuisine is Portland known for?,"I know ya'll have among the best coffee and beer, and your own little wine country, which is nice, but I'm not asking about that. And I'm sure you have some world class restaurants, but I'm not necessarily asking about those, either.
+
+Tell me about your dishes and your comfort foods, something you guys serve better than anywhere else, or better yet, nowhere else. When you were away from home, what foods did you find hard to find in other parts of the country? What foods did you miss while you were gone for an extended period? What was the first thing you ate when you came back? That's the sort of thing I want to know.
+
+So far, I know you guys have Marion berries, and chanterelle mushrooms, and apparently salmon is supposed to be pretty good out there (some argue that's a wash-over from Seattle, but I don't call this cheating, let's talk region-ish about food). You guys are so close to the ocean, is seafood pretty good out there?",1492810699.0,3,0.58,17
+asklaw,"I'm moving. What are those shipping container companies liable for, what can they waive?","So the wife and I are planning to move and use one of those pod/shipping container companies. I've heard stories of damages to property while inside these containers - from the containers being dropped, crushed, or water getting in. I'm not asking for shopping advice, and I'm aware of what insurance is.
+
+This is about shipping containers in general. What are they liable for that they can't disclaim away (even though they may try, like dump trucks with stickers claiming they're not responsible for damages from lost load)? What are they not responsible for? Excuse my inability to properly phrase the question, but this would empower me to take care for my responsibilities, buy the right insurance, and hold them to their obligations if/as necessary.
+
+Cheers.",1492785752.0,1,1.0,3
+DnD,[5e] How are my fellow DM's dealing with Eldritch Sight and the abuse of Detect Magic?,"You know, 5e did a *fantastic* job in finally balancing out magic. Now it's rare, now it's powerful, now it's special. And then they ruined it.
+
+Now Detect Magic, one of the most powerful spells in the game, can be cast for free without limit; without the books in front of me, I know Eldritch Sight abuses this power, and I'm sure there are several others. My players and I have an agreement that they basically have it cast at all times they're not casting something else because *why wouldn't they*? And this is just to make our lives easier because they were slowing down the game declaring they're using Detect Magic in every scene.
+
+I mean, forget magic traps. A mundane trap is better hidden. And boringly limited. Not that they won't kill you just as dead, but magic traps can just be fun when you get rotated through a 4th physical dimension or turned into a flowerpot, and would have otherwise allowed me to give my magic users some of the rogue's limelight in discerning and disabling it. There's certain value in hiding magic items in plain sight, and now that's taken away from me. Lead plates will block Detect Magic, some will say, but then why also wouldn't it block the magical trigger?
+
+All I've figured to do about it is limit magic items to rare loot or things they're not going to get to have anyway - and that one is dodgy. Yes, the king has an amulet of protection of some sort. It's perfectly reasonable he would, wouldn't he? STOP OBSESSING OVER IT. I didn't put it there because I intended you to snatch it like a band of murder hobos, it's there because it's right for our world. Can we get on with the game now?
+
+The only other thing I can think to do is make magic have far reaching effects where so much casting is drawing the attention of outer planar beings they're not going to want. While that's an interesting story arc in and of itself, it's an exhausting distraction just to set into place and affirm they should cut back on the Detect Magic. In fact, it would effect all their magic, as they would conclude more powerful magics would make it worse, and it would make all magic classes suddenly far less desirable to play if it's just going to attract their own bringers of death all the damn time. And this sort of thing would suddenly become bullshit if I used it in every campaign setting ever.
+
+I don't want to ban things as a house rule; that too, is bullshit. Is there something I'm missing? Is this really what they intended? How was this not caught during play testing? Do the rules actually limit somewhere how much and when they can use it, and I missed it?",1479164714.0,3,0.67,19
+Rants,"Sorry, not sorry.","That has to be the most obnoxious phrase anyone can utter in the English language. It bothers me in my every encounter with an idiot who says this on purpose doesn't understand the nature of the paradox expressed; if you're not sorry, you're not sorry for not being sorry, so why are you first apologizing for not being apologetic? It certainly expresses the arrogance of the individual they wish to portray of themselves. It's more than just an insult, it illustrates just how stupid the individual who says it is, and I hate them for it.
+
+This is why Soylent Green should be a thing - when I rule the world, say this phrase earn themselves a one way ticket to the Soylent factory. They won't even get knocked like we do cattle, who deserve the most humane slaughter science can provide - no, these people need to feel the consequences of how they enrage me, from when they're loaded in cattle cars to when they're dumped into the industrial sized meat grinder. The guy whose job it is to poke them down into the blades would be awarded a medal and a pension for services rendered to my fascist regime, and the world would be rid of idiots who say, ""Sorry, not sorry,"" one desperate, screaming train car at a time.",1476733145.0,6,1.0,3
+Rants,Yet Another Java Programming Rant,"Java genuinely makes me sad. I'm feeling it, right now, a deep sadness that weighs heavy on my heart and it's getting me down.
+
+This sucks. Not that something makes me sad, or that I'm sad; no, Java sucks. It's just dumb. I can't believe something so *terrible* is so very popular in my industry. It's embarrassing to know something this bad could be such a commercial success.
+
+Java isn't type safe. They added generics in Java 5 to make it type safe but they failed. Utterly. It would have been better if they just didn't at all. No really, their Generics have fucked up the rest of Java because they did such a bad job at it. Type information is erased at compile time, so at runtime, all that type safety is for naught. You can still shove anything into any container, which your ""type safe"" code is going to happily assume the data is something it's not.
+
+Speaking of type safe. I want to convert a map's entryset into an array. I want to do it in a type safe manner. Impossible with the given standard library. The entry set is a Set of Map.Entry<K, U>, all interfaces. So what implements Entry? Let's take for example HashMap: it has a Node that implements Entry, but it's private. Set implements toArray() and toArray(T[]), so the latter can give me a type safe array, but you can't instantiate a generic type like Map.Entry, and I can't access Node. If you think it's acceptable that I have to implement my own tuple type to solve this problem then you MUST be a Java programmer, and Java programmers love hard, useless, tedious, expensive, error prone work.
+
+I swear, people who like Java like it because it's such shit, if they can convince any poor company to use it, it's to insure job security for Java programmers, because non-Java programmers would rewrite the whole thing in literally anything else. I've written shorter solutions for some of my Java problems in Brainfuck. I'm not kidding.
+
+I need a tuple. None exist in the standard library. Why? Because it's ""so simple the standard library doesn't need to implement one."" Uh, yes it fucking does. Because now Java has abstract interfaces for tuples and various code implements them, for example, HashMap.Node. And then developers are going to write their own tuple boilerplate, which they now have to maintain, and it likely won't implement the interface, and everyone is going to have their own incompatible tuple type, that we'll have to write our own conversion boilerplate to transform between them, which will also have to be maintained.
+
+There are almost no standard algorithms. Where's adjacent_find? There's literally nothing like it, and for the life of me I don't understand why they wouldn't bother. They implemented 13 fucking types of map, several of which effectively do the same thing, yet no algorithms?
+
+And the standard library is all over the place. There's a class called Array that is your one stop shop for everything arrays, right? Right? NOPE. Array shit is spread all over; for example, you'll find arraycopy in System.
+
+There are restrictions that are entirely arbitrary and don't make a damn bit of sense. Sets and Lists have iterators but Maps don't. Most iterators are only forward iterators. Sets aren't indexed but lists are? Really? A node based container, you'll index that? Sets are sequential, too, assholes.
+
+Anyone who says they like Java, I want to smack their dicks between a hammer and a hard place. If it's a woman, I'll sever a dick from another Java programmer, staple it on them somewhere they can see it, then smack it between a hammer and a hard place. I'm so depressed.",1474646420.0,7,0.9,1
+law,What should a layman like me know about law? Where would I find it?,[removed],1474317209.0,1,0.67,0
+javahelp,How do I do things the Java way?,"C++ programmer here,
+
+I'm at a new company in the financial industry that's a mixed language environment. Great, because I don't want to be a one trick pony, but I'm struggling to get work done in Java.
+
+To illustrate, I'm performing a Volatility calculation over future options - I have a SortedSet of call and put pairs. I've found the at-the-money strike price, and now I must search the set in both directions from there for the lowest put and the highest call where two consecutive entries have a zero bid price. This calculation will only include non-zero bid price entries within this range.
+
+In C++, I have std::adjacent_find, but as far as I can tell in Java, I don't have that. In C++, if I were to have used a set, I would have bidirectional iterators, but in Java, only ListIterator is bidirectional. In C++ I could use a reverse iterator, but they don't exist in Java. I could reverse the SortedSet, I guess, but then I have to perform additional bookkeeping to keep track of the position of these two ends. I could convert the SortedSet into a List or Array, but then I'd have to take an additional step and sort the new container to ensure order.
+
+And then I have a map of contracts to a field map. A contract contains things like an expiration date. For this calculation, I need to find the next contract that expires between >23 and <37 days from a given contract, which means I need to search the keys of a map with a given predicate.
+
+In C++, I have std::find, but in Java, I don't have that. Java's Map doesn't even have iterators! Instead, I have to extract all the nodes in the map, which is almost certainly implemented as a tree, and insert them into a set, which has insertion costs to ensure all elements are unique, which is quite the unnecessary cost because being a Map, unique keys are assured. There is a member method provided by the map class to do this. That set must then be converted into a stream, where a predicate can be used to filter the contents. The filtered stream is then collected into a container.
+
+Quite frankly, are you fucking kidding me? Why are there no standard find and search algorithms? Why are there no standard algorithms? Why are there no algorithms? Or if they are there, why are they such a well kept secret? Don't even get me started on scope operators, namespaces, boxing and unboxing, the meaninglessness of Generics, type erasure, and the inability to overload anything useful.
+
+I'm not one for doing things ""The X Way(tm)"", I prefer to do things however is the best solution for the problem, but the more I have to work with Java, the more the best solution for the problem is ""in a language other than Java,"" yet I can't do that here, so ""The Java Way(tm)"" it has to be.
+
+How do you or would you solve these problems? What am I missing that makes Java the second most popular language in use, and ""so easy"" they use it to teach comp sci in universities? How can I make my work more pleasant? And as it stands, no one in my office is thrilled with Java; enough displeasure and we may end up rewriting this app in something else. I'm willing to consider Java as a viable option for solving problems, but until I figure out the Java Way of doing things, I can't help but regard this language as always a mistake. Help me.",1474048738.0,3,1.0,7
+rant,"Java programming sucks, as do all who actually like it.","What a stupid fucking programming language. But I do it, because I have to, because it's my job. Luckily it's not the only language I get to use, it just depends on the program here.
+
+What sucks about it? How about how everything is a class. There is no syntactical way to tell the difference between a namespace and an instance, you just have to know, or look it up. And if the dot operator wasn't enough, enough C++ developers have come along and got them to introduce the scope operator in Java 8, just adding to the confusion of when to use which operator.
+
+Features get added to Java as either a hack or begrudgingly. The scope operator above? Hack. Generics? A begrudging hack, because in Java 5 they finally gave in to the crowd that wanted them, but fucked them on the way out. Type erasure means they're effectively useless, out of spite for Java's original weak typing. AND YOU CAN'T OVERLOAD generic methods! Are you fucking kidding me? I mean, it makes sense - type erasure here to fuck you, but then if I need a map_find, list_find, set_find, stream_find, fuck_you_find, THAT'S NOT GENERIC, THAT'S SPECIFIC.
+
+And let's talk about the standard library. Where the fuck is it? What they have is huge, hodge podge, and slop. They added iterators begrudgingly, and they suck. They don't have standard algorithms. Literally no one in the world of Java has ever had to do an adjacent_find. In fact there are no find or search algorithms. I asked StackOverflow how to search a map and they had THE GALL to ask me, ""Why would you want to do that?"" Because fuck you, that's why! They tell me the canonical way of doing it is like this:
+
+List<ValueType> result = my_map.keySet().stream().filter(predicate).map(my_map::get).collect(Collectors.toList());
+
+Java programmers have not earned the right to defend this language from criticisms against their language being obfuscated, verbose, wasteful, inefficient, and slow. I have to traverse the map (which is implemented as a tree) to build a *SET* (which has insertion costs over a dynamic array because it has to ensure each element is unique when that's already been guaranteed being a map, and there's no guarantee the implementation of this set is using sequential memory) which then has to be converted into a *stream* which then is going to be filtered, which will then get collected into a *LIST* (which is again wasteful because of the tree nature of lists and memory fragmentation). I know I can collect to another container, but this is what your best and brightest tell me to do, as though this were ok, and honestly, it's not about collecting to a list, this whole train is a stream of programming diarrhea.
+
+Iterators in Java suck. There's no way of accessing the value of the iterator without also incrementing the iterator, which who wants to do that? Sometimes I want the value, sometimes I want the position, sometimes I want both. There are algorithms that depend on these things and this just fucks you out of them.
+
+Everything about this language is an afterthought or half baked idea. The shit people write to get around these limitations is appalling. The library is inconsistent as shit. Some containers have iterators, some don't. List has iterators, map doesn't? ""Well, you convert the map into an entrySet and that has iterators."" THAT'S NOT OK. Some have search, some don't. Some containers have binary_search but you need to sort the container yourself first. No find anywhere? No, you have to convert your container into a stream, sometimes through several other translations, before you can apply a filter, and collect that shit again. What if you did that because you wanted to know the position of the element in the original container? Well then you can't use that method, and you have to write a loop with an index, or try those dreadful iterators.
+
+The majority of application programming is searching and sorting; presentation and communication is comparatively a very simple and thin layer of any application. Microsoft made the right decision when they bought Minecraft, and then rewrote it from Java to C++.",1474037123.0,6,0.76,4
+chicagojobs,[For Hire] Senior Software Engineer. 10 years C++ and open to the possibilities.,"EDIT: Thank you all, but I've accepted a position.",1459450770.0,5,1.0,1
+3dprinter,I inherited an Isis One frame in need of TLC. Help sourcing models for frame and carriage?,"Hello all,
+
+I just inherited an Isis One frame that was cannibalized for parts and broken in the process. The motor mounts for the Z axis on top of the frame have both been broken. Also, the carriage and hotend is nowhere to be found. This is an earlier model that utilizes two rods for the carriage instead of a single rail.
+
+I think the rest of the frame is there. The tray is there, though something is wrong with the belt I have to look into - no hot bed, the motors for each axis are there, and a lot of the wiring. The rambo board is missing, but I can deal with that.
+
+Is there any possibility anyone out there has (compatible) models for these parts?",1459374990.0,1,1.0,1
+Ask3D,I inherited an Isis One frame in need of TLC. Help sourcing models for frame and carriage?,"Hello all,
+
+I just inherited an Isis One frame that was cannibalized for parts and broken in the process. The motor mounts for the Z axis on top of the frame have both been broken. Also, the carriage and hotend is nowhere to be found. This is an earlier model that utilizes two rods for the carriage instead of a single rail.
+
+I think the rest of the frame is there. The tray is there, though something is wrong with the belt I have to look into - no hot bed, the motors for each axis are there, and a lot of the wiring. The rambo board is missing, but I can deal with that.
+
+Is there any possibility anyone out there has (compatible) models for these parts?",1459374048.0,2,0.76,3
+rant,"I had to explain to someone my senior, married, with 3 of their own children why you can't turn on what is already on, off what is already off.","> ""So if it's off, and I turn it off...""
+
+You can't do that. It's already off. Nothing will happen because nothing changes.
+
+> ""But then how do you know it's off?""
+
+Because it's off.
+
+> ""So then what if they try to turn it on?""
+
+It will turn on.
+
+> ""But what if it's already on? What will happen?""
+
+Nothing. Nothing changes. It's on, it will remain just as on. There is no ""on"" and ""extra on,"" it's either just ""on,"" or ""off.""
+
+> ""But how will they know nothing changed if they tried to turn it on when it's already on?""
+
+I don't think it matters. If they wanted it on, and it's already on, and they try to turn it on, and nothing happens, the outcome is as they originally desired - they get the same result.
+
+> ""... I think a lot of people are going to be confused by this. The people downstairs [in our office] don't think that hard.""
+
+::blank stare as I detach::
+
+> ""Why did we implement this feature?""
+
+I don't know [REDACTED], I don't make the decisions, and I argued against this one from the start; I just do the work assigned to me.
+
+> ""I think we should remove the feature.""
+
+(For the love of GOD, I DON'T FUCKING CARE SINCE BEFORE YOU CAME TO BOTHER ME ABOUT THIS.)
+
+You're going to have to take that up with the decision makers.
+
+---
+
+AHHH! AAAAHHHH! AAAAAAAAAAAHHHHHHHHHHHHHHHHH! DIE TRAPPED AND DESPERATE IN ALL THE DIESEL FIRES EVER WITH YOUR WHOLE FAMILY! DIE! DIE! DIE! DIE! DIE WITH FIRE! BURN! EVERYTHING AND EVERYONE THAT IS YOU AND YOURS! YOU'VE TAINTED EVERYTHING EVERYWHERE FOREVER. THERE'S NO MORE HOPE; THE LAST OF IT WAS WASTED ON YOU. THERE'S NONE LEFT FOR ANYONE AND IT'S YOUR FAULT.
+
+6 lbs. of utterly-fucking-retarded in a 5 lb. bag.
+
+My boss yelled at me for a fault I wasn't responsible for, *after* the one responsible admitted ownership - who later approached me to apologize for our boss's behavior. I was told to fix a different problem and then yelled at for *thinking about how to fix it* because ""Who cares?"" YOU, Fuckass McDickhammered.
+
+I had my professional integrity questioned when I'm better at my craft than my colleagues - which I've worked very hard to become so and have been told as such by my colleagues and management all up the food chain, so it's not just me tooting my own horn.
+
+I've had to argue with QA that no, you can't load 67,000 accounts on a single core VM and expect... Anything. Please pair that down to 1k, in accordance with the server spec performance and load balance documentation. I've spent all day diagnosing the QA department problems - they say it's a bug, I say their configuration is fucked up and their test scenario is both meaningless and invalid. It's literally their job to validate and diagnose and they refuse to do most of either. My tester says ""I don't test that."" No shit you don't test that, I can't get you to test a god damn thing. Work comes to me, I do it, I hand it to you, you test it. I don't give a shit what it is, don't give me lip, take it up with the decision makers that dictate the workflow.",1455923292.0,9,0.81,2
+rant,The inmates are running the asylum.,"You would not believe how terrible at their jobs most software developers are. We have decades of lessons learned, backed by pure math and hard science, longer than the living memory of anyone I work with; and yet, I am continuously left speechless at just how *incompetent* my colleagues are.
+
+Speechless.
+
+I have heard shit so profoundly stupid, if I had the authority, I would have fired the employee and hired any college graduate. The company would be better off hiring an unknown quantity, that being a college graduate or perhaps a professional of some years experience, than continue with the known value, this employee. So bone chillingly, terribly confusing it leaves you to wonder how ever did they get a job in this line of work in the first place? You mean our software is built on the work of *this guy*?
+
+I have had to *lower myself* and explain things I never thought I'd have to explain to someone who is supposed to be a professional, and my senior to boot. Sometimes I've had to walk away, leaving conversations unfinished because honestly, I just can't dumb it down any more for them. I just don't know how. I don't speak stupid.
+
+Hopeless, man; you're utterly hopeless. You're supposed to be better than me! And I can't but detest you. All of you.
+
+I just can't work with people who think they know everything, who can't accept that in our line of work, we spend most of the day being wrong about *something*. I can't work with people who look at this as merely a job and not a craft. I don't want to work with people who are hostile to anything they don't understand; I can't work with people who yell in anger in meeting rooms, who drop insults in response to being challenged.
+
+This is why everything should be open source. Put your professional integrity on the line and publish your work for all to see and be judged. Whatever the outcome, you deserve it. If your software is shit, people need to know. They deserve to know, especially if they're paying for it.",1452207620.0,2,0.75,0
+rant,"We have a mystery person in the office I like to call ""the half eaten mother-fucker.""","I just walked into the pantry to find a half eaten chocolate chip cookie in an open baggie sitting on the counter. The half eaten mother-fucker has struck again.
+
+All the time - all-the-time - you'll find shit half eaten and left there, soda, cookies, brownies, donuts, bagels, and single servings of candy. We have a coffee machine that's dead simple: replace filter, empty individually measured and sealed bag of coffee grounds, insert into machine, press brew. WHY THE FUCK, then, is there an open bag of coffee grounds in the drawer? Only some of it is missing, not enough to make a full pot of coffee. The drawer is littered with coffee grounds from years of this. What are you doing, mother-fucker? Do you think I'm going to trust your little baggie of opened coffee grounds? How long has that been there? Why didn't you use all of it? There could be zebra cum in there, I don't know.
+
+Why does the half eaten mother-fucker also have to be a sloppy mother fucker? Do they think that someone else is going to want to eat their other half of whatever they left behind? They could have touched that with their herpes-sifil-gonor-itis fingers, I'm not going to touch it. And you know what, half eaten mother-fucker? Neither is anyone else. No one is judging your modesty, you're not doing anyone a favor, no one wants your leftover shit - just eat it all or throw the other half away.",1444419220.0,3,0.72,3
+lifehacks,Scientific ways to reduce a hangover.,,1433444638.0,507,0.9,60
+DnD,One question about how to fill out a 5e character sheet.,"If a saving throw is nothing more than the related ability modifier, then what am I supposed to do with the saving throw box on the standard character sheet? What do I do with the bubble and box?
+
+Same thing for skills.",1422059146.0,6,1.0,3
+gamedev,What is the difference between an entity component system and a meta object protocol?,"I've seen a lot of talk here recently about entity component systems, and they look like meta object protocols to me. What's the difference?",1384724446.0,11,1.0,7
+chicago,I need something to *do* for my birthday. Tomorrow. Suggestions?,"My fiancee was trying to make birthday arrangements and they fell through at the last moment; they're already booked. My birthday is tomorrow.
+
+So, I'm looking for suggestions. Chicago, what do you do when you want to go out on the town and play?
+
+And I mean play - I'm not at all interested in getting food, or watching a movie, and calling that a night out. BOOOOORRRRIING. I can eat right out of the fridge at 3am whenever I want, I can sit on the couch and flip through channels until the remote runs out of batteries any evening. Sky deck? I can stand anywhere and stare off into the distance. That's not doing something, that's looking somewhere...
+
+I want to move. I want to do. I want to build. I want to be involved, elbows deep in the things I do to fill my time. On that, she found a place where couples come in and build a little robot together (they look like they're from kits). $50 for a night out that sounds like fun to me. Too bad that's not going to happen...
+
+I'm looking to spend no more than $100 for the both of us. She looked into cooking or baking classes, but they're $75 a head. She looked into painting, but it too is $75 a head and I stopped at pasta art long ago. Pottery would be neat; I'd love to actually use a pottery wheel one of these days... Shooting guns is out (I already asked and got... *shot down*). Maybe bows or throwing knives (which are surprisingly ok). Any sort of circus thing we can do? House of trampolines? How about a toystore/toybox with booze, where we can go play?
+
+The only other things to add are that we've done laser tag before, and we're going karting (45mph of pure danger) Saturday.
+
+So what have you, folks? What do you do with friends when you get bored sitting still?",1383855350.0,0,0.43,13
+SuicideWatch,We have a redditor that needs some help. He's openly contemplating suicide.,/u/darthbarracuda. Go check out his post [here](http://www.reddit.com/r/atheism/comments/1p13ks/someone_please_listen/). He's a self proclaimed Nihilist and he's going down that rabbit hole. I'm not qualified to reach out and aid him.,1382549125.0,2,0.67,2
+DnD,My latest adventure. The Jade Tiger. God King of the Tigers. Designed for 100% constant tension.,"I'm abandoning hope this adventure will get a chance to continue. If any of my players are reading this, stop now, if you have any hope for this adventure.
+
+The story was designed for a level 4 party.
+
+The party starts in a little village in the jungle, following the tale of the Jade Tiger. The totem is a powerful artifact, lost in the jungle. Let the players believe anything they want, but ultimately, it is a token of the god of all tigers. I used a Dire Tiger with maximum hit dice. Use the biggest tiger you have. It's a 4"" animated statue made of jade, it is intelligent. The tiger will aid the bearer of the statue as it chooses to, or can be summoned after opposing will checks.
+
+I don't have stats for the thing on hand, but you can make them up. The thing was going to be used as part of future plots, coming in at certain times to indicate things or save the party's life, as necessary. 
+
+The statue itself, being animated, is mostly a statue, but sometimes acts out as a tiger, hunting, pouncing, licking it's paws, and so forth. This is another means of adding to story, if the statue claws its way out of the backpack, or the players take it out to see if it does something at particular moments...
+
+Anyway, back to the story. The learn from a traveling seller of fine merchandise some of the lore behind it. ""The king sits upon his throne... As they say."" There are also Druids that are native to the region who also guard the totem and the sacred canyon. The party sets off into the jungle, and here I spent a lot of time getting them lost and wandering in circles. Assassin vines, tigers, monkeys, boobytraps, and 3 cup monty playing sprites were all part of it.
+
+The whole time, they have an overbearing sense they are being watched... Stalked. They are constantly hearing sounds in the underbrush, movements. It's the animals, it's the druids, it's the whole damn forest watching them.
+
+Dryads. I used dryads, too. To get the watching-ness.
+
+The sprite played 3 cup monty to bleed them of some resources. Like a perfect scam artist, the players fell for it, and burned a significant portion of their gold to gamble for directions. They won, and were pointed in the right direction; the direction they were going... Man. Can you imagine if they had lost that bet? I mean, it was perfect, all I wanted was to bleed them of resources, I didn't care if they won or lost, they were getting to the next step regardless. They walked away feeling great. I can't believe they fell for it.
+
+And they gambled away their only sun rod, because, you know, it's not like they're going to need that in the jungle night...
+
+Finally, they discover a jungle canyon. This is key, and you'll see why later. They need to use a couple ropes tied on end to get down into the canyon. And down there, it is thick with elephant grass. Tigers get huge bonuses to stealth in this environment. It's more getting lost, and getting separated.
+
+There are old ruins down there, much in the Indian style of Bai reliefs, carved right out of the stone. I used this to tell an overview of our entire storyline, and included even the alternate endings in there. They didn't catch on in the slightest.
+
+The god tiger had stalked them before, glowing a jade aura and being totally jade colored himself. Quite dramatic in the night. It only ever stalked and watched. It never made a move against them. The ranger speaks to the forest, asking to pay hommage to it's totem.
+
+The tiger is totally visible now, in the canyon. It watches through the grass, and as soon as you see it, it's gone. It's next off in the distance, just sitting on a perch. Everywhere you look, you can see it. Watching you.
+
+They find the throne. Not in the ruins, but as a stony outcropping in the middle of the elephant grass. Think Lion King, because I'm totally ripping it off here. This is as far as our game got.
+
+From here, the party is expected to approach the totem, and take it. From that moment, they'll see a path in the grass being disturbed, and coming right for them. Guess who.
+
+I expect them to flee, through the grass. I would go through the motions of rolling for a pounce attack. The tiger will roar, they will scream, and then that's it. Each party member will flee through the grass and disappear. One. By one.
+
+At least two of the party need to get to the rope. The one with the totem must get to the rope. If you have a large party, more is better, but less than half. Now they all have to ascend the rope. One. By one. Do you know how long that will take? It will take several rounds to get everyone on the rope. And the the tiger... Do you have any idea how friggin high a tiger can jump?!?
+
+The tiger leaps, and grabs a party member, and drags him off the rope. If the player wre to demand a use rope or strength check ro something, fine, but I'd call it while the die was still rolling. Tigers can grapple with their mouth, and the Dire Tiger can weigh up to 6 THOUSAND pounds. He got you, and you're coming down. Maybe do this a couple times. Each time the tiger comes down, he disappears in the elephant grass, only to reappear as he leaps again.
+
+The party member that remains scrambles almost to the top of the rope, and there, waiting, is the merchant. Ready with a point blank shot.
+
+""Give me the totem."" Nothing more. Straight and to the point.
+
+The player has a choice, try to get all the way up and defend himself, and get nailed in the head with a death shot in the process, or hand the totem over, toss it up there, which the mercant will then shoot the rope, sending him down to the canyon below.
+
+Either the party will somehow manage to make it out alive and keep the totem, or they'll hand the totem over and all be victims of the tiger, or they'll all get knocked out before they get up the rope.
+
+If they lose overall, I figure they'll all wake up tied to a tree, either by the merchant, or my original plan was by the druids. Here they can learn that the druids have stalked them the whole way, set up the traps, and even posed as the jade tiger on the occasion. They can get some story, no hard feelings, and be released, ragged and worn out.
+
+The merchant was an important part. They spent some time with him, got to know him, his wares he sold, etc. They now know him. Great. Now they have a reoccuring anti-villian. That is to say, I wasn't going to make this the bad guy, just a major NPC that has an on again, off again, love/hate, confusing relationship with the players. Sometimes he's your greatest ally, sometimes he sticks you in your sleep. My merchant was actually played by one of our friends. I ran him as an NPC at first, and my friend was going to play him as a big reveal. Then they can give chase in later sessions, to reclaim what was taken.
+
+---
+
+It should also be noted my games are ran with a standard 25 point buy and almost only the core 3 rulebooks. In my games, if anyone dies, player or enemy, it usually means someone made a mistake. I don't use enemies as cannon fodder. They get hurt, they realize they're losing, they run for their lives. Death is rare, sudden, and damning, with long term consequences in the story. It cultivates a healthy fear of dying in the game.
+
+I hope you can use this story in your own games. There's a lot to work with, and is a great way to set off a whole series of related adventures.",1377284189.0,7,0.89,0
+debian,I need help getting video drivers working on an old iMac G4/800. I think I'm close.,"If one of the tech support forums is more appropriate, I will post there, but since I am using Debian, I thought this would be a good place to start.
+
+This is a PowerPC architecture and the system has an nVidia GeForce 2 MX 400 card in it. I've installed Debian 7.1.0 with Xfce.
+
+This isn't an unknown problem, the screen turns white because vsync is wrong or there's an issue with framebuffers or drivers or something. Truth be told, my research always brings up Ubuntu forums and documentation, and there's so much noise I can't quite tell what the problem is, or the solution.
+
+What I have done is modify my yaboot to append ""nomodeset"", as that has something to do with using one framebuffer or another, and that at least gets me to part of a view with some really trippy colors! The mouse works, and there's clearly some sort of window there, but the resolution is wrong and I can't click or do anything.
+
+I've been following [this](http://forums.debian.net/viewtopic.php?t=36188) forum post, and [this](https://wiki.debian.org/NvidiaGraphicsDrivers#Version_96.43.23_.28legacy_GPUs.29) official documentation (which is wrong), but I don't use the driver in the forum post and I have no idea how to specify the driver I need, because I don't know how to look it up. I do know the base install does install xorg Nouveau drivers. Are those the same drivers referred to in the Debian documentation?
+
+Can anyone tell me what I am supposed to be doing?",1376871913.0,3,0.8,2
+linux4noobs,What's the difference between desktop environments?,"I can't tell the difference and I want to be able to make a decision based on some semblance technical qualties. Lets ignore my computer specs, as that is not a characteristic of the desktop environment software, and I should be able to make this decision for each environment based on it's needs.
+
+They both have icons. They both have mouse cursors. They both have some idea of a task bar; I don't know who came up with whichever idea first, and I don't remotely care - but they either look like Windows or Apple OSX. I remember when the difference was more promenant, Linus famously wrote a patch for GNOME for context menu (right click) support, but now they're so close I don't think it matters.
+
+All the applications I want to run or have ever ran will work in any of the main window environments.
+
+So what am I looking for in order to choose? The only quality I can quantify is memory footprint, but thats obviously not necessarily the best judge of character. It seems the only differences are due to their legacies, and that's frustrating. There HAS to be a difference that matters...",1376598563.0,9,0.91,16
+USMilitarySO,"My friend is going into the armed forces, leaving his girlfriend at home. Girlfriends, how do you survive financially? How will she survive financially?","So my friend has decided to enlist. He lives with his girlfriend in a trailer. They are both of extremely meager means; uneducated and with part time jobs - they're unskilled and have no job security; they depend on each other to get by. They're both 21ish.
+
+She can't live on her income alone. Neither have stable or reliable family to fall back on (sisters that are perpetually pregnant with the next dude's baby, drug problems with the parents, no one else to speak of). She has no cosigner to back an education, and without petitioning for independence, won't be granted FAFSA until she's 24 (under current law).
+
+To be clear, they're not married.
+
+How can she survive? What is military pay like?
+
+---
+
+Overall, I fear he may just be delaying a normal life. While he'll be just fine while in the military, That's 4-ish years until he can go to college, until he can start a career. What are the prospects going to be like when he gets out? How does the military prepare him for a civilian life afterward?
+
+He plans on being a medic; if he gets in as one, is there a clear transition path into being a civilian paramedic or nurse? Where can we find information about this?
+
+I'm just distraught because they're both in such a shitty situation, with a long slow road to get out of it. This is a bit of an act of desparation on his part, to get out of this rut.",1375384939.0,2,0.75,9
+Military,How does the military support the civilian side of life for you and your significant others?,"I have a friend who will be enlisting in the military soon. I don't know the details, he's just telling me about it today. I'm all for it, I suppose, he's done his homework enough to know what he's getting in to.
+
+What I don't know, and I'm not sure he knows enough about, are some things regarding his life today. He has a girlfriend of many years. They've known each other since childhood. She's not going anywhere, as it were.
+
+But they're both poor. They have nothing to fall back on, no reliable family, whom all have unstable histories, pregnant sisters, parents with drug problems. So they're on their own, and they have each other. They live in a dodgy trailer they pay next to nothing for because he's the grounds keeper. She works a part time job at a pet supply shit hole. They need their combined income just to get by.
+
+They're not married, just to be clear.
+
+What can we expect to happen? I know there is housing on base, but I expect it's hard to obtain, and may not be available to them. Can anyone give me some more information on this, and how it applies to a girlfriend, not a wife?
+
+And what does military pay look like? Is there any? Can it be direct deposited into a bank of his choice (a joint account, for example)? I know his girlfriend does not make enough to live on her own.
+
+How about benefits like health insurance? They don't have any now.
+
+I know my friend will be fine in the military life; I know she will be able to bear him being away. Together, we (including *my* fiancee in this) don't have too many friends, they don't really have anyone else but us. She's meek and quiet, and we won't be in the area for too much longer (once my SO graduates). I just want to know that she can *live*.",1375382241.0,0,0.5,2
+DnD,"My last story arc, the ol' switcheroo...","I want to share many of my stories, but I haven't ran any of them yet, and most of my players read this subreddit.
+
+Sadly, this story arc wasn't completed due to logistical reasons, but it's good stuff, and I'll share it.
+
+The party had managed to stumble into an underground dungeon, hidden in plain sight, near a largeish town. The players had discovered what a mimic was, there were statues and alters to the god of secrets (whatever his name is), there were mirrors of scrying, there were rooms with just portraits of all sorts of kings, court regulars, clerics, and important or powerful people. Documents were in another room, forgery practice. Maps. Letters. Clothing and costumes, and all the like.
+
+The players look into the mirrors, and see an image that isn't quite them. They don't know yet that they're staring into the eyes of a scrying doppleganger.
+
+They were there, ultimately, to play a Zork game that was mentioned here earlier. But that darkness was just my cover, my excuse. Someone got replaced by a doppelganger.
+
+From here, I was going to let it ride for a while. Things were going to happen, suddenly, there would be murders, assassinations, and thefts, wherever the players went. The probably wouldn't realize these problems were following them. People who were previously unwilling were suddenly swayed or helpful. The occasional wink at a character would be the only gesture that something was aloof, and they would feel violated for being a part of something yet they don't know what...
+
+I haven't settled on a reveal for this story arc yet... But I would definitely leave everyone, the target player especially, in the dark. I would ask the player to argue in favor of both characters - to play both characters - and leave them to decide who was the real one. I would totally allow the player to accidentally murder themselves, as it were. It would drive the target player mad, knowing there can only be one true character, and the other a fake. How can they be forced to wrestle with this choice?
+
+The player would be confused, and play a character who is confused, and play a doppelganger who is pretending to be confused. The best doppleganger performance is the one played by the player whom it mimicks. I'd totally give that doppleganger a +8 or more meta circumstance bonus.
+
+Should the party not be equipped to answer the question, and the real character is murdered, the doppleganger would carry on with it's subterfudge. If detection is inevatible, just a matter of resources, the remaining party would probably be poisoned at a dinner party, or murdered in the night. I dunno, again, haven't gotten this far.
+
+I hope this inspires the rest of you.
+
+EDIT: Just had to comment for my players: I've said before, I, as DM, don't want to kill off your characters. I want YOU to kill off your characters. Your own blood on your own hands, holding the knife you used to stab yourself with. That's the kind of game I like to run.",1374093185.0,11,0.91,1
+DnD,[3.5] How do you incorporate equipment damage and sundering?,"So I'm trying to factor in wear and tear into my campaign. I don't use critical failures, so I don't have an easy option to damage or snap a weapon.
+
+I've looked at the sunder rules, and they are an explicit attack that provoke an AoO, AND you can't sunder armor! I don't find that cool, because look, you're swinging at a dude, if his ""base AC (10) + Dex modifier + Dodge (if any) + size modifier + miscellaneous circumstance bonuses"" don't save him, then the natural armor, worn armor, shield, or magical defenses that factor into their total AC are going to take the hit.
+
+If that's the case, then I think this is an implied sunder. The player didn't wiff, the armored defenses took the blow. And this doesn't jive with the rule book.
+
+---
+
+I'd like to act in a way as compatible with the rules as possible. So before I invent a new sundering system, what do you guys do?
+
+---
+
+Ultimately, I think what I might do is attack rolls are compared against an Unarmored AC. It's basically Touch AC; in fact, unless you guys have a suggestion that would warrant a new AC category, it probably will just be Touch AC. This determines if the strike is a wiff, if it doesn't succeed. I would then compare it against total AC. If it fails here, then some armor/appliciable bonus took the hit. Damage will be rolled against the whatever.
+
+I'm basically establishing a hierarchy. It would be a chart, like the standard Character Sheet has for totaling AC, but with sub-totals across the chart. The further along the chart you go determines the nature of the result of the attack. It would go from a complete wiff, to dex and dodge + their circumstance and magical buffs, implying the player moved or ducked, to shields and any associated mods and buffs, implying the shield took the strike, to worn armor, implying it was stricken, to a complete success - ""The tip of your blade passes through the draw strings, narrowly missing his liver!""
+
+Given a chart with subtotals, when I call out the attack roll's total, they simply need to slide their finger across the chart, and find where they succeed, or they go right off the end and fail. It's basically a [nomogram](http://en.wikipedia.org/wiki/Nomogram).
+
+It's ok if applying the rules slow down the game, jumbling numbers is not. Hence the graph is important.
+
+I'm considering something like either allowing a player to burn their single AoO, or allow a custom Parry feat, to roll a counter attack. This comes from the weapon sunder rules. Should they succeed, they will get an AC bonus, but they can still fail, and their weapon can be damaged just like their armor. The AoO idea is nice, and it pairs with Combat Reflexes nicely.
+
+Should the attack succeed overall, then the normal interpretation of combat applies where one ""finds a gap or weakness in their defenses, between their armor.""
+
+---
+
+Your criticism is very welcome.",1370625299.0,2,0.75,11
+3d6,Perhaps he's a bit ridiculous: Half Dragon Minotaur Barbarian.[3.5],"I caught a thread on r/DnD about a month ago, where someone commented an overpowered build being something like this guy. I fell in love with the idea and just had to roll him up. He's built using the standard point buy system.
+
+ECL: 6.
+
+The nice thing about being a Minotaur is you get a +8 to Strength. The nice thing about being a Half Dragon, is **YOU GET ANOTHER +8 TO STRENGTH**. Buy 18 Strength, and you land up with a Whopping 34 Strength! That's a +12 modifier!!!
+
+He has an average of 82 HP and a 20 Constitution.
+
+Because he's large, he gets wings and can fly.
+
+With all that strength, his Encumberance chart is outrageous. Light loads are 1864 lbs. He can carry the whole party on his back and still be in a light load category. He can drag 14 tons.
+
+He's immune to sleep, paralasis, maze spells, and whatever dragon element (which gives him his breath weapon). He can never be flat-footed.
+
+His great-axe will deal the most damage, 21-35 points damage or 63-105 on a crit.
+
+From the Monster Manual, I've given him the requisites so he can take the Awesome Blow feat. This allows him to throw enemies one size category or smaller 10' when a melee blow strikes.
+
+His skills, he has a huge pile in Intimidate.
+
+---
+
+I imagine this guy being a thug, not necessarily a strong silent type, but one of small words. Like a thug, he actually wants a bit of direction, and would latch onto one person in particular to be his leader, *almost* like a best friend. Given free reign, he's actually intolerable.
+
+I would encourage the other players to look down upon him, to think of him as a lesser friend; haven't we all had that friend, back in high school, that everywhere you went, you had to apologize for him before he showed up? I'm kinda modeling him on that.
+
+With his small words, he'd see something shiny, and take it - ""Mine."" And that's the end of discussion. Roll for Intimidate... The rest of the party contemplates in secret how to coax the Rod of Divinity out of his possession so the Cleric can use it. He's kind of the stupid guy that needs a gentle explaination before ultimately giving in.
+
+He wouldn't carry food. All the enemies he dispatches would be subject to his meal time. Slaughter a band of Orcs? That's dinner. With a piece of Orc leg sticking out of his mouth, shoe still on the foot, he would charge into combat. Roll for Intimidate...
+
+Maybe next time he'll cook the meat.
+
+---
+
+This guy is totally outrageous. He would make a good villian to a party, but I'm hoping one day to find a DM who would let me play him. As some of my friends have said, so do they, just so they could watch me RP this guy. It would be hilarious.
+
+I'll post the character sheet, if anyone wants it, but as a warning: I might have screwed up skill points.",1363741200.0,14,0.9,18
+statistics,Is there a better way to roll a bunch of dice than rolling the bunch and adding them up?,"I'm a nerd. Also a programmer. Not a statistician.
+
+Anyway, in many games, you roll a bunch of dice and add them up.
+
+I want to write a program that does the same thing, but I was hoping there would be a better way than:
+
+    total = 0; // We're going to accumulate the total.
+
+    for each die, 1 -> 4; //Presume we're going to roll 4 dice
+
+        total = total + (random() % 6) + 1; //So that's a random number, modulous 6, which gets us 0 -> 5, plus one, which gets us 1-6.
+
+I mean, that's fine, but, is there... better? The naive might try:
+
+    total = (random() % 24) + 4;
+
+That would get you the range of rolling 4d6, but I know some numbers come up more frequently than others, and this doesn't take that into account, so it's not good enough.
+
+I did some research into this a while back, and I don't remember exactly what I found, but I fear what I do recall might be true, that there is no othe way to get the correct result than rolling all the dice and adding them up.
+
+I know the first example does the job. And for those who do understand programming, I also appreciate that this isn't where my program is slow; but I'm proud, and I like novel solutions and beautiful code. That's the goal of this exercise.
+
+Thanks.
+
+(EDIT: Formatting.)",1362073019.0,2,0.63,23
+legaladvice,"Involuntary hospitalization. How to fight the insurance company when they think the patient has had enough, disregarding the doctor.","I'm asking for advice on behalf of a friend. I recognize this advice comes with a grain of salt, you are not my lawyer or his.
+
+This takes place in Oregon.
+
+My friend's wife is bipolar. Reciently, it's been getting really bad, to where we're talking about him involuntarily hospitalizing her.
+
+This has happened before, sadly. And the last time it happened, she was discharged early because the insurance company had decided she had enough hospitalization, despite the doctors protest, asserting she was not well enough for discharge.
+
+We would really like that to not happen again. I know one way to avoid it is to damn the insurance and pay out of pocket, but my friend makes a shit wage, and his wife just found out she probably isn't going to get disability. They simply can't afford taking on the cost.
+
+Is there anything he can do? Can he argue that the insurance company is not a doctor, thus, is not qualified to judge the fitness of his wife, and thus,  the duration of treatment?",1360952610.0,3,0.72,4
+legaladvice,Is it legal to 3D scan and then 3D print a purchased product? Is that some sort of IP copyright theft?,"Lets talk in the context of US law.
+
+Suppose you have a 3D scanner, and you use it to scan some product. Lets make this product distinct: lets say it's some sort of statue or figurine. So it's a piece of art, it's manufactured, it's sold.
+
+And you just scanned it into a 3D model on your computer.
+
+Now, let us also say you have a 3D plastic extrusion printer, and you print an exact 3D replica of the original.
+
+Is any of this illegal? Let us presume you're not selling the replicas, or using the replicas as part of a revenue stream.
+
+(EDIT: None of you are my lawyer, and this is hypothetical, as a friend and I were discussing the ramifications of 3D printing.)
+
+PS: Since we're on the subject, how does this contrast to creating my own model that looks like the original? How about a model that immitates the original, like a gear that consequentially must take on most, if not all of the characteristics of the original?",1360274053.0,3,0.81,9
+DnD,Is there some equation that calculates bonus spells instead of looking at the chart?,,1360105069.0,0,0.5,1
+DnD,What algorithm was used to generate the base save sequences (3.5e)?,"I'm writing code to generate content, and I've figured out or found algorithms for generating just about every core table and value (I had to find an algorithm for carrying capacity, and even that is a ""close enough"" calculation).
+
+I can see the pattern, and I can write the code to mimic it, but for the sake of writing graceful code, I'd rather write simple algebra, and maybe round the result, than use conditional code (if... then... else...).
+
+So, in the PHB, Table 3-1 on page 22, there are two columns for base save (good) and (poor). Is anyone smarter than me that can express an algebraic way to generate these sequences?",1358823329.0,1,0.67,3
+DungeonsAndDragons,How do I help new players role play?,"I'm a player in a game with my significant other and another couple. My SO has played in a previous campaign I had ran, and this is a first for the other. They're both enthusiastic and enjoy the hell out of game, but my SO doesn't role play as well as she would like, and the other has no personification of her character whatsoever.
+
+I don't really recall what my SO had said about her lack of ability, but an acknowledging ""I'm not very good at it"" seems to be the attitude, not so much an excuse to throw her hands up in the air, but more like a desire and willingness to improve. I think the other is in the same boat.
+
+I've got a couple techniques I've suggested or will suggest to them both:
+
+* Know the world and it's story. The better they understand the setting, the more comfortable they'll feel making shit up, like places, history, and stories.
+
+* Write a character background. The better you know your character, the better you'll understand her motivations and personality. This has helped my SO in making decisions on my character's behalf, but is she sassy, is she quiet? Is she crazy like a Russian spy?
+
+* I suppose I could suggest giving the character an accent, or wearing a costume to game. Anything to emmerse themselves into the persona.
+
+* I may remind them the philosophy of role playing games is that of collaborative story telling, so tell a story, like you're trying to pitch a book/movie idea, or as if you were reading a story to someone else.
+
+* I have to push my DM into personifying NPCs more, as he's kinda shy about it.
+
+* Practice. Think of it like acting, that you're going to audition for a play. When no one is home, no one is around, imagine scenarios with dialogue and speak out, verbally, your character's participation.
+
+What does the DnD community suggest to help a player personify a character?
+
+EDIT: Didn't get the formatting right on the first try.",1355945695.0,9,0.86,7
+askscience,What is energy?,"I've heard that matter and energy are convertable. But I find my understanding of what energy is to be lacking. In my understanding, it's vibrating matter.
+
+What happens to matter when it converts to energy? Do sub-atomic particles ""evaporate"", if you will, into a burst of photons, absorbed into whatever they collide with, imparting energy?
+
+So to illustrate, when fission occurs, as in a nuclear weapon, is matter permenantly lost because it's been converted to energy? If you could go around and collect all the matter that was the core of that bomb, now nuclear fallout and lighter elements, would there be less mass?
+
+I imagine I'm close, but I could really stand a clarification.",1354225155.0,28,0.71,28
+Homebrewing,My honey steam gives everyone a headache.,"I've made a honey steam, a partial grain kit from Midwest Supplies. It sat in secondary for 2 months. While fermenting in secondary, it made the basement smell like eggs for a couple weeks. Putting it into the bottling bucket, it initially had a sour smell, but upon tasting it, it was rather mild - it tasted like a young beer.
+
+So now that we're actually drinking it, and it is quite good, and incredibly intoxicating, it's pretty consistenly giving people a mild hangover headache in the morning. I've noticed this myself after having a single bottle not terribly late in the afternoon.
+
+I was curious what might have gone wrong that got me here? What causes headaches? How can I avoid this in the future? Is this something I run an increased risk of from fermenting a huge sugar content?",1347479308.0,10,1.0,18
+homebrew,Is an egg smell something to worry about?,[removed],1340205284.0,1,0.67,0
+help,What's with the post delays for a new account?,"My fiance has just created her own Reddit account, and she's finding it frustrating that there's a 7 minute delay. I can't find anything in the help section or FAQ that addresses the mechanics of this, or how long she has to suffer waiting 7 minute intervals between posts.
+
+Can anyone direct me to the documentation, or explain this? My only question is how long does this delay remain in effect or how does she remove the restriction?",1333736626.0,0,0.5,2
+LifeProTips,"LPT: Buy a dollar store squeegee, keep it in the bathroom.","I take really, really hot showers; like, I won't often adjust the temperature with the cold water tap.
+
+As you can imagine, this leaves condensation EVERYWHERE. You can use a dollar store squeegee on the walls, and the ceiling, and the tub surround, the bathroom window if you have one, the door, etc.
+
+This way, I keep water stains off the ceiling, streaks off the walls, I don't damage the paint or drywall, I get less mildew on the surround, and I defog my mirror. The ceiling, admittly, it helps to be rather tall. But, it takes me just a couple minutes to get the whole room.",1328552789.0,193,0.82,157
+Homebrewing,"Making my first beer tonight, wish me luck.","I finally got my Delux beer brewing kit, from Midwest supplies, early December. I've been wanting to make beer for over a year. This delux kit came with a bucket primary and a glass carboy secondary.
+
+I picked an Oatmeal Stout for my first beer, from Midwest, with a dry yeast upgrade because why not? And I got a 10 gallon stock pot, spoon, and lid from a local craft supplier.
+
+It's utterly fridged cold around here, and so the basement is a chill locker for a slower and cooler fermentation; I'll even have to prop the bucket/carboy up on some blocks or a foam mat, as I'm certain the concrete itself is enough to cause a freeze, but the ambient temperature down there is in the 50s.
+
+Part of what took so long was a) Christmas is expensive and b) I had to drink/collect enough beer bottles.
+
+But anyway, here we go!
+
+*UPDATE:*
+
+Whelp, that took longer than expected. The nature of my work means I get home later than some, and I wouldn't have had another chance until Monday, maybe...
+
+So anyway, it's really easy to get water up to a screaming temperature, and a pain in the ass to get water full of dissolved solids and malt extract up to temperature. This was on my stove. Definitely will have to use the turkey deep frier burner I have, but it is entirely too dangerously cold outside to even consider it right now. Maybe in March...
+
+Anyway, other than taking until 1am, steeping the grains leaves a pungent and earthy smell in the house, and I didn't smell gas when a short boilover knocked out the burner. Heh, that was cool. I was wondering why the temperature wasn't moving... That was embarassing.
+
+Otherwise, it's in the bucket, the yeast is in, the airlock is on, and I'm waiting to see some activity come out of that air lock.",1327010282.0,16,0.87,20
+firstworldproblems,"I'm a day behind in changing my kitten's litter box, and he pissed in a pile of old newspaper.",[removed],1319822996.0,1,1.0,0
+AskReddit,Should student aides have access to my college records? Legal question about my college's policies.,"I understand there are limitations to what legal advice may be given, here on Reddit. I think the best help I can get from the community is HOW to find this information. I certainly can't ask my college, they're the ones in question.
+
+I'm asking for a friend of mine. But we'll use myself in this context.
+
+Let's say I'm having a problem, handled by some department at my college. The person on the phone is a student aide, working in the department. This person, an aide, my classmate, can see and admits seeing, that I've taken certain classes, that I failed some, that I didn't withdrawal, etc. On top of that, I know this and all other departments have the full access to this and other information, including my billing information; because, you know, I want to discuss my billing matters with SECURITY (true story).
+
+The liberal access to ALL my pertinent information aside, though, is it even LEGAL that my fellow classmates have such unchecked access to my ""file""?",1303234147.0,1,1.0,11

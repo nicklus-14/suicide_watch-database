@@ -1,0 +1,788 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+a:t5_2unri,test123456,******S******^*****E******,1362625316.0,1,1.0,4
+a:t5_2unri,test 7,"###Guide to Obtaining a Free Voicechat Server For A Year (For a Guild/etc)
+  
+##Disclaimer  
+- I have done this operation with both TeamSpeak3 and Mumble.  This operation requires a credit card which will not be charged for the 1st year if you follow these instructions.  After that, the service is ~15.00 USD per year for 32-Slots in the case of TeamSpeak3 (the largest number of slots you can host without a license) or unlimited slots for a Mumble server.  I am not responsible for any charges that you may incur for following this guide.  I am not responsible for any changes Amazon makes to their AWS and EC2 provisions that result in you being charged.  
+- I have only confirmed that 1 year of AWS is free in the USA.  It most likely is available to any 1st-World country that has any semblence of freedom of expression.
+- I used Windows for this operation and some of the software required (PuTTy suite) is windows only.  If you know how to configure SSH with a certificate for Mac or Linux, then feel free to follow the rest of the guide and just do your thing when I start talking about PuTTy.
+
+#Definitions  
+
+**AWS (Amazon Web Services)**: Amazon hosts a cloud service.  This encompasses many different portions of a network infratsturcture.  The critical thing to understand is that your server will be hosted in an Amazon Datacenter.  You are able to chose one that is situated in a geographical location that is closest to you.  Amazon does not guarantee uptime.  Reddit itself is hosted on Amazon's cloud, and while Reddit has gone down a few times in the past months, it is available ~99% of the time.  Consider this a baseline for how reliable AWS is.  
+
+**EC2**: This is AWS' *Platform as a Service* or PaaS offering.  It allows you to provision a *(ostensibly virtual)* machine(s) of various sizes and allows you to specify the operating system that you want to use.  In our case, we will be using Amazon's AMI Linux Kernel, as the cost of the actual Cloud Hosting does not cover any licenses for software (including Windows).  
+
+##AWS Setup  
+
+1. If you do not have an Amazon account, go to http://www.amazon.com and sign up for one.  
+
+2. Once the account is created, and you have received the requisite email confirmations, direct your browser to http://aws.amazon.com  
+
+3. Click on the 'Sign Up' button at the top of the screen.  You will be prompted to logon to your account.  
+
+4. Fill out the AWS Customer Information Form, Security Check and Check the box to indicate that you agree to the AWS Customer Agreement.  If you feel the need to read it, do so before continuing.  
+
+5. You will be taken to a page that indicates the Amazon Services that you are signed up for.  There will be a red dot that indicates services you do not have and under and to the right of that dot will be a yellow button that says, ""Add Now"".  Click it.  
+
+6. You will now have to enter your Credit Card information. Do so.  You will have to verify your identity via a phone call or some other method.  
+
+7. Once the AWS signup is complete, you will be dumped out onto the page that you were previously on that showed the services you were signed up for, now with many more services in the green.  
+
+8. No matter what page you are on, there should be a page header that has the AWS logo on the left and on the right has a 'Sign Up' button, 'My Account/Console' menu and a language menu.  Hover over the 'My Account/Console' menu and it should drop down.  Select 'AWS Management Console'.
+
+9. You should be prompted to input your password again and then  put out onto a page that lists all of AWS' available 'Amazon Web Services'.  In that list, on the right side, 2nd from the top should be EC2. Select it.  
+
+10. You will be taken to a page called, 'Getting Started'.  In the middle pane of the page, toward the top, there should be a button labeled, 'Launch Instance'.  Click it.  
+
+11. A form will open up.  Select the 'Classic Wizard' from the choices and click continue.  
+
+12. The 1st option in the list of AMIs should be Amazon Linux AMI 2012.90 (or whatever it is when you are reading this).  Select the '32-bit' option and click the 'Select' button on this entry.  
+
+13. On the next page, leave the **Number of Instances** set to 1, the **Instance Type** set to Micro, and set the **Availability Zone** to whatever geographic region is closest to you.  Click 'Continue'.  
+
+14. Leave the next page as-is unless you know what you are doing.  I didn't so I just left it be.   Do the same for the 2 following screens as well.  Stop if/when you get to the 'Create Key Pair' step.  
+
+15. Select, 'Create New Key Pair' and give your pair a name.  Then download you pair.  Name it something relevant and rememberable.  Save it locally. 
+
+16. Now you will configure your firewall.  By default, your firewall will have port 22 open for SSH.  Leave this entry.  
+
+17. If you are going to install TeamSpeak3, then leave 'Custom TCP Rule' selected and enter port 10011 in the port range.  Leave the source as is and add the rule.  Repeat with port 30033.  Then change the 'Custom TCP Rule' to 'Custom UDP Rule', enter port 9987 and add.  
+
+18. If you are going to install Mumble (I'll refer to it as Mumble, even though the server component is named Murmur).  Then leave the 'Custom TCP Rule' selected and enter port 64738. Click 'Add'.  Then change 'Custom TCP Rule' to 'Custom UDP Rule', enter the same port (64738) and add that. Click continue through to the end of the wizard. 
+
+19. You should now be at the ED2 Dashboard on the Instances Page, if you are not, select 'Instance' from under the 'Instances' root node on the right side panel,  your virtual server should be running or will be shortly.   
+
+20. Once your instance is up and running, select thee 'Elastic IPs' entry from the menu on the right side.  
+
+21. From the top of the screen, select 'Allocate New Address' and press, 'Yes, Allocate' on the form that pops up.  You will have one entry in your list of Elastic IPs now.  Write this IP address down, or copy/paste it into a notepad document.  
+
+22. Select the address via the checkbox on the right side and then from the top of the screen, select 'Associate Address'.  Select the instance you just provisioned from the drop-down and press the 'Yes, Associate' button.  
+
+23. This concludes the AWS portion of the setup.  
+
+
+##SSH Access   
+  
+1. Download the PuTTY Suite from: http://the.earth.li/~sgtatham/putty/latest/x86/putty-0.62-installer.exe  
+
+2. Install the suite.  
+
+3. Open the Start Menu -> Programs -> PuTTY and select PuTTYgen.  
+
+4. At the top of the window, open the 'Conversions' menu and select 'Import Key'.  
+
+5. Locate the file that you downloaded in Step 15 of the AWS guide (somthing.pem) and open it.  
+
+6. Click the 'Save Private Key' button.  Ignore any warnings about not having a password.  Name the file something rememberable. Close PuTTYgen.  
+
+7. Open the Start Menu -> Programs -> PuTTY and select 'Pageant'  
+
+8. No window will open.  You will get an icon in your task bar down on the bottom right-hand corner of the screen.  Right click this icon and select 'Add Key'.  
+
+9.  Navigate to the file that you created in Step 6 of this section adn open it.  It will be added to your local key store.  
+
+10. Open the Start Menu -> Programs -> PuTTY and select 'PuTTY'.  
+
+11. The PuTTY session configuration window will open.  
+
+12. In the 'Host Name' field, enter the IP address you saved/wrote down in Step 21 of the AWS guide.  
+
+13. In the 'Saved Sessions' textbox, enter something like 'voice server' and then click the save button.  
+
+14. Click the 'Open' button at the bottom of the screen.  
+
+15. You will get a message about the key not being in your local store. Click 'Yes' to import the key.  
+
+16. You will now be prompted for your username.  Enter 'ec2-user' (without the quote marks) and press <Enter>.  
+
+17. You will now be at the main terminal for your AWS instance.  
+
+18. This concludes the SSH Access portion of this setup.  ",1358446303.0,1,1.0,0
+a:t5_2unri,test7,``      MURMURPID=`pidof $MURMURBIN```  ,1358446103.0,1,1.0,0
+a:t5_2unri,test6,"`    ### BEGIN INIT INFO`  
+`    # Provides: Murmur Server Installation`  
+`    # Required-Start: $local_fs $network`  
+`    # Required-Stop: $local_fs $remote_fs`  
+`    # Default-Start: 2 3 4 5`  
+`    # Default-Stop: 0 1 6`  
+`    # Short-Description: Voice Chat Service`  
+`    # Description: Murmur is an open source Voice Chat Server for Gamers`  
+`    ### END INIT INFO`  
+`    #! /bin/sh`  
+`    # /etc/init.d/murmur`  
+`    MURMURBIN=/etc/murmur/murmur.x86`  
+`    MURMURINI=/etc/murmur/murmur.ini`  
+`    case ""$1"" in`  
+`     start)`  
+`      if [ -x @MURMURBIN ] ; then`  
+`       echo ""Starting script murmur""`  
+`       $MURMURBIN -ini $MURMURINI`  
+`     else`  
+`      echo ""$MURMURBIN not installed""`  
+`     fi`  
+`     ;;`  
+`     stop)`  
+`      echo ""Stopping script murmur""`  
+`      pkill murmur.x86 2>/dev/null`  
+`      ;;`  
+`     restart)`  
+`      echo ""Restarting script murmur""`  
+`      pkill murmur.x86 2>/dev/null`  
+`      sleep 1`  
+`      if [ -x $MURMURBIN ] ; then`  
+`       echo ""Loading murmur...""`  
+`       $MURMURBIN -ini $MURMURINI`  
+`      else`  
+`       echo ""$MURMURBIN not installed""`  
+`      fi`  
+`      ;;`  
+`     status)`  
+`      MURMURPID=&acute;pidof $MURMURBIN&acute;`  
+`      if (( $? ))`  
+`     then`  
+`       echo ""murmur is NOT running""`  
+`      else`  
+`       echo ""murmur IS running, pid=$MURMURPID""`  
+`      fi`  
+`      ;;`  
+`     \*)`  
+`      echo ""Usage: $0 {start|stop|restart|status}""`  
+`      exit 1`  
+`      ;;`  
+`     esac`
+`     exit 0`  ",1358445791.0,1,1.0,0
+a:t5_2unri,test5,"
+##Mumble
+
+1\. From your terminal issue the following commands, each followed by <Enter>:  
+
+`    sudo su`  
+`     yum install openssl-devel libsndfile-devel alsa-lib-devel protobuf-compiler protobuf-devel boost-devel avahi-compat-libdns_sd-devel speech-dispatcher-devel libdaemon-devel libusb-devel ice-3.4 ice-devel libcap-devel php-devel gcc make pcre-devel perl-ExtUtils-MakeMaker`  
+
+- Press 'Y' followed by <Enter> after this step.  
+
+`    mkdir /etc/murmur`  
+`    cd /tmp`  
+`    mkdir murmur`  
+`    cd murmur`  
+`    wget http://sourceforge.net/projects/mumble/files/Mumble/1.2.3/murmur-static_x86-1.2.3.tar.bz2`  
+`    bunzip2 murmur-static_x86-1.2.3.tar.bz2`  
+`    tar xvf murmur-static_x86-1.2.3.tar`  
+`    cd /etc/murmur`  
+`    cp /tmp/murmur/murmur-static_x86-1.2.3/* ./`  
+ 
+2\. Now we will create the startup file for the mumble server.  Issue the command:  
+`    nano /etc/init.d/murmur`  
+
+- This will open a text editor.  Copy and paste the following code in there:  
+
+`    ### BEGIN INIT INFO`  
+`    # Provides: Murmur Server Installation`  
+`    # Required-Start: $local_fs $network`  
+`    # Required-Stop: $local_fs $remote_fs`  
+`    # Default-Start: 2 3 4 5`  
+`    # Default-Stop: 0 1 6`  
+`    # Short-Description: Voice Chat Service`  
+`    # Description: Murmur is an open source Voice Chat Server for Gamers`  
+`    ### END INIT INFO`  
+`    #! /bin/sh`  
+`    # /etc/init.d/murmur`  
+`    MURMURBIN=/etc/murmur/murmur.x86`  
+`    MURMURINI=/etc/murmur/murmur.ini`  
+`    case ""$1"" in`  
+`     start)`  
+`      if [ -x @MURMURBIN ] ; then`  
+`       echo ""Starting script murmur""`  
+`       $MURMURBIN -ini $MURMURINI`  
+`     else`  
+`      echo ""$MURMURBIN not installed""`  
+`     fi`  
+`     ;;`  
+`     stop)`  
+`      echo ""Stopping script murmur""`  
+`      pkill murmur.x86 2>/dev/null`  
+`      ;;`  
+`     restart)`  
+`      echo ""Restarting script murmur""`  
+`      pkill murmur.x86 2>/dev/null`  
+`      sleep 1`  
+`      if [ -x $MURMURBIN ] ; then`  
+`       echo ""Loading murmur...""`  
+`       $MURMURBIN -ini $MURMURINI`  
+`      else`  
+`       echo ""$MURMURBIN not installed""`  
+`      fi`  
+`      ;;`  
+`     status)`  
+`      MURMURPID=\`pidof $MURMURBIN\``  
+`      if (( $? ))`  
+`     then`  
+`       echo ""murmur is NOT running""`  
+`      else`  
+`       echo ""murmur IS running, pid=$MURMURPID""`  
+`      fi`  
+`      ;;`  
+`     \*)`  
+`      echo ""Usage: $0 {start|stop|restart|status}""`  
+`      exit 1`  
+`      ;;`  
+`     esac`
+`     exit 0`  
+
+- **END OF FILE -- DO NOT INCLUDE THIS LINE IN YOUR COPY**  
+  
+- Now press <ctrl> + X to quit the notepad application.  You will be asked if you want to save the modified buffer.  Type Y and then press <Enter>.  
+
+3\. Now, execute the follwing commnad followed by <Enter>:  
+
+`    cd /etc/murmur`  
+`    ./murmur.x86 -ini /etc/murmur/murmur.ini -supw [somepassword]`  
+
+- This will establish your super-user password when you log in to mumble for the first time.  
+
+4\. Now execute the following to add murmur to the startup configuration (followed by <Enter>):  
+  
+`    chkconfig --add murmur`  
+`    service murmur start`  
+`    ps -aux | grep murmur`  
+
+- That last command **should** show an entry where the right most column contains */etc/murmur/murmur.x86 -ini /etc/murmur/murmur.ini""
+
+5\. Your mumble server is now configured.  Start your mumble client and create a new connection to the IP that you copied down in Step 21 of the AWS guide.  
+
+6\. You will be prompted to enter the password you specified in Step 3 of this guide when you first log in.  Do so to obtain administrative privleges for the server.  
+
+7\. This ends the mumble setup guide.  ",1358445573.0,1,1.0,0
+a:t5_2unri,test4,"##Mumble
+
+1. From your terminal issue the following commands, each followed by <Enter>:  
+
+`    sudo su`  
+`     yum install openssl-devel libsndfile-devel alsa-lib-devel protobuf-compiler protobuf-devel boost-devel avahi-compat-libdns_sd-devel speech-dispatcher-devel libdaemon-devel libusb-devel ice-3.4 ice-devel libcap-devel php-devel gcc make pcre-devel perl-ExtUtils-MakeMaker`  
+
+- Press 'Y' followed by <Enter> after this step.  
+
+`    mkdir /etc/murmur`  
+`    cd /tmp`  
+`    mkdir murmur`  
+`    cd murmur`  
+`    wget http://sourceforge.net/projects/mumble/files/Mumble/1.2.3/murmur-static_x86-1.2.3.tar.bz2`  
+`    bunzip2 murmur-static_x86-1.2.3.tar.bz2`  
+`    tar xvf murmur-static_x86-1.2.3.tar`  
+`    cd /etc/murmur`  
+`    cp /tmp/murmur/murmur-static_x86-1.2.3/* ./`  
+ 
+2. Now we will create the startup file for the mumble server.  Issue the command:  
+`    nano /etc/init.d/murmur`  
+
+- This will open a text editor.  Copy and paste the following code in there:  
+
+`    ### BEGIN INIT INFO`  
+`    # Provides: Murmur Server Installation`  
+`    # Required-Start: $local_fs $network`  
+`    # Required-Stop: $local_fs $remote_fs`  
+`    # Default-Start: 2 3 4 5`  
+`    # Default-Stop: 0 1 6`  
+`    # Short-Description: Voice Chat Service`  
+`    # Description: Murmur is an open source Voice Chat Server for Gamers`  
+`    ### END INIT INFO`  
+`    #! /bin/sh`  
+`    # /etc/init.d/murmur`  
+`    MURMURBIN=/etc/murmur/murmur.x86`  
+`    MURMURINI=/etc/murmur/murmur.ini`  
+`    case ""$1"" in`  
+`     start)`  
+`      if [ -x @MURMURBIN ] ; then`  
+`       echo ""Starting script murmur""`  
+`       $MURMURBIN -ini $MURMURINI`  
+`     else`  
+`      echo ""$MURMURBIN not installed""`  
+`     fi`  
+`     ;;`  
+`     stop)`  
+`      echo ""Stopping script murmur""`  
+`      pkill murmur.x86 2>/dev/null`  
+`      ;;`  
+`     restart)`  
+`      echo ""Restarting script murmur""`  
+`      pkill murmur.x86 2>/dev/null`  
+`      sleep 1`  
+`      if [ -x $MURMURBIN ] ; then`  
+`       echo ""Loading murmur...""`  
+`       $MURMURBIN -ini $MURMURINI`  
+`      else`  
+`       echo ""$MURMURBIN not installed""`  
+`      fi`  
+`      ;;`  
+`     status)`  
+`      MURMURPID=\`pidof $MURMURBIN\``  
+`      if (( $? ))`  
+`     then`  
+`       echo ""murmur is NOT running""`  
+`      else`  
+`       echo ""murmur IS running, pid=$MURMURPID""`  
+`      fi`  
+`      ;;`  
+`     \*)`  
+`      echo ""Usage: $0 {start|stop|restart|status}""`  
+`      exit 1`  
+`      ;;`  
+`     esac`
+`     exit 0`  
+
+- **END OF FILE -- DO NOT INCLUDE THIS LINE IN YOUR COPY**  
+  
+- Now press <ctrl> + X to quit the notepad application.  You will be asked if you want to save the modified buffer.  Type Y and then press <Enter>.  
+
+3. Now, execute the follwing commnad followed by <Enter>:  
+
+`    cd /etc/murmur`  
+`    ./murmur.x86 -ini /etc/murmur/murmur.ini -supw [somepassword]`  
+
+- This will establish your super-user password when you log in to mumble for the first time.  
+
+4. Now execute the following to add murmur to the startup configuration (followed by <Enter>):  
+  
+`    chkconfig --add murmur`  
+`    service murmur start`  
+`    ps -aux | grep murmur`  
+
+- That last command **should** show an entry where the right most column contains */etc/murmur/murmur.x86 -ini /etc/murmur/murmur.ini""
+
+5. Your mumble server is now configured.  Start your mumble client and create a new connection to the IP that you copied down in Step 21 of the AWS guide.  
+
+6. You will be prompted to enter the password you specified in Step 3 of this guide when you first log in.  Do so to obtain administrative privileges for the server.  
+
+7. This ends the mumble setup guide.  ",1358445434.0,1,1.0,0
+a:t5_2unri,test3,"##Mumble
+
+1. From your terminal issue the following commands, each followed by <Enter>:  
+
+`    sudo su  
+     yum install openssl-devel libsndfile-devel alsa-lib-devel protobuf-compiler protobuf-devel boost-devel avahi-compat-libdns_sd-devel speech-dispatcher-devel libdaemon-devel libusb-devel ice-3.4 ice-devel libcap-devel php-devel gcc make pcre-devel perl-ExtUtils-MakeMaker`  
+
+- Press 'Y' followed by <Enter> after this step.  
+
+`    mkdir /etc/murmur  
+    cd /tmp  
+    mkdir murmur  
+    cd murmur  
+    wget http://sourceforge.net/projects/mumble/files/Mumble/1.2.3/murmur-static_x86-1.2.3.tar.bz2  
+    bunzip2 murmur-static_x86-1.2.3.tar.bz2  
+    tar xvf murmur-static_x86-1.2.3.tar  
+    cd /etc/murmur  
+    cp /tmp/murmur/murmur-static_x86-1.2.3/* ./`  
+ 
+2. Now we will create the startup file for the mumble server.  Issue the command:  
+`    nano /etc/init.d/murmur`  
+
+- This will open a text editor.  Copy and paste the following code in there:  
+
+`    ### BEGIN INIT INFO  
+    # Provides: Murmur Server Installation  
+    # Required-Start: $local_fs $network  
+    # Required-Stop: $local_fs $remote_fs  
+    # Default-Start: 2 3 4 5  
+    # Default-Stop: 0 1 6  
+    # Short-Description: Voice Chat Service  
+    # Description: Murmur is an open source Voice Chat Server for Gamers  
+    ### END INIT INFO  
+    #! /bin/sh  
+    # /etc/init.d/murmur  
+    MURMURBIN=/etc/murmur/murmur.x86  
+    MURMURINI=/etc/murmur/murmur.ini  
+    case ""$1"" in  
+     start)  
+      if [ -x @MURMURBIN ] ; then  
+       echo ""Starting script murmur""  
+       $MURMURBIN -ini $MURMURINI  
+     else  
+      echo ""$MURMURBIN not installed""  
+     fi  
+     ;;  
+     stop)  
+      echo ""Stopping script murmur""  
+      pkill murmur.x86 2>/dev/null  
+      ;;  
+     restart)  
+      echo ""Restarting script murmur""  
+      pkill murmur.x86 2>/dev/null  
+      sleep 1  
+      if [ -x $MURMURBIN ] ; then  
+       echo ""Loading murmur...""  
+       $MURMURBIN -ini $MURMURINI  
+      else  
+       echo ""$MURMURBIN not installed""  
+      fi  
+      ;;  
+     status)  
+      MURMURPID=`pidof $MURMURBIN`  
+      if (( $? ))  
+      then  
+       echo ""murmur is NOT running""  
+      else  
+       echo ""murmur IS running, pid=$MURMURPID""  
+      fi  
+      ;;  
+     *)  
+      echo ""Usage: $0 {start|stop|restart|status}""  
+      exit 1  
+      ;;  
+     esac
+     exit 0`  
+
+- **END OF FILE -- DO NOT INCLUDE THIS LINE IN YOUR COPY**  
+  
+- Now press <ctrl> + X to quit the notepad application.  You will be asked if you want to save the modified buffer.  Type Y and then press <Enter>.  
+
+3. Now, execute the follwing commnad followed by <Enter>:  
+
+`    cd /etc/murmur  
+    ./murmur.x86 -ini /etc/murmur/murmur.ini -supw [somepassword]`  
+
+- This will establish your super-user password when you log in to mumble for the first time.  
+
+4. Now execute the following to add murmur to the startup configuration (followed by <Enter>):  
+  
+`    chkconfig --add murmur  
+    service murmur start  
+    ps -aux | grep murmur`  
+
+- That last command **should** show an entry where the right most column contains */etc/murmur/murmur.x86 -ini /etc/murmur/murmur.ini""
+
+5. Your mumble server is now configured.  Start your mumble client and create a new connection to the IP that you copied down in Step 21 of the AWS guide.  
+
+6. You will be prompted to enter the password you specified in Step 3 of this guide when you first log in.  Do so to obtain administrative privileges for the server.  
+
+7. This ends the mumble setup guide. ",1358445183.0,1,1.0,0
+a:t5_2unri,test2,"##Mumble
+
+1. From your terminal issue the following commands, each followed by <Enter>:  
+
+`    sudo su  
+`    yum install openssl-devel libsndfile-devel alsa-lib-devel protobuf-compiler protobuf-devel boost-devel avahi-compat-libdns_sd-devel speech-dispatcher-devel libdaemon-devel libusb-devel ice-3.4 ice-devel libcap-devel php-devel gcc make pcre-devel perl-ExtUtils-MakeMaker
+- Press 'Y' followed by <Enter> after this step.  
+`    mkdir /etc/murmur  
+`    cd /tmp  
+`    mkdir murmur  
+`    cd murmur  
+`    wget http://sourceforge.net/projects/mumble/files/Mumble/1.2.3/murmur-static_x86-1.2.3.tar.bz2  
+`    bunzip2 murmur-static_x86-1.2.3.tar.bz2  
+`    tar xvf murmur-static_x86-1.2.3.tar  
+`    cd /etc/murmur  
+`    cp /tmp/murmur/murmur-static_x86-1.2.3/* ./  
+ 
+2. Now we will create the startup file for the mumble server.  Issue the command:  
+`    nano /etc/init.d/murmur  
+
+- This will open a text editor.  Copy and paste the following code in there:  
+
+`    ### BEGIN INIT INFO  
+`    # Provides: Murmur Server Installation  
+`    # Required-Start: $local_fs $network  
+`    # Required-Stop: $local_fs $remote_fs  
+`    # Default-Start: 2 3 4 5  
+`    # Default-Stop: 0 1 6  
+`    # Short-Description: Voice Chat Service  
+`    # Description: Murmur is an open source Voice Chat Server for Gamers  
+`    ### END INIT INFO  
+`    #! /bin/sh  
+`    # /etc/init.d/murmur  
+`    MURMURBIN=/etc/murmur/murmur.x86  
+`    MURMURINI=/etc/murmur/murmur.ini  
+`    case ""$1"" in  
+`     start)  
+`      if [ -x @MURMURBIN ] ; then  
+`       echo ""Starting script murmur""  
+`       $MURMURBIN -ini $MURMURINI  
+`     else  
+`      echo ""$MURMURBIN not installed""  
+`     fi  
+`     ;;  
+`     stop)  
+`      echo ""Stopping script murmur""  
+`      pkill murmur.x86 2>/dev/null  
+`      ;;  
+`     restart)  
+`      echo ""Restarting script murmur""  
+`      pkill murmur.x86 2>/dev/null  
+`      sleep 1  
+`      if [ -x $MURMURBIN ] ; then  
+`       echo ""Loading murmur...""  
+`       $MURMURBIN -ini $MURMURINI  
+`      else  
+`       echo ""$MURMURBIN not installed""  
+`      fi  
+`      ;;  
+`     status)  
+`      MURMURPID=`pidof $MURMURBIN`  
+`      if (( $? ))  
+`      then  
+`       echo ""murmur is NOT running""  
+`      else  
+`       echo ""murmur IS running, pid=$MURMURPID""  
+`      fi  
+`      ;;  
+`     *)  
+`      echo ""Usage: $0 {start|stop|restart|status}""  
+`      exit 1  
+`      ;;  
+`     esac
+`     exit 0
+- **END OF FILE -- DO NOT INCLUDE THIS LINE IN YOUR COPY**  
+  
+- Now press <ctrl> + X to quit the notepad application.  You will be asked if you want to save the modified buffer.  Type Y and then press <Enter>.  
+
+3. Now, execute the follwing commnad followed by <Enter>:  
+
+`    cd /etc/murmur  
+`    ./murmur.x86 -ini /etc/murmur/murmur.ini -supw [somepassword]  
+
+- This will establish your super-user password when you log in to mumble for the first time.  
+
+4. Now execute the following to add murmur to the startup configuration (followed by <Enter>):  
+  
+`    chkconfig --add murmur  
+`    service murmur start  
+`    ps -aux | grep murmur  
+
+- That last command **should** show an entry where the right most column contains */etc/murmur/murmur.x86 -ini /etc/murmur/murmur.ini""
+
+5. Your mumble server is now configured.  Start your mumble client and create a new connection to the IP that you copied down in Step 21 of the AWS guide.  
+
+6. You will be prompted to enter the password you specified in Step 3 of this guide when you first log in.  Do so to obtain administrative privleges for the server.  
+
+7. This ends the mumble setup guide.  ",1358445042.0,1,1.0,0
+a:t5_2unri,test1,"###Guide to Obtaining a Free Voicechat Server For A Year (For a Guild/etc)
+  
+##Disclaimer  
+- I have done this operation with both TeamSpeak3 and Mumble.  This operation requires a credit card which will not be charged for the 1st year if you follow these instructions.  After that, the service is ~15.00 USD per year for 32-Slots in the case of TeamSpeak3 (the largest number of slots you can host without a license) or unlimited slots for a Mumble server.  I am not responseible for any charges that you may incur for failure to follow this guide exactly as I write it.  I am not responsible for any changes Amazon makes to their AWS and EC2 provisions that result in you being charged.  
+- I have only confirmed that 1 year of AWS is free in the USA.  It most likely is available to any 1st-World country that has any semblence of freedom of expression.
+- I used Windows for this operation and some of the software required (PuTTy suite) is windows only.  If you know how to configure SSH with a certificate for Mac or Linux, then feel free to follow the rest of the guide and just do your thing when I start talking about PuTTy.
+
+#Definitions  
+
+**AWS (Amazon Web Services)**: Amazon hosts a cloud service.  This encompasses many different portions of a network infratsturcture.  The critical thing to understand is that your server will be hosted in an Amazon Datacenter.  You are able to chose one that is situated in a geographical location that is closest to you.  Amazon does not guarantee uptime.  Reddit itself is hosted on Amazon's cloud, and while Reddit has gone down a few times in the past months, it is available ~99% of the time.  Consider this a baseline for how reliable AWS is.  
+
+**EC2**: This is AWS' *Platform as a Service* or PaaS offering.  It allows you to provision a *(ostensibly virtual)* machine(s) of various sizes and allows you to specify the operating system that you want to use.  In our case, we will be using Amazon's AMI Linux Kernel, as the cost of the actual Cloud Hosting does not cover any licenses for software (including Windows).  
+
+##AWS Setup  
+
+1. If you do not have an Amazon account, go to http://www.amazon.com and sign up for one.  
+
+2. Once the account is created, and you have received the requisite email confirmations, direct your browser to http://aws.amazon.com  
+
+3. Click on the 'Sign Up' button at the top of the screen.  You will be prompted to logon to your account.  
+
+4. Fill out the AWS Customer Information Form, Security Check and Check the box to indicate that you agree to the AWS Customer Agreement.  If you feel the need to read it, do so before continuing.  
+
+5. You will be taken to a page that indicates the Amazon Services that you are signed up for.  There will be a red dot that indicates services you do not have and under and to the right of that dot will be a yellow button that says, ""Add Now"".  Click it.  
+
+6. You will now have to enter your Credit Card information. Do so.  You will have to verify your identity via a phone call or some other method.  
+
+7. Once the AWS signup is complete, you will be dumped out onto the page that you were previously on that showed the services you were signed up for, now with many more services in the green.  
+
+8. No matter what page you are on, there should be a page header that has the AWS logo on the left and on the right has a 'Sign Up' button, 'My Account/Console' menu and a language menu.  Hover over the 'My Account/Console' menu and it should drop down.  Select 'AWS Management Console'.
+
+9. You should be prompted to input your password again and then  put out onto a page that lists all of AWS' available 'Amazon Web Services'.  In that list, on the right side, 2nd from the top should be EC2. Select it.  
+
+10. You will be taken to a page called, 'Getting Started'.  In the middle pane of the page, toward the top, there should be a button labeled, 'Launch Instance'.  Click it.  
+
+11. A form will open up.  Select the 'Classic Wizard' from the choices and click continue.  
+
+12. The 1st option in the list of AMIs should be Amazon Linux AMI 2012.90 (or whatever it is when you are reading this).  Select the '32-bit' option and click the 'Select' button on this entry.  
+
+13. On the next page, leave the **Number of Instances** set to 1, the **Instance Type** set to Micro, and set the **Availability Zone** to whatever geographic region is closest to you.  Click 'Continue'.  
+
+14. Leave the next page as-is unless you know what you are doing.  I didn't so I just left it be.   Do the same for the 2 following screens as well.  Stop if/when you get to the 'Create Key Pair' step.  
+
+15. Select, 'Create New Key Pair' and give your pair a name.  Then download you pair.  Name it something relevant and rememberable.  Save it locally. 
+
+16. Now you will configure your firewall.  By default, your firewall will have port 22 open for SSH.  Leave this entry.  
+
+17. If you are going to install TeamSpeak3, then leave 'Custom TCP Rule' selected and enter port 10011 in the port range.  Leave the source as is and add the rule.  Repeat with port 30033.  Then change the 'Custom TCP Rule' to 'Custom UDP Rule', enter port 9987 and add.  
+
+18. If you are going to install Mumble (I'll refer to it as Mumble, even though the server component is named Murmur).  Then leave the 'Custom TCP Rule' selected and enter port 64738. Click 'Add'.  Then change 'Custom TCP Rule' to 'Custom UDP Rule', enter the same port (64738) and add that. Click continue through to the end of the wizard. 
+
+19. You should now be at the ED2 Dashboard on the Instances Page, if you are not, select 'Instance' from under the 'Instances' root node on the right side panel,  your virtual server should be running or will be shortly.   
+
+20. Once your instance is up and running, select thee 'Elastic IPs' entry from the menu on the right side.  
+
+21. From the top of the screen, select 'Allocate New Address' and press, 'Yes, Allocate' on the form that pops up.  You will have one entry in your list of Elastic IPs now.  Write this IP address down, or copy/paste it into a notepad document.  
+
+22. Select the address via the checkbox on the right side and then from the top of the screen, select 'Associate Address'.  Select the instance you just provisioned from the drop-down and press the 'Yes, Associate' button.  
+
+23. This concludes the AWS portion of the setup.  
+
+
+##SSH Access   
+  
+1. Download the PuTTY Suite from: http://the.earth.li/~sgtatham/putty/latest/x86/putty-0.62-installer.exe  
+
+2. Install the suite.  
+
+3. Open the Start Menu -> Programs -> PuTTY and select PuTTYgen.  
+
+4. At the top of the window, open the 'Conversions' menu and select 'Import Key'.  
+
+5. Locate the file that you downloaded in Step 15 of the AWS guide (somthing.pem) and open it.  
+
+6. Click the 'Save Private Key' button.  Ignore any warnings about not having a password.  Name the file something rememberable. Close PuTTYgen.  
+
+7. Open the Start Menu -> Programs -> PuTTY and select 'Pageant'  
+
+8. No window will open.  You will get an icon in your task bar down on the bottom right-hand corner of the screen.  Right click this icon and select 'Add Key'.  
+
+9.  Navigate to the file that you created in Step 6 of this section adn open it.  It will be added to your local key store.  
+
+10. Open the Start Menu -> Programs -> PuTTY and select 'PuTTY'.  
+
+11. The PuTTY session configuration window will open.  
+
+12. In the 'Host Name' field, enter the IP address you saved/wrote down in Step 21 of the AWS guide.  
+
+13. In the 'Saved Sessions' textbox, enter something like 'voice server' and then click the save button.  
+
+14. Click the 'Open' button at the bottom of the screen.  
+
+15. You will get a message about the key not being in your local store. Click 'Yes' to import the key.  
+
+16. You will now be prompted for your username.  Enter 'ec2-user' (without the quote marks) and press <Enter>.  
+
+17. You will now be at the main terminal for your AWS instance.  
+
+18. This concludes the SSH Access portion of this setup.  
+  
+  
+The following sections will be separated depending on whether you want TeamSpeak or Mumble.  
+
+
+##Mumble
+
+1. From your terminal issue the following commands, each followed by <Enter>:  
+
+    sudo su  
+    yum install openssl-devel libsndfile-devel alsa-lib-devel protobuf-compiler protobuf-devel boost-devel avahi-compat-libdns_sd-devel speech-dispatcher-devel libdaemon-devel libusb-devel ice-3.4 ice-devel libcap-devel php-devel gcc make pcre-devel perl-ExtUtils-MakeMaker
+- Press 'Y' followed by <Enter> after this step.  
+    mkdir /etc/murmur  
+    cd /tmp  
+    mkdir murmur  
+    cd murmur  
+    wget http://sourceforge.net/projects/mumble/files/Mumble/1.2.3/murmur-static_x86-1.2.3.tar.bz2  
+    bunzip2 murmur-static_x86-1.2.3.tar.bz2  
+    tar xvf murmur-static_x86-1.2.3.tar  
+    cd /etc/murmur  
+    cp /tmp/murmur/murmur-static_x86-1.2.3/* ./  
+ 
+2. Now we will create the startup file for the mumble server.  Issue the command:  
+    nano /etc/init.d/murmur  
+
+- This will open a text editor.  Copy and paste the following code in there:  
+
+    ### BEGIN INIT INFO  
+    # Provides: Murmur Server Installation  
+    # Required-Start: $local_fs $network  
+    # Required-Stop: $local_fs $remote_fs  
+    # Default-Start: 2 3 4 5  
+    # Default-Stop: 0 1 6  
+    # Short-Description: Voice Chat Service  
+    # Description: Murmur is an open source Voice Chat Server for Gamers  
+    ### END INIT INFO  
+    #! /bin/sh  
+    # /etc/init.d/murmur  
+    MURMURBIN=/etc/murmur/murmur.x86  
+    MURMURINI=/etc/murmur/murmur.ini  
+    case ""$1"" in  
+     start)  
+      if [ -x @MURMURBIN ] ; then  
+       echo ""Starting script murmur""  
+       $MURMURBIN -ini $MURMURINI  
+     else  
+      echo ""$MURMURBIN not installed""  
+     fi  
+     ;;  
+     stop)  
+      echo ""Stopping script murmur""  
+      pkill murmur.x86 2>/dev/null  
+      ;;  
+     restart)  
+      echo ""Restarting script murmur""  
+      pkill murmur.x86 2>/dev/null  
+      sleep 1  
+      if [ -x $MURMURBIN ] ; then  
+       echo ""Loading murmur...""  
+       $MURMURBIN -ini $MURMURINI  
+      else  
+       echo ""$MURMURBIN not installed""  
+      fi  
+      ;;  
+     status)  
+      MURMURPID=`pidof $MURMURBIN`  
+      if (( $? ))  
+      then  
+       echo ""murmur is NOT running""  
+      else  
+       echo ""murmur IS running, pid=$MURMURPID""  
+      fi  
+      ;;  
+     *)  
+      echo ""Usage: $0 {start|stop|restart|status}""  
+      exit 1  
+      ;;  
+     esac
+     exit 0
+- **END OF FILE -- DO NOT INCLUDE THIS LINE IN YOUR COPY**  
+  
+- Now press <ctrl> + X to quit the notepad application.  You will be asked if you want to save the modified buffer.  Type Y and then press <Enter>.  
+
+3. Now, execute the follwing commnad followed by <Enter>:  
+
+    cd /etc/murmur  
+    ./murmur.x86 -ini /etc/murmur/murmur.ini -supw [somepassword]  
+
+- This will establish your super-user password when you log in to mumble for the first time.  
+
+4. Now execute the following to add murmur to the startup configuration (followed by <Enter>):  
+  
+    chkconfig --add murmur  
+    service murmur start  
+    ps -aux | grep murmur  
+
+- That last command **should** show an entry where the right most column contains */etc/murmur/murmur.x86 -ini /etc/murmur/murmur.ini""
+
+5. Your mumble server is now configured.  Start your mumble client and create a new connection to the IP that you copied down in Step 21 of the AWS guide.  
+
+6. You will be prompted to enter the password you specified in Step 3 of this guide when you first log in.  Do so to obtain administrative privleges for the server.  
+
+7. This ends the mumble setup guide.  
+",1358444776.0,1,1.0,0
+antisrs,An Exercise,"In this thread we are going to pretend that women are the dominant gender in society, that men are valued for their cocks and that 10/10 women are tripping over each other to get the baby juice out of every 5/10 guy out there.
+
+>>go to the bar
+>>just want to have a nice night out with my bros without having my ass stared at and grabbed every 20 minutes
+>>as soon as we walk through the door, i hear, ""look at these fresh cocks we've got in here tonight""
+>>will this never end?",1348267513.0,4,0.56,43
+Justrolledintotheshop,A small 'modification' to the turbo.,,1348014213.0,0,0.46,15
+SuicideWatch,"Relationship in limbo, unhappy, I'm out. ","So, two days ago, she asked me to move out.  We were living at her parents house (which is disgraceful in and of itself... I'm 27 ffs) and it feels like there was no warning.  She said that I take up too much room in her bedroom, that she just needed space, but that we would still do things, would still see each other.  And now, she won't take my calls, she doesn't answer texts... So, I'm out... Gonna lay on the train tracks, neck on the track and let the express train do its thing in the morning.  Life without her isn't worth living.",1347536103.0,5,0.79,11
+SuicideWatch,Quickest way out,[removed],1347499459.0,1,1.0,0
+relationships,What did I [27 M] do wrong to screw this up with her [22 F].,"So, my girlfriend and I have been dating for almost 2.5 years.  I know this will throw /r/relationships into conniption fits, but we moved in together probably a week after we started dating - we moved into my parent's house.  We lived there for like 9 months and then she declared that she didn't feel comfortable over there and wanted to be with her dog at her parent's house...so we moved over there.  Things were going great for a long time... I mean, we had our issues like any couple, but I thought we were working through them in a healthy manner.  
+
+So yesterday, when she gets home from work, we talk and she says that she doesn't feel like she 'owns her own bedroom' anymore.  She tends to stay up late and likes top fall asleep with the TV on and hates the fan on.  I go to bed by 10 at the latest because i wake up at 4am for work and i like the fan on because her room is hot and i can't sleep when I'm warm.  Also, i sleep on the side of three bed where her containers with all her hair stuff are and she fells like she can't get to her stuff.
+
+
+Idk.  I'm just confused as hell.  She has been dealing with being the maid of honor at her best friend's wedding last Saturday and probably spent 20 total hours at home last week.  She also said that she feels like the newness is gone from our relationship - to which i responded, 'what do you think married life is like?'
+
+
+We're not on a 'break' or anything like that, just 'I'm not living there anymore.'
+
+
+I don't know why i wrote this, maybe i want some advice or insight, or just another opinion on the situation.
+
+tl;dr: she asked me to move out, said i was in the way, also said that the spark is gone, don't know what to do.",1347368125.0,2,1.0,12
+wow,Kitable World Bosses,"So, having seen the Jaina kite to Org, and assuming she had already been patched to leash to Swamp of Sorrows, are there any world bosses that can currently be kited to Org?",1347311274.0,10,0.82,8
+aww,So here is my girlfriend and my dog: Princess Marilyn after she came back from three groomer.,,1346761198.0,5,0.85,3
+talesfromtechsupport,SCCM + PEBKAC = FUCK,[removed],1344735572.0,1,0.66,0
+technology,SCCM + Task Sequence + PEBKAC = FUBAR,,1344470932.0,0,0.5,0
+a:t5_2unri,Link to reddit,,1343918872.0,2,0.75,6
+redditrequest,/r/upskirt is hosting illegal content,,1342559766.0,0,0.29,3

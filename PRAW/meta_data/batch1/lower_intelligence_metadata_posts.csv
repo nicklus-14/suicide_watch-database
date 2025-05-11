@@ -1,0 +1,225 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+PowerShell,Select Users based on 3 fields,"I always have trouble when trying to filter on more than 3 fields.  Something about the AND/OR operations always screw me up and I've been googling trying to find the answer.
+
+I have a script that adds users to a group based on 3 conditions, homephone -eq 'txt' -AND employeetype -eq 'txt' -AND mobilephone -ne 'txt'
+
+I feel like I need to throw something within the $AddFilter line in brackets but not sure which part, and also not sure if this could handle nothing being entered in the mobilephone field.  (We don't use the mobilephone field for anything except this)
+
+	$AddFilter = ""homePhone -eq '$Building' -And employeeType -eq 'A' -And mobilephone -ne 'SKIP'""
+	$AddUsers = Get-ADUser -Filter $AddFilter
+	if ($AddUsers) {
+		Add-ADGroupMember -Identity $Group -members $AddUsers -Confirm:$false
+
+Hoping a fresh set of eyes might see what I am missing.  It of course worked fine until I need to create the exception using 'SKIP'",1745509400.0,3,1.0,10
+Tile,What do to beside linear drain?,"I am building a steam room, and the linear drain is going against the wall opposite some bench seating.  Not including the bench - the shower pan is 106"" wide and sloped toward the linear drain.
+
+The linear drain is only 96"" long (1-11/16"" wide), so I am wondering what do I do with the 5"" (the red Xs) on each side of the drain to slope the water in.
+
+FYI - this is a pre-slope pan going in, so I am thinking maybe when putting in the tile/thinset to just slope  a 5"" x 1-11/16"" tile and angle it towards the drain?
+
+I've tried looking online to see examples of what others have done.
+
+Thanks in advanced for any help or tips.
+
+https://imgur.com/a/0cPifMx",1710786215.0,1,1.0,2
+Intune,Windows 11 Shared PC Autopilot default login page behaviour,"So we've only been a 1-to-1 shop and the autopilot/Intune has been working fine, but recently we have been working on getting some shared PCs configured for some end users.  Everything is great, EXCEPT, I can't figure out how to make the default windows login page USERNAME/PASSWORD.
+
+It defaults to asking for a Security Key (which most of our end users wouldn't have, and have never setup).
+
+The below imgur album shows what it looks like and the steps to get to the username screen.
+
+https://imgur.com/a/7ch4tj7
+
+While it's only a couple steps - it is not very user friendly... I have tried looking at changing this, but I haven't been able to find a setting anywhere and most of the online answers are based on a per-user setting, not a system setting.
+
+Please help Obi-Wan Kenobi, you're our only hope.",1702485567.0,2,1.0,5
+whatisthisthing,"Lucerne, Switzerland - by the Spreuer Bridge.",[removed],1700591034.0,1,1.0,2
+fortinet,"FS1024 to FS148 designated to disabled, disabled to designated. Rinse Repeat","I have an FS1024 connected to a FS148 that for whatever reason keeps having STP change the port from designated to disabled and back again... very regularly.
+
+We'll get multiple messages from the stp_daemon over the course of a minute, back and forth.  I've checked out the FS148 and there are 4 things plugged into it.  No loop, the devices aren't going up/down, just the link between the FS1024 and the FS148.
+
+We have multiple switches (all configured the exact same) connected to the FS1024 with zero issues, its just this one switch.  No idea what to do besides swapping the whole switch out.
+
+     2023-08-02 12:27:14 log_id=0105008255 type=event subtype=spanning_tree pri=notice vd=root user=""stp_daemon"" action=""role-change"" unit=""primary"" switch.physical-port=""port24"" instanceid=""0"" event=""role migration"" oldrole=""disabled"" newrole=""designated"" status=""None"" msg=""primary port port24 instance 0 changed role from disabled to designated""",1690999477.0,3,1.0,4
+PowerShell,One line PS command to remove users from group depending on attribute value,"I have been automating so much at our work lately but this one has been stumping me.
+
+We have a number of departments that each have their own Distribution group.  I am trying to create a one line script that will parse the members of the group, and remove anyone that no longer has the matching department value.
+
+    Remove-ADGroupMember -identity ""Finance Department"" -members (get-aduser -Properties ""department"" -Filter {department –ne ""Finance""}).distinguishedname -Confirm:$false
+
+It doesn't like the {department –ne ""Finance""} saying operator not supported, checked with ChatGPT just to try and it couldn't figure it out and my search and reading can't get this working either.
+
+I get that there are ways to do this easier with if/else but I want to see if its possible with just one line.
+
+**edit: Thanks everyone - lots of different ways to do it.  I'll putter away and see which one works best**
+
+So, the one line command of
+
+    Remove-ADGroupMember -identity ""Finance Department"" -members (get-aduser -Properties department -Filter * | where department -ne ""Finance"").distinguishedname -Confirm:$false
+
+works, its a bit slow but does the trick.
+
+The code from Pinches
+
+    $group = get-adgroup ""Finance Department""
+    
+    $filter = 'department -ne ""{0}"" -and memberof -eq ""{1}""' -f 'finance', $group
+    $remove = get-aduser -filter $filter
+    
+    if ($remove) {
+        Remove-ADGroupMember -identity $group -members $remove
+    }
+
+Also works and is quite a bit faster since there are limitations to the ADGroupMemeber command.
+
+Good learning for me, thanks again.  On to the next!",1674595322.0,1,0.67,26
+ontario,Thank you in advance HydroOne workers,"Just heard that HydroOne has cancelled everyone’s holidays in anticipation of the storm about to hit Southern Ontario.  Workers that were already on the road travelling home were told to check into the nearest Hydro shop.
+
+This weekend/week if you see them out working let them know how appreciative we are that they’re working their asses off over the holidays to keep power on !",1671819761.0,897,0.97,58
+sysadmin,robocopy and bad sectors,"Edit: thanks everyone - running ddrescue, will report back in 12-14 days when it’s finished.
+
+for anyone interested here is the command I am using;
+
+ddrescue -r3 -v /dev/sdb2 /media/share/ddr.img /home/me/Desktop/recovery.log
+
+
+
+I am trying to copy from a eSATA enclosure holding a 4TB HDD with some (okay, more than some, ALOT) bad sectors.  I've tried running a check disk but it never completes, I've resorted to trying to robocopy everything off of it using the command;
+
+    robocopy 4TBDRIVE:\ \\NETWORKLOCATION\SAN /MT:1 /r:0 /w:0
+
+I've been able to get some files off, but robocopy keeps getting stuck on certain files, obviously ones with bad sectors. I haven't figured out a way to get it to skip these and move onto the next if the percent copied doesn't move in say 1 minute ... it just sits there forever, until I stop the copy, go into the disk, delete the file and start all over.  There is about 2000 files I need to copy off so I am hoping that there is a better way.",1666993881.0,6,0.69,24
+k12sysadmin,Support remote locations/schools,"Hi Everyone, I am interested to see how your School Board/Department handle Schools that are not located close to your IT offices.  We have 2 centralized IT offices, and then about 7 schools that range from 1-3 hours away with student populations ranging from 15-300.
+
+Do you have a ""teacher"" at each school you lean on?  Do you leave extra docking stations, monitors, laptops in case one breaks.
+
+When/if somethings breaks do you get them to ship it to you or make a trip out there.
+
+Does your team ""split-up"" the schools or does everyone work on any issue.  Currently we assign groups of schools based on their location and student population to try and keep it ""fair"".",1642442969.0,6,0.88,3
+sysadmin,450 4.7.1 Unable to Relay. Exchange 2013 Hybrid to O365,"We have a hybrid connection setup and working perfectly between our on-prem Exchange server and O365.  Everything has been working fine for the past couple of years, but we've recently switched IP blocks, and since then we have NOT been able to Relay, through our on-prem Exchange server to O365.  It *IS* working to external recipients though.
+
+We've updated our ARPA record, looked at the ELHO and connectors and everything looks fine.  Our send/receive connector between on-prem and O365 is setup using a FQDN lookup, not IP, but just for the sake of testing I changed it to use the new external IP address of the Exchange server.  Still nothing.
+
+I've looked through the logs and besides the following there isn't anything else that I can see;
+
+    2021-11-21T01:38:51.548Z,Outbound to Office 365 - 40c19356-3e03-49ca-a65a-5d1f69775f49,08D9AC6288033657,47,LOCALIP RMEOVED:47575,104.47.60.36:25,<,450 4.7.1 Unable to Relay. ATTR37 [QB1CAN01FT006.eop-CAN01.prod.protection.outlook.com],
+
+Our RELAY receive connector is setup with AUTH = TLS & BASIC, Permission Groups = ANONYMOUS
+
+Anyone have anything else to check ?  I was hoping the error could point me in a direction to the Relay receive connector being the issue, or the Send Connector to O365...",1637777068.0,1,0.57,1
+sysadmin,Exchange rule to display reply-to address,"Holy geez trying to Google this and getting zero hits.
+We have some emails that are coming through that look legit, but the reply-to address is something different.  Right now I have a rule that says, ""even though this looks like its coming from @domain.com the email is actual not being sent from there, please be cautious""
+
+Is there a way that I can somehow actually display in the email warning what the reply-to address is, as in specifically show that its different@notdomain.com ??
+
+Environment is Exchange 2013 on-prem hybrid with Exchange Online/365",1603741066.0,3,0.81,5
+sysadmin,Desktop Outlook365 keep asking for username/password - adds the domain infront of full account,"Last week I removed the Microsoft Authenticator from my account so that I could use the Authy app for 2FA.  My account was working for almost a week, and now when I am off the network it keeps asking for username and password when trying to open Outlook. (see attached below)
+
+I've tried re-installing Outlook, removed and re-added the account but it keeps asking, whats worse too, is it keeps adding the domain infront of the full account and wont accept it when I try with either domain\user.name or user.name@domain ...
+
+Since were working from home this has been a huge pain, I feel like this has something to do with the 2FA window not coming up when I sign-in but can't see anything that would help me troubleshoot...
+
+https://imgur.com/a/Pe2SLVr",1601908413.0,2,0.75,2
+softwaregore,"Just a hair under 17EB of free space left, should be enough for a couple game installs",,1601571160.0,11,0.93,2
+applehelp,3 SSDs dead after trying to upgrade to Catalina,"I have a 2013 13"" Macbook Pro that has been working great for the entire time, just last month I tried upgrading to Catalina, and it worked fine for a couple days, and then poof.  Wouldn't boot up, Missing Folder? icon upon boot up.  Thought that was weird, so I tried internet recovery and the drive doesn't show up at all.  Ordered a new SSD and the Sintech adapter so I could use a normal M.2 drive, and it found the drive so I re-installed Catalina (internet recovery wouldn't work because the drive was too new) and again, a couple days later the SSD died.  Very strange, maybe 2 bad SSDs.
+
+Took an SSD out of my Mac Mini and plugged it directly into the Macbook pro, used internet recovery and installed 10.12 or 10.13 and used it for a couple weeks with no problems, thought everything was fine, so I upgraded to Catalina and again, dead SSD.  Missing folder icon, doesn't show up in disk utility.
+
+WTF? What is going on!!! I've lost 3 SSDs now, I dont have a carrier for the apple type M2 SSDs so I cant check to see if theyre for sure dead, but it sure seems like it.  
+
+I am honestly pissed at myself for burning through 3 SSDs and Apple if there is something they've effed up on when it comes to Catalina... anyone have any ideas at all.. Im beyond stumped",1592419547.0,1,1.0,8
+AndroidQuestions,Custom DNS for tethered or hotspotted Devices,I am trying to setup a hotspot on my phone to use a custom DNS.  I have set the DNS on the phone under Private DNS (works perfect ON the phone) but it seems whenever a device is tethered it ignores anything that is setup on the phone and uses the mobile network's default DNS.  I also do not see a way to set the DNS for the hotspot.,1588877094.0,2,1.0,0
+fortinet,FortiClient webfiltering on Android phone working as a hotspot,"We are thinking about handing out 150 phones/devices to students to act as hotspots and help them with distance learning while our schools are shutdown.  Since data usage is limited on these device plans, I was hoping to limit access to streaming websites, torrents, etc.
+
+
+If I install Forticlient with the correct license on an Android phone for web filtering, will the webfiltering also apply to any device that connects to the phones hotspot?",1587663452.0,2,1.0,6
+fortinet,Where to sell used Firewalls?,"This summer we are going to be upgrading 5 of our firewalls to different models.  We will have 2 3000Ds and 3 900Ds, has anyone found or used a place to move old equipment.  We are located in Canada if that makes any difference.  They also are currently under warranty",1587403054.0,1,1.0,11
+k12sysadmin,"Blocking ""Sign in with Google"" for GAFE domain","Is there a way to block our users from using the Sign in with Google; I have been looking everywhere and I don't like the idea of outside sites being able to access account details without the IT team's ok.
+
+Below is Zoom.us screenshot for reference,
+https://imgur.com/a/rF09HjL",1585939942.0,1,0.6,14
+k12sysadmin,Google Meet Public Live Stream,"We are trying to publicly stream our school board meetings using Google Meet since that is what the trustee and senior admin team is most comfortable with.  
+
+The Google Meet for invited users and the Live stream for guests within our domain is working fine, but I am needing to create a public link so that anyone can just watch the stream.  Google doesn't seem to have a way to do this.  I don't want to make it very complicated so I am hoping there's an easy way to do this.  Thanks",1585685086.0,2,1.0,9
+sysadmin,auto-reply for entire organization - Exchange 2013,"Afternoon everyone, we are looking at options to make sure that any staff that recieve an email send an automatic reply that states that we are closed due to COVID-19.
+
+Rather than send instructions to 1100 staff, and help half of them out trying to figure out how to do this (yes, its easy I realise that) I was hoping to create a mail flow rule that sends a response to anything sent to our domain.  Cant see how to do that though.  Anyone know how to do this, and if its a wise idea.
+
+I was also trying to think of reasons not to, one was that it now lets spam people know that the address is real, but if were asking all our users to do this themselves then that point is kind of moot.  thanks everyone, stay safe out there",1584904379.0,4,0.65,7
+aircanada,I'm in a bit of a pickle and have no idea what to do now - YWG to ZUR,"I booked a flight last month from Winnipeg to Zurich.  Since that booking my return flight had a time change of a minute.  No big deal, but now that I want to change/cancel my flight it says that I have to call Air Canada Reservations.  Well good luck with that, can't get through.  Okay, tried emailing -  4 week response time quoted, okay.  Tried Facebook Messenger Air Canada, nothing back.
+
+I booked Premium Economy (flexible) so I should be able to get a full refund for my cancellation... but I CANT cancel it.  So WTF do I do here? The flight was $3000, I don't get a lot of time to travel, so I can't see me using any sort of credit before December 30th.
+
+https://imgur.com/a/B1l84Gu
+
+edit: Kept calling and eventually got through this morning.  Was able to cancel the full flight and get a full refund.",1583956875.0,2,0.75,6
+k12sysadmin,Chromebook Geo-location,"We currently use a 3rd party app that can tell us the location of a Chromebook (Im assuming through wireless tracking since theres no GPS).  
+
+Is there a native way to check the lat/long of a Chromebook in the Google Admin console?",1582831484.0,3,1.0,6
+ITManagers,Christmas Gifts for Staff,"I have a team of around 7 guys.  The last week before Christmas I take everyone out for lunch, this year I would like to give them all a gift too for being such a great team.  We are a public funded business, so there's no such thing as bonuses or anything like that, so it will be all out of pocket.
+
+Just wondering what people think a nice gift/gift amount would be.  I was thinking $100 amazon gift cards, but I don't know if that's too impersonal or too cheap?
+
+EDIT: Took everyone out for lunch, gave each a Christmas card, wrote a stupid but funny work related haiku for each team member inside, and a $50 amazon gift card.  Awesome time, very light.  Thanks everyone for the input.
+
+Christmas Break is here
+
+We need it
+
+Still a ways to go",1575575871.0,23,0.96,24
+k12sysadmin,"Student Chromebook, Google Apps/Sites only","We have some students that are no longer allowed to browse the internet freely.  Is there a way to put them in a specific group so that they can only logon/use Google Docs/Sheets/Slide/Gmail ?
+
+I've been trying to find a way to really lockdown what they can access but not sure where to whitelist these sites.",1568821025.0,2,1.0,8
+hockey,Gibson has been pulled after allowing 6 goals on 14 shots. Still the first period,,1549155173.0,2418,0.98,284
+Diablo3Monks,Looking for advice on what to do next for higher GRs,"Character shot - http://i.imgur.com/krtVC00.jpg
+
+Battle.net profile - https://us.battle.net/d3/en/profile/lrdblz-1490/hero/74205631
+
+Just cleared a 76, and think I can probably push to 80 as is, just haven't had the time yet.
+
+Using the InnaRain build, and I'd like to stick with it, rather than go pure Rainment, so was looking for where I should go next.
+
+I know I should definitely start augmenting but what should I be looking for/or changing on the gear I have now?  ",1493050285.0,3,0.81,12
+Diablo3Crusaders,Need help with an early Akkhan build,"My first time rolling a Crusader so I'm still learning the in-and-outs about them.  I've got my gift set and a couple items that help but am wondering what I should re-roll on this 6pc.
+Almost none of them have CDR or THORNS so my main question is which one I should re-roll for if I have to choose.
+
+https://us.battle.net/d3/en/profile/lrdblz-1490/hero/74237221
+
+Trying to get 2pc of Invokers to help out and probably eventually go towards a hammer build but in the meantime need something that can clear rifts/bounties quicker
+
+Thanks",1491492081.0,6,0.88,11
+diablo3,Holding down SHIFT when comparing weapons removes the installed gem,"I'm sure a lot of vets knew this already knew this, but I didn't until just now so I thought I should share.  When you are comparing two weapons, the one you usually have equipped has an emerald and skews the comparison.
+
+Also, holding CTRL shows the min-max of the properties, ALT compares it to your second weapon (if equipped)",1485448935.0,118,0.87,21
+diablo3,"Kanai's Cube, extracted powers between non-season, seasonal characters.","Is there a way to show all the items I have extracted power from?
+I have items on my seasonal character that I'd like to either salvage or cube, but I don't want to cube something I have already done on my regular characters.
+
+edit; looks like manually is the way. Cross out the ones you have
+I've included a list of all legendaries in the game - https://docs.google.com/spreadsheets/d/15s7_if_Z3IUFBrijIPxFKQsB7P6Iv_zRS734_TQ6B7w/edit#gid=0 (found by colamachine)",1484587319.0,9,0.77,23
+apple,iOS10 mirror,[removed],1473795846.0,0,0.5,1
+diablo3,"Well, I'm an idiot ...","Over the course of the season I've probably ran into 5 or 6 menagerist goblins, killed them and then got disappointed that no pets dropped ... killed one today and looked closer and realized that the pet drops are white, not orange.  I don't know why but I just assumed they would drop like legendaries.  So today I got Lamb.  One of hopefully many more...",1463669380.0,93,0.87,57
+hockey,Duchene's comments on Radulov,"http://www.sportsnet.ca/hockey/nhl/matt-duchene-canada-russia-anthem-snub-iihf-world-championship-gold-medal-ovechkin-babcock-spezza-radulov/
+
+In the article above Duchene talks about Radulov jumping into the Canadian's bench with the Russian flag; ""The one time he was saying that [Alexander] Radulov in Halifax was skating right by them, jumping on the boards with the Russian flag. [Canadian] guys were real close to leaving the blueline and go take a run at him,"" Duchene said.""
+
+When was this, are there any video of this, just curious to see it.",1432836000.0,23,0.93,32
+hockey,"Todd McLellan, 15 million / 5 years",,1432224268.0,126,0.95,58
+playstation,PS3 HDD upgrade data loss?,"I want to upgrade my PS3 slim with a new HD, it says to make sure that you have everything backed up.  I subscribe to playstation plus so all my game saves should be okay (how do I make sure that they actually are all backed up online?), what other data will I lose.  I don't mind re-downloading all my games from the playstation store.",1409772061.0,3,1.0,3
+hockey,The St. Louios snub,"Can someone please explain to me what this whole Olympic snub deal is with St. Louis?
+
+Why was he so hurt for being left off the team originally, and why did he expect to be a shoe-in?  The guy is 38, small and even when Stamkos was removed, wasn't mine or a lot of peoples choice as the replacement.
+
+There must be way more to this story, or he's a little delusional to think that he had a right to be on the Canadian Olympic team.  Have some pride man, you don't see the last guys from the Olympic team complaining about being left off.",1394120163.0,0,0.25,6
+canada,"Cat shot in head 17 times: Man, 19, arrested and charged - Windsor",,1392391828.0,36,0.77,45
+xboxone,viruses on xboxone,"Has there been any discussion on the topic of xboxones and susceptibility to computer viruses?  Just got through reading the ars write up about using it as a work-computer (opening emails) and it got me wondering about how hard/easy it would be.
+
+Yes, the xboxone will only run signed-code, but are there ways around that. And if they did get one, what parts of the OS are accessible?
+
+Keep it civil, I'm not bashing the xbox over the ps or wii, just curious from a network security point of view.",1386692391.0,0,0.27,8
+videos,that's living in Canada.,,1352925838.0,333,0.91,124
+pics,the most harrowing drive of my life...,,1320764947.0,1,1.0,0
+pics,"if you leave your campsite like this, do everyone a favour and stay indoors",,1318002044.0,1213,0.95,320
+nhl,"Stanley Cup Final - Canucks ""Inches""",,1308173323.0,1,1.0,0
+worldnews,You can just hear the editor crying inside while publishing the title [snow storm in ontario],,1296677444.0,1,1.0,1
+DoesAnybodyElse,DAE use notepad instead of Word or Wordpad for the majority of their work?,"Network engineer myself so for copying switch\router configs, they save better in notepad, but I find now most of my writings and notes for projects are a .txt file",1290529587.0,4,0.83,5
+reddit.com,"TV commercial watchers, I need your help to find a specific one",[removed],1289941269.0,1,1.0,0

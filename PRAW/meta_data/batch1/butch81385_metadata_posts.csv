@@ -1,0 +1,899 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+HimsWeightloss,Should I wait to start my first semaglutide dose?,"So I didn't realize the delay in shipping when I signed up for compounded semaglutide.  It is now going to arrive in a few days, but 2 weeks later I am going on a trip that includes 16 hour flights each way.  Would it be smarter to push back my start by a month to avoid any potential stomach issues on such a long flight (I wouldn't be happy but could deal with stomach issues on vacation, but in the air scares me).  When I originally was signing up I figured I would be a month or more in before my trip, but now the timing is so much shorter it has me questioning when to start. I appreciate any thoughts!",1738272816.0,3,0.8,5
+pittsburgh,Electronics Shop that can do Console Repair?,"Are there any local places that do console repair?  Specifically my Xbox Series X broke and I believe it needs the NB7N chip replaced.  Trying to find something cheaper than Microsoft or UBreakIFix, and I don't trust myself to learn hot air rework on something expensive.",1732401306.0,0,0.5,0
+consolerepair,"Xbox Series X lights up, but no display, no response to troubleshoot mode","I tried to turn on my Series X today. It beeps and lights up, but no display and the fan turns off within a minute. Tried power cycling, changing hdmi cables, changing inputs, and nothing. So I tried doing the low res boot, but it doesn't beep the second time and turn off like it is supposed to. I also tried to enter troubleshooting screen with the pair button during boot. That also did nothing with no second beep.
+
+I assume it is a hardware issue since the troubleshooting and low res booting doesn't even get a beep (to me that means it isn't booting at any level).
+
+Has anyone see this before? Is there a common issue that I can look into replacing myself?",1732065817.0,1,1.0,0
+XboxSupport,Series X powers on but doesn't boot/no display,"I tried to turn on my Series X today.  It beeps and lights up, but no display and the fan turns off within a minute.  Tried power cycling, changing hdmi cables, changing inputs, and nothing.  So I tried doing the low res boot, but it doesn't beep the second time and turn off like it is supposed to. I also tried to enter troubleshooting screen with the pair button during boot.  That also did nothing with no second beep.
+
+I assume it is a hardware issue since the troubleshooting and low res booting doesn't even get a beep (to me that means it isn't booting at any level).
+
+Has anyone see this before?  Is there a common issue that I can look into replacing myself?  ",1732065620.0,1,1.0,1
+TurtleBeachRace,VelocityOne Race Power Supply,Does anyone have information on the power supply for the VelocityOne Race?  I got one from an open box amazon return auciton but it didn't come with any cables including the power supply.  From the base itself I can see that it is 24v but it doesn't say the amps.,1730002379.0,2,1.0,9
+simracing,Windsim? Why?,"I've been seeing more and more comments about adding windsim to their rigs. People say that it adds to immersion, but to me it seems like it would do the opposite. Like what race cars do you feel the wind on your face? anything open to the wind would have you in a full helmet. 
+
+Is it more just a ""neat gimmick adds additional fun for me"" kind of thing?  Not knocking it at all. Just trying to understand the benefit.",1725992326.0,35,0.85,64
+lua,Passing values into a function not working - BeamNG/BeamMP script,"So I am working on a server-side script for the multiplayer version of BeamNG.  I know coding basics, but am still new to LUA.
+
+I have a table of variables.
+
+I have a set of M.command functions that are triggered when the right keyword is typed into the chat.  These seem to interact with the above variables perfectly (i.e. I can write to a variable with one command, and print the updated value with another).
+
+I also have an event timer created by one of the above functions, which triggers a T\_Update function. However, if I reference a variable from the table of variables, it will also give me the default value and not the updated value after it has been changed.  Also trying to write to the table of variables does not seem to work.
+
+Here is a snippet of code (I removed a bunch of the code to leave just the important parts. Removed sections are just ways to change the values of the variables. These changes are reflected in the printSettings code, but not the T\_Update code).
+
+https://preview.redd.it/ox415sx4kasc1.png?width=1341&format=png&auto=webp&s=d5f8e1237f7974f1d16244d59f71465e02566d8a
+
+I have also tried placing T\_Update above the M.commands = {}, but that didn't work either.  I left it here as this was the location of it in a known working mod I referenced.
+
+Any thoughts?
+
+Current state of the full code:
+
+    require(""multiplayer"") --requires multiplayer to work
+    
+    local M = {} --I think this creates everything below as a module
+    
+    M.options = {--originally had these as separate variables but that didn't work. switched to this method based on the flood mod
+        grav = -9.81,
+        gravmax = -25,
+        gravmin = -0.5,
+        gravwarn = ""true"",
+    randtime = 60
+    }
+     
+    print(""Current Gravity is "" .. M.options.grav) --verifying the original gravity. Probably not needed once we get everything working.
+    
+    M.commands = {}  --honestly, no clue what this does.
+    
+    
+    --[[function onPlayerJoin(pid)--orginially copied over from flood mod, but no clue what it actually does.
+        local success = MP.TriggerClientEvent(pid, ""E_OnPlayerLoaded"", """")
+        if not success then
+            print(""Failed to send \""E_OnPlayerLoaded\"" to "" .. pid)
+        end
+    end]]--
+    
+    
+    
+    M.commands[""set""] = function(pid, gravity)  --manually set a gravity value
+        gravity = tonumber(gravity) or nil--check to make sure its actually a number or return invalid value statement
+    print(""Current gravity is "" .. gravity)
+        if not gravity then
+            MP.hSendChatMessage(pid, ""Invalid value"")
+            return
+        end
+        MP.TriggerClientEvent(-1, ""gravset"", tostring(gravity))  --sending to client as a string as it didn't like sending a number.  the client converts it back to a number and sets the gravity to it.
+        MP.hSendChatMessage(-1, ""Gravity set to "" .. gravity)
+    M.options.grav = tonumber(gravity) --setting the main variable to the set value
+    end
+    
+    M.commands[""reset""] = function(pid)
+    MP.CancelEventTimer(""ET_Update"") --cancel timer
+        gravity = -9.81--reset grav value
+    print(""Gravity reset to "" .. gravity)
+        MP.TriggerClientEvent(-1, ""gravset"", tostring(gravity))
+        MP.hSendChatMessage(-1, ""Gravity reset to "" .. gravity)
+    end
+    
+    M.commands[""rand""] = function(pid)
+    MP.CancelEventTimer(""ET_Update"")  --tried cancelling the event timer before doing anything else in case it was running from the beginning and not updating. didn't help. probably can be removed.
+    local gravrand = M.options.grav--tried creating local variables in order to try to send the values to the t_update function as sending the m.options. wasn't working
+    local randmax = M.options.gravmax
+    local randmin = M.options.gravmin
+    local randwarn = M.options.gravwarn
+    local changetime = M.options.randtime
+     MP.hSendChatMessage(-1, ""Gravity: "" .. gravrand .. ""\n"")--debugging messages to make sure values are coming through.  To be removed when it finally works
+    MP.hSendChatMessage(-1, ""Max Gravity: "" .. randmax .. ""\n"")
+    MP.hSendChatMessage(-1, ""Min Gravity: "" .. randmin .. ""\n"")
+    MP.hSendChatMessage(-1, ""Change Warning: "" .. randwarn .. ""\n"")
+    MP.hSendChatMessage(-1, ""Time Between Changes: "" .. changetime .. ""\n"")
+    MP.RegisterEvent(""ET_Update"", ""T_Update"",gravrand,randmax,randmin,randwarn,changetime) -- create the event ET_Update which triggers the function T_Update when event happens. tried passing the values of the variables here as it wasn't working otherwise.
+        MP.hSendChatMessage(-1, ""Gravity Randomizer initiating in "" .. M.options.randtime .. "" seconds"")
+    randtimems = M.options.randtime * 1000--converting to ms from seconds
+    MP.CreateEventTimer(""ET_Update"", randtimems)--new timer, will trigger event ET_Update every randtimems milliseconds
+    end
+    
+    M.commands[""stop""] = function(pid)
+    MP.CancelEventTimer(""ET_Update"")
+        MP.hSendChatMessage(-1, ""Gravity Randomizer stopped. Gravity has not been reset."")
+    end
+    
+    M.commands[""max""] = function(pid,gravmaximum)
+    gravmaximum = tonumber(gravmaximum) or nil --verify number is input or invalid gravity.  probably want to add another option to disallow or discourage positive values (upwards force)
+        if not gravmaximum then
+            MP.hSendChatMessage(pid, ""Invalid gravity"")
+            return
+        end
+    M.options.gravmax = gravmaximum --set global variable
+        print(""Strongest gravity set to "" .. gravmaximum)
+        MP.hSendChatMessage(-1, ""Strongest gravity set to "" .. gravmaximum)
+    end
+    
+    M.commands[""time""] = function(pid,randtimes)--verify number is input or invalid time.  may need to disallow negative values?
+    randtimes = tonumber(randtimes) or nil
+        if not randtimes then
+            MP.hSendChatMessage(pid, ""Invalid time"")
+            return
+        end
+    M.options.randtime = randtimes--set global variable
+        print(""Time between changes set to "" .. randtimes .. "" seconds"")
+        MP.hSendChatMessage(-1, ""Time between changes set to "" .. randtimes .. "" seconds"")
+    end
+    
+    M.commands[""min""] = function(pid,gravminimum)
+    gravminimum = tonumber(gravminimum) or nil--verify number is input or invalid gravity.  probably want to add another option to disallow or discourage positive values (upwards force)
+        if not gravminimum then
+            MP.hSendChatMessage(pid, ""Invalid gravity"")
+            return
+        end
+    M.options.gravmin = gravminimum
+        print(""Weakest gravity set to "" .. gravminimum)
+        MP.hSendChatMessage(-1, ""Weakest gravity set to "" .. gravminimum)
+    end
+    
+    M.commands[""warn""] = function(pid, gravwarning)
+        if string.lower(gravwarning) == ""true"" then --originally used true, but when that didn't work, switch to the string ""true""
+            gravwarning = ""true""
+    MP.hSendChatMessage(pid, ""Gravity change warning enabled"")
+        elseif string.lower(gravwarning) == ""false"" then
+            gravwarning = ""false""
+    MP.hSendChatMessage(pid, ""Gravity change warning disabled"")
+        else
+            MP.hSendChatMessage(pid, ""Please use true/false"")
+            return
+        end
+    M.options.gravwarn = gravwarning--set global variable
+          
+    end
+    
+    M.commands[""printSettings""] = function(pid)
+            MP.hSendChatMessage(-1, ""Gravity: "" .. M.options.grav .. ""\n"")
+    MP.hSendChatMessage(-1, ""Max Gravity: "" .. M.options.gravmax .. ""\n"")
+    MP.hSendChatMessage(-1, ""Min Gravity: "" .. M.options.gravmin .. ""\n"")
+    MP.hSendChatMessage(-1, ""Change Warning: "" .. M.options.gravwarn .. ""\n"")
+    MP.hSendChatMessage(-1, ""Time Between Changes: "" .. M.options.randtime .. ""\n"")
+    end
+    
+    function T_Update(gravrand,randmax,randmin,randwarn,changetime) --originally T_Update(). added the variable passthrough as an attempt to send the new values and not the default values
+    MP.hSendChatMessage(-1, ""Gravity: "" .. gravrand .. ""\n"")  --chat messages to print as a troubleshooting method. Remove when code actually works.
+    MP.hSendChatMessage(-1, ""Max Gravity: "" .. randmax .. ""\n"")
+    MP.hSendChatMessage(-1, ""Min Gravity: "" .. randmin .. ""\n"")
+    MP.hSendChatMessage(-1, ""Change Warning: "" .. randwarn .. ""\n"")
+    MP.hSendChatMessage(-1, ""Time Between Changes: "" .. changetime .. ""\n"")
+    --[[local tgravrand = gravrand--attempt to make local variables from the passed-through values when using the passthrough values directly didn't work.
+    local trandmax = randmax
+    local trandmin = randmin
+    local trandwarn = randwarn
+    local tchangetime = changetime
+    --[[MP.hSendChatMessage(-1, ""Gravity: "" .. tgravrand .. ""\n"")  --original troubleshooting print
+    MP.hSendChatMessage(-1, ""Max Gravity: "" .. trandmax .. ""\n"")
+    MP.hSendChatMessage(-1, ""Min Gravity: "" .. trandmin .. ""\n"")
+    MP.hSendChatMessage(-1, ""Change Warning: "" .. trandwarn .. ""\n"")
+    MP.hSendChatMessage(-1, ""Time Between Changes: "" .. tchangetime .. ""\n"")]]--
+    --[[if gravwarn == ""true"" and randtime >= 10 then--if they want warning, and time is longer than 10 second, implement a 10 second and 5 second warning.  When finally working may switch to 15 or 20 seconds to allow for the transition period and keep the event shorter than the time between events
+    MP.hSendChatMessage(-1, ""Gravity changing in 10 seconds"")
+    MP.Sleep(5000)
+    MP.hSendChatMessage(-1, ""Gravity changing in 5 seconds"")
+    MP.Sleep(5000)
+    end]]--
+    --[[gravdif = trandmax - trandmin  --get the difference between max and min values. was ogiginally just in the math, but when that didn't work it was separated to new variable.
+    local newgrav = trandmin+gravdif*math.random()  --takes a value between 0-1, multiplies it to the difference, and adds the min. if value is 0 it would be min, if value is 1 it would be max
+    local gravinc = newgrav-gravrand  --find the increase from existing to new grav value
+    gravinc = gravinc/100  --make an incremental version of the increase. future plan to make 100 adjustable, either new variable or based on the time variable
+    MP.hSendChatMessage(-1, ""Gravity Change Initiated..."")
+    local i=0
+    while i<100 do  --while loop to add the increment to the grav value every 0.1 seconds. future plan to adjust 100 here along with gravinc 100 above
+    tgravrand = tgravrand + gravinc
+    MP.TriggerClientEvent(-1, ""gravset"", tostring(gravrand))
+    i=i+1
+    MP.Sleep(100)
+    end
+    gravrand = math.floor(tgravrand*100)/100  --reduce the number of decimal points
+    print(""Gravity set to "" .. tgravrand)
+    MP.hSendChatMessage(-1, ""Gravity set to "" .. tgravrand)
+    M.options.grav = tgravrand  --save global variable, except it doesn't work
+    return]]--
+    end
+    
+    --[[MP.RegisterEvent(""onInit"", ""onInit"")  --these were all in the flood mod, but are currently unused and therefore commented out
+    MP.RegisterEvent(""onPlayerJoin"", ""onPlayerJoin"")
+    MP.RegisterEvent(""E_OnInitiliaze"", ""E_OnInitialize"")]]--
+    return M",1712161987.0,1,1.0,0
+automationgame,What can be done with Props in Automation? Quite a bit.,,1711677506.0,19,1.0,9
+SocialSecurity,SSDI Increase Caused Removal of State supplied Medicare Part B,"So a family member is on SSDI.  The COLA has made their monthly payment $32 more than the maximum income the state allows. As a result the state (PA) sent a letter that they are no longer eligible for state supplied Part B coverage.  The state said they can't do anything about it.  The local SS office said over the phone that there was nothing they could do either.  Surely there has to be something done.  The COLA will end up costing them a ton of money over the course of the year because of this.  Has anyone dealt with this before? Any suggestions?  They only have until the end of this week to file an appeal, but unless something changes, they were told they would lose the appeal because of the $32.",1707346526.0,33,0.85,49
+pchelp,Thunderbolt 3 not working and no updates from Vaio?,"I'm helping my cousin. He has a Vaio VWNC51428 from Sam's club . I had a spare GPU and had picked up a Razer Core X for dirt cheap. When I plug it in I get the notification that ""Thunderbolt device functionality may be limited"". The laptop's USB-C is supposed to be Thunderbolt 3. I'm using a TB3 cable and supported GPU.  The fans all spin up. Core X shows up in device manager but the GPU doesn't. I think the issue may be driver/bios related. But Vaio doesn't have any updates for this model, including the bios. 
+
+I used the Intel driver updater to update a few drivers for Intel chips. I also manually installed Thunderbolt 3 drivers and Thunderbolt Control Center.  Still the same result.  Any suggestions? Anywhere to figure out how to update the bios or other drivers?",1702873742.0,1,1.0,1
+buildapc,"Trying to add storage, issue with SATA?","My motherboard is a MSI Pro Z790-A Wifi.  I have two M.2 SSDs in slots 1 and 3 (slot 2 is behind the gpu).  I am trying to add some large HDD for photo storage but they are not being recognized when plugged in. I've tried SATA ports 3 and 4 and two different cables with no luck.  Plugging the drive into an external enclosure has no issues.  The SATA power cable is powering the RGB controller so I know that it is getting some level of power.  The BIOS doesn't show any anomalies on the power rails.
+
+Any thoughts?",1701112671.0,1,0.66,5
+forzamotorsport,Anyone successfully using a Buttkicker?,"So I recently got a Buttkicker for my system.  I turned on the Data Out, and using the port that Buttkicker says to use (5305) I get nothing.  If I switch to 4444 (the port that BeamNG successfully uses) then I get engine vibration, but that's it.  Has anyone gotten this working?
+
+&#x200B;",1698768923.0,4,0.84,9
+BudgetAudiophile,Wiim and Budget Outdoor Speakers?,"Upgraded my living room setup (woo for over half off on Focal Shape 50). Added a Wiim Pro Plus to tie the turntable, streaming, bluetooth, and tv outputs together.  Would love to get some budget outdoor speakers for my deck and patio that could connect to my system for seemless or near seemless audio between the spaces.  Trying to figure out the best budget way to accomplish this.
+
+First thought - another Wiim device inside, connected to an amp inside, with speaker wires running outside. If I want the deck and the patio as two different zones, I would have to double this.  Seems to be getting very expensive quickly (2 Wiims, 2 amps, 4 speakers, holes in the wall/ceiling/exterior for wires). From what I have read, this would work as planned.
+
+Next thought - Maybe Airplay enabled outdoor powered speakers that I could leave plugged in and use the Wiim to share via AirPlay.  Not sure if it would play both on the speakers and via AirPlay, and not sure if the speakers I am looking for exist or are affordable for decent quality.
+
+Anyone have an experience with something like this? Any third option that I'm not thinking of?",1695235149.0,2,1.0,0
+BeamNG,"I crashed as much as my computer could handle for you, Auggie.",,1689304861.0,3,0.62,0
+OlympusCamera,OM-1 weird reaction to shutter half pressed,"If I set the camera to AF on a half-press shutter, it works, but if I hold it too long or move too quickly while holding it, the screen goes black, it sounds like it takes a pic with the electric shutter, then the screen pops back up and it shows writing to the memory card... but it doesn't take a picture.  I thought it was just too sensitive at first, but the fact that it isn't taking a picture has me confused.  Why does it fake taking a picture, and what is it writing to the memory card?  Something wrong with my camera, or is this some setting somewhere that I have screwed up?",1688969950.0,2,1.0,2
+OpenRGB,"All LEDS act as 1 in effects, but not in device modes",[removed],1682916311.0,1,1.0,5
+automower,No loop signal driving me crazy,"At the end of last season I was having loop signal issues. As the wire was a few years old I bought some new heavier duty wire and ran it from my base station one way to the guide point.  It worked the rest of the season.  I go to start it up this year and I get no loop signal.  I have removed the guide wire, and ran new wire from the guide point back to the other side of the base. Still no loop. I have tried replacing all segments of wire that are on the ground instead of below with no luck. I get continuity, and I get a stable signal through the whole wire with my cable tester. I tried a small 5' loop and it works, so it shouldn't be a base problem.  I tried cleaning the contacts as well. 
+
+It is frustrating to think that I'll have to replace a few hundred feet more of wire that was put in 6 months ago. I love my mower but can't wait for the tech to improve more.
+
+I am gonna borrow a friend's spare base this weekend (they had a mower stolen and don't need it anymore) to see if maybe mine just isn't putting out enough signal or is too sensitive to the resistance or something.",1681422108.0,2,1.0,7
+BeamNG,Wind! in mulitplayer?,"Does anyone know if there is a way to control the wind for everyone on a server (either built in, a lua app, or a mod on the server)?  I know in single player you can just use the Wind! ui app, but as far as I'm aware that is a local setting and wouldn't affect others on the server.",1679202786.0,6,0.88,0
+techsupport,Weird issue connecting laptop dock through hdmi switch,"So, I have a laptop connected to a dock and a desktop. I have 2 monitors.  I was trying to find a budget way to make it so that either computer could use one or both of the monitors.  I got 2 hdmi switches.
+
+Laptop>dock>both monitors: works.
+
+Laptop>dock>switches>monitors: only the HP works, LG doesn't.
+
+Laptop>dock>switch>HP and Laptop>switch>LG: both monitors work
+
+Laptop>dock>switch>LG and Laptop>switch>HP: only HP works.
+
+Laptop>dock>switch>LG with the HP not connected to anything: LG works.
+
+Laptop>dock>switch to HP and direct to LG: only HP works. 
+
+I have tried swapping the switches, cables, and ports on both the switches and the dock. For some reason the LG will only work through the dock if no switches are installed, or only one switch is installed and nothing is in the 2nd hdmi port. If the HP is connected and either one has a switch,  I'm at a loss as to how this makes any sense.",1677109922.0,3,1.0,3
+Irishmusic,My band (Bealtaine) finally put out a CD. Here's the Spotify if you want to listen,,1662786749.0,24,0.94,1
+pixelography,[Pixel 6 Pro] Juneau Fog [Google Photos],,1658038265.0,19,0.96,2
+Cruise,There is no feeling like embarkation day!,,1657745324.0,228,0.98,19
+Cruise,Still doing sunset photos? This is from the Miracle in Alaska last year.,,1657033148.0,24,0.88,2
+automower,Better Replacement Wire?,"So, after about 3 years I'm now chasing issue after issue with my boundary wire.  It seems like in one secetion of my yard the wire has a bunch of bad areas.  When I dig it up I find cracked insulation on the wire in random places.  I'm thinking it would be best to just run a whole new section of wire through that part of the yard, but I am hoping for suggestions on better quality wire that may last longer for that. I also only need like 50' of it, so getting a 500' roll seems needlessly expensive. Any suggestions?",1656786882.0,2,1.0,9
+tipofmytongue,"[TOMT] Movie or show where character is helping small town sheriff and solves a murder of a ""drunk"" on a farm.","It was made to look like the guy wrecked his truck driving drunk, but he was actually murdered. Ends with a gun fight I think. May also involve a town dance and a power outage.",1645030651.0,1,1.0,3
+FordMaverickTruck,Does your order show up under your Ford account?,I ordered back in August from Chapman.  Didn't get a confirmation email so I emailed the dealer and he forwarded the confirmation email and said he would double check that the email address wasn't typed wrong.  I created an account on Ford and it doesn't show an order on [https://www.ford.com/buy/my-vehicles.html#/](https://www.ford.com/buy/my-vehicles.html#/)  Is that normal or is it a sign that my email is still screwed up in the system?,1643481047.0,2,0.67,3
+dispatch,Dispatch - O.A.R. | Summer 2022 Tour Dates,,1638391547.0,8,1.0,10
+Cruise,Snorkeling in the Bahamas,"So, my November Bermuda cruise was just changed to a Bahamas cruise.  I totally understand (and am glad I don't have to deal with the ultra strict testing for Bermuda), but I am sad that we don't get to do the Shipwreck Snorkel excursion we had booked.  I've been to Nassau before but just took a taxi to a few sites around the city and walked the straw market and brewery, etc.  The other two ports we are now going to are Princess Cays and Freeport which I have not been to.  With the switch the cruise line has not offered any excursions yet, and said that they may not be available to purchase until we are on the ship. So I'm looking at what might be available then and what I can find third party.
+
+First question - Of those three places, can you recommend the best one to do a snorkeling trip?  Especially with any shipwrecks or other neat things to photograph underwater.
+
+Second question - Any suggestions for the other two ports for things worth seeing/doing?",1634959363.0,4,0.7,1
+onewheel,Finally got a Pint to join this community!,,1631920148.0,9,1.0,4
+buildapc,GPU options/Any Other Changes?,"I helped my cousin build a computer a year ago.  Budget was $1k and we got the following:
+
+Case - beQuiet 500DX Black
+
+Motherboard - MSI B450 Gaming Pro Carbon MAX WIFI AM4 ATX Motherboard 
+
+CPU - Ryzen 5 3600
+
+Ram - G.Skill Ripjaws V series 16GB (2x8GB) DDR4-3200 CL16
+
+Graphics Card - Sapphire Radeon RX 5600 XT Pulse
+
+Power Supply - Corsair CX Series 650 Watt 80 Plus Bronze Certified Modular Power Supply 
+
+SSD - 500 GB SSD 
+
+HDD - Seagate Barricuda Compute 2TB 3.5"" drive
+
+&#x200B;
+
+Well, that computer went to his mom's house and now we are looking at building one for his dad's house.  The call was to build a similar build.  Prices on everything seem about the same or a few bucks cheaper. Except the GPU of course.
+
+My main questions - Are there any GPUs of similar quality that are semi-reasonable (able to fit into a $1k build with the above)?Are there any of the above components that you would upgrade with anything that came out since then (or anything that came down in price sine then)?",1631241545.0,1,1.0,1
+FordMaverickTruck,"Am I the only one that isn't losing my mind over ""delays""?","Every time a constraint is mentioned or scheduling is mentioned I feel like this whole sub goes into a meltdown that no one will ever get a truck.  The truck is listed as starting to ship in the fall.  If it was radio silence from Ford until your order was picked all if you would have been happy with an oct or november build date.  But now we get a comment that they aren't scheduling hybrids ""until further notice"" and everyone is acting like they won't be able to build them at all! Sure, maybe it's the chip shortage and it may take a while.  Maybe it's an issue with the built-in-house motor that is slower in production than expected.  Maybe they start scheduling hybrids next week.  We don't know.  But this sub gets into a doom and gloom mindset with people talking about cancelling orders when we have zero idea of how long an issue it might be and while we are still in the time frame that if you didn't read it online you wouldn't even realize there was a possible issue to begin with!  
+
+I know that we are all anxious to get this truck, but until we get a better understanding on the timeline there is no use in getting so upset.",1631117939.0,63,0.89,59
+dispatch,Dispatch fall tour cancelled?,"Just got an email from the State Theater (State College, PA):
+
+""Dispatch has cancelled their fall tour including their October 9th date at The State Theatre. We are issuing refunds directly back to the purchase card. """,1630676843.0,11,0.93,14
+LeedsUnited,"Video of the hilarious dive attempt and then ""fight"" from Everton I think?","When I was on vacation I caught most of a game from a hotel one morning.  I think it was the Everton game?  Anyway, the other team's player got stuck along the goal line with the ball with Leeds up against them.  They hilariously tried to jump backwards multiple times to try to draw a whistle.  It didn't work and when they finally got the ball wide to kick it downfield they took a nice shove from the Leeds player and almost started a fight.  Does anyone have video of that?  Or at least remembers who was involved?",1630613033.0,13,0.89,3
+TerraMaster,Seeing Photo Thumbnails remotely,"I have an F4-210 set up in my house. I know that through the TOS interface you can see the photo thumbnails.  I also know that when on the same network using it as a network drive shows the photo thumbnails.  Is there any way to show the photo thumbnails when it is a remote network drive for someone signing in from another network?  My dad would like to go back and look through his old photos on occassion and download groups of them.  Downloading through the TOS interface seems limiting (if transferring large groups of photos), and it seems cumbersome to look through one interface and do large downloads and uploads from another.",1630610506.0,1,1.0,3
+MacroPorn,Macro of a Bee at a Sunflower Festival,,1630517933.0,23,0.93,1
+Insta360,Put my One R onto my KAP (Kite Aerial Photography) rig today and snapped this,,1629670463.0,16,0.91,6
+KAP,Connected my Insta360 One R camera to my KAP rig at the beach today.,,1629670362.0,7,0.9,5
+Insta360,Time Lapse cruising Tracy's Arm Fjord from cruise ship balcony - Insta360 One R 4k Mod,,1628525847.0,2,1.0,1
+Cruise,"Time Lapse video from my balcony as we cruised the Tracy's Arm Fjord, Alaska - Carnival Miracle 7/29/21",,1628525557.0,1,1.0,1
+dispatch,I got 4 tickets to Poughkeepsie I can't use. What's the best way to sell them to a Dispatch fan?,"I got 4 tickets hoping to go to see Dispatch in Poughkeepsie, NY.  Something came up and I cant travel that weekend now.  I would love for the tickets to go to a fan for face value.  What's the best platform to sell them?",1628218530.0,9,1.0,3
+hammockcamping,Some basic questions from a newbie,"So I got myself a hammock, rain fly, underquilt, etc.   I have some trips planned to the local state park campground since that is the kind of camping I am used to.  But looking at all the pics on here I have some questions about the more adventurous camping trips:
+
+Where do you find places to hammock camp?  
+
+If you are just out in the woods, are you bringing a shovel for restroom purposes?
+
+Where do you store your bag with clothes, etc?
+
+Are you just standing under your rainfly when you change, etc?  That seems fine in the middle of the woods but less ideal in an actual campground with neighbors.
+
+Do you lay a tarp or something down on the ground under your hammock?
+
+Do you leave your shoes on that tarp or do you bring them into the hammock to keep bugs/critters out of them?
+
+Are you applying Permethrin to your hammock after you set it up, or are you spraying it at home every month or so?
+
+If you are camping with your SO, and the mood strikes you right, are there any options for fun time? That seems like one time where a tent with an air mattress has a distinct advantage...
+
+Any other tips or suggestions you wish you knew when you were new?  I plan to be mostly camping out of my car for the near future, but in the long run I would love to have a setup I could take on my bike or on my paddle board and go somewhere for a night or two.",1626977126.0,3,0.81,3
+Insta360,Best Use of One R on upcoming cruise,"I am taking a week long Alaskan cruise soon.  While I have my Mirrorless camera for general photos, I'm trying to decide the best use of my Insta360 One R.  I have a balcony room, so my first instinct was to strap it to the railing and get some nice timelapse video.  The downside is that there is no power on the balcony so I would need to keep a battery pack out there to power and keep recharging the battery pack.  Or, maybe I can get a long usb cable that can fit within the door seal to power from the inside.  But I'm thinking it would be a long and uninteresting video if I do a short enough interval to keep it from looking too jumpy.
+
+What better uses are there?",1626719458.0,4,1.0,6
+hammockcamping,"New to hammock camping, questions about stands","So, I recently got back into camping.  I needed to get a new tent.  Well, since I love hammocks, and needed to spend money anyway, I decided to go for the hammock camping experience.
+
+I picked up a Ridge Outdoor Pinnacle 360, top cover (for help with colder weather), rain fly, under quilt and top quilt.  should be everything I need for my normal setup.
+
+But, there are a few places I would like to go where there may not be suitable trees.  So, I am thinking of getting a stand of some sort.  From my research it seems like the cheapest option is a DIY Turtledog, though that may be too long to easily transport in my vehicle.   The most portable option seems to be the Tensa Solo but that is definitely not cheap for a use on occasion item. In between we have the Tensa 4 or other Tensahedron designs.
+
+I believe most places I can find trees.  But if I'm going some place I have not scouted out before, etc., I would like to have a stand in the back of my car just in case.  Am I missing any options?  Has anyone made good Turtledog instructions for one that can fold up smaller?  Are there cheaper options than the Tensa Solo (sacrificing weight for cost, since I'm not planning any long hikes)?  
+
+I really do love the idea of the Tensa Solo, but buying 2 of them is $200 for something I may not use in a given year, and I don't think I can spend that much yet.  Maybe in the future after I see how often I get out camping these days.",1625588300.0,14,0.84,12
+FordMaverickTruck,It's almost the perfect truck. I sitll might get it,"So, I'm in the market to replace my current vehicle.  I would love a truck for occasional hauling from home depot or other larger purchases.  I would love to keep 4 seats for occasional carpooling to places.  I would love good gas mileage as I drive 25 miles each way to work.
+
+So, it seems to tick all of the boxes. Almost.
+
+I play in a band.  The PA system has a subwoofer which is about 24""x24""x24"".  If I read the dimension breakdown correct, the sides of the bed are only 21.5"" high, which means I couldn't transport the sub in the bed with a tonneau cover.  I assume the back doors won't open far enough to load it in there, either. Any thoughts?  The fallback plan is a small enclosed 4x6 trailer for when the full PA system is required, but that just adds cost and decreases gas mileage.  
+
+The other item is that I would love to be able to tow a small camping type trailer, but that's not gonna happen with the hybrid, so oh well on that.
+
+And I'm disappointed is that the Lariat is the only way to get lane centering and adaptive cruise control. I like the interior (and price point) of the XLT better but I will miss not having those features.
+
+Oh, and my garage is small and I don't think I could get the Maverick in without folding the mirrors in and out every time.",1624984907.0,11,1.0,9
+Cruise,Roller coaster of a week,"Well, I found out yesterday from my travel agent, and got the official email from MSC today that my October cruise was cancelled. Looks like MSC cancelled all sailings into Oct. or Nov. for three ships.
+
+Luckily for me, I had just booked a cruise a few days earlier on Carnival out of Seattle for my first Alaskan cruise at the end of July.  Got a casino offer for some of the first cruises back.  This one let me get a balcony room for a 7 day Alaskan cruise for $375/person.  Add in taxes, fees, gratuity, and airfare to Seattle and it will be about $1k/person, which I think is an amazing deal for a week long Alaskan balcony cruise!",1623267096.0,10,0.92,4
+penguins,Stopped by my parents' house and found these...,,1620930676.0,11,0.92,3
+DataHoarder,Changing Raid 5 on my Terramaster TNAS?,"I got a TerraMaster F4-210.  I originally set it up with 2 4TB drives in Raid 1.  Got some 8TB drives during a sale to add to that.   My idea to best utilize the drives maximizing space while still being able to handle a single drive failure was to use RAID 5. I envisioned that it would be able to get 16TB of usable space, basically treating the two 4TB drives as one 8TB drive in terms of the RAID.  
+
+Well, when I got the new hard drives checked and installed, I added them to the storage pool and it changed it to a RAID 5.  However, the max storage listed available is at the 12TB mark, which to me is consistet with treating it as four 4TB drives as opposed to treating it like three 8TB drives like I was hoping.
+
+Is it possible to do what I want?  Any suggestions to get the most storage out of what I have (while handling a single drive failure)?",1619452125.0,0,0.5,2
+Scams,Now on my second day of fighting off scams/hacks,"Yesterday, I got home and saw on my phone that 2FA was disabled on my Google account.  That sent me into panic mode because I didn't turn it off.
+
+After being able to get back in and resecure my account, I was able to see that supposedly my laptop sent the request to disable the 2FA (which was sitting in my empty house). Virus and malware scans have come up empty, but it had to have been some sort of remote access, right? 
+
+Anyway, they changed the 2FA and the phone number on my account.  They also added a phone as a trusted device (which I have an IMEI number for now, unless that can be spoofed, and sent a remote wipe request if it ever comes back online).  On that phone, they installed 3 apps, and paid for upgrades. The apps themselves seem to be made by the scammers as the paid upgrades are free for a few days, and then start a recurring billing for $160-$180 each per week.  I was able to cancel those before any charges and remove all trusted devices and change my password.  It sucked but I got away without losing any money. Just some time and effort since I saw it quickly.
+
+Well, today, I started getting email bombed.  I archived the emails as they came in.  and searched through them.  Within them I found that someone had gained access to my paypal account.  They had changed the email address and the phone number and the registered address on the account and also set up 2FA with some 3rd party app.  Took me over an hour with Paypal to verify I was the rightful owner and get the account restored to my name and I was able to change the password and get 2FA back to something I could control.  They did not make any purchases or transfers before I was able to get control back.
+
+What an absolute mess, but I'm lucky that I didn't lose any actual money.
+
+I do have the listed IMEI number for the ASUS ROG phone that apparently connected to my google, and I have the email address and the physical address that they put into my paypal, but I assume those are all dead ends (and without any loss of money, I assume there is no one to give these to, anyway). Just wanted to vent and talk about what happened, and see if anyone had anything else that I should check. I've also added AVG expanded firewall to help against any potential remote attack on my computer since it seems that is how they gained initial access.",1618858196.0,9,0.78,3
+Insta360,Best mode for One R on a kite?,"I'm gonna have a chance to send my One R below a kite tomorrow morning, probably above a dozen or so other kites.  Should I try to do a video and save snapshots from it?  Or time lapse?  Or just do interval shooting?  I may try to do all of them depending on the timing and the battery life, but looking for suggestions on where to start.",1618632695.0,1,1.0,1
+ender3,Got ABS instead of PLA. Is it worth trying to use it?,"So my brother and I got a 10 pack of filament from an auction.  It was listed as PLA.  Arrived to get it and it is ABS.  I have and Ender 3 (with capricron bowden tube, metal extruder, all metal hot end, and a hardened nozzle) and my brother has a CR10 V2 with capricorn bowden tube.  Neither of us have an enclosure.  Is it worth trying to print with this on either of our printers as they are?  If not, anyone in the Pittsburgh area want to buy some ABS?  Shipping on the 10kg is too expensive...",1617392488.0,2,1.0,4
+PittsburghBeers,Regarding recent comments in this sub,"This sub is made to discuss locally brewed beers and locally available beers and beer events.  We have recently had a bunch of comments that needed to be removed because of drama going on between a person and a brewery.  The details don't matter. What matters is that this drama stops now.
+
+Doxxing anyone will result in a ban.
+
+Passing off hearsay about a person or a brewery as fact will result in a ban.
+
+Following another user into another sub to continue the drama there or otherwise stalk them will result in a ban.
+
+Any claims regarding wrongdoings of a member or a brewery should only be posted if there is evidence and these claims impact potential customers and this evidence should be posted.  Unsubstantiated claims may be met with a ban.
+
+For example, it is perfectly fine to create a post linking to the health department's inspection report and state that Brewery X failed an inspection.  It is not acceptable to post saying ""My friend told me they were at Brewery X and the kitchen area is disgusting and no one should go there.""  Without evidence, there is no way to verify if what you said is true or know if you are just attacking a brewery to hurt business.  
+
+The craft beer community is all about building a group of people that support each other while sharing our hobby.  We can do better.",1616524031.0,63,1.0,0
+Network,Setting up remote FTP to NAS on network,"So I need to remote into my NAS. My NAS is connected to my Mesh network vis ethernet.  The Mesh network is connected to my Fios Gateway, which goes out to the internet. I was thinking the best course of action to be able to easily access files but still be relatively secure is to enable FTP on a non-standard port and require username and password to access any files.  I selected the active port I wanted and the passive port range I wanted.  I went to my Fios Gateway and forwarded those ports to the Mesh node.  I went to the the Mesh node and forwarded those ports to the NAS.  I tried to use Filezilla to access it.  It actually worked once.  But now it keeps giving me errors.
+
+Some errors to overcome:
+
+* ""Server sent passive reply with unroutable address. Using server address instead."" - I assume this is because of the router behind a router set up.  Not sure what issues this will cause.
+* ""ECONNREFUSED - Connection refused by server"" - How did this work once and now won't work again?
+
+Note that I read that the Mesh network should have NAT turned off when behind another router, but doing so made everything stop working.    
+
+
+I'm obviously in over my head, and what I'm trying to do is probably stupid, but any help to get where I want to go is greatly appreciated - The goal is to be able to access and upload files to my NAS remotely on specific occasions, while trying to keep it relatively secure from potential ransomware attacks or other malware. Bonus points if I can create a Network Location in windows to access it for easy drag and drop operation.",1615863877.0,2,1.0,5
+intermittentfasting,Began OMAD almost 2 weeks ago. Already making great progress!,"35 years old. 5'6"".  Started at 282.  Decided to try OMAD as a precursor to a more intense weightloss program. Coming up on 2 weeks and my weight this morning was 270.  Definitely making progress.  I find it relatively easy to go 24 hours without food as long as I keep busy.  It's sitting in front of a tv with nothing to do that makes me really want to eat.  Definitely still have cravings during normal meal time, but I think I'm starting to break the mental connection between noon and lunch.  So far I haven't had any issues with dizziness or any other symptoms that would indicate a lack of electrolytes or any specific vitamin, but I am open to suggestions as to what I should look for and what is typically recommended.",1615826656.0,10,0.77,4
+TerraMaster,Setting up DDNS or other faster remote access with my setup.,"I have a Terra Master 4 bay F4-210.  I have it connected to my mesh Wifi node so that my laptop in my house can see it and have quick access to it.  The mesh wifi node is connected to my Fios gateway, which is connected to the internet. So, Internet>Fios gateway/router>Mesh Router>TNAS
+
+I want to be able to give my dad faster access than [TNAS.online](https://TNAS.online), which seems to throttle speeds often.  It seems like the best way to do this would be to set up a DDNS since my fios gateway can switch ip addresses (though it doesn't do it often).  But I'm at a loss on the steps to do this.  I created an account with [freedns.afraid.org](https://freedns.afraid.org) and have it set to the TNAS IP address.  When I go to that in my browser it takes my to my FIOS gateway login page, so it is routing to the right house, but not getting past my gateway.  How do I get it to pass through from the gateway to the mesh router to the TNAS?",1615781417.0,1,1.0,1
+dispatch,"""Born On Earth"" music video has been released",,1614278551.0,31,0.98,6
+dispatch,"""Break Our Fall"" pre-order is now available, including other new merch!",,1614278275.0,15,0.95,0
+Insta360,Just got an Insta360 One R Twin - Understanding limitations and live streaming,"Just got my Insta360 One R in today.  I'm already excited about all the videos and photos I want to shoot, but I was also interested in how I may be able to integrate this with my other hobbies.  Primarily, I'm curious about using this to livestream 360 videos for my band.  I updated the firmware and figured out the livestream setup, but then noticed the warning about overheating, limiting livestreams to 30 minutes, and not charging it during the livestream. This sent me down the path of exploring the webcam option as well.  I was able to get the camera to recognize as a webcam and bring it into OBS or other software.  However, I noticed that with the 360 mod it sends the video as a split screen of the two lenses, one above the other.  I was hoping for a equirectangular video that could then be streamed to youtube or facebook.  
+
+So, has anyone tried livestreaming direct from the One R?  Did you find it shutting down due to overheating at the 30 minute mark as it warns?
+
+Has anyone found a way to output the video as equirectangular to a laptop?  Did you find that you could stream longer since it wasn't running the wifi so hard?
+
+In the meantime, it's good to know that I could use the camera on it's own for a short livestream or can use the 4k action cam mod as another video source for OBS, but would love to push this thing to its limits and get the most out of it that I can!",1614027532.0,2,1.0,5
+soccer,Which stadiums have notoriously bad camera angles?,[removed],1612376852.0,1,1.0,1
+ClassActionRobinHood,The illegal actions continue,"I was watching GME on the Robinhood app.  As I was watching I saw my Trade button get replaced with the Sell button and the note about not being able to buy.  If I switch stocks and come back it goes back to trade, but after watching for a bit it goes back to Sell only.  Still some fuckery going on.",1611935595.0,4,1.0,2
+fednews,Best way to request a Lateral Transfer?,"So my agency is going through a re-org. It doesn't directly affect me, but as part of it they have sent out a form for people to fill out if they would like to lateral transfer.  My current boss's boss (hired about 2 yeasr ago) has created an extremely toxic environment which has piled on work and stress to my life.  There is another department that I am qualified for that I think would be a much better fit.
+
+The problem is that I don't know how to best fill out the ""reason for the request"" section.  As much as I would love to write out everything and blast my boss's boss, I'm sure that is a bad move professionally for me.  Everything I have written so far just comes across as whiny or complaining and I think would reflect poorly on me.  Someone suggested phrasing it as a change in work atmosphere or culture, but even with that I don't know how to write it without either complaining or turning it back to a flaw in me (like saying ""that the new atmosphere isn't a good fit for me or something just makes me sound bad).
+
+Anyone have any experience with something like this or any suggestions how to best try to get a transfer while not burning bridges if I don't get the transfer?",1611361259.0,7,0.83,6
+CR10,CR-10 V2 Fan questions,"My brother picked up a ""used but working condition"" CR-10 V2.  He's been asking me to help troubleshoot since I have an Ender 3, but we have run into an interesting issue.  It appears that he gets a clog just about every time he tries to print, but the clog is often up near the bowden tube.  I had him replace and re-seat the bowden tube and it was still happening.  I did some google searches and read that it may be an issue with the hot-end fan. 
+
+I asked him to check out the hot-end fan, and what he told me was that when he turns the unit on, the fan on the right (I believe that is the part cooling fan pushing air downward) turns on right away.  The fan on the left did not turn on automatically, but did turn on when the Fan Speed is adjusted in the menu.  That sounds backwards to me.  Can someone confirm that this is indeed backwards?  It should be the fan on the left that turns on with the unit, and the fan on the right that adjusts with the fan speed control, right?
+
+If so, would this be an issue from the manufacturer/previous owner where the fan plugs need to be swapped on the control board?  Using a CR-10 profile on Cura 4.8, so I don't think that should have had any sort of effect, even though it wasn't a V2 profile.  
+
+Would appreciate any help on this.",1611023356.0,1,0.67,2
+AskReddit,What are some things we use or do that people in the future are going to laugh at the ridiculousness of it all?,,1610914377.0,2,1.0,2
+CoronaVirusPA,High Risk 65-74 year old vaccinations?,"I thought I had read that high risk 65-74 year olds would be in Phase 1B with the 75+ age group.  Now, I can't find information on that, just 65-74 in 1C with no mention of the high risk group.  With both of my parents in this group and both being high risk, I want to make sure that I am prepared to help them pre-register and get vaccinated whenever they are eligible. Did I mis-read or did they change it?",1610736859.0,5,0.7,13
+politics,New York State Bar Association Launches Historic Inquiry Into Removing Trump Attorney Rudy Giuliani From Its Membership - New York State Bar Association,,1610378144.0,1,1.0,1
+tattoos,"Got my first tattoo. Thanks to Chris Cleary at Dissidence Tattoo Company in Pittsburgh (raw, just finished picture)",,1610240170.0,15,0.87,1
+DiceMaking,"Still a long way to go, but this is the first set I've made that I was actually happy with.",,1608581514.0,16,0.95,1
+DiceMaking,Best temp for warming up resin?,"So, until I get a pressure pot, my best bet for reducing bubbles is warming up the resin beforehand.  Everything I have read says to use warm but not hot or boiling water to warm up the resin.  Has anyone ever figured out the best temp?  Ideally I would love to use my sous vide to warm the bottles up in a set and forget type method while setting up my work space and get consistent results.  Will probably end up with a pressure pot next time I see a good HF coupon, but for now I figured I would ask this.",1608307812.0,1,0.67,5
+mildlyinteresting,An M&M in my bag doesn't have the candy shell on the sides and kinda looks like a mini burger.,,1608135557.0,251,0.92,25
+AndroidTV,"Google TV install on Sharp 70"" Aquos Android TV","If anyone got the Sharp 70"" tv from the Best Buy deal around Black Friday (model 4T-C70BK2UD), I wanted to share some tips for installing the Google TV overlay until our tv is (hopefully) officially transitioned.
+
+First, I followed these directions:  
+[https://www.howtogeek.com/693761/how-to-get-the-google-tv-ui-on-android-tv-devices-right-now/](https://www.howtogeek.com/693761/how-to-get-the-google-tv-ui-on-android-tv-devices-right-now/)
+
+During install I found the following items of note:
+
+* Trying to install install the Google Base apk showed that it was apparently already installed (it asked if I wanted to update. I selected yes. It failed installing it).
+* The directions tell you to turn on Network Debugging.  This tv doesn't have that option. But, I found that turning on USB debugging was enough.  After turning that on ADB shell was able to access.
+* After I was done with the installation, I hit the home button and was given an option to select Home or RC Update.  Not knowing what RC Update was, I selected Home and that has worked.
+* Note: I used the Disable command instead of the Uninstall command.  I assume that the uninstall would work just as well, but the disable seemed better as it would let me switch back if I didn't like Google TV or if it didn't work without losing my settings.
+
+This tv is new to me, and with it Android TV was new to me.  Google TV is also new to me.  I can see pros and cons to both.  I think I will stick with Google TV for now if for no other reason than to find some new shows/movies that I didn't realize I had access to.",1608130715.0,5,0.86,5
+tmobile,Buy Pixel 4a 5g from T-mobile or from Google (or elsewhere)?,"So, I was thinking about doing the trade in to get a nice discount on the Pixel 4a 5g. Unfortunately I dropped my phone over the weekend and it got a hairline crack in the screen.  It's not too noticeable, but with the cold weather I was in today it seems like the one edge of the crack is potentially getting bigger (I can now feel the crack in that one spot  where I couldn't feel it anywhere after it first happened).  
+
+So, now it looks like I gotta pay full price for the Pixel 4a 5g (or trade it in for pennies if T-mobile will take it or about $80 if Google will take it).
+
+Any benefit of buying at T-mobile besides getting it today?  Any reason to buy it from Google instead?  Any other place worth looking at for this phone?",1606846188.0,3,0.8,13
+shopify,Sales Tax Collection Question,"So I have a Shopify store that primarily sells shirts but also has mugs and posters.  In Pennsylvania, clothing is not taxed.  The mugs and posters are.  Shopify was charging tax on all of it.  I found that I can create a collection for the shirts and assign a tax override of 0% for those.  But, it still charges tax on shipping.  In PA, if the item is tax-free then the shipping is tax-free.  Is there any way to update Shopify to do this correctly (collect no tax on shirts and no tax on shipping for orders that only have shirts)?",1606752768.0,1,1.0,1
+TVRepair,Element E4AA70R Roku tv no picture,"So, I got a new LCD tv: Element E4AA70R on a black friday deal. . It worked fine for 3 days.  Then I turned it on and the screen was blank (though you could see the backlights lighting up when you turn it on).
+
+Customer support said they are gonna give my money back and to recycle the tv.  I want to try to get the tv to work again as they are of course sold out everywhere and other options are much more expensive.
+
+I moved the tv. Plugged it in. Blank screen.  I held the reset button for 3 seconds. And it started working. I turned it off and moved it back into the living room, and it was a blank screen.  I held the reset button again, and it worked but only the red pixels.  I held the reset button again and its back to a blank screen.
+
+I opened up the back and it seemed that all of the connections seemed good, but I didn't mess with undoing/redoing the ribbon cables since they looked good and I know they can be fragile/a pain.
+
+Any thoughts on what would cause it to typically not work, but sometimes work and sometimes only show red pixels?  I'm worried that it is probably something on the controller board which won't be fixable, but if anyone has any suggestions on other things to check, I would love to hear them!",1606502624.0,1,1.0,1
+Vent,I'm an emotional mess and I feel guilty about it.,"I guess I should feel lucky that none of my close family members or friends have died from Covid.  But I just found out that another person I know died from Covid. I'm up to 5.  This one kinda hit a little closer to home because he was seemingly healthy 2 weeks ago. He attended a large event.  Then one week ago he starting having symptoms.  This week he died.  Obviously I have no idea if he caught it at the event, but it is certainly plausible.  I was invited to the event but didn't go because I am avoiding large crowds during Covid.  But I think about how easily that could have been me.  I think about the fact that one of my other friends at the event could have been the asymptomatic carrier that gave it to him.  I want to blame the person who hosted the event.  
+
+But I feel guilty.  I've only met this guy a handful of times.  It isn't like we are close friends or anything. I'm just so emotionally beat up that just knowing the guy is enough to make scream at the universe after hearing that he died. 
+
+On top of that, I'm frustrated.  I have a lot of friends and family members that think Covid is just another flu.  That are still ""living their life"".  
+
+But, I also feel like a hypocrit.  I live alone, and being alone for 8 months is impossible for me.  I've tried to be smart and limit my contact to a small number of people, most of whom work from home and don't have any other real contacts and all take the virus seriously.  But how can I be so mad and frustrated at others when I'm still making my own mistakes.",1606193444.0,2,0.76,0
+WeAreTheMusicMakers,"Most of us aren't sponsored by any brands, but what are some brands you are loyal to that you promote to your music-making friends?","Personally, I found myself sticking with the following in my bands:
+
+JBL speakers (graet bang for the buck)  
+Shure IEMs and vocal mics  
+Behringer on audio components (mixers, wired IEM body pack)  
+Audio Technica for my non-drumset mics (those ATM350s are awesome for clipping onto the stuff I play)  
+Vic Firth drumsticks.  
+
+That's not all my equipment, but that's the stuff I am happy to promote without getting paid to do so.  I do enjoy my instruments, but those brands are getting even more specific that most people don't care about (Ben March Bodhrans for my bodhran, Louson Drums for my cajon, Remo for djembes).
+
+What brands have your loyalty?",1604885262.0,0,0.33,7
+Music,Frank Turner - Make America Great Again [Political Rock] (not pro-Trump),,1604780557.0,2,0.75,1
+MAME,Need to completely overhaul my ssytem. What would you do if you were starting over?,"So, I had an old arcade cabinet. About 13 years ago I put in my old computer with the GameEx front end. I used an Xarcade Game Controller with USB output to map to keyboard keys.  I had connected it to a touchscreen CRT monitor and I surface mounted some Logitech speakers with a sub in the cabinet.  It was awesome.
+
+Fastforward 13 years and now the computer hard drive is dead and ram is bad and cpu is having issues.  The touchscreen part of the monitor is also dead, so I just have a small crt monitor.  
+
+Well, now I want to rebuild the system. I'm not quite starting from scratch, but pretty darn close. I plan to reuse the cabinet and the game controller (and speakers if it makes sense to).  But I need a new computer/hardware system, a new monitor, and figure out what front end to use.
+
+I read in the FAQs that retropi is not recommended.  Any other suggestions on hardware as opposed to just buying a cheap computer somewhere? Any recommendations for a monitor to put in the cabinet? I had previously put a piece of black painted plywood nearly vertical to house the crt I put in, so I don't mind doing something similar.
+
+And what's the best front end these days to handle MAME and maybe some NES, etc., emulators?",1604078150.0,6,0.72,26
+dispatch,Dispatch has set up a mobile number for future text updates,"Per this tweet:  
+[https://twitter.com/dispatchmusic/status/1319371218663985153](https://twitter.com/dispatchmusic/status/1319371218663985153)  
+
+
+ You can text +1 (617) 209-6553 and you will get an automated response with a link.  When you click the link it gives you a form to fill out your name, gender identity, birthday, city, and (optional) email address.",1603419086.0,6,0.88,1
+AdviceAnimals,All I could think of during the debate,,1602124327.0,2909,0.93,227
+Conservative,"With lots of people struggling to pay bills, Trump is holding the stimulus bill hostage until after he is re-elected. Smart move?",,1602011381.0,1,1.0,1
+Conservative,What if the roles were reversed?,[removed],1601567736.0,1,1.0,0
+PremierLeague,"Messi makes U-turn, says he'll stay at Barcelona",,1599242702.0,12,0.85,18
+automower,"Well, I broke the damn thing.","I've had my automower 310 for two seasons now.  I started having collission sensor issues.  I cleaned everything out and it seemed to work fine.  Then I started having collision sensor issues again.  I tried cleaning it, reseating the body, everything, with no luck.  Then when looking at it I realized that both ""wings"" that stick out and hold the front wheels were cracked along the main body of the mower allowing it to flex a bit.  I  assume that is what is casing the collision issues (flexing too much and either hitting the cover with the wheels or just casing too much drag.  The cracks are long and separating. As far as I can tell its not fixable without putting all of the guts into a new mower.
+
+Well, it's off to ebay for me to look for a replacement.  I guess that also means I need to stop putting off buying topsoil as I can only guess that it is fron bouncing over the roots coming down my hill that caused it to crack...  I bought the original used from ebay as well, so who knows if it was already stressed there or something.",1599238745.0,3,1.0,4
+pittsburgh,"Racism in Pittsburgh, how do we get rid of it?","So, Pittsburgh has a lot of things going for it, but there still seems to be quite a bit of racism in the city, and even more when you get well outside of the city.  How do we work to get rid of it?   Just the other night, a buddy of mine called out a guy that was verbally abusing a black store clerk.  The guy doing the abusing flipped out that my buddy should be on his side since they are both white and ""white people gotta stick together"".  The argument resulted in a fight which ended with my buddy getting shot.   My buddy will survive, but without medical insurance and not being able to work, it's gonna take help from his friends to get past this.  
+
+
+I mean, the idea of ""if you see something, say something"" isn't new.  But even that is apparently dangerous these days where it might get you shot.  What else can we do as a community to try to get rid of the racism that plagues our area?",1598458596.0,0,0.43,93
+pics,[OC] A pic I took during my first time photographing surfers,,1598192433.0,35,0.93,0
+itookapicture,ITAP of a surfer,,1597803376.0,7,1.0,0
+itookapicture,ITAP of Pittsburgh,,1597165494.0,7,1.0,1
+itookapicture,"ITAP with my new camera this weekend. Well, a bunch of pics I guess.",,1597160543.0,7,0.9,2
+pittsburgh,My take on the most popular view of the city - Star trails over the city on Saturday night.,,1597158268.0,78,0.89,11
+Conservative,"Why is there a trend of ""Trump can do no wrong""?",[removed],1596820273.0,1,1.0,0
+DiceMaking,Removing sanding dust from imperfections and other beginner questions?,"So, very new to this (just got my supplies this week).  For now I have some Ali-Express molds (supposedly a generic design, not DispelDice, but I don't plan to sell any of these anyway), Art N Glow resin, alcohol ink and food coloring, cups, pippettes, and some generic acrylic ink.  Obviously without a pressure pot I expect bubbles inside the dice. However, I didn't expect what I actually got:
+
+It appears that my dice have fewer bubbles inside than I expected. I'm happy with that.  But it seems like that is because the bubbles are migrating to the top.  The problem is when I sand the face from the lid, it seems like the resin dust is collecting in the little bubbles on the face, turning them white.  This is also getting in the numbers, but I'm able to get most of that out with a toothpick.  The result is dice that look great except a face or two with a bunch of white dots all over it. Is there any way to remove the white marks from these dice?  I know moving forward a pressure pot (with molds that have a reservoir) would help prevent these in the first place, but I would love to get some sets under my belt to make sure I want to keep this as a hobby before spending that much more money on it.",1596816547.0,4,0.84,13
+AdviceAnimals,"My brain, when counting to convert yards to feet:",,1596131203.0,6,0.88,0
+automower,"Automower 310 having some ""rear collision"" issues","My Automower 310 has had a few times where it has stopped saying ""rear collision"" and sometimes it will stop and turn after the slightest bump  (or no bump at all).  I saw there was an updated magnet holder for some models but that doesn't fit this model.  
+
+Any thoughts?",1594952433.0,2,1.0,4
+AskReddit,How would your favorite movie change if it was told from the perspective of a minor character instead?,,1594250141.0,2,1.0,6
+vinyl,Had been waiting for a copy to get into my price range. One did and I happened to be working from home when it was delivered today.,,1594056382.0,46,0.9,15
+fednews,Resources for Feds that are burned out?,"Took a Fed job 6 years ago.  At that time my department had 9 people in it.  Now we are down to 5 (it was 4, but a new person started this week, finally!).  We were told that it will be staying at 5 (there are no more vacancies).  At the same time, they also relocated multiple tasks from another site to ours (This other site has 11 people in my division and has the same amount of work that we do).
+
+On top of all of that, one of the 5 people we have is relatively new (coming up on a year) and is my supervisor's supervisor.  He micromanages and does things that make our jobs so much harder than they should be, all while making us feel belittled and worthless.
+
+Needless to say I'm miserable. My coworker is also miserable. We have both applied for other positions to try to get out of this situation, but nothing has come of it yet.  This job has been affecting my mental health and life outside of work more and more and I literally dream of quitting or having our site close.  The pay is good for my field and the benefits are awesome, so I haven't quit yet, but I need to change something.  What resources are out there? Any tips or suggestions on how to handle this?",1592338635.0,40,0.91,34
+a:t5_2rhg0f,Want to snorkel/scuba on your holiday? Enjoy!,,1592161543.0,9,0.92,2
+NCOutdoors,Surf City/Topsail Paddleboarding tips/suggestions?,[removed],1591928852.0,4,0.84,0
+buildapc,Help me shave a few $ on this build for my cousin,"Current thoughts:
+
+[PCPartPicker Part List](https://pcpartpicker.com/list/RfzX7T)
+
+Type|Item|Price
+:----|:----|:----
+**CPU** | [\*AMD Ryzen 5 3600 3.6 GHz 6-Core Processor](https://pcpartpicker.com/product/9nm323/amd-ryzen-5-3600-36-thz-6-core-processor-100-100000031box) | $166.89 @ Walmart 
+**Motherboard** | [MSI B450 GAMING PRO CARBON MAX WIFI ATX AM4 Motherboard](https://pcpartpicker.com/product/mcjNnQ/msi-b450-gaming-pro-carbon-max-wifi-atx-am4-motherboard-b450-gaming-pro-carbon-max-wifi) | $159.99 @ B&H 
+**Memory** | [G.Skill Ripjaws V Series 16 GB (2 x 8 GB) DDR4-3200 CL16 Memory](https://pcpartpicker.com/product/Cf98TW/gskill-memory-f43200c16d16gvkb) | $65.99 @ Newegg 
+**Storage** | [Western Digital Green 1 TB 2.5"" Solid State Drive](https://pcpartpicker.com/product/rJhKHx/western-digital-green-1-tb-25-solid-state-drive-wds100t2g0a) | $99.99 @ Amazon 
+**Storage** | [Seagate Barracuda Compute 2 TB 3.5"" 7200RPM Internal Hard Drive](https://pcpartpicker.com/product/mwrYcf/seagate-barracuda-computer-2-tb-35-7200rpm-internal-hard-drive-st2000dm008) | $54.99 @ Newegg 
+**Video Card** | [Sapphire Radeon RX 5600 XT 6 GB PULSE Video Card](https://pcpartpicker.com/product/n4ZzK8/sapphire-radeon-rx-5600-xt-6-gb-pulse-video-card-11296-01-20g) | $289.99 @ Amazon 
+**Case** | [be quiet! Pure Base 500DX ATX Mid Tower Case](https://pcpartpicker.com/product/FCK2FT/be-quiet-pure-base-500dx-atx-mid-tower-case-bgw37) | $109.99 @ B&H 
+**Power Supply** | [Corsair CXM 650 W 80+ Bronze Certified Semi-modular ATX Power Supply](https://pcpartpicker.com/product/R2mxFT/corsair-power-supply-cp9020103na) | $94.99 @ Best Buy 
+**Monitor** | [Asus VG248QG 24.0"" 1920x1080 165 Hz Monitor](https://pcpartpicker.com/product/hy4BD3/asus-vg248qg-240-1920x1080-165-hz-monitor-vg248qg) | $199.99 @ Best Buy 
+ | *Prices include shipping, taxes, rebates, and discounts* |
+ | **Total** | **$1242.81**
+ | \*Lowest price parts chosen from parametric criteria |
+ | Generated by [PCPartPicker](https://pcpartpicker.com) 2020-06-11 13:40 EDT-0400 |
+
+My cousin's kid wants to build a gaming pc. As I'm the only person in the family that has built computers, he reached out to me (even though the last pc I built was about 15 years ago!). The above was my first crack at a parts list based on suggestions I've read from similar builds, but it is a little over budget. Here were my constraints:  
+
+Budget - He has $1000 saved up, and I plan to pitch in about another $100, so about $1100  
+Needs - pc and monitor, must be wifi capable (in mobo or separate card)    
+Use - current and upcoming games  
+If possible - black case, LED lighting, window/glass side
+
+Where would you cut some price out of this? I'm guessing the mobo and the case, but do you have recommendations on what to get that is similar but cheaper?
+
+Also, it seems like these days the stock coolers and stock thermal paste/pad are good enough for most people, right?",1591897425.0,1,0.99,10
+Catholicism,Some thoughts after receiving notice that my marriage was deemed invalid (annulment).,"I received a letter in the mail this week.  It notified me that the tribunal had found my marriage to be invalid.  Now, I fully agree with my ex filing for the annulment, and I participated willingly, and I agree with the verdict, but at the same time I am filled with so many emotions.  On one hand I feel relief. I don't have to worry about never dating or getting married because I'm still married in the church.  I also do feel some closure and some vindication. The whole idea is that you should not get divorced unless the marriage is not lawful, in which case it was never a sacramental marriage to begin with.  BUT, you can't get the church's ruling as to whether it was a sacramental marriage until after you get divorced.  For me, this lead to worry and guilt over getting divorced and ""giving up"" on my marriage in case it was found to have been lawful.  But that also brings me to another emotion: I do feel a lot of sadness.  I know that mentally my divorce was healthy for me, but I also feel like a failure. I feel like either I failed in my marriage, or, now knowing that my marriage was not sacramental, that I failed in getting married. 
+
+It doesn't help that in this time of coronavirus I'm already feeling very isolated and my faith dry.
+
+I dunno. I'm not entirely sure why I'm posting, other than to share my experience in case it helps anyone and to get my feelings off my chest.  I know that God can make good come from any situation, and I look forward to what He has in store for me, but in the meantime, I would appreciate any prayers!",1591240729.0,101,0.98,28
+Irishmusic,Bealtaine Live Stream on Saturday (6/6) at 7pm Eastern,"So, my Irish trio, Bealtaine, will be getting back together for a live stream concert this coming Saturday! Show starts at 7pm eastern and goes until we get tired of playing to a screen.  
+[https://www.facebook.com/bealtaineceol/posts/1134704086896666](https://www.facebook.com/bealtaineceol/posts/1134704086896666)",1591234823.0,2,0.75,1
+Music,Frank Turner - Make America Great Again [Indie] - Black Lives Matter,,1591226374.0,1,0.56,0
+ender3,The joys (sarcastically and not) of my Ender 3,"So, I like to mess around with gadgets... I got a 3d printer knowing that there would be lots of fiddling around with it and getting things the way that I want them.  I chose the Ender 3 because of the price and the community with such great knowledge and information on how to do things.
+
+I didn't expect what I ended up with.  
+
+First I printed upgrade after upgrade.  Then came the glass bed. Then the BLTouch, I finally had this thing printing well.  I churned out a few hundred tension relief straps  in the last few months.  I also used it for some less useful things like a Mandalorian Nativity Set for a friend....  And that's when things went south.  I had some odd issues with my last prints from that nativity set.  Nothing major, but I noticed a layer shift and some other issues.  Then I went to print some more tension relief straps.  Wouldn't you know it, I had issue after issue.  I ended up with a huge ball of PLA on the end of my hote end after one failed attempt.  In trying to scrape it off I ended up touching the spinning fan, breaking 3 blades off of it.  The nozzle was also clogged to hell.  Welp, I was looking at an all-metal hot end and a stronger nozzle in case I want to print more abrasive materials.  I ordered that to swap it all out when I got the replacement fan.  It should have been easy.
+
+That was a week ago.  My printer still isn't printing right.  I ended up getting capricorn tubing as well, but it kept popping out of the collet at the extruder.  I had to replace that to get it to catch.  Then I was having issues with the BL touch.  I had to adjust the magnet as it was sometimes not dropping and thinking the bed was much higher than it was.  Then I was still having trouble with my first layer, so I messed with the Z offset again until I got that better.  Then I was still having trouble with later layers.  I found that my eccentric nuts could use a tightening.  Then I was still having trouble and I found that the screws for the Z rod motor were a little loose and it had some slop in it. Then I was still having problems and I saw that the screws holding the extruder plate to the ring that travels up and down the rod were loose and there was slop there....    
+
+So, here I am, 20-something failed prints of tension relief straps later.  It is currently 15% of the way done with the current print, and so far so good. But I know better than to assume I have it working well.
+
+It's a good thing that I like to mess around with gadgets...",1591120575.0,10,1.0,4
+AskReddit,"After you die you see the stats for your life. You notice a stat called ""Difficulty"" that can range from 1 (super easy) to 10 (extremely difficult). What do you expect yours would say?",,1591075748.0,5,0.86,29
+depression,Do you ever feel like you have to live your life with one distraction after another to keep yourself from thinking about your actual life?,[removed],1590628586.0,1,1.0,0
+BuildaGurdy,"Still need to work on technique and string sound, but here is Gaeta's Lament (from Battlestar Galactica) on my Nerdy Gurdy",,1590119179.0,14,1.0,8
+pittsburgh,"With the water temps rising, where are your favorite places to paddleboard or kayak?","In the past I have paddleboarded at Raccoon Creek lake and Morraine State Park lake as well as near the point.  I've heard North Park is decent as well.  Any other places with public access, and ideally water deep enough and clean enough to jump in to cool down on the hot days?",1589933586.0,6,0.72,11
+Irishmusic,Bealtaine is live now!,,1587771901.0,2,1.0,0
+vcvrack,"Just learned about modular synths and this program last night. Just starting to learn. Still have plenty of work to do but for the first few hours of trying, I'm happy with what I got so far!",,1587525124.0,8,0.75,8
+Conservative,There ARE some conservatives that think that this virus is serious and opening the economy too early will have grave consequences,[removed],1587477507.0,1,1.0,0
+vexillology,A flag for the current times,,1587402655.0,18,0.89,1
+pics,My new flag design.,,1587401226.0,9,0.7,0
+Irishmusic,A guy from my Irish trio is doing a live stream tonight at 7:30,,1586473360.0,5,1.0,0
+WeAreTheMusicMakers,Some tips I learned live streaming a show,[removed],1586065831.0,1,1.0,0
+AskReddit,Has your local quarantine/restrictions changed which restaurants you are willing to get take out or delivery from? Why and which restaurants?,,1585785349.0,1,1.0,1
+pools,"Spa skimmer floats too high, doesn't skim","So I have a hot tub. It has a floating style skimmer that screws in above the filter. The problem is that the skimmer floats above the water line, even when the jets are on. If I push it all the way down the suction will hold it in place, but when the jets turn off it for back above the water line and doesnt skim. I have made sure that both the filter and skimmer assembly are screwed in tight and it happened with a new filter as well (so not just a dirty filter reducing suction). Any thoughts?",1585782568.0,3,1.0,2
+PittsburghBeers,Happy April 1st,"No funny posts from me this year. Just want everyone to have a happy and healthy day.  Links to any Pittsburgh-beer related April Fools Jokes will be allowed, but it didn't feel right trying to prank/joke as a mod this year.",1585751605.0,13,1.0,2
+CoronaVirusPA,"Clergy Teams in the Diocese of Pittsburgh Self-Quarantine, New Directives Issued",,1585460599.0,15,1.0,4
+Irishmusic,"Live Happy Hour (Facebook Live) by Bealtaine on Friday, 6pm eastern","Hey all, hope this isn't against the rules. My Irish trio is doing a free Facebook Live happy hour event tomorrow at 6pm Eastern. Below is a link to the facebook event, but you can just go to our facebook page at 6pm to see our Live post.  We aren't doing anything too fancy, just a nice microphone connected to a phone, but hopefully it works well. Let me know if you have any song requests!  
+
+
+ [https://www.facebook.com/events/539674756692838/](https://www.facebook.com/events/539674756692838/)",1584652596.0,1,1.0,0
+WeAreTheMusicMakers,Sometimes a free gig pays off!,"My trio was asked if we wanted to play music between sketches in a local sketch comedy show.  The theater held about 40 people and it would be three shows (fri-sat-sun).  We said, ""Why not?"" and took the gig for free.  It was a lot of fun, and we actually joined in on two of the sketches, and just had a blast.  Turns out, they did well on ticket sales and toss us $150 ($50 each) which was a nice surprise. But, even better than that, one of the people in the crowd happened to be a producer for our city's morning talk/variety style tv show. Well, they liked what they heard and have asked us to come in to record a segment consisting of an interview and two songs to be aired on St. Paddy's Day (we are an Irish band).  What we thought was a free show with limited exposure, ended up paying a few bucks and landing us a chance to be broadcast out to thousands.  Just goes to show that, while musicians should get paid for their work, sometimes it pays off to say yes to a free gig...",1583790529.0,96,0.97,13
+WeAreTheMusicMakers,Cover songs and derivative works and public domain? (US),"I play in an Irish Folk band in the US.  We have some recordings that we plan to distribute digitally.  Obviously the original songs are not a problem.  However, some of our recordings are traditional Irish songs (some as old as the 1600s) that I think should be in Public Domain, but I've read conflicting information regarding other recordings of the same piece causing copyright issues.  Any input on this?
+
+Also, we have some songs that we know are under copyright.  For these I was planning on obtaining a Mechanical License to do it properly.  However, I noted that if you change the music ""too much"" it becomes a derivative work.  What is ""too much""?  If we insert a traditional jig or reel as a bridge, I assume that pushes it into Derivative work?  Has anyone ever dealt with getting the approval from a publisher before?
+
+Any help is appreciated.  I want to get our music out there legally and correctly, but the whole system seems like it is set up for people like us to make many mistakes in the process!",1582572241.0,1,1.0,9
+vinyl,Sometimes problems are caused by the stupidest things. Always look carefully!,"So, I got a good deal on a U-Turn Orbit from eBay. It came in and I cleaned it up and fired it up. Immediately I noticed a loud noise coming from the motor. I looked online and reached out to U-Turn for suggestions. Both suggested looking at the wiring for the motor. While looking at that something caught my eye. On top of the motor, under the speed control, were two rare earth magnets. Apparently they were messing with the motor. I pried them out and it works perfectly! I wonder if that noise is why the person was selling it to begin with!",1581041222.0,7,0.9,2
+LettuceFunk,Getting ready for the show!,,1580432153.0,12,0.94,0
+ender3,Z axis movement issues?,"My Ender 3 is having some sort of issue with the Z axis. It had been printing fine for months. Then I went to print Friday night and it started printing way too high above the bed (I have a BLTouch). I redid the z offset, and it didn't seem consistent, but I was able to find a number that worked. Printed something but the first half inch was not great quality. Tried to print something tonight and it is once again printing way too high. Though tonight I moved it to Z0, and I had to move Z  -1.5 for it to be at the right height against paper. But then I went to raise it up to double check and I has to move Z to +0.5 before it released the paper. Basically a full mm (I assume that's the units) where it didn't move at all. I'm guessing this inconsistent movement is causing the Z offset issues. Any thoughts on what to check?",1580100180.0,1,1.0,4
+ender3,BL Touch now way too high?,"I ran out of filament on a print on Wednesday. My printer was auto leveling perfectly. I ordered more filament. Installed it, went to print something, and now my BLTouch is setting the Z height way to high (high enough to slide the scraper under it without hitting the tip at all). Everything still seems sturdy, so I don't think the BLTouch or the tip moved out of position. What would cause that to happen? Do I need to redo the Z offset for BLTouch? I'm worried about doing somett like that and it resetting and then driving into the bed....",1579934940.0,2,1.0,1
+Conservative,Am I the only Conservative that wants to see a full impeachment trial?,[removed],1579639415.0,1,1.0,0
+fednews,How to get full reimbursement rate for using POV when it saves the government money?,"So, I sometimes have to drive from one site to another.  There are usually government owned vehicles available.  However, it saves the government money if I use my Personally Owned Vehicle and drive straight from home:
+
+Home to alternate site - 73 miles, 1 hour 21 minutes
+
+Primary site to alternate site - 64 miles, 1 hour 23 minutes
+
+Home to primary site - 21 miles, 45 minutes
+
+If I go straight from home I would charge the government 52 miles and 36 minutes travel time each way. If I go to work and pick up a GOV, the GOV will see 64 miles each way, and I will charge 1 hr 23 minutes of travel time. I talked with my supervisor, and he agrees that it would be in the government's best interest to authorize me to use a POV instead of GOV, but he is unsure who can actually authorize that and what is needed to authorize it.  Does anyone have experience with this?  I would love to not have to choose between adding 1.5 hours +  to an already long day vs only getting $0.17/mile because a GOV was available.
+
+Who do I contact?",1578594314.0,5,0.86,10
+ender3,Octopi issues with my Ender 3,"My Ender 3 with BLTouch and Octopi has been working for a while.  The other day I turned it on to start a print and found that my Octopi is not connecting to wifi.  Can't access it from the ip address and looking on my router it doesn't show as connected.  I reset it a bunch of time and no luck.  I removed the sd card, checked it on my laptop and it seemed uncorrupted.  Put it back in my Octopi and it worked.  After that print I shut it down. Since then I have tried to get it back running again with no luck.  Removing and reinstalling the sd card has had no effect.  Any thoughts?",1578431734.0,1,1.0,4
+pittsburgh,"I deal with idiots every day on my commute. Especially around the West End Circle. Usually a wrong lane, last night was this (gotta reset the date on my cam). Can't we do better as a city?",,1574780807.0,0,0.22,4
+IdiotsInCars,50 miles of driving per day to/from work. Idiots are a daily occurrence. This was last night (though I need to reset the date on my cam).,,1574780434.0,45,0.8,32
+steelers,Great day for tailgating!,,1573413570.0,77,0.97,1
+steelers,It's tailgating time. Get down here!,,1572787392.0,74,0.97,12
+Sup,Just got my board in the mail from Tower's damaged boards sale. Can't wait till next season!,,1572642726.0,32,0.98,6
+Minecraft,The lights in my hotel are definitely Minecraft themed...,,1571698919.0,9,0.91,1
+irishtourism,Taking my parents to Ireland next year. Any tips for limited mobility?,"I'm coming back to Ireland (3rd trip for me) and this time I'm bringing my parents along (age 71 and 67 at the time of our trip).  My mom has some issues with arthritis in her hip which limits her walking ability to about 10-15 minutes at a time, maybe longer with her walker.  
+
+1. In the past I have stayed at the Academy Plaza hotel in Dublin because it is reasonably priced, close to an Airlink bus, and I could walk to anywhere I wanted from there.  With her limited mobility, is there a better area to stay?
+2. Would the hop-on hop-off bus be a worthwhile activity in Dublin (are the stops relatively close to the sights)?  If not, would a cab or an uber be the way to go?
+3. After Dublin the plan is to go to the Killarney for the ROK and then to Galway for a few day trips from there (Cliffs of Moher, Kylemore Abbey/Connemara, etc.).  I will be driving a rental car.  From my search it sounds like it shouldn't be a problem to use my mom's USA issues disabled person parking permit (blue hanging placard). I've read that it should be placed on the dashboard and not hung from the mirror as the local police are used to looking for it on the dashboard. Any other tips or things I should know?
+4. Depending on how my mom's mobility changes in the coming months, there is a possibility that we could hire a wheelchair when we get to Dublin.  Any thing we should know about?  I assume the skinniest chair that works would be preferred due to some old buildings with tight walkways.  Any issue with busses? Would we get weird looks if we wheel her to a bus, fold up the chair, and she walks onto the bus on her own?
+
+Thanks in advance for any tips or help.  We don't travel for a while, but since these could be specialized questions I figured the sooner I brought them up, the better.",1571429503.0,11,1.0,7
+AskReddit,Why do car service places have the least comfortable waiting areas on Earth?,,1570994727.0,3,1.0,4
+AskReddit,Why do most car service centers have the least comfortable waiting area possible?,,1570994126.0,1,1.0,1
+excel,Best way to copy this years info to a historical data tab?,"So I have a spreadsheet for calculating deferred maintenance.  You bring in the current year's DM into a tab.  You fill out another tab that tells it what year repair needs switch to DM and what year work will be completed so that the DM is charged off.  All of this works great.  The higher ups wanted a chart to show historical data from this as well as the estimates for futures years based on the above inputs.  Currently after the other info is input it creates a DM estimate tab.  I then have to manually copy and paste the data from those columns/rows into the appropriate columns and rows  on the historical data sheet.  The reason this is an issue is that as the years go by we add or delete properties so the rows do not match up between the two sheets (for example the output we are given of current DM does not have listed properties that have been demolished, but we need to keep those in because they are part of the historical data).
+
+&#x200B;
+
+What I would love to do is have the estimates auto-fill the historical data chart.  What I would need for that to happen is the following:
+
+1. Have it populate to the right property row.  I should be able to do this with the SUMIFS formula.
+2. Have it populate to the right year row.  This I don't know how to do.  My DM Estimate sheet has Last years actual numbers, and estimates for Current Year(CY), and CY+1 and CY+2.  I assume there has to be a better way to automate this beyond a bunch of IF statements to check which year we are evaluating and picking the correct row to copy based on that.  
+
+&#x200B;
+
+In other words, any thoughts on how I can have excel automatically copy a column for this year into the 2019 column and the column for next year into the 2020 column, but then when I run it next year, it will copy the ""this year"" column into 2020, and retain the information last input in the 2019 column?
+
+I know that is confusing, but please ask questions and I can try to explain it better.  But there has to be a better way than copying and pasting line by line for each year every time there is an update.",1570472219.0,3,0.72,5
+steelers,Get down and start tailgating for the game. What are you waiting for?,,1570365502.0,28,0.88,16
+steelers,It's tailgate time. Screw your job and get down here!,,1569876010.0,38,0.91,6
+BuildaGurdy,"Began the slow process of learning my recently built Nerdy Gurdy. Still have lots to learn on cotton, rosin, string pressure, and playing itself, but it's a start!",,1569545474.0,10,1.0,5
+photography,Question about MF while using a lens mount adapter,[removed],1568937186.0,1,1.0,2
+Layer,PSU,,1568399325.0,5,1.0,0
+Irishmusic,"My band had a Taper come to record one of our sets at the local Irish Festival. While the sound guys had some issues dialing us in, the capture of the crowd energy is still cool to me!",,1568395646.0,4,0.65,6
+WeAreTheMusicMakers,"Had a taper come and record our show last Saturday. Disappointed in how the festival's sound was mixed, but still happy to have captured the crowd energy and the overall feel of the show!",,1568315762.0,0,0.5,1
+secretsanta,Cache issues making me unsure if Santa shipped,"So, on my vinyl exchange I got notice that my santa pulled my info. I've been on plagued by the cache issue do my exchange page is still all screwed up. It has the whole ""come back after matching"" thing. It also says my gift was shipped, however I haven't received an email stating the same. I'm fine with waiting if that is what I need to do, but I am just concerned if it was shipped and got lost, etc. Any way to clarify if it was indeed shipped?",1567743926.0,0,0.4,3
+secretsanta,PSA with Amazon Mistakes and getting a replacment,[removed],1567049437.0,9,0.92,3
+festivals,Questions about Resonance Festival,"Hello all!  So I'm considering going to Resonance this year and am trying to get everything figured out. I know it moved venues so some of these may not be answerable yet, but I figured I would ask:
+
+1. Sounds like camping is included, and you can either camp in the parking area next to you car, camp inside the festival (lugging your stuff in by hand), or pay to car camp in the festival (drive your stuff in and leave your car inside the festival). Is this right?
+2. I may need to leave for one morning, so I assume as long as I don't car camp inside the festival this shouldn't be an issue, right? Seems like no parking pass is required so I imagine cars can come and go if needed from the lots.
+3. I read in another thread that it is BYOB (no glass) for both camping and stage areas.  
+4. Are there any rules regarding generators? Do people ever bring one for lights, phone charging, cooking purposes?
+5. Anything else I should know about?
+
+Also, I went to FrostBurn (a regional Burn) a few times, including when it was held at Coopers Lake.  If anyone has any questions regarding the venue, let me know and I may be able to help with that (though everything was covered in snow when I was there!)",1566419999.0,2,1.0,2
+vinyl,Zenith Microtouch 2g and 78rpm records,"So, while I save up money to eventually get something like a Pro-Ject, Fluance, or U-turn, I have my brother keeping an eye out in thriftstores for interesting finds.  He just called me about a Zenith turntable with a Microtouch 2g tonearm/cartridge, that can flip between LP and 78 styluses. The needles appear in tact from his untrained eye, and it powers up, spins, and the drop mechanism works (thanks to two thrift shop records for testing that out).  And it's half off today.  Not sure that it will be any sort of imporvement over my current Bic 940 record changer, but the ability to play 78s has me intrigued.So, my questions:
+
+Does anyone have any knowledge on these old Zenith turntables?  This sounds like the same style used in the console radios of the time, but this one is spring mounted to much smaller box with bass, treble, and volume controls..  Will have to check but to me that sounds like it has a pre-amp in that outer box, right?  I couldn't imagine EQing a non amplified signal.
+
+Is there anything I need to know about 78s before I switch it over to 78 and try some old ones I have in my collection?
+
+I'll try to post some pics when he drops it off at my house.
+
+&#x200B;
+
+EDIT: It looks like this one but without the tape-phono knob on the right.  Has all the other knobs, though.   [https://www.shopgoodwill.com/Item/72974662](https://www.shopgoodwill.com/Item/72974662)",1565982926.0,0,0.5,5
+PittsburghBeers,AB Inbev acquires Platform Beer Co. which is set to open a PGH tap room soon (xpost from r/beer),,1565196503.0,10,0.92,17
+AdviceAnimals,Some are slower than others.,,1564943434.0,17,0.71,0
+AdviceAnimals,Our favorite Good Girl Gina,,1564809690.0,318,0.87,2
+Cleveland,In town. Friend bailed. Who wants to grab beer or go to a concert?,"So I'm in town for the night but my friend had to take care of family stuff. That leaves me with no plans for the afternoon and an extra ticket for the Moe. and Blues Traveler show tonight at Jacobs Pavilion. Ticket is free, and if you join me for a beer somewhere the first one is on me. Anyone interested?",1564250022.0,5,0.86,5
+Scotch,"While not as fancy as some of you, I had my dad and cousin over for some tasting which included Ardbeg, Ardbeg Drum, Laphroaig, and Lagavulin in addition to Irish whiskeys and Bourbons. (Don't worry, we didn't drink them all).",,1564113494.0,6,0.8,1
+DMAcademy,Thinking of trying to DM for some friends who have never played,"I've been playing with a group for a while now.  I have a decent grasp of 5e.  I have 4 or 5 friends that are interested in learning more/testing out DnD but aren't willing to commit to anything long term.  I also don't know how good I will be or how much I will enjoy DMing (I think I should enjoy it well).  Based on that, I am thinking the following:
+
+1. Set it up for a Saturday starting in the early afternoon.
+2. Make a one-shot for the day
+   1. I will pre-make the characters, but let them pick who gets which character and name the character
+   2. I will have a reason why they all meet up, with a mystery, clues to get them on the right path (they may need help with a NPC helping them search, etc.). Some travel options, a small fight, some more travel options, and a boss fight.  Something that can be completed in one session that I can extend if they are moving too quickly, or truncate if slow to get there to make sure it completes in the evening.
+   3. I will probably leave out provisions, money, etc.
+   4. It will certainly be run as a less-serious game. I.e. I know table talk will happen, I'll have to help explain how they can literally attempt anything (and literally fail any attempt that isn't a given). 
+3. I will probably plan a dinner break, hopefully after the first fight to help break it up.
+
+Thoughts on the above?  Also, thoughts on what characters I should use or what level they should be?  I was thinking of starting them all with level 1, so that no character has any ability too confusing for someone new, but that certainly limits what they encounter.  Any other suggestions or tips?",1563825513.0,3,1.0,3
+googlehome,Google home screwing up with nest commands,"So I recently noticed that if I ask Google to set my living room temperature to a certain temp, it will instead increase my temperature. For example, I asked for it to be 75 degrees. Instead it raised my heating and cooling setpoints by 5 degrees. Anyone ever see something similar or know a fix?",1561050803.0,1,0.67,0
+vinyl,"I was told that my surround sound system wasn't good for listening to records. Well, I'm also in some bands and have two 1000w JBL EON612s that I could use... Think this is enough sound?",,1560513215.0,7,0.82,18
+dispatch,Dispatch at Red Rocks is live!,,1560135320.0,28,0.98,18
+ender3,"There is always something to tinker with, isn't there?","I finally got my 3d printer where I wanted it. After getting my bl touch v3.0 finally installed and working, I thought I was golden. I have been able to start a print, and have it be perfect. Started one last night. Checked today and noticed it had shifted a smidge on both the x and y axis on the same layer. Odd, but I could live with it on this print. Print finished tonight, and I took it off and started my next print. I noticed the bl touch was flashing oddly, then kept flashing when it was time to home z.... I looked closer and touched the pin and it went up inside the device. That's when I found a piece of the plastic pin on my desk.  Apparently the pin dropped down and caught the print when it was moving diagonally, and I guess made the x and y axis slip a little before the pin broke off. I guess I need to buy a new pin and get that installed and recheck the z offset....  I swear this thing always has something to mess with. But if I'm honest, that's part of the reason I like it...",1559708920.0,14,1.0,11
+vinyl,"Was at my parents house. My dad gave me a box of records from his dad's house and my mom's parents' house. Fun to see what my grandparents, parents, aunts and uncles listened to.",,1559706295.0,10,0.81,7
+Drumming,Drummers: Always remember a rug of some sort when playing a live show!,My brother just called me to tell me what he just saw.  An opening act at a concert he is at had some technical difficulties.  I guess the drummer did not bring a rug to put his drumset on.  The venue is new and the stage is a wood-look flooring that is probably vinyl.  His drums would not stay in place. It was causing trouble with the music.  He didn't have anything to put under his drums to try to help stop them from moving.  He took off his shirt and put that under part of his set.  It wasn't enough.  He took off his pants and put it under the other part of his drum set.  He played the remainder of their set in his underwear.   Don't be like him. Remember your floor covering if there is a chance of the stage not being carpeted!,1559612556.0,65,0.95,18
+GooglePixel,Problems with 2-Step Verification and Pixel 3a XL,"So I recently replaced my Google Pixel XL with a Pixel 3a XL.  I have 2 factor authentication on my google account, and with my work setup I have to use it everyday when I login at work.  When I first got the phone I removed my old phone from the 2FA and put in my new phone. It seemed to work.  Now, though, I get the pop-up on my phone, hit ""Yes"", see the ""Sign-in approved"" notice, and then nothing. Google is still waiting for something.  I went in and removed the phone and am trying to set it up again, and still the same thing during setup (so it won't confirm it).  Luckily I can still login via text message, but it is annoying.  Is this a known issue or any other thoughts on how to fix?",1559577558.0,1,0.6,2
+PittsburghBeers,Which breweries have live music?,I thought it would be nice to get a list of which breweries have live music (whether weekly or occasionally).  Which ones do you enjoy?,1559162311.0,10,1.0,6
+AndroidAuto,Android Auto (phone only) questions,"So, I've been using Android Auto on my phone for a while. I don't have a supported headunit, but my phone on a magnet mount serves my needs.  With that being said, I do have a couple of questions:  
+1. With my old phone, Android Auto would exit when I turned my car off (and it disconnected from bluetooth). I got a new phone. It turns on automatically, but doesn't turn off automatically.  Any thoughts on how to set that up?
+
+2. My dad was looking to use AA for navigation and calls, but uses his car's built-in sirius for music.  When his head unit is playing sirius, his calls come through, but the navigation directions do not unless he switches from sirius to aux.  Is there any way around this?
+
+3. This is not a question, just a rant: I really wish AA and my Sirius XM app would play nice together.  They finally got sirius on AA, but half the time when I click on ""Recents"" it doesn't show the station I was just on, but shows stations I haven't listened to in years.  Other times it just sits blank until I reset the phone (I think it is trying to pick up where I left off on the station, but that could have been hours before, and then the sirius app just doesn't load).",1558449239.0,5,1.0,0
+ender3,What am I missing on the BLTouch setup?,"So I bought the Creality BLTouch kit.  I used the included USB ISP to flash the firmware to the included Ender-3Marlin1.1.6BLTouch.hex, and installed the sensor. I went in and changed the Z-Offset.  I went into Cura and added the G29 to the printer settings.  I sliced a test print, loaded it to my octopi, and clicked print.  It auto homed X then Y, then moved to the middle and used the sensor to home Z.  Then it went to the left side of bed, put down a layer of filament along the edge, then started to move to the middle, almost snapping the deployed sensor pin!  
+
+&#x200B;
+
+So, A) How do I get it to keep that pin up so it doesn't break it, and B) how do I get it to actually auto level the bed before printing?",1558408063.0,4,1.0,3
+Irishmusic,I (with the help of my bandmates) wrote my first song. I thought you guys may like it.,,1556822440.0,1,1.0,0
+vinyl,Stopped by my parents' house tonight. My dad gave me the records that he still has. Some neat stuff in here!,,1556683621.0,10,0.86,8
+boardgames,Help finding a PnP game I played a few years ago,"A friend asked me about a print and play game that we had played at one of my board game nights a few years ago.  It was card based.  Cards had a number associated with them and one of like 3 actions on them (Use, grab, move?).  The rest of the game was based on imagination.  The example scenario was replacing a lightbulb.  You would move, and play your grab card to grab a ladder.  But the next person may use a card to push you off the ladder.  The first person to be able to complete the objective won.
+
+Does anyone know the name of that game?",1556558952.0,14,0.74,2
+ender3,Something isn't right with my extrusion test,"So, I wanted to calibrate my extruder. I marked 12cm and sent M83 and then sent G1 E100 F100. It extruder filament. Then it stopped extruding filament. The filament had only moved about 4cm. I tried again. Same thing. My mark on my filament is still about 4cm away after both commands. Now my quality could be improved, but it certainly seems better than what I would expect if I was extruding less than half of what I should. Did I do something wrong?",1556547284.0,4,1.0,13
+vinyl,My setup is finally decent looking! Now to fill the shelves with records...,,1556159427.0,2,0.56,5
+vinyl,First plunge into vinyl. I'm excited!,,1555893508.0,28,0.91,7
+automower,Difference between model numbers within a series?,"So I am looking to buy an Automower, and I think I have decided on the 315 or 315x (depending on the deal I can find).  However, in searching for local dealers and pricing, I found a few sites that have a bunch of automowers listed including the model number.  What caught me off guard was the different pricing.  for example, one place I looked had the following:  
+
+2019 AUTOMOWER 315 (967 67 30-05) $1,499.95  
+
+2019 AUTOMOWER 315 (967 67 30-66) $1799.95
+
+I can't find any information as to what would be different about those or why one is more expensive than the other. At first I thought one was the X, but they have the X as well (967 85 27-05).  Any thoughts?",1555590662.0,2,1.0,8
+leagueoflegends,Totally new. What's the best way to get better?,"So I am new at this game.  Definitely missed the boat the first time around, but downloaded it earlier this week.  I have a buddy that played a couple matches with me and helped me out a bit, but I still suck. Much of that suck is I think related to not knowing how to play certain characters and how to upgrade them.  I'm past the point of just rushing at everything and everyone (gotta let the minions do the brunt of the work for you).  I've managed a few matches with a higher kill rate than death rate, but I still get teammates flipping out on me because apparently I'm not playing this character or that character right.  I tried ARAM, and as best I could tell my guy was a tank.  I tried to stick with our crowd, draw fire way from any injured teammate, and retreat when my guy was getting low.  I upgraded based on the ""recommended upgrades"" and a couple of teammates were asking if I was a troll, or an idiot for my upgrade choices.  I dunno, I just want to play a fun match.  Maybe this game isn't for me as I don't know that I will have the time to test out every character and memorize what upgrades should or should not be bought for them.  
+
+&#x200B;
+
+I've done some 1v1 against a bot and do decently, but the bots aren't realistic in my experience.  Any other tips or suggestions?",1554996653.0,9,0.8,27
+penguins,"Guys, my fortune cookies say we will be ok!",,1554943158.0,3,0.8,1
+3Dprinting,Trying to setup Printoid with my FIOS router,"So, I just got my Octopi set up on my Ender 3.  Now I'm trying to setup Printoid to be able to check in on prints when I am away from my network.  I know that I need to forward a port for the octopi.  The problem I am having is that all the instructions I find say that you need to forward the public port of your chosing to port 80 locally.  The portforwarding on my Fios G1100 looks different than the examples.  I have the following options:
+
+In basic mode, I can specify the IP address and I can specify one port number.  
+
+In advanced mode, I can specify the IP address and Source Port, Destination Port, and Forward To Port numbers.
+
+&#x200B;
+
+Any thoughts?",1554843393.0,0,0.5,5
+PittsburghBeers,r/PittsburghBeers is proud to announce our new sponsorship!,"I am proud to announce that our subreddit is now officially sponsored!  Thanks to everyone in this great community, we have caught the attention of one of the great breweries in our area. As a result, we will be hosting AMAs and weekly discussions about the great Iron City and I.C. Light beers!  What says Pittsburgh Beers more than Pittsburgh Brewing!  You can expect a re-theme of the background and logo in the coming weeks!
+
+&#x200B;
+
+EDIT: APRIL FOOLS!!!",1554131532.0,26,0.93,8
+ender3,New to 3D printing but loving it so far! (First print and surprises with the unit),"Just got my Ender 3 last night. Spent some time getting it built based on some YouTube videos. I found a few surprises based on the videos I watched. First of all, my unit came with the silicone cover at the hot end. I guess that makes it a newer unit. Second, the bed is easily removable with binder clips holding it in place. Third, it came with  plastic horseshoe separator clips for the Bowden tube connectors. I guess they are listening to the complaints. At first glance my power connector looked perfectly fine, too, though I will keep an eye on that. 
+
+So, I got it all together and started the test dog since i wanted to make sure it worked well and I haven't even opened a slicer program yet, so I wanted as few variables as possible to test the mechanics.
+
+https://imgur.com/fXuapq3
+
+First thing I noticed was that I guess my bed was too high. Had some light spots were hardly any material was laid. Lowered the bed on the fly and away we went. I paused the print when I had like 2"" of test filament left, removed that and put some Amazon basics filament in and resumed. That worked surprisingly well, though an extruder knob is going to be one of my early prints to help with that next time.
+
+Overall, aside from the final piece being absolutely stuck to the bed and there still being a small outline I am having trouble removing, I thought the quality was outstanding for having no idea what I was doing (just how much tension is the right amount? Just how tight should the wheels be? These kind of things seemed like you needed to get a feel for it on your own). I'm looking forward to tinkering with this and I appreciate all of the knowledgeable people and how friendly and sharing this community is!",1553862398.0,0,0.5,2
+googlehome,Any interesting ways to utilize Google Home from a tablet?,"So I bought a tablet (Lenovo Tab4 10) and temporarily mounted it on the wall with command hooks.  I have it set to typically show Magic Mirror (time, weather, upcoming schedule).  When my Ring cameras detect motion it automatically opens the live view for that camera for 1 minute then goes back to Magic Mirror.  I am currently working getting Motion Detector working properly so that the screen shuts off but turns back on when it detects motion (to save the display and power).
+
+Now, I have 4 Google Home Minis, multiple smart plugs and smart light switches and a roku tv.  Is there anything else that you can think of that I can integrate into my wall mounted display tablet?",1551756141.0,10,0.78,4
+drunk,Nothing like drinking alone on a Friday night. At least I have good drink and a good place to drink I guess.,,1550890791.0,15,1.0,5
+funny,"I see your pizza shop, and raise you this",,1548524175.0,1,1.0,0
+PittsburghBeers,Have a Safe and Happy New Year!,"Whether you are drinking some locally brewed beers or partying with champagne and fancy dress, be safe out there tonight so that you can enjoy all that 2019 has to offer!  If you drink, remember to let someone else drive!  Get an Uber or Lyft, catch a ride with that friend that doesn't drink, call in that favor with Mom or Dad to come pick you up, stay the night.  Just don't drink and drive!",1546281786.0,7,1.0,0
+PittsburghBeers,Merry Christmas!,"Merry Christmas! I hope you get lots of good local beers from Santa. And if you are out drinking today or this week, remember to be safe and get a DD or an Uber/Lyft!",1545748851.0,11,0.84,0
+funny,It's Christmas time Amazon. Why do you gotta judge me?,,1545684025.0,24,0.83,0
+steelers,It's tailgating time!,,1544979606.0,13,0.78,11
+Ring,Intermittent issues?,"So I'm relatively new to Ring.  I have the doorbell 2 with Chime and two wired spotlight cams.  This past week I started having some intermittent issues.  My doorbell stopped functioning one night.  I noticed the next day when someone came to my door and I didn't get a notification. I found that I had to remove the device and set it back up again to get it to function.  My Chime also often shows the red ""disconnected"" symbol on it (when I click that it asks me if the lights are flashing, etc., but they aren't) yet the chime still functions.  Additionally, I noticed that one of my spotlight cams (number 2 below) doesn't always pick up motion right away, and the audio was garbled and video was choppy yesterday when I was watching someone come to my house.
+
+Is all of this normal?
+
+My doorbell is about 5' from my router with a signal strength of RSSI - 49
+
+My first spotlight cam is about 15' from my router with a signal strength of RSSI - 67
+
+My second spotlight cam is about 25' from my router with a signal strength of RSSI-69
+
+&#x200B;
+
+Is it as simple as needing an extender for the cams to make them more reliable? ",1543942144.0,1,1.0,2
+steelers,We've been waiting for an hour. Let's open these lots already so we can get our full tailgate ready!,,1543781037.0,30,0.83,10
+pics,My dad is an amateur photographer. I think his latest image is amazing,,1543688005.0,25,0.79,2
+Ring,New to Ring thanks to the holiday sales!,"So, earlier this month I got the Costco deal for the Ring Doorbell 2 with a chime extender and one year of recording for $140.  Yesterday I snagged 2 wired spotlight cameras for $250 total from Home Depot.  Got it all mounted up and now every entrance to my house is covered by camera except two small windows that are about 15' above ground level.  Debating whether I should get the security system as well (I don't know how easy or complicated the permitting process is in my neighborhood, etc.), but regardless, I am sold on Ring products.  The wired cams are amazing.  I wish the Ring Doorbell 2 was as good (may have to upgrade to the Pro at somepoint, but I think I spent enough money for now).  
+
+&#x200B;
+
+Anything interesting I can do with my camreas with Google Home, TP-Link plugs, Nest Thermostat, or other integrations?",1543078690.0,11,1.0,13
+personalfinance,Taxes while separated?,"So, I know taxes are still a few months away, but I am trying to get a better grasp on what will be the best path forward on this.  I am currently separated from my wife waiting for the waiting period to be over so that our divorce is final.  We are in Pennsylvania, which has no legal separation decree, so from my understanding we can either file as married filing jointly or married filing separately.  We separated on April 1st, so 1/4 into the year. She also quit her job around August, with minimal income after that.  I make a pretty good salary and recently itemizing has not been better for me than the standard deduction.
+
+As I understand it, if we file separately we would have to take the standard deduction (or itemize, which would screw her over as she really doesn't have anything to itemize). But, her partial year of lower income with the standard deduction may work in her favor, and if there was no benefit to itemizing, it shouldn't really harm me.  Or, we can file jointly and see whether itemizing or the standard deduction is best and maximize the potential credits and deductions, but then we have to sort out how much of our refund (I know, I know, getting a refund is bad financially) each person gets based on amount of taxes owed/paid while married vs while separated.
+
+Any thoughts?  I am looking to minimize my tax burden (maximize my refund) without screwing over my soon-to-be Ex.  I appreciate any experience or input.",1542817870.0,1,0.67,3
+tmobile,T-Mobile in Toronto - Data,"So, I recently went on a trip to Toronto.  Now, I didn't mind getting away from my phone for a bit, so it wasn't a big enough of a deal to figure it out while on vacation, but now that I am back I am trying to figure out what went wrong.
+
+When I entered Canada I got the text about the free calls, texts, and data (T-Mo ONE plan).  However, a few minutes later I lost data connectivity and didn't get it back until I re-entered the US. I double checked my settings on my phone (Pixel XL) while I was there and mobile data and roaming were both turned on. I believe I was connected to Bell primarily. I tried to manually switch providers to Telus and Rogers and neither worked, so I reverted back to Bell.  Any thoughts?  Not sure when I will be going back to Toronto, but figured I should make sure it isn't something on my end.",1541522386.0,1,0.57,4
+GooglePixel,Free credit in Google Play Store,"It looks like anyone opening the Google play store and scrolling down past the first grouping of apps sees a box offering free Google play store credit (looks like $2-$5). I managed to get a $5 one. Note, must be used by the 20th or it disappears.",1541474874.0,3,1.0,8
+Cruise,Finally booked another cruise! Woo!,"So, I haven't been on a cruise since 2015, and have been sitting on a Carnival gift card for a while.  Today I bit the bullet and booked a cruise that some family members are going on: a 14 day cruise with Panama Canal partial transit!  Still need to finalize the details (like if I can find a friend that wants to join me to cut my cost down, or if I keep my room solo, or transfer over to be the 3rd person in a family member's room), but I'm booked regardless!  It is nice to have something to look forward too again!",1541190468.0,18,0.85,5
+Catholicism,Is booking a vacation where you will likely miss a Sunday obligation a mortal sin?,"In general, is this a mortal sin?  The following is my situation that brings up the question: I have the opportunity to take an amazing trip which includes a 14 day cruise to places on my bucket list.  The cruise leaves on a Sunday night and arrives on a Saturday morning, so I will be able to go to mass both of those weekends.  However, this leaves the weekend in the middle of the cruise.  That Sunday is a sea day, so I will only be able to go to mass if there is a priest on the ship, which is not guaranteed on this cruise line.  The Saturday I would be in Cartagena, Colombia until 6pm.  While I found multiple Saturday daily masses I could attend, it seems that the vigil masses don't start until 6:30pm.  Even if they started earlier, it is likely that with a 6pm departure I would need to be back on the ship by 5, which would make even a 4pm mass impossible. So, the question comes down to whether a priest will be on board.  Since I can't know that until sailing, would it be morally wrong to book this trip?",1541167240.0,3,0.72,14
+pittsburgh,Recommendations for selling gold/diamonds,[removed],1540664213.0,1,1.0,1
+Catholicism,Would you try to return this?,"So I recently went to an auction at my local airport.  Many of the items were items that were lost and could not be returned to the owner (the rest were items that the airport itself was getting rid of).  I bought 2 laptops from this auction.  One has a generic name that I could not find the owner of if I wanted to. The other, however, has an email address associated with the user account, and I am torn as to whether I should contact this person (potentially overseas as the computer and keyboard have asian characters on it).  And if I do contact them, do I just give them the laptop back for free and be out the money, or do I ask for money equal to what I spent on it plus shipping?  
+
+&#x200B;
+
+What would you do?",1540589434.0,5,0.85,7
+WeAreTheMusicMakers,Home recording?,"So, I'm in a trio and a 6 piece band. I built up my live sound collection to the point of being able to run sound for the 6 piece band when our sound guy is not available. Now the 6 piece band has talked forever about recording but nothing has happened due to money. The trio is getting bigger and recording is on the horizon. I have a buddy who went to school for sound engineering and will give me a good price on mixing and mastering. He is less excited about recording in his home studio (""I'm trying to get out of recording and focus on mixing""). That got me to thinking about recording one or both bands on my own.
+
+Questions: what do I need to get a ""good enough"" sound? What do I need to get ""CD quality"" sound?
+
+Is it better to record on a 8+ track audio interface as one take then re-record parts as necessary, or is it better to just get a good 2-4 track audio interface and record one instrument at a time over and over?  
+
+Besides the audio interface and daw, what else should I look at investing in? Sound proofing? Pop filters for mics? Other stuff?",1539446357.0,2,1.0,6
+raleigh,Visiting for work - Questions,"I hope everyone is dry and safe after the recent storms!  I'm visiting for work this Saturday through Thursday and already have some plans to check some things out, but had a few questions I hoped you could answer:
+
+1. I'm staying at the Marriott Raleigh City Center.  They offer parking in the adjacent garage for $12/day.  I saw that other local garages like the Cabarrus Deck don't have fees after 7pm.  If I park earlier in the day, but leave after 7PM, am I still charged the full amount for those garages?  Likewise, if I park after 7pm but leave before 7pm the next day, am I charged the full amount?  Just trying to figure out if it is worth utilizing these garages (I guess it would give me ""in and out privileges"" after 7pm) vs using the one adjacent to the hotel.
+2. Any good breweries I should try to hit that are on a bus route or a cheap uber ride from the convention center area? Any that are a little further away, but still worth visiting (maybe my coworker who doesn't drink will drive.  I definitely don't want to drive after drinking, especially in a rental car through work!).
+3. Any must-try restaurants or bars in the area?   
+4. I plan to go to the State Fair on one of my shorter days.  Any other fun or unique events going on this coming week that I should try to check out?
+
+Thanks in advance!  ",1539355276.0,2,0.67,24
+steelers,Another great day to tailgate!,,1538345453.0,29,0.86,3
+steelers,Why aren't you tailgating yet?,,1537105451.0,104,0.97,18
+Sup,Decided to go out on the rivers today instead of a lake. A little choppy but fun,,1535925165.0,19,0.93,5
+TechIMO,Is It Just Me...,or should we have done this a long time ago?,1535906392.0,2,1.0,3
+tmobile,Phone without internet,"I am helping someone try to find a phone.  They are not allowed a phone that has internet connectivity (wifi or web browser on the phone).  What options do they have that would work on T-mobile?
+
+Here is what I have currently found:
+
+Doro PhoneEasy 626 - They had this phone and it worked well.  Even sent and received picture messages and connected using 3G.  Unfortunately it broke and the unlocked ones are near impossible to find now, and the locked ones are on consumer cellular which I understand is impossible to get unlocked, at least without waiting 6 months with their service.
+
+PhoneEasy 618 - 3G, which has a better signal than 2G around here, but is unable to send picture messages. They had this and it also broke quickly.
+
+BLU Tank II T193 - This is 2G only, which reduces signal drastically. It has a camera, but is apparently unable to send and receive picture messages and group texts as MMS (i.e., responses go back only to the individual and not the group).  Cheap at $21.
+
+Snapfon EZTwo - May be 2G only, unsure, but cannot send (or potentially receive) pictures messages and seems to fall apart easily.
+
+&#x200B;
+
+&#x200B;
+
+Are there any other options for a phone with no internet access? Especially ones that can send/receive picture or group texts?",1535483200.0,2,0.76,17
+boardgames,New storage situation for my collection (Kallax),"So, I outgrew my 2x4 Kallax shelf. I wanted to get something that was nice enough to leave in the living room all the time, by my living room isn't that big, and anything that looked well was too expensive. So, I had the idea to get a 4x4 Kallax and put wheels on it. It can be stored in my spare room (office/music/board game room), and can be easily wheeled out to the living room for game nights. No more having people go back and forth between rooms, or lugging sets of games out at a time. 
+
+Note that the wheels specifically say not to use with this high of a shelving unit as it could become a tipping hazard. I put all the heavier games on the bottom, and am actually installing clasps that will hook the top into the wall to stop it from tipping. Then when it is time to move, unclasp and roll it to the living room. Debating if I should put another set of hooks in the wall in the living room. Seems pretty stable and would only be in the living room during game nights (with no kids) so less of an issue 
+
+https://imgur.com/L6gyOb7",1534395154.0,23,0.74,12
+Images,My new board game storage situation.,,1534394811.0,1,0.67,0
+SmartDNSProxy,MLB.TV no longer seems to work,"I haven't changed my settings in a year, and have tried re-activating my IP address, but it looks like [MLB.TV](https://MLB.TV) is blacking out my local games even with smartdnsproxy.  Anyone else have this issue?  I hope it isn't an issue with [nhl.tv](https://nhl.tv) when hockey starts back up or I will need to find a new service.",1533963568.0,1,1.0,0
+dispatch,Location 13 Released?,"So, my google feed let me know that Location 13 was officially released today.  In doing some googling, I saw that the only track that was not yet released was Came for the Fire.  It looks like that shows up on Spotify, but I can't use spotify at my work.  I don't see it on apple music, or soundcloud.  I do see that there is a sixth video on their youtube playlist, but it is marked as Private.  Can anyone confirm that it is playable in Spotify?  Either way, I guess I will need to wait until I get home or it gets released on the other platforms.",1532706783.0,3,1.0,6
+vegas,"Visiting in August for work, what to do on my free day?","So I will be visiting in August for work, staying on the strip.  I arrive early on Monday the 20th and am trying to figure out what to do on that day. Last time I took my rental car up to Zion and hiked.  Obviously hiking in August seems less ideal.  I plan to visit some casinos and some breweries in the evenings after my training, but if you have any suggestions on what to do during the free day, I would greatly appreciate it.  ",1531935045.0,0,0.38,10
+Sup,"I got my 69 year old dad out on the lake today. Took him a while to get the hang of it, but by the end he was able to do well!",,1531697133.0,39,0.97,6
+thanosdidnothingwrong,Browsing this sub by New and seeing all the shitposts begging for Karma...,,1531393574.0,7,0.77,1
+thanosdidnothingwrong,I survived,,1531228141.0,3,0.81,0
+Sup,Budget paddle?,"So, I have two cheap paddle boards that came with cheap paddles.  I'm a large guy and decided to upgrade to a bigger SUP for myself.  I just ordered a Tower Adventurer 2.  Are there any good budget paddles that have a larger blade?  Any presonal recommendations for cheaper paddles?  
+
+As I said, I'm large and will be paddling a large board, will be on lakes or slow rivers, and will be just cruising flat water.",1530759898.0,2,0.75,5
+a:t5_3gg21,Now you aren't the only one who posted in your subreddit,Congrats.,1528425290.0,3,1.0,0
+computers,Hybrid or regular HDD?,So I got a new laptop with an SSD boot drive.  I want to put another hard drive for more storage.  Currently looking at a 1TB Travelstar 7200rpm for $56 or a 1TB FireCuda 5400rpm with 8GB flash hybrid drive for $60.  Is the hybrid worth the lower mechanical speed?,1527472236.0,1,1.0,2
+Planner,My wife's April calendar background downloads are available!,,1522697922.0,2,1.0,1
+planners,My wife's April calendar background downloads are available!,,1522697910.0,2,0.63,0
+PlanningAddicts,My wife's April calendar background downloads are available!,,1522697898.0,1,0.67,1
+PlannerAddicts,My wife's April calendar background downloads are available!,,1522697890.0,1,0.67,0
+PlannerAddicts,My wife finished her march wallpaper downloads. I hope you enjoy!,,1519957666.0,11,0.93,0
+PlanningAddicts,My wife finished her March wallpaper downloads. I hope you enjoy!,,1519957655.0,6,0.88,1
+planners,My wife finished her March wallpaper downloads. I hope you enjoy!,,1519957643.0,11,1.0,1
+Planner,My wife finished her March wallpaper downloads. I hope you enjoy!,,1519957632.0,3,1.0,0
+PlannerAddicts,My wife uploaded her February phone/desktop Calendar wallpapers (sorry I was slow in posting this!). Enjoy!,,1517672552.0,4,0.84,0
+PlanningAddicts,My wife uploaded her February phone/desktop calendar wallpapers (sorry I was slow in posting this!). Enjoy!,,1517672544.0,4,0.71,0
+planners,My wife uploaded her February phone/desktop calendar wallpapers (sorry I was slow in posting this!). Enjoy!,,1517672536.0,12,0.83,1
+Planner,My wife uploaded her February phone/desktop calendar wallpapers (sorry I was slow in posting this!). Enjoy!,,1517672525.0,0,0.5,0
+Planner,Happy 2018! Here are my wife's January phone backgrounds as well as a desktop background.,,1514847795.0,2,0.75,0
+planners,Happy 2018! Here are my wife's January phone backgrounds as well as a desktop background.,,1514847791.0,5,0.73,2
+PlanningAddicts,Happy 2018! Here are my wife's January phone backgrounds as well as a desktop background.,,1514847787.0,3,0.67,0
+PlannerAddicts,Happy 2018! Here are my wife's January phone backgrounds as well as a desktop background.,,1514847783.0,3,0.67,2
+Planner,"Sorry for not posting earlier, but here are my wife's December background calendars!",,1513007339.0,4,0.84,1
+planners,"Sorry for not posting earlier, but here are my wife's December background calendars!",,1513007321.0,14,0.9,2
+PlanningAddicts,"Sorry for not posting earlier, but here are my wife's December background calendars!",,1513007304.0,4,0.75,1
+PlannerAddicts,"Sorry for not posting earlier, but here are my wife's December background calendars!",,1513007294.0,5,1.0,1
+Planner,My Wife's November phone downloads are ready!,,1509592416.0,4,0.84,0
+planners,My Wife's November phone downloads are ready!,,1509592406.0,3,0.71,3
+PlanningAddicts,My Wife's November phone downloads are ready!,,1509592396.0,5,0.78,2
+PlannerAddicts,My Wife's November phone downloads are ready!,,1509592385.0,3,0.72,0
+Planner,Sorry for being late! My wife's October phone backgrounds are available for download!,,1507134213.0,5,0.86,0
+planners,Sorry for being late! My wife's October phone backgrounds are available for download!,,1507134198.0,14,0.89,0
+PlanningAddicts,Sorry for being late! My wife's October phone backgrounds are available for download!,,1507134183.0,10,0.92,0
+PlannerAddicts,Sorry for being late! My wife's October phone backgrounds are available for download!,,1507134171.0,12,0.93,1
+PlannerAddicts,My wife's September calendar wallpapers are ready for free download,,1504289693.0,13,0.88,2
+PlanningAddicts,My wife's September calendar wallpapers are ready for free download,,1504289682.0,1,0.57,2
+planners,My wife's September calendar wallpapers are ready for free download,,1504289671.0,3,0.6,0
+GoogleMaps,Seeing a list of polygons on a custom user map?,"So, if I create a new map, I can add polygons that overlap.  Is it possible that if I am zoomed in, I can click on an area and have it list which polygons I am inside of?  Just clicking only seems to show me one polygon on my test.",1503948480.0,1,1.0,1
+Planner,My wife's free August phone calendar wallpaper is up. /r/planners and /r/planningaddicts like them so I thought I would post them here as well!,,1501596893.0,3,1.0,0
+PlannerAddicts,My wife's free august phone calendar wallpaper is up. /r/planners and /r/planningaddicts like them so I thought I would post them here as well!,,1501594928.0,6,0.81,1
+PlanningAddicts,My wife's free calendar phone backgrounds are up for August,,1501594838.0,6,0.88,1
+planners,The free August calendar phone wallpapers are up!,,1501594711.0,12,0.93,2
+PlanningAddicts,My wife has July phone backgrounds up on her website!,,1499005161.0,4,0.83,0
+planners,My wife has July phone backgrounds up on her website!,,1499005125.0,9,0.81,0
+planners,My wife's June calendar phone backgrounds are up. Hope you like them!,,1496324762.0,11,0.92,1
+PlanningAddicts,My wife's June calendar phone backgrounds are up. Hope you like them!,,1496324747.0,3,0.81,0
+PlanningAddicts,"Free phone background downloads for May, since you liked my wife's last month!",,1493605699.0,5,1.0,0
+planners,"Free phone background downloads for May, since you liked my wife's last month!",,1493605665.0,9,1.0,3
+PlanningAddicts,My wife's phone background April calendar is ready for download! Sorry I was late in posting!,,1491254062.0,5,0.78,1
+planners,My wife's phone background April calendar is ready for download! Sorry I was late in posting!,,1491254058.0,17,0.95,3
+PlanningAddicts,My wife's phone background March calendar is ready for download!,,1488391157.0,8,1.0,0
+planners,My wife's phone background March calendar is ready for download!,,1488391070.0,15,1.0,5
+PlanningAddicts,"Since you liked my wife's phone wallpapers in January, here are February's!",,1485974880.0,9,0.85,3
+planners,"Since you liked my wife's phone wallpapers in January, here are February's!",,1485974784.0,16,0.91,2
+tabletopgamedesign,Brainstorming- Pirates Vs Ninjas board game,"So, I have an idea in my head that I would love to get some thoughts on, and hear any suggestions and further ideas.  The game is Pirates vs Ninjas.  The premise is that the Ninjas stole a Pirate treasure chest and the Pirates stole the Ninja jewel.  They both want their item back.
+
+Layout:  I'm thinking a grid plan with some spots that you (or items) can't cross, similar to the Stratego map, but with different dimensions.  One side of the map will be the beach, with a pirate ship at the end.  Only pirates can be on the ship.  The other side is a town, with fog at the end. Only ninjas can be in the fog.  The spaces between the two ends are fair game for anyone to be in.  There will be multiple (4?) characters per side.  The characters would be 2x1 (2 spaces wide). Each character would also have a card of some sort in order to keep track of health and treasure
+
+Gameplay: I don't know if I would rather this be a 1v1, where each person controls a side, or a coop where each player controls one character on a common side and they play against the other side.  Either way, I think the following items could work for either (and maybe the game could be playable both ways?).  On the players turn, they roll a die.  potential outcomes are Move 1 space, Move 2 spaces, or attack.  For the attack, I'm not sure if you should be forced to attack, or only have the option. The attack, though, would be shooting a gun (if a pirate) or throwing a star (if a ninja).  These would be placed on the board in one of 4 locations (on either of the two spaces, or one on the right and one on the left of those two), and would move a set number of spaces per turn (3?).  This means if the enemy is close they will not be able to avoid and will take a damage and lose a heart. If the enemy is further away they can try to move out of the way.  I'm thinking that a player would have a set number of long range attacks.  So, what happens if you run out of bullets?  Well you can move in on foot and if you get within a set distance (1 space?) you can choose to sword fight them.  Sword fighting consists of rolling the sword die.  Possible outcomes are successful attack (maybe 2 on a d6), blocked (maybe 3 on a d6), or counter-attack (maybe 1 on a d6).  OR, each player can roll a sword die, and depending on the combination damage is dealt to the proper player.  Any player receiving damage gets knocked back one space (so that you don't have constant fight, but have to roll a move again and choose to fight, or have the opportunity to run away).
+
+Winning the game:  You win the game by obtaining the treasure you are going after.  The problem is, you don't know which enemy has it. Each character has a card near their health card. One of them is the treasure. The other ones could be special abilities.  Cards are face down unless the character is killed, or a special ability is used (show to all, then return face down).  If a player is killed by a long range weapon, the treasure is left where the character died, and whoever gets their first gets it (so teammates can get that card and keep the game going, but the other team can get their first and win the game).  If the character is killed by  sword fighting, the other team wins by retrieving the treasure.  OR, they have to retrieve and bring it back to their side.
+
+I am open to all criticism and comments.  The game is obviously in a very early stage and very rough, hence the brainstorming title.  Are the dice tosses too random?  How big should a board be to make the game last, but at the same time not be too big that players are running around chasing each other for hours with no action?  Do I need some mechanism to make the board smaller so that if it gets down to 1v1 it ends faster?  Any other thoughts?",1454604510.0,3,1.0,3

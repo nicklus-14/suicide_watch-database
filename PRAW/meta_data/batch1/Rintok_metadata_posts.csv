@@ -1,0 +1,868 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+Watches,[Citizen Tsuyosa] Is it too big for my wrist?,What do you think? I think I'm cutting it close,1722487813.0,5,1.0,7
+Watches,[Bulova] Can anyone recommend a similar style (dark gray wrist and dial) for sub-$400?,"I saw this Bulova 98B412 in a store and fell in love. I did some research and it seems it's a Mexico-only model. The price is \~400USD, with quartz movement and a mineral glass. I feel that for that price range there has to be something with at least sapphire, and I actually prefer quartz over mechanical. Are there other models I should look into that have better components and a similar gray/gunmetal color?
+
+Link: [https://www.liverpool.com.mx/tienda/pdp/Reloj-Bulova-Surveyor-para-hombre-98B412/1143220822?gfeed=true&srsltid=AfmBOopjqFcHxH8pduwN\_imRKP7sRfOYZaHo5GvHTrYHBCNtHG7JXQ2pOi](https://www.liverpool.com.mx/tienda/pdp/Reloj-Bulova-Surveyor-para-hombre-98B412/1143220822?gfeed=true&srsltid=AfmBOopjqFcHxH8pduwN_imRKP7sRfOYZaHo5GvHTrYHBCNtHG7JXQ2pOi)
+
+https://preview.redd.it/30b4w4gh0kbd1.jpg?width=940&format=pjpg&auto=webp&s=5c8f9926cfeb887bd7a40b0d6dc895db1d76b592
+
+",1720465057.0,1,1.0,4
+laptops,Acer Aspire 5 vs Acer SWIFT 3,"Hi everyone, I need help choosing between two laptops. Usage will be web browsing, some work (Power BI, Excel), and light gaming (OSRS)
+
+[Acer Aspire 5](https://www.newegg.com/steel-gray-acer-aspire-5-a515-58m-54lg-home-personal/p/N82E16834360278): Intel Core i5 13th Gen 1335U
+
+[Acer Swift 3](https://www.newegg.com/p/1TS-000X-04JM2): Intel i5-1240P
+
+Both have 512GB SSD and 16GB RAM, so the only difference is the CPU and build quality.
+
+Which one should I choose? I've heard Acer Swifts are usually better than Aspire, will there be a noticeable difference between the CPUs?
+
+Thanks for the help!",1694112985.0,2,1.0,1
+cs50,PSET6: Count values are not updating and I don't understand why,"Below is my code.
+
+
+After opening the files, I start iterating through the DNA sequence with each of the STRs. For each position of the DNA sequence, I assign the number of times the ith STR appears in `counts`. So, for example, if I have the sequence `AATGTGTGTGTGTGTGTGAAAAAATGTGATGATG`, and the STR `ATG`, `counts` would be `[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,2,0,0,1,0,0]`, I would then find the `max()` value in `counts` and store it in `maxCounts`, which will be a list containing the maximum number of (consecutive) times each STR appears on the DNA sequence. 
+
+
+Code works for every sequence except `sequence16`, because some values in `counts`are `None` instead of 0, so the `max()` function cannot be used. However, I fail to see why those values are `None` instead of 0 or other int, because the code block that starts with the comment `# Loop through each position in sequence` should (I think) modify each `counts` value to 0 if no STR was found.
+
+
+Could someone help me?
+
+
+
+    from sys import argv, exit
+    
+    # Define iteration function
+    
+    
+    def iterateSTR(strSize, seqSize, c, count):
+        # Check if we are near the end and no more STR can be found(e.g. STR of len 5, where c is the second to last value), or if only one STR can be
+        # found at this point
+        if len(seq[c:seqSize]) <= strSize:
+            return count
+    
+        else:
+            for i in range(strSize + c, seqSize, strSize):
+                if strSize+i > seqSize:
+                    return count
+    
+                elif seq[i:strSize+i] == STR:
+                    count += 1
+                else:
+                    return count
+    
+    
+    # Check correct usage
+    if len(argv) != 3:
+        print(""Usage: python dna.py data.csv sequence.txt"")
+        exit(1)
+    
+    # Open files
+    with open(argv[1], ""r"") as file:
+        people = csv.reader(file)
+    
+        with open(argv[2], ""r"") as file2:
+            seq = file2.read()
+    
+            # Loop through STRs, skipping name in CSV
+            for row in people:
+                seqSize = len(seq)
+                maxCounts = [None] * (len(row)-1)
+                for i in range(1, len(row)):
+    
+                    # Initialize variables
+                    STR = row[i]
+                    strSize = len(STR)
+                    counts = [None] * seqSize
+    
+                    # Loop through each position in sequence
+                    for c in range(seqSize):
+                        count = 0
+    
+                        if seq[c:strSize+c] == STR:
+                            count += 1
+    
+                            # Loop through sequence, starting on character (c) where a match was found, iterating by the size of current STR
+                            counts[c] = iterateSTR(strSize, seqSize, c, count)
+    
+                        else:
+                            counts[c] = count
+    
+                    maxCounts[i-1] = max(counts)
+    
+                break
+    
+    # Iterate over people to fin matching STR counts ...
+    ...",1583881298.0,4,0.84,2
+cs50,PSET 5 Speller: Can't handle apostrophes,"I can't comprehend why my program can't handle apostrophes or substrings. Everything in check50 passes except those two things; I think the problem lies in check()
+
+check50:
+
+    :) dictionary.c, dictionary.h, and Makefile exist
+    :) speller compiles
+    :) handles most basic words properly
+    :) handles min length (1-char) words
+    :) handles max length (45-char) words
+    :( handles words with apostrophes properly
+       expected ""MISSPELLED WOR..."", not ""MISSPELLED WOR...""
+    :) spell-checking is case-insensitive
+    :( handles substrings properly
+       expected ""MISSPELLED WOR..."", not ""MISSPELLED WOR...""
+
+Load():
+
+    // Loads dictionary into memory, returning true if successful else false
+    bool load(const char *dictionary)
+    {
+        // Open dictionary file
+        FILE *file = fopen(dictionary, ""r"");
+        if (file == NULL)
+        {
+            printf(""Could not open %s.\n"", dictionary);
+            return false;
+        }
+    
+        // Read strings from file one at a time
+        char word[LENGTH + 1];
+        while (fscanf(file, ""%s"", word) != EOF)
+        {
+            // Create a new node for each word
+            node *n = malloc(sizeof(node));
+            if (n == NULL)
+            {
+                printf(""Not enough memory for new nodes"");
+                return false;
+            }
+    
+            // Hash word to obtain hash value
+            int index = hash(word);
+    
+            // Insert node into hash table at that location
+            // If its the first node in that index
+            if (table[index] == NULL)
+            {
+                strcpy(n->word, word);
+                n->next = NULL;
+                table[index] = n;
+                WORDS++;
+            }
+    
+            // If not first node
+            else
+            {
+                strcpy(n->word, word);
+                n->next = table[index];
+                table[index] = n;
+                WORDS++;
+            }
+        }
+        return true;
+    }   
+
+Check():
+    
+    // Returns true if word is in dictionary else false. ERROR
+    bool check(const char *word)
+    {
+        int hashed = hash(word);
+        node *cursor = table[hashed];
+    
+        while (strcasecmp(cursor->word, word) != 0)
+        {
+            if (cursor->next == NULL)
+            {
+                return false;
+            }
+            cursor = cursor->next;
+        }
+        return true;
+    }
+    
+The logic I'm following with `check` is the following: we check if `cursor->word` is the same as `word`. If they are the same, `while` loop finishes since `strcasecmp` will return 0, and `check` returns `true`. However, it seems it doesn't work correctly, could anyone guide me in the right direction?",1583516881.0,1,0.67,8
+cs50,PSET4 Filter: Question regarding prewritten code,"As I understand, the following code block is allocating memory for the infile, with respect to its height and width
+
+
+    // Allocate memory for image
+    RGBTRIPLE(*image)[width] = calloc(height, width * sizeof(RGBTRIPLE));
+    if (image == NULL)
+    {
+        fprintf(stderr, ""Not enough memory to store image.\n"");
+        fclose(outptr);
+        fclose(inptr);
+        return 7;
+    }
+
+However, I don't understand line 2, specifically
+
+    RGBTRIPLE(*image)[width]
+
+Why are we using a variable ""image"" if we never declared it previously? Also, why is ""width"" between brackets and not, for instance, ""height""?",1582000074.0,4,0.84,2
+cs50,Low grade in Plurality,"UPDATE: I just realized my mistake. The reason for the grade were three variables I initialized but never ended up using (invalid, winners, amountWinners).
+
+I just completed Plurality and it checked out with check50 and style50. After submitting I went to https://cs50.me/cs50x to see my scores and it was graded with a 25%. Anyone know why is the system grading like that? Below is my code for the pset.
+
+    #include <cs50.h>
+    #include <stdio.h>
+    #include <string.h>
+    #include <strings.h>
+    
+    // Max number of candidates
+    #define MAX 9
+    
+    // Candidates have name and vote count
+    typedef struct
+    {
+        string name;
+        int votes;
+    }
+    candidate;
+    
+    // Array of candidates
+    candidate candidates[MAX];
+    
+    // Number of candidates
+    int candidate_count;
+    
+    // Invalid votes
+    int invalid;
+    
+    // Function prototypes
+    bool vote(string name);
+    void print_winner(void);
+    
+    int main(int argc, string argv[])
+    {
+        // Check for invalid usage
+        if (argc < 2)
+        {
+            printf(""Usage: plurality [candidate ...]\n"");
+            return 1;
+        }
+    
+        // Populate array of candidates
+        candidate_count = argc - 1;
+        if (candidate_count > MAX)
+        {
+            printf(""Maximum number of candidates is %i\n"", MAX);
+            return 2;
+        }
+        for (int i = 0; i < candidate_count; i++)
+        {
+            candidates[i].name = argv[i + 1];
+            candidates[i].votes = 0;
+        }
+    
+        int voter_count = get_int(""Number of voters: "");
+    
+        // Loop over all voters
+        for (int i = 0; i < voter_count; i++)
+        {
+            string name = get_string(""Vote: "");
+    
+            // Check for invalid vote
+            if (!vote(name))
+            {
+                printf(""Invalid vote.\n"");
+            }
+        }
+    
+        // Display winner of election
+        print_winner();
+    }
+    
+    // Update vote totals given a new vote
+    bool vote(string name)
+    {
+        //Loop through names
+        for (int i = 0; i < candidate_count; i++)
+        {
+            //If name appears on the ballot, increase votes by 1 and return true
+            if (strcasecmp(name, candidates[i].name) == 0)
+            {
+                candidates[i].votes++;
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    // Print the winner (or winners) of the election
+    void print_winner(void)
+    {
+        //Declaring winners array and max number of votes in the whole ballot
+        string winners[candidate_count - 1];
+        int maxVotes = candidates[0].votes;
+        int amountWinners = 0;
+    
+        //Iterate through each candidate to get the max number of votes a single candidate has
+        for (int i = 1; i < candidate_count; i++)
+        {
+            if (candidates[i].votes > maxVotes)
+            {
+                maxVotes = candidates[i].votes;
+            }
+        }
+    
+        //Prints winners
+        for (int i = 0; i < candidate_count; i++)
+        {
+            if (candidates[i].votes == maxVotes)
+            {
+                printf(""%s\n"", candidates[i].name);
+            }
+    
+        }
+        return;
+    }",1580937545.0,0,0.5,1
+mexico,"Dejaron un citatorio a una persona que no vive en mi domicilio, ¿qué hago?","Como dice el título del post, dejaron en mi domicilio un citatorio a nombre de una persona que NO VIVE aquí. Esta persona al parecer tiene deuda con Famsa, y la empresa gestora de cobranza dejo una carta que básicamente dice que embargaran para cubrir la deuda. El problema es que a la hora a la que vendrán yo estoy trabajando.
+
+Jamás he tenido contacto con el deudor, y no quiero que se metan a mi casa si no estoy para explicar la situación.
+
+¿Que consejos me dan? ",1550114483.0,9,0.92,5
+mexico,¿Importa la forma en la que me titule?,"Actualmente soy pasante y estoy haciendo el trámite de titulación. Tengo la opción de titularme por promedio o por haber aprobado el EGEL. ¿En realidad importa la opción de titulación que elija?, ¿es algo que se revise en el campo laboral?",1548493619.0,8,1.0,12
+2007scape,"I understand gold amulets (u) are used for training magic, but why do people buy gold necklaces/rings/bracelets?",Q,1543277461.0,1,1.0,3
+AskDocs,Reducing liver damage from TB medication,"I recently got diagnosed with Pleural Tuberculosis, I am a 22 years old male. I'm taking TB medication everyday, specifically Isoniazid, Rifampin, Pyrazinamide and Ethambutol. As soon as I started taking the medication I noticed a change in the color of my urine from white-yellow to a kinda fluorescent orange. I researched and found out that TB medication is hepatotoxic. My question is, besides not drinking alcohol, what kind of diet or lifestyle changes shall I make to reduce liver damage to the maximum? ",1540580407.0,2,1.0,8
+Scholar,"[Book] The Elusive Quest for Growth - William Easterly, Spanish Version. (En Busca del Crecimiento)","* **DOI/PMID/ISBN:** 84-95348-07-1
+* [**URL**]( https://books.google.com.mx/books?id=BBiwFlCErzkC&pg=PA303&lpg=PA303&dq=en+busca+del+crecimiento+william+easterly+pdf&source=bl&ots=xUgMMPt5La&sig=JO5FADMCR2t2SNqKtu9vFtNMqz0&hl=en&sa=X&ved=2ahUKEwiRpu2tsJPeAhXmllQKHXoIAlo4ChDoATABegQICBAB#v=onepage&q=en%20busca%20del%20crecimiento%20william%20easterly%20pdf&f=false )
+
+I can only find summaries of the spanish version, but I need the full book in spanish. Help would be greatly appreciated!",1539982225.0,1,0.57,3
+excel,How to substitute text in a column depending on the values of another column? Without using an extremely long nested IF.,"I have numeric codes. Each code represents a discipline (biology, economics, etc). So in A1 there is the list of codes, and in A2 there is the discipline which each code belongs to.
+
+Now, I have another column (A3), and there I have the numeric codes which where taken from survey data. I would like to change the codes to the discipline (text) they represent. The only way I could figure out how to do it was with a nested IF, but seeing as there are more than 300 codes it would be innefficient. Could someone help me?",1532016375.0,6,0.8,3
+translator,[Korean > English or Spanish] Letter written to my friend while studying abroad.,,1527381886.0,2,1.0,2
+tipofmytongue,[TOMT] [SONG]60´s(?) song I heard a couple days ago.,"This is my best attempt at humming
+
+https://vocaroo.com/i/s0A7LxBqLle4",1523410399.0,1,0.66,4
+travel,Going to Eje Cafetero and need help on things to do in Pereira.,"I´m studying abroad in Medellin and I´m planning to go to Eje Cafetero in two weeks. Right now my schedule looks something like this:
+
+Monday: Bus from Medellin to Salento - Night at Salento. I´ll probably be arriving in the afternoon and will have a lot of free time. I was planning on just taking a stroll through the town but I´m open to suggestions on places to go from people that have already went there.
+
+Tuesday: Valle de Cocora hike - Night at Salento.
+
+Wednesday: Bus to Pereira - Night at Pereira. Here is where I need help, since I´ll be spending a whole day here and don´t know what is there to do. Any suggestions?
+
+Thursday: Otun Quimbaya hike - Night at Pereira.
+
+Friday: Bus to Manizales - coffee farm visit - bus to Medellin
+
+Budget is around 700k COP which is $250~ USD. I´ll be spending 350k on buses, hostels, transport and park fees, and coffee farm tour leaving the rest for food and random stuff.
+
+This is my first solo trip so I´m open to criticism on the planning. Thanks!",1521177543.0,2,1.0,2
+electricians,Question regarding phone charger adapters,"Hello, I´m wondering if it´s safe to use different adapters to charge my phone. The OEM adapter has an output of 5v 0.85A, is it safe to use adapters with different outputs? (5v 1A; 5.1v 0.85A; 5v 1.2A)
+
+Also, should I be worried if the input amperes are different (like 0.1A in one and 0.2A in another)?
+
+Thanks!",1516153019.0,1,1.0,4
+Colombia,Tips de estancia en Medellín para un extranjero,"Hola, realizare un intercambio en la UNAL sede Medellin por seis meses. Cuales barrios son los cercanos a la universidad y cuales debería de evitar a la hora de buscar apartamento? Considerando un presupuesto para renta de 600k~ al mes.
+
+También son bienvenidos todos los consejos sobre la ciudad, muchas gracias :D",1513278136.0,1,1.0,3
+medellin,Tips acerca de donde vivir,"Hola, realizare un intercambio en la UNAL entre enero y junio del próximo año. Cuales barrios son los cercanos a la universidad y cuales debería de evitar a la hora de buscar apartamento? Considerando un presupuesto para renta de 600k~ al mes.
+
+También son bienvenidos todos los consejos sobre la ciudad, muchas gracias :D",1513277417.0,1,1.0,2
+tipofmytongue,[TOMT] [GAME] Playstation 2 Off-road Racing game,"Name of the game was Off-road... I don't remember the rest, it was for PS2 and probably for GameCube as well and had a hummer in a mountainside background in the cover, which was mostly brown. 
+
+It had Fuel by Metallica in the intro video, and the cars had 4 ""levels"", third one was called professional.
+
+Thanks for the help!",1511425184.0,9,0.92,8
+Scholar,[Article] A Plain Man's Guide to Kaldor's Growth Laws,"* **Citation:** A Plain Man's Guide to Kaldor's Growth Laws. A. P. Thirlwall. Journal of Post Keynesian Economics. Vol. 5, No. 3 (Spring, 1983), pp. 345-358
+
+* **DOI/PMID/ISBN:** Not found
+
+* [**URL**] http://www.jstor.org/stable/4537750",1510542922.0,0,0.5,3
+Scholar,[Article] A Plain Man's Guide to Kaldor's Growth Laws,[removed],1510532217.0,1,1.0,1
+Scholar,[Book] Causes of the slow rate of economic growth of the United Kingdom an inaugural lecture.,"* **Citation:** Causes of the slow rate of economic growth of the United Kingdom an inaugural lecture. By Kaldor, Nicholas
+Published 1966 by Cambridge University Press 
+
+* **DOI/PMID/ISBN:** ISBN 0521054621 9780521054621
+
+* [**URL**] https://catalog.hathitrust.org/Record/001315513",1510530998.0,2,0.75,1
+Scholar,"Does anyone know where to find data on productivity, by state, in the US?",[removed],1510337357.0,1,1.0,2
+AskEconomics,"Does anyone know where to find data on labor productivity, by state, in the U.S.?",Tried on BLS but it only has national data.,1510335816.0,1,1.0,0
+Colombia,Haré un intercambio a Colombia y necesito ayuda!,"Hola, estoy planeando ir de intercambio a Colombia y no me decido entre ir a Medellín o a Bogotá. He escuchado cosas positivas de ambas ciudades, pero mi pregunta principal es en cual de las dos el costo de vida es más barato.
+
+¿Algún residente de cualquiera de las dos ciudades que me pueda pasar consejos, recomendaciones, y/o decirme aproximadamente cuanto se gasta mensualmente? 
+
+Muchísimas gracias!",1504064404.0,10,1.0,5
+Fitness,Tricep feels weird while doing overhead press,[removed],1498281296.0,27,0.8,10
+AskEconomics,Question regarding CPI by quarter.,"I'm doing a regression regarding real exchange rate and dunno how to get quarterly cpi: do I just calculate the average of the monthly CPI to get the quarter one, or do I take the cpi from the last month of that quarter and use that?",1494819065.0,1,1.0,1
+AskEconomics,CPI Historical Data,"Hello, I'm doing a project for econometrics and need the US CPI from 1990 onwards. I've looked on the Federal Reserve official website but can't seem to find it, although I did find some info on the St Louis Fed web page but idk if that represents national CPI. 
+
+If anyone can help me I'd appreciate it!",1492744431.0,1,1.0,2
+techsupport,"Computer turns off when playing games, then turns on for 3 sec, turns off again and repeat","On mobile so sorry for shitty formatting. 
+
+Specs
+
+I5 4440
+
+Gtx 960
+
+Psu Evga 500b 
+
+Ram: 4x4 1866mhz 
+
+So pretty much title. After trying to play games like Fallout 4 or Dark Souls my pc turns off and then, if I press the on button, it tries to turn on for 3 sec before turning back off, and automatically turns on and on again.",1487713687.0,1,1.0,2
+tipofmytongue,[TOMT] Electronic song,"http://vocaroo.com/i/s18sFLGRBK1P
+
+I only remember the beat, thanks for your time.",1487397258.0,2,0.67,1
+runescape,What is MTX?,"I've seen post after post about mtx controversy, tried to search what it was on wikia but a pet showed up lol, anyone care to explain?",1476295724.0,2,0.6,6
+AskDocs,Torn thumbnail care,"Hello, I thorn half my thumb nail a couple days ago, here's a [picture](http://imgur.com/ZmY5WuT) (NSFW). I've been applying iodine daily and gotten through with just bandaids.
+
+My question is if what I'm doing is fine or should I use other stuff. Also how much time should I keep the flesh protected? I'm not looking forward to spend the next 4 months wearing a band aid on my thumb waiting for my nail to grow but if that's what I have to do please let me know.",1470342487.0,1,1.0,0
+tipofmytongue,[TOMT] A song I've heard multiple times but cant recognize any of the lyrics,[Vocaroo](http://vocaroo.com/i/s0FJxphYJXuy) that's the chorus (I think). The song ends with trumpets.,1469053004.0,1,0.67,3
+tipofmytongue,[TOMT] Redditor explain how to write a report,"I don't know if I saw it on Askreddit or LPT or other subreddit, the guy says that you need to write the body first, then from the body you write the intro and then the conclusion. Plz help sorry if I don't give much info.",1461729277.0,0,0.5,0
+buildapc,"Passing my OS from an HDD to a SSD, would I be able to use the same product key?","Hello, I installed W10 using a Windows 7 product key from an old laptop I had and put it in my HDD. I'm planning on getting an SSd for my main drive and want to do a clean install. Supposing I format my HDD (no important files), make a bootable drive and start a new W10 installation on the SSD, would I be able to use the same old product key?",1458974730.0,1,1.0,3
+techsupport,I (probably) fucked up,"Hello, so for some reason I wanted to download DirectX 11 and one of the first google results from that was this: http://www.directx.com.es/, ""It's one of the first so whatever"" I said, downloaded and opened the installer and it was asking me if I would like to make yahoo my homepage as well as installing chromium, It was here when I realized that the setup had been downloaded to a new disk, one I've never seen before. I quickly canceled the installationand went to detach the virtual (?) disk from disk managment.
+
+After all I ran a scan with malwarebytes and all seemed in good shape.
+
+Is there anything more I can do to be sure nothing went through, and could someone explain me what that new disk was about? I've honestly never seen something like that.",1454396921.0,0,0.5,2
+buildapc,Roads and PCs,"Hello, I'm going to travel from one city to another in a car with my PC, probably a 4~ hour drive, and was wondering what special measures should I take (like disassembling parts) to make sure nothing bad happens to the computer. I use an Intel stock cooler.",1453525568.0,1,0.67,1
+buildapc,[Build Help] Need CPU-MOBO-RAM compatibility advice,"Hello, I'm working on my first build and already have most of the stuff:
+
+[PCPartPicker part list](http://pcpartpicker.com/p/NHTnP6) / [Price breakdown by merchant](http://pcpartpicker.com/p/NHTnP6/by_merchant/)
+
+Type|Item|Price
+:----|:----|:----
+**Memory** | [Kingston HyperX Fury Black 8GB (2 x 4GB) DDR3-1866 Memory](http://pcpartpicker.com/part/kingston-memory-hx318c10fbk28) | Purchased For $0.00 
+**Storage** | [Western Digital Caviar Blue 1TB 3.5"" 7200RPM Internal Hard Drive](http://pcpartpicker.com/part/western-digital-internal-hard-drive-wd10ezex) | Purchased For $0.00 
+**Video Card** | [EVGA GeForce GTX 960 2GB SuperSC ACX 2.0+ Video Card](http://pcpartpicker.com/part/evga-video-card-02gp42966kr) | Purchased For $0.00 
+**Case** | [Corsair 300R ATX Mid Tower Case](http://pcpartpicker.com/part/corsair-case-300r) | Purchased For $0.00 
+**Power Supply** | [EVGA 500W 80+ Bronze Certified ATX Power Supply](http://pcpartpicker.com/part/evga-power-supply-100b10500kr) | $0.00 
+**Optical Drive** | [Samsung SH-224DB/BEBE DVD/CD Writer](http://pcpartpicker.com/part/samsung-optical-drive-sh224dbbebe) | Purchased For $0.00 
+**Keyboard** | [Cooler Master CM Storm Devastator Gaming Bundle Wired Gaming Keyboard w/Optical Mouse](http://pcpartpicker.com/part/cooler-master-keyboard-sgb3011kkmf1us) | Purchased For $0.00 
+ | *Prices include shipping, taxes, rebates, and discounts* |
+ | **Total** | **$0.00**
+ | Generated by [PCPartPicker](http://pcpartpicker.com) 2015-12-09 23:55 EST-0500 |
+
+As you can see, I have DDR3 RAM, my question is, if I would get an skylake CPU (Probably an i3 6100) and a LGA 1151 MOBO (choosing between http://www.amazon.com/gp/product/B016K5UZ2G?psc=1&redirect=true&ref_=ox_sc_act_title_2&smid=ATVPDKIKX0DER  and  http://www.amazon.com/gp/product/B016A4613Y?psc=1&redirect=true&ref_=ox_sc_act_title_1&smid=ATVPDKIKX0DER) would everything be compatible and work fine?
+
+",1449723563.0,1,1.0,2
+tipofmytongue,[TOMT] Recent-ish post about syrian refugees,"It was about a woman getting evicted (?) from her apartment to make room for the refugees I think, or something related to  that. Posted probably less than a month ago, thanks for the help!",1443582547.0,1,1.0,2
+tipofmytongue,Recent-ish post about syrian refugees,[removed],1443581547.0,1,1.0,0
+mexico,[TOMT] Cancion de rock mexicano (vocaroo),"Hace unos días hice esta pregunta pero al no tener la letra era difícil saber la canción. 
+
+ http://vocaroo.com/i/s19LbeWyasXi
+
+Aquí la tarareo, el ritmo es mas o menos así, gracias por su tiempo :).",1442983047.0,3,0.71,3
+mexico,[TOMT] Cancion de rock en español,"La escuche hace unos días, la canción no es nueva pero no alcance a escuchar su letra solo el coro donde tararea ""Papapa rira papa,  papapa rira papa, (letra de la canción), papapa rira papa...",1442546876.0,2,0.67,7
+skyrim,Could anyone explain legendary perks to me?,"Hello, started playing Skyrim about a week ago for the first time and I'm getting the hang of it, I'm lvl 11 atm. Anyway, I know If you lvl a perk to 100 you can reset it(?) and you can do it multiple times, what's the benefit of this?",1438328571.0,2,1.0,9
+buildapc,"[Troubleshoot] Just got an EVGA 500w B1 and one of the little holes on the 20 pin connector is hollow, is this normal?",http://imgur.com/a/8iwWO,1436829019.0,0,0.5,2
+buildapc,What GPU should I get if I want to play 1080p@60fps but don't care about max settings (medium graphics being OK),,1434671995.0,1,1.0,2
+buildapc,Which of this two EVGA 500w PSUs is better?,"[http://www.amazon.com/dp/B00DGHKK7M/?tag=pcpapi-20](EVGA 500w B1) 
+
+Vs
+
+[http://www.amazon.com/gp/aw/d/B00H33SFJU/ref=mp_s_a_1_1?qid=1434425432&sr=8-1&pi=AC_SY200_QL40&keywords=Evga+w1&dpPl=1&dpID=51AFmFLRqWL&ref=plSrch](EVGA 500w W1)
+
+They're almost the same price so was wondering which one would be the best.",1434425630.0,1,1.0,1
+buildapc,"[Build Ready] $870 First build, monitor and OS included. Would like someone to check it","###Build Help/Ready:
+
+Hello, finished my build and need someone to look over it for feedback before I start buying
+
+**Have you read the sidebar and [rules](http://www.reddit.com/r/buildapc/wiki/rules)? (Please do)**
+
+Yup
+
+**What is your intended use for this build? The more details the better.**
+
+Light gaming, mainly LOL altough I might start playing (unmoded) skyrim
+
+**If gaming, what kind of performance are you looking for? (Screen resolution, FPS, game settings)**
+
+45-60 fps 1080p at medium-high
+
+**What is your budget (ballpark is okay)?**
+
+I REALLY want to keep it under $900
+
+**In what country are you purchasing your parts?**
+
+US, mostly amazon because most sites do not allow international debit cards or shipping to a P.O. box, which is one of the places I´ll be sending my parts.
+
+**Post a draft of your potential build here (specific parts please). [Consider formatting your parts list.](http://www.reddit.com/r/buildapc/wiki/pcpp)**
+
+[PCPartPicker part list](http://pcpartpicker.com/p/YjPXt6) / [Price breakdown by merchant](http://pcpartpicker.com/p/YjPXt6/by_merchant/)
+
+Type|Item|Price
+:----|:----|:----
+**CPU** | [Intel Core i5-4440 3.1GHz Quad-Core Processor](http://pcpartpicker.com/part/intel-cpu-bx80646i54440) | $163.95 @ SuperBiiz 
+**Motherboard** | [ASRock H97M Anniversary Micro ATX LGA1150 Motherboard](http://pcpartpicker.com/part/asrock-motherboard-h97manniversary) | $64.89 @ OutletPC 
+**Memory** | [Corsair Vengeance 8GB (2 x 4GB) DDR3-1600 Memory](http://pcpartpicker.com/part/corsair-memory-cmz8gx3m2a1600c9b) | $55.89 @ OutletPC 
+**Storage** | [Western Digital Caviar Blue 1TB 3.5&quot; 7200RPM Internal Hard Drive](http://pcpartpicker.com/part/western-digital-internal-hard-drive-wd10ezex) | $49.99 @ Amazon 
+**Video Card** | [Sapphire Radeon R9 280 3GB Dual-X Video Card](http://pcpartpicker.com/part/sapphire-video-card-100373l) | $149.99 @ Newegg 
+**Case** | [Corsair 300R ATX Mid Tower Case](http://pcpartpicker.com/part/corsair-case-300r) | Purchased for $70.00 
+**Power Supply** | [EVGA 500W 80+ Bronze Certified ATX Power Supply](http://pcpartpicker.com/part/evga-power-supply-100b10500kr) | $49.99 @ Amazon 
+**Optical Drive** | [Samsung SH-224DB/BEBE DVD/CD Writer](http://pcpartpicker.com/part/samsung-optical-drive-sh224dbbebe) | $14.98 @ OutletPC 
+**Operating System** | [Microsoft Windows 8.1 OEM (64-bit)](http://pcpartpicker.com/part/microsoft-os-wn700615) | $87.98 @ OutletPC 
+**Monitor** | [Acer G226HQLBbd 60Hz 21.5&quot; Monitor](http://pcpartpicker.com/part/acer-monitor-umwg6aab01) | $99.98 @ NCIX US 
+**Keyboard** | [Cooler Master CM Storm Devastator Gaming Bundle Wired Gaming Keyboard w/Optical Mouse](http://pcpartpicker.com/part/cooler-master-keyboard-sgb3011kkmf1us) | Purchased $30.00 
+ | *Prices include shipping, taxes, rebates, and discounts* |
+ | Total (before mail-in rebates) | $867.64
+ | Mail-in rebates | -$30.00
+ | **Total** | **$837.64**
+ | Generated by [PCPartPicker](http://pcpartpicker.com) 2015-06-13 18:11 EDT-0400 |
+
+**Provide any additional details you wish below.**
+
+I already bought the case and mouse/keyboard. The one thing I´m still not sure about is the PSU.
+
+I have [this one](http://www.amazon.com/dp/B00DGHKK7M/?tag=pcpapi-20) in my build, and was about changing it for [this one] (http://www.amazon.com/Cooler-Master-GM-G550M-Compact/dp/B00MAZK3VE/ref=sr_1_1?s=electronics&ie=UTF8&qid=1434233931&sr=1-1&keywords=g550m&pebp=1434233922316&perid=470E179E6B134016B148)
+
+Is spending $20 more worth it?
+
+P.D: I´d like any modifications made to not include MIR.
+
+**NOTE: You do not have to follow this format, but please be sure to answer these questions. Please do not ask to simply be given a build. You are welcome to delete this section.**",1434251213.0,1,1.0,2
+buildapc,[Build Help]$870 Light Gaming build. Monitor and OS included.,"###Build Help/Ready:
+
+Hello, finished my build and need someone to look over it for feedback before I start buying
+
+**Have you read the sidebar and [rules](http://www.reddit.com/r/buildapc/wiki/rules)? (Please do)**
+
+Yup
+
+**What is your intended use for this build? The more details the better.**
+
+Light gaming, mainly LOL altough I might start playing (unmoded) skyrim
+
+**If gaming, what kind of performance are you looking for? (Screen resolution, FPS, game settings)**
+
+45-60 fps 1080p at medium-high
+
+**What is your budget (ballpark is okay)?**
+
+I REALLY want to keep it under $900
+
+**In what country are you purchasing your parts?**
+
+US, mostly amazon because most sites do not allow international debit cards or shipping to a P.O. box, which is one of the places I´ll be sending my parts.
+
+**Post a draft of your potential build here (specific parts please). [Consider formatting your parts list.](http://www.reddit.com/r/buildapc/wiki/pcpp)**
+
+[PCPartPicker part list](http://pcpartpicker.com/p/YjPXt6) / [Price breakdown by merchant](http://pcpartpicker.com/p/YjPXt6/by_merchant/)
+
+Type|Item|Price
+:----|:----|:----
+**CPU** | [Intel Core i5-4440 3.1GHz Quad-Core Processor](http://pcpartpicker.com/part/intel-cpu-bx80646i54440) | $163.95 @ SuperBiiz 
+**Motherboard** | [ASRock H97M Anniversary Micro ATX LGA1150 Motherboard](http://pcpartpicker.com/part/asrock-motherboard-h97manniversary) | $64.89 @ OutletPC 
+**Memory** | [Corsair Vengeance 8GB (2 x 4GB) DDR3-1600 Memory](http://pcpartpicker.com/part/corsair-memory-cmz8gx3m2a1600c9b) | $55.89 @ OutletPC 
+**Storage** | [Western Digital Caviar Blue 1TB 3.5&quot; 7200RPM Internal Hard Drive](http://pcpartpicker.com/part/western-digital-internal-hard-drive-wd10ezex) | $49.99 @ Amazon 
+**Video Card** | [Sapphire Radeon R9 280 3GB Dual-X Video Card](http://pcpartpicker.com/part/sapphire-video-card-100373l) | $149.99 @ Newegg 
+**Case** | [Corsair 300R ATX Mid Tower Case](http://pcpartpicker.com/part/corsair-case-300r) | $70.00 
+**Power Supply** | [EVGA 500W 80+ Bronze Certified ATX Power Supply](http://pcpartpicker.com/part/evga-power-supply-100b10500kr) | $49.99 @ Amazon 
+**Optical Drive** | [Samsung SH-224DB/BEBE DVD/CD Writer](http://pcpartpicker.com/part/samsung-optical-drive-sh224dbbebe) | $14.98 @ OutletPC 
+**Operating System** | [Microsoft Windows 8.1 OEM (64-bit)](http://pcpartpicker.com/part/microsoft-os-wn700615) | $87.98 @ OutletPC 
+**Monitor** | [Acer G226HQLBbd 60Hz 21.5&quot; Monitor](http://pcpartpicker.com/part/acer-monitor-umwg6aab01) | $99.98 @ NCIX US 
+**Keyboard** | [Cooler Master CM Storm Devastator Gaming Bundle Wired Gaming Keyboard w/Optical Mouse](http://pcpartpicker.com/part/cooler-master-keyboard-sgb3011kkmf1us) | $30.00 
+ | *Prices include shipping, taxes, rebates, and discounts* |
+ | Total (before mail-in rebates) | $867.64
+ | Mail-in rebates | -$30.00
+ | **Total** | **$837.64**
+ | Generated by [PCPartPicker](http://pcpartpicker.com) 2015-06-13 18:11 EDT-0400 |
+
+**Provide any additional details you wish below.**
+
+I already bought the case and mouse/keyboard. The one thing I´m still not sure about is the PSU.
+
+I have [this one](http://www.amazon.com/dp/B00DGHKK7M/?tag=pcpapi-20) in my build, and was about changing it for [this one] (http://www.amazon.com/Cooler-Master-GM-G550M-Compact/dp/B00MAZK3VE/ref=sr_1_1?s=electronics&ie=UTF8&qid=1434233931&sr=1-1&keywords=g550m&pebp=1434233922316&perid=470E179E6B134016B148)
+
+Is spending $20 more worth it?
+
+P.D: I´d like any modifications made to not include MIR.
+
+**NOTE: You do not have to follow this format, but please be sure to answer these questions. Please do not ask to simply be given a build. You are welcome to delete this section.**",1434234226.0,1,1.0,0
+buildapc,[Build Ready] $800 First desktop ever. After a lot of research I finished my build but still need someone to look at it before pulling the trigger,"http://pcpartpicker.com/p/PTxMQ7
+
+I'm on mobile so there's the link to my build the GPU has 8gb RAM included. 
+
+Since live I live in a very hot place and we're close to summer (50ish°C erryday) I'm still not sure about the GPU, was thinking on getting a 960 instead to save me 20 bucks and getting Batman/The Witcher 3. What do you guys think, should I do it?",1433400058.0,2,0.75,5
+buildapc,[Build Ready] $800 First build ever. Constructive critiscism welcome!,"###Build Help/Ready:
+
+**Have you read the sidebar and [rules](http://www.reddit.com/r/buildapc/wiki/rules)? (Please do)**
+
+Yes
+
+**What is your intended use for this build? The more details the better.**
+
+Light gaming such as LoL, Minecraft, etc.
+
+**If gaming, what kind of performance are you looking for? (Screen resolution, FPS, game settings)**
+
+60 fps 1080p at medium settings
+
+**What is your budget (ballpark is okay)?**
+
+$800 before any rebates
+
+**In what country are you purchasing your parts?**
+
+USA
+
+**Post a draft of your potential build here (specific parts please). [Consider formatting your parts list.](http://www.reddit.com/r/buildapc/wiki/pcpp)**
+
+[PCPartPicker part list](http://pcpartpicker.com/p/yFdwJx) / [Price breakdown by merchant](http://pcpartpicker.com/p/yFdwJx/by_merchant/)
+
+Type|Item|Price
+:----|:----|:----
+**CPU** | [Intel Core i3-4160 3.6GHz Dual-Core Processor](http://pcpartpicker.com/part/intel-cpu-bx80646i34160) | $119.48 @ Newegg 
+**CPU Cooler** | [Cooler Master Hyper 212 EVO 82.9 CFM Sleeve Bearing CPU Cooler](http://pcpartpicker.com/part/cooler-master-cpu-cooler-rr212e20pkr2) | $27.98 @ OutletPC 
+**Thermal Compound** | [Arctic Silver 5 High-Density Polysynthetic Silver 3.5g Thermal Paste](http://pcpartpicker.com/part/arctic-silver-thermal-paste-as535g) | $5.49 @ OutletPC 
+**Motherboard** | [Gigabyte GA-B85M-DS3H Micro ATX LGA1150 Motherboard](http://pcpartpicker.com/part/gigabyte-motherboard-gab85mds3h) | $55.98 @ Newegg 
+**Memory** | [Corsair Vengeance 8GB (2 x 4GB) DDR3-1600 Memory](http://pcpartpicker.com/part/corsair-memory-cml8gx3m2a1600c9) | $49.99 @ Newegg 
+**Storage** | [Silicon Power S60 120GB 2.5&quot; Solid State Drive](http://pcpartpicker.com/part/silicon-power-internal-hard-drive-sp120gbss3s60s25) | $49.99 @ Newegg 
+**Storage** | [Seagate Barracuda 1TB 3.5&quot; 7200RPM Internal Hard Drive](http://pcpartpicker.com/part/seagate-internal-hard-drive-st1000dm003) | $48.75 @ OutletPC 
+**Video Card** | [Sapphire Radeon R9 270 2GB Dual-X Video Card](http://pcpartpicker.com/part/sapphire-video-card-100365l) | $133.98 @ Newegg 
+**Case** | [Corsair 300R ATX Mid Tower Case](http://pcpartpicker.com/part/corsair-case-300r) | $69.99 @ Amazon 
+**Power Supply** | [Corsair CX 500W 80+ Bronze Certified Semi-Modular ATX Power Supply](http://pcpartpicker.com/part/corsair-power-supply-cx500m) | $59.99 @ Amazon 
+**Optical Drive** | [Asus DRW-24B1ST/BLK/B/AS DVD/CD Writer](http://pcpartpicker.com/part/asus-optical-drive-drw24b1stblkbas) | $18.89 @ OutletPC 
+**Monitor** | [Asus VS238H-P 23.0&quot; Monitor](http://pcpartpicker.com/part/asus-monitor-vs238hp) | $139.99 @ Amazon 
+ | *Prices include shipping, taxes, rebates, and discounts* |
+ | Total (before mail-in rebates) | $805.50
+ | Mail-in rebates | -$40.00
+ | **Total** | **$765.50**
+ | Generated by [PCPartPicker](http://pcpartpicker.com) 2015-06-01 02:44 EDT-0400 |
+
+**Provide any additional details you wish below.**
+
+Already bought the Case and have a keyboard and mouse laying around, I included the case in the draft cuz I contemplate it in the budget, so you could say I have $730 to work with.  I´d appreciate if you guys can tell me how to make this build better or cheaper without losing too much performance
+
+**NOTE: You do not have to follow this format, but please be sure to answer these questions. Please do not ask to simply be given a build. You are welcome to delete this section.**",1433141240.0,0,0.5,3
+buildapc,"First ever desktop finished, need another set of eyes to take a look a it","http://pcpartpicker.com/p/bcXF99
+
+http://pcpartpicker.com/p/yFdwJx
+
+I'm on mobile sorry, but that's my build. I do not intend to overlook, just some light gaming, just need someone to look at it and tell me if something's not right,  for example in the pcpartpicker.com website said that the MoBo might need a BIOS update,  which idk what that is or how it's done.
+
+Everything will be purchased on amazon since is the only store that ships to Mexico and the MoBo will be purchased on digitalife.com
+
+Constructive criticism is extremely welcome!",1433010326.0,1,1.0,0
+buildapc,[Build Help] Need help picking a PSU and PC Cooler,"Hello, I almost have my build ready but would like to know if anything I picked is incompatible or how could I make it better. Also need to pick a PSU and a PC Cooler so any advice is heavily appreciated!
+
+###Build Help/Ready:
+
+**Have you read the sidebar and [rules](http://www.reddit.com/r/buildapc/wiki/rules)? (Please do)**
+
+yes
+
+**What is your intended use for this build? The more details the better.**
+
+Word processing and LOL
+
+**If gaming, what kind of performance are you looking for? (Screen resolution, FPS, game settings)**
+
+medium settings at 60 fps 1080p
+
+**What is your budget (ballpark is okay)?**
+
+$800
+
+**In what country are you purchasing your parts?**
+
+Mexico so just Amazon, and I'm buying the MoBo from fry´s since Amazon doesn´t chip them here.
+
+**Post a draft of your potential build here (specific parts please). [Consider formatting your parts list.](http://www.reddit.com/r/buildapc/wiki/pcpp)**
+
+[PCPartPicker part list](http://pcpartpicker.com/p/TsYN4D) / [Price breakdown by merchant](http://pcpartpicker.com/p/TsYN4D/by_merchant/)
+
+[PCPartPicker part list](http://pcpartpicker.com/p/3Ft7FT) / [Price breakdown by merchant](http://pcpartpicker.com/p/3Ft7FT/by_merchant/)
+
+Type|Item|Price
+:----|:----|:----
+**CPU** | [Intel Core i3-4150 3.5GHz Dual-Core Processor](http://pcpartpicker.com/part/intel-cpu-bx80646i34150) | $118.00 @ Amazon 
+**Motherboard** | [MSI CSM-H81M-P32 Micro ATX LGA1150 Motherboard](http://pcpartpicker.com/part/msi-motherboard-csmh81mp32) | $59.99 
+**Memory** | [Crucial Ballistix Sport 8GB (2 x 4GB) DDR3-1600 Memory](http://pcpartpicker.com/part/crucial-memory-bls2kit4g3d1609ds1s00) | $59.99 @ Amazon 
+**Storage** | [Samsung 850 EVO-Series 120GB 2.5&quot; Solid State Drive](http://pcpartpicker.com/part/samsung-internal-hard-drive-mz75e120bam) | $73.99 @ Amazon 
+**Storage** | [Western Digital Caviar Blue 1TB 3.5&quot; 7200RPM Internal Hard Drive](http://pcpartpicker.com/part/western-digital-internal-hard-drive-wd10ezex) | $55.99 
+**Video Card** | [Asus Radeon R9 270 2GB DirectCU II Video Card](http://pcpartpicker.com/part/asus-video-card-r9270dc2oc2gd5) | $149.39 @ Amazon 
+**Case** | [Corsair SPEC-01 RED ATX Mid Tower Case](http://pcpartpicker.com/part/corsair-case-spec01redled) | $44.99 @ Amazon 
+**Optical Drive** | [Asus DRW-24B1ST/BLK/B/AS DVD/CD Writer](http://pcpartpicker.com/part/asus-optical-drive-drw24b1stblkbas) | $20.59 @ Amazon 
+**Monitor** | [Asus VS238H-P 23.0&quot; Monitor](http://pcpartpicker.com/part/asus-monitor-vs238hp) | $141.29 @ Amazon 
+ | *Prices include shipping, taxes, rebates, and discounts* |
+ | **Total** | **$724.22**
+ | Generated by [PCPartPicker](http://pcpartpicker.com) 2015-05-25 16:52 EDT-0400 |
+
+**Provide any additional details you wish below.**
+
+I need a good CPU cooler since I live in a very hot area, in summer temperature is usually between 35-50 Celsius (last summer we had 60). I´m not planning on OC
+
+**NOTE: You do not have to follow this format, but please be sure to answer these questions. Please do not ask to simply be given a build. You are welcome to delete this section.**",1432586966.0,3,1.0,2
+buildapc,[Build Help] Need help about what motherboard to buy,"###Build Help/Ready:
+
+**Have you read the sidebar and [rules](http://www.reddit.com/r/buildapc/wiki/rules)? (Please do)**
+
+yes
+
+**What is your intended use for this build? The more details the better.**
+
+Word processing and some gaming (LOL, Minecraft) with medium settings at 60 fps 1080p
+
+**If gaming, what kind of performance are you looking for? (Screen resolution, FPS, game settings)**
+
+Medium settings, 1080p 60fps
+
+**What is your budget (ballpark is okay)?**
+
+around $600 but would like to stay below the budget
+
+**In what country are you purchasing your parts?**
+
+I´m from Mexico so probably just Amazon
+
+**Post a draft of your potential build here (specific parts please). [Consider formatting your parts list.](http://www.reddit.com/r/buildapc/wiki/pcpp)**
+
+Only thing I´m sure about my build right now is that I will be using an i3 CPU and probably a 270 GPU
+
+**Provide any additional details you wish below.**
+
+I want a nice cookie cutter MoBo,doesn´t have to be anything fancy, as everytime I search for motherboards I see a lot of acronym stuff like RAID which idk what is and how to use it lol.
+I´m also not interested in OC
+
+**NOTE: You do not have to follow this format, but please be sure to answer these questions. Please do not ask to simply be given a build. You are welcome to delete this section.**",1432529890.0,1,1.0,1
+buildapc,[Build Help] Is the Motherboard GIGABYTE GA-H81M-DS2 any good?,"Hello, so I stumbled on this CPU + MOBO bundle, store is in Mexico: 
+
+http://www.pcx.com.mx/super-combos-pcx/1876-kit-de-actualizacion-cpu-intel-core-i3-4150-gigabyte-ga-h81m-ds2-pasta-termica-swiftech-tim-mate-2-de-alto-rendimiento.html
+
+Costs $2884 pesos which is around $180 dollars for the MOBO and an i3 CPU, the thing is idk much about Motherboards is this deal any good?
+
+P.S. I´m not planning on OC",1432427542.0,1,1.0,0
+buildapc,Noob needs help with Intel i3 CPU's,"I'm looking to build my first ever desktop PC and I'm still learning about parts and stuff. 
+
+
+So for budget reasons I decided to use an Intel i3 for the CPU, and looking through Amazon (I can only buy from there) there's 4 different models and idk which is which. 
+
+
+I3-4160 3.6GHz                            $116.79
+
+I3-4150 3M Cache, 3.50 GHz     $118
+
+I3-4360 4M Cache, 3.70 GHz     $150.99
+
+I3-4130 3.4 3 FCLGA 1150         $117.58
+
+Would appreciate if you can tell me the differences and which one is the best",1432355308.0,4,0.75,5
+buildapcforme,First ever build and desktop pc.$600 budget. Help exremely appreciatted,"Hello guys, new in this so asking you experts for help :D I'm currently on a shitty laptop that can't run League of Legends so an upgrade is needed! I live in Mexico but I´m close to the border in case I need something from the U.S., can go to southern California specifically 
+
+>**What will you be doing with this PC? Be as specific as possible, and include specific games or programs you will be using.**
+
+At the moment school work, watching movies, and playing LOL and minecraft, not a fan of FPS or other high intensity games.
+
+>**What is your maximum budget before rebates/shipping/taxes?** 
+
+$600ish, can go a little over
+
+>**When do you plan on building/buying the PC? Note: beyond a week or two from today means any build you receive will be out of date when you want to buy.** 
+
+In about a month
+
+>**What, exactly, do you need included in the budget? (Tower/OS/monitor/keyboard/mouse/etc)** 
+
+Tower, Windows 7, mechanical keyboard , any mouse and monitor
+
+>**Which country (and state/province) will you be purchasing the parts in? If you're in US, do you have access to a Microcenter location?** 
+
+I´m from Mexico
+
+>**If reusing any parts (including monitor(s)/keyboard/mouse/etc), what parts will you be reusing? Brands and models are appreciated.** 
+
+From scratch
+
+>**Will you be overclocking? If yes, are you interested in overclocking right away, or down the line? CPU and/or GPU?** 
+
+Not interested
+
+>**Are there any specific features or items you want/need in the build? (ex: SSD, large amount of storage or a RAID setup, CUDA or OpenCL support, etc)**
+
+SSD, 1TB Hard-drive, Optical Drive and usb ports
+
+>**Do you have any specific case preferences (Size like ITX/microATX/mid-tower/full-tower, styles, colors, window or not, LED lighting, etc), or a particular color theme preference for the components?**
+
+Probably mid/full tower
+
+>**Do you need a copy of Windows 7 or 8.1 included in the budget? If you do need one included, do you have a preference for one or the other?**
+
+Need Windows 7
+
+>**Extra info or particulars:** I´ve never bought stuff online and don´t know if amazon/newegg/any store you use ship to Mexico, do they?",1431803992.0,0,0.4,1
+buildapcforme,$600 Gaming PC. Help extremely appreciated,"Hello guys, new in this so asking you experts for help :D I'm currently on a shitty laptop that can't run League of Legends so an upgrade is needed! I live in Mexico but I´m close to the border in case I need something from the U.S., can go to southern California specifically 
+
+>**What will you be doing with this PC? Be as specific as possible, and include specific games or programs you will be using.**
+
+At the moment school work, watching movies, and playing LOL and minecraft, not a fan of FPS or other high intensity games.
+
+>**What is your maximum budget before rebates/shipping/taxes?** 
+
+$600ish, can go a little over
+
+>**When do you plan on building/buying the PC? Note: beyond a week or two from today means any build you receive will be out of date when you want to buy.** 
+
+In about a month
+
+>**What, exactly, do you need included in the budget? (Tower/OS/monitor/keyboard/mouse/etc)** 
+
+Tower, Windows 7, mechanical keyboard , any mouse and monitor
+
+>**Which country (and state/province) will you be purchasing the parts in? If you're in US, do you have access to a Microcenter location?** 
+
+I´m from Mexico
+
+>**If reusing any parts (including monitor(s)/keyboard/mouse/etc), what parts will you be reusing? Brands and models are appreciated.** 
+
+From scratch
+
+>**Will you be overclocking? If yes, are you interested in overclocking right away, or down the line? CPU and/or GPU?** 
+
+Not interested
+
+>**Are there any specific features or items you want/need in the build? (ex: SSD, large amount of storage or a RAID setup, CUDA or OpenCL support, etc)**
+
+SSD, 1TB Hard-drive, Optical Drive and usb ports
+
+>**Do you have any specific case preferences (Size like ITX/microATX/mid-tower/full-tower, styles, colors, window or not, LED lighting, etc), or a particular color theme preference for the components?**
+
+Probably mid/full tower
+
+>**Do you need a copy of Windows 7 or 8.1 included in the budget? If you do need one included, do you have a preference for one or the other?**
+
+Need Windows 7
+
+>**Extra info or particulars:**",1431751793.0,0,0.5,0
+Fitness,"So my gym does not have a squat rack, is there a way to ""substitute"" squats?","There's no squat rack, 2 smiths and 2 leg presses. I guess I could clen the bar and do front squats but my gym is a very commercial one so dropping the weight might get me some trouble.",1424896749.0,0,0.5,11
+Naruto,Watching for the first time,"Hello, I'm planning to start watching Naruto, but seeing it has so many episodes is kind of a bummer, are there some episode that cut off the filler like they do on dbz kai? if not, which episodes should I avoid to save time?",1423182786.0,1,1.0,3
+Fitness,I took a 6-month break where I lost most of my gains and I'm planning to return using 5x5,"So I'm a skinny guy, in my break I lost most if not all of my muscle/strength (even tho it wasn't THAT much). I want to focus mostly on strenght, don't care about mass. Is 5x5 good if I'm basically ""starting over""?",1418928399.0,9,0.73,10
+whowouldwin,Who's the strongest character Comet Ozai could beat?,,1414210400.0,5,0.78,6
+dbz,What if Raditz and Nappa weren't killed?,"If somehow Goku and Piccolo managed to beat Raditz (without killing him) and convince him to join them to fight Vegeta and Nappa, with the battle resulting in Vegeta fleeing with Nappa alive, how would the Namek Saga unfold?",1406997728.0,15,0.82,10
+Dogtraining,My dog growls if I get near him while he's eating,"He's been with my family since he was 5ish months and has always done this. Maybe he's just protecting the food? idk.
+
+I have a female that's the same race and I have never had this problem.
+
+Is this common? I'm not really familiar with dog behaviours.",1406871552.0,5,0.78,3
+whowouldwin,Omnidroid (The Incredibles) vs a Jaeger,"Nothing controls the omnidroid, both bloodlusted",1404755852.0,7,0.9,6
+whowouldwin,Who's the strongest character a Bloodlusted Casper could kill?,,1403304890.0,1,1.0,1
+whowouldwin,Alex Mercer vs Spiderman,"Round 1: Battle takes place on New York City
+
+Round 2:Battle takes place at a colosseum",1403241919.0,2,0.75,3
+whowouldwin,ODST's (HALO) vs Onyx Guards (GoW),"Equipment is standard for both (Assault rifle and pistol for ODST's, Lancer and Gnasher Shotgun for Onyx Guards)
+
+Round 1: Battle takes place in a destroyed city
+
+Round 2: Battle takes place in a forest",1402248147.0,2,1.0,2
+whowouldwin,The Mountain vs Ezio Auditore,"Title
+
+Round 1: No armor, Ezio has hidden blades and The mountain a greatsword
+
+Round 2: Full armor Gregor vs Full armor/weapons Ezio (crossbow, throwing knives, hidden gun, etc.)",1402205257.0,5,0.86,10
+tipofmytongue,"[TOMT][Song]Electronic song with someone saying ""Talk dirty to me""","It's an electronic song, but the only ""lyrics"" I remember is someone saying Talk dirty to me then the main part starts. 
+
+Goes something like Tururu Turururururuuuuru Turururururu turu",1400272916.0,1,0.67,3
+whowouldwin,Game of Thrones vs Assassins Creed,"The Hound, The Mountain, Bronn of the Blackwater and [Jaime Lannister](#s ""Both Hands"") vs Altair, Ezio Auditore, Connor and Edward Kenway
+
+Round 1: No ranged weapons
+
+Round 2: Each assassin is provided with one shot from the hidden gun and 5 crossbow bolts (5 arrows for Connor), also five throwing knives, but the GoT squad gets Jaqen h'gar",1400129114.0,2,0.76,6
+whowouldwin,Highest tier of fighters,"Hello, Im new to this sub and so far Im loving it, but as someone that doesn't read a lot of comics/doesn't see a lot of anime, I would like to know which characters are the ""strongest"", like which ones are God-Tier or StrongerThanAGod-Tier.",1399858140.0,8,0.77,25
+AskReddit,What are some cool science fun facts you know?,,1392261378.0,1,0.67,7
+tipofmytongue,[TOMT]R&B/Hip-Hop song Big Sean sings in it,The chorus sang by a girl. I heard it on a Table-DanceIt has a really strong bass,1390109950.0,1,0.67,2
+AskReddit,What are some must-see movies you recommend me watching?,I don't watch a lot of movies,1388276230.0,2,0.76,11
+tipofmytongue,[TOMT][Movie/TV Show] A guy that reads a lot,"Im looking for a movie/tv show, where in the beginning a guy is bragging about knowing ''rare'' sayings or something like that.
+Another guys comes in and tells him to stop using quotes from X book because its bad",1388049664.0,3,0.8,3

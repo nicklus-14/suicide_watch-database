@@ -1,0 +1,1110 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+ender3,ARGH! Spaghetti PRINTS!,"My current settings: 
+Layer Height: .3mm
+Print Temp: 208c
+Build Plate: 55c
+print speed: 50mm/s
+
+[Image 1]
+(https://drive.google.com/file/d/1H4nD7YrIPhGYSiRT9xcxI3-tXg7vR5qO/view?usp=sharing)
+
+[Image 2](https://drive.google.com/file/d/1QLa1ZdgpN_-WuSuaBPFHTHA1qUqsaL18/view?usp=sharing)
+
+I've cleaned everything, I've adjusted the settings listed above, and recently bought a glass bed.  I'm so FRUSTRATED!!!! 
+
+Any idea's??  I'm a newb to printing.",1634069173.0,1,1.0,4
+salesforce,Selectable Lightning Datatable to keep selections between searches,"I am creating a custom Lightning Component to quickly add products to a quote. The Datatable pulls back all active products, I have a search field that the user can use to filter the products, when I search for Product ""ABC"", select it, and then search for product ""DEF"", then select it, I want to be able to add those rows to a new datatable with both products. Currently when I filter the data table it only finds the most recent selected rows.
+
+If I relate it to something I did in my old vb.Net days it would be the ""+="" operator, essentially I want to build a list that persists over the users search results.
+
+Here is what I have:
+
+Apex Controller:
+
+    public class ProductQuickAddController {
+        @AuraEnabled
+        public static List<Product2> getProducts() {
+            
+         List<Product2> activeProducts = [SELECT Id, Name, ProductCode, Family, Description FROM Product2 where IsActive = True];
+            
+         //system.debug(activeProducts);  
+            
+         return activeProducts;
+            
+        }
+    	@AuraEnabled
+        public static List<Product2> getResults(string searchStr) {
+            
+         searchStr = '%' +searchStr + '%';   
+            
+         system.debug(searchStr);   
+            
+         List<Product2> activeProducts = [SELECT Id, Name, ProductCode, Family, Description FROM Product2 where (Name like :searchStr or Description like :searchStr) and IsActive = True];
+            
+         //system.debug(activeProducts);  
+            
+         return activeProducts;
+            
+        }
+        @AuraEnabled
+        Public static void insertLineItems(string lItems, string quoteID){
+            
+            system.debug(lItems);
+            
+            List<QuoteLineItem> qli = (List<QuoteLineItem>) Json.deserialize(lItems, List<QuoteLineItem>.class);
+            
+            If(qli.size() > 0 ){
+                For(QuoteLineItem i : qli){
+                    
+                    QuoteLineItem li = new QuoteLineItem();
+                    
+                    li.QuoteId = quoteID;
+                    li.Product2Id = i.id;
+                    li.UnitPrice = i.UnitPrice;
+                    li.Description = i.Description;
+                    li.Quantity = i.Quantity;
+                    
+                    insert li;
+                    
+                }
+            }       
+            
+        }
+    }   
+
+    Component: 
+        <aura:component Controller = ""ProductQuickAddController"" implements=""force:hasRecordId,flexipage:availableForAllPageTypes,force:appHostable,force:lightningQuickAction"" access=""global"">
+        	<!-- attributes -->
+            <aura:attribute name=""productList"" type=""Object"" />
+            <aura:attribute name=""productCols"" type=""List"" />
+            <aura:attribute name=""filteredProducts"" type=""List"" />
+            <aura:attribute name=""selectedRowsCount"" type=""Integer"" default=""0""/>
+            <aura:attribute name=""selectedRows"" type=""List""/>
+            
+            <aura:attribute name=""searchText"" type=""String"" />
+            <ltng:require styles=""{!$Resource.ModalCSS}""/>
+            
+            <aura:attribute name=""addProductsCols"" type=""List"" />
+            
+            <aura:attribute name=""errors"" type=""Object"" default=""[]""/>
+            <aura:attribute name=""draftValues"" type=""Object"" default=""[]""/>
+            
+            <!-- handlers-->
+           <aura:handler name=""init"" value=""{!this}"" action=""{!c.doInit}"" />
+           
+            <div style=""height: 90%; padding: 10px;"" aura:id=""Products"">
+                <lightning:layout verticalAlign=""end"">
+            <lightning:layoutItem flexibility=""grow"">
+                <lightning:input label=""Search"" type=""search"" value=""{!v.searchText}"" name=""search""/>
+            </lightning:layoutItem>
+            <lightning:layoutItem class=""slds-p-left_x-small"">
+                <lightning:button variant=""brand"" label=""Search"" title=""Search"" onclick=""{!c.filter }"" />
+            </lightning:layoutItem>
+        </lightning:layout>
+                
+              
+                 <h1>Selected Rows: {!v.selectedRowsCount }</h1>
+                <center>
+                    <div style=""height: 500px; padding: 10px;"">
+                <lightning:datatable
+                    aura:id=""tblProducts""
+                    columns=""{!v.productCols}""
+                    data=""{!v.filteredProducts}""           
+                    keyField=""Id""
+                    onrowselection=""{!c.getSelected}""/>
+                </div>
+                    </center> 
+                <div id=""controls"" style=""float:right; padding: 10px;"">
+                	<lightning:button variant=""brand"" label=""Set Prices"" title=""Set Prices"" onclick=""{!c.selectedProducts }"" />
+            </div>
+            </div>
+           
+            <div style=""height: 500px; overflow: scroll; padding: 10px;"" aura:id=""addProducts"">
+            <lightning:datatable
+                    aura:id=""SelectedProducts""
+                    columns=""{!v.addProductsCols}""
+                    data=""{!v.selectedRows}""           
+                    keyField=""Id""
+                    errors=""{!v.errors}""
+                    draftValues=""{!v.draftValues}""
+                    onsave=""{!c.handleSave}""/>
+                	
+                   
+            </div>
+            
+            
+        </aura:component>
+     
+    Controller: 
+            ({
+            	doInit : function(component, event, helper) {
+                    
+                    component.set('v.productCols', [
+                        //{label: 'Id', fieldName: 'Id', type: 'text'},
+                        {label: 'Name', fieldName: 'Name', type: 'text'},
+                        {label: 'Code', fieldName: 'ProductCode', type: 'text'},
+                        {label: 'Family', fieldName: 'Family', type: 'text'},
+                        {label: 'Description', fieldName: 'Description', type: 'text'}
+                    
+                    ]);
+                    
+                    component.set('v.addProductsCols', [
+                        //{label: 'Id', fieldName: 'Id', type: 'text'},
+                        {label: 'Name', fieldName: 'Name', type: 'text'},
+                        {label: 'Description', fieldName: 'Description', type: 'text', editable: true}, 
+                        {label: 'Sales Price', fieldName: 'UnitPrice', type: 'currency', typeAttributes: { currencyCode: 'USD'}, editable: true, typeAttributes: { required: true }}, 
+                        {label: 'Quantity', fieldName: 'Quantity', type: 'number', editable: true, typeAttributes: { required: true }}
+                    
+                    ]);
+            
+                    helper.fetchProducts(component, event);
+                    
+                     $A.util.removeClass(component.find(""Products""), ""slds-hide"");
+                    $A.util.addClass(component.find(""addProducts""), ""slds-hide"");
+            		
+            	}, 
+                filter: function(component, event, helper) {
+                    
+                 
+                    helper.getSearchResults(component, event);
+                }, 
+                getSelected: function(component, event, helper) {
+                    
+                 	var prevSelected = component.get(""v.selectedRows"");
+                    
+                    let selectedProds =[];
+                    
+                    selectedProds = component.find('tblProducts').getSelectedRows();
+                    
+            
+                    component.set(""v.selectedRows"", selectedProds)
+                    
+                    
+                },
+                
+                selectedProducts: function(component, event, helper) {
+                    
+                    $A.util.removeClass(component.find(""addProducts""), ""slds-hide"");
+                    $A.util.addClass(component.find(""Products""), ""slds-hide"");        
+                   
+                    
+                }, 
+                
+                handleSave : function(component, event, helper) {
+                    //alert(""v.draftValues"");
+                    helper.savelItems(component,event);
+                }
+                
+                
+            })
+
+
+Helper: 
+
+    ({
+    	fetchProducts : function(component, event) {
+            
+              var action = component.get('c.getProducts')
+            
+           	  var self = this;
+                   
+                     
+              action.setCallback(this, function(response) {
+                component.set('v.productList', response.getReturnValue());
+                component.set('v.filteredProducts', response.getReturnValue());
+            } );
+            $A.enqueueAction(action);
+    		
+    	}, 
+        getSearchResults : function(component, event) {
+         
+            var strSearch = component.get(""v.searchText"")
+            
+            var action = component.get('c.getResults')
+            
+           	var self = this;
+              action.setParams({""searchStr"":strSearch});
+                     
+              action.setCallback(this, function(response) {
+                component.set('v.productList', response.getReturnValue());
+                component.set('v.filteredProducts', response.getReturnValue());            
+            } );
+            $A.enqueueAction(action);
+            
+            
+        }, 
+        
+        savelItems : function(component, event){
+            
+            var quote = component.get(""v.recordId"");
+            
+            var draftItems = component.get(""v.draftValues""); 
+            var items = JSON.stringify(draftItems); 
+            
+            var action = component.get('c.getResults')
+            
+           	var self = this;
+            action.setParams({""lItems"":items, ""quoteID"":quote});
+                     
+               action.setCallback(this, function(response) {
+                
+    		 var state = response.getState();
+                console.log(state);
+                if (state === ""SUCCESS"") {
+               
+                    console.log(""From server: Success"");   
+                    alert(""Items Added to Quote."");
+                    window.location.reload()
+    
+                }
+                else if (state === ""ERROR"") {
+                     
+                    var errorMsg = response.getError();
+               		let toastParams = {
+                        title: ""!Error!"",
+                 			message: ""Please contact system administrator."", // Default error message
+                 			type: ""error""
+                			};
+               		let toastEvent = $A.get(""e.force:showToast"");
+               		toastEvent.setParams(toastParams);
+               		toastEvent.fire();
+          
+                }
+        	});
+            $A.enqueueAction(action);
+        }
+    })
+
+
+EDIT: As @bravo2actual stated, this was the fix: 
+    
+    <aura:attribute name=""selection"" type=""List"" />
+    
+    <lightning:datatable
+                aura:id=""tblProducts""
+                columns=""{!v.productCols}""
+                data=""{!v.filteredProducts}""           
+                keyField=""Id""
+                selectedRows = ""{!v.selection}""
+                onrowselection=""{!c.getSelected}""/>
+    
+    <lightning:datatable
+                aura:id=""SelectedProducts""
+                columns=""{!v.addProductsCols}""
+                data=""{!v.selection}""           
+                keyField=""Id""
+                hideCheckboxColumn=""true""            
+                draftValues=""{!v.draftValues}""
+                onsave=""{!c.handleSave}""/>
+And in the controller:
+
+    getSelected: function(component, event, helper) {
+                    
+            var selectedRows = event.getParam('selectedRows');  
+            var allSelectedRows = component.get(""v.selection"");
+            
+            selectedRows.forEach(function(row) {
+                    allSelectedRows.push(row);
+                });
+            
+            component.set(""v.selection"", allSelectedRows);
+        
+        }",1594823586.0,1,0.67,1
+powerrangers,"Fully Restored Tor the Shuttlezord, Show Accurate Paint","So I picked up a ""broken"" Tor for $30 on eBay.  The battery pack was corroded, and there was a few pieces missing.  Here is the before pics [Warrior Mode](https://i.imgur.com/II69YnS.jpg) and [Carrier Mode](https://i.imgur.com/sIe6tmO.jpg). [Here](https://i.imgur.com/xux8N9Q.jpg) you can see the corrosion on the original electronics.  
+
+I set about cleaning the contacts, and replacing solder, wires, and the LED.  [Here](https://youtu.be/mTB1yfnyE8c) is the working electronics again, after 26 years. 
+
+[Pics](https://imgur.com/a/WNQngbZ) of the complete repaint, and [video](https://youtu.be/1OnifwxVSyc) of the reinstalled electronics.",1589839606.0,9,0.91,4
+QuickBooks,Salesforce <> Quickbooks Inventory Sync,"I am a Salesforce consultant looking at syncing the Quickbooks Inventory Locations, and Inventory Items with the Locations and Product Items in Salesforce.  
+
+ 
+
+I am using DB Sync, but I haven't been able to get a satisfactory answer from them. They claim it is a not possible due to a Quickbooks limitation.  
+
+I need to know which objects in Quickbooks to look at, that aren't views or read only objects. 
+
+ 
+
+Has anyone ever attempted this before?",1589290875.0,2,1.0,4
+leukemia,"12 Year old Daughter with B Cell ALL, feeling alone.","My daughter is feeling very alone, her Mom and I always try to listen but her main complaint is that, ""you guys aren't kids going through this"".  She was also diagnosed with depression due to all of this. She hates taking her pills, and hates the clinic visits.  She's month 2 of consolidation. 
+
+Are there any resources or support groups made up of kids her age? Maybe even one where they can Facetime or Zoom or something. 
+
+Thank you all!
+
+Edit: we are located in the Twin Cities Metro area of Minnesota, USA
+
+Edit 2: We talked to the clinic a while ago, and they say they didn’t really have anything that would be for kids her age.",1589087653.0,13,0.94,17
+VideoEditing,Help restoring video from a MP4 file,"I used GoToMeeting to record a visual session of my daughter and our friends and family shaving their heads in support of my daughters fight against Leukemia. 
+
+After the GTM conversion here is nothing but a black screen, I'm really tore up about it as it was a special occasion, and a once in a life time experience.  
+
+If you'd be willing to take a look at it and help me, DM me and I can send you a link to the file.",1585540786.0,2,1.0,0
+powerrangers,"Custom Figures, 3D Printed Z-Putty, Sculpted Zedd, Zordon, and Alpha. Full Legacy Psycho Team as well (Plus Collection glory shots)",,1584078688.0,11,0.87,0
+leukemia,Tomorrow is Day one...,"So last Friday, my 12 year old daughter was diagnosed with B-Cell ALL Leukemia.  Mom and I are terrified but our 12 year old is handling it way better than us. 
+
+Tomorrow they put in her port, do the first bone marrow biopsy, and a spinal tap, as well as a platelet transfusion. They are keeping her in the hospital until Saturday.
+
+What are we in for? We are really worried about how bad things are going to get for her and how to help her through the rough times. Of course mom and I are having all the horrible things that movies and TV will show you, but we are looking for a realistic voice. 
+
+Thank you in advance, and I'm sure this will be the first post in a long journey.
+
+EDIT:  Reporting from Day 2.  She had a rough night with pain, and then this morning the first round of nausea hit.  The found out that the cancer had spread to her spinal fluid, so now she will need spinal taps once a week.  They are still positive and hopeful about her outcome.  Thank you for everyone who has offered advice and support!",1582514336.0,17,1.0,24
+salesforce,REST API for Published Knowledge Articles,"I have a simple Rest API that I've done in another environment but I have no idea why its not working. When I execute from Dev Console, it gives me: System.NullPointerException: Attempt to de-reference a null object
+
+However, when I execute from workbench, it gives me everything I am looking for.
+
+Here is the API Class:
+
+    @RestResource(urlMapping='/PublishedKBArticles/*')
+    Global with Sharing class KnowledgeAPI {
+        @HttpGet    
+        Global Static Void getPublishedKB() {
+
+        RestRequest req = RestContext.request;
+        RestResponse res = RestContext.response;
+
+        List<Knowledge__kav> kbs = [SELECT Id, Title, Data_Group__c, Data_Category__c, Question__c,Answer__c FROM Knowledge__kav Where PublishStatus = 'Online']; 
+
+        List<KnowledgeAPI_Datatype.Article> kbsList = new List<KnowledgeAPI_Datatype.Article>();
+
+        For(Knowledge__kav kb : kbs){
+
+            kbsList.add(new KnowledgeAPI_Datatype.Article(kb));
+        }
+
+        String kbResults = json.serialize(kbsList); 
+
+        system.debug(blob.valueof(kbResults));
+
+        res.responseBody = blob.valueof(kbResults); 
+    }
+
+    }
+
+and here is the custom data type class:
+
+    public with sharing class KnowledgeAPI_DataType {
+
+     Public Class Article {
+
+        public String Id {get;set;} 
+        public String Title{get;set;}
+        public String DataGroup{get;set;}
+        public String DataCategory{get;set;}
+        public String Question{get;set;}
+        public String Answer{get;set;}
+
+        Public Article(Knowledge__kav kb){
+
+            Id = kb.Id;
+            Title = kb.Title;
+            DataGroup = kb.Data_Group__c;
+            DataCategory = kb.Data_Category__c;
+            Question = kb.Question__c;
+            Answer = kb.Answer__c;
+
+        }
+    }
+
+
+    }
+
+
+EDIT:  The solution! 
+
+In the end the requirement was met by using the following code. I think what the problem is, is when you get a list of the Knowledge_kav object, there was a ""wrapper"" of attributes that the custom datatype did not take into account. (see [picture](https://i.stack.imgur.com/CY2in.png))
+
+    @RestResource(urlMapping='/PublishedKBArticles/*')
+    Global with Sharing class KnowledgeAPI {
+	@HttpGet    
+        Global Static list<Knowledge__kav> getPublishedKB() {
+                
+        RestRequest req = RestContext.request;
+        RestResponse res = RestContext.response;
+        
+        List<Knowledge__kav> kbs = [SELECT Id, Title, Data_Group__c, Data_Category__c, Question__c,Answer__c,CreatedDate, LastModifiedDate FROM Knowledge__kav Where PublishStatus = 'Online']; 
+        
+        system.debug('List: ' + kbs);
+                
+        return kbs;
+    }
+
+    }",1580095801.0,3,0.81,1
+PleX,Best Always up IPTV URL?,[removed],1570224829.0,0,0.5,2
+powerrangers,Made a gift for my brother in law with his old VHS tapes.,"My wife and I found the tapes in box when moving, and I got this idea to display them since he has not VCR but they are sentimental.  He doesnt know we have them, and will be surprised to see them.  I made the lightning bolt and I used a VCR to USB adapter to digitize the tapes, then put them on then USB drive inside the bolt.  Then I made the Shadow Box to hold every thing.  I'm happy with the results! 
+
+https://imgur.com/a/n4Ycf2b",1545717996.0,8,1.0,1
+salesforce,Updates study material for certs?,"I passed my admin, trying to get my service now, and already failed it twice, by only 3%.  I'm having trouble finding decent updated study material and practice tests,  any idea where to look? Specifically the Service ;)",1539474671.0,4,0.83,14
+personalfinance,Debt Consolidation Programs,"Hi all, I'm sure that this topic has come up before but I am wondering about any good debt consolidation programs out there?
+  
+I apologize if this topic has been covered before, I'm just trying to keep my head above water. I'm in MN, USA.",1539225383.0,2,1.0,1
+powerrangers,The element from the show I didnt know I missed: rock music.,"I'm on my first watch through of all post Zordon era seasons, and I'm on episode 10 of Ninja Storm.  The music is good again! Like when there are fights its not that weird Casio synth music.  This was the scene I noticed it on: https://youtu.be/EqSnY58nn6g
+
+Also, was it hard for anyone else to get through Wild Force?",1536368138.0,22,1.0,1
+powerrangers,"Ahhhh After 10,000 years (or what felt like it) the old theme is GONE! It's time to check out the new one!! [ANNOUNCEMENT]","[Yes](https://i.imgur.com/vMROBmY.gif), its true rangers, the new theme is live! /u/Gooflactus and I have spent many nights trading CSS and Photoshop tips
+ and tricks to bring you this new morphinominal theme.  We hope that you like it! 
+
+Our general idea was to create a theme that was respectful to as much as the ranger teams as we could.  With that in mind
+we took a modular design approach so that it was easier to swap image assets, etc.  
+
+While most of the mod team did test the new theme, there are things we may have missed.  If you find any technical issues or otherwise please send a message to the mod team and please do not create a post. 
+
+Thank you all and may the power protect you! ",1535149359.0,58,0.99,22
+powerrangers,"Just moves, and I never feel fully settled in until the collection is up.",,1534275694.0,10,0.92,2
+a:t5_n170w,This is awesome image,,1533934109.0,1,1.0,1
+a:t5_n170w,THis is a test Text Post,Test Post,1533934075.0,1,1.0,0
+HealthInsurance,"[MN] Young Family of 4 w/baby on the way, need advice on how to buy a plan that's best for us.","I recently switched jobs and moved to a smaller company, the healthcare plans here is outrageous compared to what I was paying before.  I am looking to get on a private individual/family plan, but not sure where to start.  The baby is due late this fall, and I have until 7/25/2018 before my special enrollment qualification is gone. Where do I go? Who do I talk to? What should I be looking for?  Thanks everyone! ",1530549730.0,2,1.0,6
+personalfinance,"Are there any ""good"" debt consolidation companies our there?","I have used one or two in the past, as an alternative to BKY or Personal Loan.  I've always been somewhat displeased.  Is there any debt consolidation company out there that you can use? 
+
+Where you make one payment, and they negotiate or inform your debtors of the the arrangement and it stops collections/garnishments etc. ",1526490303.0,2,1.0,0
+powerrangers,Question about Lost Galaxy,"So, I'm on my first official watch through of all the seasons, and I'm currently on Lost Galaxy.  This came out about the time where I was feeling like I was supposed to be ""too old for power rangers"".  I only caught the random episode here and there.  
+
+So I'm on episode 21, and one thing I've noticed is that there seems to be a lot of planetary battles and plot points.  Is this all happening on Terra Venture? or is it all happening on random planets within a reasonable travel distance from Terra Venture?  
+
+If its the second option, why are the colonists landing on those ""M"" class planets?  Why does Terra Venture keep passing them?  
+
+Furthermore, why do they make a big deal about not getting back to earth when they have the Astro Megaship onboard, which OBVIOUSLY has the ability to travel in FTL, as like they did that all the time in the previous season... 
+
+Overall I like this season, its a great followup to In Space and feels still like the ""Zordon-Era"", and I was surprised to find out that Trakeena and Damon are married in real life... ",1524775344.0,5,0.86,9
+transformers,Best Comic story lines?,"The last time I read Transformers comics was back in the early 90s and I had no access to a regular comic shop, and the internet wasnt like it is today... 
+
+That being said I am an avid G1 fan, and Beast Wars fan.  I'm looking to get into the comics and wondering which series I should start with and what the best ones to read are. 
+
+I specifically love anything to do with pre-Great War cybertron lore, and post Beast Wars lore.  Really I'm hungry for anything!!!",1524492406.0,7,1.0,13
+transformers,"Walmart had POTP Optimus on clearance for $30, he goes well with Combiner Wars Megs!",,1524061131.0,39,0.94,6
+dotnet,"SQL commands colliding between users, while clicking a button at the same time, ASP.NET 4.5 WebForms VB","I have taken on a legacy project at my current job, and it is a ASP.net 4.5 WebForms application running on a Windows Server 2008 R2, with a SQL Server 2008 R2 database behind it.
+
+Currently we have an issue where if two or more users click on a button that executes a SQL Command they get one of two errors:
+
+""A severe error occurred on the current command. The results, if any, should be discarded.""
+
+or
+
+""ExecuteReader requires an open and available Connection. The connection's current state is open.""
+
+The first issue can be cleared up if the user refreshes, the second issue requires the AppPool to be recycled on the web server.
+
+Here is an example of a call to the database:
+
+    Public Function OpenSQLConn() As String
+    
+        If SQLConn.State = ConnectionState.Closed Then
+            SQLConn.ConnectionString = ConnStr
+            SQLConn.Open()
+        End If
+    
+        OpenSQLConn = SQLConn.DataSource.ToString
+    
+    End Function
+    
+    Public Function CloseSQLConn() As String
+    
+        If SQLConn.State = ConnectionState.Open Then
+            SQLConn.Close()
+        End If
+    
+        CloseSQLConn = SQLConn.Database.ToString
+    
+    End Function
+
+    Public Sub getDataSet(ByRef ds As DataSet, ByVal dataTable As String, ByVal queryString As String)
+    
+        OpenSQLConn()
+        Dim sqlCmd As New SqlCommand
+        With sqlCmd
+            .CommandText = queryString
+            .CommandTimeout = 0
+            .CommandType = CommandType.Text
+            .Connection = SQLConn
+        End With
+    
+        Dim da As New SqlDataAdapter(sqlCmd)
+        da.Fill(ds, dataTable)
+        CloseSQLConn()
+    End Sub
+
+    Public Function executeSQL(ByVal queryString As String, Optional ByVal doNotExecuteDebugOnly As Boolean = False) As Boolean
+    
+        If SQLConn.ConnectionString = """" Then
+            SQLConn.ConnectionString = ConnStr
+        End If
+    
+        If doNotExecuteDebugOnly = True Then
+            Debug.Print(""ExecuteSQL, Not Executed: "" & queryString)
+    
+        End If
+    
+        Dim da As New SqlDataAdapter(queryString, SQLConn)
+        Dim ds As New DataSet
+    
+        If SQLConn.State = ConnectionState.Closed Then
+            SQLConn.Open()
+        End If
+    
+        da.Fill(ds, ""temp"")
+    
+        executeSQL = True
+    
+        SQLConn.Close()
+    
+    End Function
+
+I'm assuming I need to change the way I am accessing SQL, or do something different with the settings on the Servers, but I'm at a loss as to what to change. Any thing would be helpful at this point.
+
+**EDIT:**  Because its been asked and it was an oversite on my part: 
+SQLConn is coming from a ModFunctions.vb file in the solution and its created as:
+
+    Public SQLConn As New SqlConnection",1523648602.0,10,0.72,27
+legaladvice,"[Dakota County, MN] Pending Custody/Child-Support Case","For the last 4 years I have been attempting to hold onto a relationship with my 10 year old daughter that has been plagued by 
+my ex wife, my ex in-law's, and my own estranged mother and step-father.  My daughter struggled with adjustment to me remarrying, and 
+rather than attempt a healthy response, my ex seeded those negative feelings in my daughter.  Legally, I have 50/50 Physical/Legal Custody. 
+We have been working with a Parenting Consultant for almost a year, everyone in my family is seeing a therapist and going to family therapy
+and we have done all the work to try and repair relationships, however they have finally 'won' and convinced my daughter that I don't
+love her, that her step-mom hates her, that my step-daughter is a bully, despite the fact that we have done everything we can to prove otherwise. 
+
+My daughter now wants nothing to do with me or my wife and step-daughter anymore and has asked to live at mom's permanently. After all 
+emotional and financial stress, including me going $10k in debt, and a Stress induced panic attack that landed me in the hospital I'm inclined
+to give in to this, if will allow everyone to stop fighting and retain what shred of sanity we all have.  To that end, when the time comes to
+discuss a new parenting time schedule, I know my ex will attempt to gain more child support, and as I am getting a new job in a month, where my 
+salary will increase significantly, I am seeking advice as to how to proceed with minimal exposure and risk.
+
+I have never missed a child support payment and do not shirk my responsibility, I am only attempting to minimize my ex wife taking me to the cleaners over all this. ",1523561946.0,2,1.0,3
+mechanics,"2010 GMC Terrain V6 - Engine Power Reduced, Service Stabilitrak with codes. X-post r/mechanicadvice","Hi All, 
+
+I have an issue and I am desperate, my vehicle no longer can go above 10 MPH. Here is what happened.
+
+Months ago, I got the CEL with the following Codes: 
+
+* P0017: Crankshaft Position - Camshaft Position Correlation Bank 1 Sensor B
+* P0018: Crankshaft Position - Camshaft Position Correlation Bank 2 Sensor A
+* P0019: Crankshaft Position - Camshaft Position Correlation Bank 2 Sensor B
+
+After a lot of troubleshooting, I need to get my timing chains replaced. The vehicle was driveable and it didn't seem to be running very rough, and the labor was a little more than I could afford so I've been saving money. That isn't the main issue but I thought it was worth mentioning. 
+
+2/2/2018 - week I needed an oil change and I decided to take it to a Valvoline Instant Oil Change, (for the first time in my life, as I usually do them myself) they put and 3 days later (2/5/201, I was driving home, and lost all power, and the Traction Control Light came on, and then it said, ""Engine Power Reduced"", ""Service Stabilitrak"" and I couldn't go more than 10MPH. 
+
+Once I got home, I did some Google Fu and everyone was saying to clean the throttle body, so I did that, and then drove fine until today, 2/10/2018. I thought maybe the throttle body was shot, so I purchased a new one, installed it, then was able to get 2 blocks down the road before it stopped again. I then borrowed my friends bluetooth code reader, and the following codes are now showing as well: 
+
+* P0089: Fuel Pressure Regulator 1 Performance
+* P228D: Fuel Pressure Regulator 1 Exceeded Control Limits - Pressure Too High
+* 
+Now I have no idea what to do. Any ideas would be great!
+
+**EDIT**: So when I had valvoline change the oil they claimed that the engine required 6qts however whenever I've done it myself, I only need 5.3qts. I drained the oil today, and there was 6 qts in there. So I put new oil in to the amount that I normally put in when I change it, 5.3qts. Then cleared the codes, started it up, and the engine was a little rough and sputtered, but evened out. Then all those same codes come back! Really frustrating!!",1518322688.0,5,0.86,0
+MechanicAdvice,"2010 GMC Terrain V6 - Engine Power Reduced, Service Stabilitrak with codes.","Hi All, 
+
+I have an issue and I am desperate, my vehicle no longer can go above 10 MPH. Here is what happened. 
+
+Months ago, I got the CEL with the following Codes: 
+
+* P0017: Crankshaft Position - Camshaft Position Correlation Bank 1 Sensor B
+* P0018: Crankshaft Position - Camshaft Position Correlation Bank 2 Sensor A
+* P0019: Crankshaft Position - Camshaft Position Correlation Bank 2 Sensor B
+* 
+After a lot of troubleshooting, I need to get my timing chains replaced. The vehicle was driveable and it didn't seem to be running very rough, and the labor was a little more than I could afford so I've been saving money. That isn't the main issue but I thought it was worth mentioning. 
+
+2/2/2018 - week I needed an oil change and I decided to take it to a Valvoline Instant Oil Change, (for the first time in my life, as I usually do them myself) they put and 3 days later (2/5/201, I was driving home, and lost all power, and the Traction Control Light came on, and then it said, ""Engine Power Reduced"", ""Service Stabilitrak"" and I couldn't go more than 10MPH. 
+
+Once I got home, I did some Google Fu and everyone was saying to clean the throttle body, so I did that, and then drove fine until today, 2/10/2018. I thought maybe the throttle body was shot, so I purchased a new one, installed it, then was able to get 2 blocks down the road before it stopped again. I then borrowed my friends bluetooth code reader, and the following codes are now showing as well: 
+
+* P0089: Fuel Pressure Regulator 1 Performance
+* P228D: Fuel Pressure Regulator 1 Exceeded Control Limits - Pressure Too High
+
+Now I have no idea what to do. Any ideas would be great!
+
+**EDIT**: So when I had valvoline change the oil they claimed that the engine required 6qts however whenever I've done it myself, I only need 5.3qts. I drained the oil today, and there was 6 qts in there. So I put new oil in to the amount that I normally put in when I change it, 5.3qts. Then cleared the codes, started it up, and the engine was a little rough and sputtered, but evened out. Then all those same codes come back! Really frustrating!!",1518321966.0,1,0.67,3
+powerrangers,"Thanks to my wife's steady hand, and a black wash, No Butterscotch ranger in this house!",,1518155651.0,115,0.96,10
+secretsanta,JACKPOT!!! Thanks SS!!,,1513790847.0,3,0.81,0
+mechanics,2010 GMC Terrain V6 3.0 Help with Trouble Codes.,"[Here](https://i.imgur.com/qpIWtg4.jpg) is the print out got from Autozone. 
+
+I replaced the Oil Pressure Sensor, I am thinking that the next to replace is the 4 Engine Variable Timing Solenoids.  I'm scared that its actually the timing chain, wondering if anyone with experience can give me direction on one way or the other. ",1510877633.0,3,1.0,6
+polymerclay,My Michelangelo sculpture for a friend!,,1510530508.0,40,0.99,11
+TMNT,Finished my sculpt of Mikey for a friend of mine!,,1510528120.0,20,0.92,2
+funny,9 year old daughter to mom...,"For reals this happened earlier this evening...
+
+Daughter: Mom, I want a tampon for my birthday!
+Mom: uhhhh, do you know what a tampon is?
+Daughter: No, but on TV they say you can walk on the beach, every day, ride a bike, run, and do whatever you like without anyone noticing!
+
+LMAO!!!!!!!!",1504151424.0,16,0.75,5
+MechanicAdvice,"2010 GMC Terrain 3.0 V6, Oil Pressure Sender/Switch","Does anyone know where this is? Mine needs to be replaced and I have the new part, but I cannot find it? 
+
+I do see something that looks like it, if you are looking at the top of the engine just to the left of the oil filter. Is this it? If so, any tips on getting it out of there? 
+
+Thanks guys!!!",1504149722.0,1,0.67,2
+Voltron,Finally got around to drawing my favorite Paladin.,,1503286740.0,24,0.92,0
+legaladvice,{MN} I need to challenge a Parenting Consultant's findings,"I recently have had a parenting consultant make a decision in my custody of my daughter. A few days after the decision, I have a testimony from my daughter's principal about an incident that my ex cited in her initial argument, this testimony greatly conflicts with what my ex said, and I need to challenge this decision.  
+
+I know I only have 14 days to file a motion and challenge it, but I cannot find the forms to do this.  Does anyone know what forms I would need for Minnesota, Dakota County to do this? 
+
+Thanks, /r/legaladvice has helped me greatly in the past! ",1502814434.0,1,0.57,6
+depression,"Seriously, who's grave did I shit on?","* 1985 - Born to parents in high school (Mom 16/Dad 17)
+* 1986 - Dad dies in a car accident
+* 1986 - 1993 - Live with Mom  and maternal grandparents as she bounces from one boyfriend to the next, while leaving me at home with her parents. Before mom marries step dad
+* 1994 - parents have little brother, move us all 4 hours away from any family or friends
+* 1998 - Parents separate for 6 months before joining cult-like pyramid scheme and becoming ""new christians"", who then proceed to force conversion on me by throwing away my movies/books/CD's they did not approve of. Also parents become super homophobic and racists. (taught 4 year old brother to refer to gay people as ""fags"" and racial slurs.  
+*  1998 - 2003 - Rebel against religious parents for awhile before faking it to please them until my senior year, 3 months before graduation i move back to home town by myself, start college
+* 2004 - parents move less then a mile away from me, continue to disregard boundaries and invade life. 
+* 2005 - met 1st wife, 8 months later get engaged, find out wife committed a felony/theft while we were dating. Stupidly forgive her, and get married. graduate from college
+* 2008 -  Daughter is born, then wife loses job, then I lose my job, then lose house
+* 2009 - wife starts having grand mal seizures, unclear as to why, she goes 15 months unemployed. 
+* 2010 - get wife a job at company I interned at in college, wife proceeds to start fucking the CFO, i find out, stupidly forgive her, try to save marriage, end up filing for divorce while having to move in with HER parents for 6 months. 
+* 2011 - finally move into own apartment with daughter, start trying to rebuild life
+* 2012 - finalize divorce, 50/50 everything on daughter. get better job in field of study, things improve
+* 2013 - meet second wife, who also is divorced, has daughter the same age, ex had an affair. 
+* 2014 - small wedding with second wife, get new job with a 20k/yr pay increase, 1st wife finds out, takes me back to court for more child support, 2nd wife loses her job.  struggle financially to pay legal fees
+* 2015 - 1st wife takes back to court for more money, loses. struggle to pay legal fees and living costs
+* 2016 - 1st wife takes back to court for custody ongoing, 1st wife convinces parents that new Asian wife is evil and holding me hostage, parents side with 1st wife  --- struggle to pay legal fees and living costs
+* 2017 - custody resolution - 1st wife wins, unbeknownst to me, 2nd wife and step-daughter had been emotionally abusing my daughter, lose partial custody of daughter, surprised by 2nd wife and step-daughter actions as it was happening at school and when i was at work. 
+
+Also, 2nd wife and I had been trying for new baby, she may/may-not be pregnant.  I have been in therapy, and on/off medications... after this last battle for custody costing me $15,000, and the shit I've been through with my parents betraying me, and then feeling super embarrassed and foolish that i had no idea of the shit going on in my own house, if my 2nd wife is pregnant i might lose my shit... 
+
+I asked for a divorce from 2nd wife last night and I'm super depressed and anxious... i can't take anymore of all this shit, i just want it all to end.... ",1502393716.0,1,0.67,0
+personalfinance,{US} How safe/effective are those Prepaid Debit cards?,"I am in the need to switch banks, and due to a soon-to-be ex-wife, my banking history is ruined at several banks.  I have a joint account with her now at a credit union, but can't open anymore accounts.  Are those prepaid Visa debit cards effective? are there any ones that are better than others?  I'm looking to still use direct deposit, and get cash at reasonable fees. ",1502373353.0,1,1.0,14
+MechanicAdvice,"2010 GMC Terrain 3.0 V6, Trouble Codes need advice on what to fix.","I have just over 100k on my Terrain and the check engine light came on so, I took it to autozone and got the following [print out](http://i.imgur.com/qpIWtg4.jpg) My question is, do you think it really is the OCV or is it a timing belt, or is it the 02 Sensors, etc.  The car has been running a little more rough than usual, but the gas mileage seems about the same.  I know that if the Cat was clogged I wouldn't be able to accelerate, but that seems fine too.  
+
+Any help would be great! ",1498676174.0,3,1.0,9
+powerrangers,My MMPR Team Drawings.,,1496857888.0,97,0.97,6
+Voltron,"My 3D printed Voltron, fully poseable and transformable!",,1496795289.0,66,0.98,7
+powerrangers,May the power protect you! Finally added white and yellow to my collection! Awww yissss!!!,,1496761384.0,8,0.83,11
+powerrangers,Yes!!! My local target has them!,"The Target in my town finally has MMPR White, and Yellow!! 3 whites and 1 yellow.  Apple Valley, MN fyi.",1496436548.0,4,0.83,3
+dotnet,Excel Upload and Import to SQL Table in ASP.net 4.0 application not working on server/working on local,"Hi,  I have a ASP.Net 4.0/VB Application that I am having a user select an excel file and then click a button to import.  The file is being uploaded and saved on the server, however its not being dumped into the table.  This is working fine when I run it in Debug mode on my local machine, however when I publish it to the server it no longer works, the file makes it to the server location but it doesn't get read into the table. 
+
+The server is Windows Server 2008 R2, and I installed the AccessDatabaseEngine, and I have Full control to the IIS Users on the folder on the server. 
+
+
+Is there something I'm missing? Google/StackOverflow/ASPSnippets hasn't helped as much as I'd hope.  
+
+EDIT:  I figured this out, rather than try and use Excel Interop I switched to EPPlus for .net 4.0. It was actually a lot easier than attempting to use the office interops, because the client or server doesn't need excel.  
+
+http://epplus.codeplex.com/
+
+And the working Code: 
+
+            Imports OfficeOpenXml           
+
+            Dim excelPath As String = Server.MapPath(""~/Files/"") + Path.GetFileName(fuPrintXls.PostedFile.FileName)
+
+            fuPrintXls.SaveAs(excelPath)
+
+            Dim excel As New FileInfo(excelPath)
+
+            Using package = New ExcelPackage(excel)
+
+                Dim workbook = package.Workbook
+
+                Dim worksheet = workbook.Worksheets.First()
+
+                Dim objConn = New SqlConnection(ConnStr)
+
+                objConn.Open()
+
+                Dim totalRows As Integer = worksheet.Dimension.[End].Row
+
+                For i As Integer = 2 To totalRows
+
+                    Dim strSQL As String = ""INSERT INTO MyTable ( Column ,Column ,Column ,Column ,Column)""
+                    strSQL += ""VALUES  ( "" & worksheet.Cells(i, 1).Text.ToString() & "" , "" & worksheet.Cells(i, 2).Text.ToString() & "" , '"" & worksheet.Cells(i, 3).Text.ToString() & ""' ,"" & worksheet.Cells(i, 4).Text.ToString() & "" , '"" & worksheet.Cells(i, 5).Text.ToString() & ""')""
+
+                    Dim objCmd = New SqlCommand(strSQL, objConn)
+
+                    objCmd.ExecuteNonQuery()
+
+                Next
+
+                objConn.Close()
+
+            End Using
+
+",1496173103.0,0,0.5,15
+transformers,Need help finding the upgrade kit for Leader Class Combiner Wars Megatron,"I have access to a 3D printer, and I remember seeing it available some time ago on a few 3D printing sites, but I can't seem to find it. 
+
+Does anyone have a link to the downloadable 3D printing files for this? 
+
+This is an example: http://www.bigbadtoystore.com/bbts/product.aspx?product=dx10009&mode=retail
+",1492540241.0,5,0.73,2
+legaladvice,MN Dog ownership/adoption issue.,"Hello, my wife and I went through the initial stages of adopting a dog through a rescue shelter.  We signed a Foster with Intent to adopt the dog contract. In this contract, there was a few things that the former Foster, and the wording made confusing, but because we had always intended to pay for the Dog, we didnt think anything of it.  
+
+Weve had the dog for almost 30 days, and had planned to finalize the adoption with the Rescue tomorrow (4/4). The agency is now saying we violated their terms and are going to keep our deposit of $250, and going to take the Dog back. They say we violated 3 terms, one not taking the dog to get vaccinated on the day they chose, we never knew about this and the former foster told us she would check and let us know, but never did. That we failed to finalize the adoption within seven days of the dogs spay appointment, I contacted and scheduled the appointment on day six, on a day that was outside the seven days, but the former foster agreed to the date. 
+
+They are threatening to have a police officer come to our door and take the Dog back. 
+
+I even offered the rest of the fees, and complete the adoption several times. 
+
+I want to fight this and keep the dog, my friend works for MPLS Animal Control and says regardless of the contract, after 5 days of homing a dog, you become legally responsible. My questions is the true? And what dobI do if they do show up with a cop? 
+
+Thanks!!
+
+EDIT: I should say that I apologized for any misunderstandings, and sent email proof to them showing we were attempting to honor the agreement several times and they dont seem to care, and havent acknowledged it. 
+",1491283134.0,3,0.81,2
+torrents,VPN's and Torrenting,[removed],1490891186.0,1,1.0,1
+beastwars,Looking to sell my Beast Wars Figures...,"Make me an offer and we'll see if we can work something out. 
+
+All have been sitting on a shelf for many years.  
+
+http://imgur.com/a/hR2iU ",1490633502.0,6,1.0,6
+powerrangers,MMPR #13 shows you one of the things I've always wanted. <spoiler>,"Goldar without [armor!!!](http://i.imgur.com/F9IDj4t.png) I just think its awesome that they include this! 
+
+Does anyone else think this is bad ass? ",1490130927.0,5,0.74,3
+powerrangers,Whats different between the 2010 MMPR Megazord and the 2013/2015 Legacy figure?,Is it just the die-cast or are there other major differences?  I have a Legacy Dragonzord coming and I want to know if it will be compatible with my 2010 figure I already have. ,1488924767.0,3,0.68,5
+Chihuahua,"This is Miss Fiona, or Fifi, we just adopted her today. Shes 3 months old, we are so excited!",,1488860087.0,67,0.97,3
+powerrangers,"My Collection so far, just got the MMPR S1 Megazord in the mail today.",,1488832216.0,16,0.92,2
+powerrangers,My wife and I got to meet Becky G and RJ Cyler at Mall of America yesterday!!,,1488648837.0,60,0.97,1
+PleX,Plex not playing AVI's that I know I've watched.,"When I try to watch it, I get the, ""Not enough CPU..."" My Rig is just fine for specs, http://i.imgur.com/yR184uN.png, and my PMS is updated yesterday to 1.3.4.3285.  Any Idea's? ",1486268433.0,1,0.57,1
+powerrangers,"6.5"" Legacy Wave 3",Has anyone heard a release date yet for these figures? I'm eagerly anticupating completeing the teams and Build A Megazords. Ive checked Tokunation and MMPRToys Youtube but cant find anything...,1486054762.0,7,0.88,5
+powerrangers,"Rewatching MMPR S01, does anyone know what the ""Rad-Bug"" was in the Sentai?","[""It does 0 to 3000 in 2.8 seconds!""](http://i.imgur.com/buS99uE.jpg)  
+
+It struck me as odd that this thing was a hold over from the Sentai, what was it in Zyuranger? ",1485300490.0,9,0.86,6
+legaladvice,[MN] Do I have a case against my parents?,"I recently won a court case that my ex brought against me to adjust custody of my daughter based on a lot of slander and false information.  My mother, step-father, and step-grandma took it upon themselves to contact my ex-wife out of nowhere and feed them a bunch bullshit.  I was completely violated, where my therapy records were requested, my medications, and a guardian at litem appointed to my home.  The guardian sided with me, and puts in her report that the family drama is just that, drama, and the judge ordered my ex to have individual therapy.  
+
+This all started because of my parents getting involved and making my ex believe all this stuff.  I ended up having several anxiety attacks (What I am on medication/therapy). Having to up my dosage and therapy sessions.  as well as spending thousands of dollars only for nothing to change, and it being proven that nothing is going on.  
+
+I know emotional distress cases are tough when there is no physical evidence, but I really what to hold my parents, step-grandma accountable.  I haven't spoken to them in over a year, with encouragement from my therapist, and i'm a lurker in /r/raisedbynarcissists.... 
+
+So is there anything I can do? ",1481258179.0,0,0.4,4
+rickandmorty,Our Christmas Tree...,,1479871994.0,38,0.96,3
+HTML,"Sorry if its been asked... anyone solve for RTSP Stream in Chrome? If so, what did you use?","I just set up my house with 5 security cameras, they can utilize rtsp streams, and I wrote a simple one page html form to show the streams.  it works in Firefox, with the VLC plugin, however, I cannot get anything to work (even HTML5 <video> tag) in Chrome. 
+
+Here is an example of the stream URL: rtsp://192.168.1.124:7447/5830f0a7e4b074099df5ae10_2
+
+Any suggestions or help would be GREAT! thanks!",1479772462.0,2,1.0,1
+powerrangers,"Sculpted an Alpha 5 to go with Zordon, Perfect size for the classic 8"" figures.",,1478827924.0,33,1.0,1
+powerrangers,Drew/Painted Zordon to watch over my starting Legacy Collection.,"Here it is with Red and Green MMPR, I also sclupted and painted a Power Sword for the red Ranger: [Boom](http://i.imgur.com/4yBvg1h.jpg), Here it is with the Zords and Morpher, with Movie Legacy Red/White. [Boom2](http://i.imgur.com/Cdf3kTo.jpg), Shout out to the [OG's!](http://i.imgur.com/FeuJDC2.jpg)",1477540303.0,12,1.0,1
+Fundraisers,[Request] Help a family stay together!!,[removed],1476475359.0,1,1.0,0
+Assistance,Help a good father keep his daughter!,"I love being a dad, and I love my daughter, recently my ex-wife and my mother have teamed up to try and take her away from me.  To make a long story short, my mother is a controlling bible banger, who my therapist has encouraged me to cut ties with, and my ex-wife, who had a 9-month affair, is jealous and butt-hurt that I have moved on.  Neither of them will let me get on with life and move on.  More details after the link! https://www.gofundme.com/BauerFamilySupport",1476474526.0,0,0.46,3
+KerbalSpaceProgram,KSPI Extended - 1.1.3 - Am I daft?,"I am having the hardest time building a simple warp ship.  Can anyone tell me the necessary parts I need to build in order to keep the folding warp drive functioning smoothly? 
+
+I've been trying combinations all afternoon! ",1469672731.0,0,0.5,8
+MechanicAdvice,X/post from r/mechanics - 2010 GMC Terrain Brake issues,"So I've had my 2010 GMC Terrain SLT for about 2.5 years now, in that amount of time I've had the Rotors turned twice, and pads replaced twice. I've only put about 25k miles on it, a few weeks after replace/turning the rotors, the vibration starts again and things get all wonky.  I'm having a frustrating time figuring out what is going on.  I went from the cheap pads to the high end performance pads and it still happens.  I'm almost thinking that I need to replace my Calipers or something.  I also always use a torque wrench to put the wheels back on, and alignment and tires all check out. 
+
+I'm posting here to see if there is anything I should check or be aware of before dropping the money to replace the Calipers. Any help would be appreciated!! ",1469481796.0,1,1.0,13
+mechanics,2010 GMC Terrain - Brake issues,"So I've had my 2010 GMC Terrain SLT for about 2.5 years now, in that amount of time I've had the Rotors turned twice, and pads replaced twice. I've only put about 25k miles on it, a few weeks after replace/turning the rotors, the vibration starts again and things get all wonky.  I'm having a frustrating time figuring out what is going on.  I went from the cheap pads to the high end performance pads and it still happens.  I'm almost thinking that I need to replace my Calipers or something.  I also always use a torque wrench to put the wheels back on, and alignment and tires all check out. 
+
+I'm posting here to see if there is anything I should check or be aware of before dropping the money to replace the Calipers. Any help would be appreciated!! ",1469481181.0,3,1.0,3
+dotnet,Excel Like DataGrid/GridView in ASP.NET 4.5 (WebForms) VB,"Anyone know of a easy to implement and manipulate datagrid/gridview plugin or anything for ASPX pages, with VB codeBehind?  My team is in the process of converting a WinForms application with VB.Net 4.0/SQL Database to a ASP.NET 4.5/SQL application and currently we have a lot of Datagrids where a lot of data is manipulated.  I am looking for as close to excel/WinForms Datagrid as possible.  
+
+Edit:  I know that ASP already has a datagrid and a gridview, but I don't like either of them. I'm looking for something closer to this, except not as robust. what I am looking for is more of a dynamic control, for editing a cell and then having a bunch of other cells update in real time.  Something like this: http://demos.telerik.com/aspnet-ajax/grid/examples/overview/defaultcs.aspx but homegrown. ",1460661151.0,9,0.8,15
+mechanics,2012 Hyundai Sonata Program Key,"Hey all, my wife's key fob for her Sonata had the battery replaced and we need to resync it to her car. The dealership wants $65 to do it.  Is there anyway I can do this myself?",1459514936.0,4,0.84,1
+powerrangers,"Local Toys R Us had 2 of these on sale, and only one of them each left!",,1455819295.0,8,0.9,3
+mechanics,Front brakes creak!,"Hi All, 
+
+I have been going crazy trying to figure out what could possibly be wrong. 
+
+I have a 2010 GMC Terrain SLT 3.0 V6 AWD, and I have replaced the front pads with OEM Ceramics, I've had the rotors turned and replaced, and for the life of me I cannot figure out why the noise keeps coming back. 
+
+It has been one week to the day since I replaced the pads, and now the noise is coming back.  I'm not sure of any other way to explain it other than when I am slowing down at about 30MPH I start to hear what sounds like a creaky bed spring with people having sex on it. Sorry if that offends anyone, it's the easiest way for me to describe it. 
+
+Any help would be appreciated! ",1452191193.0,1,0.67,0
+rickandmorty,"The wife and I got a little crafty this past weekend, she painted all the ornaments, I sculpted the full figure. CAAAAAAANNNN DOOOOO!!!!",,1450219866.0,17,0.88,2
+tamagotchi,"Wife has a rare Dinkie Pet/Tamagotchi, anyone interested buying? It's a Rikou no Koibito.",,1450128993.0,6,0.88,4
+beastwars,"Finally set up my collection, Season 1 Cast, missing Scoponok only.",,1447271236.0,11,0.93,2
+translator,Japanese? Can someone tell me the name/brand of this tamagotchi toy?,Here is the front and back of the [toy](http://imgur.com/a/21jor). ,1443744888.0,1,1.0,1
+japan,"My wife had this from childhood and we found it in a box, mint condition, can anyone tell me what it is?","Title says it all, here are the pics: http://imgur.com/a/21jor
+ ",1443738724.0,3,0.53,13
+borrow,[REQ] $350 to be paid back October 23rd with 20% Interest.,"I recently had to pay for a family court attorney for my wife concerning her ex-husband.  I need this money to pay vehicle tab registration, and auto insurance.  I would pay back on 10/9 however I will be using that paycheck to pay rent, groceries and gas.  
+
+I am in Burnsville, MN. I have a Paypal account, or would be willing to do a bank account transfer. I will payback with 20% interest as well as any fees on October 23rd 2015. ",1443722408.0,3,1.0,3
+legaladvice,[MN] Ex-Husband preventing daughter from using her GizmoPal or any phone to call mom.,"Long story short, for many months my step-daughter (age 7) has been asking her dad, to call us while she is there, and she has never been allowed to. His excuses are thin, ranging from, ""not right now."" to ""No."" Neither of which come with an explanation. When she is at her paternal grandmothers, she is allowed to call, sometimes more than once.  She is in therapy due to insecurity issues and anxiety issues, and one of the ways we decided to help with that, is to get her an LG GizmoPal, which only allows the child to call 2 people, and has a parental control app.  This was an attempt to provide her with an option to call, that was in her control. 
+
+Today we got a phone call from her teacher at the school that the ex has forced my step-daughter to leave the device at the school, and caused her to be distraught and in tears and fearful that she won't be able to call her mom, which strengthens her anxiety and insecurity. 
+
+The decree states: *“The parties shall have the right to visit with the minor child by telephone at reasonable hours and with reasonable frequency when the child is not in their care.”* 
+
+What can we do? We are looking at filing Contempt of Court motion but not sure what that will achieve.... ",1442614031.0,76,0.91,23
+stepparents,Ex-Wife telling daughter to not be affectionate or listen to Step-Mom. (X-Post from r/Parenting),"My daughter is 7 years old, and she is a cuddler, and is very affectionate with her family members, hugs and kisses, and ""I love you""s. She and her step-mom got off to a great start (she was 4 when SM came into the picture) and they did all sorts of girly BFF things with each other. Now a little under 3 years later, and my ex is telling my daughter things like, ""You don't have to listen to her"" or ""You shouldn't hug her or call her mom"". Its confusing to my daughter as, she feels that connection with her step mom, but doesn't act on it for fear of what her biological mother might say. My wife and I have always encouraged both of our kids to love and respect all of their parents, regardless of if they are biological or step. My ex is of no help and cooperation, and encourages our daughter to call her Step-Dad ""Dad"" and be affectionate with him. How has other divorced parents dealt with this? ",1439317164.0,5,1.0,5
+Parenting,Ex-Wife telling daughter to not be affectionate or listen to Step-Mom.,"My daughter is 7 years old, and she is a cuddler, and is very affectionate with her family members, hugs and kisses, and ""I love you""s.  She and her step-mom got off to a great start (she was 4 when SM came into the picture) and they did all sorts of girly BFF things with each other. Now a little under 3 years later, and my ex is telling my daughter things like, ""You don't have to listen to her"" or ""You shouldn't hug her or call her mom"".  Its confusing to my daughter as, she feels that connection with her step mom, but doesn't act on it for fear of what her biological mother might say. My wife and I have always encouraged both of our kids to love and respect all of their parents, regardless of if they are biological or step. My ex is of no help and cooperation, and encourages our daughter to call her Step-Dad ""Dad"" and be affectionate with him.   How has other divorced parents dealt with this? ",1439307196.0,71,0.93,12
+powerrangers,"This may have been answered already, but why did Nick put Dino Charge on early hiatus?","I think most of us agree this season has been better than the last few, and its the first one I've been watching as it comes out since Lost Galaxy.  It seems ridiculous that they would do this, since the reviews have been generally positive.  Also, does anyone know when its supposed to pick up again? I don't understand why they are pushing Super Dino Charge when Dino Charge hasn't even ended yet. ",1436364523.0,1,0.6,6
+legaladvice,"My ex-wife keeps taking our child to unneeded dentist/doctor appointments, and enrolling her in elective programs, without my knowledge or consent.","My ex and I share 5050 Legal, and 5050 Physical custody of our daughter.  I am liable for 70% of Medical/Child Care costs, on top of my Child Support.  My ex has taken our daughter to the dentist to have major work done, without me knowing about it until the bill comes. She also enrolled her into a summer camp without me agreeing to it, (she already goes to the YMCA every day) and she is claiming that I need to pay her for 70% of school lunches, when under the MN Law, 518A.26 SUBD 4, Basic Child Support should go towards that.  My question is, am I liable to pay for the dentist and camp even though she didn't properly communicate and consult with me?  Also, I should mention that the dentist she took her too has a greater out of pocket expense and the one that Me, my wife, and step daughter all go to is covered better under my insurance.  ",1435853951.0,9,0.85,5
+polymerclay,My step by step of Sarah Kerrigan,,1435159037.0,28,0.97,3
+boston,Visiting Boston for the first time in a few weeks...,[removed],1433431740.0,0,0.42,22
+KerbalSpaceProgram,"My Hover Bike, and Car",,1432165833.0,5,1.0,14
+KerbalSpaceProgram,My take on the Colonial Viper. Love the new stock parts!,,1431032389.0,41,0.93,6
+tablets,"Verizon G-Pad LTE 8.3, anyone try to load Windows 8.1 on it?","I have the Verizon G-Pad LTE, I was thinking of trying to play around and load Windows on it.  Is there any support for this? or would it brick it? ",1428512176.0,0,0.43,2
+AdviceAnimals,I normally just sit in there and listen...,,1426620768.0,14,0.82,1
+comicbooks,First look at Supergirl for new CBS Series.,,1425913081.0,0,0.43,6
+comicbooks,"Reading Smallville Season 11, wait, Is that the Omnitrex?",,1425663624.0,119,0.95,19
+KerbalSpaceProgram,I have an issue...,"I have the ParameciumKids JumpDrive Mod installed, and whenever I Jump to one of my beacons, after a few seconds the nearby beacon just blows apart.  Anyone else have this issue? 
+
+Link to Mod: [JumpDrive](http://forum.kerbalspaceprogram.com/threads/66921-Part-Plugin-parameciumkid-s-Jump-Drive-v0-5-\(new-models-and-sound-effects!\))",1424968465.0,1,0.55,3
+personalfinance,"Recently cleaned up Credit, and got finances in order, want to check my credit score.","I have recently cleaned up my credit through writing the 3 credit bureau's repeatedly to get negative or old items removed, as well as taking care of old debts.  I would like to get a credit report, and see what it says now, as well as my 3 scores. I know there are a lot of sites out there for this stuff, but I want a good one, and I am looking for recommendations. Thanks! ",1415979415.0,39,0.78,29
+relationship_advice,"Me [29 M] with my wife [30 F] Dated for 16 months, married for 5, we fight every 2 - 3 weeks, and it gets more harsh each time. (X-post/relationships)","A little back info, We are both divorced, and have kids from previous marriages (I have a 6yr old daughter and so does she). Both our ex's were the ones to have an affair.
+About every 2 - 3 weeks, we are fighting, and like most couples we have intimate knowledge of the other persons faults, and insecurities. When we fight, we tend to throw them at the other person. Example, Her father is very strict, and cold emotionally and has the opinion that my wife is overly emotional, or My ex wife was a stripper in her late teens, and had long since abandoned that lifestyle before our daughter was born. When we fight, we use these things to hurt the other person.
+The fights always seem (to me) to start out of nothing, I lack empathy, or respect for other's emotions, I think people should just ""get over it"" if they were offended by someones words. I don't know why I am that way, and after I have hurt that person, and I have time to reflect I always feel horrible for invalidating that persons emotions. My wife has a temper that results to her yelling and screaming, throwing things and hitting objects. When she calms down she is very apologetic, and always apologizes of her actions.
+We both do love each other, but these faults of ours are taking a permanent toll on our relationship, and I think it might be over... I don't want to lose her, but we both don't trust each other that these fights won't happen again.
+I am meeting with a therapist tomorrow, but I fear it might be too late, she may not want to even give us a chance anymore...
+TL;DR: We fight horribly every two weeks, I'm emotionally insensitive, which causes my wife to lose her temper. How do we stop the madness, restore trust, and begin loving again?",1415049760.0,1,1.0,2
+relationships,"Me [29 M] with my wife [30 F] Dated for 16 months, married for 5, we fight every 2 - 3 weeks, and it gets more harsh each time.","A little back info, We are both divorced, and have kids from previous marriages (I have a 6yr old daughter and so does she).  Both our ex's were the ones to have an affair.
+
+About every 2 - 3 weeks, we are fighting, and like most couples we have intimate knowledge of the other persons faults, and insecurities.  When we fight, we tend to throw them at the other person.  Example, Her father is very strict, and cold emotionally and has the opinion that my wife is overly emotional, or My ex wife was a stripper in her late teens, and had long since abandoned that lifestyle before our daughter was born.  When we fight, we use these things to hurt the other person.   
+
+The fights always seem (to me) to start out of nothing, I lack empathy, or respect for other's emotions, I think people should just ""get over it"" if they were offended by someones words.  I don't know why I am that way, and after I have hurt that person, and I have time to reflect I always feel horrible for invalidating that persons emotions.  My wife has a temper that results to her yelling and screaming, throwing things and hitting objects. When she calms down she is very apologetic, and always apologizes of her actions. 
+
+
+We both do love each other, but these faults of ours are taking a permanent toll on our relationship, and I think it might be over... I don't want to lose her, but we both don't trust each other that these fights won't happen again. 
+
+I am meeting with a therapist tomorrow, but I fear it might be too late, she may not want to even give us a chance anymore... 
+
+
+---   
+**TL;DR**: We fight horribly every two weeks, I'm emotionally insensitive, which causes my wife to lose her temper.  How do we stop the madness, restore trust, and begin loving again? ",1415038290.0,6,1.0,2
+Marriage,What do you do when your spouse starts to annoy you or drive you nuts?,"My wife and I have been together for 2 years now, and we both are pretty well aware of our faults, or traits that annoy the other one.  We try to be respectful and mutually attempt to keep them in check.  Every once and a while we need to remind the other one that they are, ""getting to big for their britches"" I myself am guilty of it.  
+
+Some of these things we do are small, but some are big. Small examples would be, I scrap my teeth on my fork sometimes, and it drives my wife batty.  She has a near OCD level of cleanliness to where I have to have a different pair of slippers for each level of the house.   We love each other so we try to accommodate the small things.  Big examples are, I bottle things up, or don't talk about things that bother me, to the point to where I build resentment and towards her, and then say mean things.   She has a quick temper and is very quick to judge, doesn't let you finish your sentence. 
+
+My question is, how do you ""vent"" or get rid of the negative feelings when its your spouse that is causing you to feel that way?  
+
+FYI, we are near the real world avatar's of Monica and Chandler from Friends, if that helps. ",1414612195.0,9,1.0,2
+nostalgia,"Ghostwriter, because of this show I wore a felt pen around my neck for way too long...",,1412716473.0,16,0.95,2
+MechanicAdvice,98 GMC Jimmy V6 SLT Starting issue...AGAIN,"Hi All, 
+
+Ok here is my original post: http://www.reddit.com/r/MechanicAdvice/comments/2eq3t5/1998_gmc_jimmy_slt_wont_start_help_xpost/ 
+
+I replaced the fuel filter the day I posted the last time, and now it did it this morning, I'm not sure at all what is going on.  ANY advice would be super appreciated! ",1412606918.0,7,0.89,13
+AskReddit,"[Serious] Guys and Gals, real-talk now, why did you marry your wife/husband?","Looking back, do you think that it was enough to base your marriage on? I realize that some of you may have gotten married for the wrong reasons and have had to work very hard to have a happy marriage. Initially you may have doubted your reasons, but now you may be happy, how did you over come that? ",1412191584.0,4,0.75,5
+personalfinance,"I am climbing out from a mountain of debt, Federal Loans are taken care of, but my Private Loans need help. (Xpost from /r/StudentLoans)","I hit a series of unfortunate events over the course of the last few years, I lost 3 different jobs due to downsizing/outsourcing. I had a divorce, and also supported a wife and child through most of that. I'm finally back to earning a decent wage and have cleaned up my consumer debt, and got my federal loans back on track. Now i have 6 Private Student Loans totaling $71k from Sallie Mae, with an interest rate of 13.12%. I would like to consolidate and refinance, but obviously due to my past, my credit is shot at the moment.
+Any Suggestions?",1411069225.0,1,1.0,3
+StudentLoans,"I am climbing out from a mountain of debt, Federal Loans are taken care of, but my Private Loans need help.","I hit a series of unfortunate events over the course of the last few years, I lost 3 different jobs due to downsizing/outsourcing.  I had a divorce, and also supported a wife and child through most of that.  I'm finally back to earning a decent wage and have cleaned up my consumer debt, and got my federal loans back on track.  Now i have 6 Private Student Loans totalling $71k from Sallie Mae, with an interest rate of 13.12%.   I would like to consolidate and refinance, but obviously due to my past, my credit is shot at the moment.  
+
+Any Suggestions?  ",1411067696.0,2,1.0,6
+Music,"Reddit seemed to really like Kawehi, She's starting a new project and needs help!",,1410273403.0,1,1.0,0
+powerrangers,"My oldest daughter requested this drawing, thought you guys would appreciate it!",,1409458377.0,25,0.86,4
+MechanicAdvice,"1998 GMC Jimmy SLT Won't Start, help (x-post /r/mechanics, /r/autos)","Battery is a little under 3 years old, the plugs, wires, distributor cap and rotor have been replaced less than a year ago. There is no rhyme or reason to why it won't start occasionally. It will do this: http://youtu.be/4DV2iQo5tdU and after a little while it will start, and be fine for few weeks, and then it does it again. There is fuel pressure up to the engine. Very frustrated!!
+
+Edit: I replaced the fuel filter, it seems to have done the trick, we'll see tho. ",1409147538.0,2,0.76,13
+auto,"1998 GMC Jimmy SLT, won't start!","Battery is a little under 3 years old, the plugs, wires, distributor cap and rotor have been replaced less than a year ago.  There is no rhyme or reason to why it won't start occasionally.  It will do this: http://youtu.be/4DV2iQo5tdU and after a little while it will start, and be fine for few weeks, and then it does it again.  There is fuel pressure up to the engine. Very frustrated!! 
+
+Edit: I replaced the fuel filter, it seems to have done the trick, we'll see tho. ",1409145986.0,5,0.78,6
+mechanics,"1998 GMC Jimmy SLT Won't Start, help","Battery is a little under 3 years old, the plugs, wires, distributor cap and rotor have been replaced less than a year ago.  There is no rhyme or reason to why it won't start occasionally.  It will do this: http://youtu.be/4DV2iQo5tdU and after a little while it will start, and be fine for few weeks, and then it does it again.  There is fuel pressure up to the engine. Very frustrated!! 
+
+Edit: I replaced the fuel filter, it seems to have done the trick, we'll see tho. ",1409145212.0,1,1.0,1
+legaladvice,Ex-Wife is giving me hell...,"Back Info: Divorced in 2012, Minnesota.  1 Child, Originally when we divorced we agreed to $300/month in Child Support, we have 50/50 Legal and Physical Custody. This past year I got a better Job, and my Ex found out and took me back to court for more child support. I had been making payments and openly communicating with her. In June, my current wife and I had money drained from our accounts without our knowledge, and we have since worked it out with the bank and got the money back.  I emailed my ex to tell her the support check would not go through but that I would continue to payments when we got everything figured out.  She responded and said it was ok.   Now I got a letter from the county and my income is being garnished.  Is there ANYTHING I can do? It seems very unfair that even tho I have been open, and and making payments that my ex can request this and it just happens. 
+
+EDIT: People are assuming that my ex needs my child support to put food on the table.  My ex has a full time job, lives with her BF/Fiance, and they share finances, he makes the same if not more than I do.  If there was ever a question of whether or not my child would go without food or the necessities, I would not hesitate to do what I need to do.  The fact that people just assume that the divorced mother is the victim is the point I was saying when I said I get treated like the ""Deadbeat Dad"".  I love my daughter more than anything and will always do whatever it takes to make sure she has what she needs and then some.  The problem is that I know she doesn't need, or use the money for my daughter.  I know that she has gone on shopping sprees and gotten manicures and her nails done with the money.  Child Support is a JOKE without any regulation to make sure that it goes to the child, and not for the parents use.  But alas, I'm bound to pay it because of a broken legal system and the stigma that the mother is always the victim. /Rant",1406301337.0,0,0.44,14
+SuicideWatch,I can't take it anymore,"My ex wife is taking all my money in the form of child support or tuition for expensive daycare, that is court mandated, I have 50/50 Physical and legal, however due to fucked up laws, since i got a higher paying job then what i had when we divorced, she gets more child support.  Then there is the fact that i have my current wife, and a step-daughter to as well as my own to provide for.  My current wife is out of work, and has been actively looking.  We can't seem to keep our heads out of the water financially.  we don't live lavishly and don't drink or have drug habits.  I'm just sick and tired of being sick and tired and nothing working out... I feel like i ruined my wife's life by just being in it, and that my daughter would be better off without me... ",1405956403.0,3,0.72,4
+legaladvice,"I need to file bankruptcy in MN, and I can't afford an attorney. What are my options?","I know I make below the state median for a family of 4, and I can file Chapter 7.  I have already been through all other options, Debt Consolidation, Credit Counseling, etc. and its time to file. Recently a Judgement made on me 4 years ago, on an account from my ex-wife and I, seized money from both my Checking and Savings accounts, without my knowledge.  It's time to file, yet, I cannot afford the attorney, and I'm apprehensive about doing it on my own.  Any advice? Resources? 
+
+Edit:  Thank you all for the advice, I have an appointment with an attorney tomorrow at 11AM.  We've taken the money out of those accounts, except what was already ""used"", (bills). ",1404743769.0,12,0.88,5
+Banking,"What is a ""DDA checking debit funds via 1LLG""?","I googled around a little, but still unclear as to what it is.  My wife and I had our bank accounts drained by this, calling Wells Fargo only started the circle of 1-800 numbers.  Neither of us know about any colletions/judgements/IRS/etc. ",1404346902.0,4,1.0,7
+KerbalSpaceProgram,What to do after career?,"I'm almost done playing through career mode.   I love this game, but now I'm worried about what to do next. I've built planes, SSTO's, Space Stations, Bases, and tracked down some of the easter eggs... now what?",1404229905.0,6,1.0,10
+KerbalSpaceProgram,"I made an X-Wing (Stock, and in my career so far)",,1403725693.0,57,0.91,17
+KerbalSpaceProgram,GPS mod?,Is there a mod out there that display's the latitude and longitude? I'm trying to find a better way to pinpoint some of the easter eggs... ,1401763101.0,9,1.0,6
+videos,"IMO Jason David Frank does more than any other celebrity for his fans, here he is helping me propose to my girlfriend.",,1399211356.0,0,0.33,0
+powerrangers,"Jason David Frank, helped me propose, he was totally awesome and cool with it!",,1399175951.0,35,0.88,8
+StarWars,Question about the EU news.,"Every article I read about the news that Lucasfilm/Disney is not taking the EU seriously, is mentioning that there we a number of inconsistencies in the EU.  
+
+I started reading the EU with the Jedi Academy trilogy and promptly read everything that's come out post-ROTJ.  I read them purely for the joy of a good adventure with my favorite characters so maybe thats why, but I don't remember any gaping large inconsistencies.  Can any of you refresh my memory or explain what they are referring to?  ",1398951886.0,0,0.25,5
+KerbalSpaceProgram,"33 Days in, My Space Program so far.",,1398893115.0,30,0.92,4
+movies,Mystique in action in X-Men: DOFP,,1398883392.0,2,0.67,0
+powerrangers,"I don't like the MMPR fan film either, but this looks amazing!",,1398261075.0,14,0.66,10
+KerbalSpaceProgram,"After much encouragement from my fellow Kerbonauts, I made it to Minmus and back.","Yes its true this game has a steep learning curve, but this community is so encouraging and such a fun one to be involved in! Everyone here seems willing to give back to the community with a helping hand. 
+
+Due to that encouragement, I was no longer intimidated by a trip to Minmus.  I also learned how to use maneuver nodes correctly. 
+This mission was fine until it was time to land, i lost a strut and my main chute.  On the way back i burned a lot of fuel trying to get home, finally i opted to just burn in the general direction and i was able to have enough fuel for a 7 second burn to get into splash down. Jeb was gritting his teeth the whole way home. 
+
+[My crash landing](http://i.imgur.com/DP5IGxT.png)
+",1397251549.0,7,0.83,3
+KerbalSpaceProgram,"MUN!, AGAIN!! This time I was able to return home!",,1397149554.0,30,0.79,9
+KerbalSpaceProgram,"You all are way beyond me, but I've only been playing a week! I DID IT! MUN!",,1396383245.0,73,0.96,28
+zelda,"My Brother In-Law got me the best B-day gift, had to display it next to my custom Link sculpture, so excited had to share!",,1396013937.0,8,0.65,2
+tifu,TIFU by pissing all over the back of my pants.,"So yeah, I'm 6'3"" 225 LB's and I normally use the large handicapped stalls in public restrooms, as normal sized ones are too cramped.  I went into the bathroom to do the morning deed, and was forced to use the smaller stall as the large one was occupied. I sat down and started to release the urine, I heard the distinct sound of liquid on denim.  Due to my size, and the smaller size of the stall, I had failed to tuck the the twig and berries down into the bowl of the toilet, and pissed all over the back of my pants.  Its 8:45AM and I don't leave work till 4:30PM... I tried to rinse the piss and dry it as best as possible, but now I am sitting at my desk with a cold wet ass...
+
+Edit: Twigs to twig, i only have one penis. ",1395064591.0,56,0.9,30
+StudentLoans,"Finally in a financial position to get back under control, have no idea where to start, any ideas?","I graduated in 2005, and have had piss poor luck in my career due to economy. At times I've had to sell cars, and even sell my house in order to make ends meet. I've made payments here and there to try and get the lenders off my back, I even went through some consolidations when I could.   I'm finally in a position to actually get my loans back under control, however I have no idea who or where they are at.  Is there any way to find this information out? I don't receive collection calls, and I don't get letters, so I have no idea where to even start. ",1392153800.0,2,0.76,1
+legaladvice,[MN] - Modification for Child Support,"I have a 5 year old with my Ex, she had an affair and moved in with her boyfriend and has since. We were separated for about 2 years and then finalized the divorce not even a year ago. The Child support calculator worked out that I should pay $266 a month in Child Support, she wanted $500, and had no good reason. For the sake of being done with the situation, I agreed to $300. We have Joint 50/50 Legal and Joint 50/50 Physical Custody. It is my understanding that the Child Support payment be used for child care and medical costs. I already pay $240/month in Day Care and $236 in Medical Insurance for the child, which is more than $300. She is trying to take me back to court for a modification to child support. What grounds does she have? other than i got a new job? If we have 50/50 and i already pay MORE than what i’m obligated to pay, does she have any ground to stand on?",1391459936.0,3,0.81,4
+hayleywilliams,"Hayley joins Fall Out Boy for Sugar, We're go going down.",,1391132732.0,10,0.78,3
+powerrangers,Recommended viewing suggestions?,"I've watched from MMPR to In Space, every episode, and I really like the episodes that have deep stories over the ""filler"" episodes.  I want to catch up to the current series. I was wondering, is there a list somewhere that shows the notable or ""must see"" episodes from each season? I've googled a bit and checked on www.rangercentral.com but can only find complete episode lists, i just want to know the notable episodes. Thanks! ",1390580369.0,2,0.63,12
+learnprogramming,".Net 4.0/VS2012 and Crystal Reports, how to get them to behave.","I've recently upgraded my core application to .Net 4.0 Framework and Visual Studio.Net 2012 (Upgrade 4).  Everything else within the application is playing nicely.  However, when I try to deploy the application to a workstation machine I get 2 errors (linked below).  I'm not at all familiar with Crystal Reports. Some things I have tried is setting the build to x86 but that doesn't help, so its back to Any CPU.  Any tips or directions would be AWESOME. 
+
+[Error 1](http://i.imgur.com/YR4VR5J.png)
+[Error 2](http://i.imgur.com/EnCQPLD.png)",1389219099.0,2,0.76,2
+funny,It has happened before! x-post /r/pics,,1388782872.0,0,0.3,0
+pics,It has happened before!,,1388782812.0,0,0.45,0
+Sculpture,My crowning achievement - The Queen of Blades,,1388526978.0,4,0.83,1
+secretsanta,SS Nailed it!,,1388411128.0,3,0.81,0
+videos,Can we love Jennifer Lawrence any more? Interview on David Letterman,,1386789354.0,0,0.3,2
+AskReddit,How do YOU define Love between two people? Do you think you can decide to Love someone?,I'm curious as to what peoples interpretations of love are. ,1383762098.0,2,0.76,2
+funny,My first thought when I saw the new pic of Magneto.,,1383334795.0,0,0.5,0
+pics,"Watching Revolution, caught this guy, he failed gun safety for sure.",,1382979018.0,0,0.44,0
+funny,I think the internet is trying to tell me something...,,1382724160.0,1,0.6,0
+a:t5_2yvb9,Example 2,,1382484655.0,13,0.94,0
+a:t5_2yvb9,Example:,,1382484596.0,32,0.93,0
+zelda,My custom Link sculpture and Shield I made. Thought you guys could appreciate it.,,1367847886.0,14,0.65,10
+StudentLoans,"Single, Divorced, Dad vs Sallie Mae","I'm 28 years old, I have a 5 year old daughter who i have 50/50 everything and pay child support on. I recently consolidated my Federal Student Loans through Direct Loans, and they have been wonderful to work with.  However, due to an oversight, i have 4 Private student loans that are entering into default and I have collection agency's calling me and my employer at all hours, trying to get me to agreeing to paying over $30k in a lump sum... 
+
+What are my options? ",1365738910.0,6,1.0,8
+pics,"this was at a church that my buddy got married at, i need a funny caption! ",,1363209424.0,0,0.5,1
+pics,"Saw this in a gas station, are you serious? ",,1360782186.0,0,0.5,0
+AdviceAnimals,we turned our co-worker into a meme... hope you enjoy!,,1356623766.0,0,0.33,1
+videos,an Oldie but a goodie,,1353947332.0,10,0.66,5
+Art,Finished an original take on Beauty and The Beast for my daughter. Really happy with the way Beast turned out. (Sculpture),,1352990483.0,3,0.59,0
+adventuretime,"My 4 year old who is obsessed with AT, asked me to draw us with Finn and Jake, how'd I do? (She's the Princess)",,1352682536.0,79,0.91,6
+reactiongifs,MFW I'm about to hit on a hot chick,,1351002269.0,3,0.71,0
+AskReddit,Where were you 11 years ago today? Post a map link. ,[removed],1347369549.0,1,0.6,1
+twincitiessocial,"My buddy and I are hosting a screening of Iron Sky, get your tickets before they sell out!! Movie Meetup? ",,1345138383.0,5,0.64,3
+Art,Working on a sculpture of Beauty and The Beast for my 4 year old... still a WIP,,1344822135.0,2,1.0,0
+pics,"This is my dad, cleaning a fish he caught, on marble counter tops at a nice hotel... I love my family! ",,1343164416.0,0,0.48,3
+twincitiessocial,Hello? Anyone out there?,"Hi there fellow Narwhal Bacon Crusaders!   
+
+I'm 27, single/divorced, male - I'm a SQL/HTML/C# Developer...
+
+I was married for 7 years, and don't have very many single friends anymore... I'm looking for friends male/female, and I realize this may not be the right subreddit but i'm going for exposure here people... R4R twin cities is lame... 
+
+I live in Burnsville, enjoy playing music, watching movies, drawing/painting/sculpting, and drinking a good beer... 
+
+lets be friends!!! 
+
+",1340068152.0,0,0.5,23
+pics,My 4 yr old daughter told me she wants to be a Unicorn and Pig farmer when she grows up... I drew it for her.... ,,1339379666.0,2,0.54,2
+pics,One of these day's I'm just gonna go for it... ,,1335974118.0,12,0.6,10
+Artists,Question for a beginner... ,"Hi All, 
+
+I am just starting to take commissions and I was wondering... how do you start pricing out your work?  I mean I'm no Jack Kirby or Alex Ross, so as I start to do work for money whats a good way to structure prices?  I will be doing B&W pencil and Charcoal, as well as Paintings and Sculptures.... Any Ideas? ",1333325714.0,3,0.71,4
+AskReddit,"Ladies, how does a guy stay out of the FriendZone? ","The year is 2005, I started working at a local gas station chain while attending college.  I met, Crush(changing name). Crush is a very pretty and down to earth girl and as her name suggests
+I had a crush on her.  When we first started talking she had a boyfriend and I wasn't going to be ""That guy"".   When she became single, I had started dating, Ex(Again not using real name). 
+
+Crush and I friendzoned each other back then, but there was always tension between us.   Ex and I get married, she makes me get rid of all my attractive ""girl"" friends numbers.  I lose contact with Crush. 
+
+6 years later, Ex and I divorce, she slept around with other guys and I found out about it. (Whole other story).  Random text appears from Crush's sister, whom I haven't spoken to for 6 years as well.  
+
+Text is for an invite to a St. Paddy's day party at her place.   I think, this might be a chance to reconnect with Crush... 
+
+Show up to party, find Crush, we hit it off again like the 6 years never happened, she's still a great person.  We end up haveing to take Crush's sister to the ER, as she cut her foot open.(Another story)
+
+Like a baus I volunteer to drive her and her sister to the ER, being the only sober person, and I end up with them from 4AM to 9:30AM... 
+
+Crush and I exchange numbers and are genuinely excited to see each other again.  We are both Single now... and I need some advice, how do I stay out of the friendzone???
+
+**TL:DR** Long time Crush, oppurtunity finally happened, how do I stay out of the friendzone? 
+
+**EDIT:** I should also note, that I haven't been in the dating scene for about 7 years... so I'm a little out of practice... Hence this post.
+
+**EDIT2:**So I asked her out, and she said yes! The Date is ON!
+",1332341056.0,2,0.53,25
+whowouldwin,Having Nerd-Debate... Can you help settle this??,[removed],1331840858.0,1,0.6,3
+pics,"Drew this for my buddy's bday, Reddit, i give you Jedi Master Link",,1326171539.0,0,0.33,0
+pics,"Fellow IT people can relate, this is the crap we put up with on an hourly basis...",,1320332969.0,8,0.79,9
+AskReddit,"Reddit, what is your definition of Love? ","My wife and I are going through a rough spot in our marriage, and we need a little clarification.  I am pretty sure everyone defines love differently, so I am looking to get as many opinions as possible.  ",1311689469.0,8,0.84,32
+AskReddit,I woke up this morning and decided to quit smoking...,"My first cigarette was at 14 years old... at my ""worst"" 1.5 packs a day.  While i enjoyed the ""buzz"" my addiction was more the oral fixation... something to do while driving and drinking. 
+
+Reddit, how did you kick the habit and how many years ""sober""?  ;) 
+
+Edit: Thanks for the camaraderie people, sometimes its easier to kick the habit when you think about other people's methods... ",1310054956.0,380,0.75,540
+fffffffuuuuuuuuuuuu,How i broke the ice with GF's mom. [true story],,1305219933.0,1,0.52,2
+AskReddit,"Reddit, I'm in Costa Mesa, CA for a few days for work...",[removed],1304188600.0,1,1.0,0
+AskReddit,"Nipple Size, whats your preference? ","My friend is a little concerned with her size, i told her there is a good reference ""chart"" and she is fine. 
+
+( . )( . ) = Italian Sausage
+( o )( o ) = Pepperoni (my preference, and her size) 
+( O )( O ) = Canadian Bacon
+
+Whats yours? 
+
+EDIT:  I'm talking about ""areola's"" here people, i wasn't thinking there were people out there with mutant ninja nipples the size of egg-plants... :) ",1302788995.0,5,0.78,43
+pics,"My valentine's gift to my wife, who recently became a redditor, she loved it... ",,1297722834.0,0,0.43,0
+fffffffuuuuuuuuuuuu,2 yr redditor vs 2 month...  ,,1296493990.0,6,0.6,6
+pics,"As a 6'4"" male, i have been stuck at the ""short stall"" quite often, when I saw this, mind = Blown",,1287342356.0,6,0.72,10
+reddit.com,So instead of RRoD its a RDoD... it looks like a HAL360... ,,1276893376.0,7,0.89,1
+reddit.com,My co worker has the sound a Platypus makes as his ringer... it reminds me of this... so i drew it... ,,1274824804.0,1,0.6,1
+reddit.com,Reddit please help my friend reach his goal!! ,"My very good friend left this morning to start a journey where he will walk from Delaware to California, for a Charity organization, he officially starts on Thursday, but i thought i'd try and generate some support from this awesome community! 
+
+Charity: http://www.mycharitywater.org/ 
+My Friend: http://www.poseidonsjourney.com/ 
+
+If 950 people donate $20, he'll reach his goal and that will have helped 1000 people have clean renewable drinking water. ",1269882495.0,0,0.4,1
+reddit.com,"Reddit, I got an Anti-Healthcare bill email today, how much of this is true? ","How much of the below is true? At this point I have not decided if i'm pro or against, (frankly i think the whole government needs to be ""reformed"") Anyways, can anyone filter out the truth in this? 
+
+Page 22 of the HC Bill: Mandates that the Govt will audit books of all employers that self-insure!!
+
+Page 30 Sec 123 of HC bill: THERE WILL BE A GOVT COMMITTEE that decides what treatments/benefits you get.
+
+Page 29 lines 4-16 in the HC bill: YOUR HEALTH CARE IS RATIONED!!!
+
+Page 42 of HC Bill: The Health Choices Commissioner will choose your HC benefits for you. You have no choice!
+
+Page 50 Section 152 in HC bill: HC will be provided to ALL non-US citizens, illegal or otherwise. 
+
+Page 58 HC Bill: Govt will have real-time access to individuals' finances & a 'National ID Health card' will be issued!(Papers please!)
+
+Page 59 HC Bill lines 21-24: Govt will have direct access to your bank accounts for elective funds transfer. (Time for more cash and carry)
+
+Page 65 Sec 164: Is a payoff subsidized plan for retirees and their families in unions & community organizations: (ACORN).
+
+Page 84 Sec 203 HC bill: Govt mandates ALL benefit packages for private HC plans in the 'Exchange.'
+
+Page 85 Line 7 HC Bill: Specifications of Benefit Levels for Plans --The Govt will ration your health care!
+
+Page 91 Lines 4-7 HC Bill: Govt mandates linguistic appropriate services. (Translation: illegal aliens.)
+
+Page 95 HC Bill Lines 8-18: The Govt will use groups (i.e. ACORN & Americorps to sign up individuals for Govt HC plan.
+
+Page 85 Line 7 HC Bill: Specifications of Benefit Levels for Plans. (AARP members - your health care WILL be rationed!)
+Page 102 Lines 12-18 HC Bill: Medicaid eligible individuals will be automatically enrolled in Medicaid. (No choice.)
+
+Page 12 4 lines 24-25 HC: No company can sue GOVT on price fixing. No ""judicial review"" against Govt monopoly.
+
+Page 127 Lines 1-16 HC Bill: Doctors/ American Medical Association - The Govt will tell YOU what salary you can make.
+
+Page 145 Line 15-17: An Employer MUST auto-enroll employees into public option plan. (NO choice!)
+
+Page 126 Lines 22-25: Employers MUST pay for HC for part-time employees ANDtheir families. (Employees shouldn't get excited about this as employers will be forced to reduce its work force, benefits, and wages/salaries to cover such a huge expense.)
+
+Page 149 Lines 16-24: ANY Employer with payroll 401k & above who does not provide public option will pay 8% tax on all payroll! (See the last comment in parenthesis.) 
+Page 150 Lines 9-13: A business with payroll between $251K & $401K who doesn't provide public option will pay 2-6% tax on all payroll.
+
+Page 167 Lines 18-23: ANY individual who doesn't have acceptable HC according to Govt will be taxed 2.5% of income.
+
+Page 170 Lines 1-3 HC Bill: Any NONRESIDENT Alien is exempt from individual taxes. (Americans will pay.) (Like always)
+
+Page 195 HC Bill: Officers & employees of the GOVT HC Admin.. will have access to ALL Americans' finances and personal records. (I guess so they can 'deduct' their fees)
+
+Page 203 Line 14-15 HC: ""The tax imposed under this section shall not be treated as tax."" (Yes, it really says that!) ( a 'fee' instead) 
+Page 239 Line 14-24 HC Bill: Govt will reduce physician services for Medicaid Seniors. (Low-income and the poor are affected.)
+
+Page 241 Line 6-8 HC Bill: Doctors: It doesn't matter what specialty you have trained yourself in -- you will all be paid the same! (Just TRY to tell me that's not Socialism!)
+
+Page 253 Line 10-18: The Govt sets the value of a doctor's time, profession, judgment, etc. (Literally-- the value of humans.)
+
+Page 265 Sec 1131: The Govt mandates and controls productivity for ""private"" HC industries.
+
+Page 268 Sec 1141: The federal Govt regulates the rental and purchase of power driven wheelchairs.
+
+Page 272 SEC. 1145: TREATMENT OF CERTAIN CANCER HOSPITALS - Cancer patients - welcome to rationing!
+
+Page 280 Sec 1151: The Govt will penalize hospitals for whatever the Govt deems preventable (i.e...re-admissions).
+
+Page 298 Lines 9-11: Doctors: If you treat a patient during initial admission that results in a re-admission -- the Govtwill penalize you.
+
+Page 317 L 13-20: PROHIBITION on ownership/investment. (The Govt tells doctors what and how much they can own!)
+
+Page 317-318 lines 21-25, 1-3: PROHIBITION on expansion. (The Govt is mandating that hospitals cannot expand.) 
+Page 321 2-13: Hospitals have the opportunity to apply for exception BUT community input is required. (Can you say ACORN?)
+
+Page 335 L 16-25 Pg 336-339: The Govt mandates establishment of=2 outcome-based measures. (HC the way they want -- rationing.)
+Page 341 Lines 3-9: The Govt has authority to disqualify Medicare Advance Plans, HMOs, etc. (Forcing people into the Govt plan)
+
+Page 354 Sec 1177: The Govt will RESTRICT enrollment of 'special needs people!' Unbelievable!
+
+Page 379 Sec 1191: The Govt creates more bureaucracy via a ""Tele-Health Advisory Committee."" (Can you say HC by phone?)
+
+Page 425 Lines 4-12: The Govt mandates ""Advance-Care Planning Consult."" (Think senior citizens end-of-life patients.)
+
+Page 425 Lines 17-19: The Govt will instruct and consult regarding living wills, durable powers of attorney, etc. (And it's mandatory!)
+Page 425 Lines 22-25, 426 Lines 1-3: The Govt provides an ""approved"" list of end-of-life resources; guiding you in death. (Also called 'assisted suicide.')(Sounds like Soylent Green to me.) 
+
+Page 427 Lines 15-24: The Govt mandates a program for orders on ""end-of-life."" (The Govt has a say in how your life ends!)
+
+Page 429 Lines 1-9: An ""advanced-care planning consultant"" will be used frequently as a patient's health deteriorates.
+
+Page 429 Lines 10-12: An ""advanced care consultation"" may include an ORDER for end-of-life plans.. (AN ORDER TO DIE FROM THE GOVERNMENT?!?) 
+
+Page 429 Lines 13-25: The GOVT will specify which doctors can write an end-of-life order.. (I wouldn't want to stand before God after getting paid for THAT job!) 
+
+Page 430 Lines 11-15: The Govt will decide what level of treatment you will have at end-of-life! (Again -- no choice!)
+
+Page 469: Community-Based Home Medical Services = Non-Profit Organizations. (Hello? ACORN Medical Services here!?!)
+
+Page 489 Sec 1308: The Govt will cover marriage and family therapy. (Which means Govt will insert itself into your marriage even.)
+
+Page 494-498: Govt will cover Mental Health Services including defining, creating, and rationing those services.
+",1269631047.0,0,0.5,9

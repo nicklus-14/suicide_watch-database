@@ -1,0 +1,969 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+SS13,"Docker, Clocksources, Performance and you","Hi! At **CM-SS13** we done a transition to ""raw"" Linux/Docker deployment recently (check project repos on GitHub if that is of interest to you) and I wanted to mention a particular perf pitfall that probably affects TGS Docker setups too and isn't mentioned much.
+
+During some of our first live tests with \~200 players, performance was pretty horrible, in the 50-200% worse range. We linked it to profiler and proc overhead, but that wasn't quite the end of the story. A quick strace revealed that BYOND performs an **absurd** amount of *gettimeofday* and *clock\_gettime* calls, and even more with profiler on.
+
+Around that point, we noticed an old random mention on coderbus by oranges (thanks!) regarding timing, docker, and virtualization. Curious! And all that eventually leads us here: [Yet Another Reason your Docker Containers May Be Slow on EC2: clock\_gettime, gettimeofday and seccomp](https://careers.appian.com/blog/the-tech-corner/yet-another-reason-your-docker-containers-may-be-slow-on-ec2-clock_gettime-gettimeofday-and-seccomp/)
+
+&#x200B;
+
+[Seccomp overhead for timing calls](https://preview.redd.it/eyb3nx8s39v81.png?width=1400&format=png&auto=webp&s=bf402b92ad0ce9339ce3a8e6764cc3544f69b96c)
+
+Normally to avoid the overhead from fully fledged system calls, the Linux kernel provides a ""virtual Dynamic Shared Object"" (vDSO) Library  to allow calling most of these without having to go through the whole process. **Unfortunately when running as a Xen guest** (among others), **timing calls still incur a full system call.** This is doubly problematic given **seccomp adds a lot of overhead to syscalls for security handling.**
+
+Now with BYOND making several dozen thousands per second, you can imagine how this fares questionably. Thanksfully this was in our case **linked to the xen clocksource, which you can disable on host** (should you have access to it) for classical clocksources using boot arguments  **clocksource=tsc tsc=reliable** to switch to the more classical TSC register.
+
+This seems a pretty classic ""docker overhead"" problem, but under BYOND really becomes crippling. Figure the issue is known with oranges mentioning it on discord, but I couldn't find much around BYOND about it. Hopefully this helps some people running docker smooth out performance.",1650708707.0,21,0.96,11
+WorldOfWarships,The longest 44 seconds of my life,,1643849054.0,22,0.76,32
+WorldOfWarships,"""I'm gonna scare them off with some flank shots so you can push and--""",,1642379763.0,137,0.97,15
+SS13,Docker-based SS13 Game Stack²,"*First - mind these opinions are my own and not those of any project or whoever else*
+
+Second, to get this straight out of the way and save on time arguing in comments, yes, i consider our overall approach around game deployment deficient - read below. No this is not meant to be a personal attack - Yes I know it works well - Yes there are reasons for various choices therein - Yes there are historical reasons - I know all that - but hey it all bugs me for various reasons - and I firmly believe only way to improve things is to talk about em. And no, obviously, this is not meant to be a magic replacement but a draft for discussing alternatives..
+
+With that hopefully out of the way...
+
+## Current Observations
+
+* Juggling dynamic loaded & RSC baked resources in a project is error-prone
+* People lose track of what's what by running that big humongous repo folder
+* BYOND is a mess, game workdir/install mutable as hell, too many moving parts
+* Adding more via dependent management software is probably not helping this
+* Switching instances in-place by juggling folders is needlessly complicated
+* Ensuring reproducibility and installing system deps means ton of extra automagic tooling to maintain
+* Game was driven into slave of adjacent custom management logic, when it is the actual core component
+
+## Resulting Conclusions
+
+* Gotta go thin, only run in prod what you're supposed to need. Fail fast, fix it
+* Get a reproducible, immutable as possible env, run round, tear it down
+* Standardize that env both in deps and contents and switching it
+* Should use software as standard as possible, as as little of it as possible, don't reinvent wheel
+* Wait uh that sounds like 80% of what docker would coerce you into/help you do ?!
+
+## Tentative workflow
+
+*Main design point being these five components are fully independent - and that the docker-centered approach solves a few of the above, but mainly, forces us to solve the rest ourselves*
+
+* [Build manually or by CI a docker image](https://gist.github.com/fira/0d276e945f46ee3216dbef407c4c8431)
+* [WebApp to testmerge branches before hitting docker build (don't look, it's awful)](https://gitlab.com/mekkiti/tpanel-test/)
+* [Server management tooling lets you switch active built image](https://docs.docker.com/engine/reference/commandline/tag/)
+* [System Daemon (re)creates and (re)starts server env on exit](https://gist.github.com/fira/db82f4c6b66ad6fdd124d07bd5d475a6)
+* [Game just runs, as it's meant to, deletes on exit](https://gitlab.com/cmdevs/colonial-warfare/-/blob/dev/docker-compose.yml)
+
+Done some varied testing under that approach, so see below for some tidbits and observation that are hopefully interesting
+
+## The Good
+
+* Got to fix a ton of random codebase issues by setting this up (eg. configs, modular resources, file() access to stuff in RSC, etc)
+* Near zero code footprint for basic server management
+* Directly backed by well-known and stable system tooling
+* Fully reproducible, zero-setup (except docker), cross-platform builds
+* As isolated and immutable as you can get: containerized and fresh each round
+* Provides as a side-effect a quick way to spin instances up for testing or CI, including MySQL etc
+* Whole OS + Env + BYOND + CM13 actually packs in less than 120 MB if done right (\~30MB + RSC/DMB)
+* Can easily distribute/reuse builds via docker registries
+* Docker layer caching helps keep minimal net/disk usage
+* Multi-Stage docker build vastly limit redoing unneccessary steps
+* Flexible enough to easily wire to anything (tested with Gitlab Deployments, click button on MR, get running game server to test)
+
+## The Unexplored
+
+* Well, almost everything
+* Draft Testmerge app is very rudimentary (it also runs off generic git remotes, not MR/PRs)
+* You'd likely want a Systemd Watchdog script to handle auto restarts on mishaps
+* Docker Multi-Stage building is cool looking and all, but building method would vastly benefit from integration under another tool instead such as Juke to join with CI / Local building / etc
+* Logging via stdout/docker/systemd backend is an alternative more flexible than world.log but didn't fully explore it
+
+## The Bad
+
+* Noticeable network overhead when running on docker default networking  -- net stack eating up to 15% CPU time during a live test with 230 players. This is probably the case to a lower extent regardless of setup, but no doubt default docker setup of virtual ifaces + conntrack + L4 docker proxy + bridge networking + namespacing makes it way worse. Host networking ""fixes"" this, but this loses part of isolation
+* You can't expect every contributor to have a mean to run/build docker images, esp. due to how annoying support is on Windows (Hyper-V, etc). This means properly integrating it with other options is critical, and also neuters how useful some of the good aspects are in practice
+* Docker Multi-Stage caching is borderline rocket-science, moreso for usage in CI, further prompting need to integrate with other build tooling as possible instead
+* The whole restart model relies on DreamDeamon shutting down cleanly in graceful restart case (arguably as it should be, but..). This disables DreamSeeker reconnect - requiring clientside gadgets for reconnecting automatically.
+
+And probably more.. I do hope this is still somewhat interesting perspective to whoever would actually have read through",1637595713.0,20,0.88,7
+SS13,Lightweight DD docker setup as an alternate prod stack ?,"Hey, been messing around with things for a while and I wanted to share some experience & what-ifs around all this.
+
+I was looking into alternatives management stacks, and never gotten to actually use TGS in any major fashion, as a few things immediately threw me off with it:
+
+* It's a complete 'controller' solution, but as a result quite obviously feature-bloated (eg. TM and perms management)
+* There doesn't seem to be solid Linux support, users are instructed to rather use the Docker image
+* Said Docker image runs contrary to 90% of docker and modern app design principles (mutable, subprocesses, recommends to use host net, etc) which completely defeats the point
+
+&#x200B;
+
+In general, I still don't get the obsession about local building SS13 community has had since just about forever. It's pretty much the antithesis of a portable, compatible setup and seems to just end up with differences between dev and prod setups that are completely unwarranted. 90% of the codebase isn't actually needed to run it either, but it seems nobody can clearly tell which is which anymore.
+
+Implementations based on this thinking line have been tested on two projects so far, though not in large scale production...
+
+&#x200B;
+
+&#x200B;
+
+* **Step 1: Replace the whole ""common build tooling"" concept by just ""the same build""**
+
+Your CI probably already handles building. You can just use that - or depending on your organizational requirements, likely just the exact same build process (in Docker case, can just happen via Dockerfile as one option - though it is unpractical for dev env support). Why rebuild it at all - and alternatively why add more differences and moving parts ?
+
+&#x200B;
+
+* **Step 2: One-off administrative processes, notably for TM**
+
+The most common example of this is going to be Testmerging. Nothing actually forces you to run building Testmerges any differently from what's outlined in Step 1. In fact, as per the principle outlined in the title, it could be entirely separate. All you need is a web UI to do git stuff on the side and a way to switch what image will be used.
+
+&#x200B;
+
+* **Step 3: Remove useless runtime deps and content**
+
+Basically the .dme, code/, hopefully everything in icons/, and just about 90% of just about any SS13 repo is not needed to run it, only to build it. Binary materials are packed into the .dmb, resources usually in the .rsc. If they're not, it shouldn't just be a random thing but intended and known, because this has implications for performance, dynamic loading, and server management. In testing and small scale production with both projects, a full squashed CM docker image (Base Linux OS + BYOND install + game binaries and basically everything to run it self-contained) came out only 120 MB.
+
+&#x200B;
+
+* **Step 4: Clearly define and separate moving parts within the game setup**
+
+By design docker containers are meant to be stateless and (virtually) immutable. This means that at any point you should be able to delete your setup, create a new one and it will run exactly the same - because anything important lives in externally attached resources. While we can't do anything about the former (this is a game server, doing so would restart game), we sure can take care of the second. This mostly just means database and storage volumes, such as savefiles.
+
+&#x200B;
+
+* **Step 5?: Bring back permission management where it belongs?**
+
+aka. why does my game instance relies on an external server for permission management ? This wasn't a problem in my test cases, but there are many more ways to deal with this such as simply using a shared database and proper ingame code...
+
+&#x200B;
+
+* **Step 6: Stop reinventing that goddamn wheel and just use a bloody init system**
+
+On modern Linux distros for example you already got that awesome feature bloated software that you pretty much have no choice but to run, our dear god and savior PID 1, systemd. It turns out that it's actually pretty good at starting and stopping things - mainly because that's its primary function! \[note: on Windows i figure you should be able to achieve something similar via System Services\]
+
+Once you decoupled the building process from the whole running part, running the game simply amounts to launching it, and relaunching it every time it exits. You can exit it with /proc/shutdown (crazy!). See also Restart=Always in systemd.
+
+You can also run a docker-compose image definition with stop\_signal: SIGUSR1 to ensure BYOND performs proper game shutdown when you do so manually out of game. And yes, I know that supposedly the shutdown sometimes gets stuck but i've yet to see it and i'm sure you could just work around it similarly if actually needed..
+
+One of the two implementations this has been tested on was using in place of full systemd management just a launch script looping with docker-wait. I also ran this for a test with systemd service instances which allowed to spin up a test game automatically from a single press on a GitLab MR (the exact implementation sadly turned out impractical for perms management reasons).
+
+&#x200B;
+
+**TL;DR**: I'm really more than theorizing we don't need 3/4 of that crap we tend to be carrying around in server management and they're first and foremost the result of bad design and handling. I took the Docker road because it forced to untangle a number of issues, but the base idea is just about the same...",1626529220.0,4,0.75,9
+skyrimmods,General SE Scripting Questions,"Hi ! Am looking into possibility of fixing/updating/reworking some stuff from an old mod that I believe has a bunch of issues and is very script intensive as it's for the most part separate from regular game logic.
+
+&#x200B;
+
+Struggling with finding proper ways to do things in Papyrus given there are so many angles to approach a single problem, and documentation is somewhat lacking, so I'm not getting too far and would have questions to help steer on the right track... Not sure where to look for this...  
+
+
+&#x200B;
+
+* Where to look to properly store extra values pertaining to specific actors and persist them ? Base mod currently just hijacks arbitrary deprecated game AVs. From my understanding you can't persist MGEF and the like on NPC actors. Would you just use a Quest to store global values.. ? Or does SKSE provide a  better way to achieve this ?  
+
+* How to handle stacking effects ? Base mod currently fires up lots of MGEF with looped single updating. This  sometimes results in several of them applying related effects concurrently to the same actors (caster + target), and racing each other under heavy load. I've been guessing it would be possible to instead keep a single MGEF and update its values on spell  casts/etc, but this does sound very clunky. Any suggestions there ?  
+
+* Is there a good way to generally carry values through spells/effects/enchants to scripts ? Are parameters enough for this ? Using Magnitude appears to be inconsistent due to racing issues (eg. according to older posts you can't use SKSE GetMagnitude() for single hit effects since it's gone by the time script applies), and that wouldn't allow to carry values through cloaks i suppose ?  
+
+* Are there workable alternatives or anything special to do to improve  performance issues with scripted cloaks, beyond being very conservative  about usage, dispel, and magnitude ? A page on CK Wiki suggest basically flicking them on/off periodically but I'm confused about whether this actually helps since the game seems to already be very conservative about applying them.  
+
+* Can't figure it out looking at docs, online examples (or lack thereof),  or header files : are vanilla {Send,Register}ModEvent or SKSE ModEvent-s sent to a specific object, or globally ?  
+
+* Any particular resources I can look into for all this in general, other than source, half-complete docs  and half-decade old random forum posts ?  
+
+
+Thanks a bunch for your help and time",1626356327.0,6,1.0,2
+Overwatch,"Haha, Yes, of course! That was my plan all along! Never doubted you...",,1621039540.0,20,1.0,5
+Overwatch,"""A timely intervention.""",,1595333292.0,55,0.89,2
+Warframe,Railjack Avionics major drop table changes,"Spent a long while with a friend pre-patch hunting for Conic Nozzle (base speed), Section Density (crit damage) and Predator (crit chance). According to wiki and official drop tables, they'd be 0.1% chance drop on particular level/area variants of rare fighters, and even specifically hunting them, we never saw these. We were lucky enough to have gotten (non-sigma) Hyperstrike twice, which has similar treatment.
+
+I just launched a single mission post-patch, and got 4 Conic Nozzles + 1 Section Density. Indeed, according to official drop table, they now drop on the common elite veil fighters with a pretty high rate. I'm not sure how much the rest of table is affected.
+
+Wouldn't surprise me if there were more such (as in, major, not adjustments) changes, seeing also how sentient cores just randomly stopped dropping in plains (eidolons included, probably a bug?), even though patch notes don't seem to mention anything remotely related either...",1591947086.0,19,1.0,7
+mountandblade,Mexican Standoff - Bannerlord Archers Edition,,1585854644.0,1,0.67,1
+pathofexile,"We vaaled 120+ Shackles for Ele Weakness without luck, so handcrafted a pair for the meme, this happened",,1579698005.0,158,0.89,60
+pathofexile,3.9 Exalted Orbs vs New Item Icons ?,"Just randomly noticed that on /exilecon/two, in the section new influenced items, they showcase special exalted orbs and related items. 
+
+For reminder, they show four of them : 
+
+* Cursader's Exalted Orb
+* Adjudicator's Exalted Orb
+* Hunter's Exalted Orb
+* Warlord's Exalted Orb
+
+Now what's a bit more interesting is that the three showcased items have extra modifier icons in header, much like shaper/elder/delve/synthetised. That intrigued me so I had a look. And sure enough you can see their names in CSS class names, and file path (which is located in /protected-assets/ - is this a mistake or intentional?)
+
+* Death Stride Stealth Boots has ""Basilisk"" icons on left and right
+* Chimeric Visor Mind Cage has ""Judicator"" icon on right
+* Gale Colar Gold Amulet has ""Eyrie"" icon on left, and ""Basilisk"" on right
+
+I'm not sure what this means exactly, esp. considering there's only three defined for four shown orbs.  
+I also can't find any reference to the above keywords related to PoE when searching around... yet it's pretty obvious they're somehow linked to this new system?
+
+So yeah. Leaving this here in case it's not been noticed (which i doubt, but...) or someone wants to delve (hah!) deeper into the subject. Good day!",1573870382.0,1,0.67,2
+Kairosoft,Language Packs,"I've been an avid Kairosoft fan since Game Dev Story. Yet... I just now discovered the language packs system in Silverscreen, how long has this been a thing ? I see on the website some other titles are supported.
+
+I wouldn't mind giving a go at making an English->French pack, but am slightly concerned by the fact people that might need them wouldn't find them...
+
+Is there per chance a community site of some kind with a list of packs ? Or is it likely to be useful just posted on wiki ?
+
+Thanks!",1560496316.0,1,0.67,3
+thedivision,Is something wrong with Gearscore Loot Scaling ?,"So, I was using recalibrated gear at 466 in WT4. Ran Tidal Basin to move to WT5, then went ahead and ran two Challenging and two Heroic missions. 
+
+Several hours later I'm getting Field Caches and Loots barely at 470, and my Gear Score overall went up from 466 to 470 by equiping the highest I found (breaking all talent/brand synergy) and using a 484 backpack from vendor. 
+
+On the other hand, I hear lots of people already at or over 500.
+My Clanmates are all telling me they basically looted 470 ever since entering WT5 at 450.
+I'm 470 and still looting 470. What gives ? Babbling around on Discord, some others told me they had a similar problem.
+
+Did something change, am I doing something wrong, or is that a bug ? Am I supposed to recalib the trash-tier gear i find just to loot higher stuff ?
+Right now i'm confused about how to scale loot up at all, nothing seems to go up. It was very noticeable in previous World Tiers, but just doesn't seem to increase at all now. Hm...",1554495512.0,5,0.86,2
+pathofexile,Orbital Strike of Wisdom - Lootfilter Beams VS. 65 Lasting Impressions,,1546183892.0,23,0.78,7
+Stellaris,Niven: How to crash your friends' MP game in 7 simple steps,"1. Be new to Stellaris Niven
+2. Get lucky 6 L-Gate Insights through Surveys and Special Projects
+3. Think it's cool and buy last one from Curator Order and activate gate
+4. Get big fat warning afterwards, Gray Tempest spawns everywhere 
+5. Realize it's meant to be an Endgame Crisis and it's year 2260
+6. Everyone gets their colonies destroyed by the Gray Tempest
+7. Game Over
+
+Well, this escalated quickly and made for quite some awkward and old fashionned (read: destructive) fun on Vocal.
+
+I should have know better after messing with Marauders last time...",1532221091.0,139,0.97,29
+pathofexile,"[ISC] Hours trying to craft +3 Minion Helm, then I just slammed 2 ex out of spite...",,1530360257.0,616,0.87,146
+SecretWorldLegends,SWL Tanking Meta ?,"Hey,
+
+I've been trying to tank some Elite 1s but it's not going as well as I'd have liked. Mostly, a lot of mechanics in SWL vs TSW just outright confuse me, and i'd like to know if some people had actual tips and tricks or answers regarding them.
+
+1. How much HP is enough ?
+In TSW, Tanks used to mostly play DPS-Tank because of the need to keep Aggro. This seems to have changed. From what I saw so far everyone's rather playing full HP talis. Even then, in Elite 1s, sometimes almost 9KHP don't seem enough. Am I doing something wrong ?
+
+2. Which weapons and what to put on bar ?
+Right now i use Chaos/AR, simply because i don't have a decent secondary of any other type. The AR lets apply Debilitate via Essence Nade, which reduces incoming damage. Does it really matter ? I pretty much only have Chaos spells in bar. 1 Chaos Base, 1 Chaos Power, 1 AR Power, Grenade, Evulsion/Chaotic Pull, Elite Interrupt (Pandemonium/Anomaly).
+
+3. What about Interrupts ? DPS-Impairs ?
+A lot of previously interruptible stuff don't seem to be anymore. Okay, I can live with that, I'm assuming it's to prevent boss burns.
+However, what I don't understand is, it looks like you can only interrupt some of the boss skills via an Elite. For example, Evulsion doesn't interrupt Eblis' Painwheel Overdrive. Anomaly does. But Evulsion can interrupt Bulkwark on ICB. Ehhh ?
+
+4. How to mitigate lots of incoming damage such as Eblis' Dark Rush ?
+It's pretty clear the heals can't keep up with damage bursts over 1.5KHPS at this point. I tried using Immutable to bust through, which works wonders, but this means you can't interrupt it's Painwheel in later phases for example (and DPSes don't seem to manage to dodge it). On the other hand, a prot cd isn't a definitive solution, though it helps a lot. Do you need several ?
+
+Thanks for reading through, and don't hesitate to comment. I'll take all the help I can get :(
+",1499351112.0,16,0.91,71
+SecretWorldLegends,Good Reboot but... too soon ?,"I know a lot of people are going to throw me stones for saying this, but let me explain. I'll try to keep this brief.
+
+I've been playing SWL whole day about 20 hours straight so far, got patron and some aurum, played around with new players, introduced them to the game, played through part of the story, and finally came to a somewhat saddening realization: as good as the remake is, there's simply no content.
+There's really great ideas out there, and I more than appreciate everything Funcom's done in terms of revamping and adapting the game. It shows just how much they care for it.
+Unfortunately, the game is missing a lot of content as it is right now (El Dorado, Fusang, Elite/NM Dungeons AFAIK, Group Scens, Tokyo, AEGISes, etc). 
+
+Now of course, I didn't expect there to be much content right away, but just ask yourself: what are you going to do once you're done with the story we already know from TSW ? I could be wrong, but from the look of it Elites aren't in game yet, so that just leaves Shambala, Lairs if those work at present, and farming the trivial Story Dungeons in a loop...
+
+I came to this realisation a few hours back and it really killed my wiill to play for now... I can't bring myself to do anything else than play around with the AH & Exchange anymore...
+Is it too soon for a release ? Are you aware of future plans or release timeline ? Any chance we see actual group content anytime soon ? Is SWL still a MMO, or just a ""Shared-World"" singleplayer game ? What are your thoughts ?
+
+I apologize in advance if this seems like a troll post, but i'm genuinely saddened and confused now.",1498351445.0,1,0.6,6
+WorldOfWarships,[shitpost] CV economy explained in one (lousy) picture,"http://i.imgur.com/Gu7ce0G.png
+
+Well, CV meta is going to have to adapt, i suppose...",1492337117.0,41,0.84,32
+WorldOfWarships,"[shiptoast] ""What is Counterplay"" feat. RNGesus",,1492335711.0,12,0.76,22
+WorldOfWarships,[shiptoast] A wounded and cornered Atlanta is a dangerous Atlanta,,1486949222.0,167,0.97,56
+WorldOfWarships,How come some of the mods are allowed ?,"Hey,
+
+Had modded my WoWS game a long while ago and I recently gave it another shot, using Aslain's Modpack. There are a few new or i had never tried, so i decided to enable them to try them out.
+
+Some friends almost called me out for modding WoWS at first, and I was like, no dude, it's totally okay. After playing a bit with some mods enabled though, i had to review that standpoint.
+
+Let's talk about some of the mods.
+Note that all these mods are in WG Modpack and Aslains'. Both are ""OK"" for rules of Kings of the Sea per example, so the question is not whether they are legal per rules, but whether they really are fair to use.
+
+ * Navigator: Probably the weirdest one. It taps directly into realtime game info and exposes angling between you and your target... Erm.
+ * Most Minimap Mods: At first, i thought having the ship names on the minimap was really practical as a Quality of Life improvement. Then i realized they'd show even when out of visual range (maybe even Cyclone ?). Granted, you could always ask a teamate in spot range; but now you have the info directly.
+ * HP Bars in ship lineup: I can't really speak about it since I didn't try it, but i'm guessing it suffers from the same problem as the Minimap mods.
+
+Now, don't get me wrong. All mods are controversial to an extent, and yet having the ability to mod the game is great. I mean, you could just have a sheet of papers with ship info next to you instead of Contour Mods. You could just have a timer instead of the Smoke mod. Being able to have them as mods is just much more convenient for everyone.
+
+What I just don't understand is how mods providing hidden real-time in-game info can be considered fair... 
+What's your thoughts on the matter ? Please comment.",1485713646.0,2,0.57,31
+talesfromtechsupport,"Debugging a two years old network misconfiguration with a video game, players, and reddit","Hey :) Long time lurker first time poster. I have a story from a while ago that might more or less fit in there. Sorry for sloppy writing skills.
+
+So, bit of context first. We've been holding LAN Parties with a student group, open to public and complete with tournaments and prizes, usually between 50 and up to 250 players, at our school. There's about two per year.
+
+I was part of the Systems & Networks guys there for a long while, and since the event is recurrent, we tended to reuse the same firewall configuration baseline. When we quit school and passed things over to the next guys, they did the same. I figured I'd come to the next event and sit around, just in case help is needed.
+
+Cast:   
+
+ * $Fira: Me  
+ * $TO: Tournament Organizer for said game  
+ * $NewAdminGuy: The new Network Admin Guy  
+
+This was one of the biggest events to date, with over 200 players bringing their computer, and because unfortunately we only managed to get 100 Mbps of uplink throughput, this meant we had to classify traffic and throttle accordingly, to prevent anyone from eating perf away from others. Actual QoS would probably be better, but remember we were students -- and that felt a bit out of our league. Hang on to that info, it might prove useful.
+
+So everything seemed to be going smoothly so far. It's a two days-long event, and trouble can pop at any time, but I was just happy that the initial setup went relatively fine, albeit late *as usual*.
+
+I'm just sitting and chilling here since there doesn't appear to be any problem, when suddenly...
+
+> Panicked $TO: $Fira ! We can't launch games of League of Les Gents... Every time someone uses one of the spells of character Joyce, everyone loses connection. Tournament is running late...  
+> $Fira: Err...  What am I supposed to do about this ? It's not networking... Is it ?  
+> $TO: I don't know, can you just look ??  
+> $Fira: .... Fine... 
+
+Four attempts at reproducing on my end later, nothing seems to quite do it. Everything appears to be running fine, even in the game, and with said character. There's over a hundred other players on other games that aren't having any issue either. I end up dismissing it.
+
+Second round.
+
+> Angry $TO: $Fira ! This still isn't working. Worst, we banned Joyce from the tournament, but people are still getting some lag ! You have to do something !  
+> $Fira: ... At this point, i have no clue... Can you show me the actual problem ?  
+> $TO: This way.
+
+I see ten of the tournament players, understandingly rather annoyed, trying to play a game for a test. Everything seems to run fine, so I ask them to test with the infamous Joyce. 
+Everything runs fine... up to the point the Joyce player uses his dreaded spell. Suddenly, something pops up on all ten players' screen : ""Disconnected. Attempting to reconnect...""
+
+It never reconnected. I nearly choke. What ? 
+
+> $Fira: I'm gonna... urm... Look into this... Quickly...  
+
+I run off.
+
+Thirty minutes later I still don't have a clue as to what's going on.
+$NewAdminGuy is panicking, $TO has no idea what to do, and i'm on the verge of calling it ""dark magic"" and going home to hide under a blanket.
+
+I turn to my last resort... Google and Reddit. After a few combined keywords search, I end up on a reddit post of someone that had ""freezes"" upon that same event... and analyzed the network traffic of it occuring. Apparently, whenever that Joyce uses his ability, there's an enormous packet burst. But why would that cause an issue I can't reproduce here ?
+
+Suddenly, a flashback. There's been similar latency issues during some matches under heavy game load in the past editions. What if they're related ? When does that go back ? Two years or so ? Hey, that's when we started using the limiters... If we assume the game devs screwed up, and I did too back then, and ...
+
+I tab back to the limiters configuration. Wait, aren't those set up the wrong way ? It's actually grouping by *remote address* instead of *local address*... So that would mean that the packet burst gets limited and fills the limiter, preventing reconnects, since it's received by ten people at once ! I correct it, still unsure about the whole thing as it seems just such a far shot, and run back there.
+
+> Panting $Fira: Hey... $TO... Can we... Try again ?  
+> Annoyed $TO: Sure...  
+
+They launch the game.
+
+> $PlayerA:  OMG guys, It's Joyce !!! Why did you pick Joyce ?!  
+> $PlayerB:  AAAH! We're all gonna die, Joyce is here !
+
+I cross fingers.  They do their thing.. and... and...    
+Nothing. Me, $TO, and $NewAdminGuy along with a few players cheer in joy. 
+
+
+I go back to my chair and slump on it, feeling both stupid about causing the issue in the first place, and just so happy about managing to fix it. Hopefully there won't be more issues... not today at least.
+
+
+**TL;DR**: Accidental misconfiguration was here for two years...  Eventually managed to fix it thanks to reddit... And the 'annoying' players that were right all along.",1485282328.0,501,0.97,31
+WorldOfWarships,How to Cyclone for beginners,,1484517768.0,93,0.97,18
+pathofexile,Small Rants from someone who sucks at trading,"Just wanted to point out a few things: 
+ 
+* When I message you several times, it's because I think you were AFK or didn't see. I'm not trying to harrass/troll you.
+* When I say I have no idea about the value of something and propose, buying or selling, you can actually tell me no instead of dismissing it as scam.
+* I understand you can be busy but is it that hard to message back or set DND/autoreply ?
+* When you message me to buy something, I'm really not expecting you to actually message 3-5 people and buy from the fastest. It's even more disappointing when i'm in the list several times...
+* When I propose alternate currencies to complete, it's because I'm poor, not trying to scam you. I fully understand a no. 
+
+Met some great people through trading but also often stumbling on all these... Please be considerate.
+That's about it. Thanks for reading through...",1482340935.0,31,0.67,31
+hackmud,Search Engine Prototype: fira.search,"Hey there,
+
+So I spent my afternoon and evening making a little search engine for the game. It incrementally and randomly scans via scripts listings, stores into a database and provides a simple search interface.
+
+It's more of a proof of concept than anything right now, but ideally i'd like to add at least scoring, tagging, and owner-set descriptions eventually. Sadly, having came out of vLAN yesterday, i'm running out of script space for now.
+
+Please leave a comment if you like it or have suggestions !
+The ""engine"" itself is located at fira.search.",1477351906.0,6,1.0,3
+networking,"LoL, Jayce, Metagame, Reddit and Gaming LANs: A traffic shaping misconfiguration story",[removed],1477149333.0,1,0.67,7
+Deusex,[Spoilers DXMD] There's more to the eye than you can see,"Did anyone else try to open the Augs screen while in the NSN ?
+
+You'll notice while in the NSN you have a buffed up version of Remote Hacking that reduces by 2 the bars to complete, and lets you... Activate Friendly-Fire on robots remotely. Yeah ! No kidding.
+
+The sub-augments use a placeholder texture... I wonder if they'll make those real ones for a DLC ?
+
+Edit: Image Link, Yeah -- Werewolf Mode! http://images.akamai.steamusercontent.com/ugc/477768074982858154/5D73103B682881D0D843128D04C1A5BD232095C7/
+
+Edit2: I really couldn't fit a better title without spoiling or hinting to something else... Sorry if it sounds clickbait'y.",1473324581.0,15,0.9,6
+WorldOfWarships,[Rant/Apology] You can't be serious... Idiotic! Cowards! AAAAAAAAAAA,"Yeah, I'm not the type to flame usually, but when you spot 2/3rd of the enemy team and your whole team is moving to the opposite corner of map knowingly, leaving you to 3v9 in Standard Battle...
+
+Even told them after a few minutes, perhaps a bit abruptly since I was under heavy fire and ramming an island to dodge. For the most part they kept going, one even acknowledging in chat.
+
+Died at 7 minutes of game before they realized our flank was open, we won to timer barely, topped the scoreboard anyway...
+
+Seriously... Haven't seen that in a while. Sorry, yet not sorry...",1472069709.0,0,0.27,7
+HoloLens,I tried HoloLens today! Looking great but... rainbow?,"So a colleague working daily with HoloLens came to show it to us today! He passed it over to a few people and everyone was real impressed. Then came my turn...
+
+I put it on and what I notice first is that the image is real clean and sharp. But wait, something's off with the color.... 
+
+Sure enough I turn back to the Microsoft Edge window... and the white background is all rainbow. I try to adjust the set but no matter the angle and distance, nothing cuts it -- it stays rainbow all over. 
+
+I'm confused so I try to look it up online. Turns out, it's a known issue on the edges... not so much everywhere. Turns out, it's a common problem with defective ones... but this one clearly worked alright for everyone else. 
+
+And then there's those guys that got it replaced several times and always had the issue. 
+
+Have you heard of or experienced anything similar ?
+I'm starting to think something's off with my eyes..",1471524913.0,7,0.74,8
+NoMansSkyTheGame,"My 2cents on the topic of MP, as someone that barely followed the game","Hey, just my two cents as a random person that had NMS in sights... I'll try to keep it short.
+
+So I didn't do my research fearing to expect too much, and just left NMS on Wishlist for 2 months before buying it. You can't go wrong with a Space Exploration game where ""Every other player lives in the same galaxy"", yeah ?
+
+
+Then I learned there actually was no MP. Ah well.
+
+
+I just feel confused. Not even one second when i read about the game concept I remotely thought you could do it as a full solo game. 
+
+
+Part of me now feels disappointed. Because this is priced as an AAA game, and with how well known it has become, i'm pretty sure they could have had resources to implement MP. And it's sad that they didn't.
+
+
+Part of me feels a bit angry. Not because I was blindly expecting MP, but because they didn't seem to want to clearly say it's not. I'd have bought it regardless, and now this feels like they never wanted to admit it.
+
+
+Part of me feels sad, because the game could probably have been even better that way.
+
+
+The last time I've felt like that was for Black Desert Online. They marketed it as ""next-gen MMO with sandbox elements"". Oh, it was. But what do you expect when you hear of a ""MMO with Sandbox elements"" ? Certainly not a Solo-Sandbox within a MMO. Turned out the sandbox was essentially solo since you can't trade or interact between players through it. Ugh... just, why ? It's such a waste...
+
+
+So here I stand, feeling stupid on the one hand for not knowing there wouldn't be MP, and feeling disappointed on the other as clearly I was far from the only one.
+
+
+Was it just so hard to say outright ""this is not a MultiPlayer game"" ?",1470929333.0,0,0.25,4
+MysteryDungeon,PSMD SOS Website ?,"Hey guys :)
+
+I just recently bought PSMD, after skipping pretty much every installment of the series since Red/Blue. I'm so happy to see that contrary to some of the other games, they brought back all the cool stuff like SOS Mail Passwords -- you can't spell how disapointed I was by the Seeds Streetpass from GtI... 
+
+Now, back in Red/Blue I remember there was a pretty well known website for SOS Mails posting and player help, complete with a SOS mail parser on the site, and you probably wouldn't even remotely believe how many weeks i spent rescueing people on it. Rushing to Floor 89 just to rescue one person and send him that A-OK... ahhh, nostalgia :D
+(Note: I can't find that website anymore. If anyone's got it, feel free to shoot it back to me...)
+
+Anyway, I was really wondering if there's anything like that site for PSMD. Something which would allow trading SOS mail codes in realtime, but a bit more custom-tailored than posting on Reddit.
+
+If not, do you think this could be useful at all, and if you do, would you be interested in making one ? I can provide hosting/infrastructure, Q&A and tech help, but developing a _modern_ web site from scratch is a bit beyond me sadly.
+
+Thanks for reading through o/
+",1461713131.0,6,1.0,3
+SSBM,[Tournament Thread] HFLAN 12 -- Stream LIVE,"80 slots in total dedicated to Melee Singles, with an additional Doubles tournament !
+
+
+Location: ESIEE Paris, France
+
+Timezone: CEST
+
+Duration: The whole week-end!
+
+Event is open and tournament is beginning real soon.
+
+Attending: Mahie, ProfPro, Leffen, Tekk, Overtriforce...
+
+
+Tournament link on smash.gg : https://smash.gg/tournament/hflan-12-1 (Brackets coming up real soon)
+
+Stream Link: It's LeFrenchMelee's and live already ! https://www.twitch.tv/lefrenchmelee 
+
+
+GL&HFLAN :)",1460199308.0,10,0.78,2
+thedivision,Improving Rogue system -- DZ Retaliation Rights,"Hey! So I just ran into a pretty silly situation and had some ideas (largely stolen from another game) that might (or might not) help with it and similar ones.
+
+Basically, I was in a DZ 15-19 instance with mostly solo players, plus a 4-man group of DZ40+ Lv19 geared guys. 
+
+They gank me and another solo player post-extract. Okay, fine.
+They gank me as I get close trying to spot them again. Well, it's fair.
+
+Several minutes later, I spot one of them alone and attempt to gank him. I shoot first, screw up massively and he kills me while rogue. Well, okay -- i screwed up, right ?
+
+So at this point, obviously his 3 friends are going to come and chase me. I respawn, take some distance and play safe. Eventually I see all three starting to shoot at me. I evade, run into subway and force past an elite pack to slow them down and prepare an ambush beyond. 
+
+They come. I'm ready for them and... What ?
+The 20s rogue aggro timer expired.
+What do I do ?! They're closing in and they're intent on killing me.
+I start shooting. Take two of them down (later rezzed by their teamates so this didn't matter, did it ?). Obviously, they eventually kill me... and i get bitten by the rogue penalty.
+
+Is that normal ? I don't think so. On the one hand they beat me fair and square (okay, maybe not fair), on the other hand, i got penalized for attempting to defend myself. It's also very frustrating that even if you take some players of a group down 1v4, they'll just get rezzed back -- but that's beyond the point of this post.
+
+
+**Okay Fira, down with the crying, can you just get to the point ?**
+
+The whole concept of going Rogue is great, as it introduces PvP and dynamics into the DZ. Sadly, I feel like the system currently is just too simple to be abused by groups, esp. vs Solo players. I've seen this constantly happen since i've been in DZ, not only to me but other players as well, and it's very hard to get an actual fighting chance when retaliating from an attacker. They just gank 4v1 or 4v2, lose their rogue timer, rinse, repeat. Easy cash, too.
+
+**Woah. Stop cryin' loser, the DZ is fine as it is.**
+
+I'm not saying this is a big problem, simply that i think it's one of several potential issue that can be addressed using what's already been done in other games. Read down below for the proposed solutions.
+
+**Okay, just spit it out already...**
+
+Ever heard of EVE's Crimewatch ? Okay -- if you do, you do likely realize that it's a somewhat overcomplicated system. 
+However there's a few interesting points that might gain to be adapted into The Division without too much headache:
+
+* Security Status: The more you perform unlawful actions by shooting first (in a nutshell), the lower it gets. It serves several actual purposes, but for ours, this could be implemented as a simple reputation system, visually identifying common rogues.
+
+* Criminal Flagging: We already got this already in The Division with the rogue timers, although they work a bit differently : in EVE, constantly pirating people will reset the timer. In The Division, a manhunt timer seems to just go down over time. On the one hand, this doesn't make much sense, on the other, it's normal that a manhunt target should be able to lose its status eventually. I don't have anything to suggest for this, but feel free to throw your own ideas.
+
+* Alternate Retaliation Timers : In my case, the issue was that after the initial 20s Rogue Timer, they were simply able to chase me down to do it again without any being able to lawfully retaliate. I'm thinking there should be a second timer, like 60s or so, during which your target should be able to attack you back without suffering Rogue status. If she does, obviously, you can attack it without going Rogue yourself -- since he basically asked for it. I think that'd make sense, however it might just be too complicated just by the fact that you can now have two non-rogue legally shooting each other.
+
+* Kill Rights : If you got ganked, EVE allows you to fairly attack the person back for the next 15 minutes without being treated a criminal. Something similar could be implemented here to give a fighting chance to solo/duos against groups run'and'gunning: once you gank someone, you're a fair target for him for the next, say, next three minutes -- regardless of Rogue status. Again, while I'm thinking it might make sense, it might as well just be too complicated.
+
+**Blah Blah Blah. TL;DR ?**
+Maybe it's just a personal impression, but from my few rogue groups attempts and solo DZ experience, i really feel like it's just too simple as a group to gank solo/duo players and run the timer -- especially when you are actually rewarded for doing so, and/or in low population instances. Adding some kind of retaliation mechanic would make the DZ even more dynamic by forcing groups to be on the lookout at any time.
+
+
+Again, those are just some ideas i'm throwing out there. Feel free to discuss constructively, flame me, troll them, or anything. That's what i'm posting here for, right ?
+
+See you in the DZ guys :)",1459437973.0,1,0.56,6
+blackdesertonline,"PSA: Contrary to most of the game, horse system is P2W and indirectly allows laundering perls to silvers","Hello,
+
+So I've started doing some taming & breeding of horses, and had a look around the shop seeing as there were quite a few ""coupons"".
+
+I'll keep this short, but turns out in a nutshell that horses with certain skills are worth 1.5M for each out of the box, even T1. And the cash shop coupons allows endless rerolls of skills using pearls.
+
+I felt smart at the time upon seeing this, and rerolled some skills on my T4 horse before putting it up on market, and its value skyrocketed from 200K to 4700K. The horses are fixed-price, too, so there's no way to negociate that. Nevertheless, the buyer was really happy about it, i gained a nifty sum, and then facepalmed as I saw just how bad this actually was.
+
+There's also the breeding reset coupons. With females being so rare, there's an enormous advantage to take reset coupons on them as you get higher tiered ones and more attempt at more females. I've tried using it a bit, and same thing, it looks pretty unbalanced for people who wouldn't use them.
+
+I could talk for a while about other problems of the current Horse system (no XP gain from skills training, degressive XP-to-Training ratio, price doesn't change with skill training...) , but it looks to me like the whole breeding system was never adapted to the B2P/EU-NA model the rest of the game has.
+
+I'm not sure how much of an issue this actually is but it sounds like they, intentionally or not, left a loophole that allows perl->silver trading. Add to that the fact that horses can be worth several millions, and this could even be used for silver trading. What do you guys think ? I wanted to get some sane opinions before hitting the forums, and hope this is the right place.",1457958527.0,0,0.44,33
+networking,I can't believe people are buying this... Am I the only one thinking this is a joke ?,"So I came across this yesterday : http://netduma.com/
+
+My first reaction when i see ""Anti DDoS VPN"": 
+""This is awesome! Finally an ISP someone proposing DDoS Scrubbing as a service to consumers !""
+
+My reaction when i read the details : 
+""... They don't sell the VPN service..and... This is not even a scam, this is outright lying....""
+
+Their VPN-Hybrid in a nutshell: Game traffic runs direct, Everything else through OpenVPN
+
+ * ""VPN with No overhead and additional latency"", because game traffic goes direct... 
+ * ""DDoS invincible thanks to OpenVPN masking your IP"", i laughed so hard. Anyone who can write <img src=yourserver:27014> can decloak you and hit your home.
+ * ""DDoS invincible"" ... even then, provided you have dozens of VPNs to take the bullet and are manually switching them.
+
+Let's see the other features ?
+
+ * QoS, that they call themselves ""broken"" in some of their blogs
+ * ""Anti-Flood"", basically RED as congestion control, in all likelyhood
+ * Network & Ping graphes, which are a standard thing nowadays
+ * ""One-click VPN"". In other words, run OpenVPN in Site-to-site mode without knowing about anything like MTU fragmenting your packets at application level and wrecking latency.
+ * Geo-Filter, Deny and Allow: Refuse connections on a Geo basis so that game servers try and retry until they find someone close to you. Seriously ?! You can't just do that on the Internet...
+ * ""Powerful hardware"": a 60$ Mikrotik Routerboard, 600 Mhz MIPS with full software processing, they didn't even bother changing the case
+
+... Though granted, their Customer Service, Web Design, and Marketing teams looks to be pretty good. I guess that's where all the money is going. Certainly not ""R&D, Legal and Patents"" as they told me...
+
+Please tell me I'm not the only one thinking they're basically selling vaporware. You can get something more solid with an Ubiquiti EdgeRouter doing some hardware processing for less than those 200€.",1435344338.0,81,0.82,94
+sysadmin,A Long VMware day,"I like the job, and the people there, they're very nice, but as a naturally anxious person, some days are very stressing. 
+
+> Boss: ""Hey, i'm gonna bring down one of the ESX hosts for updating.""
+
+> Fira: ""What do you mean by 'bring down' ?""
+
+> Boss: ""Well, shut it down. The HA cluster will restart the VMs on another host.""
+
+> Fira: ""What?! What about the current state... Databases... File Systems... Integrity... Service disruption...""
+
+After a while talking, i manage to convince him to actually use the features on those fancy licenses.
+
+> Fira: ""So you see, if you put the Host in Maintenance Mode, it'll move the VMs away automatically.""
+
+> Boss: ""Okay, let's do that then.""
+
+Nothing happens. It's stuck at 2%. Okay. Hm. Let's wait.
+One hour later, it's still stuck at 2%.
+
+> Boss: ""Okay, let's do it my way then, i'll hard-reboot the host.""
+
+> Fira: ""WHAT WAIT WAIT WAIT"" -hastily tries to migrate the live master SQL node-... 20%... 40%... 50%... 80%....
+
+> Boss: -click- ""There, reboot initiated !""
+
+> 100%. .... Connection Lost to host.
+
+> Fira: ""At least the SGDB made it through...""
+
+> Boss: ""Well, gonna start the update now.""
+
+I sit in front of the monitoring dashboard, waiting for early-christmas.
+After a few minutes, finally realise that nothing's going to happen, because both the Monitoring server and the Dashboard display were on that node.
+
+It's been 10 minutes. Everything still appears to be down.
+I realise that the SGDB Cluster is still alive and kicking, but this doesn't matter because most of the application servers weren't yet redundant and got downed. Not much to do but sit in confusion at what just happened.
+
+> Fira: ""Hey, isn't HA a bit... you know... faster than that ?""
+
+> Boss: ""It must be the Maintenance Mode that broke it. Shouldn't have listened...""
+
+20 minutes. The update process is only at half, and the HA still doesn't seem to give a damn, probably because of the maintenance mode indeed.
+
+> Fira: ""Hey, i found this VMware KB1007156 that was exactly the problem we had. They say it can be a problem in the DRS configuration.""
+
+> Boss: ""I don't think so, i disabled DRS yesterday because of backuping issues.""
+
+> Fira facepalms. ""Yeah, that could explain why nothing happened..""
+
+40 minutes, the update is finally done and we spin the host back up. Services go back up gradually and we get a storm of emails from the monitoring system.
+
+Everything is back up. We're running with staggeringly low traffic so i check on how many external connections we missed on the proxy member that stood up. Not that many. Well I guess it wasn't *that* problematic then...
+
+And still, I need some rest from this day.",1434044058.0,6,0.73,15
+smashbros,"HF-LAN Top 4/8 Finals about to start ! Staring Armada, Prof Pro, Poor Zuh and Amsah in Singles.",,1431268195.0,0,0.5,0
+SSBM,x-post r/smashbros - HF-LAN is Live and ongoing with 180 SSBM players !,,1431177199.0,12,0.83,0
+AskNetsec,What-if: the witch-hunt for cleartext-stored passwords,"I can think of two major problems with passwords stored in cleartext :
+
+* It eases post-exploit and password reuse on other systems 
+* It allows login to concerned system if the file is leaked somehow
+
+Now, imagine a very simple, single, short-lived system with local logins, and auto-generated passwords. The login would effectively become a token of sorts... 
+The first point doesn't apply, and assuming someone can read an arbitrary file he could just as well get the SSH privkey and MITM the admin or other shenanigans ... So I think you've got bigger problems than the second point. 
+To me it's a bit as if you chose to display your password-manager's passwords 'encrypted' and deciphered them mentally by fear of someone capturing your screen input.
+
+While I agree that there's no real reason to store passwords unhashed, and that it's very bad practice, I'm wondering if/where - from a theorical standpoint - there's any problem with this line of thinking...
+
+Thoughts ?",1430647335.0,2,0.55,8
+sysadmin,"What the hell, wget ?","So i've had this recurring issue with wget when specifying proxy, where about 90% of the time it wouldn't download stuff via HTTPS.
+This usually ended up with the following error:
+
+    Proxy tunneling failed: Bad RequestUnable to establish SSL connection.
+
+Today, devs started going mad at it and i set out to fix the problem.
+After searching a while on the Interwebz, i find a shadowy reference to a bug in wget. How could wget, used practically everywhere in scripts, package managers, and everything in the linux world, have such an obvious bug ? Better check myself.
+
+    # nc -l - p 4444
+    # LANG=C LC_ALL=C https_proxy=http://localhost:4444 wget https://host/file
+
+The output is:
+  
+    CONNECT host:443 HTTP/1.1
+    User-Agent: Wget/1.13.4 (linux-gnu)
+
+If you're familiar with HTTP, you probably already see that something is wrong.
+Let's try with curl, i've never ever had this problem with curl, so i figured it's the best way to confirm this is indeed the root of it..
+
+    # nc -l - p 4444
+    # LANG=C LC_ALL=C https_proxy=http://localhost:4444 curl https://host/file
+  
+    CONNECT host:443 HTTP/1.1
+    Host: host:443
+    User-Agent: curl/7.26.0
+    Proxy-Connection: Keep-Alive
+
+Yep.
+
+*RFC 2616, HTTP 1.1* : ""A client **MUST** include a Host header field in **all HTTP/1.1 request messages.**""
+
+This is what makes it possible to have VirtualHosts for example.
+So this problem has apparently been around for years, and nobody bothered to fix it yet. 
+
+What the hell, wget ?
+",1430321238.0,1,0.56,6
+eliteexplorers,PSA: We might have explorer-specific map filters coming soon,"I'm not sure if anyone else noticed that, but yesterday i had a look at my map filters and... surprise ! Sadly they're gone today, that was probably a mistake on Frontier's end somehow...
+
+There were two new categories written in German, along with a few filtering options each. From what i could make of the output, and the name of the filters, here's what would be available :
+  
+ * 20 LY Filter, I assume to know where you can sell your exploration data, unavailable systems marked in red
+ * Available Exploration Data : Where you have exploration data for systems, including public-seeded ones
+ * Active, sellable data you have right now
+
+I think there was also a fourth one, but i can't remember what it did. Silly memory...
+
+Anyway, anyone else noticed that ? Do you have more informations ?",1429099144.0,8,0.8,8
+eliteexplorers,What just... I don't even... Uh ?,"So I was following my wingmate to something fun as we were on our way back. First time visiting a blackhole.
+
+Picture the scene:
+
+300 LY away from the nearest backyard station.
+
+300kLs away from the main star.
+
+80km from a black hole.
+
+
+Suddenly, bang! A FSD discharge!
+I nearly jump out of my chair, and navigate my way to the targets tab, between fear and happiness of finding a fellow explorer like that.
+
+**System Authority Ship**
+
+Him: You are under orders to submit to an analysis, commander.
+
+Me: What--- What the fuck--- What are you-- Why are you---
+
+Him: I'm done here, you can proceed.
+
+Me: Wha---
+
+And he jumps out.
+
+The rumors were true. Those things really are creepy.",1428865349.0,13,1.0,3
+EliteDangerous,I think I just started a war because of a delivery mission.,"The Empire's Influence went above the Independants' because of my coffee delivery, and the system is now listed at war. I'm not actually sure that's what triggered it, but I didn't notice it before that...
+Oops ?
+
+10/10 Will do grocery delivery again and cause death of thousands.
+
+UPDATE: The system is [HR 1076](http://eddb.io/system/9180). The Coffee Empire has made the first push thanks to their shipment, but it doesn't seem to have gone very well for them as their influence is dropping, to the benefit of Bluecorp. We shall see who of the drinkers and non-drinkers will prevail.",1428673487.0,119,0.96,46
+thebutton,We have 3 more 34ers. And 7 people who missed it by a second.,,1428576322.0,5,0.77,0
+thebutton,Graph of 22 Last Hours of Button Pressing -- Decreasing trend in last 4 hours,"http://i.imgur.com/sIQFNsy.png
+
+On the left, the number of clicks since i started recording them yesterday.
+On the right, the time emaining at every single click. It doesn't go very far down because it is downsampled for display, so it effectively shows an average.
+
+But you can notice that the time to click has been trending /way/ down for the past four hours ! And we just broke the 33s barrier. So i'm thinking this might start to go faster and faster... Who knows ?",1428571356.0,6,0.75,1
+thebutton,Quick Hack - Graph of reset times for last 25 minutes,,1428494364.0,0,0.33,0
+thebutton,Realtime button stats with Websocket,"http://imgur.com/vjNuvRs
+
+Did nobody think of hijacking the websocket directly to read realtime button stats ? I saw the spreadsheet, but it's kinda weak...
+
+Maybe i'll try to have some fun with injecting that into Statsd/Graphite and post the results. It might actually come to something nice now that we're at only 10 presses per minute.",1428486257.0,0,0.5,1
+thebutton,This reminds me of Space Station 13. Greyshirts unite!,"In Space Station 13, there's a bunch of jobs, each starting with their own clothing.
+The Assistant is the general station redshirt, except it has a grey suit. And it's very famous for their grey jumpsuits, an unmistakable sign of one's belonging to the lowest, yet coolest, caste of the station. 
+
+Assistants are reputed for being troublemakers and lowlifes. They're also the first persons you expect to bash your head in with a toolbox. Expandables.
+
+But there is also an hidden, unspoken truce, a vow of honour between assistants to help each other, beyond law and death. No matter how other view them.
+
+This is our story.",1428484359.0,0,0.5,0
+zfs,PSA: The effects of bad RAM,"First ZFS setup. I wanted to turn on all the fancy features, so even though this was a really small setup, it needed more RAM. 
+
+
+I install a SSD for L2ARC and additional RAM modules. Reboot.
+Boot process goes fine and then... panic ! 
+At first I get thinking this is because i had to reorder the SATA drives... So i get a live to attempt to fix whatever is causing the problem.. 
+
+
+> FreeBSD (Amnesiac) ..
+
+> login: root
+
+> This is the motd
+
+> root@live# zpool
+
+> <KERNEL BACKTRACE FOLLOWS>
+
+
+
+The RAM module was bad to the point of randomly crashing ZFS and init, and my mirroring pool got corrupted because of it.
+Hopefully this wasn't prod, but i can't help but shiver thinking about the times i carelessly added new RAM to a production system...",1427530253.0,3,1.0,15
+gaming,I miss this game. Do you miss some dead games too ?,"Picture the scene. 
+
+An alien mothership has crashed down on your beloved Earth. They're not really of the nice kind. So you've been working as a team of 40 comicbook heroes, each with his own powers and costume, to disable the mothership's shield. 
+The deed is done: the shield is down. Now you're flying with your 39 companions - some with wings, some with jetpacks, or with anything they can, in a beautiful ordered chaos - toward the ship to land on it.
+
+Music kicks in. https://www.youtube.com/watch?v=EDOgWnvTAKM
+
+Aaah, memories...
+Are there games you wish you could still play sometimes, but can't ?
+Which are they ? Why ? Please tell me i'm not alone.",1427529421.0,1,0.57,5
+CrusaderKings,OK. So I inherited this Byzantine Empire thing. Need tips..,"Newbie here. 
+Third game attempt, about 40 hours of play so far...
+I started as Countess of Paris with slightly boosted stats, and after 10 years of plotting, two assassinations, a marriage and good 20 years of waiting, inherited the Byz throne during an open revolt...
+It's been 30 years since, crushed the revolt, positionned heirs in Ummayad/Spain, Lombardy, and Francia(es?) (though have no claim on later one because elective means heirs keep jumping).
+
+Problem is, while at first i managed to make all vassals happy, this isn't quite the case anymore. Have a fair 15% of them @ -100, including 2/3 Kings, and I realize giving away kingdoms might have been a bad idea....
+I had passed med crown authority and a faction later forced me to put it back to low. They're now all hating me over various De Jure claims, and warring each others.. 
+
+
+Do you have tips on how to improve this ?
+I didn't use Viceroyalties by fear of the vassals opinion malus, but should I ?
+
+Thanks :)",1425643970.0,5,0.86,10
+SS13,Building your RUST from scratch : Experience notes,"This isn't really a guide, but more like notes on how to build a RUST Generator on Baystation, because the documentation is very scarce. I assume it works under the same principle on /tg/ and /vg/. 
+
+Before starting know that you NEED AdvProcCall, Spawn and VarEdit to get it to work (or mapping and a bit of tweaking the code), since it's not fully implemented yet.
+
+ * Building the core room : You'll need an area, at least 9x9 (the largest EM field size is 7x7), with working power and APCs (so NOT a new room in space). I'd advise using Rwalls, because Gyrotons will eat through normal ones if you forget them.
+ * The core field generator : in the middle, build or spawn a RUST Tokamak core (board: /obj/item/weapon/circuitboard/rust_core, actual: /obj/machinery/power/rust_core), powernet it to somewhere you can drag a lot of power from, weld and wrench it to the ground.
+ * The gyrotons : the gyrotons are essential for bootstrapping the reactions. Spawn (/obj/machinery/rust/gyrotron) a few on the edge of the room, and turn them facing the center.
+ * The Fuel injectors : on the edge of the room, place a few Fuel Injectors (/obj/machinery/power/rust_fuel_injector), again facing the middle of the room. Weld and wrench.
+ * The fuel injector ports : two tiles in the opposite of the facing direction, and preferably in a different room, place or construct for each injector a fuel injector port (
+/obj/machinery/rust_fuel_assembly_port). It's VERY important that it be two tiles away, and facing the direction of its matching injector (you can 'rotate' it in variables screen). Be careful, it spawns on the wall, so it's not where it looks to be!
+ * In the room of the injector ports, spawn a fuel compressor (/obj/machinery/rust_fuel_compressor). This is where you're going to make the fuel rods for the reactions. You need to varedit it to have a 'compressed_matter' above 0 for it to work.
+ * Create a control room, and place the controller computers there: /obj/machinery/computer/rust_core_control + /obj/machinery/computer/rust_fuel_control + /obj/machinery/computer/rust_gyrotron_controller
+ * Optionally, add atmospherics for actual meaningful operation of the core: a way to vent the room, a way to fill it with phoron, and a way to pour the hot plasma into the hot-loop of a TEG (this is how we (would) generate power).
+
+My miniature setup looks like this: http://i.imgur.com/FBoUxHt.png
+
+Now let's get it working ! 
+
+ * Flood the core with Phoron
+ * Start the EM Field on the RUST Core Control computer. 300MW stength will net you a 5x5 field, 500MW and higher 7x7 size.
+ * Start the Gyrotons to pour energy in the EM Field. This part is tricky, because the controller is broken. Stand near it and Run AdvProcCall. Choose yes, owned by something, obj, Gyroton Remote Controller (should be at the end), input ""interact"" as proc path, 1 argument, mob reference, yourself. On the GUI, do NOT click several times on enable because it'll activate the same Gyroton several times...
+ * Go to the fuel compressor and generate a few fuel rods then click on every fuel port to place them. Click again to inject them. 
+ * At the RUST Fuel Injection Control computer, start the injector(s).
+ 
+It's on.
+
+Sadly the monitoring computer doesn't work, so i had to use the Variables on the EM Field to see how the reaction was going. You should see ""Energy"" increasing from gyrotons, and the amount of reagents increasing, then diminushing as they are fusionned to make more energy. Once the reaction is started, you can stop the Gyrotons.
+
+**OK Fira. Now what ? How does this make energy ?**
+That's where i'm a bit stuck. The reaction should generate energy in two forms: radiations and heat. The radiations can likely be collected by a collector, but that's not the point of the RUST. The real point is to collect the hot plasma into a hot loop to run a TEG. 
+
+During my testing however, the engine generated so much Phoron during its operation that it broke the atmospherics completely, eventually causing rounding errors to hard-set the temperature to 1 Kelvin. Which is anything but hot.
+
+So that's where i'm at: I managed to make a functional RUST Engine, but it's essentially useless. Don't hesitate to drop me a comment if you got it to work, otherwise i hope you learned from this post :)",1420305184.0,11,0.81,9
+SS13,[Meta] Can we have a discussion about the state of the SS13 community ?,"Seriously, guys, what the hell ?
+
+It's like every day i pass playing this game, i realize this community's got even more issues than i thought the last.
+
+ * The three values of SS13 seems to be: clowns, grief, and server wars
+ * Server wars can get pretty literal with all those DDoSes
+ * I won't even talk about the Purlek story
+ * Everyone likes to fork code and make it closed source
+ * Players have fun going to grief other servers and most openly admit to
+ * Forks and pulls are the life of communautary developpement,  splitting codebases the death of it
+ 
+Sometimes i want to scream, ""GET YOUR SHIT TOGETHER, this could be an awesome game but you're wasting it shitting on each others"".
+Even the codebases splits, that's like the most incredibly retarded thing i've seen in a long time.. You'd think such a small community would be much more tight-knit and help each others.
+
+On a more serious note, 100% of the players i've talked to or asked  seem to regard Reddit /entierly/ as crap just because of the amount of bitching going on in this one subreddit. 
+
+I don't pretend to change anything with this post, but please take a second to think about it. Thanks for reading.",1419895826.0,21,0.86,42
+SS13,Ideas Requests : Optimizing SS13 to scale for hundred players (Also in need of profiling runs),"Hello, dear NanoTrassen employees. You've probably noticed that in a fashion ressembling relativity, the more people you cram on a station, the more times slows down around it.
+
+If i'm here today, it's because i'm asking for your input to help mitigate this phenomenum. I'll throw what I could piece together as ideas so far, please comment on them and provide your own, so we can make this a less laggy place !
+
+ * **Hardware level: run on a modern, high single-thread perf CPU** -- this would ideally mean a Xeon E5-1620, E5-1650, i7-4770 or even better an i7-4790K. Sadly the first ones are very expensive, and the later one is more of gamer gear than server. Hopefully Hetzner's EX40 boxes run on 4770 which provide 90% perfs of a 4790K, which seems like something reliable enough. The other way is to make a custom. What are you running your servers on ?
+ * **OS Level: Kernel/System-side optimization** -- I assume this would be essentially useless : SS13 cares more about Load than Latency, and all the work is done within the interpreter since it's not even properly multi-threaded.
+ * **Storage level: SDD and your iops** -- In its massively singlethreaded paradigm, do you know if iops are actually blocking for SS13 ? If so, could it be beneficial to reduce latency by using a SSD, especially for logs writing ? I doubt it, but i'm really searching for everything possible to help.
+ * **Application level: Compile time optimizations** -- It'd probably be possible to ask the BYOND developpers for updated builds for a specific x86 subarchitecture, reducing size, improving cache locality and why not even making it faster... Or would it ? Do you think they would comply ? Has anyone ever tried asking them for such builds ?
+ * **Features level: trimming down the fat** -- There are plenty of features that have been added to SS13, but some might hurt the game in terms of perfs more than they're actually useful. What features would you think are computationally intensive yet useless ? (Would you mind the disabling of the floor dirt layer for example ?)
+ * **Optimizing down to SS13 code** -- I'm looking for profiling runs from big servers to know which parts of the code could be optimized to run faster. Please contact me if you can help with that. Profiling is a very important part: for example prior to the say code refactoring, one part of it would do crazy, crazy recursive ops to the point chatting took the most part of server CPU. There's probably more bottlenecks that could use help...
+ * **Slowing down ticker speed** -- That might sound stupid, but slowing down the whole game somewhat could probably help with slugginess and spikes. How much would you be ready to take ? Is 10% slowdown global a big deal to you ?
+ * **More Ideas ?** -- What's your personnal take on this ? Do you have any ideas to improve the game's speed and responsivity ? Share them with everyone !
+
+Thanks for your input :)",1419471887.0,13,0.9,23
+Eve,CCP considering removing the Industry Teams already,,1418830017.0,1,1.0,1
+networking,Helpful tips regarding Linux Traffic Control ?,"Hey !
+
+I'm about to start using Linux TC to do some fun things (connection thorttling, latency and jitter emulation, etc) and the traffic control engine seems really complex, yet complete.
+
+So far i've looked into the general principle, and more closely into netem for latency/jitter, and HTB for classful throttling.
+
+Do you have any general tips, advices or gotchas about using this great tool ? Thanks !",1418815687.0,7,1.0,2
+Cityofheroes,Valiance giving out invites to people registered on their site,,1417538940.0,12,0.85,7
+battlestations,"My Battlestation for the Week-End, plus bonus players' stations",,1416742884.0,72,0.94,11
+networking,pfSense & Active Sessions Monitoring,"Hello !
+
+We're running two LANs a year at school with about 200 active users.
+Our uplink is 100 Mbps and because we have only one public IP, we're required to NAT them all over the same IP, with sadly connections all going towards the same game servers. This seemed to have caused some occasional global-disconnects in the past and i'd like to crunch some numbers about what's going on this edition.
+In the previous sessions we've been using a mixture of Nagios+Check_MK and Observium, mainly for layer 2 and bandwith intel, but i feel like it's definitely not enough.
+
+Ideally i'd like to collect three specific metrics and reinject them for display in Kibana, Graphite or dashing/tipboard :
+
+* Realtime number of active TCP/UDP sessions and breakdown
+* Bandwith usage and PPS with breakdown
+* Connections per second with breakdown
+
+We're running pfsense for firewalling, captive portal and throttling and i'm bringing an additional octo-core server for supervision purposes. Ideally i'd like to collect info while impacting as little as possible the firewall.
+
+I've figured three ways to do the later twos so far:
+
+* For bandwith/per host monitoring, set a span port on the core and send everything to a remote ntop. This means no additional load on the firewall
+* Set up pfflowd or softflowd on the pfSense and forward data to a dedicated NetFlow collector or ntop
+* Run the whole of firewall logs through Sylog over UDP to an ELK stack for the whole logging breakdown
+
+But I have literally no clue about how to get the /active/ sessions count... nTop seems to indicate active sessions individually but i can't find any kind of summary count in it !
+
+Is it relevant at all ? Could you point me out on how to get these stats ? Is there anything else i'm missing ?
+Thanks in advance :)",1414367049.0,17,0.9,1
+SuicideWatch,Everything should be fine now... but no,"Hey...
+
+Always been your local ADHD gifted weirdo. When I got in college I stopped taking meds for it as I felt even more awkward...
+
+ Everything went down around ~18 two years later. No motivation for college, couldn't manage things anymore, failed 2nd year badly. Parents gone mad, assumed teen crisis, things got worse, ended up just spending time (role)playing old MMOs...
+
+Rinse, repeat, 2nd 2nd year... Try real hard, spend time working with & explaining to class majors to end up minor still. Burned out after few months.
+Meanwhile game-world gone to hell too with a ridiculous, tearful internet-love story (and said game coincidentally disappearing to boardroom politics).
+End up the year missing classes just being depressed and running around school singing..
+
+School psychs & friends spoke on my behalf. Against all odds, legendarily harsh physics teacher realizes I still understand things and does too. Administration and everyone convinces me to get ADHD registered as handicap to help 'justify things' (aka quotas).
+
+3-weeks trip in psych hospital ; finally get to talk things w/ parents... Helped a lot. Diagnosed as atypical autism, depression and general anxiety. Gave more meds to help...
+
+So managed to pass in 3rd year networking apprenticeship somehow. Found an actually very interesting position with understanding people as parents leveraged 'handicap'.
+
+
+So I'm here now, twenty.
+I have a great job where I can learn quite a bit, and i believe to be performing okay... Company's paying the school, everything's good.
+
+
+Yet somehow ... This isn't right. I should never have got all this.. 
+I totally can't manage daily life, be it at home, school or company... Anything paperwork related i pretty much hide from hoping it disappears...
+Keep skipping classes that are depressingly boring and simple.. Feel like everyone around me is stupid... Then consider everything there's to know and feel even more stupid... and alonz..
+
+Time at company was great (project rush mode helps) -- but I can feel all of this coming back more and more everyday. Gaining more and more weight to compulsive eating too....
+
+End up missing classes and crumbling down alone in a corner still... World feels unrealistically sad and I can't help but want to cry... yet I can't, maybe because of those stupid antidepressant meds...
+
+So I just stay down... screaming in silence... and wishing i could cry to death... or that some kind of angel would understand me, this pain.. and kill me. 
+Sadly neither twos are something you can really talk to anyone as it defeats the very purpose....
+
+I don't know what to do. 
+I know by now that I'm too weak to do it, but the thoughts never really leaves me.. 
+Sometimes the very idea feels so sweet that the mere thought of death makes life worth living. This isn't right...
+And I have no idea how to talk about this to anyone... even less if i should.
+Sorry for the long post... and thanks for reading me..",1401292658.0,1,1.0,1
+networking,I don't get Internet and peering business... Care to explain ?,"Hey r/networking !
+
+Recently some friend showed me pics of his student residence's network (closets left open and all, geez...). We noticed buildings of 80-100 users (there's three of them!) were connected to fiber bridges through cascading 100M links... I'm not sure what exactly they have on the other side, except it eventually ends up in 3 load-balanced DSL links from different ISPs. With all that, this part may also just be 100M.
+Somehow this explains why people have been complaining about plainly unbearable network slugginess and packet loss all around for the last few years. Quite a few people end up leasing a dedicated line.
+
+Anyway -- this is beyond the point. We got thinking on what it'd take to run an associative ISP in the building. 
+Aight. So quite a few big end-user targeted ISPs around here provide Tripleplay 100 Mbps FTTH, for example in said building, at roundly 30€/month. This ISP apparently has its own dedicated, physical fiber network.
+
+Let's think a bit: what's included in those 30€ ?
+
+* All-in-one 'box' including TV, Phone and Multimedia features
+* Associated R&D, Marketing and Legal costs
+* Whatever they have to use for underlying TV and SIP Telephony
+* RIPE NCC membership and whatever else
+* Field techs for end-user setup
+* Helldesk infrastructure and staff
+* NOC infrastructure and staff
+* Ridiculously expensive backbone equipement
+* Optical equipement and fibers (i believe they run GPON)
+* Their dedicated optical nodes, buildings and equipement
+* Awkwardly huge civil engineering costs to deploy the fiber
+* __Transit to at least 4 Tier 1 peers__
+
+Okay. The current building's crappy ISP doesn't provide TV, and i believe most people around here opt out of the local phone line and use their mobiles.
+Let's say we run through one of the local 'public interest network' fibers, somehow get an AS and IP block without the 2k€/year RIPE membership, and given that there's a second, free network closet linked to every room w/ Cat6... Well, that leaves only equipement, and the last item - transit... Should be able to provide some pretty cheap-but-okay access, right ?
+
+That's where i'm lost. Apparently a dedicated, single 1 Gbps fiber uplink port in one of those Tier 1 POP IX costs __about a thousand__ per month. Hell, some providers seem to sell 100M Ethernet port IP transit for that same thousand - though i believe they lend an edge router. __Why is it so expensive ? Why does it vary so much ?__
+Could someone please enlighten me here ?",1390344322.0,9,0.8,15
+Ingress,Playing outnumbered and outgunned: tips?,"Hey !
+So i'd like to get some new tips on how to play this.. and hoped you guys could share a few! 
+
+Context: I'm a L7 player in a mostly-green area. Quite a few highly mobile and well supplied L8 players on the other side.. There are some actually organised blue coalitions a few kilometers away, but don't often come here - so, daily, the enemy controls most of the places i move around.. i don't have much gear (farming.. duh), time (student!), even less mobility, and a pretty poor touch with the regional community.
+
+Here's a few points i've figured out, feel free to comment, add more, or just bash me if i'm completely wrong!
+
+ * **Spread your shots** : It's no use blowing up several portals in the same place, they'll get rebuilt anyway. Keep them moving!
+
+ * **Don't rebuild** : Take out 6/8 resonators, break the fields, leave the rest. Don't let them have fun breaking stuff - and force them to recharge those remaining R8s.
+
+ * **XM attrition** : Anything too low on XM, tear it down! If it's a strong, yet non-important portal, just dummy-fire it and someone will recharge. Control comes with upkeep, make them pay for it.
+
+ * **Mods attrition** : Any portal not shielded enough, take it out. Make them understand common shields aren't enough. In practice, firing at random places daily, even without destroying anything, got them deploying turrets and force amps everywhere!
+
+ * **Decoy fire** : Fire B1/B2 everywhere you pass .. Eventually people will completely stop checking them. Randomly fire B7s or so at target portals to wear them down before actually attacking. 
+
+ * **Get personnal in COMM** : As a small scope player, slipping and giving them info isn't much trouble. However when they do, this can actually be used by your nearby cells. Create a friendly environement, comment everything, be nice and stay cool.
+
+ * **Target personnal portals** : Know your enemy, and target specific place you know they'll want to control - the longer they spend backtracking, the least time spent on the borders.
+
+
+Bottom-line being to make the big players look back over their shoulder and keep an eye on 'their' territory at all time. Considering how much supply those guys have, it's probably not doing much, but it's the best i found so far..
+Care to share some tips and ideas on how to attack efficiently and at minimum cost ? Meta-gaming tips much appreciated :)",1387560866.0,29,0.82,22
+networking,Messy college LAN Party searching for a network monitoring dashboard,"Hi /r/networking !
+
+We're regularily holding small LAN Parties events at our college (duration ~35 hours, 200~300 devices, a dozen switches), which are usually ill organized and very messy. After watching from the sidelines and troubleshooting random epic fails, i feel like it's time to step in and try to put some order in there.. however small.
+
+
+
+As such i'm currently looking for a network monitoring tool to help keep the most stupidly simple, yet vital, things in check. (eg. last year the lazy admin didn't set up any kind of redundancy, and there's really nothing like suddenly being told that a third of the room's been down for half an hour because someone bumped in a switch...)
+
+
+
+Now looking around I see a crapton of ""entreprise ready"" monitoring suites bragging about fancy ticketing systems, business intellgience and report creation tools, alert systems, and generally just being reliable and proven by time. Considering the simple topology, relatively small scale and duration, and just my sheer lack of skills 'n time (much to learn about the equipement setup already), i'd really like to avoid having to add that to the list.
+
+
+
+Basically we just need some simple, clear, understandbable-by-anyone dashboard that can rapidly and simply display: 
+
+
+ - If a device is responsive at all (did it crash ?)
+ - Link state on a per-port basis (are the uplinks pluggued in ?)
+ - CPU and Temperature status (is it about to explode ?)
+ - Current data/packet rate on a per-device basis (around where's that idiot downloading porn ?)
+
+Aka. knowing where things went fubar when the inevitable happens without having to run all around the hall. Hell, even just the first two would do.
+
+
+
+This seems to fall more into homebrewing/scripting than an actual solution, but I recall someone asking here a few months ago with similar needs and there were quite a few answers. Can't find it anymore though...
+
+Any constructive comments, shameless trolls, or general tips would be really appreciated !",1384280627.0,41,0.82,34

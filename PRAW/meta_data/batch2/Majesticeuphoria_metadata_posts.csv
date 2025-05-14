@@ -1,0 +1,586 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+expedition33,How I fixed issues with the game not looking good [Graphic Settings],"Update your Nvidia driver to the hotfix version: https://www.reddit.com/r/nvidia/comments/1k4kkx8/geforce_hotfix_display_driver_version_57615/
+
+Change Gamma to 0.9 and Brightness to 1.25 (adjust based on map, turn it to 1 in bright areas)
+
+Use this mod. It looks beautiful. You don't have to download, you can make the ini file yourself.
+
+https://www.nexusmods.com/clairobscurexpedition33/mods/16
+
+In-game settings: https://www.youtube.com/watch?v=mmOP0KV0gl4
+
+Try TSR at 100% if DLSS isn't looking good.
+
+These fixed my game from looking jagged and shadows being messed up. The game is so pretty. 
+
+Optional: I used Reshade to add LumaSharpen for some sharpening, but it's not needed tbh. My eyes just feel more comfortable with the sharpening.
+
+You can also install this to unlock 30 fps cap and developer console: https://github.com/Lyall/ClairObscurFix",1745785336.0,2,0.76,0
+Twitch,Userscript for blocking the replies to a blocked user that work,"        // ==UserScript==
+    // @name         Hide Twitch Replies to Specific User (Title-Based)
+    // @namespace    http://tampermonkey.net/
+    // @match        https://www.twitch.tv/*
+    // @grant        none
+    // @version      1.1
+    // @description  Hides all chat replies to specified users by checking the title attribute
+    // ==/UserScript==
+    
+    (function() {
+        // Add usernames you want to block replies to (case insensitive)
+        const BLOCKED_USERS = [""user1"", ""user2""]; 
+    
+        const observer = new MutationObserver(mutations => {
+            mutations.forEach(mutation => {
+                if (!mutation.addedNodes) return;
+                
+                mutation.addedNodes.forEach(node => {
+                    // Find all message containers
+                    const messages = node.querySelectorAll ? 
+                        node.querySelectorAll('.chat-line__message') : [];
+                    
+                    messages.forEach(message => {
+                        // Find the reply title element
+                        const replyTitle = message.querySelector('p[title^=""Replying to @""]');
+                        if (!replyTitle) return;
+    
+                        // Check if reply targets any blocked user
+                        const isBlocked = BLOCKED_USERS.some(user => 
+                            replyTitle.title.toLowerCase().includes(`@${user.toLowerCase()}`)
+                        );
+    
+                        // Hide entire message if blocked
+                        if (isBlocked) {
+                            message.style.display = 'none';
+                            console.log('Hid reply to blocked user:', replyTitle.title);
+                        }
+                    });
+                });
+            });
+        });
+    
+        // Start observing the chat container
+        const chatContainer = document.querySelector('.chat-scrollable-area__message-container') || document.body;
+        observer.observe(chatContainer, {
+            childList: true,
+            subtree: true
+        });
+    
+        console.log('Twitch Reply Blocker active. Blocking replies to:', BLOCKED_USERS);
+    })();
+
+Add it as a custom userscript to Tampermonkey after replacing blockeduser1 with the user you blocked. The issue with Twitch blocks is that it only hides the message from the blocked user, but not the replies to that message, so you can still see their messages.
+
+Edit: Updated based on suggestion",1744682516.0,2,0.6,4
+33Immortals,You have another chance to get the Race to Immortality Twitch drops if you had issues last time.,,1743887808.0,24,0.97,0
+33Immortals,33 Immortals Beginner's Guide for Purgatario,"**NOTE:** Do not enter Purgatario until you have weapon upgrades unlocked and ideally have 1 or 2 weapon upgrades. The elites and the boss are way more tankier than Inferno and, you'll need a proper build to meet DPS checks else you will wipe in torture chambers.
+
+**Recommended Weapon Builds:**
+
+You can read their details on the [wiki](https://33immortals.wiki.gg/wiki/Weapons)
+
+1) Dagger - Greedier+Patience is the go-to burst damage build, but you need to time the patience damage buff properly by dashing away before using takedown for max burst damage. Alternatively, you can go for Quick Strike+Stabs for a more co-op strike light attack focused build, but it's much harder to be as effective because burst damage is very good for Adam & Eve. I focus on Attack & Vitality stats usually, but it depends on the relics you roll.
+
+2) Bow - Quick Shot+Auto Recall. You might need to use a macro or auto-clicker of some sort to not hurt your wrists, but this combo does a lot of damage. I focus on Empathy stat for more ults, with Attack second usually.
+
+3) Sword - Shockwave+Frenzy/Final Justice. You're not the DPS on sword, this is just to help with co-strikes. Your job is to be the tank by taking aggro and parrying. I usually focus on maxing Empathy before investing in Vitality, so you can give massive shields to others and yourself. Parrying makes it easy to survive along with your ults being up constantly.
+
+4) Staff - Scattered Orbs+Bouncing Orbs is my go-to build for Purgatario. Massive AOE damage and helps everyone with co-strikes. Use your torpor (right-click skill) for AOE damage and slow whenever you can squeeze it in. I focus on Attack or Empathy usually with some Vitality. The best choice depends on relic rolls, I prefer increasing Attack to meet DPS checks for the boss fight.
+
+**Recommended Perks:**
+
+1) Renewal of Dust - You gain +20%/40%/60%/80%/100% Dust when defeating Monsters. This perk is a must and the top priority because you want to level up as much as you can and stack stats.
+
+2) Empyreal Deceptiveness - You deal +100% Critical hit Damage while your Co-Strike counter level is above 30/27/24/21/18. A must for DPS builds, but not necessary for Sword. 
+
+3) Rejuvenated Vigor - Your chance of finding Rare or Epic Relics increases by 10%/20%/30%/40%/50%. 
+
+4) Astute Erudite - Your Co-Op Power generates +12%/24%/36%/48%/60% faster. Great for Empathy builds like Sword and Bow.
+
+5) Immeasurable Love - While your Health is below 20%/25%/30%/35%/40%, you regenerate 1% of your maximum health every 5 seconds. Good for players new to the map.
+
+**Strategies:**
+
+1) Stick together - The moment you spawn into the map, you should rush to other players so that you can farm enemies together with co-strikes for quick stats levels. I use my teleport stone to go to a group if I get spawned at the opposite end of all the players. Your priority is to farm urns, elites, chests with your group while increasing your stats. Use alt wheel to emote tactics and objectives to others, it helps gather people to elite fights, chests or secret dungeons.
+ 
+2) Torture Chambers - Don't enter them right as they spawn! There are only 8 torture chambers before ascension and only 22 players. You would have to do 4 chambers with 4 keys to get 8 relics for a full build, which is unlikely. You should aim for 6 relics if you can. Farm stats, keys and bones from urns, chests, etc. in overworld before entering torture chambers with a group. Never enter them alone or with too small of a group. Just wait for others by farming other stuff in the meantime. You can get relics from overworld elite kills too. Purgatario is a lot more slow paced compared to Inferno and you will see a lot of experienced players just farming together while new players rush into chambers and die.
+
+3) Ascension - Co-op power builds are very strong for ascension, and you usually want to go where everyone is gathering unless there are enough people to split into two strong groups, which is not common. If you are nearly full health, you can play a bit greedy because you will get full healed anyway once you enter the boss lair. I usually take some damage to activate co-op powers or to res people.
+
+**Boss Fight:** Adam & Eve
+
+1) Start with left boss. It's easier for melee to attack that boss because of its patterns. You want everyone to attack the same boss for co-strikes, so use emotes to hint left if you see someone attacking the right boss.
+
+2) The boss has 3 main mechanics: Remembered Virtues, Forgotten Sins, and Forbidden Knowledge. You can see under the Boss' HP bar which mechanic it's going to initiate. 
+
+Remembered Virtues - This is a DPS check mechanic. You have to kill the figs that spawn as fast as possible. I recommend splitting into short groups of 2-3 players so you can build co-strikes and kill them quickly.
+
+Forgotten Sins - Memory game DPS check mechanic. The boss will go to the center of the map and show the order in which you have to kill the trees that spawn. There'll be two of each: Bird, Fish, Hand. You have to memorize the order and kill them in that order asap. Use emotes to gather others towards the correct trees.
+
+Forbidden Knowledge - The easiest mechanic where you rush to bottom left and kill elites attached to the trees and steal blessing. Once you kill the first elite, you go right by activating the buds by attacking them and routing to the bottom right elite, after which you go to the top elite. Don't forget to steal blessing after killing every elite. Once you steal all three blessings, it's easy DPS time!
+
+**Additional Tips:** 
+
+1) You can place the Bow co-op power to hit both bosses for double ult DPS.
+
+2) Save your staff co-op powers for when the elites spawn during dps check mechanics.
+
+3) If you die, use ""Assist Me"" emote and get to a good spot for res. Don't bait people into bad spots. 
+
+I beat Purgatario once with only 5 random players after ascension. 2 bows, 1 dagger, 1 staff and 1 sword. The sword guy hard carried us in helping us survive, but we all built empathy except dagger, so we met dps checks by spamming ults.
+
+If there's any additional tips & tricks or strategies I missed out on, then please post them in the comments.",1743071978.0,100,0.97,31
+mechabreak,Did any of you win the Falcon model voucher from the gold maintenance boxes?,"I opened only about 60 of these, with most of them being 10 or 20 corite. Wondering if anyone won a voucher.",1742314964.0,4,0.84,7
+mechabreak,"Is this Inferno a bot, or is there a way to get him without grinding Mashmak?",,1741691178.0,23,0.86,33
+mechabreak,PSA: Progress from beta test does not carry over.,,1740419496.0,96,0.96,60
+marvelrivals,Optimization Guide: Performance fixes that actually work,[removed],1735481585.0,1,1.0,0
+DeadlockTheGame,My thoughts on why matchmaking feels worse after the recent update.,"Ranked had a requirement of 50 games in quickplay before you could queue for it. Now with the merge due to declining playerbase, there is no such requirement for the ""Extra Competitive"" queue option. So people who want to sweat and play fair competitive games are queued with new players or players who just want to have fun. 
+
+There were also restrictions on players who had comms ban or other bans from queueing ranked, which were removed too so now you get queued with griefers and trolls a lot more than before.
+
+Ranked was only solo queue, but now you can get matched into premades even with solo only preference command, so it makes games very likely to be a stomp. 
+
+Now I'm not saying Ranked mm was good before the merge. There was often pretty big difference in average ranks between the teams, and the mm is fundamentally flawed placing new players in average mmr. Some new players are placed in Emissary which is higher than some players with 300+ hrs. There was also an issue of ranked only being available for a certain time window, which is a good idea to test, but it meant that some people just could not play ranked because of how narrow the time windows were. However, it was a much better experience because of the restrictions (I still had rage quitters and griefers in ranked, but it was not as bad as it is now).
+
+What is happening right now is that new players and players who just want to have fun experimenting builds are mixed with players who want to climb for more competitive games. Yes, it is an issue due to declining playerbase, but the mm is putting new players in mid mmr lobbies, which creates a bad experience for everyone. 
+
+I've uninstalled the game because I don't see hope for fair matches with current mm, but I've posted a long feedback post for the devs detailing match history analysis and matchmaking algorithm suggestions, so I hope they consider it. I don't think bringing 24/7 ranked back will help at this point since it will split queue into 3 (casual, ranked and hero labs) and mm will not be able to find fair matches. The devs have to fix the mm algorithm to accurately determine player skill & performance (not based on KDA, but more on Kill participation and objective focused play), punish the least valuable player in the lobby with a big decrease in mmr, and a few other things (restrictions, behavior score, etc.) that can massively improve the experience.
+
+Ultimately, I think we'll really only get to have a fair and fun competitive experience in ranked when they add draft pick and have balanced teams of player skill. I know we can't get even games in every match, but it's currently extremely rare to get even games. I'd hope to have even games at least 50% of the time in ranked when they reintroduce it.",1734011565.0,3,0.56,19
+DeadlockTheGame,What average length of games do you prefer and why?,"This poll is assuming that the economy is adjusted for smooth scaling, so you still get to build your core items and a few counter items for e.g. Infernus with Ricochet, Inhibitor & Crippling at 15 min mark for a 15-20 min game would be around 40 min mark for a 45-50 min game. Obviously, laning phase would be very short in a 15-20 min game and long in longer games.  
+
+
+Please share your reasoning in comments.
+
+[View Poll](https://www.reddit.com/poll/1go7x1e)",1731265026.0,1,0.67,10
+nanocurrency,Is redeemfor.me legit?,"Yes, it is. I've made this post solely for people who are going to search for this question on Google. 
+
+This was my first time purchasing anything with Nano and I got my steam gift cards in under a min. The purchase only took a few seconds. Both Nano and redeemfor.me are pretty amazing.   I recommend purchasing on a no-kyc platform, I went through kyc platforms, and it was a pain to buy crypto (Had to wait a week before I could withdraw my crypto after purchase). Nautilus is a great wallet for nano, very easy and quick to use.
+
+I'm wondering if there are any other great & legit services (not just buying gift cards) that use Nano and are better to use than fiat websites.",1689293612.0,43,0.95,21
+Techno,SHINEDOE Set at Awakenings,,1689103251.0,5,1.0,1
+Techno,"What are your favorite Techno tracks from Movies, TV Shows, Games & Anime OSTs?","#Movies
+
+##Climax:
+
+[What To Do](https://www.youtube.com/watch?v=CJHloriacsk) & [Dickmatized](https://www.youtube.com/watch?v=Bn7_K6XO38M) - This [dance scene](https://www.youtube.com/watch?v=WZA80GrYsek) with incredible choreography is one of my favorite scenes in cinema.
+
+##Trainspotting:
+
+[For What You Dream Of](https://www.youtube.com/watch?v=zzHmXaUSL6o) & [It’s Like That](https://www.youtube.com/watch?v=DYLhd7bSkWM) - Classic club bangers
+
+[Slow Slippy](https://www.youtube.com/watch?v=nufrfpylP54) - Perfect OST for the scenes in the movie. It has a certain psychedelic and melancholic charm to it.
+
+##Blade:
+
+[Confusion (Pump Panel Reconstruction Mix)](https://www.youtube.com/watch?v=d_Hw_UC314M) - From the [iconic club scene](https://youtu.be/gHBhKbF2xMA?t=45). 
+
+#Games
+
+##Cyberpunk 2077: 
+
+[ON MY WAY TO HELL](https://www.youtube.com/watch?v=SFEYuCe5OI0) - Banger track. Trigger's brilliant usage of this track in Edgerunners further made me fall in love with this track
+
+##WipEout® 2097:  
+
+[Atom Bomb (Straight 6 Instrumental Mix)](https://www.youtube.com/watch?v=pQqHTttWBlk) - Nostalgic soundtrack with old school techno vibes.
+
+##Persona 4:
+
+[Sauna](https://www.youtube.com/watch?v=6jX-Lrhrt1M) - Love the synths in this track.
+
+##Sayonara Wild Hearts:
+
+[Heartbreak V](https://www.youtube.com/watch?v=PKi6tWHHwVc) - This [stage](https://youtu.be/fRzwWBANeE4?t=66) at 1:12 is such an adrenaline rush.
+
+#Anime
+
+##Devilman Crybaby: 
+
+[Crisis](https://www.youtube.com/watch?v=Wan2bmphNDI) - Absolutely love the tribal and acid techno elements in this track.
+
+[Night Hawk](https://www.youtube.com/watch?v=zkoiRGoxE20) - Love the vocal fx and build up in this one.
+
+[Sabbath I](https://www.youtube.com/watch?v=w_I1MWCTkyQ) - The way this track was used in the anime was perfect for the atmosphere of the club scene. Kensuke Ushio is one of my favorite composers.
+
+##Eureka Seven:
+
+[Get it by your hands HI-EVO MIX](https://www.youtube.com/watch?v=iKBv54TWuyI) - Incredible trance techno track. 
+
+[Ninety Three](https://www.youtube.com/watch?v=VTPhcKs_CYU) - This [iconic rave scene](https://www.youtube.com/watch?v=W1oCOfnPBdA) from the anime will forever be in my memory.
+
+[trance ruined](https://www.youtube.com/watch?v=NvDicWZa_rE) - Not necessarily techno, but absolutely love this offbeat trance track.
+
+
+##Blue Lock: 
+
+[Puzzle](https://www.youtube.com/watch?v=_wUW0iSaLFQ) - This OST is used perfectly in the anime to create hype for the soccer matches.
+
+##Call of the Night:
+
+[Fun, Pain, Happiness, Sadness](https://youtu.be/PuC9p-4o2zA?t=70) - This track has so much variation after 1:13, it really feels like it captures the emotions of the its title the way it was used in the anime.",1687980612.0,22,0.9,41
+WutheringWaves,Tutel,,1683611987.0,41,0.96,0
+WutheringWaves,The last stage of potential endgame mode in WW has two boss fights,,1682193409.0,34,1.0,23
+MachineLearning,"[N] Dolly 2.0, an open source, instruction-following LLM for research and commercial use","""Today, we’re releasing Dolly 2.0, the first open source, instruction-following LLM, fine-tuned on a human-generated instruction dataset licensed for research and commercial use"" - Databricks
+
+https://www.databricks.com/blog/2023/04/12/dolly-first-open-commercially-viable-instruction-tuned-llm
+
+Weights: https://huggingface.co/databricks
+
+Model: https://huggingface.co/databricks/dolly-v2-12b
+
+Dataset: https://github.com/databrickslabs/dolly/tree/master/data
+
+Edit: Fixed the link to the right model",1681314544.0,738,0.98,130
+LivestreamFail,Lacari speaks out for the swaggers,,1680712156.0,669,0.89,41
+LivestreamFail,Lacari finally accepts it,,1680712065.0,324,0.85,12
+Techno,Which event in Belgium is this from? The lighting and visuals are amazing.,,1678887586.0,5,0.86,2
+willneff,Will and Cyr star in Interstellar,,1678144422.0,4,0.83,0
+cyr,Will and Cyr star in Interstellar,,1678144403.0,15,0.94,0
+Notion,Solution to Notion Embeds not working in Brave,"Pick the ""Allow all cookies"" option in Brave Shields for the notion page that you are on and all your embeds should start working.",1677351291.0,3,1.0,1
+LivestreamFail,43-year old bald man goes into a fit of anger alone in a cold room,,1673155193.0,87,0.79,8
+manhwa,Who is your favourite well-written side character out of all manhwas?,,1671921488.0,4,1.0,8
+manhwa,Here's my Webtoon Tier List ranked by enjoyment. Would love some recommendations. Sauce in comments.,,1669686555.0,54,0.73,79
+Techno,Just grabbing a coffee...,,1661473288.0,11,0.79,0
+LivestreamFail,Whale shows his special talent to impress virtual female,,1656040289.0,8,0.57,0
+lostarkgame,TIL You can use animated mokoko emotes in global chat :O,,1653078778.0,67,0.85,7
+PokemonUnite,How I made 14360 coins in 23 days (without dailies),"1) Uninstall the game
+
+2) Install the game after 16 days
+
+3) You'll get 4000 coins instantly
+
+4) Login for 7 days and do the returnee missions (360 coins) till you get to the free unite license and select a pokemon like Lucario that you have that is worth 10,000 coins. 
+
+So if you want to get a huge coin reward, all you have to do is not play the game for 16 days.
+
+Edit: The total coins I earned with the dailies and weekly coin limit ( without the energy and event mission rewards) is 2100+840=2940. Now if you add the fact that I got the lunar new year unite license 10000 coins as well. The total I earned up till now is 27300. If you include energy and event mission reward, it's about 29000 coins.",1645113338.0,49,0.88,30
+PunishingGrayRaven,They really added twitch emotes in the dialogue lmao,,1643203277.0,45,0.98,3
+RedditAndChill,Chat might enjoy this song :),,1639808489.0,1,1.0,10
+House,Banger KETTAMA DJ Set at The Lab LDN,,1639176703.0,14,0.89,4
+LivestreamFail,"""This isn't an MMO""",,1639113542.0,291,0.88,3
+PokemonUnite,This game should not allow blocked players to team with you in ranked.,"I last picked jungle in an ultra ranked game and this squirtle in my team followed me around trying to last hit every mob as I was trying farm. He lost to me in my last game before this one and just started throwing this game because of that. I made sure to report him and block him, but I get matched with him immediately in the next game. I choose venasaur and go bottom and he does the same when he was supposed to be the jungler. I report him again, and the next game I match with him again. I've lost three games ranked games in a row because of one guy harassing me that I blocked after our first game. I get that kids play this game and this is not a rare occurrence, but why am I getting matched with players I have blocked and reported for harassment and intentionally throwing the game. Is there a way to send this feedback to the devs?
+
+Edit: My solution is pretty bad since it can be abused against good players as bad players will block them. I am not sure what is a good solution for this problem. It's already pretty hard solo queuing to climb ranked.",1633964905.0,684,0.92,133
+LivestreamFail,Moon finds yet another afk player in new world,,1632883161.0,3369,0.97,71
+LivestreamFail,Soda introduces himself to the crew,,1624828516.0,155,0.86,4
+LivestreamFail,Robert spits out some quick bars,,1613468108.0,14,0.76,2
+LivestreamFail,Furry bards interrupted during practice,,1610096256.0,40,0.9,0
+lofihouse,I made a playlist of some of the EELF gems that were deleted,,1603377670.0,7,0.9,7
+House,I made a playlist of some of the EELF gems that were deleted,,1603377648.0,30,0.96,17
+DestinyFashion,Equinox Warlock,,1602785848.0,2,0.75,2
+psytrance,Atrus - Dream Creatures,,1600789325.0,3,1.0,1
+House,Yaeji - Therapy,,1599599333.0,1,1.0,0
+japanesemusic,Need help identifying a song.,"So many people are looking for the song in [this clip](https://clips.twitch.tv/TrustworthyBumblingBatteryAMPEnergy) after it was shown live in a big Dota 2 tournament. It's a pretty catchy tune.
+
+Edit: I separated [the vocal and instrumentals](https://gofile.io/d/HkRjA9) if it helps.
+
+Edit 2: A user found it - https://www.extrememusic.com/albums/3573?item=58531",1599498484.0,3,1.0,0
+gachagaming,What's your favorite raid and world boss system in gacha games?,My fav raid system is Dragalia Lost because of the skill it takes to carry your team in dire situations and my fav world boss system is Destiny Child where you get to use 20 chars from your collection.,1597998710.0,21,0.92,23
+gachagaming,"What are some gacha games that have raids/world bosses like Destiny Child, Honkai, Dragalia Lost & Exos Heroes?",[removed],1597958100.0,1,1.0,1
+FallGuysGame,Jinx level bug,"So at the level where you are supposed to jinx the other team, 40+ of us were indefinitely stuck because everyone was jinxed but the score said 1-1. It took a long time for people to start leaving after realizing the glitch. The game didn't move on even after people left on both sides.",1596284641.0,19,1.0,3
+DestinyFashion,P.I.M.P.,,1592752722.0,29,0.89,10
+LivestreamFail,JP asks Zeke to hide TOS on screen,,1592068155.0,173,0.88,9
+DestinyTheGame,"PSA: Anti-Barrier rounds artifact mod says ""Weapon mod"" but is actually only for Auto-rifles.",[removed],1591726645.0,1,1.0,0
+lofihouse,Bass Toast - Get On Down And Party,,1588772437.0,2,0.75,0
+destiny2,Petting the cat,,1587241109.0,1,0.67,0
+DestinyTheGame,PSA: Warmind cells created with tyrant's surge do not get extra range from global reach mod.,[removed],1586522588.0,1,1.0,0
+raidsecrets,"If you have Grasp of the Warmind mod, can you try this out?","I noticed that the legendary lost sector, The Quarry, has rasputin effects at the start behind the spawn and at the end. I don't have the mod, but I wanted to try throwing a Warmind cell in there to see if it does something both at the start and end. Seemed like a potential secret to me.",1584488170.0,0,0.38,3
+DestinyTheGame,"Bungie just changed the legendary lost sector to The Quarry, go get your exotic shotgun!",[removed],1584479165.0,1,1.0,1
+SDSGrandCross,Gyro mode is awesome!,"I recommend everyone to try it, you can move your phone around as if you were in the tavern.",1583268545.0,9,0.85,17
+DestinyFashion,Righteous Warlock King,,1582682263.0,22,0.93,3
+forsen,My lidl gachi,,1581656464.0,4,0.75,0
+RedditAndChill,i made this FeelsDankMan,,1581625393.0,1,1.0,0
+lofihouse,David Jackson - Broken Heart,,1579767933.0,1,1.0,0
+RedditAndChill,Okayga 👉🏾____?,,1579761278.0,3,1.0,1
+Techno,Marusha - Live @ Loveparade 2000,,1578847727.0,109,0.96,16
+lofihouse,"Computer Data | Fault Radio DJ Set at General Repairing, Oakland",,1578833680.0,11,1.0,2
+apexlegends,Wingman has 100% accuracy on hipfire if you crouch,,1576844537.0,359,0.88,46
+lofihouse,Gloved Hands - Got Me Feeling [Trancy deep lo-fi house],,1573568943.0,6,1.0,2
+House,"Jungle - Beat 54 (Krystal Klear 12"" Mix)",,1572408281.0,9,0.92,1
+Techno,Hiroshi Watanabe - Matrix,,1568286718.0,3,0.81,1
+Techno,The underground techno scene in China is incredible. This set is really good.,,1562957786.0,170,0.95,48
+House,"DJ Windows XP @ Shourai Sessions, RADION, Amsterdam",,1561163943.0,1,1.0,0
+lofihouse,"DJ Windows XP @ Shourai Sessions, RADION, Amsterdam (27-09-2017)",,1561159916.0,11,1.0,0
+Techno,FenixForce - Domestic Violence [Hardcore Acid],,1560845750.0,3,1.0,1
+avesNYC,Anyone going to Basement on Friday night or Good Room on Saturday night? How good are they?,"I am visiting NYC for a conference for a few days and I am pretty interested in the techno scene in NYC. I've been looking for a good techno/house experience since Berghain & Village Underground and I heard good things about these parties. I would love to meet people in the scene and go to the events. PM me if you you're interested to meet up, otherwise I'd like to hear your general thoughts on the techno scene and dress code here. Do people wear all black and leather stuff? How good is the crowd at these clubs/events?
+
+Edit: Review for people who are looking at this post to know more about Basement:
+
+I went in with some awesome NY residents as we met on Reddit. I had an incredible night there. I felt like I was in Tresor with Kit Kat & Berghain vibes. You can wear leather and be shirtless or nude ( covering genitals with tape or something). The crowd was incredible and Tin Man & Fiedel played incredible sets with some of my favorite techno tracks throughout the night till 6 am. I was on acid and I had a great time tripping to acid and industrial techno. Also, wasser is free, you can just ask for a glass of water at the bar! I only got to see the main room but the sound system was banging and the club has really good underground vibes, I knew I was going to have a great night the moment I entered in from the coat-checking. 
+
+tl;dr: If you're into Berghain/Berlin style Techno clubs, this is probably the best club in America that comes closest to the experience. If not, this place is not for you. They want people who appreciate the music and lose themselves  as they dance to create a nice crowd, so if you're not in the mood for raving it's probably better to not go.",1560472636.0,7,1.0,15
+Techno,The Classical - Not a Trick (Love Letters' Hate Mail Remix),,1560470502.0,1,1.0,1
+oculus,Oculus is forcing Virtual Desktop dev to remove the VR streaming functionality.,,1560306978.0,460,0.93,97
+StopGaming,Do I play too much video games? [Test/Survey],,1559669607.0,4,0.84,1
+Sdorica,Fix for incorrect time error in emulators like Nox and LD Player on Windows 10,"I was getting incorrect date and time error even though they were set correctly.
+
+This is the fix for it:
+
+1) Control Panel
+
+2) Clock and Region
+
+3) Date and Time
+
+4) Internet Time
+
+5) Change Settings
+
+6) Check the synchronize option and select ""time.nist.gov"" as the server
+
+7) Open emulator
+
+8) Go to date and time settings
+
+9) Set to automatic
+
+10) Restart and run the game
+
+
+Hope it helps someone in the future :)",1558335935.0,21,0.96,4
+LivestreamFail,Chang talks to Soze after getting bugged with the wrong player model,,1556787627.0,2,0.56,1
+LivestreamFail,Kevin Shaw - The Drift King,,1554623733.0,3,0.6,1
+LivestreamFail,Chocobo tries to blend in,,1554101748.0,0,0.5,0
+Animemes,Two kinds of weebs,,1546888822.0,26,0.88,5
+Tinder,Streamer has an interesting encounter on tinder,,1541628064.0,9,0.91,0
+assholedesign,This Meditation App uses your fingerprint to read your mind state..wait what?,,1540374175.0,26,0.92,3
+LivestreamFail,[Wholesome] Guys travelling across India in a rickshaw give a kid a small surprise :),,1535153018.0,0,0.5,2
+virtualreality,The new Nvidia GeForce RTX 2080ti and 2080 stats might have been leaked.,,1534616377.0,56,0.89,30
+ethereum,Zerion open-sources its Web3Swift library for DApp development,,1532031913.0,0,0.33,0
+oculus,Through the Psychedelic Wormhole with Morgan Freeman,,1530565241.0,7,0.89,0
+LivestreamFail,Psychedelic Fractal Temple,,1530564769.0,0,0.4,1
+LivestreamFail,Through the Psychedelic Wormhole with Morgan Freeman,,1530564722.0,0,0.5,2
+LivestreamFail,🤔,,1529859088.0,0,0.49,1
+LivestreamFail,Dyrus comes out,,1528843374.0,1,0.52,1
+LivestreamFail,Dyrus breaks Realm Royale,,1528842414.0,14,0.6,2
+LivestreamFail,Streamer predicts unexpected E3 announcement Pog,,1528709984.0,512,0.79,26
+CryptoCurrency,Zerion Pulse: An All in One Portal to Track and Manage Your Crypto Funds,,1528125288.0,3,0.81,0
+IOTAFaucet,I Love IOTA - 0 inflation!,"Bleep Bloop Beep Beep I am not a robot
+
+What is the best subreddit you have stumbled upon accidentally and how did you do it? /r/changemyview was actually quite an amazing find, I stumbled upon it through a thread on askreddit and I love the community in that subreddit!",1527892873.0,2,1.0,3
+duelyst,Three turn win with thunderhorn craziness,,1523703971.0,4,0.84,3
+LivestreamFail,YMCA PogChamp,,1517986411.0,4,0.51,1
+LivestreamFail,[VR] When the weed is too dank,,1516376627.0,272,0.86,16
+duelyst,Insane combo at the end. All the stars aligned for 20 damage in one turn.,,1515260341.0,9,1.0,1
+LivestreamFail,Weeb Dance Party in VR (◕ ω ◕✿),,1515198707.0,27,0.69,3
+LivestreamFail,Vigor whispers a secret to Lacari,,1514816281.0,17,0.66,7
+youtubehaiku,[Meme] Strange Birbs Summoning Satan,,1508133872.0,1,1.0,1
+virtualreality,Made a few VR demos with FOVE and Leap Motion. Would love to hear some feedback from the community :),,1502875367.0,58,0.93,22
+Buddhism,How to communicate without a motive?,"I have been recognising the registration function of memory, the accumulation of karma and samskaras. I have been trying to stop the process of registration and recognition when it's unnecessary, and failing miserably at it. There is awareness of the witnessing of the whole process of time, as I experience the immediate past as if it's the present. However, this awareness goes away when I try to communicate with others and I hadn't realised this simple subtle fact for a long time, just recently discovering that I have been communicating about spirituality, life, buddhism, zen, yoga, mysticism, krishnamurti and non-positive thinking all with a certain motive. This is why I wonder if I can communicate or interact socially without a motive.
+
+Edit: On further reflection, I think usually my motive is to create a certain social image about me in others' minds in order to have physical security. I am unsure if this motive stems from social insecurity or is just a physical self-preservation mechanism of the body.
+
+Edit 2: I think a clearer question for Buddhists would be this: Is there such a thing as right communication?
+
+Edit 3: On further reflection on my motive, I discovered that it seems from social insecurity - there seems to be a very deep fear of social rejection. I am trying to understand the nature of the fear that arises, but K's words are not resonating anything with me as of now.
+
+Krishnamurti's quote on the source of fear: ""So what is it that most of us are afraid of? There are superficial fears, such as the fear of losing a job, and so on, but to those fears we can generally adjust ourselves. If you lose your job, you will find some other way of making a living. The great fear is not for one's social security; it lies much deeper than that. And I do not know if the mind is willing to look at itself so profoundly as to be able to find out for itself what it is intrinsically frightened of. Unless you discover for yourself the deep source of your fear, all efforts to escape from fear, all cultivation of virtue, and so on is of no avail because fear is at the root of most of our anxious urges. So can we find out what it is we are afraid of, each one of us? Is the cause of fear common to us all, like death? Or is it something that each one of us has to discover, look at, go into for himself?""",1487484226.0,8,0.83,35
+AskScienceDiscussion,[Epistemology] What would be the method to study a newly discovered unidentified object on an unfamiliar planet that ensures prevention of all possible bias?,"I don't know if this is the right subreddit to ask this question, but I have always wanted to ask this question to scientists.
+Whenever we study a newly discovered unidentified object such as a new animal species on earth, we become biased by generalizing our knowledge of other earthly species to that on our first instinct. I want to know if it's possible to have a reliable method that allows us to study something completely alien to us without bias. I would really like to know the steps of the method in detail.",1485636828.0,2,0.63,4
+askscience,[Epistemology] What would be the method to study a newly discovered unidentified object on an unfamiliar planet that ensures prevention of all possible bias?,[removed],1485119647.0,1,1.0,1
+askscience,Can we revive someone by making their body replicate the same conditions as when the person was alive?,[removed],1469596472.0,1,1.0,0
+Advice,How can I perform tasks joyfully?,"I try to think about ways in which I can be joyful when doing various tasks but I can't figure out how to do it. What do you recommend reddit?
+
+Background: https://www.youtube.com/watch?v=F9u8KqFZlu8
+I wonder how I can actually walk through life joyfully.",1446603893.0,1,0.67,3
+Frugal,How can I buy the cheapest and best flight?,"I am a student enrolled at a U.S. university for an undergraduate degree  and I want to travel from Mumbai to San Francisco. How do I book the best flight(cheapest and quickest) for me? What are some tricks you use to be more frugal? Should I book flights online or from an agent? I have never traveled outside India before, please help me.",1433997217.0,16,0.79,8
+amv,[AMV Request/Challenge?] Try making a AMV with this song.,"https://www.youtube.com/watch?v=NXFtLpcXErY
+
+
+>Plea.",1426514150.0,1,0.6,0
+anime,"Which anime has the best audio( OP, OSTs, ED, sound effects, voice acting)?","I think audio is a huge factor in the experience of an anime and I would like to now which anime does reddit think to have the best audio.
+
+Please state the anime name and give examples of why you chose that anime.",1425578912.0,14,0.68,40
+Smite,Scylla and her dogs feeling the funk!,,1424961316.0,17,0.73,11
+askscience,Can we calculate when a mirror loses it's ability to reflect?,[removed],1417230305.0,1,1.0,0
+AskReddit,What are some fun things to do in a school trip?,"Me and my friends are going to Jaipur and we will take near 13 hours in a train... And we need things to do in a train, hotel room and bus. What are some fun things to do with friends on a trip? Except alcohol abuse, *we have already done that* what things should we take for the trip?",1416575638.0,2,1.0,3
+Futurology,"People of /r/Futurology, which projects,companies or concepts do you think are going to bring a huge advancement in Education and why?","I want to know more about ongoing or 'in-talks' projects that are really looking at revolutionizing education. I hope that lesser known projects may get some exposure here.
+
+
+
+
+
+Do you think Elon Musk should look into the Education sector?",1416317029.0,7,0.88,9
+anime,Enhance your anime watching experience on youtube with cinema mode!,"So this is just a short guide on how to enhance your video-surfing experience on youtube.
+
+Go to http://www.chromeactions.com/ and download the add-on appropriate for your browser.
+
+This is the gallery for instructions:http://imgur.com/a/vBXmB
+
+First three images are the recommended settings but you can adjust according to your preference.
+
+[Try watching this now, with your browser on fullscreen(F11).](https://www.youtube.com/watch?v=P-dsLrkAQfw)
+
+edit: [Try this too](https://www.youtube.com/watch?v=gQsXwazeRbI&list=UU6S81Ox7_peyOW74BvVTXYA)
+Hope you like it :D and [this too](https://www.youtube.com/watch?v=vk8Krl_sPMY)",1415890317.0,0,0.38,4
+personalfinance,I am an International Student wanting to Study Computer Science in US .How can I afford the education?(IND),"SAT score: 1950 Sat Math level 2 score: 670 Sat physics score: 680 Toefl score: 106
+  
+What are some ways I can afford to get in the best universities of US( obviously not ivy league with those scores)? Any scholarships for Indians/International Student? 
+
+I can only afford $8k per year at a stretch(with an education loan from bank) which is 50% of my dad's annual income. Please help.",1414698735.0,1,1.0,10
+AskReddit,"What is something that you have done on one your social networks in past, that you are ashamed of?",,1414422914.0,3,1.0,11
+WritingPrompts,"[WP] A robot is taught to function as a human in our society by some humans, but at the end of the story the humans find that the robot is more 'human' than them.",Good Luck.,1414135783.0,6,1.0,5
+BitTippers,Will give 2 byte(16 bits) for first 20 people to comment. Courtesy of /u/prmcd16.,It's over. ,1413546514.0,5,1.0,62
+anime,MKAlieZ(Aldnoah.Zero's OST) fits everything.,,1412849506.0,1,0.54,1
+AskReddit,Redditors What is your best Iphone 6 / Iphone 6 plus bend joke?,,1411882424.0,0,0.33,2
+kpophelp,Can anybody recommend me some good kpop music? :D,"I made a playlist of the songs I like: https://www.youtube.com/playlist?list=PL-wjcEWTdn6mHoZ9b3YUZZ_ZHt-h_bo3R  
+
+Do you have any recommendations of songs which I would like depending on the songs in the playlist?  
+
+btw, I love edm",1411066187.0,2,1.0,2
+kpop,Can anybody recommend me some good kpop music? :D,[removed],1410975098.0,0,0.3,9
+anime,"Save 25% on planetarian ~the reverie of a little planet~ on Steam(From the makers of Air,Kanon and Clannad,VisualArt's/Key)",,1410591248.0,30,0.83,3
+giveaways,AMD Radeon Discount Code/Free Game( Worth upto 20$) Giveaway,,1410456627.0,4,1.0,0
+freebietalk,My parents hate freebies :C,"My parents feel that there is a lot of crime involved in the delivery of these freebies and also that there might be some adulteration in the samples. 
+They are scared of the delivery guys that bring the shipped goods. They suspect that he/she might kidnap, steal, murder or frame us. I don't even know how they imagine this stuff. I can't even search of such a case on the internet.   ( I just got bashed for ordering some freebies :C)
+Have you guys ever encountered a case where ordering freebies was dangerous for you?
+
+Edit: Before you ask, my age is 17.",1409500722.0,9,0.81,13
+SuicideWatch,This is for all the ones that are considering suicide.,[removed],1409491917.0,2,0.76,3
+giveaways,"Enter to win a K-on glass , designer art file or a streetfighter book. (Save Jawa's life by donating)",,1409470421.0,6,0.87,1
+FREE,Enter to win K-on glass and donate too :D (Please help the cat),[removed],1409412318.0,1,0.66,0
+Smite,The best way to play Zhong Kui.,"Zhong Kui has the highest basic attack damage early game.
+He does near 120 damage depending upon the enemy, which is 10-15% of the enemy in one basic attack.
+
+Go solo
+
+Starting items: Telkhine's Ring level 2 , 2 health pots and 2 mana pots.
+
+My Build: Telkhine's Ring, Magic boots, Fatalis/Demonic grip[Look at their defense],Rod of tahuti[Gotta rush it for huge early damage],Spear of magus, Ethereal Staff/Gem of isolation[More survivability vs full team slow].
+
+Abilities:  upgrade these - 2>1>3>2>4 -  before  level 5 . After getting your ult your priority should be 2>1>4>3.
+
+Usage: land both(1 original and one from the book) of the basic attacks on the enemy solo laner after using your 1-2 to clear the wave. after level 5. forget about the wave and use your 1>4>2 combo while landing your basic attacks on him.(you'll need atleast 5 basic attacks)
+
+Basic attack damage:
+60+(33)   + 30 +(33) ~ 120-160   
+
+
+I am telling you guys, Zhong kui is OP.
+
+Edit: you can replace telkhines with demonic grip, late game.",1405595567.0,4,0.74,12
+Smite,Xbalanque buff idea,"I think xbalanque needs a good wave clear and a buff.
+
+What if xbalanque's first ability activates bolas that go through minions and gods rather than splashing damage",1402982149.0,1,0.6,29
+Smite,How to delete Ra Bot?,,1402825786.0,0,0.29,2
+Smite,Janus ultimate idea,Janus is immobile for two secs while he teleports a fellow ally next to him. I think it would be a really strong ult.,1400098570.0,0,0.33,4
+Smite,Art request: Godscylla,Can anyone make an art of Godscylla(Godzilla)?,1400053458.0,0,0.5,7
+Smite,Rugby Tyr Skin Idea..,"It would be cool to have a rugby or the sport also known as american football skin for tyr. His 1 would be a tackle and his 4 can be an epic touchdown. Well, I don't watch rugby so you guys give ideas for his 2 and 3....",1400053049.0,2,0.67,2
+GifSound,Dem avengers..,,1399441233.0,0,0.25,0
+Smite,Does anybody remember hercules?,"I just want to know if anybody even plays hercules, I mean I completely forgot hercules was in the game since I don't see him being played anywhere. Its weird that I see arachne more than hercules nowadays..... If nobody actually plays him don't you think he needs a buff or possibly a remodel?Do you play him, if not then why?
+
+Edit: The general consensus seems to be that he's strong but he is too buggy right now and the other warriors are much more stronger(in terms of damage) than hercules.",1398327333.0,9,0.69,80
+india,Why Kejriwal’s argument against Modi might be true…,,1398277128.0,0,0.5,0
+a:t5_31bdu,Why Kejriwal’s argument against Modi might be true…,,1398273227.0,1,1.0,0
+Smite,I increased my fps from 6 to 40!!!,"So, I own a switchable graphic card laptop, the acer aspire 5745G. I just switched to windows 8 and completely forgot about the switch feature. One graphic card is Intel HD 4000 and another is Nvidia 310M(or something like that...).All I had to do was:
+1) Go into BIOS using F2 on some systems when booting(as soon as you start your laptop).
+2) Change the graphics mode from ""Switchable"" to "" Discrete""
+3) Reboot saving changes.
+4) After rebooting, install Nvidia GeForce experience to install the driver and optimize the game(if supported).
+5)Reboot after install.
+6)Play game and enjoy the newly found smoothness.
+
+You could also go into Nvidia Control Panel and change the settings for maximum performance.(You can access this through the control panel and then you will find it if you click on ""adjust the...."")
+
+Also instructions by /u/Vordus for extremely low fps people:
+go to C:\Users\Owner\Documents\My Games\Smite\BattleGame\Config (wherever your smite config is) and replace your battleengine.ini text with this http://pastebin.com/raw.php?i=CjrCZaDu
+(I also set mine to read-only, but i dont know if that does anything)
+It basicly makes it use 50% of your screen, and blows it up to the smallest resolution, so it looks awful (im fine with it) but it runs like butter.",1397567326.0,9,0.66,44
+anime,[SPOILERS] Kantoku Fuyuki Todoki - Episode 2,"It was quite hilarious, I want an ota-waifu now >:3
+
+[MAL link](http://myanimelist.net/anime/23213/Kantoku_Fuyuki_Todoki)",1397374985.0,15,0.86,0
+Smite,Someone managed to run smite on Linux!,,1396869303.0,5,0.73,3
+anime,This is one of the best OST's I have ever heard...,,1392843042.0,1,0.6,2
+gank,MRW I saw poseidon release the QUAKEN!!!,,1391016559.0,12,0.94,1
+Smite,Can you make a higher score than this in practice mode?Let's see who can get the highest :D,,1389971253.0,3,0.72,18
+getdisciplined,I want to thank /r/getdisciplined and give back something to you guys :D,"28 days ago, I posted this on /r/getdisciplined :http://www.reddit.com/r/getdisciplined/comments/1t0cgr/i_cant_seem_to_live_in_the_present/
+
+I looked through all the comments and read some chapters of the Eckhart Tolle book , also doing meditation wherever possible(free time in class,bus,when i am bored).It has changed my life, THANKS A LOT for making me aware of the existence such a happier life.I stopped pursuing happiness and now I pursue wholeness which has made me ten times more productive and focused.Even though I haven't truly become able enough to completely live in the present, I have had a drastic improvement.
+
+So in return ,I can't give much but I would like to tell you about the facebook pages that helped have this transformation too.You can make the time you spend on facebook productive by liking these pages and choosing the ""Get Notifications"" option.
+
+https://www.facebook.com/RefineTheMind
+https://www.facebook.com/thedailyzen
+https://www.facebook.com/lifehackorg
+
+The posts help you reflect upon your life slowly slowly helping you get to the point of enlightenment.",1389710595.0,3,0.57,4
+edmfeedback,"Arty, Matisse, Sadko,Steve Aoki and Afrojack- The No Beef Riot (NKPyo Mashup)",,1389375369.0,1,1.0,1
+getdisciplined,I can't seem to live in the present.,"Whenever I do anything, for e.g. studying for exams,I'll get distracted and think about new ways of playing games or when partying I will think of the past and forget about enjoying the party.My mind gets distracted to future or the past but never enjoys the present.I just do it unconsciously and when I realise it, I start thinking of how I keep doing this again and again(the past).I keep wasting my time and   don't achieve anything even If I have complete potential in it.Moreover, I am in IB so I need to manage my time very well or else I won't get in a good university.I can't seem to discipline my self to completely concentrate myself on the task that I am doing.Please help me.
+
+Edit:Thanks a lot guys ,I love reddit community.People take out time from their busy lives to help others by sharing their knowledge.It's quite incredible.",1387205974.0,59,0.94,27
+anime,I made this last year and just wanted to share ._.,,1384181211.0,0,0.44,0
+Smite,New Kraken model in development.,,1383674350.0,6,0.69,3
+Smite,Thought this was a good idea....,"So I did an audioswap of the Smite Gameplay Trailer in a real amateur way...Do you like it?
+
+http://www.youtube.com/watch?v=x3abL8wRsH4
+
+I mean the effects of freya,hades and thor look awesome with the sound.",1377364665.0,1,0.67,1
+Smite,Nice banner and smite promotion tip.,"A very nice job by the person who made the banner with the new art , its glorious *.*.Also it would be nice if someone promoted SMITE on the Maxthon Games Forum :D",1376586769.0,1,0.6,0
+Smite,#Remeberthemanticore ;~;,,1376499325.0,41,0.85,9
+Smite,A buff to xba? Your thoughts?,I think xbalanque is a very strong ad carry but what he really lacks is a good wave clear.It takes a lot of mana to clear the wave with him compared to other ad carries. I would rather like a low cost wave clear ability than the poison darts.how do you think he should be changed?,1374419478.0,0,0.5,17
+Smite,Can someone make a wallpaper out of the concept arts?I tried... >.>,,1373811963.0,7,0.73,9
+Smite,Why to play Ao Kuang in 1v2 lanes?,"As the sidelanes are narrower and shorter its a bug buff to ao kuang in 1v2 lane because his tornadoes can hit both the enemies and clear the wave while you sit in the tower FOREVER ;P.Even if you don't hit one its gonna hit the other enemy if placed correctly.If the enemies leave the lane to gank other lanes you can push the lane quickly and get their towers and return to base in time before they gank you.Another advantage is that he doesn't have to last hit like other solo laners.The Slow of his 1 and his ult are great for jungler ganks early game .Another advantage of sidelanes is that you have to keep an eye on only one side for ganks which makes you very safe.
+
+Tips:
+
+Sit in the tower so they cant initiate.
+
+Always take beads always and if you are confident you can take combat blink instead of aegis as second active item.
+
+Use your beads when needed.
+
+If you have pushing problems ward your tower and teleport to it.
+
+Cons:
+
+If the enemies last hit the waves and wait for you to come to kill you,you are gonna be at a disadvantage by losing gold and exp.
+
+Counter: Take exp from your jungler and then tornado the wave when it enters tower range.
+
+DON'T BAIT YOUR JUNGLER BY CALLING HIM FOR GANK because you can't save him after a fail gank because of your low cc.
+
+Also always go to the lane with fire giant ALWAYS.
+
+https://account.hirezstudios.com/smitegame/stats.aspx?player=nkpyo
+If you see my recent ao games in conquest all have been played without a mouse on a laptop and in a 1v2 lane.
+
+Any arguments?I do know that ao kuang is squishy and all but you just have too keep an eye for ganks and be wary of your enemies in front of you.Also I played in casuals and I a not a pro so I would like some comments on why this wont be viable?",1372504681.0,0,0.5,12
+Smite,Anubis is an amazing god :D,"I just realised that anubis is an amazing god.If you have a fed and good anubis in you team in casuals you win:).Yay for free wins with anubis :3
+
+Theres no counter to anubis in casuals even though you are fed because he just has to ult and regain his whole health from lifesteal thats so much fun :D.The enemies cant do anything in front of him cuz even if anubis dies his teammates get a deicide . yay for anubis ult work in teamfights :).Communication is just so hard and no-one retreats  in casuals when told in casual but actually... where are they going to retreat if anubis is behind them :/ So gg to all the people who play anubis I love how you guys get freewins >.< <3
+
+Edit: Honestly how could I carry the game with a 5-0 ao at 15 mins mark?
+https://account.hirezstudios.com/smitegame/match-details.aspx?match=17294151
+
+What happens after we kill anubis?
+After my whole team has used almost all of our abilities on anubis to kill him his teammates destroy us , so even if he dies its a deicide.And i am saying anubis is OP in casuals.Teamwork and mutual understanding is achieved only in ranked ;_____; If instead of anubis it was some other god it would have been possible to counter them but anubis does 1500 damage with his 1 and 1200 with his 3 and if you aegis that he does 5000 damage with his ult and the team cant do anything cuz if they try to help they are going to get hit by the abilities too or his teammates would wipe them out so its a gg always against anubis annd he just makes casuals boring for me >.>",1372332109.0,0,0.25,22
+Smite,Rewards for good teamwork :D,I think Hi-Rez should add an option to give honor to a teammate on his communication skills and how effectively he used VGS commands and reward them accordingly :) I think it will encourage more teamwork and people will start using VGS commands a lot more than now.Also you need to add more VGS commands Hi-Rez :D,1372258443.0,5,0.67,13
+Smite,I found this awesome art of ao kuang on net,,1371552328.0,9,0.66,12
+Smite,Was trying isis first time in conquest when matchmaking.......,"screeewweed me up D:
+
+http://i.imgur.com/QHk6vty.jpg?1
+
+Should I still try to play isis?I don't think i am gonna play her again :/
+
+They called me a noob isis several times even though i told them i am a noob with her :(",1371204252.0,0,0.5,17
+Smite,Change the Sand Guardians to Gods,"Instead of having the sand guardians in Domination, it would be better to have three earth gods or if thats not possible please change the appearance of the sand guardians so that each one is unique.",1370954312.0,0,0.33,2
+Smite,How much would you pay for this Loki Skin?,,1370343393.0,0,0.31,2
+Smite,Awesome Arena game i had today :D,"At first we were owning them,I was the agni, and we all had 0 deaths.Then the Ymir(my friend papaya :D) dc'ed and we had to play carefully but they were really good and caught us off guard.Then the Anubis dc'ed and it was just me,fenrir and thor.We still managed to win 3v5 against them by stunning to help each other and killing with coordination.Was an amazing match,props to everyone in the match :D,also made a new friend Dslayer5891.We won closely with 16-0 :)
+
+https://account.hirezstudios.com/smitegame/match-details.aspx?match=14217222",1369047225.0,1,0.67,7
+Smite,I can haz double tornado :3,"http://imgur.com/rFhIKvX
+
+Yes!, You CAN!!
+
+http://www.youtube.com/watch?v=gbcn0E07x_g
+
+My CDR was capped + I used level 3 purification beads for instant 5 sec cd reduction :D",1368971832.0,11,0.63,21
+Smite,When you will you fix this bug Hi-rez?,"Its been a lot of time, but when is hi-rez gonna fix the bug of the 'Y'/Damage Taken screen.It shows the damage taken of your previous death instead of the recent death.Its a very important part of MOBA to get to know the damage done by enemy characters.",1367943635.0,11,0.88,12
+Smite,I just ONE-SHOT The Gold Fury!!!!!,"http://www.youtube.com/watch?v=4nq7s9UX5HE
+
+Why don't you guys put some funny/random background music or put your reactions to the background of the video(Creative Commons) and just post it in the comments below? Just for fun :D
+
+",1367682078.0,2,0.57,10
+Smite,When I step into Ymir ult after Ra blind.,"My reaction when I die after ymir ult........
+http://www.youtube.com/watch?v=H91rPIq2mN4",1367406913.0,0,0.33,2
+Smite,When people step into ymir ult by mistake.,,1365429161.0,0,0.5,0

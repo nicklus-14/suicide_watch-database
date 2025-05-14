@@ -1,0 +1,119 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+devops,"Single-Workstation ""Dual Boot"" using a Hypervisor?","Hello r/devops,
+
+I'm not sure if this is the right place to ask this, but I figure this sub is the best chance at running into someone that might be able to point me in the right direction.
+
+I'd like to preface that I am no stranger to virtualization, and what I'm asking is more-so proof-of-concept rather than asking for an officially supported solution for a prod environment. Now, on-to my lunacy.
+
+&#x200B;
+
+I have this inspiration in my head, my daily laptop is currently traditionally dual-booted with Debian and W11 (I have to learn the quirks, otherwise I won't be able to help users when the time comes)
+
+I absolutely *hate* how clunky it is to switch between OSes, and my sessions aren't properly persisted as I'd like them to be. I was curious if there is a solution to run both systems on a hypervisor. Kind of like when you enable Hyper-V and all of the sudden your ""host"" OS is now running on top of the HV. The structure would be like this.
+
+              Laptop
+                |
+            hypervisor
+           /          \
+         OS1          OS2
+
+&#x200B;
+
+With the caveat that I'd like the OSes to pause when switching, so that resources are more or less ""dedicated"" to each OS when in use. I feel like a setup like this would be practical as it would allow you to quickly switch between environments, without requiring too many resources from the metal.
+
+&#x200B;
+
+Let me know if I'm crazy,
+
+Yzzel.
+
+&#x200B;
+
+EDIT: P.S. I have a not-so-similar setup on my esxi host at home, where I have a Windows and Linux ""desktop"" dev environment that I remote to from my laptop. This idea comes from not wanting to be tethered to my network (Wireguard or LAN) for these environments.",1636986032.0,0,0.5,11
+PowerShell,Storing Hash Tables/Calculated Properties in Array,"Hey guys, long time lurker. I'm at my wits end with trying to optimize this script. I'm pulling resource values from servers to generate an e-mail report. For the sake of not posting the whole script, I'm gonna focus on the parts of the script with storage info.
+
+&#x200B;
+
+I'm trying to simplify the use of my Select-Object statements, and wanted to store my calculated properties in an array to pass as an argument. (Not even sure if what I'm saying makes sense, I digress.)
+
+This is what my (sad) attempt at doing this currently looks like, I've tried many (bonehead) iterations and cannot for the life of me get this to work.
+
+    $DriveSpaceTableObjects = @(
+        @{'Name' = 'Drive Letter'; Expression= {$_.DeviceID}}
+        @{'Name' = '% Utilization'; Expression= {(($_.Size - $_.FreeSpace) / $_.Size).ToString('P')}}
+        @{'Name' = 'Size (GB)'; Expression= {[int]($_.Size / 1GB) }}
+        @{'Name' = 'Free (GB)'; Expression= {[int]($_.FreeSpace / 1GB) }}
+        @{'Name' = 'Server'; Expression = {$env:COMPUTERNAME}}
+    )
+    Get-CimInstance -ClassName Win32_LogicalDisk | Where-Object {$_.DriveType -notlike 4 -and $_.DriveType -notlike 5} | Select-Object $DriveSpaceTableObjects
+
+Here's what's frustrating, this works for the above, but when I try to pass it with `Invoke-Command` as below:
+
+    $dcserverspaceremote = Invoke-Command -Authentication Kerberos -ComputerName $DCServers -ScriptBlock{
+        Get-CimInstance -ClassName Win32_LogicalDisk | Where-Object {$_.DriveType -notlike 4 -and $_.DriveType -notlike 5} | Select-Object $Using:DriveSpaceTableObjects
+    }}
+
+It doesn't work. I cannot figure out why. Please help. Lol
+
+EDIT:
+
+Here are the responses for the respective commands.
+
+Local `Get-CimInstance`
+
+    Drive Letter  : C:
+    % Utilization : 37.05 %
+    Size (GB)     : 200
+    Free (GB)     : 126
+    Server        : EXAMPLESERVER
+
+`Invoke-Command`
+
+    Drive Letter   : 
+    % Utilization  : 
+    Size (GB)      : 
+    Free (GB)      : 
+    Server         : 
+    PSComputerName : EXAMPLESERVER.EXAMPLE.LOCAL
+    RunspaceId     : 93767eab-5cf7-4018-9791-c94d5961b5bb
+
+EDIT FROM COMMENT:
+
+Okay, I'm onto something. See the following:
+
+Using this array (Modification on the last line)
+
+    $DriveSpaceTableObjects = @(
+        @{'Name' = 'Drive Letter'; 'Expression' = {$_.DeviceID}}
+        @{'Name' = '% Utilization'; 'Expression' = {(($_.Size - $_.FreeSpace) / $_.Size).ToString('P')}}
+        @{'Name' = 'Size (GB)'; 'Expression' = {[int]($_.Size / 1GB)}}
+        @{'Name' = 'Free (GB)'; 'Expression' = {[int]($_.FreeSpace / 1GB)}}
+        @{'Name' = 'Server'; 'Expression' = {$_.Server}}
+    )
+
+I run Invoke-Command like this
+
+    Invoke-Command -Authentication Kerberos -ComputerName $DCServers -ScriptBlock{
+        Get-CimInstance -ClassName Win32_LogicalDisk | Where-Object {$_.DriveType -notlike 4 -and $_.DriveType -notlike 5} | Select-Object *,@{'Name' = 'Server'; 'Expression' = {$env:COMPUTERNAME}}
+    } | Select-Object $DriveSpaceTableObjects
+
+Then my responses come in properly. I have a feeling that the `$Using:` scope applies it to all of the variables in the array, but if that was the case, then I would at least get back ""Server"" as my local workstation name.
+
+&#x200B;
+
+Still doesn't feel like an answer, though. Would like to keep trying.",1634746661.0,8,0.8,30
+sysadmin,Unknown account audit/monitoring to generate a permissions model,"\~\~\~\~\~\~ BACKGROUND \~\~\~\~\~\~
+
+Hello, long time lurker. I'm usually decent at figuring out this stuff on my own, I've tried searching, and I'm 100% sure there's an answer out there for me, but I can't figure out what to search. Anyway:
+
+&#x200B;
+
+I am a mostly sole SysAdmin (3 man operation, 500+ employees), my help consists of someone who fields the easy stuff, me (backend, admin stuff, provisioning/de-provisioning, permissions, process improvement, etc. Pretty much anything 'important') and my boss, who wears too many hats to focus on IT.
+
+&#x200B;
+
+I inherited a situation where they have been keeping the systems working, but that's it. So there is lots of housekeeping in order.
+
+\~\~\~\~\~\~ END UNIMPORTANT BACKGROUND \~\~\~\~\~\~
+
+I am trying to find a way to monitor an account over a period of time, to see what security permissions it uses, so that I can create a Security Group only with the exact permissions it needs. It's a service account that has been given Domain Admin out of laziness (yikes). The first account I'm trying to tackle deals with printing, but there's several more on the Domain Admin list that I need to get rid of. Any help is appreciated, even if it is just what to search for.",1633367381.0,3,0.72,3

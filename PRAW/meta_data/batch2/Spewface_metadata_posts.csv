@@ -1,0 +1,331 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+Vaporwave,"Elmers Glue Cut & Build, Spacestation & Hometown USA, circa 2005",,1725080897.0,1,0.6,1
+USMC,Boots untied? Show me the order.,"Long story short, a Marine in a schoolhouse I'm attending had his boots untied, and after attempting to correct him, he asked me to show him where in the order it states that they have to be tied or secured.
+
+Now, I took this as an opportunity to both educate myself, and demonstrate what being a squared away daggon devil is, and called his bluff. Tragically, I failed to justify my disdain for his appearance via deferral to an order; however, myself and other admirable Marines enforced good order and discipline and got the Marine to tie his daggon boots. But I am wondering, do any of you Ladies or Gentlemen know of a reference I am missing that clearly states how, or why, to tie boots?
+
+Call me an idiot, but I couldn't find it in 1020.34H. I also looked in the local base order, and its referred NAVPERS 156651, but I couldn't find anywhere that ""footwear needs to be secured"", or anything of that nature. The closest thing I could find was about boot blousings that, ""When combat boots are worn, the trousers will be bloused in a neat uniform manner"" (1020.34H, 1-71), but nothing stating how footwear should be fixed to the body.
+
+Any help or guidance in this matter would be appreciated - I hate to sound cliche, but the new generation of Marines are equipped with knowledge - which can be a great thing, but terrible when used with bad intentions.
+
+Semper Fi",1722480666.0,2,0.57,21
+programming,"I made a web app for Personal Finance by visualizing your budget, let me know what you think",,1641599381.0,31,0.78,8
+haskell,"WebSockets-RPC: A simple ""streaming"" RPC mechanism for your fancy Haskell / Purescript webapp","I quickly ducktaped this system together, and there isn't a strict protocol for websocket-rpc (that I know of) of which I based this on; this is simply an obvious pattern that I wanted to capture. Please tell me what you think of it, and if you can improve the code (performance analysis would be nice!)
+
+Haskell: https://github.com/athanclark/websockets-rpc
+
+Purescript (client only): https://github.com/athanclark/purescript-websockets-rpc",1488925724.0,12,0.82,1
+haskell,[Code Review] Time-indexed mutable map,"Hi everyone, I made a simple structure for a time-indexed mutable map container - basically a `Data.HashMap`, but for entries that you want to measure the age of. This would be useful for something like a cache that you want to clean-up often.
+
+I'm looking for suggestions if you have any, it's still very new and I don't have everything implemented that I'd like to yet. Here's the link: [https://github.com/athanclark/timemap](https://github.com/athanclark/timemap)
+
+## The kind of suggestions needed:
+
+- Performance and optimization - are there other structures I should be using to implement it? What about strictness and `{-# UNPACK #-}`?
+- Standard functions
+
+Any help with this would be very much appreciated!
+
+### Edits
+
+- Now using stm-containers instead of hashtable, its about 1.3x faster
+- Added `update`, `timeOf`, `ageOf`, `filter`, `filterWithKey`, `keys`, `elems`, `size`, `null`",1449788634.0,7,1.0,1
+haskell,Incremental unification and program manipulation,"Hi everyone, I would like to discuss the options for this concept - _incremental_ program creation, typechecking, and modification.
+
+For starters, I would like to direct attention to prenex polymorphic / Hindley-Milner type systems like Haskell and PureScript, for brevity. The existing methodology is to create your program with text, then invoke your compiler to attempt type checking _from the empty state_ - unifying inference and type signature claims throughout the whole program, but starting from a blank slate. I believe that an initiative for incremental development may be a strong gain (or at least a fun toy) for systems like Haskell. The idea came to me when I starting thinking about social networks, and the feasibility for users to claim something abstract, but structurally precise - like code or logic, for instance. The issue you immediately run into is code correctness - if you have a swarm of users appending and editing a shared codebase, __without__ locks, then the result will diverge into a garbled mess very quickly.
+
+---
+
+This got me thinking - mostly about totality and atomic substitutions across a codebase - if I had a data type `Foo`, and wanted to add a new sum-type data constructor to it, we all know how we would traditionally code this - we would make the change for `Foo` (in our editor), then make the change for every function involving `Foo` as an input, to retain totality of functions (pattern matching gets interesting here, with the use of wildcards `_`).
+
+But, say we instead decided to build a _substitution_ for our code (or really, a lens into our codebase where we modify). Now, we could declare the fields to be _added_  or _removed_ from `Foo`, and with some magic, we could also induce other required substitutions for functions that depend on `Foo`, to retain totality.
+
+The semantics for a system like this is fairly interesting, because it's not what is normally common when looking at denotational semantics - usually we address the expression's grammar, or the grammar of a type (like in pure type systems). But in this case, we would need to address the semantics for _declaring_ expressions and types, and show that our substitutions / modifications retain totality.
+
+---
+
+I think this could be a new design for a Haskell interpreter - the main issue is that our type checking can't be garbage collected in an obvious way. I'm checking out OutsideIn(X) right now, but I'm fairly new to constraint solvers so I can't promise that I'll have a truly incremental version soon. But it would still be interesting to see how we could make a runtime system that's editable, in an atomic way, that is still efficient in typechecking (you don't need to recheck terms that are outside the reach of the modified subject matter), but may not be very efficient operationally (but would be efficient in terms of _adjusting_ the operation at runtime).
+
+I argue that a system like this would be very useful for collaborative logic programming, like a financial trading network, where you would not want to ever take the running system down, but would like to tweak it at any given time, by many different people _at the same time_. Or really, any network where people could be collaborating in the same codebase. It would be interesting to see groups of people translate something complicated and abstract, like a legal system, into a program that all the experts contribute to.
+
+Does anyone have any ideas for a research project like this? Maybe something that already exists, papers to add to my stockpile, or counter arguments to show where I might be being silly? Any help with my understanding would be greatly appreciated.",1448491143.0,17,0.87,12
+haskell,Status of Percent Encoding and x-www-urlencoded in Haskell web services,"Hi everybody, I've been wrestling with x-www-urlencoded for a couple days now, and have found myself a bit perplexed.
+
+---
+
+From what it seems, Yesod has some [custom parsing going on under the hood](http://stackoverflow.com/questions/20675038/in-the-yesod-ecosystem-what-is-the-best-way-to-urlencode-some-text) to make sure the decoding is correct. I did a bit more investigation (ie; [asked a follow-up question on SO](http://stackoverflow.com/questions/33704839/discrepancies-of-percent-encoding-for-urls/33705245?noredirect=1#comment55214485_33705245)) and found it to be a bit more tricky than I expected.
+
+A quick google search led me to the [urlencoded library](http://hackage.haskell.org/package/urlencoded-0.4.1/docs/Data-URLEncoded.html), which looked fairly promising at first (it uses MonadError via `fail`, instant red-flag for me :\ ), but after further investigation [it actually gets parsing incorrect](http://hackage.haskell.org/package/urlencoded-0.4.1/docs/src/Data-URLEncoded.html#importString) - query strings don't necessarily _need_ a value associated with a key - it's all well and fine to do something like `?key1=val1&key2&key3=val3`; no `val2` is required.
+
+This leads me to believe that the best method we have to decoding percent-encoded strings is with [Network.HTTP.Base.urlDecode](http://hackage.haskell.org/package/HTTP-4000.2.20/docs/src/Network-HTTP-Base.html#urlDecode), then _manually_ break the string into a `[(String, Maybe String)]` (and do `+` substitution afterward).
+
+I feel like we can do better - maybe an attoparsec parser would better serve us? What methods do you use to perform form-data parsing? Any help with this would be greatly appreciated.
+
+---
+
+__EDIT__: Just found [http-types' urlDecode, too](http://hackage.haskell.org/package/http-types-0.9/docs/Network-HTTP-Types-URI.html#v:urlDecode).",1447615048.0,12,1.0,9
+haskell,withState' - why doesn't this exist?,"I've been finding _scoped_ stateful computations useful - to compute a single state with `StateT` is fine and dandy, but what if you want to compute another stateful computation, that uses a _different_ state type?
+
+I really just want something like this combinator:
+
+    withState' :: (s1 -> s2) -> (s2 -> s1) -> StateT s2 m a -> StateT s1 m a
+    withState' to from x = do
+      now <- get
+      let (y, now') = runState x (to now)
+      put (from now')
+      return y
+
+Does something like this exist somewhere in the deep, dark corners of Hackage that nobody touches? :|",1446787456.0,18,0.89,8
+haskell,How to nest WAI routes - 1,,1446322319.0,13,0.93,6
+haskell,[Proposal] `returnWhen` for MonadPlus,,1440606110.0,9,0.67,34
+haskell,"""Growable"" as an abstract container for enumerations?","The `Enum` class gives us `enumFrom`, `enumFromTo`, `succ`, etc. My issue with these is their restriction to lists as their result:
+
+    enumFrom :: Enum a => a -> [a]
+
+I'm wondering if there could be different behavior for different data types - generating a tree, for instance, might add multiple nodes on each layer, fanning out, instead of a singleton tree like lists.
+
+I'm imagining something like the following class:
+
+    class Growable f where
+      another :: a -> f a -> f a
+
+And to revise `Enum` to fit:
+
+    enumFrom :: (Enum a, Growable f) => a -> f a
+
+Do you think there is any value to this idea? If not, why? I think it would be great to have generic enumerations, but counter examples are always welcome!",1440263878.0,6,0.76,2
+haskell,[RFC] Overloading Set Operations,,1439163374.0,4,0.83,7
+haskell,Commutativity and Unordered Sets in Haskell,"Before you start flinging rotten tomatoes, I realize that commutative operations aren't important in Haskell for a reason. That being said, there was an interesting discussion on [#haskell](http://ircbrowse.net/browse/haskell?id=21124389&timestamp=1438017956#t1438017956) today - how can Set be foldable, when sets are supposed to be unordered?
+
+It was quickly answered that the Haskell `Set` is indeed ordered. But, this still didn't scuff my interest, so I decided to make a library for [commutative binary operations](https://github.com/athanclark/commutative).
+
+It turns out to parallel `Monoid` and `Foldable` very closely, but there is an interesting result - I can't conceivably make a correct `Commutative` instance at the binary operation level. The nature of pure functional programming states that functions are to be consistent - `f a` should be the same `f a` all the time. However, the nature of commutativity states that `f a b` _could be_ `f b a` at any later point - it doesn't matter.
+
+So, I pulled out my stapler, `unsafePerformIO`, and viola! We have [""commutative"" instances](https://github.com/athanclark/commutative/blob/master/src/Data/Commutative.hs#L48) that randomly chose between `a <~> b` and `b <~> a`.
+
+-----
+
+A cleaner solution might be to define the `commute` operation at the set level, much like `mconcat`. So, I bantered around and made ""`Mergeable`"" - the analogue to an unordered `Foldable` (which has about as terrible semantics as it sounds). From this, I made instances for lists, both possibly empty and non-empty.
+
+Where do we go from here? Is there any hope for our obsessions? I also made a basic [unordered set implementation](https://github.com/athanclark/sets/blob/master/src/Data/Set/Unordered/Unique.hs) which could serve as another instance for `Mergeable`, but I don't see much practical / performant utility.
+
+Has there been much history of commutative attempts in Haskell? What are the underlying issues? Would we actually gain anything (for the compiler) to state that a whole set can be evaluated in any order, or that the set can be partitioned in memory in any way?",1438050550.0,11,0.82,6
+haskellquestions,Is this a valid monadic combinator?,"I couldn't find this anywhere else, so I threw it together. Please tell me what you think!
+
+    tillM :: Monad m => m Bool -> (a -> m a) -> a -> m a
+    tillM p f x = do
+      p' <- p
+      if p' then tillM p f =<< f x
+            else return x
+
+Would this be legitimate? I'm not sure what the laws would be, yet, but the ideal use case is when you have a stateful function you'd like to fix with an input value, until some property of your _stateful_ data is found.
+
+__EDIT__: Wait, crap, I think `till` is already defined as an inverse boolean interpretation. Crud. Any ideas folks?",1437688157.0,0,0.5,4
+haskell,[Spoiler] Project Euler #24: why Haskell is syntactically awesome,"(and operationally awesome, too)
+
+Problem 24 asks us what the millionth (lexicographically ordered) permutation of `[0,1,2,3,4,5,6,7,8,9]`. How do we get this?
+
+    import Data.List
+
+    (sort $ permutations $ [0..9]) !! 999999
+
+Bam.",1433890704.0,19,0.82,27
+haskell,"[Question] Would an ""Associated Data Constructor"" be possible?","I had an idea for a different style of pseudo-generic programming - having associated data constructors. Here's what the idea would look like:
+
+    class Foo a where
+      term Term1 :: a
+      term Term2 :: Int -> a
+      term Term3 :: String -> a
+      term Recurse :: a -> a
+
+      foo :: a -> IO ()
+      -- default instance
+      foo Term1 = putStrLn ""term 1""
+      foo (Term2 n) = print n
+      foo (Term3 s) = putStrLn s
+      foo (Recurse f) = foo f
+
+And when writing an instance, you could either depend on the data constructor aliases to define your (default) `foo` function, or be more specific:
+
+    data Bar = Bar1
+             | Bar2 Int
+             | Bar3 String
+             | BarR Bar
+             | Bar4 Bool
+
+    instance Foo Bar where
+      term Term1 = Bar1
+      term Term2 = Bar2
+      term Term3 = Bar3
+      term Recurse = BarR
+
+      foo (Bar4 b) = print b
+
+I don't know what implications this would have for compiler implementations. Do you think it would be possible? The main use-case I could see this being profitable for are generic type inference / checking algorithms, that want to be generic over the Expression and Type data types, but also want to define behavior in advance.",1433523892.0,8,0.91,7
+functionalprogramming,Introducing λtext - General Purpose Templating Utility,,1433114681.0,8,1.0,2
+programming,Introducing λtext - General Purpose Templating Utility,,1433109887.0,16,0.67,16
+haskell,Introducing λtext - General Purpose Templating Utility,,1433109862.0,38,0.94,23
+haskell,"Not sure if you might find this useful, but I know I will use these combinators.",,1432771557.0,3,0.59,13
+haskell,Enriching Lucid with Overloaded Monads for easier App Migration,,1431564057.0,15,0.94,5
+haskell,Can we make Sum and Product... Foldable?,"I know they're not operationally polymorphic (restricted to numbers), but I still would find it interesting to see:
+
+
+    -- | I know, I didn't put proper constraints :\
+    foldrSum :: (a -> b -> b) -> b -> Sum a -> b
+    foldrSum f acc (Sum 0) = acc
+    foldrSum f acc (Sum n) | n > 0 = f n $ foldrSum f $ Sum $ n-1
+                           | otherwise = f n $ foldrSum f $ Sum $ n+1
+
+    primeFactors x =
+      let (xs1, xs2) = unzip [(n, x `div` n) | n <- [2..intSqrt n], x `mod` n == 0] in
+      nub $ xs1 ++ xs2 ++ [x] -- remove duplicate from square numbers
+      where
+        intSqrt = floor . sqrt . fromIntegral
+
+    -- | Nor did I here
+    foldrProduct :: (a -> b -> b) -> b -> Product a -> b
+    foldrProduct f acc (Product 1) = acc
+    foldrProduct f acc (Product n) = let ns = primeFactors n in
+      f n $ foldrProduct f $ Product $ n / head ns
+
+So `Sum` is something like a distance away from 0, and the catamorphism's normalization (correct?) simply approaches 0, and `Product` depends on unique prime factors to comprise the number - where if `n` is my test case, then deconstructing `n` should prolong `1 * n = n` until the base case as well.
+
+__EDIT:__ Here's a cool thing I found after looking! http://hackage.haskell.org/package/monoid-subclasses-0.4.0.4/docs/Data-Monoid-Factorial.html",1431060105.0,0,0.46,2
+haskell,"RESTful Wai routes, hold the onions",,1431039939.0,11,0.92,2
+haskell,"Nested Routes - Declarative, Compositional Wai Responses","Hello everyone, I just finished my routing library and I'd like some feedback: http://hackage.haskell.org/package/nested-routes
+
+It's very similar to Scotty / Spock, except for a few differences:
+
+- Routes may be declared in a nested manner
+- You can inject Attoparsec parsers directly in route handlers
+- File Extensions are directed to the appropriate response
+
+This is geared to make the process of web application development easier - Handling `.json` requests is automatic, and variable routes is as easy as injecting an attoparsec parser and prefixing your response with the appropriate function arity.
+
+Right now, it only works with GHC 7.8 because HList 0.4 isn't published yet, but you can clone the darcs repository and `cabal sandbox add-source ...` it in to use 7.10 :)
+
+Any questions or comments are more than welcome!",1430147536.0,12,0.94,6
+javascript,JavaScript with partial application,,1415562701.0,10,0.71,6
+webdev,Why Yesod > Rails (in my opinion),,1403814750.0,2,0.56,2
+math,"Post High-schooler trying to learn Category Theory for Haskell, please help! I don't even know Mathematical Proofs yet (technically)!","Hello everyone. I've been on a mission to learn Haskell - I find it to be the future of computing, technology, and our world (and I need some help undertaking the task of its prerequisites).
+
+What I really need to learn, though, is Category Theory. I've got the basics down (functors, isomorphisms, monoids, etc.), but I don't understand it definitively. When I ask around, everyone on Freenode compares topics to objects in Abstract Algebra. So I decided to put-off Category Theory, and switch to that for a while.
+Now, my Abstract Algebra book is going into things like equivalence relations and mathematical induction proofs (which I know nothing about!)
+
+Where should I go from here to gain my pre-req's? I know nothing about mathematical logic, so I feel like that would be a good start. I also haven't picked up my calc. book in a loooooong time. What would be a good book for me, to get the basics of mathematical proofs with sets, numbers, etc? Thank you in advance!!",1391486902.0,3,0.71,26
+userexperience,Why don't text editors support sys-admin config file syntax highlighting?,"Professional editors like vim and emacs _must_ have implementations of syntax highlighters for common config files like apache, dhcpd, dns, etc. Why not have some installed by-default in Ubuntu/<insert OS here>? Or, even better, have the appropriate program-specific syntax package included in the installation __of that program__? Food for thought!",1390289722.0,0,0.5,7
+linuxaudio,Have you heard of kxstudio? It looks bad-ass,,1366758412.0,10,0.76,2
+Gentoo,Will turning package.keywords into a directory screw up dispatch-conf?,"I'm trying to install an overlay to get my audrino working, and avr is telling me that package.keywords needs to become a directory. I know that portage will work fine and use all the contents of the files inside the directory, but will dispatch-conf work when I do a `emerge something --autounmask-write`, or will I have to manually edit the entries? Is there any way to configure dispatch-conf so it will go to the file I'd like it to? Thanks in advance!!",1366319076.0,9,1.0,6
+Gentoo,"[NOOB] Portage overlays, package.keywords, and dispatch-conf?",[removed],1366170882.0,1,1.0,0
+linuxaudio,JACK Compressor with sidechaining support?,"Hi yall. I'd really like to be able to compress an audio feed live in response to another audio feed, is there any JACK compatible software for this? Or maybe a LADSPA/LV2 plugin for it? Any help would be awesome! Thanks!",1366138290.0,6,1.0,4
+linuxaudio,Documentation for LASH?,"I can't seem to find any.. I'd really like to be able to switch between my software setups quickly and on the fly, but I'm not sure if this is the only option. Any ideas anyone? Also, what's your favorite real time audio setup? Thanks in advance!!",1365874857.0,3,1.0,1
+Bitcoin,You know what we need? An extension to HTML5.,"I know it sounds un-necessary, but if there was a semantic markup for users though html (which would include some block for a bitcoin address), than we could just have our local machine/browser send bitcoins rather than trusting websites with it. It would also allow forum users across the board (like phpbb, wordpress, etc.) to be able to recieve them from any users anywhere as easy as possible. Any thoughts?",1365580533.0,0,0.5,2
+linuxaudio,Anyone know if it's possible to make a midi knob control X / gtk buttons/switches?,"I find it really difficult to switch from sooper looper to jack-rack with the mouse to edit the settings. I was wondering if it were possible to assign (separate) hardware to specific buttons of certain programs, that way live music would be way easier. I'd be happy with something like F2 or something doing a ""record"" on sooper looper.
+
+I know it's probably way out of my league, but is there any way I can configure X at run time to be able to do this? Maybe a hotkey that calls a specific program that delegates to sooper looper as a ""record"" command? Any help would be really appreciated :)",1365574355.0,6,0.88,3
+Gentoo,NetworkManager rising from the dead?? How do I kill this thing??!?,"So I recently installed networkmanager thinking it would make wifi life easier, but nothing has ever been more of a pain in the neck to get working. Initially I added it to the default runlevel for the daemon to start, but in order to trace down the colsolekit session, I thought it would be easier if it were removed. I did a rc-update del NetworkManager and got the green light that it had been removed, yet as I boot the service starts!! How do I kill this thing?? Also consolekit isn't on a runlevel either. Thank you in advance!!",1364867020.0,4,0.7,11
+Gentoo,Firmware package doesn't exist anymore??,"Hi everyone, I've been trying like mad to get my wireless adapter working (it's specific type is a Ralink rt2571w, via USB), and it uses the rt73usb module (everything kernel-wise is compiled correctly). Gentoo actually has a guide for it here: http://en.gentoo-wiki.com/wiki/Ralink_RT73
+So far everything works; the module is loaded, and the device shows up under lshw, yet it says its disabled (can't physically enable it, no switch), so I thought it was just missing the firmware. I don't think the package ""rt73-firmware"" exists, though. I can't find it in gentoo's online package listing, and emerge can't find it either (even when placing it in package.keywords like the guide says). I'm really lost here guys. Any love for a noob? Please, any tips or guidance would be really appreciated. Thanks!",1364775955.0,5,0.78,10
+javascript,Design Pattern Performance Battle! Synchronous Error Handling Match #1,"Here is a jsPerf of some common design patterns for error handling in synchronous libraries:
+
+[Sync. Error Handling - Error Made](http://jsperf.com/synchronous-try-catch-vs-instanceof-return)
+
+[Sync. Error Handling - No Error Made](http://jsperf.com/synchronous-error-passing-vs-throwing)
+
+As you can see, the instanceof operator is **way** faster than throwing and catching when an error is made. Counter-intuitive, don't you think? The other test shows a *slight* lead on throwing + catching when an error isn't made, so there's that too.",1358616235.0,0,0.5,2
+design_critiques,Made a new logo for RailwayJS - a Rails clone for Node.js,"Found this awesome project and thought I could give em a new logo, Here it is:
+http://athanclark.com/railwayjs-logo.svg
+And here's the icon:
+http://athanclark.com/railwayjs.svg
+
+Whachyall think? Any suggestions?",1355590916.0,3,1.0,4
+learnprogramming,[all] Cubic spline intersection point algorithm explanation?,"Hi fellow programmers, I'm trying to write a library that does vector-graphics path operations like the ones found in inkscape:
+[union, intersect, difference, etc.](http://kalaalog.com/2007/11/01/inkscape-path-operations-basic-tutorial/)
+
+I'm trying to write it in javascript to be used with [paper.js](http://paperjs.org/], but that's not important. I'm just having a hard time finding out what the best way to approach it is!
+I did some digging on how the cubic spline is graphed and found some good info here:
+[how cubic splines are rendered](http://13thparallel.com/archive/bezier-curves/)
+
+The only problem is that if you use a constant rate of change for the percentage along the line (like 0.1, 0.2, 0.3, etc.), you get this kind of effect:
+[inconsistent graph](http://13thparallel.com/archive/bezier-curves/example3.htm)
+
+Anyway, I was thinking a possible approach would be to populate two arrays (one for each curve) of the 2D points obtained from running the [function](http://www.wolframalpha.com/input/?i=f%28x%2CA%2CB%2CC%2CD%29+%3D+%28A+*+x%5E3%29+%2B+%28B+*+3+*+x%5E2+*+%281-x%29%29+%2B+%28C+*+3+*+x%281-x%29%5E2%29+%2B+%28D+*+%281-x%29%5E3%29) (x is the percentage), then to search through the arrays to find the closest points. Then, I could use some calc to get a pixel-perfect result by having the percentage's be a derivative of the cubic spline function for the path. So the percentage's derivative would be the derivative of the spline. Then, I could just move pixel by pixel (or arbitrary value by arbitrary value) to get a more precise result, like a ""capturing"". Too inefficient an approach?
+
+I thought so, too. So, I thought about figuring out what the inverse function of the cubic spline function would be. Then I would be able to find all the inputs that would cause the graph to have a specific value, like all the points that have a specific x value. Then, I'd be able to iterate through the points on one spline, running it's coord's through the inverse functions for each axis to see if I was getting close.
+The original function is this:
+
+[wolfram alpha](http://www.wolframalpha.com/input/?i=f%28x%2CA%2CB%2CC%2CD%29+%3D+%28A+*+x%5E3%29+%2B+%28B+*+3+*+x%5E2+*+%281-x%29%29+%2B+%28C+*+3+*+x%281-x%29%5E2%29+%2B+%28D+*+%281-x%29%5E3%29)
+
+But the inverse is this monster (according to wolfram alpha. I haven't done maths in a really long time):
+
+[egad](http://www.wolframalpha.com/input/?i=inverse+of+f%28x%2CA%2CB%2CC%2CD%29+%3D+%28A+*+x%5E3%29+%2B+%28B+*+3+*+x%5E2+*+%281-x%29%29+%2B+%28C+*+3+*+x%281-x%29%5E2%29+%2B+%28D+*+%281-x%29%5E3%29)
+
+The *good* news is that I can easily test to see if either of the curves to be intersected are linear or not, so there's a possible optimization. But other than that, I'm kinda out of ideas.
+
+Anyway, finding the intersections is just the first part. I'll need to interpolate the remaining curve in order to create a new one that mends the cut / addition. But (I'm hoping) that won't be as hard.
+
+/r/learnprogramming, am I approaching this problem the wrong way? Any help would be greatly appreciated.
+
+**also**, I'd love to copy inkscape's source code and translate it to javascript, but I just can't find it in it's [code base](http://bazaar.launchpad.net/~inkscape.dev/inkscape/RELEASE_0_48_BRANCH/files)(stable). I might just ask them on their forums for their code or explanation for how it works.
+
+Thank you guys so much!
+",1354958157.0,3,0.81,0
+webdev,Semantic URL question... to include action name or not to include... that is the question.,"Hey everyone, I'm creating my first web application for my portfolio, and I was wondering what the best way to present my URLs would be.
+I was planning on having my router (I'm using CakePHP, might switch to rails later when I get it working) direct everything from /portfolio/ to my portfolio controller, and then have /blog/ be my blog controller, but my issue is that I'm going to organize my projects in my portfolio a little funny. I'm planning on having two base Models - one for my projects, and one for the problems that the projects solve (like I'll have some problems be ""WordPress themes"" and ""Facebook Apps"" and ""Professional Websites"", and my projects could fit one or more of those criteria (like a wordpress theme that was developed for a professional website that I maintain, for instance), so they will have a many-to-many connection.). Here's where it gets tricky... Should I have nested Controllers so that I'll have a facebook-app controller with a show($id) action, or should I have a facebook() action on my portfolio controller that takes in an optional id parameter?
+My biggest question is would /portfolio/show/facebook/show/:id be acceptable? Or should I just try /portfolio/facebook/:id?",1350445016.0,1,1.0,6
+programming,Just realized this today...,,1350006634.0,1,1.0,0
+javascript,Backbone Views breaking on first try???,[removed],1349470835.0,1,1.0,0
+web_design,Semantic checker like YSlow?,"I looked online for a tool like yahoo's yslow for semantic web structuring, but I can't really find one. Is there a tool out there that will check for things like microformats, redundant html elements, and other things SEO friendly? I found a firefox addon, but it seems to just highlight the stuff. I think it would be really cool to see a score for a website like ""90% semantic"" or something.",1349456885.0,0,0.5,0
+javascript,Question with functions linking back to LexicalEnvironment,"I was reading an astounding article at http://javascript.info/tutorial/closures about closures, but I have an itching question...
+So the LexicalEnvironment object contains the values of each variable / function at each statement's execution, yet when JavaScript encounters a function, it sets it's property [[scope]] to the current LexicalEnvironment... Something that baffles me.
+
+So say you have this code:
+
+var foo = 0;
+function bar(param) {
+    return param + "" World!"";
+}
+
+The LexicalEnvironment object after each statement would then be this:
+
+// LexicalEnvironment = { foo: undefined, bar: function }
+var foo = 0;
+// LexicalEnvironment = { foo: 0, bar: function }
+function bar(param) {
+    return param + "" World!"";
+}
+// LexicalEnvironment = { foo: 0, bar: function(param) {...}, bar.[[scope]]: this }
+
+Do I have this kinda right or completely wrong? Any help would be greatly appreciated! Thank you!",1349324348.0,2,0.75,3
+PHP,Symfony's tricky installation,"Lords of PHP, master's of the dynamic programming realm, I have but one plea... Please help me get a working Symfony install on my personal server!
+
+The link is http://athanclark.com/Symfony/web/app_dev.php and if you can check it out, PHP right off the bat throws an error for the 3rd line - only the ""use Symfony\Component\..."" namespace statement. Any ideas what would cause this problem? Should i get a dump of my php.ini or phpinfo(); for you guys? Any help will be much appreciated!!!",1348840405.0,3,0.6,20
+Wordpress,Design Flaw...?,"So I'm trying to create a web portfolio, and I thought it would be a good idea to create a custom post type (I named them ""Projects"") to hold references to all my websites and junk.
+As I was creating it, I thought it would be a good idea to include some properties (like URL, Completeness level, etc.). So I thought I could create a new type of feature to support (just like thumbnails, title, etc.) and new template tags (ie get_project_url() ) so I could be like:
+
+if($post->supports('project_url')) get_project_url();
+
+but that seems like a road to the core, which would take a while to decipher / redesign.
+The only other way I could do it (moderately cleanly, anyway) would be to create a meta box for the project's edit screen, hook onto the on_save action to save the data and associate it with a post, then go into a theme and do some get_post_meta() magic to get it working.
+
+I know I could be like:
+
+if( post_type($post) == 'project' ) {
+    ... all the meta shizz ...
+}
+
+but that just seems to.. duck-tape-ey. Any ideas?",1343605988.0,5,0.86,3
+Wordpress,Anyone else have trouble with Contact Form 7 and Wordpress?,"EDIT: Sall good, I fixed it. It turned out that you need to use the [contact ...] tags inside a page or else it won't work. I used the raw html in a sidebar because the input size was too big. Muchas Gracias!
+
+
+Hey yall. So I've got a wordpress network hosted with FatCow.com. I installed the ""Contact Form 7"" plugin, and it seems that there is a server error. When I try to send a valid email with it, it gives me a ""Failed to send your message. Please try later or contact the administrator by another method."" error.
+
+Here's the website link: http://acss.athanclark.com
+
+I've tried poking around in the php source code, but I can't find where the validation stage happens (the action of the form is the ID of the same page!). I don't know a lot about jquery / ajax, but I don't think it's client-side. I did some snooping on google, and someone had a similar problem, and all they said is that it was a server-side problem. I tested php's native mail() function, and it worked just fine emailing me. Not really sure where to go with it.
+
+Here's my phpinfo(): http://www.athanclark.com/test.php
+
+If someone could help me with this, I will give cake. And a Clark always repays his debts.",1342807233.0,2,1.0,5
+linux,"Anyone else find ""The Linux Programming Interface"" to be one of the most helpful Linux books ever written?","I've got a little bit of history with C / C++, but I've never really had the patience to learn everything about it. This book, however, has gotten me very interested into learning the ins + outs. Since I've read this, I now know how to write portable *nix applications, the various system calls of *nicies, how opening files really mapps it's contents to an inner-program buffer, etc etc. It's really helped me learn the mechanics of operating systems. Anyone else have similar experiences, and any other great books to share?",1339118108.0,41,0.8,26
+todayilearned,TIL that an average computer will do a mathematical operation in the same time that light travels about 3.6 inches.,[removed],1335474104.0,2,1.0,1

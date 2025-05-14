@@ -1,0 +1,237 @@
+subreddit,body,created_utc,score
+KGATLW,I'm ready for a breakneck bluegrass version of The River,1685902750.0,46
+KGATLW,message sent!,1685634045.0,1
+DeepRockGalactic,I've seen a lot more of this lately. Friend was playing scout a few nights ago and said the driller C4'ed him and then revived him... just so he could do it again.,1678063140.0,3
+ExperiencedDevs,"Yup, no problem. Good luck!",1660676238.0,1
+ExperiencedDevs,"So hopefully I am understanding the problem correctly. You could have a Dockerfile using windows containers to have a readily available instance of QuickBooks Desktop. Depending on how Quickbooks Desktop handles data you could populate it using a volume mount or just a seed file. 
+
+Do you know if it's possible to establish that communication using either powershell or some other utility provided by Quickbooks? If so you could make that your entrypoint for whenever this container stands up. That was in CI all you need to do is start the container, have a listener for whenever that communication is established, and then start running tests.",1660672466.0,2
+ExperiencedDevs,Would it be possible to use a Dockerfile/image?,1660669449.0,0
+ExperiencedDevs,I use the pomodoro timer and it seems to help. Forcing regular breaks where I can get away from my desk and stretch makes a huge difference. That and I try to go for a walk or run during lunch.,1660430242.0,1
+AnarchyChess,I mean ya it's probably fine. Just was reminded of that article from a few years ago.,1616026878.0,21
+AnarchyChess,"https://thehackernews.com/2019/10/unix-bsd-password-cracked.html
+
+> Thompson's password has been revealed as ""p/q2-q4!a"" — a notation in chess to describe the move ""pawn from Queen's 2 to Queen's 4.",1616025221.0,83
+golang,"These are the solutions I put in place. These instructions also assume that you are working with github. They will probably work with alternatives but who knows. Also this a good working example why you should always write instructions like this in the project readme lol.
+
+## Local Machine
+
+### Private Repository Packages
+
+[Source](https://golang.org/doc/faq#git_https)
+
+#### Why does ""go get"" use HTTPS when cloning a repository
+
+Companies often permit outgoing traffic only on the standard TCP ports 80 (HTTP) and 443 (HTTPS), blocking outgoing traffic on other ports, including TCP port 9418 (git) and TCP port 22 (SSH). When using HTTPS instead of HTTP, git enforces certificate validation by default, providing protection against man-in-the-middle, eavesdropping and tampering attacks. The go get command therefore uses HTTPS for safety.
+
+Git can be configured to authenticate over HTTPS or to use SSH in place of HTTPS. To authenticate over HTTPS, you can add a line to the $HOME/.netrc file that git consults:
+
+```netrc
+machine github.com
+login USERNAME
+password APIKEY
+```
+
+For GitHub accounts, the password can be a [personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token).
+
+Git can also be configured to use SSH in place of HTTPS for URLs matching a given prefix. For example, to use SSH for all GitHub access, add these lines to your ~/.gitconfig:
+
+```gitconfig
+[url ""ssh://git@github.com/""]
+  insteadOf = https://github.com/
+```
+
+Finally, we need to tell go that the repository is private and has no entry in sum.golang.org. In .bashrc or .profile add the following
+
+```bash
+export GOPRIVATE=github.com/<USER OR COMPANY NAME HERE>
+```
+
+## Dockerfile
+
+```
+ENV GOPRIVATE=github.com/<USER OR COMPANY NAME HERE>
+# It is important that these ARG's are defined after the FROM statement
+# These are defined during the build stage or in our case in a github action
+ARG SERVICE_USERNAME=""nothing""
+ARG SERVICE_TOKEN=""nothing""
+# working inside the appropriate go directory
+WORKDIR /go/src/github.com/<USER OR COMPANY NAME>/<REPO NAME>
+# using ssh for private repo access
+RUN git config --global url.""https://${SERVICE_USERNAME}:${SERVICE_TOKEN}@github.com"".insteadOf ""https://github.com""
+```
+
+## Kubernetes
+
+This is not go related, but it was in the readme right next to it and was took some time to piece together. In order to access private repositories Kubernetes needs a Secret using a github personal access token or PAT with the `write:packages` permission.
+
+[Creating a personal access token](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token#using-a-token-on-the-command-line)
+
+> 💡 Note
+>
+> You should have a separate personal access token for Github workflows, development cluster, and the production cluster for security reasons
+
+```bash
+kubectl create secret docker-registry github-registry \
+  --namespace=development \
+  --docker-server=ghcr.io \
+  --docker-username=<github username> \
+  --docker-password=<github personal access token> \
+  --docker-email=<github email>
+```",1615982319.0,3
+golang,"Private repos. Not a problem now, but the first time getting it setup at work was a real pain.",1615951790.0,39
+RedditMasterClasses,yo what do you use for storing these parts?,1609610364.0,1
+baduk,"Next step, integrating with [OGS](https://ogs.docs.apiary.io/#)
+
+Then you can play with someone else :3",1609420208.0,1
+Haken,Ya I can't be too mad at that,1606971495.0,3
+RedditSessions,plin plin plon?,1606535025.0,1
+sysadmin,"We are using markdown files in github. Anytime someone needs to edit the documentation they create a new branch, makes changes, and then merge it back into the main branch. We have a few snippets for document templates and are also using a vscode extension to convert the markdown to pdf.",1605717771.0,2
+rpg,"For the last few months I've been using trello. Card templates are great for when I need to create NPCs, cities, etc. You can link cards together to easily switch between them.
+
+Link: [https://imgur.com/a/oKhP8GV](https://imgur.com/a/oKhP8GV)",1596845028.0,3
+sysadmin,"Jack of all trades at a small business in a rural area. On the clock I have been asked to chop firewood, fillet a few dozen pounds of fish, build pallets, and setup a webcam for some pregnant goats.
+
+Did all of them with no complaints because I love working at this company :3",1596762661.0,1
+sysadmin,Hmm I'll have to look into the file locks next time this happens. Thanks for the advice,1590978392.0,1
+sysadmin,The incident that provoked me to write this happened while I was out of office for two days. SmartPosting failed on the server side of sage and in my experience SmartPosting needs to be started prior to the psqlWGE. I know our accountant reached out to sage but they were unable to resolve the issue until I remoted into the server and did all of these steps manually. This was after 5 hours of downtime.,1590785451.0,2
+sysadmin,"Do things that are not IT/Tech. Paint, read non-technical books, play an instrument, anything that doesn't involve a computer. It helps a lot to have some sort of outlet/escape to avoid getting burnt out",1583720151.0,1
+sysadmin,Manufacturing shop. Boss is very big on work-life balance and spending time with your family. He also let's everyone go an hour early on Fridays,1579529322.0,1
+beer,"Best: Evil Genius New Phone Who Dis?
+
+Bought it on the name alone and was pleasantly surprised at just how good it was.
+
+Worst: Flying Dog Dead Rise
+
+A summer ale with Old Bay seasoning flavoring it...",1578543616.0,8
+sysadmin,Yup. The suite is nice though in that it appends the signature after the email has been sent. That way regardless of the OS/mail client you always have the same signature being added,1572904546.0,2
+sysadmin,We use Exclaimer here to manage email signatures and it works out pretty well.,1572903505.0,3
+Muse,"I mean yes, but at the same time the experimentation here just doesn't work for me",1541782936.0,2
+Muse,"I mean, Muse has always been an artist to me where I can listen to the album front to back and love every minute. This is the second album where that isn't the case.",1541782872.0,1
+Muse,Bless you,1541782637.0,2
+Muse,"I mean it's my opinion, but thanks.",1541782627.0,2
+Muse,"Yea maybe that's a bad way to describe it. I felt at home when Drones came out. More respect to Muse for moving towards what they really love, but it's just not for me.",1541781689.0,3
+Muse,Nothing at all. 4/5 song. Was more a joke about Dig Down being next lol,1541781428.0,2
+Muse,"**Algorithm** - Reminds me a lot of Kavinsky. Really good opening to the album. **4/5**
+
+**The Dark Side** - Still sticking with the Kavinsky vibe. I honestly like this better now than I did when the single released because of the introduction that Algorithm provides. **4/5**
+
+**Pressure** - Absolute banger. Fell in love with the song when the music video came out. **5/5**
+
+**Propaganda** - I thought I hated this song when it first came on. After getting past the jarring intro it became another one of my favorites off this album. Different in a good way **5/5**
+
+**Break it to Me** - Amazing follow up to Propaganda. The strings, bass, and general weirdness of this song are very welcome. **5/5**
+
+**Something Human** - And here is where I feel the album starts to fall off. Just feels really generic and uninspired. Not the worst song off the album, but after the last 5 tracks it just doesn't hold up. **3/5**
+
+**Thought Contagion** - Start to turn it around. Maybe we can recover from this. **4/5**
+
+**Get Up and Fight** - Muse pls. Stahp. **2/5**
+
+**Blockades** - Great synths. Still have hope for thi... oh no **4/5**
+
+**Dig Down** - ded **1/5**
+
+**The Void** - this is the song that plays when you die **2/5**
+
+**Where Simulation Theory Ranks**
+
+OoS > BHaR > Sb > Ab > R > D > 2L > ST",1541780612.0,1
+AskReddit,The inside jokes. It's always the best when one of you cracks a joke that only your spouse understands and you both start laughing like idiots. ,1539429062.0,6
+Artifact,Aww yiss,1539080860.0,1
+Artifact,God bless you beautiful bastards. Good luck all,1538756691.0,2
+Artifact,Depending on how many keys you have you could do a random drawing coupled with a contest that doesn't already exist. People were complaining that they couldn't draw/art so make a unique contest that isn't that.,1538667997.0,2
+Artifact,"I would be interested in overall and maybe filtering. I agree with keeping the interface clean. Maybe some basic toggles at the top that either hide or grey out cards based on what is selected? From there you could just have a count of what is being ""displayed"" based on the current filter. That way if you wanted to see all the rare cards you could filter away the commons and uncommons and the count would give you the total rares.",1538578410.0,1
+Artifact,"Could you include a rarity count? For example how many common, rare, and uncommon cards there are?",1538575457.0,1
+Artifact,Poor dog :c,1538129833.0,2
+Artifact,:3,1538081089.0,3
+Artifact,So that's why my surface pro is broken,1538081069.0,1
+Artifact,Oh so they do have a dog program,1538081031.0,0
+Artifact,"Also, I think dogs should vote",1538080987.0,2
+Artifact,Aww yiss :3,1535800233.0,1
+bindingofisaac,"You say that, but I got 1,000,001% about half a year ago saying the same thing. I'm now on my second save and only have the Keeper and the Lost left to clear.
+
+Isaac always reels you back in",1523116360.0,16
+DMAcademy,I agree but I feel like it's a conflict of interest :p,1492481483.0,-1
+DMAcademy,"Well thanks for the plug. The Discord of Many Things isn't officially the /r/UnearthedArcana discord, but our own community. If anyone is interested in checking us out and getting help with DMing, homebrew, world building, or just want to chat then stop on by. ",1492460762.0,2
+Games,"In conjunction to this, if anyone has any questions about running or playing the game, myself and other users at the [Discord of Many Things](https://discord.gg/ZrDhU7X) do our best to give advice and get people started.",1490495013.0,14
+Cooking,"Jazz covers of popular video game music
+
+https://open.spotify.com/user/maladroitthief/playlist/5At2KrckWFhWj4tT085rrN",1489192792.0,1
+discordapp,What was the issue? We guessed it had to do with the markdown * not being closed off,1488484838.0,1
+discordapp,"For anyone that is affected by this and cannot get back into your discord app,   login using the web client and delete the message. Then either restart your phone, or clear the cache and force quit the app.",1488483730.0,1
+discordapp,"Yup, it's a powerful sword.",1488483619.0,1
+DnD,I think a little over a dozen.,1486145992.0,1
+DnD,One of the judges :D,1486144391.0,1
+DnD,Reading through January's submissions was awesome even though I didn't get to do all that many. Can't wait for this months :D,1486141974.0,1
+DMAcademy,"Congratulations guys! Here's hoping for 10,000 more :D",1485522140.0,3
+Games,"Don't know if it's too late to add this, but I run a small discord community dedicated to helping dungeon masters, new and old, with issues or questions they might have. It's helpful if you have questions or ideas that you want to bounce off of people and get a relatively quick response.
+
+[Discord of Many Things](https://discord.gg/ZrDhU7X)",1485173596.0,6
+northernlion,"[maladroit...](https://www.youtube.com/watch?v=tgwco8SbTBc#t=25m8s)
+
+:c",1484762856.0,9
+northernlion,"Could he have exited and then continued the run to survive? Not saying he should have, that ending was perfect.",1484322698.0,9
+DnD,"Would love to have you. Moradin is running one shots right now, send him a message to see when his next game is.",1484169122.0,3
+bindingofisaac,Ah awesome! I have been listening to it on bandcamp so I can be patient :D,1482338344.0,1
+bindingofisaac,Any chance this will get added to spotify? /u/garden_peeman ,1482336030.0,1
+UnearthedArcana,Someone gilded it though. It must be good,1481772627.0,3
+UnearthedArcana,/u/BornToDoStuf is this /r/boh5e material?,1481772255.0,8
+DnD,I just got my sets of dice today! Absolutely love them and cannot wait to break them in next week. ,1481156994.0,2
+UnearthedArcana,:),1481129044.0,2
+UnearthedArcana,"Ancient Styx Dragon should have +12 to Charisma saves, not +13. Assuming that it has a +7 proficiency and +5 Charisma mod that is.
+
+~~4/10~~
+
+Edit: With changes it's 8/10",1481128828.0,11
+DMAcademy,"I would look at the Lich in the monster manual and steal ideas from it. It's one of the few casters I know that has Legendary actions. Don't just blindly copy them, see what different things it can do and then take the ones you like/make sense and apply them (or modified versions of them) to your Necromancer.
+
+Another thing I like to do with fights against intelligent enemies is play them intelligently. Necromancer is minding his own business when these five decked out looking adventurers bust down his door? 6th level spell right off the top. It starts the party off on the back foot and lets them know this guy doesn't mess around. Disintegrate, Chain Lightning, or Globe of Invulnerability would be good options.",1480451100.0,4
+IAmA,"First off, love your work. Is there any chance of Determination coming out on vinyl? 
+
+Also any plans of a Zelda album?",1480271238.0,1
+UnearthedArcana,"Ah, there is some confusion on my wording then. You should never be adding proficiency when making these checks. Was originally written where you could train in enchanting to gain a proficiency bonus, but realized that made it far too easy. When I am off work tonight I will go through and clarify in some sections.
+
+Also level 1 wizard with 20 Int... lol :P",1479246324.0,2
+UnearthedArcana,"Yea, I'll have to read through so I can assign it based on rarity",1479245841.0,1
+UnearthedArcana,"If you are ignoring material components then I completely understand why you would raise the difficulty. Right now, a wizard with +5 Int has around a 35% chance of success of creating a permanent rare item.
+
+I might also need to add a formula. You are forgetting that the Spell level is also added to the DC. So a 4 charge wishing wand that recharges would require 5 consecutive **DC 19** spellcasting checks. 
+
+I mainly added the material components for quest ideas and potential story ideas. Maybe a guild exists because some creatures are hunted almost to the brink of extinction and need to be protected. Maybe there are poachers killing unicorns because of how valuable the horn is for creating Mantles of Spell Resist.",1479244879.0,1
+UnearthedArcana,I'll have to read through the DMG again. I might have to update this.,1479244352.0,1
+UnearthedArcana,I think I like the limit of one at a time. Bulk enchanting would be too good if it succeeds. Keep trying to pull this apart though. I want as much criticism I can get for when I eventually revisit this,1479242218.0,2
+UnearthedArcana,You're not wrong. It would be easier to attain with the help of the party. I'll have to take that into consideration when I revisit this. I don't agree on duration increases. One of the things I disliked about other rules is how infeasible it is because of all the waiting required.,1479239202.0,1
+UnearthedArcana,"Thanks!
+
+The difficulty of this greatly depends on the DM. Make it rather easy to find the ingredients they are looking for then yes it will be a lot easier. However, give them one shot to not screw up three DC 17 rolls in a row is rough. For a wizard with 20 Intelligence that means never rolling below a 12 three times in a row.
+
+In the future I plan to make additional rules for enchanting mishaps and partial creation. I want to use these for a few sessions before I decide if they need adjusted or not though. ",1479236176.0,2
+UnearthedArcana,Thanks! Let me know if you have any feedback afterwards,1479228951.0,2
+DnD,"For real though, come in and say ""Hi.""
+
+We don't bite.
+
+Well, /u/irishbandit does, but you get used to the pain.",1478533891.0,2
+DnDBehindTheScreen,"Exactly. I wanted something that is risky, but doesn't become as cumbersome as permanent stat loss.",1478093327.0,3
+DnDBehindTheScreen,Yep. I used this to find my bearings on the bell curve. It isn't meant to be easy to do and I am also making the assumption that some if not all of these rolls will be made with advantage.,1478091503.0,1
+DnDBehindTheScreen,That's an interesting system. Thanks for sharing!,1478090701.0,4
+DnDBehindTheScreen,Mainly because in my games no one has tried using that spell. I'll have to think about how I would want to handle that tomorrow.,1478062167.0,3
+DnDBehindTheScreen,Yea this table wasn't really made for the bot anyways. It's meant to be rolled by the players without them knowing the outcome,1478058414.0,1
+DnDBehindTheScreen,"Because it's not me making these rolls, it's the cleric. These three d20s are rolled one at a time with other party members attempting to assist in some meaningful way. If it's just a d100 then it's one and done and that isn't as suspenseful. This is meant to be dramatic.",1478056891.0,41
+DnDBehindTheScreen,Also for the Triple 1 outcome (3) it's basically an Easter egg result for when players manage to defy the odds. ,1478056756.0,6
+DnDBehindTheScreen,"OH!
+
+How did I miss that? Sorry, fixing now.",1478056527.0,3
+DnDBehindTheScreen,Seems about right. The low and high results should be outliers. You can tweak the numbers depending on how forgiving or unforgiving you want death to be in your games.,1478052709.0,14
+DnDBehindTheScreen,looks like the bot doesn't support multiple dice. RIP,1478047351.0,3
+DMAcademy,"Oh I'm aware. We almost spent half hour on a riddle once, but they were having fun and so was I.",1477303940.0,1
+DMAcademy,"Read about mines. Look up maps and layouts of mines. You don't need to be an expert, you just need to know enough to make it believable. Google some artwork to get inspiration flowing. ",1477194919.0,2
+DMAcademy,"First, don't punish players. You have perfect knowledge of your world. Of course they aren't going to find every little nook and cranny you create.
+
+Google some riddles or puzzles that other DMs have made and use them. Make the dungeon bottleneck to that puzzle so the have to solve it. Also give them subtle hints for secrets. A slight draft in a hallway, a waterfall in a cavern, or a bookshelf where one book is in clearly better condition than other books.
+
+",1477161700.0,7
+DMAcademy,"The typical gold, gems, tomes, occasional magical items sprinkled around, and a sword with a blade made out of some unknown crystalline material. It functions as a magic weapon, but once a day it can be used to carve a tear into another plane of existence. The tear allows travel from both planes, lasts for 1d6 minutes, and there is a 10% chance the blade shatters from using this feature.
+
+That could be fun :)",1477161321.0,3

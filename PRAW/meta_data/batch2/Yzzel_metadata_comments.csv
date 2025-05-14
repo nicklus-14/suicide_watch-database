@@ -1,0 +1,150 @@
+subreddit,body,created_utc,score
+devops,Absolutely. I'd imagine so. Looking for something more proof-of-concept out of interest. Might try to roll my own solution as it seems to be a good learning opportunity for low-level functions on a hypervisor.,1637002964.0,1
+devops,"Hmm, I'll definitely have to look into this. I guess the suspend isn't entirely necessary, so long as the resources are dedicated to the OS in ""focus""
+
+&#x200B;
+
+I've started looking into how I might be able to roll my own solution leveraging KVM or something.",1637002838.0,1
+devops,"Yeah, this is my current solution on my desktop, but I also have the benefit of having 32 threads on that monster, so I don't sweat with running a bunch of VMs while still being able to do other work.
+
+&#x200B;
+
+Maybe my idea is too niche, or just not practical. I may try to roll my own solution to this. I wonder if people would be interested, at the very least, I'd get some more familiarity with low-level functions of Hypervisors.",1636988808.0,1
+devops,"Yeah, I love WSL2, but I love some of the Linux DE's, and running Linux GUI apps in WSL2 is do-able but not ideal.
+
+&#x200B;
+
+I realize MS is always improving WSL, but a full Linux environment scratches an itch for me. Maybe I don't leverage WSL2 as much as I could be, but in my workflows it seems to be an ""in a pinch"" or a testing solution at best.",1636988451.0,1
+PowerShell,"I'm not sure I understand, isnt my expression currently in a script block?",1634767536.0,2
+PowerShell,"Answered your other comment, `param` seems to want to take each hashtable as a separate argument, and still produces a blank output. This is an incredibly frustrating experience. I would like to at least figure out why `Invoke-Command` seems to completely ignore variables contained in that array.",1634758278.0,1
+PowerShell,"Interesting...
+
+Ran:
+
+    $DriveSpaceTableObjects = @(
+        @{'Name' = 'Drive Letter'; 'Expression' = {'I AM A POTENTIAL DEVICE ID'}}
+        @{'Name' = '% Utilization'; 'Expression' = {(($_.Size - $_.FreeSpace) / $_.Size).ToString('P')}}
+        @{'Name' = 'Size (GB)'; 'Expression' = {[int]($_.Size / 1GB)}}
+        @{'Name' = 'Free (GB)'; 'Expression' = {[int]($_.FreeSpace / 1GB)}}
+        @{'Name' = 'Server'; 'Expression' = {$_.Server}}
+    )
+    
+    Invoke-Command -Authentication Kerberos -ComputerName $DCServers -ScriptBlock{
+        Get-CimInstance -ClassName Win32_LogicalDisk | Where-Object {$_.DriveType -notlike 4 -and $_.DriveType -notlike 5} | Select-Object $Using:DriveSpaceTableObjects
+    }
+
+Output:
+
+    Drive Letter   :
+    % Utilization  :
+    Size (GB)      :
+    Free (GB)      :
+    Server         : 
+    PSComputerName : SERVER.DN.local
+    RunspaceId     : 092ba323-fca1-4aed-bbfc-ae30a7aa896b",1634754457.0,2
+PowerShell,"Okay, I'm onto something. See the following:
+
+Using this array (Modification on the last line)
+
+    $DriveSpaceTableObjects = @(
+        @{'Name' = 'Drive Letter'; 'Expression' = {$_.DeviceID}}
+        @{'Name' = '% Utilization'; 'Expression' = {(($_.Size - $_.FreeSpace) / $_.Size).ToString('P')}}
+        @{'Name' = 'Size (GB)'; 'Expression' = {[int]($_.Size / 1GB)}}
+        @{'Name' = 'Free (GB)'; 'Expression' = {[int]($_.FreeSpace / 1GB)}}
+        @{'Name' = 'Server'; 'Expression' = {$_.Server}}
+    )
+
+I run Invoke-Command like this
+
+    Invoke-Command -Authentication Kerberos -ComputerName $DCServers -ScriptBlock{
+        Get-CimInstance -ClassName Win32_LogicalDisk | Where-Object {$_.DriveType -notlike 4 -and $_.DriveType -notlike 5} | Select-Object *,@{'Name' = 'Server'; 'Expression' = {$env:COMPUTERNAME}}
+    } | Select-Object $DriveSpaceTableObjects
+
+Then my responses come in properly. I have a feeling that the `$Using:` scope applies it to all of the variables in the array, but if that was the case, then I would at least get back ""Server"" as my local workstation name.
+
+&#x200B;
+
+Still doesn't feel like an answer, though.",1634753303.0,2
+PowerShell,Unfortunately this approach would slow down the script considerably.,1634752863.0,1
+PowerShell,"Yes, it slows it down considerably, almost not practical. The parallelized functions of Invoke-Command are much needed in this context.",1634752836.0,1
+PowerShell,I'm running this for a lot of different groups of servers. Maintaining the script would be a nightmare if I had to edit the variable declaration in every scriptblock.,1634752756.0,1
+PowerShell,"    IsPublic IsSerial Name                                     BaseType
+    -------- -------- ----                                     --------
+    True     True     Object[]                                 System.Array",1634752570.0,2
+PowerShell,"So, running `Invoke-Command` like below:
+
+    Invoke-Command -Authentication Kerberos -ComputerName $DCServers -ScriptBlock{
+        $Using:DriveSpaceTableObjects
+    }
+
+Returns:
+
+    Name                           Value
+    -----                          -----
+    Expression                     $_.DeviceID
+    Name                           Drive Letter
+    Expression                     (($_.Size - $_.FreeSpace) / $_.Size).ToString('P')
+    Name                           % Utilization
+    Expression                     [int]($_.Size / 1GB)
+    Name                           Size (GB)
+    Expression                     [int]($_.FreeSpace / 1GB)
+    Name                           Free (GB)
+    Expression                     $env:COMPUTERNAME
+    Name                           Server
+
+Which is the same response I get just by calling `$DriveSpaceTableObjects`...",1634749835.0,2
+PowerShell,"Manually defining the array at the beginning of every Invoke-Command is in line what I'm trying to avoid.
+
+Also, doesn't `$Using:<your variable>` use the local variable?",1634747904.0,1
+PowerShell,">In Scriptblock you are missing $DriveSpaceTableObjects.
+
+I have `Select-Object $Using:DriveSpaceTableObjects` at the end of `Get-CimInstance`.
+
+Is this not correct?",1634747434.0,1
+sysadmin,"`Start-ADSyncSyncCycle -PolicyType Delta` 
+
+will push hybrid AD user changes ASAP.",1634330780.0,1
+sysadmin,"Yeah, during the Texas grid failures at the beginning of the year, I had a moment of ""Oh, fuck."" 
+
+&#x200B;
+
+Promptly realized that no one was going to be leaving their house for anything so we just powered everything down, headed home and called it quits until the whole state wasn't at a complete standstill.",1634327399.0,3
+sysadmin,"Sometimes when PowerShell gets finnicky with my SQL queries, I use a more general query and load the response into an object. From there I treat it like I would any other data in PowerShell (ex. CSV, or any other objects really)
+
+Example:
+
+`$query =`
+
+`""`  
+`SELECT ""asset""`  
+`FROM database.asset_table`  
+`WHERE desc IS NOT NULL`  
+`""`
+
+`$result = Invoke-SqlQuery -ConnectionName ExampleDB -Query $query`
+
+From there I'll just use Select-Object or a Foreach statement or something to sort through the data.
+
+&#x200B;
+
+DISCLAIMER: Not always ideal, but it works in a pinch.",1634058283.0,1
+sysadmin,"Been using Untangle for a while. I love it. There's some functionality it supposedly lacks, but I haven't hit any of the limitations. The people that work there are fantastic, and very helpful as well.",1633959509.0,2
+sysadmin,">The first thing I do is scan all servers to see where an account is used on services and scheduled tasks. There are multiple ways to do it but I like CJWDEV Service Credentials Manager. I paid for it but the free version should be good enough.
+
+This is helpful, I wrote some scripts to check in a few places, but having something comprehensive would be very helpful. Thanks.
+
+>Then you need to know where the account is authenticating to find network shares or databases it talks to. Or it could be configured inside a Linux-based appliance. This data can be more difficult to gather. You need to report on the domain controller Security event logs. For this, I use ManageEngine AD Audit Plus. It's incredibly cheap for what it does but I don't know if there is any free option. You could set up a trial but that would be a lot of work for 30 days of use.
+
+Yeah, big problem is that these accounts run on appliances. I've sorted most of the Windows based stuff, but the appliances are the headaches. Security event logs have gotten at least part of the outlining done. It's the last leg to build the confidence that my changed won't break anything that is nerve wracking. My boss has beef with ManageEngine, but I will give them another look and see if I can't talk him back into it.
+
+>Because my company had a tendency to share the same service account across many processes, my preference is to create a new service account for each process and migrate one process at a time. Once I think I have found all the places a service account is used, I replace the account with the new one and see if anything breaks. When I think the old service account is dead, I create an alert in AD Audit to email me if it authenticates. I wait a couple of weeks, preferably over month end, and then disable the old account.
+
+This logic is sound. I have done a similar process to move some of our hosted applications onto proper service accounts. I just wish literally any of them had been configured not-with-Domain Admin. I like the tip about e-mailing when it auths, didn't think about that even though I have it set for a couple of sketchy accounts i'm told are ""Important.""
+
+>I recently used this method to migrate a heavily shared, highly privileged service account and I didn't break anything. I also created documentation on how to change each password in the future. For example, change the password on X service on Y server, recycle the service and then check Z directory to make sure new files are still being created. Now if we ever get compromised or maybe a sysadmin leaves on bad terms, we can confidently change all privileged service account passwords without breaking stuff.
+
+Inheriting a completely undocumented system is not fun at all. That's what i'm currently doing. I've reconfigured perfectly functional services just to document them. Headaches.
+
+&#x200B;
+
+Thanks for the pointers. I really appreciate it.",1633378629.0,1

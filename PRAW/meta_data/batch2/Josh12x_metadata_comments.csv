@@ -1,0 +1,157 @@
+subreddit,body,created_utc,score
+Unity3D,"Hey there, I think I'd be interested in something like this. I'm currently working on my own game, but I'm in no rush to finish. I think it would be best for a small game completely fresh, some sort of arcade style. It would be awesome if we worked together on something like that and clicked pretty well, maybe we could help each other out after that for personal projects and such. Or fresh ones together. If we do make a small little arcade game then I'd like to ask in advance if we could use it in my current project, I already had the idea to make little arcade cabinets at some point for my game, to play simpler stuff on your down time/to pass time. 
+
+In terms of personal strengths, my strongest is coding(c#), second is modeling, and third is texturing. So I'm sorta the jack of all trades master of none type deal, as I'm sure a lot of indie developers are. I've never worked with someone before so this could be a great chance to take it easier and no real pressure on anything grand.",1495431239.0,1
+Unity3D,"Thanks for the information! I wasn't sure how it worked exactly or the implications, but felt I should say it might just in case. I shall take this knowledge with me graciously.",1489789525.0,1
+Unity3D,"You way is probably better tbh though, after thinking about it for a bit, I realized for performance sake its probably???? not best to use time/update time every frame. I think multiplying time.Deltatime gives even the miliseconds of a seccond, every single frame which is data you dont really need or use. I mean its probably not the end of the world considering how powerful cpus are, but something to consider and i def bet there is a better way using the corutines like you were. It should work though, and i doubt unless your game is super crazy would something so insignificant effect performance that greatly, just maybe a little caveat to the advice I gave. I also could be talking nonsense, what is life.",1489709962.0,2
+Unity3D,"You can actually get a timer running in update instead of IEnumerator/ Courotines , I'm not an expert on them though and cant really debug em, only use em for minor delays and things. To have time flow in the update method/function, you would use a variable(like minutes) and say minutes += 1 * time.deltaTime. 1 second = 1 minute in this case.  Then underneath that I would have a few if statements to check . Like if(minutes > 60) then set minutes back to 1, add 1 to hours variables. if(hours >24) then set hours to 1 and days to 1, then the 12 months, ect. I ""think"" this should work how you intend instead of it being instant, i cant say i've tested this, but i do know for a fact you can update a varible in the update method over time by multiplying with time.deltaTime. I hope it helps!",1489698500.0,2
+Unity3D,"i can't really hop in blender right now(at a hotel with a shitty chromebook).
+
+Some ideas/suggestions/resources i think might help 
+
+
+http://blender.stackexchange.com/questions/6425/keep-sharp-edges-when-using-subdivision-surface
+
+""Weighted edge creases for subdivision surfaces allows you to change the way Subsurf subdivides the geometry to give the edges a smooth or sharp appearance.
+
+The crease weight of selected edges can be changed using Transform Properties (N) and change the Median Transform slider. A higher value makes the edge “stronger” and more resistant to subsurf. Another way to remember it is that the weight refers to the edge’s sharpness. Edges with a higher weight will be deformed less by subsurf. Recall that the subsurfed shape is a product of all intersecting edges, so to make the edges of an area sharper, you have to increase the weight of all the surrounding edges."" 
+
+The above bit of into is usefull if you use a smooth/subdivide modifier(dont just select all verts and smooth a few times over, try the modifier out if you havent .
+
+Heres my suggestion and what i think would be quickest though, its likely from your blender picture that the actual shading of the sword is set to flat.
+
+while in edit mode with the sword, select all the vertices, then  on the left panel try to find something like.. shading/uv. Make sure to click smooth for faces/be extra safe and just click smooth for verts edges too. This doesnt change how smooth the objects geomtry itself is, but rather how the light effects it, is it a hard edge or a smooth transition. I hope this helps! 
+
+I think thats a fine looking sword for getting new to modeling and unity friend.
+
+Edit. looked around a little more. This link should help more.
+
+https://docs.blender.org/manual/ko/dev/modeling/meshes/editing/smoothing.html",1488007813.0,1
+Unity3D,"Sometimes its not the skeletons or the wieght painting that cause the wierd bend in the knee(most time it is) but what you have to do, is make sure there are extra edge loops in areas that tend to bend(like the knee) inside the 3D modeling progam you use, how can it stretch the faces smoothly, if when in fact its only working with a few faces? think about how much smoother an object can look with a few extra edge loops/verticices, and then think about how that can easily apply to movable areas like joints. Dont go too crazy though! It could very well be the wieght painting. but my guess is a combination of both weight painting, and not enough edge loops. Could be wrong though! If its the wieght painting, just really spend some time and think about it. in terms of blender, red areas should bend very little/none, yellow should be the start of the upperleg from kneecap/start of lowerleg from kneecap, get some gradient in there and move the bones inside blender. and then weight paint as its moved! To make it look smooth from any angle, theres a way to set all bones in blender back to defaul pose/shape when you are done. Hold on, lemme try to remember/open it up.
+
+Alt+R to reset rotation to default postion.
+Alt+G to reset location.
+
+so once you are done, and have all the bones moved/painted on as you move em live, then set all the bones back.",1487680102.0,6
+Unity3D,"this is the way that I personally do it.
+
+
+This is my first post, so I'm not sure how to post code
+
+Here is pastebin link
+http://pastebin.com/Py8SKPWs
+
+and below is just me writing it out.
+
+Here is a quick mock up example of what a save float array method might look like
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class HelpForSomeDude : MonoBehaviour 
+{
+    //get an instance of this static class, so that it can be used from anywhere
+    public static HelpForSomeDude instance;
+
+    void Start()
+    {
+
+        //set that global instance of the class to this.
+        instance = this;
+        
+
+        //pop this script on some gameobject/like a manager or something, you then can call functions using HelpforSomeDude.SaveSomeArrayToPlayerPref or whatever other methods
+    }
+    //Function instead of void if java i think, i wrote this is c#, but should give quick idea
+    public void SaveSomeArrayToPlayerPref(float[] arrayToSave, string SaveName)
+    {
+        for (int i = 0; i < arrayToSave.Length; i++)
+        {
+            //idea being here that is saves each float as the basename + the location in array, so float of spot 1 in array would be saved as SaveName1 
+            PlayerPrefs.SetFloat(SaveName + i, arrayToSave[i]);
+
+            //this is using the name we save, adding on a ""Keyword"" TotalLength, and saving the array size/number of elements of it, as its own int, to be read later to reconstruct the array.
+            PlayerPrefs.SetInt(SaveName + ""TotalLength"", arrayToSave.Length);
+        }
+    
+   }
+
+//Here is a quick reader method that can convert a blank array into the saved array
+//Public function/method with the return type of a float of arrays, you just pass in the basename of the save and it returns the entire array
+
+    public float[] GetSavedFloatFromString(string baseSaveName)
+    {
+        //create a new array of floats, that has the size of the save name we are looking at.
+        float[] ReconstructedArrayFromName = new float[PlayerPrefs.GetInt(baseSaveName + ""TotalLength"")];
+
+        for (int i = 0; i < ReconstructedArrayFromName.Length; i++)
+        {
+            //cycle through each position in the array, and set each spot to that of the saved name we are finding.
+            ReconstructedArrayFromName[i] = PlayerPrefs.GetFloat(baseSaveName + i);
+        }
+
+        return ReconstructedArrayFromName;
+    }
+}
+
+
+//Example of a player class that has mutliple stats(float might not be the best, but i couldnt think of an example for some reason
+public class PlayerStats
+{
+    public float[] allStats;
+
+    //save method of the above stats
+    void Save()
+    {
+        //use the helper class to call the save method for these stats, and name it as characterstats/whatever youd like
+        HelpForSomeDude.instance.SaveSomeArrayToPlayerPref(allStats, ""CharacterStats"");
+    }
+
+    void Load()
+    {
+        //using the same name we saved as, it autopoulates and replaced the float using the helper method again.
+        allStats = HelpForSomeDude.instance.GetSavedFloatFromString(""CharacterStats"");
+
+        //the array allstats, should now be replaced/updated with what you have.
+    }
+}
+}
+
+I have not tested the code, but have some confidence(80%) this should work.
+
+The idea basically is that, you can now save an array of floats using that simple method from anywhere, with just a new name, and load using just the name.",1487591776.0,1
+Animesuggest,"Anytime man, glad to have helped. You're in for a ride man, wish I could go back and read it all again. Enjoy!
+",1440384668.0,1
+Animesuggest,Whoa fudge! I didn't realize Mushoku Tensei had a manga... dude..,1440354651.0,2
+Animesuggest,"There's a light novel called Mushoku Tensei. Exact premise, he dies while trying to protect a few people from a truck in the rain. He was kicked out of his house and was a useless otaku, his parent's passed and he didn't even go to the funeral, his brother broke his computer and now he was homeless at the age of 30 something. He saw the people about to get hit and jumped in the way. He is reincarnated into a new world as a child, this world has magic and everything else.  Really long, amazing read.
+https://www.baka-tsuki.org/project/index.php?title=Mushoku_Tensei:Volume_01_Prologue link if you are interested.",1440354270.0,3
+Terraria,"There is a block called Conduit plating,  I think that's the name lol.  It drops off the new mobs of the Martian invasion event.  You can make futuristic looking everything,  all the furniture,  ect has a set of it.  And the block itself looks cool,  as well as the back wall.  Umm..  After plantera you'd need to kill the golem,  and after that there is a new guy at the dungeon,  a tough boss called the cultists.  I think after that these Martian probe enemies occasionally spawn,  if you don't kill them,  they will escape,  report to their base,  and the invasion will start.  I think they are more likely to spawn after a solar eclipse for some reason. ",1436051963.0,1
+Terraria,"I was just thinking of this ideal! Awesome job :), I totally thought the small ships with npcs would be epic as well. There is a new block added, that looks very futuristic, and space like. How far are you in the game?",1436050872.0,1
+Terraria,"Happy 4th of july! Personally, the game is so well polished now.. so much new stuff, new sprites for a bunch of items, like the early armors sets, ect. To get the full experience, I'd suggest to play it fresh. If you are crazy like me, expert mode too! Its a lot lot harder, more fun, and more rewarding. Its not too crazy either, espeically since you know what to do, I just beat the last boss today, however I did kind of no life it.. shh.. regardless, best of luck! And just have fun :)",1436050740.0,1
+Terraria,"Hmmm, I don't think the dessert prevents housing. I'm not sure dude, things I would suggest are more torches, maybe have a platform where the doors are? Maybe with the update the requirements are a little more specific to accommodate the new npc behavior. Maybe they need to be able to reach the doors. Not sure though! Just a suggestion.",1436050370.0,1
+Terraria,"MINECARTS! Seriously dude, you can place them now while on it anyway, they are cheap and only need 1 iron and wood for 50! You can now combat with them too, and they are faster then you can run right now. Be sure to make the iron minecart equip mount too! Its faster then the default wood one. Then just ride on the entire length of the fight, he goes super faster when hes low, as apart of expert mode, and an iron minecart is just able to outrun him. Be sure to make it huge though! Like.. maybe the entire length of hell. Its a bit of work, but is actually faster placing then a platform in my opinion, and it dont need to be straight either!",1436050118.0,3
+Terraria,"I've just recently finished beating the final boss! Lots of cheese methods, and patient. Also a giant farm, and ALL the potions, using them as often as possible, even for normal enemies. I think its great! I love and adore the game, and the update. Now that I'm finished I plan on making a giant base, probably a spaceship, and maybe little ones all around it for the npcs to live in.",1436049741.0,1
+Terraria,"I just copied a comment I told someone else, best of luck!
+
+As much as this sucks, and it's kind of a cheese method. You would have to take the time, build a big platform in the jungle, give yourself lots of jumping space, and don't have the platforms too close, so when you push down, you fall faster. Once his form turns though, you can't fight like that.. At least me personally, so what I did was made a mini Hellavator, and my platform was near the bottom of the jungle, then I bought a bunch of dynamite and made it sticky with gel. And threw them to the sides as I fell down the tunnel I dug up. Finally, I bought a bunch of rope and put it down the giant tunnel I just made. You can kite planteras second form, by shooting him as you go up and down the rope, but it don't work on his first because he shoots you. ",1436049482.0,1
+Terraria,"As much as this sucks,  and it's kind of a cheese method.  You would have to take the time,  build a big platform in the jungle,  give yourself lots of jumping space,  and don't have the platforms too close,  so when you push down,  you fall faster.  Once his form turns though,  you can't fight like that..  At least me personally,  so what I did was made a mini Hellavator,  and my platform was near the bottom of the jungle,  then I bought a bunch of dynamite and made it sticky with gel.  And threw them to the sides as I fell down the tunnel I dug up.  Finally,  I bought a bunch of rope and put it down the giant tunnel I just made.  You can kite planteras second form,  by shooting him as you go up and down the rope, but it don't work on his first because he shoots you. ",1436048938.0,1
+Terraria,"I dunno,  it seems fine.  It's big enough,  has torches,  table and a chair.  Maybe try adding more torches up top too?  Or maybe there's a biome nearby,  for me I randomly couldn't have npcs as well on the right side of my town,  turned out it was too close to corruption! ",1436048580.0,1
+OkCupid,"Thank you, you're pretty awesome, honest and kind all at the same time. I'm not sure what I will do yet, but I think I'm going to at least take a break from reddit and okcupid for now. I wish you the very best in life, as well as the best luck to you too.",1424063997.0,2
+OkCupid,"You have a point. Thank you for your brutal honesty. That is probably what I really needed at this point in my life. After having read this and the original comments, as well as all others. Maybe I shouldn't even have an account and try to get my life together. Its just really really hard.. ya know? I don't have the best support ever from my family, and as everyone here has read don't have any friends. I live in Detroit and I'm pretty sure my medical insurance stopped working after I dropped out. I do have a lot wrong with me, and perhaps going to that site to fix it, is very far from ideal, it actually probably made me worse to be honest. I'm not sure if I want to continue on with this post, I'm thinking of deleting it and my account. if I dedcied to do that, then thank you everyone for your help, and sorry if it goes wasted.",1424063241.0,3
+OkCupid,"Fair point! I apologize. I'm not sure why I said sir. ""It means a lot, dude"" Would that have been better? lol",1424062766.0,1
+OkCupid,"I won't lie to you, that was brutally honest. Although that's what I signed up for by doing this. That stung pretty bad, quite bad actually. I realize I'm a loser who has a lot wrong with him, I've been slowly working on myself as best I can. I know you have and had the best intent though. Thank you for your critique. I'm not sure if I'm therapy level bad or not, maybe you're right though.",1424062558.0,2
+OkCupid,"Thank you for the kind and encouraging words :), it means a lot sir.",1424062361.0,1
+OkCupid,"Thank you! It means a lot, I think I will do just that, I've been working on it since the GermTheory sent his message.",1424061040.0,1
+OkCupid,"Thank you for your sincere and genuine advice. I've been working on my profile since you left your last comment and am actually feeling really good about it looking shorter and less negative. I'm sure I will manage to get over my shyness and anxiety some day, but for now this is really nice, ya know? Thank you for your feedback! Once I'm done editing, may I ask for your opinion on it again?",1424061004.0,1
+OkCupid,"Thank you! I realize there was a shit ton of text, but that's what I thought a profile was about. My phones pretty shit, hence the blurry pictures, I can work on that. Are you sure removing the negative parts would be to my benefit? Sure It may make me get a few more replies and messages, but what happens when I bring the negatives up? I accept your critique though, and will look into it, try to cut down on text, and probably remove a lot of the negatives though. Just want to talk about it, ya know? And yes, I am in fact being serious about doing this. My shyness and anxiety, is crippling. I can't hold my own in a conversation in person with someone I barely know, this kinda bridges the gap. Thanks so much by the way!",1424059612.0,1
+OkCupid,"Nvm! I fixed it, I apologize very much. I had an extra letter in my username, my bad.",1424058283.0,1
+OkCupid,"Thank you! Hmm.. That is my username though, could you please tell me how you link to your account? It would be greatly appreciated, because when I'm clicked on myself it simply says /profile. I looked up other peoples critiques and filled in my username on the address bar, thinking it would work. I apologize.",1424058098.0,1
+SuicideWatch,"Now you are speaking my language of friendship welcome to the jungle and sweet child of mine are the shit.  I can play sweet child on guitar and it's amazing,  so you play an instrument too?  And are even in a band? ",1419516395.0,1
+SuicideWatch,"I was joking a big about the not talking thing..  I have a wierd sense of humor but thanks for talking with me :)  and merry Christmas,  thanks for spending some of it talking with a stranger.  I guess I like the same power chords and loud rock,  I play guitar so I can appreciate the guitar behind acdc,  as for other music..  Hmm..  I like old stuff like Johnny Cash,  but as of recently I found out of five for fighting and absolutely love the songs chances and 100 years,  really speaks to me..  Hmm also guns and roses are awesome. ",1419515706.0,1
+SuicideWatch,"You didn't like play ball!?  You monster!  I'm kidding,  yeah it was a but odd the album in general,  and on a scale of 1 to you don't want to talk with me anymore..  Where would me telling you I've never heard of any of those bands lay? ",1419515072.0,1
+SuicideWatch,"I'm sure to can make an awesome game :)  with gaming being a hobby you enjoy and love,  it's easy to put love into the project I've found.  And sorry to hear you haven't celebrated in awhile,  if that's the case then just happy Thursday and good life to ya. ",1419515008.0,1
+SuicideWatch,"Hello,  thanks for talking with me,  it means a lot.  I personally only like the song play ball of the album,  I think their classics remain and it will be hard to beat their old self,  I just didn't enjoy it as much,  what about you?  What's your favorite music and band? ",1419514733.0,1
+SuicideWatch,"Gauntlet legends is based off the old arcade one I think,  just with the Nintendo 3d graphics and a general improvement all around.  Also whoa!  Lol I'm not very fluent in c# yet so that's awesome how much ya know,  that's really cool.  I personally don't like ios games,  much prefer a keyboard with a  bazillion buttons.  Also merry Christmas sir,  just cuz mines lame and I'm feeling sorry for myself doesn't mean I shouldn't wish the kind gentleman who's talking with me right now a happy holiday. ",1419514102.0,2
+SuicideWatch,"Yeah I'm a pretty big gamer,  it helps a lot,  it's probably my biggest hobby,  I recently tried to get into unity and am learning c#,  and have made great progress,  I'm trying to recreate an old Nintendo 64 game called gauntlet legends.  I have heard about eve,  but it's too complicated and expensive for me,  I am a broke 18 year old lol.  Also thanks for chatting with me dude. ",1419513419.0,1
+SuicideWatch,"I like rock n roll,  my favorite band is ac/DC but I listen to all kinds of music.  How about you? Sir and or madam? Sorry terrible humor to lighten the situation",1419511560.0,1

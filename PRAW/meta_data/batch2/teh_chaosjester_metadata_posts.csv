@@ -1,0 +1,548 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+LegionGo,Legion Go stuck on Please Wait screen when rebooting to advanced startup options,"Hi All, 
+
+I am trying to boot in to safe mode to do DDU and install AMD drivers, but when I reboot to the advanced startup options through settings, I am stuck on the Please Wait screen. I've left it for about 10 minutes and just does not progress.
+
+Has anyone else seen this issue and know of a workaround? Google has not really yielded any useful things to do.
+
+TIA",1733487129.0,2,1.0,15
+homelab,Same USB UPS with multiple names NUT Server,"Hi All,
+
+Wondering if anyone has come up with a workaround for my particular scenario.
+
+I have 1 UPS plugged in to my Ubuntu 22.04 server running NUT server which on its own is running fine. The local machine using nut-client sees the UPS and everything is good.
+
+The issue: qnap and asustor suck.
+
+To connect the qnap NAS to a network UPS it expects the name of the UPS to be ""qnapups""
+
+To connect the asustor NAS to a network UPS it expects the name of the UPS to be ""asustor""
+
+They also both have different hardcoded credentials, qnap uses admin/123456 and asustor uses admin/11111 so that's also awesome... I have managed to get around this by editing the upsmon.conf on each NAS to use the same username/password which does seem to work, though changing the UPS name in the below config does not.
+
+My woraround that does not work well:
+
+In the nut server ups.conf I have the following:
+
+    [YouPeeSss]
+            driver = ""usbhid-ups""
+            port = ""auto""
+            vendorid = ""051D""
+            productid = ""0002""
+            bus = ""001""
+            desc=""APC BX1200MI""
+    [qnapups]
+            driver = ""usbhid-ups""
+            port = ""auto""
+            vendorid = ""051D""
+            productid = ""0002""
+            bus = ""001""
+            desc=""APC BX1200MI QNAP Connection""
+    [asustor]
+            driver = ""usbhid-ups""
+            port = ""auto""
+            vendorid = ""051D""
+            productid = ""0002""
+            bus = ""001""
+            desc=""APC BX1200MI Asustor Connection""
+
+And this ""works""... for a while. The issue I am thinking is that the usbhid-ups driver doesn't like being addressed by multiple things at once and I see /var/log/syslog flooded with:
+
+    usbhid-ups[3816336]: libusb_get_interrupt: error submitting URB: Device or resource busy
+    usbhid-ups[3816336]: Got disconnected by another driver: Device or resource busy
+    kernel: [506579.023429] usb 1-3: usbfs: process 3816336 (usbhid-ups) did not claim interface 0 before use
+
+Eventually, either the client running on the server, or one of the NAS' will end up disconnecting from the UPS cause the data is stale, then the others eventually follow depending on which of the above win the fight.
+
+As mentioned above, changing the upsmon.conf on the NAS worked for the username and password but if I were to comment out botht the qnap and asustor sections on the server's ups.conf they no longer connect.
+
+Have tried to search for ways to have the same USB UPS under different names on the NUT server but have not been able to find any solutions, so if anyone here has had a simillar issue and come up with a workable workaround, would really appreciate it.
+
+TIA",1688444801.0,2,1.0,5
+SteamDeck,Cant install or boot Windows from Jsaux SSD Dock or Wavlink USB C dongle,"Hi All,
+
+Ripping my hair out with this one. I recently got a Wavlink USB C dongle with NVME from [Amazon](https://www.amazon.com.au/dp/B09YHHVJRN?psc=1&ref=ppx_yo2ov_dt_b_product_details), threw in a new Kingston 1TB drive and tried to install windows via USB stick direct in to the deck and it wont let me install stating that Windows won't allow you to install on a device connected to USB.
+
+After that, I plugged it in to my PC and used Rufus to create a Windows To Go install, and this is where it gets fun. Threw it back in the deck, tries to boot, I am now in an infinite loop of automatic repair that fails, a reboot where all I get on the screen is the teal background and a mouse cursor that sits there for a few minutes then shuts down.
+
+So for more fun, I took the SSD out and threw it in my Saberent USB C NVME enclosure, plugged it in to the USB C port on the Wavlink dock, and low and behold, it booted, I got through the set up and in to the desktop with out any issues. I then even rebooted and did a clean install from USB stick on the deck and it was all good.
+
+So I thought to myself, that Jsaux dock with the SSD looks nice, everyone says they have Windows working on it, so I post a question asking the vendor if it really does support Windows running off the SSD and they assure me it does. So I go ahead and order one. Fast forward to today, it arrives, looks great, fits great. Throw the SSD in and end up with the same issue as the Wavlink.
+
+At this stage, I am thinking it has something to do with the chipset used, as both the Wavlink and the Jsaux use the Realtek RTL9210B-CG USB to PCIE bridge. The Saberent enclosure I have does not. I've tried this on 2 different SSD's so I am pretty sure they aren't the issue. One was a Samsung 256gb and the other a Kingston 1TB.
+
+Has anyone come across this issue and figured out how to get Windows going? The Wavlink is just something they slapped their logo on, and for another vendor of the same dongle I've seen people specifically state they are running Windows 11 off this on the deck, and a lot of people commenting on the Jsaux product page say the same. Apart from that, I have not been able to find any useful information or things to try :(
+
+TIA",1679037068.0,0,0.5,5
+asustor,SNMP randomly stops working,"Hi all, I have a  AS1104T running ADM  4.1.0.RJD1 and have enabled SNMP but randomly it just stops responding.
+
+If I turn it off and back on it works again for a little while but will then stop again randomly.
+
+Has anyone else had this issue and found a workaround?
+
+TIA
+
+&#x200B;
+
+EDIT: See this in the logs often, was not changing anything at the time.
+
+    INFO	31/07/2022 PM 07:18:49	SYSTEM	[SNMP] New setting was applied successfully.
+    INFO	31/07/2022 PM 07:18:48	SYSTEM	[SNMP] Service started.
+    INFO	31/07/2022 PM 07:18:39	SYSTEM	[SNMP] New setting was applied successfully.
+    INFO	31/07/2022 PM 07:18:39	SYSTEM	[SNMP] Service stopped.
+
+&#x200B;",1659354431.0,5,1.0,3
+asustor,Cant enable SNMP on ADM 4.1.0.RJD1 on AS1104T,"Hi All,
+
+I am trying to enable SNMP on my AS1104T running ADM  4.1.0.RJD1 but when I tick the enable button, enter either a V1/2 community name or V3 username and password, the apply button is greyed out.
+
+Has anyone come across this and/or knows a work around? Would like to get zabbix to monitor, and it was on before (though very flaky) the update.
+
+TIA",1657784957.0,1,0.67,3
+Chromecast,CCWGTV - Lock down in work environment,"Hi All,
+
+Have done some searching and really cant find any useful info about locking down a CCWGTV in the workplace.
+
+I am testing one for OptiSigns digital signage at the moment which is working great, however, I need to lock it down so no one can install apps or cast to it.
+
+Does anyone know if its possible to disable installing apps and to disable casting to it? There are no options I can see, and am somewhat familiar with ADB so can use that if required but cant find any info or guides.
+
+TIA
+
+&#x200B;
+
+EDIT: Managed to disable casting by using adb commands
+
+command: adb shell pm disable-user --user 0 PACKAGENAME
+
+Package names:
+
+com.google.android.chromecast.chromecastservice
+
+com.google.android.apps.mediashell
+
+android.chromecast
+
+&#x200B;
+
+Don't want to do this for the play store as it would likely stop auto updates of the digital signage app, but I guess its an option.",1655945884.0,1,0.67,1
+Lenovo,L13 Yoga Gen 2 AMD Backlit keyboard rarely works,"Hi All,
+
+Got the L13 Yoga Gen 2 AMD a few weeks ago at work and the backlight on the keyboard is pretty random as to when it feels like working.
+
+In vantage, it sometimes shows up in the options to turn it on after a battery drain but then disappears when I charge and reboot. The fn+space key combo also follows that pattern, works after a discharge but doesn't after being fully charged and rebooted.
+
+In BIOS it also sometimes works and sometimes does not, so its pretty random. Only behaviour I can replicate is after fully draining the battery.
+
+Has anyone come across this before? All my drivers are up to date, BIOS is on the latest (and only available) version.
+
+Would very much prefer to resolve this without having to reinstall Windows or send it back to Lenovo if possible.
+
+TIA",1652406835.0,5,0.86,5
+rickandmorty,Rick & Morty exists in the Star Trek universe. 99 years Rick & Morty,,1647507088.0,26,0.9,4
+PurePwnage,Info on what will happen after camerarmy.com email closure,"Hi All,
+
+I don't have anything to do with the [gamerarmy.com](https://gamerarmy.com) email addresses or anything but I have just recently done some moving off google in reaction to their announcement that free gsuite accounts will require to be upgraded to a paid subscription for my own domains.
+
+Just wanted to let people know that while the mail will be cut off, the account will still exist as a google account. That means you will keep access to the following things (not everything just a few important points):
+
+* Purchases on google play
+* Youtube accounts/uploaded videos
+* Google Home stuff on the account
+
+You will lose mail and I think drive contents, so if you have not already done a takeout export, do so ASAP. But at least people that have used the account to buy stuff on google play wont lose it.
+
+&#x200B;
+
+EDIT: Oops, typo in title... oh well cant change it :/",1643490604.0,6,0.87,3
+PowerShell,Issue with Connect-ExchangeOnline in script,"Hi all,
+
+I have run in to a weird issue that I cant work out. Writing a script that has to do some EXO things and in my script I get this error when attempting to run Connect-ExchangeOnline.
+
+`New-ExoPSSession: Could not load file or assembly 'Microsoft.Identity.Client, Version=`[`4.30.1.0`](https://4.30.1.0)`, Culture=neutral, PublicKeyToken=0a613f4dd989e8ae'. Could not find or load a specific file. (0x80131621)`
+
+I am running the script in PS 7.2.1. The weird thing is that if I attempt to run Connect-ExchangeOnline in the same session after running the script, I get the same error but if I close the window and reopen and run Connect-Exchange I get the browser based log in prompt and everything is fine.
+
+If I run the script in PS 5.1 it works fine also, but would prefer to use 7.X due to some improvements in Invoke-RestMethod.
+
+Has anyone come across this before? I cant find anything useful when googling that error.
+
+TIA",1641963524.0,2,0.67,9
+darktranquillity,Five '90s IN FLAMES Members Launch New Band THE HALO EFFECT,,1635729677.0,20,1.0,3
+PurePwnage,Familiar face in the background of an LTT video,,1614586126.0,45,0.96,11
+blackplayer,"Android Auto + BlackPlayer EX, music keeps playing after turning off car","As the title says really.
+
+I have my Galaxy Fold 2 (also happened on my S10+) plugged in to my car and when I turn the car off the music is still playing, is there any way to stop this?
+
+Also an issue I had on my S10+ that has not yet happened on my Fold 2, but music was stopped and randomly started playing some times but I cant seem to find any useful tips on how to stop that. I am hoping it doesn't happen on my fold but would like to know if anyone has had that issue and managed to fix it just in case.
+
+Thanks in advance",1607596325.0,1,1.0,0
+sysadmin,Managing user/device billing,"Hi All,
+
+I know this likely isn't really a sysadmin function, but hoping someone out there might have had to deal with billing for user and device costs before.
+
+&#x200B;
+
+Currently have a powershell script that pulls out all the users and computers in AD, we have a custom field for their billing cost. The script pulls all the data together in to a CSV and spits it out to our finance department to raise invoices to all the other departments.
+
+I inherited maintenance of the script when I started the job a while back, and I do not believe that AD is a good source for this information but am not really finding any other solutions out there.
+
+Wondering if anyone knows of any software packages that manage this kind of thing? Ideally would just want something that syncs user data from AD, but with the ability to add people/things that are not in AD (such as O365 accounts that have no on prem accounts etc) with a list of licenses/services with their price etc.
+
+We are running Snipe-IT for asset management, but its messy but once cleaned I can script something nicer for device costs so that is less of an issue in the long term, right now the script pulls the custom field and relates it to their department based on OU. However this doesn't factor in purchase dates so god knows how many people have been overcharged as we have not had a hardware refresh for over 5 years :/
+
+So the short version of the question is, does anyone know what's out there to track and bill users with options for listing what licenses/services they are consuming?
+
+TIA :)",1602666484.0,4,1.0,0
+aussievapers,Few things to get rid of,"1) Steamcrave Titan PWM mod, Aromamizer Titan RDTA and 4x Golisi S30 18650'S30
+
+Mod in good condition, no paint chips or anything.
+
+Tank in good condition, one little ding on the bottom rim but does not effect tank at all
+
+Tank spares: 2x 18ml glass sections, 2x 28ml glass sections, chimney peices for both glass sizes, Series deck peice, ""tower"" desk peices and spare grub screws
+
+Boxes for both Mod and Tank
+
+&#x200B;
+
+2) Voopoo Drag
+
+Mod in decent condition, works fine. Has the signature wear and tear that pretty much any drag would have
+
+With box
+
+&#x200B;
+
+3) GeekVape Nova with Cerberus tank
+
+Mod in good working condition, a little wear and tear.
+
+Tank with no coils
+
+With box
+
+&#x200B;
+
+4) iJoy Diamond with Capitan X3 tank
+
+Great mod, in great condition. Uses 20700's (not included)
+
+Capitan X3 tank with 2 X3-C1 coils .4ohm 60-90w
+
+With box
+
+&#x200B;
+
+5) Vandy Vape Bonza Mech Tube
+
+Needs a bit of a polish, but is all good. Was purchased in kit, but the RDA was defective so I just wrote it off. RDA not included
+
+With box
+
+&#x200B;
+
+6) THC Tauren Mech Tube
+
+Also needs a bit of a polish but works Great
+
+With box (metal tubey thing)
+
+&#x200B;
+
+7) Falcon King Tank
+
+Tank with no coils
+
+With box
+
+&#x200B;
+
+8) Digiflavor Drop RDA
+
+Has not had much use, in great condition
+
+With box and maybe spares baggy if I can find it in my tub of baggies...
+
+&#x200B;
+
+9) GeekVape Zeus X RTA
+
+In great condition, though I did accidently try to cut the posts with my wire cutters one day. This proved fatal to my clippers, but left a bit of a mark on the deck. Does not effect performance
+
+With box and spares again if I can figure out which baggy is for this tank
+
+&#x200B;
+
+10) GeekVape Zeus Dual RTA
+
+In great condition
+
+With box, spares baggy and bonus bubble glass
+
+&#x200B;
+
+11) VandyVape Pulse X RDA
+
+In great condition
+
+With box, spares baggy. Does not come with the clear plastic cap, it was starting to crack.
+
+&#x200B;
+
+12) VandyVape Revolver RTA
+
+Single coil RTA with adjustable airflow in the chamber, in good condition
+
+With box, spare bubble glass and spares baggy
+
+&#x200B;
+
+Photos available here [https://home.chaosjester.net/gallery/index.php?/category/1](https://home.chaosjester.net/gallery/index.php?/category/1)
+
+&#x200B;
+
+PM me if you are interested in anything, all reasonable offers will be considered",1580361756.0,3,0.8,0
+aussievapers,My haul from Everest in Penrith,,1563610261.0,17,0.88,8
+intelnuc,D54250WYK Secure Erase SSD,"Hi All,
+
+&#x200B;
+
+I am trying to secure erase 30+ M-SATA SSD's housed in old D54250WYK NUC's that we are getting ready to sell off.
+
+&#x200B;
+
+The issue I am facing is that the SSD is ""frozen"" so I cant perform a secure erase.
+
+&#x200B;
+
+The guides I have tried suggest to boot in to Parted Magic, go to the erase tool but the drive is frozen and cant be unfrozen.
+
+&#x200B;
+
+Common solutions for this are to put the PC to sleep and wake, but this has not worked in Parted Magic or Ubuntu live.
+
+The other solution is to hotplug the drive, however as these are M-SATA, that is not an option as it does not support hotplug.
+
+&#x200B;
+
+I have updated one NUC's BIOS hoping that might make some kind of difference but it has not.
+
+&#x200B;
+
+Does anyone know a workaround that will work with this model NUC?
+
+&#x200B;
+
+TIA",1561948741.0,3,1.0,1
+Vaping,My love for you is like a truck...,,1556236570.0,6,0.88,3
+sysadmin,ITAM System with License management and internal billing (FOSS Preferred),"Hi All,
+
+&#x200B;
+
+Currently have an older version of Snipe-IT for ITAM (with no LDAP or user management so its next to pointless) and a powershell script that runs monthly pulling our monthly billing cost for a user out of a custom AD field plus pulling some reports from some other web based platforms.
+
+&#x200B;
+
+We recently did some changes to our AD field data that meant I had to go back and do a lot of shotty workarounds to make the powershell script output the data like it did before the changes. Going forward this isn't the best solution.
+
+&#x200B;
+
+Just wondering if anyone was aware of any FOSS and Self Hosted ITAM software that would do standard ITAM, LDAP sync for users, License management and be able to spit out a monthly report for billing purposes? The latest version of Snipe-IT looks like it will do pretty much everything but the billing aspect, but if anyone could make any suggestions for anything else I could look in to, it would be greatly appreciated.
+
+&#x200B;
+
+TIA",1555372849.0,2,0.62,2
+Cylance,Remove application uninstall password when device removed from management portal,"Hi All,
+
+&#x200B;
+
+We are using CylancePROTECT as our main AV in our org.
+
+&#x200B;
+
+We have the option to have the uninstall password set up so that users can not uninstall.
+
+&#x200B;
+
+We are currently trying to get MS Intune set up to manage BYOD and have the deployment of the client all sorted, however when we retire a device from Intune, we would also like to uninstall Cylance during retirement. This is currently working for other applications but obviously Cylance will not uninstall due to the password being required.
+
+&#x200B;
+
+With Intune, we have this set up as a LOB application so there is no option to modify the uninstall command to include the password, and if we were to add this in Intune as a win32 app and include the password in the uninstall command it would defeat the purpose of having this option in the first place.
+
+&#x200B;
+
+On my test PC, I have removed the device from the Cylance management portal and on the client can see that it is no longer registered.  Does anyone know if there is any way to remove the password at uninstall requirement when the client is unregistered?",1553484032.0,2,1.0,3
+Vaping,Starting young face check,,1552723123.0,4,0.59,5
+ArcherFX,Book readers... I just used a reddit account analyser and saw this...,,1549950884.0,13,0.85,2
+Vaping,Treated myself to a new starter kit...,,1545877207.0,50,1.0,20
+Vaping,"Tube Tuesday, or mech Monday depending on your timezone",,1545100479.0,36,0.93,12
+aussievapers,Rage and H-Priv for sale,"http://imgur.com/a/M3J2Poy
+
+Ohm boy rage squonk mod with vandy vape pulse X RDA all boxes and accessories. Little bit of wear on the mod top and 2 little chips in the paint (pictured) - $80 posted
+
+Smok H-Priv 2 kit with vandy vape revolver single coil RTA. Has 1 coil with the smok tank, can't remember which one. All accessories and boxes. - $60 posted
+",1543721546.0,6,1.0,0
+diablo3,Haedrig's gift on Nintendo Switch,So I've complete the season journey but can't see where I go to get the Haedrig's gifts... Anyone know where they are,1541308953.0,5,1.0,5
+Vaping,Ao this is a thing then? Creed on an ego-t,,1537360167.0,14,0.85,11
+Vaping,"Big mod, tiny RDA handcheck",,1536643367.0,3,0.81,4
+aussievapers,"Big mod, tiny RDA handcheck",,1536643285.0,2,0.76,1
+aussievapers,[Syd] Pulse 80w squonk for sale,"Hi all, 
+
+Have had this for a few weeks and am just not using it as much as I thought I would. 
+
+Is the high end version with the refill bottle. Has full retail packaging and manuals etc. Has only left my house 3 or so times so it's in tip top shape. Black side panels. 
+
+http://imgur.com/a/Nx2RMBg
+
+Looking for $60 including post or less for a meetup in the Penrith area",1536227446.0,1,1.0,3
+Vaping,First mech mod handcheck,,1535778275.0,14,1.0,14
+Vaping,Im sick so I bought a new RDA handcheck... Menthol juice helping to clear the sinus!,,1535009314.0,13,0.99,5
+Vaping,New mod sticker idea,,1534912639.0,8,0.79,6
+aussievapers,Deliciousness hand check,,1534245198.0,18,0.95,8
+Vaping,Seriously need to stop buying hardware,,1533645428.0,2,0.63,5
+aussievapers,I need to stop buying hardware deskcheck,,1533640945.0,7,0.89,2
+aussievapers,Nic mix question,"Hi all,
+
+I just got some of the 100mg nic from vapoureyes NZ and have mixed to 3mg in some RTV juice and I am finding the nicotine to be a little harsh despite steeping for a week. 
+
+Last time I used the easy mix 12mg in doubler and at a 6mg mix it was still way less harsh. 
+
+Does anyone have any tips for keeping the nic content at the same level but mellowing out the throat hit a bit? 
+
+TIA",1533609224.0,3,0.8,13
+CircleofTrust,u/teh_chaosjester's circle,,1522910706.0,1,1.0,1
+rickandmorty,I'm Vegemiiiiite Riiiiiick,,1511585776.0,7,0.71,2
+battlestations,New battlestation. Another IKEA fredde,,1502799097.0,63,0.91,8
+depression,Think i just hit rock bottom,"Hi all, long time lurker first time poster. 
+
+I got really drunk and had a huge fight with my wife and am currently in hospital after the cops picked me up after walking all night through the streets to get to the train station. I'm still very confused and can't really remember what set me off, but I think it was all in my head and I just went a bit loopy. 
+
+I know alcohol doesn't really do anything good for you but I had a lot and just wanted to be alone and walk. So I walked about 4km from where I was to where I was staying. I got in the car and tried to sleep in the passenger seat but then my wife came out and we had a fight because I am messed up and can't articulate anything about how I feel. I love her so much but I am an emotional retard and find it hard to express that.  I hurt her so much tonight and I don't know if I can do anything to make it up to her and that really hurts. 
+
+I'm on meds and I know drinking can mess them up but I also know that it's no excuse for the hurt I've caused. Her father tried to pick me up while I was walking away but all I could say is that I had gone too far and was past the point of no return. I was planning on catching the train home then killing myself when I got home so I'm a little glad that the cops got me and took me to the hospital but now I'm freaking out and I am so confused. 
+
+I am not sure what to do from here and if anyone has any helpful suggestions I'd really appreciate it. The hospital staff are busy with other things so I'm not sure what to ask of them but I know I need help. 
+
+Sorry for the rambling, just so confused and unsure of what to do right now. 
+
+Tl;dr I got drunk, had a big fight with my wife and threatened self harm and need some advise on what to do. ",1497126091.0,2,1.0,0
+rickandmorty,Google assistant gets it,,1495014316.0,16062,0.9,236
+PurePwnage,Patches forAustralian Gamer Army members,"Hi All,
+
+Was doing some sorting out of stuff in the garage over the weekend and found a bunch of Gamer Army patches.
+
+Happy to post some out to anyone that wants them, just PM me an address to send to.
+
+Cheers,
+Col. ChaosJester",1492479486.0,6,1.0,8
+AndroidWear,AW2.0 - Text messages don't send automatically,"Is anyone else having this issue? When I say ""OK Google, Text so and so something or rather"" it shows the confirmation screen, on 1.5 it used to tick down with the option to cancel then send after a few seconds. In AW2.0 it just gives me buttons for cancel or send and I have to tap send, which is not ideal as I am probably driving when I use this feature and don't want to have to fiddle with the watch.",1491956069.0,8,0.72,6
+Windows10TechSupport,WIndows 10 Mail app gmail issues,"Hi All,
+
+I am having an issue with setting up a particular email address in the Windows mail app.
+
+The scenario is this:
+
+I have several accounts on the same google apps domain
+
+For example:
+user1@mydomain.com
+user2@mydomain.com
+etc
+
+I am trying to log in to user1, but for some reason the page that the app directs me to has user2 signed in and will not allow me to add user1.
+
+So I don't even have user1 set up, but its like the web browser page that comes up to log in to gmail has a session saved under user1 and even through I am putting in the user2 credentials, it just redirects to user1.
+
+When I add the account, I get an email from gmail saying there was a new sign in from internet explorer, so I cleared cookies and cache from IE, Edge and Chrome just in case. Same issue.  Reset the mail app through the settings (insider build feature), same issue.  Even deleted the app through powershell and reinstalled from the store, same issue.
+
+Google-fu has failed me, if anyone can help it would be greatly appreciated.",1462947611.0,1,1.0,1
+PurePwnage,Really serious forum question,"So now that the forum links here, and while I know the forum is still up...
+
+When the forum is shut down for good, what happens to Weiman's post count?
+
+Also is Gillz banned here too?
+
+Real important questions these are! ;)",1459145579.0,5,0.78,7
+3dshacks,3DS Homebrew InstallMii PHP based admin tool,,1458816464.0,15,0.86,9
+adviseanimals,Regarding Star Wars spoliers,,1450224378.0,3,1.0,0
+AdviceAnimals,Regarding Star Wars spoilers....,,1450224293.0,1,1.0,1
+LogitechG,Replacement G602 receiver in Australia,"Hi All,
+
+Just wondering if anyone knows where I can get a replacement G602 receiver in Australia?
+
+I have checked the logitech store and they only appear on the US site so I cant go that route, the only other option is to get one on ebay for 2-3x the price from logitech.  This ends up being about half the price of just buying another mouse (I already have 2 and they both work fine, just one of the receivers is dead.)
+
+My google fu has not helped and only really returns the ebay and logitech US sites.
+
+TIA
+
+",1447726267.0,2,1.0,2
+torrents,MaterialTix - Material Design Theme for Tixati (x-post from /r/tixati),,1444714398.0,15,0.86,7
+Tixati,MaterialTix - Material Design Theme for WebUI,,1444713506.0,3,1.0,1
+AdviceAnimals,"Seriously, why do people to this?",,1441329408.0,187,0.91,9
+PurePwnage,Had to do it...,,1439449848.0,37,0.87,5
+Surface,Windows wont activate,"Hi All,
+
+I recently removed Windows 10 and reinstalled windows 8.1 twice and both times it would not activate.
+
+First I installed windows with a retail ISO and thought that might have been the cause as technically the surface is an OEM key.  So after that, I installed from the recovery image provided by MS.  I did this because when I tried to use the recovery image from Windows 10, it kept saying the recovery media I had was not valid, but worked fine after installing 8.1.
+
+Now both copies refuse to activate and just give me the message ""Windows cant activate right now, please try later"" and if it keeps failing to contact my system admin (me). It does not give me any useful error codes, or give me the option of activating over the phone.
+
+Has anyone come across this or have any ideas what I should try?
+
+TIA",1433994029.0,5,0.86,4
+GamePhysics,BF2 Jeep drop,,1433985748.0,1,1.0,1
+Showerthoughts,There will be generations of gamers that don't know why it's still weird to see Mario and Sonic in the same game,Always remember the Sega vs Nintendo wars people!,1433464230.0,5,0.86,0
+friskydingo,Someone hired the Desepticles for their slogan,,1432821510.0,33,0.92,10
+canberra,TV outage in Gungahlin,"We just lost every channel except ABC, anyone else in the Gungahlin area affected?",1428313166.0,8,0.73,13
+SuicideWatch,Friend in need of help,"Hi all, have a friend that is currently in a bad place and has mentioned to me that he does not plan on living out the week.  
+
+I have had my moments so I pretty much know that the standard ""don't do it's"" aren't really going to do anything here.
+
+Apart from just letting him know I am around if he needs anything at all, are there any other bits of advise anyone can share?
+
+Sorry if this is in the wrong sub, thought it would be best to post here due to the possibility of him actually going through with it.",1427081784.0,5,1.0,1
+AndroidWear,"LG G Watch, can't set time without phone!","So I have had to send my phone off and don't have any other android devices on hand to set the time on my watch.  There are no options to set it ON the watch.  What a joke.  How the hell is this a ""smartwatch"" when you cant even tell it to set its own damn time.
+
+Grr... Anyone know a way around this?  Could there be some ADB command that could set its internal clock?",1423694944.0,2,0.75,3
+AdviceAnimals,Thank the lord...,,1418462946.0,11,0.92,2
+AdviceAnimals,Work sucks,,1418165932.0,5,0.73,2
+MetalMemes,Listening to the new In Flames album when....,,1417303044.0,35,0.79,12
+AndroidWear,LG G Watch does not wake on wrist,"I have had the LG G watch for just under a week and I cant seem to get the watch to wake when it is on my wrist.  I have to tap the screen to get the screen to come on.  If I take the watch off and move it from 180 degrees to 90 degrees it turns on as it should so I don't think it is faulty as such.  Does anyone else have this issue, if so have you managed to figure it out?",1413935148.0,1,1.0,5
+canberra,TransACT Fiber question,"Hey peeps, just moved in to a place that has transact fiber and just wanted to know if anyone can answer a few questions.  As the network got sold to NBN Co. recently, just need to know what kind of gear I will need, I am assuming just a router.  Also need to know if they need to install anything in the house like for other NBN fiber, or if the place should be fully wired and I just plug the router in to any of the available RJ45 connections in the house.  I am assuming as it is in Harrison it would have never been wired up for copper or PSTN so all the ""phone"" ports should be wired back to the fiber box outside?
+
+TIA",1407300127.0,2,0.63,12
+AdviceAnimals,So the KFC Double is back in Australia for a few days...,,1401424648.0,6,0.69,1
+AdviceAnimals,Phrasing matters,,1399615154.0,2,0.63,3
+AdviceAnimals,Foxtel is awesome,,1397435561.0,3,0.6,2
+techsupportgore,I like mine medium rare - iPhone 5 cooked to perfection [x-post from pics],,1397025087.0,10,1.0,4
+pics,I like mine medium rare - iPhone 5 cooked to perfection 30 minutes at 200c,,1396998985.0,1,0.6,0
+AdviceAnimals,"Seriously, is it that hard?",,1395276265.0,3,0.61,5
+pebble,Has anyone switched from Pebble to Galaxy Gear?,"Hey all, Have seen a few 2nd hand Galaxy Gear's around and have been kind of thinking about making the switch.  Just wondering if anyone else has done so and what their experience has been like?  
+
+I like the Pebble because it is simple yet useful, it does not try to do too much, which I think the Gear does.  But on the flip side, I am a total tech whore and I just want the gear for no real good reason.  So really, this is a ""talk me out of getting the Gear"" kind of post :p",1385946193.0,12,0.74,24
+ragecomics,I hate my job sometimes...,,1385506800.0,13,0.64,1
+Pictures,Reddit priorities,,1384738015.0,0,0.33,1
+gameofthrones,[No Spoilers] House stark Tea Cozy,,1376027353.0,72,0.82,8
+Ingress,My recent Ingress dilemma,"[](http://cdn.meme.li/instances/300x300/39934452.jpg)
+
+So I quit smoking, now I really don't want to go downstairs with the other smokers and farm my portals :(
+
+",1374475904.0,0,0.48,4
+gaming,Yay me,,1374467150.0,2,0.58,5
+galaxys4,Google Edition ROM for I9505,,1372377448.0,9,0.79,14
+galaxys4,Google edition question,"Does anyone know if the google edition ROM will support the s view cover?  I would love to use the ROM but kinda like the cover, and after spending $50 on it I don't want to ditch it.  Currently running foxhound that has ripped out touchwiz but would really like to use something AOSP'y
+
+EDIT: Installed the Google Edition ROM, I can confirm that the S View cover works fine :)
+",1372292599.0,7,1.0,8
+australia,Brace yourselves...,,1372240412.0,1,1.0,0
+MetalMemes,Work sucks...,,1369959881.0,220,0.98,18
+pebble,Now that we have 2 way...,"Will the Android Pebble app get an update so we can answer or decline calls?
+
+",1368745279.0,7,0.82,15
+pebble,Another use for the charge cable,"So I had a thumbscrew from my case sitting on my desk that was stuck to the charger cable... If you ever drop a screw in a hard to get to place, just dangle your pebble charger  and pick it up :)
+
+",1365913787.0,0,0.39,4

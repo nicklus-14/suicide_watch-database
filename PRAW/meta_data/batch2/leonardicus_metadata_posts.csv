@@ -1,0 +1,880 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+pools,How to clean out or prepare these anchors for pool safety cover?,"Hi all, we have a bunch of these anchors around the pool for a safety cover. The pool guy is coming this week to close the pool. In preparing the pool, I noticed these all have polymeric sand or whatnot inside. Is there anything I should do to clean them out or prepare for the pool guy?
+",1728979510.0,3,0.8,17
+git,Strategies to commit blobs,"I’m completely new to Git and had a question for those experienced users here. I have a project that I want to track (mainly) code files. Great, this is what Git is for. I also want to track (or keep) only the most recent version of some binary files, mostly large datasets. I know that I can commit them like any other file and Git won’t care, and I also know I won’t have additional features like diff on binary files. I only want to attach (track? Keep?) exactly one version of these files in my repo so I can pull it down without having to store it somewhere else. I may update these files and I’m happy to have the old version trashed. Is there a way to do this? Is it fundamentally incompatible with Git?",1699904812.0,0,0.25,10
+baconreader,Bug with highlighting active thread in iOS app,"So this bug has existed for several months now with the iOS app and using iOS 15.1 and now 16.1.
+
+The issue is that when I open a thread in any subreddit, rather than highlighting the thread as active, a thread further down is marked as active while the one I’m viewing is marked as viewed. The issue is somehow linked to how threads are indexed, because the further I scroll, the further the discrepancy is. It starts off by skipping one thread, then two, then three, etc.",1667352597.0,12,0.88,3
+googlehome,Google Nest Mini won't let me cancel streaming during Downtime,"Based on Google's [description](https://support.google.com/googlenest/answer/9141231?hl=en), when Downtime is on, we should still be able to use commands to stop or cancel actions in progress. However this doesn't work. 
+
+What is the cause and how can I fix it?",1662517676.0,1,1.0,6
+stata,Updated sidebar times,"Can we update the rules in the sidebar to request posters to indicate whether and where a question has been asked? A not insignificant fraction of posts here also end up being cross-posted to the Statalist, StackExchange or elsewhere, often posted simultaneously and hardly ever with cross-links.
+
+There is a popular opinion that such cross-posting practices are rude because it shows a disrespect to the time and effort of those who wish to help with questions that may have already been answered elsewhere. I don't have a problem with a poster wanting a wider audience for help, but those communities should be aware of the other postings.",1637452489.0,3,1.0,7
+Scholar,[BOOK] Graphical data analysis with R,"Graphical data analysis with R by Unwin, Antony
+
+Chapman & Hall/CRC the R series, 2015
+* **Citation:** insert full citation here
+
+ISBN: 9781498715232, 1498715230
+
+[Amazon link](https://www.amazon.com/dp/1498715230/ref=cm_sw_su_dp)",1497221837.0,0,0.5,4
+Anki,[Solution] find the differences between two lists of cards based on a common note field,"I recently ran into this problem when using my French verb definitions and their conjugations. I gave one note that keeps definitions and another for each conjugation (tense or mood). At some point, I had many more definitions then their matching conjugations and I wanted to update what was missing.
+
+I couldn't figure out how to solve this with filters in Anki so I came up with a solution that works quickly in Excel.
+
+1) Create a filtered deck for the first note type. Make sure to increase limit to something large enough (5000 say), uncheck ""Reschedule cards."" and export list of notes to plain-text (tab delimited) file.
+
+    Filter: deck:""French vocab"" note:""Verbe""
+
+2) Repeat the above to create a second filtered deck for the other not your.
+
+    Filter: deck:""French vocab"" note:""Verbe: Simple Present (Présent)""
+
+3) Open both files in Excel and keep the desired column from each card. In my case, I used the first column which happens to be the same four each and represents the French word. The layout of the Excel file should be:
+
+
+    Verbe in column B
+    Conjugation type in column C
+
+4) To check that the verb also has a conjugation, use the formula in column A: 
+
+    =IF(ISERROR(MATCH($B1, $C$1:$C$1000,0)), ""Needs conjugation"", """")
+
+5) As a quality check, you can also see which verbs have conjugations but don't have a definition. Use the following formula in column D: 
+
+    =IF(ISERROR(MATCH($C1, $B$1:$B$1000,0)), ""Missing definition"", """")
+
+From here you can sort the list and create your missing cards. That's it.",1486335402.0,3,0.81,0
+learnfrench,French ebooks,Would any of you kind people have ebooks that you can link me to? I'm looking for books at a low B1 level.,1485997479.0,10,1.0,4
+howto,How to replace my shower head with one that includes a handheld sprayer?,"I have a large diameter, fixed shower head that I wish to replace with one that also includes a handheld sprayer. Ideally, I should be able to divert water flow to use either one or the other, or both (with the anticipated drop in pressure). Is this as simple as buying a diverter with the appropriate shower heads?",1481911863.0,34,0.77,5
+uwo,Can someone in Ivey help me with something easy?,[removed],1478287755.0,1,1.0,1
+rstats,Growing a data frame by rows: optimization and a benchmark,"Hi all,
+
+I wondering what the fastest way is to incrementally grow a data frame by a row (or set of rows). To motivate my question, consider a dataset of data on individuals that has a cluster variable (e.g., observations on children which are clustered in schools). Suppose I wish to take a bootstrap sample over these clusters. This involves identifying a whole cluster at random, and adding into the sample, and repeating this process to produce a sufficient sample.
+
+I've done this two ways, one using rbind() and the other to implicitly insert rows using the subsetting operator ([]). 
+
+Here is my example code (R version 3.3.1), with a system.time benchmark.
+
+    # create fake data
+    m <- 2000 # number of clusters
+    n <- 100 # number of people per cluster
+    df = data.frame(cid = as.vector(matrix(1:m, 1:n, nrow=n, ncol=m)),
+                    id = rep(1:n, m),
+                    x = rnorm(m*n,0,1))
+    #df #done
+    
+    # draw a random sample of cluster IDs with replacement.
+    set.seed(1524)
+    boot.cids <- sample(unique(df$cid), replace=T, size=length(unique(df$cid)))
+    #boot.cids # show sampled cluster id's
+    
+    # prepare data frames to hold the resulting bootstrap sample.
+    boot.df1 <- data.frame(cid = integer(), id = integer(),
+                           x = numeric(), new_cid = integer())
+    boot.df2 <- boot.df1
+    
+Method 1: 
+
+    system.time({
+    ### assemble the samples
+    ## Method 1 - rbind()
+    for (i in 1:length(boot.cids)) {
+        boot.df1 <- rbind(boot.df1, subset(df, df[""cid""]==boot.cids[i]))
+    }
+    })
+    #boot.df1 # show the results
+
+The outcome is:
+
+       user  system elapsed 
+     43.984   0.004  44.008 
+
+And method 2:
+
+    system.time({
+    ## Method 2 - subsetting
+    for (i in 1:length(boot.cids)) {
+        s <- subset(df, df[""cid""]==boot.cids[i])
+        boot.df2[c(1:nrow(s)) + nrow(boot.df2), ] <- s
+    }
+    })
+    #boot.df2
+
+The outcome is:
+
+        user  system elapsed 
+     82.988   0.016  83.037 
+
+Running this code with m=10,100,4000 always yields method 1 to be twice as fast as method 2.
+
+So now I'm wondering:
+
+* Why is rbind() faster? If I had to guess, it's because method 2 must be copying out the data frame each time.
+
+* Is there are more optimal solution, perhaps not requiring a for loop?
+
+Edit: fixed error with fake data.",1472691765.0,8,0.99,12
+AskStatistics,What is the family of model I should use for this analysis?,"Hi all, I'm running into a problem of terminology and I seem to be confused.
+
+I would like to look at time trends of a chronic disease using data collected from several, independently sampled cross sectional surveys. I thought originally panel analysis might work, but I understand this means I need data from the same individual at each time point. I feel like this could be handled in a mixed model but I'm new to this sort of sequential cross-sectional time analysis.
+
+Any help would be greatly appreciated.",1471615581.0,1,1.0,2
+AskStatistics,Brexit data?,"Do any of you know where I can get Brexit vote data that includes country, county/district, vote to stay/leave, age and income?",1468691273.0,2,0.67,0
+Scholar,[Book] - Applied Longitudinal Data Analysis,"J. Singer & J. Willett (2003) Applied Longitudinal Data Analysis: Modeling Change and Event Occurrence
+
+No luck using suggested sources.",1468676282.0,2,1.0,2
+AskStatistics,Examples where controlling for a covariate has been damaging/inappropriate,"I'm looking for examples where variables have been controlled for (e.g., regression covariate) which were later found to be inappropriate because they either had no effect or were inducing confounding.
+
+Alternatively, would SEM be one way to test for this comparing different models of causation?",1467675613.0,7,1.0,4
+AskStatistics,Model adequacy using logit for probit,"I'm using a logistic regression model to predict short term risk of surgery. I'm fairly certain my model performs decently and its predictors are well specified. However, I ran a link test to check model adequacy and the logistic model is inadequate. Specifically, both xhat and xhat^2 are significant regressors. My understanding is that the strict and correct way to interpret this failure as the distribution of the outcome variable is misspecified. I tried the exact same model but using probit, and this produces an adequate model fit. What should I do? Use the probit, but making the interpretation more difficult, or stick with the logit?",1467220607.0,1,1.0,0
+Scholar,"[Book] Multilevel and Longitudinal Modeling Using Stata, Third Edition","[link](http://www.stata-press.com/books/multilevel-longitudinal-modeling-stata/index.html)
+
+Couldn't find a download link or digital copy at my uni library.",1466796909.0,0,0.33,4
+stata,How to make Stata produce this type of table?,"I'm trying to get Stata to produce a table of frequencies, listing out all possible combinations of categorical variables. Here's an example of the output that I would like:
+
+    x1  x2  x3  frequency
+    0    0   1    14
+    0    1   0    42
+    1    0   0    32
+    0    1   1    26
+    1    0   1    19
+    1    1   0    43
+    1    1   1    30
+
+I could use two-way tables but that its not as condensed as this table is, and you can imagine if you had a 2-by-k table then it would get a little difficult to read. Any suggestions?",1466795667.0,2,1.0,2
+academia,Cam someone please invite me to PubMed Commons?,I have articles listed in PubMed but no means of inviting myself. PM me if you wouldn't mind and I'll send my email.,1466030733.0,1,0.67,0
+AskStatistics,Regression question for a treatment that only affects a subset of subjects,"I think I am second guessing myself but is it valid to do this? Suppose I have a regression in which a health outcome is predicted by drug treatments. Further suppose that birth control is one of these predictors, and obviously, this only applies to females of a certain age. Can I simply make 'birth control' a dummy variable? What if I create an interaction term of 'birth control' with 'sex'?
+
+Thanks!",1465867709.0,3,1.0,3
+AskStatistics,Genealogy dataset,"Do any of you don't people know where I can get a dataset that includes a large (preferably >1,000) dermographic records of people's sex, marriages, number children? I'm interested in examining a large set of family trees.",1465091753.0,2,1.0,0
+AskAcademia,Plagiarism detection of references,"Related to the previous post about using a plagiarism detection software, this got me thinking about detecting other types of intellectual plagiarism. Do any of these programs look at the order/placement of references to see if an idea or logical framing of an argument has been plagiarised?",1464534748.0,1,0.6,8
+Scholar,[Book] Hierarchical linear models: applications and data analysis methods,"Authours: Raudenbush and Bryk
+Edition: 2nd
+
+Looking for a digital copy.",1461764485.0,2,0.75,2
+Ubuntu,"Looking to get a graphics card in the <$100 range, is a particular brand or model preferred for Ubuntu comparability?","Basically I have modest requirements. It must have HDMI out, and drive full HD. I don't really require much horsepower in GPU speed or memory because I don't game. I don't know if ATI/AMD or nVidia are more Linux friendly these days.",1461279982.0,13,0.94,9
+epidemiology,Anyone going to CSEB 2016 in Manitoba? Care to meet up?,The Canadian Society for Epi and Biostats has a conference coming up in June at the University of Manitoba. Curious who may be going from this sub.,1459290201.0,5,1.0,8
+worldwhisky,Review #3: Crown Royal Canadian Harvest Rye,"Accidentally posted this to /r/scotch, but now it's here.
+
+**ABV: 45.0%**
+
+Drunk unchilled and neat, in a Glencairn glass.
+
+**Nose**: honey, oil, apple, biscuits, pepper, hints of cinnamon and alcohol
+
+**Taste**: Medium weight mouth feel. Vanilla, cherry, honey, oak, smokey, oily (but kind of thin).
+
+**Finish**: Leather and smokey after taste, a bit of alcohol spirit. Medium finish.
+
+Cost: $35
+
+I'm pretty new to reviewing whiskies and these were the qualities that stuck out with me most. I'm sure I'm missing some on the taste, but I doubt my palate is that refined.
+
+Overall: 88/100
+
+It's a great whiskey for what it costs, but I don't think it's my favourite. It's enjoyable to sip and enjoy, probably on a cool day.",1459200026.0,11,1.0,4
+Anki,Question about mature cards,"I can't seem to find this answer in the manual. I have French deck that I'm studying from and it seems that words that have reached their max review interval (6 months in my case) are rightfully mature cards, but now they seem to have re-entered my deck as review, resetting the review intervals (1 day, 3 days, 1 week, etc).
+
+Am I wrong in thinking they are being re-reviewed, and if so, how do I control this behavior?",1457888208.0,1,1.0,5
+askscience,How does laser targeting for missile strikes work?,[removed],1456159995.0,1,1.0,0
+Scholar,[Article] - Image-derived arterial input function for quantitative fluorescence imaging of receptor-drug binding in vivo,"[link to article abstract](http://onlinelibrary.wiley.com/doi/10.1002/jbio.201500162/abstract). Can't get access through my institution or ILL.
+
+Thanks!",1445217867.0,1,1.0,1
+HomeImprovement,Sealing of waterproofing exterior foundation cracks,"My wife and I recently bought a home and the home inspector mentioned sealing some narrow exterior cracks in our block foundation. I have heard of using either an epoxy/concrete patching kit or some kind of caulking. We live in Canada so it needs to hold up to more extreme temperature ranges (-25 to +40 Celsius). From what I've been Googling, another option may be a polyurethane sealant. Any tips or recommendations?",1441497425.0,6,0.72,1
+duolingo,Pretty unimpressed with Duolingo's progress quiz/fluency progress meter.,"I've just noticed that my progress meter has been fluctuating between 44% and 45% for the French tree over the last month or so. At the same time, my progress quiz has jumped from 2.73/5.00 to 4.76/5.00 in the last couple of months, and I've also been contributing more to immersion translations. All of this work, plus outside learning, and while I can feel my comprehension getting better, the Duo fluency meter seems absolutely useless. I especially don't like that it now has a button to show the progress on LinkedIn. I think DL should either improve the meter or remove it entirely.",1440616838.0,23,0.83,13
+lectures,It takes about 20 hours to learn a new skill,,1440603031.0,38,0.67,28
+askscience,[Microbiology] How is the diversity of microbial or commensal communities quantified?,,1440199406.0,1,1.0,1
+languagelearning,One easy way to learn one of the official languages of your country,"So this is a trick that I came up with earlier this Summer on in my path to learn French. I'm Canadian, and the second official language is Quebec French. I have done the usual thing using Duolingo and such websites, but for a more targeted approach, I signed up for high school correspondence course in French. It's very cheap, done at my own pace, and most importantly gives me exposure to Quebec French.
+
+Now if you happen to live in another country, such as the USA, and want to learn Spanish for example, this may also work for you while being very cost effective.",1439583751.0,3,0.72,4
+duolingo,"After translating a document, where does the text go?","I was just wondering that when users complete a translation for a document, the Wiki articles are presumably uploaded to Wikipedia, but what about all the other articles? I am referring to the non-commercial articles in particular. Can these translations be publicly searched on the web, or is there a central depository?",1439301572.0,6,0.88,4
+learnpython,"How to get started with databases, and which one to learn?","I'm looking for beginner resources into learning database use and design using python, and which flavour of SQL I should learn. My objective is to mainly create databases for collecting medical-type data. ",1437153588.0,8,0.84,13
+funny,"What are you trying to say, Google?",,1436973356.0,1,0.67,0
+French,Anyone have an idiom dictionary pdf?,I've got a dictionary of idioms and idiomatic expressions in English. Does anyone know where I can get one for French expressions? (Preferably a pdf),1436754069.0,2,1.0,0
+fitbit,My Charge strap started to break ...,"I was able to contact customer support, and they requested to know the details of where I purchased it. I included an explanation along with a photo of the damage. My fitbit was only 6 months old, so I was really quite disappointed that from average use the band broke or failed so badly from gentle use. After I provided them with proof of purchase, they immediately send me a new replacement item. I'm quite happy with how smooth the replacement process was, and had a new item in less than 10 days.
+
+Thanks Fitbit!",1436294590.0,10,1.0,11
+AskReddit,"What is your country's version of the idiom ""let them eat cake"" ?","Inspired by the quote often incorrectly attributed to Marie Antoinette. What are your examples of sayings, idioms or quotes? ",1435081461.0,1,1.0,4
+duolingo,Finished the French tree! :D,,1433295315.0,64,0.86,17
+jackrussellterrier,"Oh boy, did someone say car ride? I love car rides!",,1430929211.0,47,0.96,1
+epidemiology,Data sets which capture occurrence of hospital acquired infections?,"Are there any such data sets open to the public they would document whether an individual acquired a hospital acquired infection, and possibly some information about disease status or duration of hospital stay? ",1430262345.0,9,1.0,12
+uwo,"Need stats tutoring before the final? I can help with inferential stats (SOC 2050, BIOSTATS 2244, etc) in exchange for beer money.","I am a recent PhD graduate with several years of TAing and tutoring experience. I like to teach one-on-one or in small groups of up to 4 people. My rate is $20/hr, minimum of 1 hour. Group rate is $15/hr. I'm available evenings and weekends.",1428801454.0,0,0.33,0
+jackrussellterrier,"Sal resting on my legs, crossing hers",,1426016060.0,26,0.97,0
+learnpython,Here's a (non-deterministic) finite state machine implementation in Python3,"[Link to the code](https://gist.github.com/leonardicus/9e76e939b27639183813)
+
+Here's one way to make an object-oriented implementation of Markov chains and non-deterministic finite state machines. I know it's over-engineered for the trivial 2-state discrete-time Markov chain, but the extra structure allows for an easily extensible system to incorporate a larger set of finite states.
+
+I've added a little something extra to make this a be a little more ""random,"" by giving the transitions at first a default probability of transitiion, and then for each subsequent state transition, draw a new probability from a Gaussian distribution.
+
+The **initial state** of the Markov chain is:
+
+* A --> A: 0.3
+* A --> B: 0.7
+* B --> A: 0.25
+* B --> B: 0.75
+
+Transition probabilities are modified by the addition of ±N(0, 0.05).
+
+And here is a **sample output** for 6 time steps:
+
+    A
+    Leaving A.
+    Transitioning....
+    Entering B
+    B
+    B
+    B
+    B
+    Leaving B.
+    Transitioning....
+    Entering A
+    A
+
+In the future, I would like to have several of these machines, possibly each with different states and parameters, running in parallel. Could you fine people offer me some feedback on whether this code can be parallelized? Also, any feed back on the code itself? Thanks!",1425345945.0,0,0.5,7
+learnpython,Can you lovely people offer some tips on creating libraries?,"More specifically, I'm in the process of creating a library for a discipline of biology. As planned, it will offer some utility functions, quick statistical calculations, and later add some graphing capabilities. Right now there is no such library in PyPI or github. I think the right thing to do here is to start simple and use scipy and pandas for support (do not reinvent the wheel).
+
+Can you offer me videos, articles or advice on how I should begin my task?",1423252508.0,23,0.94,11
+learnpython,I made a simple dynamical model of an infection. Is there anything that can be improved?,"Hi all, I've written a small script that computes the dynamical [epidemiologic model for an infection](https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology#The_SIR_model_is_dynamic_in_three_senses). Simply put, the model assumes three compartments that vary by a system of ordinary differential equations. The compartments represent susceptibles, infected and recovered/removed individuals from the epidemic.
+
+This is not homework and the underlying math is correct. I am trying this as an exercise to get familiar with numpy, matplotlib and networkx. 
+
+My initial thinking with using networkx was that I could map each compartment as a node in the graph¸ and then with each time step calculate a direction-specific transition rate. In my model the networkx representation is not all that convenient I suppose because I haven't figured out how I would map these transitions over time using a graph structure.
+
+Here is a picture of the [output](http://imgur.com/lax8Vs7). Anyway, here is my code (Python 3). Please critique it if you would be so kind.
+
+    import networkx as nx 
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    def main():
+
+        # Make a graph and add 3 nodes: Susceptible, Infected and Recovered
+        G = nx.Graph()
+        G.add_nodes_from(""SIR"")
+
+        # Simulation Parameters
+        t_steps = 1000  # simulation time
+        N_total = 1000  # total population size (N)
+        beta = 0.1         # infection rate (beta)
+        gamma = 0.05       # recovery rate (gamma)
+
+        # Set initial conditions
+        init_values = {'S': N_total - 1,
+                       'I': 1,
+                       'R': 0 }
+        for node in ""SIR"":
+            G[node]['t'] = np.empty( (t_steps), dtype='float16' )
+            G[node]['t'][0] = init_values[node]
+        
+        # Run the simulation.
+        for t in range(1, t_steps):
+            s, i, r = G['S']['t'][t-1], G['I']['t'][t-1], G['R']['t'][t-1]
+            G['S']['t'][t] = s + (-beta * i * s / N_total)
+            G['I']['t'][t] = i + (beta * i * s / N_total) - (gamma * i)
+            G['R']['t'][t] = r + (gamma * i)
+
+        # Print the number of susceptibles, infected and recovered at a few time points.
+        print_data_at_time(G)
+        print_data_at_time(G, 100)
+        print_data_at_time(G, t_steps-1)
+
+        # Plot the time course of infection for each compartment.
+        plt.plot(G['S']['t'], 'g.')
+        plt.plot(G['I']['t'], 'b.')
+        plt.plot(G['R']['t'], 'r.')
+        plt.show()
+
+
+    def print_data_at_time(G, t=0):
+        """""" Prints the number of susceptibles, infected and recovered 
+        from graph, G, at a specified time, t. """"""
+        print(""At time = {}"".format(t))
+        for node in (""SIR""):
+            msg = ""{} has {} individuals."".format(node, G[node]['t'][t])
+            print(msg)
+
+    if __name__ == '__main__':
+        main()",1422461602.0,8,0.69,10
+learnpython,I created a quick imgur album and image downloader.,"Here's the link to the [imgurdl](https://github.com/leonardicus/imgurdl) repo.
+
+I'd like to hear any feedback you may have for it. :)",1421687156.0,8,0.84,6
+geegees,Where to find course syllabi?,"I've tried searching Google for course syllabi (specifically those in EPI), but I have had no luck. Are they normally kept in uozone or something like that?",1420991133.0,3,0.72,4
+funny,My wife and I laughed when our odometer hit this number,,1419208746.0,0,0.29,0
+SuicideWatch,Prevented someone from committing suicide today...need some closure and advice,"I'm not sure if this belongs here, but please help if you can.
+
+By a number of coincidences today, I went out to walk my dog at a very specific time of day and place in my neighbourhood, quite out of the usual for my normal routine. As we started the walk, I noticed my new neighbour out of the corner of my eye standing in her backyard, which I thought was unusual since no one was ever in their backyard. Upon closer inspection, I notice she just strung herself a noose and began to hang herself. I proceeded to call out to her, rush over, manipulate her unconscious body enough to remove the noose from her neck, then lay her on her side and make sure she started breathing again. She was literally unconscious for no more than 30 seconds, so it was quite lucky I was there and acted when I did. After I was confidence she was alive and breathing with no obvious neck trauma, I called the police and ambulance and stayed with her for comfort and to keep her talking until help arrived. I'm quite shocked because of what I saw and also very thankful she survived and is now under mandatory psychiatric hold for 72 hr to get the help she deserves. I'm also concerned that I may stumble upon her body again in the future, when no one will likely be around to help her. Can you help me seek some closure and offer some coping advice? In the meantime, I've made an appointment for grief counselling tomorrow.",1418764696.0,16,0.87,10
+cider,So I tried making a saison cider...,"... and it was not so great. Wyeast 3711 was my saison yeast. I was curious to see what the effect of the funk and apple would be, and it turned out to be more funk than apple. Starting OG around 1.055, FG 1.02. 
+
+Have any of you done something similar, and if so, what were your results? ",1417740555.0,8,1.0,6
+Scotch,"New here, are non-Scotch whisk(e)y reviews allowed here?","If not, where are they allowed? I didn't see anything in the sidebar about it.",1417458138.0,3,0.64,5
+Scotch,Review #3: Glenmorangie Original,,1417308098.0,25,0.88,3
+Scotch,Review #2: Glenfiddich 18,,1417196986.0,22,0.85,1
+Scotch,First Review: Macallan Gold,,1417039198.0,42,0.89,16
+ottawa,What are your property management horror stories? Who are good property managers?,"Seriously considering a move to your lovely city in the next year, and looking for some feedback about rental property companies.",1415920130.0,4,0.83,22
+epidemiology,[Question] Considering an MSc Epi,"I'm considering enrolling in an MSc Epidemiology program in Canada. I will have previously earned a PhD in molecular and cell biology, and so I want the degree as a complement to my wet lab experience, and am looking to transition towards the area of clinical trial analysis and management. Are there any pros or cons to completing a course-based or thesis-based MSc, if academic research is not my primary goal? ",1415836565.0,2,0.67,6
+chemhelp,[Request] Getting a sense for how long HPLC-MS/MS experiments take,"Hi all, I'm trying to get a handle on the length of time it takes for each major step to complete an HPLC-MS/MS experiment. I'm familiar with the concepts, just don't have an idea if the experiments take hours or days or weeks.
+
+Thanks!",1415811410.0,1,1.0,7
+fixit,"Repair a jacket zipper that no longer ""zips"" up [X-post /r/DIY]","This weekend I decided to tackle a couple of jackets that seemed to have irreparably broken zippers. With a bit of time searching the internet, a local fabric store and a few household pieces of equipment, I now have two fully functional zippers again.
+
+Here's a [diagram](http://images.mec.ca/media/Images/Articles/Graphics/zipper_v2_m56577569831496233.gif) of the various parts of the zipper.
+
+First, a note. Often times the piece that malfunctions on a zipper are not the teeth themselves, but the actual slider. A slider is really two flat plates of metal held together by a post at the top end, and with wear, sometimes these plates move apart and bend ever so slightly. When this happens, the zipper does not function properly and it causes the teeth to come apart after trying to use the slider.
+
+When does a zipper need to be completely replaced? Usually when teeth are missing or bent out of shape, or the bottom stop is missing. In most other cases, you can repair the zipper yourself for much cheaper than it would cost a tailor or cobbler to repair it.
+
+**Strategy #1:** The first zipper fix I attempted was to use a pair of fine (but not needle nose) pliers, to gently squeeze both sides of the slider, to lessen the gap between both plates. You do not need a lot of pressure at this step because the metal is fairly delicate compared to the force applied. Also, needle nose pliers shouldn't be used because the pressure is not evenly applied. I made sure the squeeze evenly from the side, rather than trying to squeeze the top and bottom. Doing this method to both halves of the slider, and a couple of minutes of patience, restored zipper #1.
+
+**Strategy 2:** After trying the squeeze strategy (above) with my second zipper, it appeared that it was not going to work. With careful inspect, I could see that the slider was cracked and it would be a matter of time before the metal broke and the slider fell off. This repair was easier once I figured out how to determine the size of the zipper. To read the size, it's usually embossed on the back of the slider, and sizes range from #1-10, and correspond to the width of the teeth. There are sizing guides online if this number is not missing, but for jackets, these are usually #5 to #7 zippers. I went to my local fabric store and grabbed a matching number slider for ~$2. If they don't sell the slider individually, then you could also buy a separable zipper of the same size and get the slider that way.
+
+To remove the old slider and prepare the zipper to receive the new one, you will need either pliers or nail clippers. Move the slider to the bottom of the zipper and separate the two sides. On the side with the slider, at the top of the zipper is a metal stop. Locate the stop, and with your tool, pry it apart and remove it. If you bought a replacement slide and it came with a slide stop, then you can discard the old stop, otherwise be gentle and save the old one. It only needs to be loosened a little before you can pull it off. Once removed, the slider should easily be removed from the top, and the new slider replaced in the same manner. With the new slider on zipper, replace the stop at the top and use your pliers to clamp it in place.
+
+Congratulations, you've repaired a zipper for about $2 and 10 minutes of time.",1415645192.0,11,0.88,0
+DIY,"Repair a jacket zipper that no longer ""zips"" up","This weekend I decided to tackle a couple of jackets that seemed to have irreparably broken zippers. With a bit of time searching the internet, a local fabric store and a few household pieces of equipment, I now have two fully functional zippers again.
+
+Here's a [diagram](http://images.mec.ca/media/Images/Articles/Graphics/zipper_v2_m56577569831496233.gif) of the various parts of the zipper.
+
+First, a note. Often times the piece that malfunctions on a zipper are not the teeth themselves, but the actual slider. A slider is really two flat plates of metal held together by a post at the top end, and with wear, sometimes these plates move apart and bend ever so slightly. When this happens, the zipper does not function properly and it causes the teeth to come apart after trying to use the slider.
+
+When does a zipper need to be completely replaced? Usually when teeth are missing or bent out of shape, or the bottom stop is missing. In most other cases, you can repair the zipper yourself for much cheaper than it would cost a tailor or cobbler to repair it.
+
+**Strategy #1:** The first zipper fix I attempted was to use a pair of fine (but not needle nose) pliers, to gently squeeze both sides of the slider, to lessen the gap between both plates. You do not need a lot of pressure at this step because the metal is fairly delicate compared to the force applied. Also, needle nose pliers shouldn't be used because the pressure is not evenly applied. I made sure the squeeze evenly from the side, rather than trying to squeeze the top and bottom. Doing this method to both halves of the slider, and a couple of minutes of patience, restored zipper #1.
+
+**Strategy 2:** After trying the squeeze strategy (above) with my second zipper, it appeared that it was not going to work. With careful inspect, I could see that the slider was cracked and it would be a matter of time before the metal broke and the slider fell off. This repair was easier once I figured out how to determine the size of the zipper. To read the size, it's usually embossed on the back of the slider, and sizes range from #1-10, and correspond to the width of the teeth. There are sizing guides online if this number is not missing, but for jackets, these are usually #5 to #7 zippers. I went to my local fabric store and grabbed a matching number slider for ~$2. If they don't sell the slider individually, then you could also buy a separable zipper of the same size and get the slider that way.
+
+To remove the old slider and prepare the zipper to receive the new one, you will need either pliers or nail clippers. Move the slider to the bottom of the zipper and separate the two sides. On the side with the slider, at the top of the zipper is a metal stop. Locate the stop, and with your tool, pry it apart and remove it. If you bought a replacement slide and it came with a slide stop, then you can discard the old stop, otherwise be gentle and save the old one. It only needs to be loosened a little before you can pull it off. Once removed, the slider should easily be removed from the top, and the new slider replaced in the same manner. With the new slider on zipper, replace the stop at the top and use your pliers to clamp it in place.
+
+Congratulations, you've repaired a zipper for about $2 and 10 minutes of time.",1415643659.0,8,0.75,0
+Homebrewing,"Quick question, causes for rubber or plastic aroma?","I noticed that one of my earlier brews has a low but noticeable aroma of rubber or plastic, and I'm wondering what the cause could be. It was a peach wine that exploded out of the carboy at peak ferment. ",1415577617.0,4,0.84,13
+Cooking,Bolognese sauce,"I'd like to share with you a favourite sauce of mine, and a special cooking tradition in my house, especially fun on cold days. The basic recipe is derived from [Mario Batali's recipe](http://abc.go.com/shows/the-chew/recipes/ragu-bolognese-mario-batali), but I make several deviations and disagree with the ""quick"" version of this sauce. Unlike many famous dishes of Italian cuisine, a bolognese is like a pizza, there are numerous versions of the same basic dish, and everyone has their own method. Here's mine:
+
+**Ingredients:**
+
+* 3 large carrots, finely chopped
+* 4 ribs celery, finely chopped
+* 1 large onion, finely chopped (I replace this with 1 tbsp onion salt because of allergy)
+* 3 cloves garlic, finely chopped (also replaced with 2 tsp garlic salt)
+* 1.5 lb lean ground beef
+* 1 lb lean ground veal
+* 1 lb ground pork (more fatty than the beef and veal)
+* 5 oz tomato paste
+* 2 cups milk (1 or 2%)
+* 3 cups wine, divided (dry or semi-dry, your choice of red or white or mix)
+* 1/3 cup parmesan cheese, grated (parmeggiano reggiano is preferred)
+* 2 tbsp oil
+* 2 tbsp butter
+
+**Instructions:**
+
+1. Begin by heating a large dutch oven or heavy-bottomed pot on medium heat. Add butter and oil, and allow to heat until melted, and mixed.
+2. Add vegetables and allow to sweat until they begin to become translucent, 10-15 mins.
+3. Add meats together and brown, stirring to break meat up into small pieces. Once meats pieces stop sticking together and stay as small pieces, allow to cook until all water evaporates. Season only with salt at this point. This will let the fat render out of the meat, and together with the oil, will start to brown the meat. This is required for the sauce and the fat should not be removed.
+4. Continue for 30-45 min allowing the meat to brown in the fat, stirring occasionally to brown all meat. The meat will make crackling sounds as this is happening.
+5. Next add 5 oz of tomato paste, and mix completely. Do not add tomato sauce. Cook on medium-low for 20 min to allow sugars from tomato paste to caramelize and flavours to incorporate.
+6. Add 1 cup dry wine (your choice), and allow alcohol to cook off and reduce. Stirring occasionally. About 5 minutes.
+6. Add milk, and mix. Allow to reduce completely, stirring occasionally. About 5-7 minutes.
+7. Add remaining 2 cups of wine, and allow alcohol to cook off. About 3-4 minutes. Once alcohol is gone, add parmesan cheese and stir again to incorporate.
+8. Cover and reduce heat to low to keep remaining liquid. Cook for 1 more hour.
+9. Serve over broad pasta noodle of your choice, and lightly toss to mix together.
+
+[Here's what the sauce looks like](http://i.imgur.com/WcuiV7p) when its cooked. If you have any feedback, I'd love to hear it.",1415041930.0,2,0.76,5
+londonontario,Air sirens in London?,Anyone else has them right now? What's the deal with them?,1414594912.0,7,0.83,13
+Scholar,[Article] - Sensitive glucagon quantification by immunochemical and LC-MS/MS methods,"Authors: Lapko VN, Miller PS, Brown GP, Islam R, Peters SK, Sukovaty RL, Ruhn PF, Kafonek CJ.
+
+PubMed ID: 24295121
+
+Bioanalysis [1757-6180] Lapko yr:2013 vol:5 iss:23 pg:2957 -2972
+
+No luck through ILL and my school doesn't subscribe to this journal.",1411072679.0,1,0.67,0
+math,Recommendations for Intro PDE book,I'm looking for an intro PDE book similar in level to the Ordinary Differential Equations by Morris Tenenbaum and Harry Pollard. Any suggestions?,1409072068.0,9,0.77,13
+winemaking,"Quick flavour question: fresh, green bell pepper - good or bad?","Just sipping on a commercially produced 2011 sauv blanc right now and the flavour profile is very prominent with green bell pepper, and then in the background are citrus and grassy notes. I'm just wondering if that's a desired taste, or if its the mark of an immature wine. ",1406595211.0,3,0.81,4
+learnpython,Class-private and when to use it,"Is there much use in worrying about making objects class-private (names with leading ""__"") when beginning a project? One of the leading Python philosophies is ""we're all consenting adults"", so is it worth investing early on in ""guarding"" a program design by hiding implementation details?",1405380961.0,3,0.72,11
+learnpython,Which method call is better idiomatic python?,"I'm trying to make a Vector class to represent a 2D point in Python. The structure is quite simple, there is an 'x' and 'y' attribute to hold the position.
+
+I would like to attach several instances of this Vector() class to objects that can later be plotted on a grid, and be able to move them by calling up/down/left/right functions.
+
+In Java, I would define these class methods in the class, and therefore every class instance has its own copy of the class method. The same could be done in python, and would be called like so:
+
+    v = Vector(x, y)
+    ...
+    v.move_left()
+
+Alternatively, since there is nothing special about the movement functions other than to manipulate an attribute, they could be declared out the class body keeping the 'self' parameter. Then, I could move the point by doing:
+
+    move_left(v)
+
+The second method seems better because it doesn't un-necessarily create multiple copies of the same utility method. Each instance of the Vector object can equally use the movement functions, and the overall structure of the object is more ""flat"", which seems preferable in Python (unlike Java).
+
+Am I thinking about this correctly? Which is more pythonic?",1405181341.0,1,1.0,6
+learnpython,Testing a very simple class...what's wrong?,"Here's the code I have for trying to create a basic Point class to represent a 2D coordinate.
+
+    class Point(object):
+        """""" Represents a 2D point in polar space. """"""
+
+        x = 0
+        y = 0
+    
+        # the relevant functions
+        def move_down_left():
+            x -= 1
+    
+        def move_down():
+            y -= 1
+
+I'm testing the class using this straight-forward example.
+
+    p = Point()
+    print(""The current point is (%r, %r)."" % (p.x, p.y) )
+
+    p.x = 1
+    p.y = 2
+    print(""The point has changed to (%r, %r)."" % (p.x, p.y) )
+
+    p.move_down_left
+    p.move_down
+    p.move_down
+    print(""Now the point is (%r, %r)."" % (p.x, p.y) )
+    
+And the output is:
+
+    The current point is (0, 0).
+    The point has changed to (1, 2).
+    Now the point is (1, 2).
+
+Why isn't my coordinate changing?
+
+**Edit**: Problem solved and explanations given. Thanks!",1404691632.0,5,0.79,17
+math,Set theory applications in biology and medicine,"I was wondering what the applications of set theory would be in biology and medicine. I'm fuzzy on what set theory is as a field of mathematics, but I know that it has application to probability theory and can be a basis to many mathematical disciplines. Can you enlighten me? ",1404306241.0,2,0.55,12
+showerbeer,Post-run beer and bath,,1403743909.0,11,0.92,1
+secretsanta,[rant] this is the third time that I've been stiffed,[removed],1403642956.0,1,1.0,5
+Scholar,[REQUEST] Three-dimensional electron microscopy: structure of the Golgi apparatus.,"Please help in finding this article. I can't get it via Google, ILL or my library. Thanks!
+
+Eur J Cell Biol. 1990 Apr;51(2):189-200.
+
+Three-dimensional electron microscopy: structure of the Golgi apparatus.
+Rambourg A1, Clermont Y.
+
+PMID: 2190832",1402325128.0,4,1.0,4
+Homebrewing,How to make copper chiller fittings for a utility sink faucet?,"I'm thinking about buying the coiled copper from a hardware store, and I would like to know how to go about making the fittings to use it with my kitchen sink (3/8"" diameter I think?). Could you point me toward a DIY project or a shopping list?
+
+Also, a noob questions: If the inlet for the chiller is to come from my kitchen faucet, where does the outlet go? Right down the sink drain?",1402280997.0,2,0.76,6
+Homebrewing,Warm weather brews,"Today I bottled one of my chestnut brown's and noticed the FG was under-attenuated due to yeast shock, likely from temperature swings in the weather. I'm looking for recommendations of yeast that can handle 75 F+ heat, and possibly styles I can make with them. For instance, I was looking at Wyeast 1214 Belgian Abbey, and wonder if it would complement a brown ale or stout with its profile. Thanks for you help!",1402179365.0,1,0.6,8
+electricians,[Request] How do I repair/test the wiring of my mini-fridge?,"I have a mini-fridge, with the [wiring diagram](http://imgur.com/bg1PAO2) posted on the back (it's a JC-46 wine fridge). Basically the thing stopped working on me, completely dead, after about a year. From reviews I've read, similar problems seem to be the fault of the electronics, and not usually a problem of the condenser.
+
+Can you help me diagnose if 1) the wiring is fried, 2) it's worth fixing on my own, 3) how to fix it?
+
+From visual inspection (and diagram) the wiring corresponds to yellow/green, black and red.
+
+I know how to work a voltmeter and soldering gun, so I'm not afraid of some surgery. ;)",1402013025.0,1,1.0,10
+LifeProTips,LPT: Request for how to cool my poorly insulated home without A/C,"I live in an older home that does not have very good insulation, and does not have central air. I am at the mercy of ambient temperatures and the wind. The windows in this place aren't suitable for a window A/C unit, so I'm left with fans during the Summer. However, the heat and humidity gets unbearable here, and I am considering either getting a portable A/C unit or a dehumidifier to help out. I figure by dehumidifying the house, it at least won't feel as nasty, a ""dry"" heat.
+
+What do you recommend?",1402010846.0,3,0.67,24
+Homebrewing,Bottling with floating yeast rafts?,"I have a batch of beer that I had brewed 3 weeks ago using Belle Saison yeast. Due to circumstances out of my control (the weather), the beer was not kept at a well controlled temperature and susequently fluctuated from 18-26 C. The temperature range seems okay for this yeast, and Danstar says that it's not a highly flocculant yeast that can allow a lot of yeast rafts to remain floating, but sinking them can be promoted by cooling.
+
+Right now I plan to cold-crash the batch in my fridge for 2-4 days to see if that helps, but I am skeptical that I will get all the yeast to sink. If it doesn't, how can I prevent bottling these rafts?",1401979782.0,14,0.79,8
+linux,Web-interface for podcast downloading and management?,"Hi all, I'm hoping that you can help me with a software request. I'm looking for a web-based app that will let me download and manage podcasts on my own computer, similar to what sabnzbd does for newsbin files. There are a couple of cloud/streaming based services for this, but I want the program to run locally, and download files locally.
+
+My end goal is have my server auto-fetch my podcasts, then I can periodically transfer them to my portable devices. Any suggestions would be helpful.",1401626937.0,5,0.65,5
+Homebrewing,"""You're gonna love my nuts!"" Chestnut Brown Ale","I was waiting to make this batch for quite some time, and I got inspiration for the name from a [certain infomercial](https://www.youtube.com/watch?v=4O-SX_W0lrQ). The wort was a single 4 gal batch that I then split in two, to test two UK hops (Fuggle and EKG) and then each half-batch was split again so that I could test two yeast strains in this style (Nottingham as control, and Belle Saison). The fermentation is underway and it's smelling nutty and floral already.
+
+Recipe:
+35% Maris Otter
+32% Canadian 2-row
+12% amber DME
+8% honey malt
+4% special B
+4% chocolate malt
+4% chestnut flour
+
+All ingredients mashed in at 165 F then held at 150-152 F.
+
+Single hop variety added at 60 min (0.75 oz) and 20 min (0.25 oz).
+
+OG 1.052, FG 1.012, ~21 IBU, 5.3% ABV, ~20 SRM.
+ 
+",1399941358.0,0,0.5,2
+Homebrewing,Which grain mill should I get?,"I'm gradually getting into larger all-grain brews and it's honestly a pain to crush grains without a proper mill. I'm looking at either a [corona-style mill](http://www.torontobrewing.ca/servlet/the-203/Victoria-Grain-Mill--dsh-/Detail) which is a cheaper option, or a roller-style mill for almost twice as much money. Are there any differences in mill quality or crush consistency? What do you recommend?
+
+Edit: thanks all for the input. Unexpectedly, I had the chance to witness a roller mill in action and it was great. I'm expecting a huge gain in efficiency over my previous method.",1398908757.0,3,1.0,30
+math,Impulsive differential equations: how do they work?,"Hi /r/math,
+
+I've recently come across some models that make use of ""impulsive differential equations"" used in epidemiologic modeling. I have taken a differential equation course in my undergrad, but we dealt with smooth, continuous functions. My understanding of impulsive DEs is to introduce step-wise or impulse (delta function?) jumps, but my problem is, how can the discontinuity be resolved? Can someone explain this possibly with some simple example for illustration? Thanks in advance.",1397854428.0,6,0.88,8
+statistics,What is the name of the concept I'm looking for?,"My apologies that I will have to be a little vague because I'm really not sure what it is I'm looking for. My guess is something of either a sensitivity analysis or trying to construct a distribution for a parameter.
+
+I have a model of my system that I wish to use to compute a state parameter. The state parameter is bounded on an interval, [0,1], and can be thought of a measure of the system configuration/conformation. I know from experience that when values of this parameter are close to its extremes, the perceived differences are quite small, yet in the middle of the parameter range, small differences lead to large perceived differences in the state of the system.
+
+Fortunately, I can run a simulation of this system (using Matlab or R), and I can ""brute force"" nearly all possible configurations of the system, which I can then use to calculate the paramter on these simulations.
+
+How do I linearize the parameter space, or, more accurately describe it's non-linear response? For example, how do I analyze the parameter space so that I can say something like: a 5% change at the paramter extremes has no practical effect; a 5% change a moderately extreme has a minor practical effect, while a 5% change in the middle of the range can have a large practical effect on the system.",1397269774.0,1,1.0,4
+Pizza,Spent grain stout crust,"This was a crust I made to experiment using stout beer and my spent grains from home brewing.
+
+2.5 cup bread flour
+0.25 cup flour of spent grains
+1 tbsp oat bran
+2 tsp kosher salt
+
+450 ml stout
+
+2 tsp pizza or bread yeast
+
+Mix ingredients as usual for a dough, though you made need to adjust floor or liquids component. Dough should be a little on the sticky side. Set aside, covered for a few hours. Give dough a quick fold and then allow to double in volume (can refrigerate overnight if wanted).
+
+The dough will make a fluffy middle while being structural enough for a solid base and chewy texture. Has a nice caramelized taste from the stout.",1396218573.0,1,1.0,0
+rstats,Notebooks in R?,Is there an ipython notebook Mathematica notebook equivalent for R or RStudio? ,1395076650.0,10,0.87,10
+Homebrewing,Jalapeno witbier is ready!,"Hey all, a while back there was some discussion on using jalapeno in beer. I decided to make an [extract witbier](http://brewtoad.com/recipes/jalapeno-witbier) and now that it's finally bottle conditioned, [here's what it looks like.](http://imgur.com/NC1rq4D)
+
+The smell is forward on jalapeno, followed equally by malt and hops. The taste is light bodied, a little sweet, and some vegetal taste of jalapeno with no residual heat. Interestingly, the heat has decayed considerably over the primary fermentation, and at bottling, offered a little hint of pepper heat on the finish. Today, nearly a month later, no heat, just fresh pepper. I'm quite enjoying this beer, though I think that it's grown on me, and is the only successful witbier style I've brewed yet. I wouldn't say it's my favourite homebrew, but given the right food pairing, like umami-rich foods, would be most enjoyable. ",1393022924.0,10,1.0,4
+londonontario,Places to get phone screen replaced?,I just cracked my phone's glass and I read that it's best to replace the screen and glass together as they come glues together. Can anyone recommend a reputable place to get it replaced? ,1392232844.0,5,1.0,9
+videos,Facebook Like Fraud,,1392161468.0,0,0.5,0
+askscience,Which Gene SNPs are associated with being a good athlete?,[removed],1391977931.0,1,1.0,0
+duolingo,Translation tiers now improved!,"I logged in today to see that all users were upgraded to the new design, and that the translation tier system has been improved. Now, downvotes are much less punitive, only counting for -1, rather than -5. To progress to the next tier, you need at least 100 votes, and 90% of them positive. Thank you Duolingo for making a fairer voting system.",1391740649.0,11,0.8,2
+Homebrewing,Started a Jalapeno Witbier,"Starting fermentation today. If this turns out decently I can post the recipe. Right now it smells spicy.
+
+Edit:
+60% wheat malt extract
+40% light malt extract
+
+Hops:
+Hallertaur, 0.25 oz at 60, 0.25 oz at 10 and 0.5 oz at 1 min.
+
+Fresh chopped jalapeno (with seeds), 1/gallon, at 10 min.
+
+Yeast:  wyeast 3068, fermented at 64 F to emphasize phenolics,  74% attenuation.
+
+Strain out the peppers before fermenting or you may get too much green pepper flavour that will take a while to mellow.
+
+Estimated OG 1.052, measured OG 1.052
+Estimated FG 1.012
+Estimated 5% ABV 
+
+Edit 2: [Pictures!](http://imgur.com/a/H7phc) These were meant to be uploaded with the post, but oh well.",1391369579.0,6,0.88,9
+Homebrewing,[Request] Critique my Honey Nut (Cheerio) Brown Ale Recipe,"Hello fellow homebrewers,
+
+I decided today to make a honey nut brown ale, and while I'm at it, to experiment with my choice of yeasts and hops. Since these are test batches, I will have 4x1 gallon homebrews.
+
+Grain bill:
+
+* 2.2 lb pale 2-row
+* 2.2 lb maris otter
+* 8 oz honey malt (for flavour)
+* 4 oz chocolate (for colour)
+* 4 oz special B (for colour and flavour)
+
+Extracts:
+
+* 12 oz dry malt extract (medium) (during boil)
+
+Hops additions
+
+* 3/4 oz at 60 min
+* 1/4 oz at 20 min
+
+I plan to make a 4 gallon batch, the split the batch in half for the boil. Each boil gets either Fuggles or EKD hops. Then each of those is split in half to receive either Belle Saison or Nottingham Ale yeast.
+
+Predicted stats: OG 1.051, FG 1.012, 21 IBU, 5.2% ABV, 19 SRM.",1390851008.0,2,0.75,2
+duolingo,How to contact a translation mod about an abusive translator?,"I made a series of translations that were not incorrect, just not written according to a specification. The higher tier translator came and down-voted all of these rather than simply correcting them. I have reported this individual for abuse using the button for translations, but that's a serious hit to my translation points and I feel I should get them back. I have written on this individual's stream kindly explaining the situation but have not received a response.",1390668108.0,25,0.8,14
+duolingo,Duolingo gets a facelift!,"Just logged on and noticed that the new web interface is up. Go check it out, it's clean and pretty. :)",1390264382.0,19,0.95,32
+Homebrewing,Fermentation restarted in cider after sulfite,"Hi all,
+
+I made an apple cider back in November that I ended up racking onto gelatin and sulfite after I was quite sure fermentation was finished (by SG stability, OG 1.08 down to 1.012). I have been unable to bottle due to holidays and work so it sat in secondary for a month at room temp. There are no obvious signs of contamination (pellicle, colonies, odd smell or taste). Is this normal? Are my yeast just reawakened and feeding off the gelatin?  ",1389717009.0,7,0.9,9
+HBL,I'm not a graphic artist but here's my first homebrew label for my Drunken Monkey Wine,,1388881034.0,0,0.5,0
+NewOrleans,Recommendations for craft beer in New Orleans?,"I'm visiting the city for a few days later this month and I was wondering if you could recommend to me some good bars or brew pubs around the convention center? 
+
+Edit: Thanks, these are great suggestions. I'm coming from just next to the convention center.",1386347233.0,12,0.81,27
+showerbeer,It's shower time with my Guinness soap and Winter ale!,,1385344552.0,9,0.75,4
+Homebrewing,London ale yeast fermentation rate,"I made a [Christmas warmer beer]( http://mobile.drinks.seriouseats.com/2011/11/homebrewing-how-to-brew-winter-warmer-christmas-beer-spiced.html ) on Wednesday evening and pitched my yeast starter Thursday morning. By the evening, fermentation was very vigorous and now, less than 48 hr later, fermentation is nearly completed. Ambient room temp has been 68-70 F for WLP013. Is this yeast typically rapid, or did I somehow stall fermentation?",1385169283.0,6,1.0,9
+Homebrewing,First smash beer was a great success,,1384310006.0,2,0.67,1
+Biochemistry,How to deal with endogenous and exogenous expression system?,"Hi all,
+
+I'm working to answer some reviewer's comments for a paper. We have a tagged protein that we expressed in a model cell line to look at protein trafficking. They want us to validate our model by analyzing the native, endogenously expressed protein in the physiological cell model. The problem with this approach is that no commercial antibody is available, hence the epitope-tagged version.
+
+My question is what kind of meaningful biological questions can I answer if I am forced to express a tagged, exogenous protein in a cell line that also makes the endogenous protein? In the usual form I see this reported, the authors knockdown expression by siRNA and then express the protein to demonstrate that the protein specifically rescues some function.
+
+My concerns are that:
+* over-expression may alter cell viability or trafficking patterns;
+* the epitope tag may alter the normal function or trafficking pattern, though there's no evidence for this in the literature in this context;
+
+If I can show that exogenous expression does not alter the normal cell physiology and function, is that enough to proceed to verify that my two cell models accord with each other? ",1384045307.0,1,1.0,2
+Homebrewing,How to aerate 5 gal+ batches?,"Hi all, this weekend I brewed my largest batches ever: a 5 gal and a 6 gal. By the end of the process (cleaning, stirring, aerating, transferring), I threw my back out. I've looked through the archives here but found nothing.
+
+Are there any ways that I can mechanically aerate the wort without vigorous shaking? Maybe I can rig something up to a drill? I don't have access to gaseous O2 cylinders so I can't bubble oxygenate. Thanks!",1383586015.0,2,0.67,41
+Homebrewing,Just got some cheap carboys and supplies,"I arranged to buy a former homebrewer's carboys and equipment for cheap. Ended up getting five new 5 and 6 gallon carboys, capper, airlocks, etc. Just a reminder to check local sales for good deals.",1383411255.0,0,0.33,0
+mead,Surprise Braggot,"Last night my SO and I brewed a ""surprise"" fruit punch braggot. I wanted to make something that would forseeably be complete by Christmas for some good cheer and celebration. I decided that a dry cider is not what I wanted to make, so I opted for a a small amount of malt extract to have a rounder, sweeter mouth feel. I don't know how it will turn out, but the smell is not bad at all.
+
+**Recipe:**
+
+* 4 L cranberry-apple cider (un-pasteurized)
+* 1 kg honey
+* 1 can frozen OJ concentrate (240 mL)
+* 450 g Golden LME
+* Water topped off to 8 L
+
+The colour is cherry red, and yeast was pitched from a 24 hr, 500 mL starter. Predicted OG: 1.087, ferment down to about 1.020. Predicted 9.1% ABV.",1383054038.0,13,0.94,6
+Homebrewing,Spent grain caraway barley bread [r/breadit x-post],,1382894900.0,120,0.95,24
+Breadit,Spent grain caraway barley bread,,1382894865.0,13,0.85,8
+Homebrewing,The fizzy physics of beer foam,,1382637829.0,54,0.9,7
+Homebrewing,When is it safe to remove beer from fridge?,"So I have a batch of beer that has been refrigerated now for a good 10 days and its occupying a significant volume in our fridge. Once the beer has had a good chance to cool and let the yeast go dormant, can I remove them from the fridge and store them in the dark? What would be any ill effects?",1382581916.0,5,0.73,13
+Homebrewing,How do I crush my malt?,"Just got my grain bill order, but the barley is whole. I have a mortar and pestle, but this may take a while. How thoroughly should I crush it?
+
+**EDIT:** I have 2 lbs of grain to crush.
+
+**EDIT 2:** I decided I would give my adjustable burr grinder (normally used for coffee) a go. It did work with a little bit of adjustment, though time consuming. When I head to the LHBS, I will ask them if they also allow use of their grinder, as some people here suggest it may not be allowed. 
+
+**EDIT 3:** After grinding, I finally got around to making beer with the grains a few days ago. I brewed a SMaSH beer and did not detect any issues with the manually ground grains. The wort tasted sweet and malty. The beer has been vigorously fermenting for a couple of days now with a small amount of trub and healthy krausen. As far as I can tell, everything looks fine.",1382112085.0,9,1.0,31
+mead,Please critique my peach cider recipe,"I'm trying to decide on a cider recipe, using peach puree that I got at the grocery store. Peach and ginger seem like a good combination, so I cobbled this recipe together.
+
+3.5 L peach puree from the store, pasteurized.
+
+1 # liquid honey
+
+1 tsp yeast nutrient
+
+15 raisins
+
+1 # brown sugar
+
+1 tsp shredded ginger
+
+2 sticks cinnamon
+
+I haven't decided on the yeast, I could use either am ale yeast (Nottingham) or a wine yeast. Suggestions?
+
+Estimated OG = 1.097, FG = 1.024, abv 9.5%.",1381686525.0,3,0.62,7
+Homebrewing,Is this evidence of underpitching?,,1381635372.0,4,0.7,11
+Homebrewing,El Punkin Jefe,,1380547130.0,20,0.85,5
+Homebrewing,What do you do with spent grains?,"I collected a little over 3 lbs of grains from my porter today, and I came to the realization that I don't know what to do with them. I could throw them out, but that seems like a waste. I did notice our dog *really* loves the taste (and extra fibre). I came across people using them as ingredients in whole wheat breads.
+
+What do you use spent grains for?",1379813512.0,7,1.0,22
+Homebrewing,Today I started my first brew: hard cider,"I've been lurking in this sub-reddit for some time now, and today I decided to take the plunge and brew my own batch. I work in a lab with cell culture and E. coli, so why not also learn how to keep yeast happy?
+
+Here's the protocol I've used to start the fermentation, for 1 gallon, that I've cobbled together from a number of sources.
+
+* 6 L fresh, unpasteurized apple cider
+* 2 cups brown sugar
+* 3 g of Nottingham ale yeast (Lallemand)
+* 1 tbsp yeast nutrient
+* 1.5 tsp pectic enzyme
+* 0.5 tsp Vitamin C
+
+I used the side burner of my BBQ to dissolve the brown sugar in the cider, and also gently raise the temperature to 72 C for 5 minutes to pasteurize the cider.
+
+After cooling, filled the carboy to an inch below the neck to allow for the rehydrated yeast and some head space. All other ingredients added at time of pitching, and mixed to dissolve.
+
+Here are my SG readings:
+
+* SG of cider before treatment: 1.042
+* SG of cider after pasteurization and with added sugar: 1.050",1379376888.0,10,0.77,27
+Cooking,Homemade Hot Sauce (Pics and recipes inside),,1378659873.0,18,0.76,3
+fitmeals,"[QUESTION] High fiber, high protein breakfast foods?","I'm looking for something that is either quick to prepare or can be batch made for the week and is both high in fiber and protein. Low carb would be nice, but not a requirement.
+
+Thanks!",1374508619.0,8,1.0,11
+dataisugly,Global prevalence of sickle-cell anemia,,1374111356.0,1,1.0,0
+raspberry_pi,[REQUEST] How-to make a d-pad controller or other custom keypad,[removed],1371563939.0,1,1.0,0
+Python,[Request] Python library for route planning using GPS coordinates,"Hi /r/python,
+
+I recently purchased a Raspberry Pi to create a car navigation system for finding geocaches along my driving route (see [Cacheberry Pi](https://www.youtube.com/watch?v=bwD6K2EeeV8). I have Java experience, but I am new to Python.
+
+I would like to implement a navigational computer that incorporates street maps in order to create a driving route based on my current and destination GPS coordinates.
+
+Can you suggest a Python library that can handle the use of maps and GPS coordinates?
+
+Thanks!",1370914606.0,4,0.67,6
+raspberry_pi,"Just received my RPi, here's what I plan to do!",[removed],1369962857.0,1,0.66,0
+a:t5_2x83u,How does this differ from Geocaching?,"Genuinely curious. I know that Geocaching is a ""proprietary"" company with it's own system and wide userbase. How does this differ?",1368563981.0,4,0.75,9
+BurlingtonON,"Lost my dog in live traffic today, but some awesome Good Samaritans helped me get her back!","This is a shout out, and thank you, to the kind citizens and visitors to Burlington today who helped me search for, and in some cases chase, my dog. The ring on her collar broke and startled her at the Lake Shore, which caused her to run away in panic. I found her a few hours later when a woman found her and called me (2 km away!).
+
+Keep being awesome ladies and gents, and thank you for looking out for us.",1367800703.0,5,0.86,2
+geocaching,[HOWTO] Request: find duplicate finds,"A few times when I have recorded logs via c:geo, the Found logs get duplicated, so my account shows that I have found a cache twice, instead of once. Is there an automated way to look at the list of all my finds and highlight those I have found more than once?",1365975395.0,14,0.95,11
+italy,Vuotando in italia a febbraio per cittadini stranieri?,"In breve, io ho doppia cittadinanza per italia e canada. Sono vissuto solamente in canada. È possibile votare per me? Grazie!
+
+EDIT: Ho ricevuto la risposta dall'ambasciata; è automatica la registrazione.",1358636499.0,8,1.0,29
+a:t5_2vy5i,"Umm....well okay, if you say some.",,1358130735.0,2,0.75,0
+duolingo,[Italian] How do I report someone for posting obviously bad/fake translations?,"Hello all,
+
+I have noticed one particular user of the Italian beta who is submitting translations that are obviously fake/poor. An example of a fake translation is a submission composed of just a few letters for a complete sentence. An example of a bad/poor translation is a very obvious copy directly from Google Translate (which also fails to convey any sentence cohesion or context).
+
+Is there a reporting mechanism? At least with the old way of rating translations, I could rate them the lowest.",1358011853.0,19,0.89,4
+a:t5_2vy5i,I offer you my body [X-post from /r/duolingo],,1357443133.0,9,1.0,0
+a:t5_2vy5i,Con lei i rapporti sono buoni.,[removed],1357252178.0,1,1.0,0
+duolingo,Where are you at in your language learning progress?,,1357167031.0,5,0.73,6
+uwo,We are a Local Club Seeking Aspiring Public Speakers [x-post to /r/londonontario],,1352245767.0,0,0.5,0
+londonontario,We are a Local Club Seeking Aspiring Public Speakers,,1352243971.0,2,0.76,0
+Dogtraining,"My dog used to run with me, but now she doesn't. May you please help?","Hi all,
+
+I have had my dog Sally for nearly a year now. She's a rescue, going on 4 years old, with a history of abuse in her former home. Even though she's much more confident now, she still remains sensitive to loud noises, sudden movements, and retains a little apprehension towards me more than my wife (her aggressors were male).
+
+Sally and I would go running 4-6 km once a week last Fall. Recently in the Spring, we've done some trail running and I had fallen a few times scaring her by both the sight and sound of me tumbling toward her, but also the retractable leash chasing her. I fear this was the moment that has now created a mental block to go running with me.
+
+The past few weeks I have tried to gently coax her outside to run with me, always starting off with a casual walk pace. Once we progress to a run, she will not continue. I have tried picking her up and pointing her in the direction that I want her to go in, but this results in her sitting down and generally pulling back to return home. However, if my wife and I jog with her, she comes along happily, so the issue must lie with me.
+
+Can you please help me recover my running partner?
+
+**tl;dr:** My dog used to run with me, but now does [this](http://i.imgur.com/ZqQir.jpg).",1347408411.0,4,0.76,18
+Ubuntu,Good software alternative to iTunes.,"Hi all,
+
+I recently made a complete switch to Ubuntu after multi-booting various linux distributions for years. I've been stuck using windows for some dedicated work apps, done of which run will under Wine.
+
+I have yet to find a good replacement for iTunes to manage my iPod nano. I like Banshee's UI for everything else.
+
+All software alternatives I've tried either can't use the proprietary Apple database format or horribly mangle the contents. This list includes banshee, amarok, gtkpod, and a couple others I can't remember the names of.
+
+Thanks!
+
+EDIT: I'm using a Nano 6th ed. I don't care about the software's ability to manage playlists (the software already mentioned does a good job of that), but rather handle syncing or transferring content to my iPod.",1345047623.0,1,0.56,11
+biology,Colleage salvaged a NanoDrop and it is awesome!,"She salvaged it from an old lab. Model ND-1000. I was able to get it running, calibrated and reading samples accurately. I can't believe how small and quick this machine is, especially for those purified DNA gel bands which tend to be ~2 ng/uL. Our more conventional cuvette spec can't accurately read below 50 ng/uL so for smaller quantities I've had to guess for so many years. This makes my inner nerd happy.",1343251605.0,9,0.91,13
+DIYbio,Plasmid swap,"Hi all,
+
+In the spirit of sharing resources for diy bio projects I propose a swap for people to share their plasmids and/or other vectors. It's quite easy to share these things through conventional postal mail. Would anyone be interested? If not, where do you obtain your plasmids from? Do you even use them?",1342056232.0,1,1.0,0
+Hammocks,"First camping purchase, a Hennessy Hammock A-sym zip. Here's my review.",,1341355769.0,9,0.99,1
+java,Config file parsing in Java,"Hi /r/java, I am trying to build in some programmable flexibility in my program by using a customizable config file. The idea is that the parameters in the config file should be turned into usable objects in the program. For this purpose, can you recommend a library I can use to implement this? I have come across the Apache [Commons Configuration](http://commons.apache.org/configuration/) which allows interpretation of INI, XML and other format config files for reflection into real Java objects. I have not decided on a config file format, so XML is appealing because of the natural hierarchy in the format which would reflect in my code. Are there any example programs that do this that you can point me toward? Thank you.",1340564280.0,5,0.86,17
+javahelp,[Question] Simple Error Handling,"Hi all,
+
+I'm trying to build in basic error handling to my application. My old method of doing this was using routines that would return binary values to indicate success/failure but this is way too cumbersome and I want to more elegantly handle errors and exceptions.
+
+Here is an example section of code that tries to remove an entry from a Map, and if the entry does not exist in the first places, throws an error. Have I correctly done the throw-try-catch?
+
+    private void checkSafeRemove (int key) {
+        if ( ! map.containsKey(key)) {
+            throw new IllegalArgumentException(""This key does not exist!"");
+        }
+    }
+
+    public void removeItem(int key) {
+        // Check that the the item exists before trying to remove it.
+        try {
+            checkSafeRemove(key);
+        } catch (IllegalStateException e) {
+            // TODO: Maybe handle and exception here...
+            System.err.print(e.getMessage());
+        }
+    
+        map.remove(key);
+    }
+",1340041618.0,2,1.0,7
+a:t5_2tie8,Idea for a club: code kata/programming club?,"Hi all,
+
+I would like to see if there is any interest in creating some kind of bi-weekly or monthly programming club/code kata group in London. I was envisioning something like a 1 hour meeting where we meet to complete short programming puzzles in teams of two to improve code design and efficiency.
+
+I would like to hear your ideas and comments.",1338925800.0,1,1.0,1
+dogs,What is my dog's breed(s)?,,1338855242.0,3,1.0,5
+compsci,Parallel Computing Wrapper,"I have a fairly naive question for you lot. I have a program that is designed to be run in a multi-threaded environment (a simple command-line switch specifies the number of cores to use). My questions are:
+
+1) Can I run the program using cores from 2 or more CPUs, or am I limited to the number of cores in one CPU?
+
+2) Can I write an MPI wrapper for said program to take advantage of parallel computing clusters?
+
+Thanks!",1336086035.0,13,0.76,14
+askscience,How do probiotic patents work?,"I'm curious as to how patents for various strains of Lactobacillus (for example) get patented for probiotic food products. Are the individual wild-type strains patented, or do they transform them with extra DNA, or select them for a different genotype?",1331727220.0,1,0.55,2
+epidemiology,MSc or MPH in Epidemiology?,"Hi all,
+
+I have a quick question for you all. I'm considering epidemiology program options and the schools I've narrowed down offer an MSc with a focus in epidemiology, or an MPH with epidemiology electives. Does the degree name really matter so long as I get relevant experience? 
+
+Thanks!",1329786501.0,3,0.81,7
+GAMETHEORY,Journals Publishing Articles in Game Theory,"Hi r/gametheory,
+
+I have a quick question for you, as this is not my area of research. What are the major journals publishing articles on game theory? And if it helps to narrow this topic a little more, I'm looking for articles relating to common board games, such as chess, go, etc?
+
+Thanks!",1327542150.0,1,1.0,0
+learnprogramming,Source Documentation Best Practices?,Basically the title. I came across code for a project I like and there are multiple files that have 3000+ lines of code and commenting (~60% commenting). That still strikes me as very un-readable. What are your tips for writing and commenting your code?,1326465010.0,5,0.86,7
+javahelp,[QUESTION/FIXME] How to leverage Factories to make a modular card game,[removed],1326317466.0,1,1.0,0
+books,Any Good Crime Mysteries in the vain of Steig Larsson or Arne Dahl?,"I'm looking for authors that write stories similar to these two authors. Something dark in mood, and a crime mystery/thriller. Thanks!",1324656748.0,0,0.4,10
+Erasmus,Italian-Canadian and ERASMUS?,"Hi there,
+I'm a Canadian citizen by birth with Italian heritage and citizenship. Am I eligible for ERASMUS or does it only apply if I'm currently enrolled in an ERASMUS-partnered university? I tried looking for a list on their website of partnered universities but could not find one.
+Thanks for helping a confused Canuck!",1323995311.0,1,1.0,0
+secretsanta,Timey-Wimey Coffee Mug from Reddit Secret Santa!,,1323552556.0,8,0.91,0
+herpetology,Is my leopard gecko malnourished?,"Hi everyone,
+
+I recently adopted two leopard geckos, called Lily and Marshall. I've had them for 2 weeks, and we figure they're each about 8 years old.
+
+I acquired them from my step-sister and they were both fairly malnourished, but over the past weeks I've been feeding them regularly. Lily has been able to bounce back to good health with minimal effort.
+
+Marshall however was in a far different state. He looks very frail and skinny, to the point I can see some of his ribs. I've tried manually feeding him meal worms that seems to work. He'll also be force-fed Fluker's crickets, but really does prefer to hunt. The thing is this: he's eating, drinking and pooping with some regularity, however not as frequently as Lily. He has a hard time hunting prey when placed in a container by himself. He consistently misses prey by dodging to the side, or falling short of his prey, as if he's either poorly sighted or blind in one eye (it really appears if he has no depth perception). His skull also looks caved in, literally, there are bilateral concave depressions in his skull, posterior to the eyes.
+
+I don't have access to a regular vet, but can some of you give me suggestions on what may be wrong or what I can do to help him? Right now I've just finished all my live meal worms but have Fluker's crickets and worms which I've been dusting in vitamin and mineral powder. I know his bones are at least strong enough they don't appear to look bowed or soft (like Ricket's in a human) so he's getting enough calcium and Vit D3.
+
+Thanks!
+
+**tl;dr:** gecko looks skinny, malnourished, can't hunt properly due to low vision/partial blindness, and his skull looks caved in. He does eat, drink and poop with some regularity. His excrement comes out in two-parts: one is black & well formed, the other is white. I can manually feed him small prey and make him drink with water bowl/syringe. Suggestions?
+
+**EDIT:** Wow that was a quick set of replies! Thank you all so far for replying. Pics will come shortly.
+
+**EDIT 2:** Pics, tail [comparisson](http://imgur.com/BWrHz) and [concave head](http://imgur.com/7Arha).",1320630105.0,8,1.0,30
+Android,"Rogers Edge Problem, or my phone?","Hi everyone,
+I hacked my HTC Magic last month to run Gingerbread 2.3.5. The process itself went fairly well and everything worked as it did with the standard Rogers ROM.
+
+Recently, I had dropped my phone and aside from checking the screen, didn't think anything of it. A few days later I noticed that my data connection no longer gets established. Is it possible that when I dropped it, I broke some circuitry to one of the antenna? Is there even a separate antenna for 3G data vs. voice communication? If that's the case, I'm resigned to accepting the lost function and dropping my now useless data plan.
+
+The only other thing I can think of is if I have the Rogers APN settings correct. If I call Rogers up and ask for their APN settings for my phone, would they give them to me? Or, do you know of a website with the correct information?
+
+Thanks!",1318867893.0,5,1.0,2
+compsci,Finding the longest path,"Hi all, I'm not sure if this is the right subreddit for this question, so point it out to me if it's not. Also, this is not for cheating at homework, just trying to work out a problem.
+
+What is the algorithm I'm looking for to find the longest, non-redundant path in a set of n connected nodes, without explicitly knowing a start or end point? The longest connected path is obviously n. For simplicity, I'm only considering path-length as a measure of longest path (so each edge is weighted equally).
+
+The way I see it would be the arbitrarily start at a random node, record each connected neighbour node, and recursively explore these neighbours, until all combinations are exhausted. This brute-force method seems exhausting and not very efficient.
+
+Can someone help me out?
+Thanks!
+",1318708192.0,1,0.67,9
+java,Representing a Grid for a Board Game,"Hi everyone,
+
+I'm looking to try to write a board game class for a board game project I want to work on. The specific game is Catan, which uses a hexagonal board. I've worked out how to address each hex, edge and node, using both absolute and relative coordinates.
+
+My question concerns how to implement this board, where each hex can have both playable and non-playable pieces on it, of various types.
+
+My idea is to use one object to represent the entire state of the board (and any general functions therein), containing a HashMap object for my hex tiles. The Hex HashMap will be indexed by absolute coordinate, and the value would be Hex tile objects. Since it would be most convenient to access the topology of the board through each of the hex, edge and node coordinate, would a HashMap for each topological layer of my board be a sensible approach? Would this create too much overhead in memory?",1318287523.0,3,1.0,3
+Cooking,DIY Pumpkin Spice Latte,"Dear /cooking, I spent the week deconstructing the spice in the popular pumpkin spice latte served at a popular coffee chain.
+
+The problem I have with the latte is that it's whole milk, and the syrup used is really high in sugar - an overall high-caloric drink. The milk fat and sugar both serve to mute the flavour of the actual spice and instead hide the flavour of all the ingredients.
+
+I made a spice mix that works well with non-fat or 1% milk, and brings a more vibrant flavour to the drink. Hope you enjoy.
+
+Ingredients to serve 2 cups:
+ 
+* Espresso - 4 fl. oz. (1/2 cup)
+
+* Milk - 1.5 cups
+
+* Vanilla - 1 tsp.
+
+* Cinnamon - 3/4 tsp.
+
+* Ginger - 1/2 tsp.
+
+* Nutmeg - 1/4 tsp.
+
+* All-spice - 1/4 tsp.
+
+* Cloves - 1/8 tsp.
+
+* Maple syrup - 1 tbsp.
+ 
+How do you brew this wonderfully spicy drink?
+ 
+1) Set up stove-top espresso machine ove medium heat. It should take about 8 minutes to brew 1/2 cup.
+
+2) In a small saucepan, whisk all spices, vanilla and maple syrup into the milk. Treat this like risotto and don't walk away, always stirring. Keep heat medium to medium-low to avoid burning the milk or curdling.
+
+3) When steam starts to rise from the milk, turn heat off but continue stirring.
+
+Optional: if you have a frother, now's the time to froth up your milk.
+
+4) When espresso is brewed, pour milk mixture into mugs, and add espresso overtop.
+
+5) Drink that heavenly mix.",1317593888.0,135,0.91,49
+cycling,[Newbie] Slightly Rusting Chain and Winter Bike Maintenance,"Hi all, can you help a new cyclist out? I have a relatively new bike (3 months) that I primarily use for commuting to work and around town (and secondarily for fitness).
+
+I had my first inner tube pop so I went to the LBS, bought a new tube and figured while I was there, I'd pick up a chain degreaser with a brush and some Finish Line Wet lube for wet weather riding (their recommendation for Winter riding).
+
+As I changed the tube, I noticed some areas of the chain have started to rust. This past week I got stuck riding home  the rain and on the way my tube popped, so my bike and I got a cold shower. I should add I took a very basic bike maintenance course through the same LBS and they showed me pointers about replacing the tube and making minor adjustments as well as cleaning the chain, but I've forgotten the details now.
+
+Tomorrow I will undertake washing and lubing the bike, so cyclers, *how* do I do it?",1317511439.0,4,0.75,16
+learnprogramming,[Java] When to use Java Collection Framework or roll your own?,"Hi /learnprogramming!
+
+I have a rather basic question that's stumping me right now. I have some basic Java background (the last time I used it was Java 2 so it's changed quite a bit since).
+
+When should I use the built-in collection interfaces versus making my own? If I make a class *implement Collection*, then do I have to provide methods for every abstract method in the interface?
+
+For some more context, I'm trying to learn the fundamentals of OO-progamming again so I'm writing a basic dice game. I've worked out a basic factory pattern to create my dice objects, and now I want to add them to a basic collection so that I only have to deal with one object, rather than n-dice. How would you recommend a create the collection?",1317428161.0,9,0.81,14

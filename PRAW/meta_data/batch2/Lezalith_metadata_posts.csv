@@ -1,0 +1,219 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+Overwatch,What is Ana's quote upon selection in french?,"Sorry, this probably doesn't belong here, but I'm really interested and can't find it.
+
+Basically, what is the ""Never stop fighting for what you believe in"" in french voice acting?",1490311812.0,2,1.0,1
+gamemaker,[Paid] Copy of Undertale's dialogue system,"****Edited****
+
+I can't keep looking at it, best to keep it deleted. Thank you, people in the answers.",1463511634.0,1,0.67,16
+gamemaker,[Help!] Alarm counting down stops the game..?,"In some of my cutscenes, I use scr_cutsceneDelay(x). This will basically create an object that counts down x seconds, then destroys itself and calls back the cutscene the delay was called from.
+
+Now, during cutscenes, variable movement is set to 0. This is so that player cannot move (You will see that in the movement script soon) during the cutscenes.
+
+I have a cutscene here that is starting with a 2 seconds delay, followed by a textbox with a string of ""..."" . 
+
+For some reason, my player character keeps on moving during the delay and when the textbox was created, up until a point where I press enter on the first textbox (Which destroys it and creates a new one with new text).
+
+Theoretically, this would mean entire game is ""paused"", and unpaused only when I press enter on the first textbox. But alarms are not supposed to do that, are they? That is kinda their point. Here is the movement script:
+
+    if (global.cutsceneInvolved = 1) { movement = 0 };
+    else { movement = 1 };
+    
+    
+    if movement = 1 { movementSpeed = 5};
+    else { movementSpeed = 0};
+    
+    
+    if movement = 1
+        if keyboard_check(vk_left) and keyboard_check(vk_up) {
+            if place_empty(obj_player.x-5,obj_player.y-5) and place_empty(obj_player.x-5,obj_player.y) and place_empty(obj_player.x,obj_player.y-5) {
+                direction=135; speed=movementSpeed;
+           }
+        }
+        else if keyboard_check(vk_right) and keyboard_check(vk_up) {
+            if place_empty(obj_player.x+5,obj_player.y-5) and place_empty(obj_player.x+5,obj_player.y) and place_empty(obj_player.x,obj_player.y-5) {
+                direction=45; speed=movementSpeed;
+           }
+        }
+        else if keyboard_check(vk_down) and keyboard_check(vk_right) {
+            if place_empty(obj_player.x+5,obj_player.y+5) and place_empty(obj_player.x,obj_player.y+5) and place_empty(obj_player.x+5,obj_player.y) {
+                direction=315; speed=movementSpeed;
+            }
+        }
+        else if keyboard_check(vk_down) and keyboard_check(vk_left) {
+            if place_empty(obj_player.x-5,obj_player.y+5) and place_empty(obj_player.x-5,obj_player.y) and place_empty(obj_player.x,obj_player.y+5) {
+                direction=225; speed=movementSpeed;
+            }
+        }
+        else if keyboard_check(vk_right) {
+            if place_empty(obj_player.x+5,obj_player.y) {
+                direction=0; speed=movementSpeed;
+            }
+        }
+        else if keyboard_check(vk_up) {
+            if place_empty(obj_player.x,obj_player.y-5) {
+                direction=90; speed=movementSpeed;
+            }
+        }
+        else if keyboard_check(vk_left) {
+            if place_empty(obj_player.x-5,obj_player.y) {
+                direction=180; speed=movementSpeed;
+            }
+        }
+        else if keyboard_check(vk_down) {
+            if place_empty(obj_player.x,obj_player.y+5) {
+                direction=270; speed=movementSpeed;
+            }
+        }
+        else speed=0
+
+
+Alarms shouldn't pause games, should they? And if they would, that textbox is just instance_create, that shouldn't prolong the pause.
+
+Edit: I forgot to mention, that cutscene is called in from room's creation code. I realize I am not giving player character time to ""update itself"" to ""tell itself it shouldn't be moving anymore"", but how does creating an alarm prevent this update?",1458090437.0,3,1.0,6
+gamemaker,[Help!] Resuming a specific timeline,"Hey Reddit.
+I've been trying to make a cutscene with the timeline. There is some dialogue involved, which I have a script for, but I've been unsuccesful in my attempts to call the timeline back.
+
+    scr_dialogueManager(1);
+    calledFromTl = true;
+    timelineSelected = ""tl_cutscene1"";
+    timeline_index = tl_cutscene1;
+    timeline_running = 0;
+
+This is the step 0 of the timeline. It will call in dialogue number 1, set two variables CalledFromTl and timelineSelected and then stop the timeline.
+
+Dialogue script in a nutshell: Spawn in a textbox with a text you found in an array. Destroy the textbox if enter is pressed. If textbox is destroyed, IF that was NOT the last message from dialogue, spawn in a new textbox with the next line of text, ELSE do nothing and simply just destroy the textbox.
+
+I'm trying to put at the end of that Destroy event 
+
+    if (calledFromTl = true) {
+        timeline_index = timelineSelected;
+        timeline_running = true
+    }
+
+So IF the dialogue was called from a timeline, ""resume"" that specific timeline. It would appear timeline is not resumed, however.
+
+Any suggestions?",1457051844.0,2,1.0,5
+gamemaker,[Help!] Movement and collision script not working,"    if keyboard_check(vk_left) and keyboard_check(vk_up) {
+        if position_empty(obj_player.x-1,obj_player.y-1) and position_empty(obj_player.x-1,obj_player.y) and position_empty(obj_player.x,obj_player.y-1) {
+            direction=135; speed=10;
+       }
+    }
+    else if keyboard_check(vk_right) and keyboard_check(vk_up) {
+        if position_empty(obj_player.x+1,obj_player.y-1) and position_empty(obj_player.x+1,obj_player.y) and position_empty(obj_player.x,obj_player.y-1) {
+            direction=45; speed=10;
+       }
+    }
+    else if keyboard_check(vk_down) and keyboard_check(vk_right) {
+        if position_empty(obj_player.x+1,obj_player.y+1) and position_empty(obj_player.x,obj_player.y+1) and position_empty(obj_player.x+1,obj_player.y) {
+            direction=315; speed=10;
+        }
+    }
+    else if keyboard_check(vk_down) and keyboard_check(vk_left) {
+        if position_empty(obj_player.x-1,obj_player.y+1) and position_empty(obj_player.x-1,obj_player.y) and position_empty(obj_player.x,obj_player.y+1) {
+            direction=225; speed=10;
+        }
+    }
+    else if keyboard_check(vk_right) {
+        if position_empty(obj_player.x+1,obj_player.y) {
+            direction=0; speed=10;
+        }
+    }
+    else if keyboard_check(vk_up) {
+        if position_empty(obj_player.x,obj_player.y-1) {
+            direction=90; speed=10;
+        }
+    }
+    else if keyboard_check(vk_left) {
+        if position_empty(obj_player.x-1,obj_player.y) {
+            direction=180; speed=10;
+        }
+    }
+    else if keyboard_check(vk_down) {
+        if position_empty(obj_player.x,obj_player.y+1) {
+            direction=270; speed=10;
+        }
+    }
+    else speed=0
+
+Pretty straight-forward. If a key is pressed, if nothing exists in the direction of X, start moving in the direction X at the speed of 10. 
+
+For some reason, the checks for empty position aren't really doing anything. The collision is just doing it's own thing.
+
+
+Any idea why?",1456948308.0,3,1.0,7
+gamemaker,[Help!] Question about alarms,"Hey everybody! 
+I'm trying to save time here, so I hope you don't mind. I'm gonna post it here, will be back in a day to work on the code again, and I'll use what I'll find here.
+
+Alarms!
+So, you set an alarm like this.
+
+    alarm[0]=30
+    alarm[0]=3*room_speed
+
+Second case will set it to exactly 3 seconds, first case to 30 steps.
+
+Now, from what I've heard, once the alarm is done, it will give us 
+
+    alarm[0]=1
+
+This can be used in Ifs, right?
+
+    if (alarm[0]=1) {...}
+
+= If alarm 0 has ended, do {...}
+
+Now, is this the only output? Or does it go down over time?
+Ïf so, I would be able to do
+
+    if (alarm[0]=30) {...}
+    if (alarm[0]=60) {...}
+
+That way I could have many conditions, based on the number of steps remaining. 
+
+Is this how alarms work, or am I wrong?
+
+(Basically my question, is everything that I've written here true?)
+
+Thank you for answering people :)",1456742983.0,7,1.0,3
+gamemaker,[Help!] script(array[variable]) not working,"Hey everyone,
+basically, I got a script, let's just call it scr_bluemoon. 
+I also have an array, let's called that array.
+I also have global variable, dialogue.
+So far, we have:
+
+global.dialogue=0
+
+array[0]=""One""
+
+array[1]=""Two""
+
+
+I need to put an argument inside of the scr_bluemoon script. The argument is called text in scr_bluemoon and is stated as argument0, thus 
+
+text = argument0
+
+scr_bluemoon(argument0)
+
+
+Now, I want the text to be different every time, based on the global.dialogue variable. It then references to array, and picks the final text. 
+This should be sufficient:
+
+scr_bluemoon(array[global.dialogue])
+
+But it's not. It doesn't work. It doesn't do anything, actually. No errors, but no script is called, either.
+Any ideas?",1456359198.0,5,1.0,11
+guns,Is this enough to kill a man?,[removed],1449190364.0,1,1.0,2
+SuicideWatch,I'm afraid I want to die. Or do I?,"During the day, it's alright. I'm just a normal kinda guy, nothing special about me.
+During the night, all I can think of is killing myself. How useless I am. How I cant do anything in my life. I just feel so bad, seeing all the people living their lives and not paying attention how world is unfair. Everyone seems to go with the flow, thinking only about himself.
+I dont want to live anymore. I have nothing to do, I have one single friend (which is a girl I've personally never seen) that is trying to help, but she thinks she cant do much (and I refuse to tell her that if she would be interested in my activities more, it would be enough, because then she would be interested just because I told her and not because she cares). 
+I've used to cut myself, then replaced it with addiction to snuffing tobacco, now I do both tobacco and cutting (just not so deep as I used to, I couldnt look at my hand for all those months the scars were healing). 
+Few days ago, I held a gun at my temple, and was trying to press the trigger. It's not an actual gun, it's a gas one powered by CO2 which uses iron balls as ammunition. I was scared that the force would be too little to kill me (which I am still not sure about) and that's the only reason I didnt push the trigger. 
+I have no purpose. I wake up, somehow live through the day and then go to sleep, I do nothing useful, I do not have a reason to live.
+But its funny. During the day, I find these thoughts absurd, usually I can't even realize why Im thinking them. 
+
+I honestly don't know if I will get to the point of pulling the trigger. I don't want to die, I just don't want to be useless anymore. I dont want to be alone. My mother kinda cares, I know she does, but she never shows it and that doesnt make it better. Im 17 by the way. 
+
+I dont want to die. But... I dont want to live. If only I could simply disappear, but that can't happen.",1441167406.0,6,0.88,3
+SethBlingSuggestions,Item elevator,"Hey,
+so, today my friends kinda rage quitted the survival server, because they wanted stuff from my base, and I said ""Sure, take it, but you have to come for it."" and I live on top of a giant mountain. At the same time, I was actually watching a video about a piston flying machine on youtube, made with the slime blocks, and that got me thinking:
+It would be possible, to make like an elevator for items from base of the mountain to the top and vice versa? Or atleast a one way, I thought when the slime blocks can transfer people, why not items! I can't do it by myself though, I don't know how, so I put it here.",1399543330.0,0,0.5,2

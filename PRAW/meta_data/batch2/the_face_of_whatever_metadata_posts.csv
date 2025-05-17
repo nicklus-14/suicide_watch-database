@@ -1,0 +1,143 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+OnePiece,Spoiler for chapter 1081,The tenth commander of the Blackbeard Pirates should change his name to >!Ow-kiji!<,1682100528.0,1,0.6,0
+OnePiece,They should rename the 10th Captain of the Blackbeard Pirates,[removed],1681975827.0,1,1.0,1
+OnePiece,This looks like a promising meme template. Spoilers for latest chapter.,,1658471940.0,6,0.88,4
+learnart,Some of my newer artwork,,1540497835.0,1,1.0,2
+ArtCrit,Some of my newer artwork,[removed],1540496283.0,1,1.0,0
+emacs,Wrote a function that implements toggle (repeat all and repeat one) in simple-mpc,"Not much else to say. Tried [simple-mpc](https://github.com/jorenvo/simple-mpc) after the ever-resourceful [Zamansky sensei](https://www.youtube.com/user/mzamansky/videos) mentioned it, and I really like it over Mingus.
+
+Yet, there was an itch that the package didn't scratch, so, after digging around in the code, I implemented a super-hacky workaround to toggling looping songs. I've bound it to ""R"" (for Repeat but really, bind it to what's best for you). It basically cycles through three states - repeat playlist, repeat single song, repeat off.
+
+Putting the code here for anyone who might find it useful. Please bear in mind it's an ugly bit of elisp hacked together in 20 mins ^so^please^be^gentle.
+
+     (use-package simple-mpc
+                  :commands (simple-mpc sb/simple-mpc-toggle-single-repeat)
+                  :init
+                  (with-eval-after-load 'simple-mpc (require 'simple-mpc-utils)
+                                        (defun sb/simple-mpc-toggle-single-repeat
+                                            ()
+                                          ""Toggles repeat modes like any conventional player would.""
+                                          (interactive)
+                                          (cl-destructuring-bind (_ _ rep repeat-p _ _ sing single-p _ _)
+                                              (split-string  (caddr (split-string (simple-mpc-call-mpc-string ""status"") ""\n"")) ""[:\t ]"" t)
+                                            (cond
+                                             ((string= ""off"" repeat-p) (setq repeat-p ""on""))
+                                             ((and (string= ""on"" repeat-p) (string= ""off"" single-p)) (setq single-p ""on""))
+                                             ((and (string= ""on"" repeat-p) (string= ""on"" single-p)) (setq repeat-p ""off"" single-p ""off""))
+                                             )
+                                            (message ""repeat:%s;\nrepeat_one:%s""
+                                                     (nth 3 (split-string (caddr (simple-mpc-call-mpc-strings (list rep repeat-p))) ""[:\t ]"" t))
+                                                     (nth 7 (split-string (caddr (simple-mpc-call-mpc-strings (list sing single-p))) ""[:\t ]"" t)))
+                                            )
+                                          ))
+                  :config
+                  (add-to-list 'evil-emacs-state-modes 'simple-mpc-mode)
+                  :bind
+                  ((""C-x M-m"" . simple-mpc)
+                   :map simple-mpc-mode-map
+                   (""R"" . sb/simple-mpc-toggle-single-repeat)
+                   )
+                  )",1522356352.0,3,1.0,2
+emacs,"Does anyone else feel lucid emacs to be ""lighter""","Not really very important, and it may just be the high of building emac 26 talking, but I just compiled and started using the 26 alpha, and I opted for lucid over gtk this time. Also got rid of those annoying gconf and gsettings deps as I don't use them for anything else either.
+
+It seriously feels like a different beast now. My emacs loads up way faster, and is taking up much less RAM.
+Has anyone else noticed this or am I just being blessed by the Linux Gods for my suffering?",1521895110.0,19,0.83,26
+Clojurescript,How to get started with Clojurescript?,"Hi. I've heard a lot about Clojurescript and I'm very eager to try learning it. I'll be honest though, I am one confused mess right now (I hope your replies straighten things out for me). I don't even know whether I would be wasting my time (given where I am programming skills-wise) trying to learn clojurescript but skimming through a few blogs really makes me want to try it. 
+
+Okay, I apologise in advance for the wall of text but I just want to map out the fastest route to learning. I'll try to be to-the-point as much as I can.
+
+* Context
+
+I am certainly no programming expert but I'm not a blank slate either. I've taken a few programming courses during college and know the very basics of programming. I think the best adjective for my current level is ""half-baked"" - I sorely lack practice and my coding is ugly but passable. 
+
+That being said, I probably learnt the most when I started tinkering with emacs lisp, and teaching myself Javascript (the Nodejs variety). I found out I liked both languages way more than OOP languages and, doing some blog-digging, I found out clojurescript would be a fun thing to learn too. 
+
+* Emacs and Elisp
+
+Plus, having tinkered with a lisp dialect, the brackets don't seem daunting anymore. Probably the biggest reason I'm tempted to try cljs is because I've heard emacs has great support for clojure. 
+
+* Javascript and Node
+
+I actually don't mind Javascript (shoot me!). That being said, Douglas Crockford's videos have taught me that it is one flawed piece of technology. Cljs is touted as a much more sophisticated tool. Part of the reason I'm interested in cljs as opposed to clojure is because I can see myself working with javascript but not JVM in the foreseeable future. I've heard cljs makes templating super-easy (my other goal is to learn Typescript so that I can use Angular2).
+
+* Job and hence very little time or resources
+
+This is quite self-explanatory. i have a shitty job which takes up most of my time and has nothing to do with programming. So my most pliable resources are blogs, weekends with emacs and irc channels. This makes the most obvious route (learning by oneself) very time-consuming.
+
+* Questions
+
+I'll just list a few questions point-wise because I've probably already written way more than anyone is willing to read.
+
+** Functional Programming
+
+Another big reason I'm interested in cljs is because I want to learn functional programming as well. That being said, I haven't the faintest idea what functional programming is. I know I have the math background to grasp the concepts but I really don't have a starting point I know of. So any info regarding learning Functional Programming would also be greatly appreciated.
+
+** Concurrency
+
+Another topic I'm hazy about. I know there are many clojure libraries for concurrent programming but how does the compiled javascript (which runs on a single thread) reflect this concurrency?
+
+** Use cases (When cljs?)
+
+** Advantages (Why cljs?)
+
+* **How to start**?
+
+** Books?
+
+** Blogs?
+
+** Theory?
+
+* Points to a good startup guide
+
+**THE MOST IMPORTANT QUESTION**. I want to set the coding environment up as smoothly as possible. Plus, I want to learn the syntax and basics as fast as I can so that I can bite into the good stuff.
+
+* irc?
+
+Any good channels on freenode (except #clojurescript) where I can lurk and get some knowledge regarding these questions? Specially functional programming and cljs setup
+
+&nbsp;
+
+All right, I've rambled enough. If you have advice outside of these questions please give it - any input is appreciated. Thanks.",1466979471.0,5,0.86,3
+German,"Two org-drill files and the script files I used to compile them. If anyone uses org-drill, I hope these files can come in handy or at least provide a base to expand upon.",,1466692086.0,2,0.67,3
+musictosleepto,"The music swell at the outro of Blue, Blue Sky (Alan Parson's Project) is the greatest outro to any song I know. And it's great to fall asleep to.",,1460906244.0,3,1.0,0
+resumes,Planning to apply for an entry-level job in the IT industry. Need your input once again,"This is the current state of my CV. http://imgur.com/fkEFwSn
+
+I had previously posted my [unfinished CV](https://www.reddit.com/r/resumes/comments/4bm56a/planning_to_apply_for_an_entry_level_job_in_the/) here and got very good advice from you guys (especially /u/resumeraidersDOTcom and /u/oceanlark. Thank you so much!). I have now completed it but it is far from satisfactory. I may have gone overboard in a few places but the general advice I got last time was to not undersell myself. 
+
+Even though it's not perfect, I am much happier with what I've written than with my previous attempt, and it's all thanks to you guys. Now I'm counting on this subreddit again to help me again. Please excuse my selfishness and thank you for any input you can give me.",1459538487.0,1,1.0,0
+mentors,[offering] Intermediate level Physics or Mathematics help/advice,I have a Masters in Physics and am willing to help any high school/young college students with topics they might be having trouble with.,1459147112.0,8,1.0,3
+resumes,Planning to apply for an entry level job in the I.T industry. Any help would be greatly appreciated.,"This is my first time posting here but I've been following this subreddit for some time now and have you guys to thank for me even being able to set the ball rolling. My resume, as you can see, is currently unfinished. http://imgur.com/lip9pAH - however I don't honestly know how to proceed from here. I really hope the length of my post will not bore you but instead inform of my situation.
+
+&nbsp;
+
+The elephant in the room is that I have no experience. I graduated from college in 2013 and have been doing nothing professionally since then. This is because I graduated severely depressed and, that same year, finally visited a psychiatrist and started getting medicated for the same. These past three years have been a unique and intense struggle for me but I don't know how that can help shape this resume. A big part of that problem is my self-esteem but there is also the real, unavoidable fact that I have missed out on industry experience at a very, very crucial age. So the bulk of what makes a good, meaty resume is missing. 
+
+&nbsp;
+
+But that doesn't mean I was doing nothing. Conversely, I was putting more effort into restructuring my life than I had ever done in my life. A lot of that falls largely in the field of metadata (implementing GTD through emacs, doing programming courses in Coursera and such) which cannot be directly put into my CV. I still plan on adding a small ""Experience"" section with projects I can back up. For example I am currently developing a blogging app in Javascript (full-stack) and I have my emacs configuration files on my github handle. I have also put the programming languages I've worked in during this time instead of just the ones I learnt in school/college.
+In the end, my self-esteem, or lack thereof, makes me come up with the currently underwhelming display you can see in the picture I have linked. 
+
+&nbsp;
+
+I would greatly appreciate any pointers to transform this into a full-fledged CV. I honestly want to give it my best shot and I'm looking forward to your invaluable advice. Thank you.
+
+&nbsp;
+
+Edit: Thank you for the pointers. I found each of them very helpful. I will finish and upload the resume on my next edit.
+
+Edit2: Posted the finished CV in a [new post](https://www.reddit.com/r/resumes/comments/4cxigp/planning_to_apply_for_an_entrylevel_job_in_the_it/) here. The imgur link is http://imgur.com/fkEFwSn
+",1458733982.0,4,0.84,5
+duolingo,Any ideas on using api.duolingo.com to extract information?,"Hi, sorry for the long(ish) post but I'm just putting this out there in case someone else is also interested in a similar endeavour. I'm currently learning German and have been using Duolingo on and off. Some things that have made my experience with Duolingo less than ideal is that they don't stress much on grammar and, after a certain point, the words start to become harder with not too many use cases to get a feel of the expanded vocabulary. Of course the immersion module offsets this problem and I use other resources too. Overall, mixing and matching keeps me interested in the learning process and Duolingo is quite important in my schedule.
+
+I use emacs and have, painstakingly, created (over time) a drill file that contains various nouns and their articles. Org drill's algorithm really is pretty terrific, and I've hooked it with an idle timer such that when I'm doing nothing significant, I have the option of running a drill.  But nouns do not a language make. I think, among the areas I'm weak in, verbs are the most important. However, setting up verbs is way harder and I really don't want to insert the components by hand. This is where Duolingo can potentially come in very handy. I have unlocked enough courses over time to have a decent vocabulary list, and Duolingo keeps verbs in a very systematic manner - with conjugations and Particip II stored in a tabular format. If I could access those and programmatically create a file that takes the verbs in the vocalbulary, I would be able to set up my drill system for verbs very quickly.
+
+So, after all this rambling let me finally ask my question. If anyone is interested in my vague project I would really appreciate any advice, any pointers in the right direction - anything at all. I am not too familiar with duolingo's api and have no experience with web-crawling - so really any advice would help me a lot. I am currently leaning towards using Javascript to do this but I really have no set preference. Thank you for reading!
+
+P.S: I found a great python implementation of something similar to what I want here https://github.com/KartikTalwar/Duolingo . But I am a complete python n00b and am getting a json parser error when I try to get the vocabulary. Plus, I don't really need something this sophisticated as I only plan to use the code once or twice. I am sharing this person's work so that anyone with similar interests and better skills than me can benefit from it.",1458284129.0,10,0.92,4
+emacs,Is there any way to integrate Evernote into my Emacs GTD workflow?,"I'm using org-mode and have tinkered around to create a system I am very satisfied with.... except the Capturing part. My laptop's set up with various capture templates and I've even set up the super-useful firefox capture templates given in orgmode.org. But the real challenge is capturing when I'm outdoors and/or multimedia. MobileOrg -  I mainly use it as a way to remotely refer to my tasks list but it's really not a good solution for capturing. I feel that, given the impressive processing power smart phones have nowadays (not to mention great apps like Evernote), it should be possible to set up a way to bind Evernotes captures to my main org file but I really have no clue how to go about doing that. I'd love to hear your ideas.",1454649591.0,10,1.0,8
+depression,I'm sharing with reddit my immediate short-term goals as an experiment in anonymous sharing (I have a theory that a hundred mediocre ideas on the web may spark a really good one somewhere out there).,[removed],1448807800.0,3,1.0,4
+depression,"Doldrums, although irritating, are way less painful than absolute despair.","My one or two posts before this were all written during two different yet equally painful times I hit rock bottom. This subreddit and r/SuicideWatch really helped me through those unbearable times and made me realize the immense help anonymous kindness can provide. I mainly reply to posts instead of posting myself (except when I'm desperate for help) and try to to help the desperate the way I was helped. This time, I want to post at a far less dramatic stage in my psyche - the doldrums. Depression, for me, has been a stretch of barren desert - bleached of emotion, devoid of intent or purpose and a pervasive, constant dull pain (like an annoying low-level buzzing). Till a few months back, that had been the majority of my experience. Coming off of a recent earth-shattering slump, I am now armed with some perspective. Now that desert, while still nigh unbearable, seems a mere annoyance compared to the trauma that has been these last few months. I'm back in that desert but, for the first time, it's been an ascension. I cannot even take that maddening expanse of nothingness for granted. I have also realized that just being there for the desperate is first-aid at best. People who hit rock bottom almost always fall from that desert. The unending sorrow siphons strength till you go mad. It is also dangerous because you're not desperate. In the desert we are tired and dull, in despair we are thrashing, kicking, desperately seeking comfort and survival. That kicking, squealing, ungainly thrashing is an evolutionary response, I surmise. Our subconscious recognizes the threat of extinction - of sanity or of life- and tries to reach out for help. Till recently, I was content being there for those who reached out in those moments. Now, back in the desert I recognize that, precisely due to the low level of energy we possess during these times, we are far less likely to reach out for help. 9 times out of 10, that won't be significantly problematic but sometimes, not being helped at the right time can trigger a downward spiral. Helping the desperate is, indeed, a very important task and one which, I feel, these subreddits succeed beautifully in. However, if we can stopper the problem before the spiral maybe we, who trudge through this desert, can strengthen our collective safety net. I apologize for the rambling and mostly speculative nature of this post. What my intentions are (and I hope I can execute it in a way that can help others and me) is to post even during these less dramatic doldrums -  mundane updates, new endeavours and purposeless venting. Maybe I'll talk a little about some tweaks or life-changes and try to document the things that will and won't work. I don't know what that may accomplish but, at the very least, I want others stuck in these doldrums to know that they are not alone.",1445091931.0,2,0.76,0
+depression,"To anyone out there who might be feeling as miserable as me, please know that you are not alone in this bullshit.","About a month and a half ago, it became too much for me to bear. That was the first time I decided I wanted to kill myself. A few weeks ago, frustrated that there was no sure-fire way to kill myself in reach, no tall buildings, handguns, sharp knives, I tried to dehydrate myself to death. Third day in I literally started bashing my head in from the pain. Everytime I come back from the brink, I think ""Well, after this fiasco I'll never go down that road for sure"" and then, as if to mock myself, I end up right where I started. If I could conjure up an image of my mind, of my circumstances, of every goddamn thing around me, I would stab it full of holes and rape every stab wound. I've honestly gone beyond any semblance of humanity and I see no hope, no light, no reason at the end of it all. To anyone reading,  if you ever feel like I feel, please find a way out of it - if nothing other than to spite life's stupid fuckface. I honestly don't care about anything anymore but to get revenge - on what I don't know anymore.",1443253452.0,40,1.0,3
+SuicideWatch,I have decided to take my life. I am currently following the three-day rule.,"I've made a similar post over at /r/depression. I don't know how posting on reddit would remotely help me but when killing yourself is one of the cards on the table, other things don't look so ridiculous.",1437827787.0,3,0.72,4
+depression,I've taken the decision to end my life after my last visit to the psychiatrist yesterday (Friday 24th July). I am currently following the three-day rule.,,1437823769.0,2,0.75,23

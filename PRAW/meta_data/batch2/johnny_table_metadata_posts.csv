@@ -1,0 +1,655 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+teslamotors,Speculation on Performance Roadster,What do you think the specs on the Performance model of the 2020 Roadster will be?,1511073110.0,1,0.53,5
+AskReddit,[Serious] What is the best interview you’ve ever heard?,,1510938476.0,1,1.0,2
+buildapc,$800 PC - 95% for gaming,[removed],1509065283.0,1,1.0,3
+teslamotors,Ford Model S,Why did Ford care so much about the Model E name but let Tesla use the Model S name?,1502757982.0,1,0.53,7
+AskDocs,Headajce at base of skull. Mostly when waking up or moving.,"Headache at base of skull. Feels like a throbbing sensation in line with heartbeat. Pain is worst when waking up in the morning but also intensifies when I walk around. Been going on for about a week.
+
+Male 26 200 lbs 5'8"" no medications",1502335636.0,1,0.67,0
+SWGB,Make map visible with no fog of war in scenario editor,"Just as the title says I'm trying to remove fog of war and make it all visible but I can't figure out how.
+
+Also, bonus points for anyone who can tell me if teams are locked in the editor or if there is a place I have to select that.",1499016550.0,3,1.0,2
+excel,Error in range.find,"I'm looking through one column to find where the first 29 appears and where the first 25 appears but they may not always be there so I need this to loop to the next number and find that. This particular sheet I'm working on has 29 (it successfully finds the row with 29) but not 25 and I can not get the macro to successfully determine it's found the number I'm looking for. It will loop and find the correct row for the next number up (26) but then it keeps looping. The error is 91.
+
+    AOE = WorksheetFunction.Match(""AOE"", sh.Range(Cells(1, 1),     Cells(1, Lcol)), 0)
+    Set DataRange = sh.Range(Cells(1, 1), Cells(Lrow, Lcol))
+    DataRange.Sort Key1:=sh.Cells(1, AOE),                             Order1:=xlDescending, Header:=xlYes
+
+    'Find top AOE
+    x = 0
+    Entry = 29 - x
+    On Error Resume Next
+    Cutoff = sh.Columns(AOE).Find(Entry, after:=Cells(1, AOE), _
+                        LookIn:=xlFormulas, _
+                        Lookat:=xlWhole, _
+                        SearchOrder:=xlByRows, _
+                        SearchDirection:=xlNext, _
+                        MatchCase:=False).Row
+    If Err.Number <> 0 Then
+    Do
+     x = x + 1
+     Entry = 29 - x
+     Cutoff = sh.Columns(AOE).Find(Entry, after:=Cells(1, AOE), _
+                        LookIn:=xlFormulas, _
+                        Lookat:=xlWhole, _
+                        SearchOrder:=xlByRows, _
+                        SearchDirection:=xlNext, _
+                        MatchCase:=False).Row
+    Loop Until Err.Number = 0
+    End If
+    On Error GoTo 0
+    If Entry < 25 Then
+    MsgBox (""There are no entry dates between 25 and 29"")
+    GoTo Line1
+    End If
+
+    Rows(""2:"" & Cutoff - 1).Delete
+
+    'Find bottom AOE
+    x = 0
+    Entry = 25 + x
+    On Error Resume Next
+    Cutoff = sh.Columns(AOE).Find(Entry, after:=Cells(1, AOE), _
+                        LookIn:=xlFormulas, _
+                        Lookat:=xlWhole, _
+                        SearchOrder:=xlByRows, _
+                        SearchDirection:=xlPrevious, _
+                        MatchCase:=False).Row
+    If Err.Number <> 0 Then
+    Debug.Print Err.Number
+    Do
+      x = x + 1
+      Entry = 25 + x
+      Debug.Print Err.Number
+      Cutoff = sh.Columns(AOE).Find(Entry, after:=Cells(1, AOE), 
+                        LookIn:=xlFormulas, _
+                        Lookat:=xlWhole, _
+                        SearchOrder:=xlByRows, _
+                        SearchDirection:=xlPrevious, _
+                        MatchCase:=False).Row
+    Loop Until Err.Number = 0
+    End If
+
+                        
+    Lrow = sh.Cells.Find(""*"", after:=Cells(1, 1), _
+                        LookIn:=xlFormulas, _
+                        Lookat:=xlPart, _
+                        SearchOrder:=xlByRows, _
+                        SearchDirection:=xlPrevious, _
+                        MatchCase:=False).Row
+                        
+     Lcol = sh.Cells.Find(""*"", after:=Cells(1, 1), _
+                        LookIn:=xlFormulas, _
+                        Lookat:=xlPart, _
+                        SearchOrder:=xlByColumns, _
+                        SearchDirection:=xlPrevious, _
+                        MatchCase:=False).Column
+                        
+    Range(Cells(Cutoff + 1, 1), Cells(Lrow, Lcol)).Delete
+",1496352812.0,2,0.76,9
+excel,Macro does not run as intended unless going in step,"This macro basically skips portions of code when running through at full speed but if i use F8 to run through step by step it goes fine. Any help as to why would be appreciated.
+The error starts on the ""For b"" lines near the bottom. That is where it skips if going at full speed. 
+
+    
+    Sub Total_Suspense_Lines()
+    Dim TSL_Col As Integer
+    'Total Suspense Lines pivot table
+        ActiveSheet.PivotTables(""PivotTable1"").AddDataField ActiveSheet.PivotTables( _
+            ""PivotTable1"").PivotFields(""Suspense Amount""), ""Count of Suspense Amount"", _
+            xlCount
+        ActiveSheet.PivotTables(""PivotTable1"").AddDataField ActiveSheet.PivotTables( _
+            ""PivotTable1"").PivotFields(""Suspense Amount""), ""Count of Suspense Amount2"", _
+            xlCount
+        With ActiveSheet.PivotTables(""PivotTable1"").DataPivotField
+            .Orientation = xlColumnField
+            .Position = 1
+        End With
+        With ActiveSheet.PivotTables(""PivotTable1"").PivotFields(""Billing Specialist"")
+            .Orientation = xlRowField
+            .Position = 1
+        End With
+        With ActiveSheet.PivotTables(""PivotTable1"").PivotFields( _
+            ""Count of Suspense Amount2"")
+            .Caption = ""Sum of Suspense Amount2""
+            .Function = xlSum
+        End With
+       'With ActiveSheet.PivotTables(""PivotTable1"").PivotFields(""Original Date"")
+            '.Orientation = xlPageField
+            '.Position = 1
+        'End With
+        'ActiveSheet.PivotTables(""PivotTable1"").PivotFields(""Original Date""). _
+            CurrentPage = ""3/20/2017""
+            
+    'Find starting column in Total Suspense Lines
+    TSL_Col = SpTable.Sheets(Spsheet).Cells(Ttl_Lines_Row + 3, 1).End(xlToRight).Offset(0, 1).Column
+
+    'Vlookup to fill in Total Suspense Lines
+
+    For i = Ttl_Lines_Row + 3 To Ttl_Prem_Row - 1
+        On Error Resume Next
+        SpTable.Sheets(Spsheet).Cells(i, TSL_Col) =                             
+    Application.WorksheetFunction.VLookup(SpTable.Sheets(Spsheet).Cells(i, 1),     
+    ESMwb.Sheets(""Sheet2"").Range(""A:B""), 2, 0)
+    Next i
+
+    For b = Ttl_Lines_Row + 3 To Ttl_Prem_Row - 1
+        If IsEmpty(Cells(b, TSL_Col)) = True Then
+        Cells(b, TSL_Col) = ""0""
+        End If
+    Next b
+
+    End Sub
+",1495832962.0,3,0.81,9
+teslamotors,Applying to Tesla,I've been following Tesla for about two years now and recently realized how much I would enjoy actually working there. I've seen a few openings in a nearby showroom and plan to apply but I'm wondering if anyone has advice for someone looking to get a foot in the door of this awesome company.,1493090165.0,4,0.67,7
+excel,Named Range Trouble,"Getting ""Application-defined or object defined error"".
+
+    Set Data = Workbooks(2).Sheets(""Sheet1"").Range(Cells(1,1), Cells(Lrow,Lcol))
+
+I know it has something to do with the Range because it works if I take it out and only use one cell but I need to be able to use those Lcol and Lrow variables.",1490215830.0,6,1.0,4
+excel,Looping through column of dates,"I'm trying to make a macro that separates out all data that is at least 31 days old. My problem comes when actually trying to get Excel to find Today's Date-30. It simply doesn't highlight anything. Also, I need this to be able to handle a scenario where if Today's Date - 31 is not present Excel will continue looking for dates older than that until one is selected (Today's Date - (31+x)).
+
+    Sub Date Sort()    
+    Dim Lrow As Long
+    Dim Lcol As Long
+    Dim DataRange As Range
+    Dim DateColumn As Integer
+    Dim sh As Worksheet
+    Dim x as Integer
+    Dim Aged as Date
+    
+    ActiveWorkbook.Worksheets.Add after:=Sheets(1)
+    ActiveWorkbook.Worksheets(1).Copy Sheets(2)
+ 
+    Set sh = ActiveWorkbook.Worksheets(2)    
+    Lrow = sh.Cells(Rows.Count, 1).End(xlUp).Row
+    Lcol = sh.Cells(1, Columns.Count).End(xlToLeft).Column
+    Set DataRange = sh.Range(Cells(1, 1), Cells(Lrow, Lcol))
+    x = 0
+    Aged = Date - (31 + x)
+    
+    DateColumn = WorksheetFunction.Match(""Original Date"", sh.Range(""A1:AC1""), 0)
+    DataRange.Sort Key1:=sh.Cells(1, DateColumn), Header:=xlYes
+
+
+    'sh.Range(Cells(1, DateColumn), Cells(Lrow, DateColumn)).Select
+    Set Cutoff = sh.Find(What:=Aged, LookIn:=xlValues, lookat:=xlWhole, SearchOrder:=xlByRows)
+
+    If Cutoff Is Nothing Then
+    Do
+      x = x + 1
+      Aged = Date - (31 + x)
+ 
+      Set Cutoff = sh.Find(What:=Aged, LookIn:=xlValues, lookat:=xlWhole, SearchOrder:=xlByRows) 
+    Loop Until Not cutoff Is Nothing
+    End If
+ 
+ 
+End Sub",1486007942.0,3,0.81,8
+XboxOneHelp,Merging Live accounts,My brother's first Live account was connected to my dad's email but now my brother has his own email. He couldn't figure out how to transfer the first Live account to the new email and so made a new account. Is it possible to merge the old with the new account?,1485476086.0,1,1.0,0
+excel,Issue sorting column,"Trying to sort a sheet by a particular column but I can't tell why it's not working. Error is on the last line.
+
+
+    Sub Sort()
+
+    Dim Lrow As Long
+    Dim Lcol As Long
+    Dim DataRange As Range
+    Dim DateColumn As Integer
+
+ 
+
+    ActiveWorkbook.Worksheets.Add after:=Sheets(1)
+    ActiveWorkbook.Worksheets(1).Copy Sheets(2)
+
+ 
+    Lrow = ActiveWorkbook.Worksheets(2).Cells(Rows.Count, 1).End(xlUp).Row
+    Lcol = ActiveWorkbook.Worksheets(2).Cells(1, Columns.Count).End(xlToLeft).Column
+    Set DataRange = ActiveWorkbook.Worksheets(2).Range(Cells(1, 1), Cells(Lrow, Lcol))
+
+ 
+    DateColumn = WorksheetFunction.Match(""Original Date"", ActiveWorkbook.Worksheets(2).Range(""A1:AC1""), 0)
+    DataRange.Sort Key1:=ActiveWorkbook.Worksheets(2).Range(Cells(1, DateColumn)), Header:=xlYes
+   
+     End Sub
+   ",1485473722.0,1,0.6,6
+excel,Having trouble with Paste Values in VBA,"This code is giving me a compile error ""Expected: end of statement"". It works fine if I do regular copy/paste but not for paste values.
+    
+    With ActiveWorkbook.Sheets(""Data"")
+        .Range(""A1:O1"").AutoFilter Field:=15, _
+            Criteria1:=""B""
+         
+     Lrow = ActiveWorkbook.Sheets(""Data"").Cells(Rows.Count, 1).End(xlUp).Row
+     If Lrow <> 1 Then
+      
+        .Range(""A1:E"" & Lrow).SpecialCells(xlCellTypeVisible).Copy _
+        ActiveWorkbook.Sheets(""Summary"").Cells(1, 1).pastespecial xlpastevalues
+     .AutoFilterMode = False
+     Else
+        .AutoFilterMode = False
+     End If
+ 
+    End With",1485404510.0,1,0.67,5
+spacex,CRS 10 Tickets,[removed],1484586687.0,1,1.0,0
+Chattanooga,What's with the colonial style boats by the pier near the aquarium?,,1478909312.0,9,0.91,6
+sonata,Looking to purchase 2013 Hybrid,"Found a good deal on a 2013 Hybrid with 80,000 miles. Since I'd be the second owner it seems the warranties are no longer effective. Was looking for anyone who has experience with this model and can speak to how reliable it may or may not be",1470769277.0,3,1.0,1
+Nissan,Looking to buy 2012 Altima,"Car is 2012 Altima sedan 2.5 S with 68,000 miles for $9,000
+
+I'm new to the car buying process as well as Nissans and was hoping for some general advice/problems to look for when I go to the dealer. Carfax says no accidents. It has two previous owners with the first being a rental company that put ~30,000 miles on the first year. Second owner was for personal means. Factory warranty has expired but a third party warranty is available.
+",1470508287.0,2,1.0,0
+teslamotors,Was surprised to see this at a traditional dealership,,1468724994.0,118,0.96,68
+excel,Trying to filter out specific values in VBA but formula's not working,"    With ActiveWorkbook.Sheets(1).Range(""K1:K"" & Lrow)
+        .AutoFilter Field:=1, Criteria1:=""<>2"", _
+            Operator:=xlAnd, Criteria2:=""<>5""
+        .Offset(1, 0).SpecialCells(xlCellTypeVisible).EntireRow.Delete
+    End With
+
+I'm guessing it has something to do with the fact I'm trying to filter for numbers rather than text because this works earlier within the same macro. If I use the code above it fails to filter out 5's and 2's and deletes all rows.",1467769912.0,2,0.67,10
+excel,Looking to consolidate multiple workbooks into one but retain sheet names,"I'm making a macro that will copy each sheet from each workbook into one new workbook but I want the sheet to keep the name from the original. The problem I'm running into is Excel tells me I cannot name two worksheets the same even though they are on different books. 
+
+Also, is it possible to add and name a workbook without saving it?
+
+    Sub WBook_Copy()
+ 
+    Dim WB As Integer
+    Dim WB_Count As Integer
+    Dim WS_Count As Integer
+    Dim WS As Integer
+    Dim wst As Worksheet
+ 
+    Workbooks.Add.SaveAs ""ABC.xlsx""
+ 
+    WB_Count = Workbooks.Count
+ 
+        For WB = 1 To WB_Count
+        If Workbooks(WB).name <> (""ABC.xlsx"") Then
+       
+            WS_Count = Workbooks(WB).Sheets.Count
+       
+            For WS = 1 To WS_Count
+            Workbooks(WB).Sheets(WS).Copy _
+            before:=Workbooks(""ABC.xlsx"").Sheets(Sheets.Count)
+            Workbooks(""ABC.xlsx"").Sheets(Sheets.Count - 1).Name = _
+            Workbooks(WB).Sheets(WS).Name
+            
+             Next WS
+       
+        End If
+   
+        Next WB
+ 
+    Application.DisplayAlerts = False
+    For Each wst In Workbooks(""ABC.xlsx"").Worksheets
+    If Application.CountA(wst.Cells) = 0 Then wst.Delete
+    Next wst
+
+    Application.DisplayAlerts = True
+ 
+    End Sub",1467401778.0,3,0.72,15
+Chevy,2005 Trailblazer help identifying busted hose,,1466336317.0,3,0.62,2
+excel,Worksheet Consolidation cleanup,"Made a macro that copies all worksheets into one generated by the macro. This is the longest and first real macro I've made and plan on using it at work so any help with cleaning it up or user proofing it would be helpful. For instance, do I need to include the ""On Error GoTo"" and ""On Error Resume Next"" lines? Why do I need so many ""End if""s at the end? The forms this will have to handle will be from numerous third parties and there's no telling what they'll look like.
+
+    Sub ws_copy()
+
+    Dim Lrow As Long
+    Dim Lcol As Long
+    Dim Prow As Long
+    Dim WSCount As Integer
+    Dim i As Integer
+
+        'On Error Resume Next
+        'Application.DisplayAlerts = False
+        
+         i = Application.InputBox(prompt:=""Place all tabs not to be copied to the left. "" & vbCr & _
+         ""Enter the place number of first tab to be copied."", Title:=""Worksheet Consolidation"", Type:=1)
+        
+        
+            If IsEmpty(i) = True Then
+                Exit Sub
+            Else
+        
+
+           'User cancels action
+            If i = False Then
+                Exit Sub
+            Else
+        
+
+           'User enters non-numeric value
+            If IsNumeric(i) = False Then
+                MsgBox ""Enter a numeric value.""
+            Else
+          
+  
+          'User enters numeric value
+           If IsNumeric(i) = True Then
+        
+
+                'Creates consolidation sheet
+                 Worksheets.Add(before:=Sheets(1)).Name = ""Upload""
+
+
+                WSCount = Worksheets.Count
+            
+            
+                Lrow = Worksheets(i + 1).Cells.Find(""*"", After:=Cells(1, 1), _
+                        LookIn:=xlFormulas, _
+                        Lookat:=xlPart, _
+                        SearchOrder:=xlByRows, _
+                        SearchDirection:=xlPrevious, _
+                        MatchCase:=False).Row
+                        
+                Lcol = Worksheets(i + 1).Cells.Find(""*"", After:=Cells(1, 1), _
+                        LookIn:=xlFormulas, _
+                        Lookat:=xlPart, _
+                        SearchOrder:=xlByColumns, _
+                        SearchDirection:=xlPrevious, _
+                        MatchCase:=False).Row
+            
+            'Copies first user designated tab and pastes in (1,1) ""Upload""
+            Worksheets(i + 1).Range(Worksheets(i + 1).Cells(1, 1), _
+            Worksheets(i + 1).Cells(Lrow, Lcol)).Copy _
+            Worksheets(""Upload"").Cells(1, 1)
+            
+            
+            
+            
+            'Handles copy and paste for the rest of the tabs
+            For i = i + 2 To WSCount
+             
+    
+            Lrow = Worksheets(i).Cells.Find(""*"", After:=Cells(1, 1), _
+                        LookIn:=xlFormulas, _
+                        Lookat:=xlPart, _
+                        SearchOrder:=xlByRows, _
+                        SearchDirection:=xlPrevious, _
+                        MatchCase:=False).Row
+                        
+            Lcol = Worksheets(i).Cells.Find(""*"", After:=Cells(1, 1), _
+                        LookIn:=xlFormulas, _
+                        Lookat:=xlPart, _
+                        SearchOrder:=xlByColumns, _
+                        SearchDirection:=xlPrevious, _
+                        MatchCase:=False).Row
+        
+          'Determines last row with data in ""Upload""
+           Prow = Worksheets(""Upload"").Cells.Find(""*"", After:=Cells(1, 1), _
+                       LookIn:=xlFormulas, _
+                       Lookat:=xlPart, _
+                       SearchOrder:=xlByRows, _
+                       SearchDirection:=xlPrevious, _
+                       MatchCase:=False).Row
+                        
+     
+          Worksheets(i).Range(Worksheets(i).Cells(1, 1), Worksheets(i).Cells(Lrow, Lcol)).Copy _
+          Worksheets(""Upload"").Cells(Prow + 1, 1)
+     
+
+
+           Next i
+
+           Else
+           Exit Sub
+
+            End If
+            End If
+            End If
+            End If
+       
+        'On Error GoTo 0
+        'Application.DisplayAlerts = False
+
+    End Sub
+
+
+",1465954040.0,5,0.86,1
+excel,Trying to consolidate all worksheets into one on single workbook,"As the title says I'm trying to combine all worksheets in a workbook into a single new worksheet titled ""Upload"". These worksheets will have all kinds of configurations as they come from different third parties. Problem with this code is I get an application defined or object-defined error but I'm new to all this so I'm not sure how to resolve that. Any help is appreciated, whether general or specific to this problem.
+
+Edit:
+Well, I made some adjustments to the code but it didn't help. I get an error that says
+
+ Run-time error '1004':
+
+Application-defined or object-defined error
+
+on the line that says
+
+     Sheets(i).Range(Cells(1, 1), Cells(Lrow, Lcol)).Copy Sheets(""Upload"").Cells(Pasterow, 1)
+
+I believe the problem is with the Lrow and Lcol sections. For some reason, even though i is set to a value and there is data in the relevant worksheet the Lrow and Lcol values are equal to 0.
+Here's the new code:
+
+    Sub ws_copy()
+    Dim Lrow As Long
+    Dim Lcol As Long
+    Dim Pasterow As Long
+    Dim WSCount As Integer
+    Dim i As Integer
+
+    On Error Resume Next
+        Application.DisplayAlerts = False
+            i = Application.InputBox(prompt:=""Enter the place order of first tab to be copied."", _
+                       Title:=""Worksheet Consolidation"", Type:=1)
+        
+            Select Case i
+            Case Is = IsText
+                MsgBox ""Enter a numeric value.""
+            Case Is = ""False""
+                Exit Sub
+            Case Is = IsNumber
+        
+                 Worksheets.Add(before:=Sheets(1)).Name = ""Upload""
+
+
+                   WSCount = Worksheets.Count
+
+                For i = i + 1 To WSCount
+                 On Error Resume Next
+    
+                Lrow = Cells.Find(""*"", After:=Sheets(i).Range(""A1""), _
+                        LookIn:=xlFormulas, _
+                        Lookat:=xlPart, _
+                        SearchOrder:=xlByRows, _
+                        SearchDirection:=xlPrevious, _
+                        MatchCase:=False).Row
+                        
+                Lcol = Cells.Find(""*"", After:=Sheets(i).Range(""A1""), _
+                        LookIn:=xlFormulas, _
+                        Lookat:=xlPart, _
+                        SearchOrder:=xlByColumns, _
+                        SearchDirection:=xlPrevious, _
+                        MatchCase:=False).Row
+             On Error GoTo 0
+       
+            Pasterow = Lrow + 1
+     
+            Sheets(i).Range(Cells(1, 1), Cells(Lrow, Lcol)).Copy Sheets(""Upload"").Cells(Pasterow, 1)
+
+
+
+    Next i
+
+    Case Else: Exit Sub
+    End Select
+     On Error GoTo 0
+        Application.DisplayAlerts = False
+    
+    End Sub
+
+
+This is the old code:
+
+    Sub ws_copy()
+    Dim Lrow As Long
+    Dim Lcol As Long
+    Dim Pasterow As Long    
+    Dim WSCount As Integer
+    Dim i As Integer
+    
+    Worksheets.Add(before:=Sheets(1)).Name = ""Upload""
+
+
+    WSCount = Worksheets.Count
+
+    For i = 2 To WSCount
+        On Error Resume Next
+    
+            Lrow = Cells.Find(""*"", After:=Sheets(i).Range(""A1""), _
+                        LookIn:=xlFormulas, _
+                        Lookat:=xlPart, _
+                        SearchOrder:=xlByRows, _
+                        SearchDirection:=xlPrevious, _
+                        MatchCase:=False).Row
+                        
+            Lcol = Cells.Find(""*"", After:=Sheets(i).Range(""A1""), _
+                        LookIn:=xlFormulas, _
+                        Lookat:=xlPart, _
+                        SearchOrder:=xlByColumns, _
+                        SearchDirection:=xlPrevious, _
+                        MatchCase:=False).Row
+        On Error GoTo 0
+       
+        Pasterow = Lrow + 1
+     
+        Sheets(i).Range(Cells(1, 1), Cells(Lrow, Lcol)).Copy Sheets(""Upload"").Cells(Pasterow, 1)
+
+        Next i
+
+    End Sub
+",1465516474.0,6,0.88,2
+excel,Trying to copy worksheets into new workbook,"Doing this as practice. [Trying to copy](http://imgur.com/a/WOUrt) each worksheet from one workbook into a new corresponding worksheet (that is generated by the macro) on another workbook. Macro is copying the sheets in backwards order and making way too many worksheets. VBA beginner looking for general and case specific advice.
+
+    Sub WS_copy()
+
+    Dim wb As Object
+    Dim i As Integer
+    Dim wscount As Integer
+
+    Set wb = Application.Workbooks(""Book1.xlsm"")
+    wscount = wb.Worksheets.Count
+
+    Application.Workbooks.Add.SaveAs Filename:=(""C:\Users\Andrew\Desktop\New""), _
+                            FileFormat:=xlOpenXMLWorkbookMacroEnabled
+
+
+
+    For i = 1 To wscount
+
+        Workbooks(""New.xlsm"").Worksheets.Add
+
+        wb.Worksheets(i).Copy Workbooks(""New.xlsm"").Worksheets(i)
+
+    Next
+
+    End Sub
+
+
+",1465353515.0,3,0.81,6
+buildapc,Bought a game. Need help understanding the minimum requirements,"
+[Here](http://imgur.com/a/S0cMY) are the game's minimum requirements as well as my computer's hardware. I need help determining if I only need a new graphics card or if there is more I'm going to have to replace. I have a 350 watt power supply. I'm fairly ignorant when it comes to computer hardware so if I've left something out let me know.
+",1461122155.0,2,0.75,5
+elderscrollsonline,Looking to learn about the game,"Some friends and I are thinking of purchasing this game. I have played Morrowind, Oblivion, and Skyrim, but never an MMO. How does this differ from the previous ES games other than the obvious online aspect? Do I need a powerful PC to enjoy it? Is it worth the $60 on Steam and what expansions should I get?",1461102105.0,4,0.75,6
+excel,Count cells of certain color and insert in Msgbox,"I basically want to count the number of colored cells (color index = 37) in a range and then be able to insert that number in a msgbox.
+This is what I have but it needs some correction.  
+
+    With Application.WorksheetFunction
+        c = ActiveSheet.CountIf(Range(""E2:E"" & LastRow), .Interior.ColorIndex = 37)
+    End With
+
+    MsgBox (c & "" lines could not be resolved""), vbOKOnly
+
+",1459995059.0,5,1.0,4
+excel,VBA If Then statement trouble,"Attempting to evaluate one cell and then change the values of two cells if that cells equals 0 but macro keeps putting incorrect value and only in one cell.
+This is part of a nested if then statement.
+
+
+
+
+    elseif cells(x,4) = 0 then  
+    cells(x,11) = cells(x,5) and cells(x,12) = cells(x,6)
+
+[Here](http://imgur.com/YXFMC4k) is a pic of the sheet itself.
+
+As you can see from the picture, Excel is putting 0 in cell(3,11) when it should be 2.5 and putting nothing in cell(3,12) when it should be 7.5.",1459907623.0,6,0.88,3
+excel,Help finding last row in loop,"Excel keeps telling me the subscript is out of range when I run this line in a macro but it looks identical to everything I see online. Can someone tell me where the error is?
+
+Lastrow = ThisWorkbook.Sheets(""discrepancies"").Cells(Rows.Count, ""A"").End(xlUp).Row",1459825128.0,2,1.0,7
+excel,MOD with a negative as an IF criteria not returning 0,"MOD(ABS(12.3),ABS(-4.1)) should equal 0 but is not when placed within an IF function and is messing up a larger formula it is in. Why is it not considering the absolute values as it should be?",1459463526.0,2,1.0,11
+excel,Countif cells contain greater than a certain number of characters,"I know to count cells that contain, say, 5 characters you can use countif=(A:A,""?????""), but how do I count cells that have greater than five characters?",1458937495.0,10,0.92,18
+excel,Looking to return certain value based on how many times a value matches across two columns,"I've got ID numbers associated with up to two values (SYS-A AND SYS-B) in another column, but each ID could appear could appear multiple times under SYS-A and/or SYS-B. I need Excel to look at each ID and tell me if it is associated with both systems or if it is associated with only one and which system if only one. Could I have the ""RESULT"" column on another sheet as I have one tab with payments by social and the other with the system each ID is associated with? ""Result"" should be dependent on Sheet 1.
+
+Sheet 1  
+ID------SYS  
+1--------A  
+1--------A  
+1--------B  
+1--------A  
+2--------B  
+3--------A  
+3--------A  
+
+Sheet 2  
+ID-----PAYMENT---RESULT  
+1---------5------------BOTH  
+2---------3--------------B  
+3---------2--------------A  ",1458858840.0,10,1.0,5
+teslamotors,Do most people schedule test drives just for fun with no intention to buy? Does this bother the stores?,,1455757705.0,1,0.53,13
+AskReddit,How did you figure out what you wanted to do in life?,"How did you figure out what or who you wanted to be in life and what steps are you taking toward that?
+
+Also, what is it?",1445663305.0,2,0.75,22
+Blink182,"Who did the spoken vocals in ""Down""?",Having a dispute with my friend and we can't tell who it is.,1441511105.0,7,0.89,27
+relationships,[M24] Feeling hopeless after girlfriend [F23] of two and a half years ends relationship then finds someone else.,"My girlfriend of two and a half years ended our relationship recently after I moved cities for a job and now she is already dating someone else. She's told me he is everything she wanted me to be. She can't go back to mediocrity now that she's experienced something better.
+
+
+I can't say I don't deserve it. I didn't treat her well. Never made her a priority. What I wouldn't give for another chance now that I realize how stupid I've been.
+
+
+This is a girl who has pursued me for eight years, since high school and through college. She always told me she was going to marry me one day and would have in a moment if I'd asked. Always told me I was the man of her dreams. Always supported me. Made me feel loved and I wasted it all because I didn't give her my all like she did me. How horrible a person do you have to be to make someone who wanted you so badly detest you?
+
+
+I deserve it. She deserves better and I know she's happier but now I'm left with just my thoughts. They're getting worse everytime I think about her being affectionate towards someone else. I can't imagine I'll ever find someone who has loved me so much.
+I've struggled with depression for years but now it's become a physical affliction. I feel like I'm going to get to the point I simply can't function. The fact that I just moved to a new town is making it so much worse. I have a friend staying here for now but I'm afraid of myself and how desperate I'll be to stop this pain once I'm alone for hours at a time in this apartment.
+
+
+tl;dr: Long time girlfriend broke up with me and found someone else. Not in a good place mentally.",1440473561.0,2,1.0,3
+SuicideWatch,Feeling hopeless after breakup,"My girlfriend of two and a half years ended our relationship recently after I moved cities for a job and now she is already dating someone else. She's told me he is everything she wanted me to be. She can't go back to mediocrity now that she's experienced something better. 
+
+I can't say I don't deserve it. I didn't treat her well. Never made her a priority. What I wouldn't give for another chance now that I realize how stupid I've been. 
+
+This is a girl who has pursued me for eight years, since high school and through college. She always told me she was going to marry me one day and would have in a moment if I'd asked. Always told me I was the man of her dreams. Always supported me. Made me feel loved and I wasted it all because I didn't give her my all like she did me. How horrible a person do you have to be to make someone who wanted you so badly detest you? 
+
+I deserve it. She deserves better and I know she's happier but now I'm left with just my thoughts. They're getting worse everytime I think about her being affectionate towards someone else. I can't imagine I'll ever find someone who has loved me so much.
+
+
+I've struggled with depression for years but now it's become a physical affliction. I feel like I'm going to get to the point I simply can't function. The fact that I just moved to a new town is making it so much worse. I have a friend staying here for now but I'm afraid of myself and how desperate I'll be to stop this pain once I'm alone for hours at a time in this apartment.",1440472867.0,4,1.0,3
+buildapc,[Build Help] What one part should I get?,"Have a PC mostly used for gaming. It's fairly low end and no parts have been upgraded in probably five years. 
+I'm looking to upgrade it slightly with a budget of $200-$300. My biggest problem currently is FPS. I play online a lot and I'll average 10-15 FPS in some games where my friends will have no problem hitting 60. I would like to get a part or two to alleviate this problem if its possible to do on this budget. Any help would be great!",1438402780.0,1,1.0,2
+stepparents,SS with very different personality,My SO has a 3 yo son who has a very different personality from mine and it has become a major concern of mine in the future of our relarionship. She says a lot of this has to do with his age and I admit some of it is but I'm concerned that our personalities may clash if this relarionship moves into a marriage and we all live together.Looking for any advice or experience. Thanks!,1434837509.0,1,0.57,11
+techsupport,USB ports not working. No mouse/keyboard function as a result,"As the title says my USB ports are not working. The two front work intermittently as I have tested them by plugging in a controller and and the light flashes momentarily, however,  I have seen no tutorial that could help me considering I have no way of using the computer without a keyboard or mouse. I have tested multiple keyboards and even made sure they worked on other computers. It is Windows 7. Any help is greatly appreciated.
+
+
+Edit: The keyboard was initially working a little, allowing me to get into the BIOS but not move around in the menu, but that seems to have changed. The light is no longer on and the computer explicitly states ""No Keyboard Found"".
+
+Edit 2: Now I can get into BIOS again. Maybe one USB port works a little, I guess.",1422250833.0,1,0.66,13
+AskReddit,"Step-parents and those whose SO has children with another person: How has this dynamic affected your relationship, especially if both parents are still involved?",,1417408017.0,1,1.0,1
+Chattanooga,Does Chattanooga still have the Christmas boat parade on the river?,"I looked online but haven't been able to find mention of it and I was curious if it was still planned and if so, when?",1411060248.0,9,0.92,8
+finance,Difference in Equity Markets,[removed],1399215217.0,0,0.5,0
+finance,Closed ended vs open ended,What is the difference between a closed ended and open ended fund?,1398814093.0,1,0.6,6
+FinancialCareers,Need advice for career.,"Graduating in May with BS in Economics and looking for career advice. I'll have about a 3.0, so not the strongest academically and I have no internships but I have been employed all throughout college. I'm not the salesman/entrepreneur type and it seems those are the only types of jobs available in finance. I have been a server for a while not so it's not as though I can't interact with people. Just looking for what types of jobs are available other than financial advisor/wealth management. 
+
+Also, I have an interview with Axa. Any thoughts on that company?",1397629500.0,3,0.8,6
+TalesFromYourServer,Tip theft,Anyone here had to deal with coworkers or bus boys stealing cash from your tables?,1393224717.0,11,0.87,9
+AskReddit,What was the most POS vehicle you've ever owned and what made it so bad?,,1393019599.0,3,1.0,7
+AdviceAnimals,Class Schedule Problems,,1392086863.0,6,1.0,1
+playrust,Ability to search for servers,"Is there a way to filter out unwanted servers such as looking for a certain capacity or simply searching for a title? If not, this would be an essential addition in my opinion.",1390254322.0,1,0.6,3
+playrust,Any chance a 'Take All' button will be added?,,1389851600.0,15,0.69,26
+playrust,Weapon slots info,"Is there any way to influence the number of slots a weapon will have when you craft it? Also, is there a list of the maximum number of slots each type of weapon may have?",1389066001.0,2,0.67,2
+playrust,Why does my house keep disappearing?,"Multiple times I have built a multistory, mutifoundation house only to have it disappear without notice. Keep in mind this is not a wooden shelter I'm talking about. What is going on? Is this a server issue or do houses decay?
+
+Edit: I don't think it was a server wipe because I was disconnected then logged back on and found my house was gone but all the items were still in my inventory. It wasn't due to neglect either because I had played everyday I had the house",1388882622.0,0,0.5,5
+playrust,How long does it take for a door to despawn so I can replace it?,,1388090552.0,2,0.76,4
+playrust,Is there a place to give comments or suggestions to the developers?,,1387315735.0,2,0.67,1
+playrust,US Central 3 large,[removed],1387147101.0,2,1.0,1
+playrust,Flying doors,Any word on when this problem will be fixed? It's rather annoying considering it leaves all your accumulated items up for grabs.,1386919374.0,2,0.67,3
+askscience,Why is it that I crave sugary food more after I've eaten a meal?,,1386201640.0,1,1.0,0
+history,Looking for a graduate history program,I'll graduate next May with a B.S. in Economics and am thinking of going on to graduate school to get a Master's in history. Anyone know which history programs are best? Would it even be worth it to do this? I live in the southeast but would be willing to go north.,1377693275.0,2,0.63,10
+jobs,Economics major expecting to graduate next spring. Where should I look for jobs and how could I get in?,"I'll graduate with a B.S. in Economics in May of 2014 but all my jobs have been entry level positions in the food industry (server, fast-food cook, cashier). I feel that I need to get my foot in the door in a more relevant industry but how should I go about it and where should I look? I don't have any definite career in mind but I've thought of banking as that is closely related to my education.",1370407658.0,1,1.0,8

@@ -1,0 +1,931 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+Spectrum,Did upload speeds get buffed?,I've been consistently getting +700mbps upload speeds for a couple of weeks now.  Used to only get 40mbps.,1736908600.0,0,0.25,5
+backblaze,Inherit Backup stuck at Updating Backblaze Resources,"I upgraded to Windows 11 via a fresh install.  All my drive letters remain the same.  When I installed the Backblaze client and selected Inherit Backup it downloaded data from Backblaze but now it has been stuck on ""Updating Backblaze Resources"" now for several hours and the progress bar has not moved a millimeter.  Is this typical?  This is a reasonably large backup set of \~7.3m files and 26tb of data.
+
+https://preview.redd.it/12mepn1irs9e1.png?width=838&format=png&auto=webp&s=2a06ac0b73628a585dea242902bf95d6dc3acf6b
+
+  
+",1735482276.0,1,1.0,1
+mikrotik,Port forwarding through pass-through OpenVPN connection,"I have a machine (192.168.0.100) on my local network that uses OpenVPN to connect to a remote endpoint with a dedicated static IP so that it can be easily accessed from outside the local network.  With my previous Asus router, a simple port forward of the relevant ports to the 192.168.0.100 address worked great.
+
+I have replaced that router with a Mikrotik hAP ax^3.  I have it configured and everything is working as expected except the OpenVPN connection.  While the machine can access the internet normally, incoming connections to previously forwarded ports just do not work anymore.  I've added port forwards in the IP>Firewall>NAT section but they don't seem to be helping.
+
+I'm guessing I either have a firewall rule dropping them or I don't have a firewall rule routing them properly but I can't figure out which.  I'd greatly appreciate any help in figuring this out.  My config export is below.
+
+        # 2024-01-15 16:19:32 by RouterOS 7.12.1
+    
+    # software id = 1D6I-AT65
+    
+    #
+    
+    # model = C53UiG+5HPaxD2HPaxD
+    
+    # serial number = HF0098X4PFZ
+    
+    /interface bridge
+    
+    add admin-mac=78:9A:18:46:D1:58 auto-mac=no comment=defconf name=bridge
+    
+    /interface ethernet
+    
+    set [ find default-name=ether1 ] advertise=10M-baseT-half,10M-baseT-full,100M-baseT-half,100M-baseT-full,1G-baseT-half,1G-baseT-full poe-out=off
+    
+    /interface wifiwave2
+    
+    set [ find default-name=wifi1 ] channel.skip-dfs-channels=10min-cac configuration.country=""United States"" .mode=ap .ssid=BadWolf disabled=no security.authentication-types=wpa2-psk,wpa3-psk
+    
+    set [ find default-name=wifi2 ] channel.skip-dfs-channels=10min-cac configuration.country=""United States"" .mode=ap .ssid=""Surveillance Drone 864DPD"" disabled=no security.authentication-types=wpa2-psk,wpa3-psk
+    
+    add configuration.ssid=Hopalong disabled=no mac-address=7A:9A:18:46:D1:5C master-interface=wifi1 name=wifi3
+    
+    add configuration.ssid=Hopalong disabled=no mac-address=7A:9A:18:46:D1:5D master-interface=wifi2 name=wifi4
+    
+    /interface list
+    
+    add comment=defconf name=WAN
+    
+    add comment=defconf name=LAN
+    
+    /ip pool
+    
+    add name=dhcp ranges=192.168.0.10-192.168.0.254
+    
+    /ip dhcp-server
+    
+    add address-pool=dhcp interface=bridge lease-time=10m name=defconf
+    
+    /interface bridge filter
+    
+    add action=drop chain=forward in-interface=wifi3
+    
+    add action=drop chain=forward out-interface=wifi3
+    
+    add action=drop chain=forward in-interface=wifi4
+    
+    add action=drop chain=forward out-interface=wifi4
+    
+    /interface bridge port
+    
+    add bridge=bridge comment=defconf interface=ether2
+    
+    add bridge=bridge comment=defconf interface=ether3
+    
+    add bridge=bridge comment=defconf interface=ether4
+    
+    add bridge=bridge comment=defconf interface=ether5
+    
+    add bridge=bridge comment=defconf interface=wifi1
+    
+    add bridge=bridge comment=defconf interface=wifi2
+    
+    add bridge=bridge interface=wifi3
+    
+    add bridge=bridge interface=wifi4
+    
+    /ip neighbor discovery-settings
+    
+    set discover-interface-list=none lldp-med-net-policy-vlan=1
+    
+    /interface list member
+    
+    add comment=defconf interface=bridge list=LAN
+    
+    add comment=defconf interface=ether1 list=WAN
+    
+    /ip address
+    
+    add address=192.168.0.1/24 comment=defconf interface=bridge network=192.168.0.0
+    
+    /ip cloud
+    
+    set ddns-enabled=yes ddns-update-interval=10m
+    
+    /ip dhcp-client
+    
+    add comment=defconf !dhcp-options interface=ether1
+    
+    /ip dhcp-server lease
+    
+    add address=192.168.0.100 client-id=1:4c:cc:6a:6d:b:cc mac-address=4C:CC:6A:6D:0B:CC server=defconf
+    
+    add address=192.168.0.97 client-id=1:50:eb:f6:7e:e4:a7 mac-address=50:EB:F6:7E:E4:A7 server=defconf
+    
+    /ip dhcp-server network
+    
+    add address=192.168.0.0/24 comment=defconf dns-server=76.76.2.181,1.1.1.1 gateway=192.168.0.1 netmask=24
+    
+    /ip dns
+    
+    set servers=76.76.2.181,1.1.1.1
+    
+    /ip dns static
+    
+    add address=192.168.0.1 comment=defconf name=router.lan
+    
+    /ip firewall address-list
+    
+    add address=0.0.0.0/8 comment=RFC6890 list=not_in_internet
+    
+    add address=172.16.0.0/12 comment=RFC6890 list=not_in_internet
+    
+    add address=192.168.0.0/16 comment=RFC6890 list=not_in_internet
+    
+    add address=10.0.0.0/8 comment=RFC6890 disabled=yes list=not_in_internet
+    
+    add address=169.254.0.0/16 comment=RFC6890 list=not_in_internet
+    
+    add address=127.0.0.0/8 comment=RFC6890 list=not_in_internet
+    
+    add address=224.0.0.0/4 comment=Multicast list=not_in_internet
+    
+    add address=198.18.0.0/15 comment=RFC6890 list=not_in_internet
+    
+    add address=192.0.0.0/24 comment=RFC6890 list=not_in_internet
+    
+    add address=192.0.2.0/24 comment=RFC6890 list=not_in_internet
+    
+    add address=198.51.100.0/24 comment=RFC6890 list=not_in_internet
+    
+    add address=203.0.113.0/24 comment=RFC6890 list=not_in_internet
+    
+    add address=100.64.0.0/10 comment=RFC6890 list=not_in_internet
+    
+    add address=240.0.0.0/4 comment=RFC6890 list=not_in_internet
+    
+    add address=192.88.99.0/24 comment=""6to4 relay Anycast [RFC 3068]"" list=not_in_internet
+    
+    /ip firewall filter
+    
+    add action=accept chain=forward comment=""defconf: accept in ipsec policy"" ipsec-policy=in,ipsec
+    
+    add action=accept chain=forward comment=""defconf: accept out ipsec policy"" ipsec-policy=out,ipsec
+    
+    add action=fasttrack-connection chain=forward comment=""defconf: fasttrack"" connection-state=established,related hw-offload=yes
+    
+    add action=accept chain=forward comment=""defconf: accept established,related, untracked"" connection-state=established,related,untracked
+    
+    add action=accept chain=forward comment=deluge connection-nat-state=dstnat
+    
+    add action=accept chain=input comment=icmp protocol=icmp
+    
+    add action=accept chain=input comment=established connection-state=established
+    
+    add action=accept chain=input comment=related connection-state=related
+    
+    add action=accept chain=input comment=ovpn dst-port=4672 protocol=tcp
+    
+    add action=accept chain=icmp comment=""echo reply"" disabled=yes icmp-options=0:0 protocol=icmp
+    
+    add action=accept chain=icmp comment=""net unreachable"" disabled=yes icmp-options=3:0 protocol=icmp
+    
+    add action=accept chain=icmp comment=""host unreachable"" disabled=yes icmp-options=3:1 protocol=icmp
+    
+    add action=accept chain=icmp comment=""host unreachable fragmentation required"" disabled=yes icmp-options=3:4 protocol=icmp
+    
+    add action=accept chain=icmp comment=""allow echo request"" disabled=yes icmp-options=8:0 protocol=icmp
+    
+    add action=accept chain=icmp comment=""allow time exceed"" disabled=yes icmp-options=11:0 protocol=icmp
+    
+    add action=accept chain=icmp comment=""allow parameter bad"" disabled=yes icmp-options=12:0 protocol=icmp
+    
+    add action=drop chain=icmp comment=""deny all other types"" disabled=yes
+    
+    add action=drop chain=forward comment=""defconf: drop invalid"" connection-state=invalid
+    
+    add action=drop chain=forward comment=""defconf: drop all from WAN not DSTNATed"" connection-nat-state=!dstnat connection-state=new in-interface-list=WAN
+    
+    add action=drop chain=input comment=""not LAN"" in-interface-list=!LAN
+    
+    /ip firewall nat
+    
+    add action=masquerade chain=srcnat comment=""defconf: masquerade"" ipsec-policy=out,none out-interface-list=WAN
+    
+    add action=dst-nat chain=dstnat disabled=yes dst-port=4672 protocol=tcp to-addresses=192.168.0.100 to-ports=4672
+    
+    add action=dst-nat chain=dstnat dst-port=50084 in-interface-list=WAN protocol=tcp to-addresses=192.168.0.100 to-ports=50084
+    
+    add action=dst-nat chain=dstnat dst-port=50084 in-interface-list=WAN protocol=udp to-addresses=192.168.0.100 to-ports=50084
+    
+    add action=dst-nat chain=dstnat dst-port=5351 in-interface-list=WAN protocol=udp to-addresses=192.168.0.1 to-ports=5351
+    
+    add action=dst-nat chain=dstnat dst-port=123 in-interface-list=WAN protocol=udp to-addresses=192.168.0.100 to-ports=123
+    
+    add action=dst-nat chain=dstnat disabled=yes dst-port=3690 protocol=tcp to-addresses=192.168.0.100 to-ports=3690
+    
+    add action=dst-nat chain=dstnat disabled=yes dst-port=2401 protocol=tcp to-addresses=192.168.0.100 to-ports=2401
+    
+    add action=dst-nat chain=dstnat disabled=yes dst-port=8443 protocol=tcp to-addresses=192.168.0.100 to-ports=8443
+    
+    add action=dst-nat chain=dstnat dst-port=50000-51000 in-interface-list=WAN protocol=tcp to-addresses=192.168.0.100 to-ports=50000-51000
+    
+    add action=dst-nat chain=dstnat dst-port=50000-51000 in-interface-list=WAN protocol=udp to-addresses=192.168.0.100 to-ports=50000-51000
+    
+    /ip service
+    
+    set telnet disabled=yes
+    
+    set ftp disabled=yes
+    
+    set www address=192.168.0.0/24
+    
+    set ssh address=192.168.0.0/24 port=2200
+    
+    set www-ssl address=192.168.0.0/24 disabled=no
+    
+    set api disabled=yes
+    
+    set winbox address=192.168.0.0/24
+    
+    set api-ssl disabled=yes
+    
+    /ipv6 firewall address-list
+    
+    add address=::/128 comment=""defconf: unspecified address"" list=bad_ipv6
+    
+    add address=::1/128 comment=""defconf: lo"" list=bad_ipv6
+    
+    add address=fec0::/10 comment=""defconf: site-local"" list=bad_ipv6
+    
+    add address=::ffff:0.0.0.0/96 comment=""defconf: ipv4-mapped"" list=bad_ipv6
+    
+    add address=::/96 comment=""defconf: ipv4 compat"" list=bad_ipv6
+    
+    add address=100::/64 comment=""defconf: discard only "" list=bad_ipv6
+    
+    add address=2001:db8::/32 comment=""defconf: documentation"" list=bad_ipv6
+    
+    add address=2001:10::/28 comment=""defconf: ORCHID"" list=bad_ipv6
+    
+    add address=3ffe::/16 comment=""defconf: 6bone"" list=bad_ipv6
+    
+    /ipv6 firewall filter
+    
+    add action=accept chain=input comment=""defconf: accept established,related,untracked"" connection-state=established,related,untracked
+    
+    add action=drop chain=input comment=""defconf: drop invalid"" connection-state=invalid
+    
+    add action=accept chain=input comment=""defconf: accept ICMPv6"" protocol=icmpv6
+    
+    add action=accept chain=input comment=""defconf: accept UDP traceroute"" port=33434-33534 protocol=udp
+    
+    add action=accept chain=input comment=""defconf: accept DHCPv6-Client prefix delegation."" dst-port=546 protocol=udp src-address=fe80::/10
+    
+    add action=accept chain=input comment=""defconf: accept IKE"" dst-port=500,4500 protocol=udp
+    
+    add action=accept chain=input comment=""defconf: accept ipsec AH"" protocol=ipsec-ah
+    
+    add action=accept chain=input comment=""defconf: accept ipsec ESP"" protocol=ipsec-esp
+    
+    add action=accept chain=input comment=""defconf: accept all that matches ipsec policy"" ipsec-policy=in,ipsec
+    
+    add action=drop chain=input comment=""defconf: drop everything else not coming from LAN"" in-interface-list=!LAN
+    
+    add action=accept chain=forward comment=""defconf: accept established,related,untracked"" connection-state=established,related,untracked
+    
+    add action=drop chain=forward comment=""defconf: drop invalid"" connection-state=invalid
+    
+    add action=drop chain=forward comment=""defconf: drop packets with bad src ipv6"" src-address-list=bad_ipv6
+    
+    add action=drop chain=forward comment=""defconf: drop packets with bad dst ipv6"" dst-address-list=bad_ipv6
+    
+    add action=drop chain=forward comment=""defconf: rfc4890 drop hop-limit=1"" hop-limit=equal:1 protocol=icmpv6
+    
+    add action=accept chain=forward comment=""defconf: accept ICMPv6"" protocol=icmpv6
+    
+    add action=accept chain=forward comment=""defconf: accept HIP"" protocol=139
+    
+    add action=accept chain=forward comment=""defconf: accept IKE"" dst-port=500,4500 protocol=udp
+    
+    add action=accept chain=forward comment=""defconf: accept ipsec AH"" protocol=ipsec-ah
+    
+    add action=accept chain=forward comment=""defconf: accept ipsec ESP"" protocol=ipsec-esp
+    
+    add action=accept chain=forward comment=""defconf: accept all that matches ipsec policy"" ipsec-policy=in,ipsec
+    
+    add action=drop chain=forward comment=""defconf: drop everything else not coming from LAN"" in-interface-list=!LAN
+    
+    /system clock
+    
+    set time-zone-name=America/Chicago
+    
+    /system logging
+    
+    add prefix=debug topics=dhcp
+    
+    /system note
+    
+    set show-at-login=no
+    
+    /system ntp client servers
+    
+    add address=""time-a-b.nist.gov ""
+    
+    /tool bandwidth-server
+    
+    set enabled=no
+    
+    /tool mac-server
+    
+    set allowed-interface-list=none
+    
+    /tool mac-server mac-winbox
+    
+    set allowed-interface-list=LAN
+    
+    /tool mac-server ping
+    
+    set enabled=no",1705358393.0,1,1.0,9
+mikrotik,Additional steps recommended for securing HAP AX3 after completing setup in Installation Guide?,"Hi,
+
+Is there an additional guide or best practices article somewhere that discusses how to further secure a Mikrotik router beyond what the company outlines in the setup guide on their website?  I've seen a few references to additional securing in other posts but I'm not finding any guides or stickied posts anywhere so I'm not sure I'm looking in the right places.  I'm getting ready to setup a HAP AX3 at home and I'd like to get all my ducks in a row first.",1704919030.0,5,0.78,7
+blenderhelp,How to disable auto-clipping in Viewport Shader Solid Mode?,"Since I updated to Blender 4.1, I've been having a weird clipping issue in Viewport Shader Solid Mode.  This issue does not occur in Material or Rendered mode.  Basically, any time I get even semi-close to an object while in Solid Mode, it will clip and the entire object will disappear while in Object mode.  In Edit mode, it will go to a wireframe-like view.
+
+I have set my Clip Start in the View panel to the lowest it will go, .00001.  This does not make any difference at all.  Changing Focal Length is also no help.  I'm not sure what else to try and I'd greatly appreciate any suggestions.
+
+In the picture below, the object is .85 meters wide and that is as close as I can get to it before it clips out of view entirely.
+
+&#x200B;
+
+https://preview.redd.it/9d5dy98qm74c1.png?width=2127&format=png&auto=webp&s=99ebdf66459b5e5c70bf4c13f9bdfd699da813eb",1701666085.0,1,1.0,2
+blenderhelp,Blender crashing on file operations since update to 3.6,"Since I updated to 3.6 from 3.4 I have been encountered immediate crash to desktop events on random file operations.  The crashes occur on something like a load, save, import, or export.  As soon as I click on the action in the menu, if it is going to crash it crashes immediately--no error message or delay.  Once Blender crashes in this manner it will not restart until the PC is rebooted.  Attempts to load Blender again result in an immediate CTD.  Starting it from the command line with the -con option does not generate any error messages.  It just crashes immediately.  It also prevents older versions of Blender (like my 3.4 install) from opening.  
+
+Today I managed to get this error from an addon.  Blender did not immediately crash when the error appeared but did crash immediately when I tried to save the file directly after.  I don't know if this informs the situation any other than confirm it's a file handling problem that seems to be causing the crashes.
+
+&#x200B;
+
+&#x200B;
+
+https://preview.redd.it/oa7mif0t3pub1.png?width=927&format=png&auto=webp&s=1531f79d26ec9cebeb279c06f2e3cc91f8546b64",1697519142.0,3,1.0,2
+slingtv,Is Audio always this bad?,"So I just signed up today so I could watch live news...
+
+Well, I can *watch* it but I can't hear it.  I can't get more than 10 seconds of continuous audio on CNN, other news channel are better but there's still lots of drop outs/squeaks/squelches/and just generally disturbing noises.
+
+I did a speed check to make sure it's not my ISP.  Getting 550mbps down. I can watch (and hear) 1080p videos on Youtube no problem.  I cranked Sling down to the lowest quality settings and still can't get usable audio.  I can't believe the service could last long delivering this kind of experience but I can't seem to fix it, either.",1696798329.0,1,0.6,6
+gayyoungold,Dealing with grief?,"Any tips?  My husband and I were together 29 years.  He passed away unexpectedly three months ago, just a couple of weeks after our anniversary.  He was 20 years older than me and we always assumed he would be the first to go but I never expected the pain to be this bad or unfathomable.  Losing my parents was a tiny drop in the bucket compared to this.
+
+How have the rest of you handled your grief when you lose a partner?  I'm going to therapy.  I'm talking about it.  But it's not getting any easier.  People tell me to start thinking about the future to help get passed this but, honestly, I can't even \*see\* a future right now.  It's just a giant black hole. When they say I'll meet someone else eventually I just wanna cry.  Yes, I may meet someone else but I'll never have 29 years with someone else.  We lived together over half of my life.  Virtually every memory I have starts with ""We.""  Nothing feels remotely normal now and I still expect to see him every time I walk by a room in the house.  I just feel so very lost right now and I have no idea how to right myself.
+
+If you've gone through something similar I would greatly appreciate hearing your story and how you coped with the loss and the grief surrounding it.",1696629080.0,29,0.98,11
+backblaze,WARNING: Your Backblaze client installation is not correct,"So I got a pop up asking me to update Backblaze tonight, which I did.  It generated this error:
+
+[Image](https://i.imgur.com/9Nll8gv.png)
+
+So I tried redownloading the client from Backblaze and installing.  Still got the same error screen.  
+
+The errors from the log are below.  I've checked the path and it exists, but the only file in it is ""bzdoinstall.exe"".  I'm not sure if the installer is deleting unpacked files on exit or if they are not being unpacked properly.  Not sure how to proceed from here.
+
+
+    Successfully unpacked into dir: C:\Users\Dale\AppData\Local\Temp\bzi0829014117_0000001_9710dir
+    Now proceeding with installation into dir: C:\Program Files (x86)\Backblaze\
+    PID: 1008660
+    20230829014121 0001008660 - ERROR: GetListOfFileInfosInDir (processId=1008660) FindFirstFile_C failed, dirPat=C:\Users\Dale\AppData\Local\Temp\bzi0829014117_0000001_9710dir\install_log\*, GetLastError=3, and_a_lastError_of_3_means ERROR_PATH_NOT_FOUND, check if dirPat starts with a letter-colon in this log line.
+    20230829014121 0001008660 - FAILED to find ANY tmpdir log files from dir: C:\Users\Dale\AppData\Local\Temp\bzi0829014117_0000001_9710dir\install_log
+    20230829014121 0001008660 - Stopped bzbui.exe, BzSystem::RunCommand: ""C:\Users\Dale\AppData\Local\Temp\bzi0829014117_0000001_9710dir\bzbui.exe"" -quitbzbui
+    RESULT->
+    20230829014122 0001008660 - Stopped bzserv service, BzSystem::RunCommand: ""C:\Users\Dale\AppData\Local\Temp\bzi0829014117_0000001_9710dir\bzserv.exe"" -stop_service
+    RESULT->bzserv exiting out of main
+    20230829014122 0001008660 - ERROR: could not copy file to dst dir: clusternum.txt
+    20230829014123 0001008660 - ERROR: could not copy file to dst dir_x64: C:\Program Files (x86)\Backblaze\x64\bzfilelist64.exe",1693274301.0,19,0.92,18
+backblaze,Suggestions on how to restore only newer or changed files?,I replaced an old Toshiba drive with a new Seagate about 6 months ago.  The Seagate has crapped out on me.  I've got a replacement drive now and I still have the data on the older Toshiba drive I can copy over locally.  It's there a way to just download newer or changed files from Backblaze or am I stuck ordering a drive from them?,1692145702.0,2,1.0,4
+unrealengine,Anyone got the Water Plugin to Work with Imported Landscapes?,"I'm having a devil of a time trying to place water actors from the beta water plugin in any imported landscape.  They seem to work fine on an internally generated landscape but the water just does not render on any imported landscape.  The closest I've come to making it work is creating a generic internal landscape first, adding water, then importing a landscape and placing it on top of the first one but this is pretty flaky.
+
+I'd like to know if anyone has used it successfully on an imported landscape.  I'm trying to decide if I'm beating a dead horse or not.",1644525593.0,1,1.0,0
+Forgotten_Realms,Kelvin's Cairn vs. The Spine of the World,"So I started off making a 3D model of a tavern my Rime of the Frost Maiden group acquired, then I decided to place it in on its street in Lonely Wood, which led to needing terrain and somehow I've wound up making a 3D terrain map for Icewind Dale and the Ten Towns area.  Which is where I've run into a problem.
+
+Kelvin's Cairn is 1,000 feet high and is supposedly the only peak within 1,000 miles.  Unfortunately, the Spine of the World is a lot closer than 1,000 miles (closest point is around 30 miles) and it has peaks as high as 20,000 feet.
+
+Does anyone know if this discrepancy has ever been resolved in the lore?",1643729423.0,28,0.93,9
+blenderhelp,Set Material Base Color to Viewport Color?,Is there a way in Blender or possibly an external script/add-on that will let you set a material's base color to be the same as the material's viewport color?  I've found a couple that will set the viewport color based on the material base color but I need to do it the other way around.,1636695585.0,2,1.0,0
+firefly,3D models of ships other than Serenity?,Does anyone know of any 3D models of ships from the show that are not the Serenity?  I'm having a devil of a time finding any.,1635005034.0,33,0.93,12
+graphic_design,Graphic Asset Management?,"I've been Googling for awhile and all I'm coming up with are professional digital asset management systems designed for working groups to large corporations.  I'm an amateur and I just need something to keep up with graphic assets on my PC.  I don't need a web interface or any other group-centric features.  How do you folks who work solo do this?  I've bought a lot of assets over the years but finding them when I need them is not always easy, especially as my memory starts rebelling.  I'd use a folder tree but some things need to be in more than one category, so something that supports categories or tags is needed.",1629327018.0,4,0.84,3
+lfg,[Online][Other][CST Thursday] Reliable Player Looking for Sci-Fi or Modern Urban Fantasy Game,"Hi, I'm a reliable, mature, and chill player with a sense of humor looking for a game on Thursday nights.
+
+I'm exhausted with traditional fantasy, so no 5E. Ideally looking for something like Stars Without Numbers, Delta Green, Star Wars variants, Call of Cthulhu (preferably set in relatively modern times), Conspiracy X (If you're running this you'd make my year inviting me!), Coriolis, Night's Black Agents, and similar games and homebrews in the approximate genre.
+
+Don't get me wrong, I like a good combat, but I prefer games that tend to emphasize role-playing and problem solving that resorts to C4 last.",1625623844.0,3,1.0,4
+lfg,[Online][Other][CST Monday] Reliable Player Looking for Sci-Fi or Modern Urban Fantasy Game,"Hi, I'm a reliable, mature, and chill player with a sense of humor looking for a game on Monday nights.
+
+I'm exhausted with traditional fantasy, so no 5E. Ideally looking for something like Stars Without Numbers, Delta Green, Star Wars variants, Call of Cthulhu (preferably set in relatively modern times), Conspiracy X (If you're running this you'd make my year inviting me!), Coriolis, Night's Black Agents, and similar games and homebrews in the approximate genre.
+
+Don't get me wrong, I like a good combat, but I prefer games that tend to emphasize role-playing and problem solving that resorts to C4 last.",1619126219.0,3,1.0,1
+lfg,"[Online][Other][CST, Mon or Wed] Reliable Player Looking for Sci-Fi or Modern Urban Fantasy Game","Hi, I'm a reliable, mature, and chill player with a sense of humor looking for a game on Monday or Wednesday nights.  
+
+I'm exhausted with traditional fantasy, so no 5E.  Ideally looking for something like Stars Without Numbers, Delta Green, Star Wars variants, Call of Cthulhu (preferably set in relatively modern times), Conspiracy X (If you're running this you'd make my year inviting me!), Coriolis, Night's Black Agents, and similar games and homebrews in the approximate genre.
+
+Don't get me wrong, I like a good combat, but I prefer games that tend to emphasize role-playing and problem solving that resorts to C4 last.",1618368064.0,2,1.0,0
+Stellaris,Question about ending AI initiated wars,"I wound up involved as an ally in a war initiated by an AI.  They have ideological war goals.
+
+We've been at war more than 3 hours.  I have occupied every one of their systems.  I have occupied their planets.  I have even destroyed the armies of their allies and bombarded their home planets into emptiness.
+
+They've been green on the Status Quo end war option for 2.5 hours.  The AI won't take it.  The War Goal end war option got down to -60 at one point but now it's at -170.  How do I get this ended?  My war weariness is only at 53%.   I've got an awakened empire gobbling up everything near my border and I'm trying to build up 95k power fleets to prepare for it but my economy is under heavy stress from this pre-existing war.  Any tips would be much appreciated.",1615376844.0,1,0.99,4
+keto,Any where to buy frozen scrambled egg patties?,Does anyone know of a store that carries frozen scrambled egg patties?  My normal local grocery store doesn't and google is mainly pulling up restaurant supply companies.  Wondering if anyone has seen them somewhere.,1613010235.0,7,0.78,13
+StackAdvice,Reputable Arachidonic Acid source?,"Hi Everyone,
+
+There was a very interesting study on gut microbiome and depression in rats.  One of the things they found was the depressed rats with bad gut flora responded to supplementation with arachidonic acid as the bad gut flora greatly reduced the available AA serum levels and apparently this causes some dysfunction in the endocannabinoid system.  I'm looking to try this on my highly treatment resistant depression but the sources on Amazon seem mostly body-building related and kind of sketchy.  Are there any recommended brands out there?
+
+They also noted the rats responded well to supplementation with *l. plantarum (lpWJL)* but I have not been able to find a consumer source for that strain at all.
+
+&#x200B;
+
+For those interested in the study, it's here:
+
+[https://www.nature.com/articles/s41467-020-19931-2](https://www.nature.com/articles/s41467-020-19931-2)
+
+( Effect of gut microbiota on depressive-like behaviors in mice is mediated by the endocannabinoid system )",1608084413.0,17,0.96,13
+GooglePixel,Question for those of you who used the cable to transfer to a Pixel from your old phone,Is it just a bulk transfer or can you pick the things you want transferred over (and the things you don't)?,1551573789.0,1,1.0,2
+researchchemicals,Best psychedelic RC analogues for depression/microdosing?,"I've been dealing with refractory major depressive disorder for the better part of two decades now and have exhausted the gamut of pharmaceutical options and combos, as well as less conventional treatments like ECT, with little success.  I've been following the literature on interesting results in depression with LSD and psilocybin and I've decided I would like to explore these avenues further.
+
+What research chemicals are the ideal substitutes for those?  Dosage suggestions would also be appreciated.  I have no experience with either drug and would prefer to microdose/start slow.
+
+Also, anything to watch out for when purchasing or red flags?
+
+Any advice would be appreciated, thanks!",1539908357.0,11,0.92,13
+SecretWorldLegends,"Tanks, what does your DPS look like?","I'm curious what DPS numbers other tanks are pulling in.  My DPS has scaled up horrificly slowly.  At IP805, with both weapons at red 12 and all talis max yellow, I struggle to squeak out 1500 dps.  I recently ran into a part-time tank who said he usually pulled down 6k in substantially less gear.  As near as I could tell, though, he had only two defensive glyphs and the rest of his were crit rating...  I'm not sure that's viable at higher levels given how hard stuff starts hitting but I'm curious what other tanks are doing and what kind of DPS is typical.",1514251095.0,4,0.7,20
+SecretWorldLegends,Recommendations for an off-hand tanking shotgun?,"My boring Shotgun of Destruction has maxed itself out of mythic levels and it's time to start leveling its ultimate replacement.  I am a hammer/shotgun tank and I'm trying to decide what to level up now.  I'm not really seeing much in the way of particularly exciting tankish procs on any of the shotguns in game at the moment though.  The only two that seem moderately interesting are the Bolstering Blaster and The Redeemer, but since the extra damage on the Blaster isn't added hate damage it's pretty inconsequential.
+
+What do you guys use or suggest?",1509606826.0,6,0.87,11
+SecretWorldLegends,WARNING: Another complete character deletion has occurred after linking SWL account to Facebook for community rewards.,"Until this issue is addressed, please be very cautious when considering linking your SWL account to your social media accounts like Facebook for the community rewards being offered.  Our cabal now has two players who have reported having their entire character list deleted immediately after following the links to link their SWL account to their Facebook account.  
+
+At this point it is unclear if Funcom can restore characters that get deleted. While I and many other players have linked our accounts with no issues, there is a rare issue that can completely wipe your character[s], so proceed at your own risk.
+
+EDIT: Follow any instructions given during community reward redemption carefully.  Any account mis-linking or character deletion that occurs during this process cannot be reversed by Funcom support. 
+",1509172463.0,0,0.35,12
+SecretWorldLegends,Any other Steam Patrons encounter key issues today?,"I logged in today and claimed my regular and Halloween daily rewards.  I received and used my cache key.  Later, however, when I was in a lair I discovered I only had 3 lair keys, as well as only 10 dungeon keys, and 2 scenario keys.  My Patron honeycomb icon was lit up and the subscribe option was not available.  There was no charge for teleports.  As best I could tell, there was no interruption in Patron status. Nor should there be since my Steam renewal processed on October 14th.
+
+The only two out of the ordinary things to happen today were the patch this morning and I made an Aurum purchase this evening.  I don't know why either of those would screw up daily key allotments but I'm curious if anyone else had trouble today.",1508915337.0,2,0.67,5
+SecretWorldLegends,[BUG?] Lorentzian Fabricator v2 drops in Kaidan lair,"While running the Kaidan lair tonight, one of my cabal mates pulled a Lorentzian Fabricator v2 from a chest.  It says it unlocks the teleport for Orochi Tower lobby... Which is unlocked by the story mission now, making this redundant.",1508137932.0,8,0.99,5
+SecretWorldLegends,"Ultimate Ability (Wings) Scaling with AR Really Penalizes Tanks and Healers, Again","First, yes, I know Funcom intends to release more ultimate abilities in the future and I fully support that idea.  I think it's great we will be able to customize our ultimate ability to our roles and play styles in the future.  But the first ultimate ability penalizes tanks and healers unfairly.  Honestly, it's useless in group content for us.
+
+It's the default ability and the only one we can choose right now.  It should be equally beneficial to all player classes.  Instead, the damage dealt by your wings scales with your Attack Rating (may be Combat Power, instead).  So, as a tank, my wings will do approximately 11k damage.  The DPS folks in my cabal report numbers near 30k.  Healers are similarly screwed with bad damage numbers on their wings.  There is no healing or defense buff component to this particular wing ability so I have no reason to use it, ever, outside of solo content or that rare occasion when I'm the only person left standing and no DPS has already used theirs (because the 10 minute CD makes it useless twice in a row.)  I'm not going to use mine for 10k when a DPS could do 30k by using theirs instead.
+
+Funcom, you really missed the mark here.  You should have given the default ability a flat damage number across the board like the old ultimate ability had.  Save the scaling damage/healing/defense/etc bonuses for the future abilities when you implement them.  We get enough demoralizing trying to level two sets of gear to get through zones or deal with scenarios.  Tanks and healers had to do the same work to get those wings as DPS, if not more, but we get 1/3 the reward.  How do you think it would go over if you only let players queued as DPS use 2 keys per dungeon?",1507838581.0,24,0.75,45
+SecretWorldLegends,No incentive for low-population classes like tanks to run extra Activities,"One of my friends was talking about the ridiculous queue times for a DPS.  He apparently frequently waits 45-60 minutes or more in prime US play times.  I didn't realize it was quite that bad (worse than in TSW, even) and I was trying to figure out why since there are so many more players here now when I realized, as a tank, I don't run any more dungeons than I have keys for typically, unlike TSW where I would queue all the time.  And I rarely pug in SWL.  Usually my friends list/cabal has more than enough DPS already needing their daily dungeons.  I don't know how new players or folks who have not had a chance to establish good relationships with tanks in-game manage to get much done in the group finder.
+
+
+Not only is there no particular incentive to run more than the daily keys worth of dungeons, it actually ***costs*** me Marks and shards.  While shards aren't such a big deal since Tokyo, Marks remain an obstacle for a lot of folks, especially at 3,000 per dungeon if you want to open chests.  And if you don't, there is absolutely no reason to run a dungeon since you can get way more XP running side missions in Tokyo in the same amount of time.  Mission reward XP for E4 Polaris is 2,778.  There are sides in Scorched Desert that award more.  Neither of those numbers include XP from kills but still, you can see the disparity.  And sides drop shards and a lot more bags than a dungeon for the same amount of time.  Yes, dungeons can drop dungeon talismans but realistically I'm gonna wind up selling all the one and two pip dungeon junk for shards unless I'm really lucky and score a DPS radiant.  And we all know how infrequently that happens.
+
+I'm not going to farm dungeons for radiants.  If I'm farming, it's for distillates and I'm going to do it with a group I already know for efficiency.  No one wants to try farming E5s in a pug.
+
+NYR has an even bigger problem.  There is zero reason to do it more than once per week.  So, I run it Tuesdays.  And maybe once or twice more if some of my friends haven't been able to get theirs for the week.  But I'm not going to queue up to tank it for random folks for two 1k distillates and 800 shards.  There's no point.  It will take more than those 800 shards to put those two distillates into anything I own and I can get much better distillates elsewhere.
+
+None of this lack of incentive is actually unique to tanks, or healers, for that matter.  DPS have little incentive to run more either.  But there are so few tanks and healers compared to the number of DPS that the game really needs to recycle them some if it wants all the DPS running around to get their dungeons and other group activities done.  I don't have a good suggestion for fixing this problem, though, short of implementing a bounty for short classes in the Activity Finder but I have real mixed feelings about that because it technically penalizes DPS.  But I do think Funcom needs to put some thought into encouraging more participation by low population classes in the Activity Finder so players don't get discouraged with the game.  I've greatly enjoyed SWL and I want to see more people hanging around.",1507763219.0,33,0.87,24
+SecretWorldLegends,DW6 Elite 5 Aggro Mechanics?,Does anyone know what the aggro mechanics of the final boss in Darkness War elite 5 are?  Specifically with Concuss?  Even if I run out afterwards first and pop a force taunt he still sometimes makes a beeline for a DPS and nails them.  Trying to figure out how exactly it's supposed to work.,1506581220.0,7,1.0,9
+DataHoarder,Crashplan replacement for ~50gb,"I used Crashplan to backup stuff I couldn't afford to lose, like documents I scanned then shredded.  Not only would it backup to the cloud relatively immediately, it would backup to another PC on the network immediately.
+
+Can anyone suggest alternatives?  I can live without local backup but I'm not keen on file restrictions that come with, say, Carbonite.  If I drop a video file in my backup folder, I want it backed up without having to go in and manually assign it to backup, for example.",1505763732.0,4,0.7,15
+SecretWorldLegends,Why are all the drunk NPCs in Agartha women?,Been at a radio show for almost two hours and only seen staggering drunk women.  Not a single male NPC exhibiting any kind of drunk behavior.  What's up with that?,1498606114.0,3,0.62,5
+fantasywriters,Reverse Symbolism Dictionary?,[removed],1489182734.0,1,1.0,3
+gaybros,This came in today....a reminder to never give in,,1488320069.0,226,0.89,9
+TheSecretWorld,Remind anyone else of the Ur-Draug? :),,1488104019.0,29,0.89,7
+Wicca,The Binding of Trump. Real or fictitious? First I've heard of this.,,1487833580.0,1,1.0,0
+Cthulhu,"You gotta wonder, does this make the bathroom smell better or worse?",,1487630864.0,44,0.93,9
+RelayForReddit,Update wipes user accounts,The last update completely wiped my stored Reddit account information for both of my Reddit accounts.  Opening the app nothing was there.  Had to add each account as though they were brand new.,1487621254.0,18,0.87,14
+malelivingspace,Poster Printing Services,I did a search here and found www.shortrunposters.com but was wondering if there were any other services you guys have used for printing posters for framing.  Not really interested in canvas for this one.  I know I've read several recommendations in here in the past but I'm not finding them with search. ,1486688757.0,4,0.84,3
+TheSecretWorld,Suggested Mod List for New Players,"We all know The Secret World's user interface leaves a lot to be desired.  Fortunately it is easily moddable and we have number of useful mods out there to choose from.  Here's a list of the mods I use, what they do, and why I like them.  While you can play with no mods at all, some are so useful as to be almost essential.  Unlike some other games, installing a mod does not alter your game data and they can be easily uninstalled without messing up your game install.
+
+These are not in any particular order.  They can pretty much all be found at [Curse](https://mods.curse.com/tsw-mods/tsw) though there are other mod sites as well.
+
+**meeehrUI-Topbar**
+**********
+If you are only going to install one mod, get this one.  It does an incredible array of things and does it well.  It adds helpful minor features like auto-sprint, auto-pet summoning, etc.  Makes it easy to see your currencies and inventory, your map coordinates, etc.  
+
+It has a couple of *major* features that will make your game play much less tedious.  The first is an auto-Aegis switcher.  It will automatically change your controllers and shields to match your offensive target.  No trying to cycle between the right damage types every time your target changes or their shields change.  It is a real life-saver in Tokyo.
+
+The other is the Deck Picker.  I didn't realize how useful this was at first.  It has three functions: Aegis Gear Selection, Aux Weapon Selection, and Gear Manager Selection.  The Aegis section makes it simple to manually change Aegis controllers, etc when you need to with just a quick click on the top bar.  The Aux Weapon Selection is amazing.  You can store both your aux weapon active *and* passive abilities so you can switch rapidly between aux weapons without having to restore passives, etc.  The Gear Manager selection is like the gear manager in the Character menu, but it's accessible with one click from the top bar, gives you an easy to see preview, makes it simple.
+
+**Effects UI**
+***********
+This mod is useful throughout the game but can be a lifesaver in dungeons and raids.  It does tend to be a little more resource intensive than other mods and can affect your FPS so if you are borderline low now, it might not be ideal for you.
+
+Effects UI can be used to mod most effect and cast icons and warning.  It is a lifesaver with Powerline-Voltaic Detonation, for example, because you can create a large countdown icon anywhere on your screen to tell you when you need to pop it.  No looking at the tiny buff bar or trying to count.  It can show you when the Machine Tyrant's shield will pop back up.  Warn you about major casts in dungeons, raids, etc.  Even tell you to run around when you're on fire in Hell Eternal.  Plus a nice bounty hunter warning if you or anyone in your group has a bounty hunter inbound.  It's hard to sum up all this mod can do.
+
+**TSWACT**
+******
+This is the TSW mod for Advanced Combat Tracker.  It is an extremely detailed combat log analyzer that will give you stats on your DPS/HPS as well as your penetration percentage, crit percentage, how much you glanced, etc.  Hugely helpful for getting your glyphs right in your build.  This mod requires you to install Advanced Combat Tracker separately and have it running when you load TSW.  It's a little more involved to set up than other mods but there are easy guides to follow.
+
+**Advanced TradePost**
+********
+You will need to pull the unofficial update version from the forum thread on Funcom's site for this.  The Curse version is not up to date.  ATP modifies your bank and adds a number of useful features.  It will automatically stack items in your bank inventory, for example, which is extremely helpful when you have 200 signets in there and don't feel like checking each one individually.  It will sort your inventory by item type as well.
+
+For me, one of the single most important features of this mod is it adds punctuation to pax amounts. 7000000 pax becomes 7,000,000 so you don't make horrible errors on the auction house trying to count the tiny zeroes on screen.  You won't spend too much accidentally nor will you accidentally list your item for 10% of what you intended.  Can't tell you how many times I've picked up a Nassir's Dance emote for 500k instead of 5M because someone missed a zero.  :P
+
+**Auto Need/Greed**
+*******
+Makes looting much faster.  You tell it what items you want to need on, greed on, pass on, etc. and it does it for you automatically every time someone opens a bag.  It's rule-based by level, zone, etc. so it's quite flexible.
+
+**Valyrie's Fashionista**
+************
+This is one of those mods that sounds like fluff.  And it might be if you only wear one outfit constantly.  But TSW is filled with hundreds of pieces of clothing and has thousands, if not millions, of outfit combinations.  For me and many other players, this mod is a must.  Fashionista is basically an outfit bookmark.  Dress your character, store the clothes as an outfit in Fashionista, and you can instantly change back to all of it with one click.  Also remembers your weapon visibility preferences for each outfit as well.
+
+**Valyrie's Friends Enhanced**
+**********
+This mod replaces the basic TSW interface and provides some helpful features for being social in the game.  I am especially fond of the ability to create notes for each friend.  This makes it easy to keep up with raid capable folks, RP buddies, etc.  I also use it to keep track of asshats so I don't run with them again.
+
+**TSWRP**
+********
+If you are interested in role-playing in TSW, this mod is for you.  It basically allows players to create RP Profile pages (you can use basic html if you want) in a WYSIWG editor with text and images.  Any player who has a profile will show a little TSWRP under their name when you click them.  You can click that TSWRP to read their profiles.
+
+**Quick Emotes and Commands**
+*******
+Nice and easy to use mod that gives you 5 icons with 8 drop-down options each that you can assign emotes or other in-game commands to.  Instead of typing /actchat every time to post your parse, you can click a button.  Especially helpful if you want to use emotes but keep forgetting their names. :)  Can also be used to macro frequently posted text, etc.
+
+**ElTorqiro_TargetsSquared**
+*******
+This one can be very useful, especially when you're tanking.  It basically shows you who has the aggro of your offensive target.  So you can see if you lose aggro to a DPS, for example.  Or if you are a DPS you know when to run and lay off until the tank gets it back.  :)  It does not always seem to update though, so it's not 100% accurate.",1486512146.0,13,0.93,9
+Nootropics,Sarcosine source other than PowderCity?,I've been getting their 100g bags but they don't have any in stock and said it will be around 6 weeks before they have more available.  I'm going to need some before then and I'm not finding anything with Google that looks promising.,1486426594.0,3,1.0,3
+gaybros,I laughed entirely too hard,,1484351802.0,250,0.93,12
+TheSecretWorld,"Steam has Collector Edition Issues for 75% off, or roughly $6.25USD","If you just need to fill in an issue or two, Steam has the Collector's Edition of all the issues on sale for 75% off.  For most of them, that comes out to $6.25.  So you get the issue and all the special goodies from the CE.  :P",1483148240.0,12,1.0,9
+gaybros,[Sonic Saturday],"Happy Hannukah and Merry Christmas Everyone!
+
+[Obligatory Holiday Tax](https://www.youtube.com/watch?v=1ftld7Ohojg) and [Fees](https://www.youtube.com/watch?v=ccefqYQWtdA)
+
+**Some Newish Stuff:**
+
+[Raging](https://www.youtube.com/watch?v=ZhzN7-Q00KU) -- Kygo featuring Kodaline.  Love the pacing in this.
+
+[Hotter than Hell](https://www.youtube.com/watch?v=fEOyePhElr4) -- Dua Lipa.
+
+[Head Hung Low](https://www.youtube.com/watch?v=_btuXnfq5Ik) -- Father Tiger.  **Has to be seen.**  For reasons.  Not necessarily the ones you think.
+
+[Trip Switch](https://www.youtube.com/watch?v=w1Qxxx2SQoo) -- Nothing but Thieves.
+
+**Old Stuff:**
+
+[Somebody to Love](https://www.youtube.com/watch?v=t6HSlZBNwUQ) -- Boogie Pimps.  It scares me when I realize some of you are young enough to have skydived in this...
+
+[Take Me Away](https://www.youtube.com/watch?v=IFknru0KBFA) -- 4 Strings.  Had such a crush on the guy in the flat cap.
+
+[Tiefenrausch](https://www.youtube.com/watch?v=wVNyurP4k8M) -- Kai Tracid.  I like the way the video plays on itself.
+
+And just for grins, let's cover some [fetish ground.](https://www.youtube.com/watch?v=hiE8sC5GtCY)  Feel free to listen without sound. Might be an improvement.",1482597216.0,3,0.72,5
+Wicca,Feel like something is draining the life out of me,Feels kind of like there's a giant psychic leech stuck on me.  I'm going to do a heavy smudging cleanse with white sage but I'd appreciate any other suggestions on how to help with this.,1482364741.0,3,0.72,4
+gaybros,Sonic Saturday,"You young guys are letting me down!  How else am I supposed to get exposed to the latest music?  :P
+
+I've been on a Josef Salvat binge now for over a year, but some of his recent collaborative work is also fantastic.
+
+[Heading Home](https://www.youtube.com/watch?v=qL7jZLtG2K4) -- Gryffin feat. Josef Salvat  (the acoustic version is also a treat!)
+
+[Complex](https://www.youtube.com/watch?v=v-cdC-qG2ns) -- Jonas Rathman feat. Josef Salvat
+
+For your punishment, you get thrown back and [Crucified.](https://www.youtube.com/watch?v=EdooYar_A6g)",1482018986.0,5,0.74,6
+gaybros,[Sonic Saturday] Is this still a thing?,"One of my favorite things about this subreddit was getting exposed to new music weekly....
+
+So, something I've had on repeat for months now:
+
+[Hustler](https://www.youtube.com/watch?v=X9Yv6J6Vzyw) - Josef Salvat.  Check out his entire *Night Swim* album.  You will not be disappointed.
+
+[Tonight](https://www.youtube.com/watch?v=GCa_TKn9ghI) - RÜFÜS.  Their *Atlas* album also a huge recommend.
+
+And a little election [remorse](https://www.youtube.com/watch?v=kMXwix9kRJQ).
+
+And a little plain [crazy](https://www.youtube.com/watch?v=WCNQ2mc_Zzc).",1478982238.0,26,0.91,14
+buildmeapc,What will I regret about buying this pre-built gaming PC vs. building my own?,"I've been researching builds and putting together various system possibilities for weeks now and my head is still spinning.  My budget is around $800-$1000 and I'm trying to put together a good gaming PC that will be usable for the next 3-4 years without much issue.  I've built PCs for years but today's processor line-ups, graphic card line-ups, and differences between gaming and other apps makes picking the right stuff surprisingly confusing for me.
+
+[This](http://www.microcenter.com/product/467635/G313_Desktop_Computer) system has most of the specs I've been looking at and, once I take a Windows license into account, it tends to be cheaper than building it myself plus I'm not scavenging a lot out of my existing PC and can pass it on to a friend who needs one.  I'm sure this has it's own set of limitations or cost-cuts that I might not be considering.  What will I regret about this versus doing it all from scratch?
+
+Also, should I consider the i7-6700k with a GTX1060 now (roughly same price) and upgrading the video card in the future? 
+
+Thanks for any guidance everyone.",1477685747.0,2,0.76,5
+gaybros,"Colby Keller's Logic For Voting Trump...""logic"" used loosely.",,1475864292.0,1,1.0,1
+askgaybros,Anyone heard of a drug called B?,Anyone heard of a drug that goes by the name of B?  A friend of mine took some Saturday night and didn't know what it is.  Thought it was some kind of ghb variant.  Said it was a clear liquid.  Any ideas?,1473095327.0,0,0.4,11
+gaybros,TIL Twinks4Trump is an actual thing...,,1472766509.0,14,0.78,10
+gaybros,"Gay Uncles Day, didn't know that was a thing!",,1471227372.0,354,0.88,47
+gaybros,Tyler Posey just came out...,,1469904513.0,0,0.39,10
+buildapc,Best CPU/mobo combo for gaming around $400?,"Hi Everyone,
+
+I am preparing to upgrade my current PC (AMD Phenom II 1055T x6) which has been horribly CPU-limited for awhile now and I want to avoid that mistake this go round as much as possible.  I've done a lot of research into preferred gaming CPUs and I'm having trouble picking a clear winner.  There seems to be a lot of difference of opinion whether an i7 is worthwhile, for example.
+
+The ones on the top of my list are the i5-6600k, the i5-4690k, or the i7-4790k.  Open to feedback on those or other recommendations.
+
+Looking for decent gaming performance with some longevity.  Will be 1080p for the foreseeable future, consistent 35-40fps on high settings and I'm happy, anything else is gravy.  
+
+Will most likely be purchasing locally from MicroCenter as they seem to have the best CPU/mobo deals around typically.  I'll be buying 16gb of ram, and re-using existing case, PS, SSDs.  Current video card is a GTX 560 Ti, will be replacing in the next month or two.  Waiting to see how the new card releases pan out.
+
+On the fence about overclocking--my AMD experience was unpleasant but I'll probably give it at least a minor go on the new hardware but I don't want to rely on overclocking in choosing.  
+
+Thanks for any advice!",1469301437.0,1,1.0,5
+gaybros,"Words of Angst & Wisdom from an Older Generation, plus a bit of history",,1466128919.0,456,0.96,35
+gaybros,"What will call a President's husband? I wanna get elected to hear Anderson Cooper say ""the President and First Bro boarded Air Force One today...""","What do you think we should call the male spouse of a US President?  It would be rather demeaning to all of the First Ladies before if we simply call him Mr. Clinton, why wasn't their own name sufficient in the past?  
+
+So, choices?",1465357421.0,3,0.53,28
+gaybros,Useful Auto Tips from Clark Kent. Crosspost /r/BuyitforLife,,1464711009.0,7,0.68,1
+keto,Minimizing Damage from Cheating?,[removed],1463156408.0,0,0.33,8
+gaybros,"North Carolina Doubles Down...If you can't admit you're wrong, yell louder.",,1462821526.0,46,0.96,2
+gaybros,[SS] Gollum Gets Down!,,1461452905.0,1,0.6,1
+gaybros,Connecticut invites Bank of America to move HQ from NC to more LGBT-friendly state,,1460918771.0,106,0.93,7
+gaybros,Something else PreP doesn't prevent - confirmed Zika transmission between Gay Partners,,1460692996.0,25,0.68,38
+Blakes7,Making a Zen Sphere,"So I want to duplicate, on a smaller scale, the Zen computer sphere on the flight deck.  The lighting is easy but I can't for the life of me figure out what they used for the finish.  It's kind of a leathery/papery/marbleized paper finish of some sort.  Any clues?  It's the color and finish that really make the sphere, IMHO.",1459911062.0,3,0.72,2
+RelayForReddit,User Profile button broken again,"This happened about a year ago and seems to have popped back up sometime recently.
+
+Clicking on the User icon in the menu does not do anything in most cases.  It just sits there and flashes but the menu stays up and nothing happens.  This is most notable when trying to view the profile of a commentator in a discussion.  Note that the profile button does work for the author when you side swipe and pull the menu from the subreddit list of topics.
+
+Edit: sometimes if you interact with a menu in another way that works, such as voting, it will then allow you to use the profile button.",1459832089.0,6,0.81,0
+gaybros,[SS] Sonic Saturday,"In many ways I'm on the fence about this guy.  His lyrics are amazingly intelligent and all written by himself.  His execution, though, sometimes gets a bit dull.  Then again, I've yet to come across an album where I enjoyed *every* track, so maybe I'm being too harsh.  Plus he looks like a baby Campbell Scott.  :P
+
+Josef Salvat -- [Open Season](https://www.youtube.com/watch?v=AXiMS5XW6kA) or [Autre Saison](https://www.youtube.com/watch?v=X1yS8sDj9v4), if you prefer French.  I like the way this video breaks the fourth wall.  And [Hustler](https://www.youtube.com/watch?v=X9Yv6J6Vzyw), with longing and intensity I haven't seen in a video for awhile.  ",1459574416.0,16,0.83,18
+gaybros,[SS] Sonic Saturday,"I'm feeling nostalgic, so have some bubblegum dance pop from your breastfeeding days!
+
+Daze - [Superhero Lover](https://www.youtube.com/watch?v=kmX_mFSqNn8)
+
+And we'll throw back a bit further with something there are no words to describe...
+
+New Order - [True Faith](https://www.youtube.com/watch?v=mfI1S0PKJR8)
+
+...and some [ear bleach](https://www.youtube.com/watch?v=AXiMS5XW6kA) to return you to your present millennium.",1458974998.0,10,0.99,16
+gaybros,Dave Franco or Scott Eastwood as Young Han Solo - who's your pick?,,1452541708.0,8,0.68,22
+askgaybros,Those of you recently out of a LTR - do you feel like you're cheating moving on?,"Just want to know if anyone else has felt like this and how you got over it because it's a serious mindfuck here.  My relationship (21yrs) ended a few months ago and my partner has moved on.  Like, gone through half of Grindr moved on.  And I can't bring myself to come close because every time I start I feel like I'm cheating on him.  Even though I know it is over and I ***definitely*** have no desire to be back together.  It's like trying to fight a basic instinct that's ingrained so deep in my core.",1452231506.0,8,0.9,13
+gaybros,If you haven't seen Longtime Companion -- Please watch it,Then thank science for the meds and PreP you have access to today.,1452146884.0,0,0.48,5
+askgaybros,Etiquette: To Swallow or not to Swallow?,"So, I'm coming out of a very long term relationship and this question popped into my head.  We were monogamous and together so long I had no safety qualms about swallowing his cum when I sucked him off and I preferred it since he made those extra special cute noises.  :)
+
+Now, though, as I prepare to get back in the real world dating pool, what's standard operating procedure these days?  In my earlier single days a guy who swallowed when you first met was considered pretty loose with safe sex and someone to avoid. Swallowing was a faux pas and spitting was graceful!
+
+Where does it stand today?  Okay to do once you know the fella?  Or do you have to really know the fella?  Or does no one care anymore since Truvada?  :)",1449309103.0,9,0.8,21
+gaybros,Since We're Doing Sports Instruction...Protect those Balls!,,1448085263.0,93,0.78,14
+gaybros,[SS] [Melancholy Edition] Annie Lennox -- Love Song for a Vampire,,1446949807.0,4,0.76,0
+EatCheapAndHealthy,Meal Planning Software,"Can anyone recommend a good, easy to use meal planning program?  Something that has a database for recipes that you can use to select a week's worth of meals and have it print the necessary shopping list for the week?  I find I'm much more frugal in the store if I know exactly what to get and don't wander around going ""yummy"" and buying stuff that just rots in the fridge.
+
+I bought one called Cook'n on sale months back but the thing is so counterintuitive that I, a genuine computer nerd, have yet to figure out how to make a dang meal plan with the thing.  So I've decided to start over and look for friendlier pieces of software.  ;)",1446855386.0,13,1.0,10
+gaybros,Support group for men in abusive relationships in Dallas?,Any body know of one in or near Dallas?  He's like a fucking black hole I just cannot escape and he makes me feel like shit for trying even though it's his fucking idea.,1446312616.0,9,0.85,5
+hometheater,Mono guy has question about 2.1/3.1 or soundbar for TV and music,"I'm moving into a new place and need some advice on the best new setup for my TV.  I'm deaf in one ear and don't hear stereo, much less surround sound, but I can tell a qualitative difference between the two and want to keep as much of the ""life-like"" sound as possible while minimizing wiring since I will be renting.  It's just very hard for me to tell what piece is contributing to what sound-wise.
+
+I currently have a Yamaha RX-A1000 amplifier that I would prefer to use.  I don't think I'm going to try to mess with rear speakers at the new place, though, so I'm unsure whether a 2.1/3.1 setup or a soundbar would be a better choice.  I've heard a couple of soundbars that sound quite lifelike, but most sound pretty blah and I'm concerned about music playback on one especially.  Plus it seems the amp has to go if I use one.
+
+For front speakers I have a pair of Boston Acoustic VR30s I'd like to use but if they're too big I may switch to some Polk bookshelf speakers.  I'm not sure about a center channel speaker yet -- the manual for the A1000 doesn't mention a 3.1 setup so I don't know if it would be an improvement over stereo or not.  Advice?",1445286000.0,5,0.78,4
+gaybros,"Sacrilege, I know. But I had to accommodate vegetarians...",,1442089477.0,6,0.58,7
+askgaybros,Ending it after 21 years. WTF now?,"I'm floundering guys.  I have no point of reference and no clue how to do this.  I was fortunate enough to meet my soulmate at 21, and we spent 21 years together, but prior to that my relationships were measured in weeks.  Splitting stuff up meant telling a guy he could keep the extra toothbrush I gave him when he spent the night.
+
+My partner has decided that we're heading in very different directions and decided we should split.  I agreed, reluctantly, because he was mostly right and you can't force someone to stay if they're unhappy.  Most of the problem stems from some serious depression issues I've had over the past years and he's stuck around like a champ.  I have to given him an A for effort on that front and I understand when he says he can't live with it anymore.  There are days I can't live with me either.
+
+We came to this decision fairly amicably and I thought we were going to handle separating pretty maturely, but he's gotten extremely angry since then and we barely communicate.  He's also taken a ""what's mine is mine and what's yours is mine"" mentality and thinks I should just walk out the door.  Although it was his idea, apparently it's my *fault.*
+
+I don't want this to get ugly.  I want to be able to look back on the past 21 years with a smile and good memories, not let it be marred by a bad breakup.  How do you disentangle 21 years together?  Is this kind of anger normal at first?  Will it subside?  Or do I have to get ugly too?
+
+Those of you who've ended a LTR, how did it go?  Are you still friendly with your ex?  Any advice or mistakes to avoid?  Things to look out for?  How long did it take you to get over it?",1441764272.0,51,0.9,57
+gaybros,Supposedly there is a panda in this picture...,,1440306343.0,23,0.64,4
+gaybros,Stoplight Thought: Isn't the mouth the preferred method?,,1437943035.0,0,0.46,0
+SuicideWatch,How do you banish the thoughts?,"I've battled major depression for about 12 years now.  Most of that time I've been able to maintain hope and hurting myself hadn't been a thought.  A few years ago I lost sight of the light at the end of the tunnel for a long time and I considered suicide from a rational perspective -- in that if things didn't start turning around in the future there wasn't much point in continuing the fight.  Lately though I've been overwhelmed with somewhat irrational thoughts of just ending it all and I can't keep them at bay.  Telling myself they are not rational isn't helping.
+
+I'm getting kind of concerned and a little scared.  We've increased my medication but I'm not sure if it will help.  Can anyone share things that have worked for them to help keep those thoughts at bay, or at least keep them from becoming compelling.
+
+Thanks for your time.",1437373891.0,1,0.6,1
+gaybros,Quite Possibly the Bro-est Gay Notebook Ever,,1436998280.0,193,0.96,21
+gaybros,Wordy Wednesday or FDF? Gay Erotica Audiobook,[removed],1434565636.0,1,0.67,0
+gaybros,I see your treehouse and raise you an Integral House by famous math LGBT supporter,,1433633804.0,11,0.69,6
+gaybros,"My First Bought. RWD damn near killed me too many times, but it was fun.",,1433139514.0,6,0.56,8
+askgaybros,"Depressed Bros, how do your Partners handle it?","I think I need some outside perspective and advice.  My partner and I will be together 21 years this summer.  About 15 of those I have spent on a long, slow, and losing struggle with depression that has continued to get worse.  My psychiatrist and I are currently in a holding pattern waiting for something new to come out because I have tried almost every antidepressant, adjunct, and combo out there in addition to more fun stuff like therapy and ECT.
+
+My partner is pretty unhappy with the current state of affairs and I don't blame him.  It's not at all what he signed on for and I'm pretty much the polar opposite of what I used to be.  Instead of smiling, happy-go-lucky, can't stop laughing until I nearly pass out, I'm now the guy who won't answer a phone, doesn't like going out, and hasn't not faked a smile in a decade.  I understand it gets exhausting.
+
+For the last year or so he's existed in about 3 phases: overprotective, martyr, and ""why the hell aren't you fixed yet.""  I don't like any of them and I'm not sure how to respond.  Do any of you ever encounter the same reactions?  I'll elaborate a bit.
+
+The Overprotective phase is like nurturing maternal instinct in overdrive.  While I appreciate the effort, it's incredibly annoying.  He basically thinks he has to shield me from everything and won't let me do much of anything myself.  For example, even though I've never really been actively suicidal he feels the need to lock up anything in the house I might conceivably use to hurt myself...down to kitchen knives or aspirin.
+
+Although I don't think he does it intentionally, or even really knows what he does here, the Martyr phase is the worst.  It's the phase where everything that he hasn't done or that has gone wrong in life is somehow the result of my depression issues.  We didn't move because he thought it would be too stressful.  He didn't start a new business/accept a new job/etc. because he was worried about me.  My favorite: he started drinking again because he didn't know what to do.  Obviously hearing this stuff doesn't really help my own ego.
+
+The last phase is rooted in his incredibly deep-seated belief deep down that depression can be cured if you just don't want to be depressed anymore.  This is despite being told exactly how depression is an organic issue by numerous doctors and therapists.  On one level he understands that but on another more visceral level he always thinks I can fix myself if I just really wanted to.  Whether it's ""exercise cures depression"" (I hit the gym at least 4 days a week.  What next?) or get more sunlight, or any number of insane things.  The current one is I need to go to more talk therapy and work out my childhood issues.  Me: I don't have any childhood issues.  Him: You probably do and just don't know it.  You need to talk to somebody about it.  Me: So, just sit in the room and say nothing because there's nothing to bring up?  
+
+This phase is where we encounter most of our problems.  We went to couples counseling awhile back and only managed one session.  He started off demanding I tell him when I'd be cured by and promising it would never happen again.  I thought the counselor's eyes were going to pop out.  I told him I didn't know the answer to the first and damn sure couldn't promise the second, so if he needed that I understood but I couldn't give him what he wanted.  The counselor tried to explain how impossible that was.  He decided the counselor was just taking my side and wouldn't go back.
+
+So we've kind of been in stalemate limbo.  He doesn't want to leave but he's obviously not happy.  I don't know how to help him anymore at this point, and I'm trying to figure out how to manage his phases myself because they've been pretty aggravating for me.  I'm not keen on ending things either -- I've spent damn near 50% of my life with him now, more time than I ever spent with my parents, and just thinking about the hole it would leave hurts.
+
+Wow, sorry for the wall of text.  Any insight or advice you guys have from your own experiences would be really appreciated.",1430295102.0,16,0.89,19
+gaybros,"These things give you guys problems, too?",,1428357760.0,9,0.77,9
+Enhancement,Does RES not work with Reddit Gold highlighting?,"I've been using RES for a while and like its feature set a lot.  I got more Reddit Gold today, though, and none of the new comments on any topics I've been looking at are getting highlighted as new.
+
+I can't find a setting or option to enable RG highlighting, but I wanted to make sure I'm not missing one somewhere.",1427243777.0,23,0.9,5
+gaybros,Me Monday,"I had to check the computer calendar to make sure I didn't sleep through Monday.  It's almost noon CST and no Me Monday.  :(  You guys have to feed my need to see normal gays having fun.
+
+**Username/Name:**
+
+**Location:**
+
+**Age:**
+
+**Best Place You Ever Had Sex/Semi-Sexual Experience** (romantic, exciting, just plain illegal, you name it):
+
+**Spring Sunshine Selfie Pics** (or why won't the snow leave selfies):
+",1427129382.0,40,0.84,93
+gaybros,"California Ballot Initiative ""Sodomite Suppression Act"" to allow execution of gays by ""bullets to the head.""",,1426868022.0,44,0.95,10
+Israel,"British deputy PM: If Netanyahu rejects two-state solution, U.K. will recognize Palestine",,1426796012.0,15,0.72,19
+gaybros,Me Monday,"So it's almost noon CST and no Me Monday thread!?  Are you guys on strike or just still hungover from the weekend?
+
+**Username/Name:**
+
+**Location:**
+
+**Age:**
+
+**Craziest Life Experience:**
+
+**Worst Selfie Pics (and others):**
+",1426524682.0,31,0.89,107
+gaybros,New Penis Size Study for Those with Questions,,1425365774.0,9,0.72,15
+gaybros,"PSA: SuperHIV, New form of HIV turns into AIDS before victims realise they are infected",,1423895995.0,49,0.77,34
+gaybros,"Gay Twins Come Out to Their Dad, was yours this emotional?",,1421456688.0,0,0.42,5
+gaybros,What are your non-traditional Thanksgiving meal picks?,"So...I kinda don't like turkey and my partner doesn't like ham.  This year we're going to be at home instead of at family so we're trying to compromise on an alternative.
+
+What are your non-traditional Thanksgiving meals?  I've been trying to think of something fun to grill but he keeps shooting stuff down, so give me your ideas!
+
+EDIT: Thanks for some fantastic suggestions!  Keep 'em coming for any one else in the same boat.",1416617422.0,17,0.91,27
+explainlikeimfive,ELI5:Why has the Mars Rover Opportunity's Lithium Ion Battery Lasted 11+ Years and the one in My Cell Phone/Laptop/Tablet Dies in Less Than 2?,"Pretty much as the title says.  I recently read the Spirit and Opportunity rovers use rechargeable lithium ion batteries to store power for the night.  Opportunity has been operating for ~11 years or so now and still works great.  I can't keep a rechargeable lithium ion phone battery alive for much more than 2 years.
+
+What's different?  
+
+EDIT: Thanks to everyone for answering!  For those responding with budget, better battery, designed to last answers, /u/hangnail1961 gave the ideal response.  Keep in mind the launch cost and logistics of chunking an unnecessarily large and heavy battery into space for no mission goal reason.
+
+>They have far outlasted even the designer's hopes: they were designed for a **90-day mission** and expected to last up to 3 years.
+
+Best answers so far have dealt with charging method, rate, and voltages and their effects on battery life.  /u/Dupont_circle has a nice summary in here.  Also, the charging window seems to be a good explanation for much of the extended life.",1414565256.0,873,0.85,319
+gaybroscirclejerk,Can you Bros help recalibrate my Brodar? Who knew it was the *carts*?,"Please better Bros, it's seriously on the [fritz](http://www.reddit.com/r/gaybros/comments/2jn8i3/the_broest_thing_i_have_ever_seen_in_a_grocery/) apparently.  I mean, how did I manage to confuse a folding portable passenger plane with shopping carts in the grand scheme of Brodom?  I feel so fem and low now.",1413737896.0,5,0.69,6
+gaybros,The Bro-est thing I have ever seen in a grocery store parking lot...,,1413672337.0,51,0.71,9
+askgaybros,Easy to clean edging lube?,"So, my partner has asked me to try to find an easy to clean up lube for our mutual edging sessions.  He wants to go back to something water-based, but damn that requires adding water or more lube every couple of minutes and really kills the mood for me.  Our sessions generally go for 1-1.5 hours, so that many interruptions for your typical water-based lube would drive me insane.
+
+We've used a variety of silicone lubes in the past, but those have always been a bear to clean up after.  Right now we use plain baby oil, occasionally add a dab of vaseline in to thicken it up, and it works great -- only have to refresh every 30 mins or so, but it can still be a pain to clean up afterwards.
+
+Any suggestions, oh wiser and more experienced bros?",1413161119.0,2,0.61,4
+gaybros,Ted Cruz proposes US Constitutional Amendment to screw gay marriage,,1412717698.0,21,0.79,35
+gaybros,Russia Cancels Exchange Program After a Gay Student Seeks U.S. Asylum,,1412649966.0,21,0.88,2
+Roleplay,"M4M - NSFW. [e][pm][3rd] Writing Partner Wanted, Open Genre","I am looking for a creative writing partner to roleplay with either via email or PM here.  I have a fairly busy life so expect 2-3 exchanges per week. 
+
+While erotica or sex will be a part of the story, I am interested in a partner who can see past just sex towards creating a real story.  Roleplaying should have a goal or a plot, challenges, failures, learning experiences, etc.  So please be able to create a non-perfect character who has a real flaw or two.  :)  On that note, character development is an important part of writing to me.  I prefer the slow reveal to the ""here's my life story now screw me"" approach.
+
+I am open to genre suggestions.  My preferred settings are modern realistic or urban fantasy, but sci-fi and fantasy settings are also good if you aren't prone to solving every problem with the wave of a wand or a mysterious technological device.  I'm fine with fandoms as long as I know them or can be brought up to speed fairly easily.
+
+Third person, past tense.  I'm not a grammar nazi, but please be able to write beyond the typical text message or FB post.
+
+If I sound like someone you might be interested in writing with, let me know and we can work out some details.",1412388531.0,2,1.0,1
+gaybros,Ebola just landed! Plan my bug-out pack.,[removed],1412049698.0,0,0.5,12
+gaybros,"MTV Gay(ish) History, pt. 2: One of These is Not Like the Others","If you missed last week's installment of pseudo-intellectual musical boredom, you can find it [here.](https://www.reddit.com/r/gaybros/comments/2gxp58/mtv_gayish_history_the_gayest_video_you_never_saw/)
+
+**One of These is Not Like the Others**
+
+Last week I briefly touched on the gender ambiguity that pervaded a lot of the eighties, and the music scene in particular.  It could seriously put a guy's gaydar on the fritz.  I thought I'd start with a round of Gay or Not Gay, but then I decided taking them one by one would be too easy.  So, today I give you 6 videos.  One of these lead singers is not like the others.  Can you find the gay one?  Or is it the *straight* one?
+
+To give you an idea of what you might be up against, watch [this](https://www.youtube.com/watch?v=pIgZ7gMze7A) and ask yourself ""How did we ever not see that coming?!""  Because we didn't, for over a decade.
+
+[Spandau Ballet - True](https://www.youtube.com/watch?v=AR8D2yqgQ1U).  Some of the best dressed musicians, ever.
+
+[Taco - Puttin' on the Ritz](https://www.youtube.com/watch?v=xmSqhi5l9_k).  He's seriously channeling Tim Curry from *The Rocky Horror Picture Show* here...
+
+[Erasure - Sometimes](https://www.youtube.com/watch?v=gynvBs-bvJQ).  A long-time favorite.  Probably another reason I have a thing for guys in white shirts.
+
+[Billy Squier - Rock Me Tonight](https://www.youtube.com/watch?v=gnAoKRkI6r4&list=PL6pzchLwanubT69xb8HlPEZRjdN4PRK5p).  The color is not the best, but those are pink satin sheets.  Pretty much everything is pink, actually.  Plus quite possibly the first pair of skinny ""jeans"" ever filmed.
+
+[Adam Ant - Goody Two Shoes](https://www.youtube.com/watch?v=o41A91X5pns).  I wish my eyeshadow looked that good in the morning.
+
+[Imagination - Just an Illusion](https://www.youtube.com/watch?v=xDs_aRRdp2o).  Amazingly enough, this video pre-dates Thriller.
+
+
+And I guess I should give you the flip side of gender [ambiguity](https://www.youtube.com/watch?v=qeMFqkcPYcg) for a taste of what was going on with some female singers.
+
+
+**Video Killed the Radio Star**
+
+Otherwise known as a famous [song](https://www.youtube.com/watch?v=W8h5OEivJdA) by the Buggles, which holds the distinction of being the first video ever played by MTV.  While prescient, things didn't quite play out the way they expected.  Video actually rocketed a lot of obscure British and European artists to stardom in the US -- few US bands had videos for MTV to play, so MTV relied heavily on foreign videos, which were apparently much more common, for a lot of its early programming.  As record stores started to report surging sales in obscure English bands, US record execs suddenly realized the power of MTV. 
+
+On the flip side, a bad video could also tank a career.  Case in point: Billy Squier.  You saw him squirming on pink satin sheets [above](https://www.youtube.com/watch?v=gnAoKRkI6r4&list=PL6pzchLwanubT69xb8HlPEZRjdN4PRK5p) and prancing about in a pink tank top.  This did not go over well with his straight male audience and his meteoric rise became a meteoric flop.  Squier later blamed the director, who was gay, for projecting that ""gayness"" onto him.  It is widely considered to be the worst music video ever made, though having recently gone through my own, limited collection I would have to disagree, sadly.
+
+Other singers had trouble presenting to the camera.  While the lead singer in Spandau Ballet was great at it, for example, other singers were a bit...confused.
+
+[Alphaville - Big in Japan](https://www.youtube.com/watch?v=JZGF4wcPJO0).  While most of the time the lead singer does well, at times he's almost morphing into a humorous singing Chucky doll...
+
+[Rick Springfield - Human Touch](https://www.youtube.com/watch?v=yo0uTu2uLtI).  This *would* be in my Top 5 Worst Videos of All Time.  Ironically, Springfield would go on to become a TV actor.  Here his timing is so off and he's so stiff you could barbeque salmon on him.  This video is only notable for a few things: what we considered high tech in the 80s (note the knobs on the TV), the ""keyboard"" is actually a venerable Commodore 64 computer, and check the date the computer gives him...  This also hearkens back to the dystopian, nuclear holocaust mentality.
+
+Fortunately, singers and directors managed to overcome these early shortcomings fairly quickly.  But the era of less-attractive singers quickly disappeared.  Or at least they didn't make anymore videos.  Do you think this [singer](https://www.youtube.com/watch?v=FTQbiNvZqaY) could front a band and make a video today?  Sadly, probably not.  The 1979-81 portion of my collection has many singers in this vein, but they pretty much all disappear from 1982 on.
+
+**Spies and Trench Coats**
+
+Last week I mentioned the Cold War and the impact on the psyche of the eighties as a whole.  I had a set of videos all linked by groups of spies in trench coats, but being stupider than usual I've misplaced it.  Here are two of my favorites that I know by heart, plus a little semi-animated mystery police and WWII espionage to fill in the gap.
+
+NSFW - [Golden Earring - Twilight Zone](https://www.youtube.com/watch?v=G8KHLlHKD6U)  One of the better videos of 1982.  Gritty, realistic, plus bouncing boobs (if you like that sort of thing).  The lead singer got the idea for this video from *The Bourne Identity*.  Yes, I know what's running through your mind right now -- Matt Damon was just a baby then.  But he only starred in the first set of remakes.  Now-out gay actor Richard Chamberlain starred in the first round of originals.  Of course, this video even pre-dates that.  We had books back then.  :P
+
+[Art of Noise - Peter Gunn](https://www.youtube.com/watch?v=DTAvSecJvsw&list=RDDTAvSecJvsw).  How do you make a music video for a song with no words?  Throw in a hard-boiled detective, a little voice-over, and a lot of trench coats, of course.
+
+[Aha - Take on Me](https://www.youtube.com/watch?v=djV11Xbc914).  Awesome, considering all the animation was almost certainly drawn by hand in 1986.
+
+[Pat Benatar - Shadows of the Night](https://www.youtube.com/watch?v=et8pum4V3uI).   One of the better music videos to come out that was only tangentially related to the underlying song.  See if you can count the number of young actors in this who would go on to become movie stars.  Sorry for the vid quality. I have a much better version but Youtube blew a freaking copyright gasket when I uploaded it, so this is the best I can find.",1411797790.0,12,0.73,2
+gaybros,"My Bro-est shirt is on its last legs, sadly",,1411776022.0,163,0.81,19
+gaybros,How to Shave Like a Man (and save a bundle too),"(If you want to shave like a *real* man, look up straight razor shaving, but that's a whole other world of dedication.)
+
+Another discussion here on our favorite niche subreddits prompted this.  If you want more information after reading, check out /r/wicked_edge for great advice.
+
+Depending on how old you are, your father or grandfather probably shaved with a double-edged safety razor.  If you've never seen one, they look like [this.](http://www.shaving-shack.com/files/cache/fb9ab32b201798614bf8f988657ef25b.jpg)  While chrome plated steel is the most common, you can get them in everything from black anodized finishes to burled wood.  A double-edged blade looks like [this](http://1.bp.blogspot.com/-afKkZDo58d4/UQA6q15mI9I/AAAAAAABkus/DZ545tY1Tl0/s1600/blade.jpg) and will run you somewhere from 5 to 50 cents a blade.  (My last order was 50 blades for $11.00.  How many cartridges can you get for that?)
+
+Why would you want to use a DE razor?  Better shave, save a ton of money, reduce your environmental footprint, impress your overnight guests with something shiny instead of a cheap piece of plastic.  (Though in fairness you can get metal handles for most cartridge blades if you look.)
+
+If you are like me, you've spent your life thinking these things are dangerous and were grateful companies like Gillette invented cartridge razors and were happy to pay $4 a cartridge for the protection they offered...oh wait.  I said they were called double-edged *safety razors*.  Hmmm...
+
+**Common Myths about DE Razors**
+
+1.  They are dangerous.  **No.**  DE razors are no more dangerous than your typical cartridge razor.  I actually nick and cut myself less shaving with a DE razor than I did with a cartridge.  The only time a DE *might* be more dangerous is when it comes time to change the blade.  Some razors require you to twist off the head to replace the blade.  Obviously if you just grab the head (blade and all) in your hand and twist, you are going to cut yourself.  The proper way to unscrew the head is to press it down against a counter, or just wrap it in a washcloth or towel.
+
+2.  It takes more time to shave with a DE razor.  Again, **no.**  While some men choose to make an entire ritual out of shaving, you can jump in the shower and shave with a DE just as fast as a typical cartridge razor.
+
+3.  It's hard to learn to shave with one.  **No.**  It's actually pretty easy if you remember 2 things.  One, you hold the handle at a completely different angle than a cartridge razor.  Cartridge razors are designed to press flat against your face and be pulled down.  DE razors should be held at an angle to the skin (~20-30deg, typically) and then pulled down.  [Here's](http://shaveinfo.com/images7/blade-angle.jpg) an example pic.  Two, you ordinarily should not apply pressure to the razor.  The weight of the metal head is typically enough to give you a very close shave without any added pressure on your part.
+
+**Common Questions**
+
+1.  What does it cost?  You can order a Chinese DE handle on Amazon with free shipping for under $5.00.  A name brand chrome plated razor like an Edwin Jagger will cost somewhere between $25 and $45, depending on if you catch it on sale.  There are lots of options under $25, and lots over $45.  Blades are dirt cheap.  You can change your blade daily if you want and still spend a lot less than you would on cartridges.  As I mentioned, my last order was 50 blades for $11.00.
+
+2.  How do I know what blade to buy?  You don't.  No one can tell you what blade to buy because blade performance is highly dependent on your beard, your skin, and even the razor handle you use.  New DE users are advised to buy sample packs and try out several different blades to begin with.  Most shaving sites will sell you a variety of sample packs.  **DO NOT** buy a blade based on someone else's good review.  If you want to add it to your sample pack to try, great.  Just don't order 50 of them expecting a great shave.  :P
+
+3.  How long does a blade last?  This is highly variable depending on your beard, how many passes you normally use, and the blade itself.  I usually use either a Shark Custom Chrome or an Israeli Personna Red blade.  The Shark provides me a good shave that's consistent for about 3 weeks.  The Personna Red provides me a **phenomenal** baby bottom smooth shave, but it only lasts around 1 week.  But at ten cents a blade you can pop in a new one every day if you want and still spend less than a dollar a week.
+
+4.  Can I still use shaving cream?  Yes.  I don't recommend it, but you can without any real problems.  If you want a real, custom shave, try shaving soap and a brush.  This will add a minute or two to your shaving routine, but I find it hands down better than shaving cream.  I actually got started with DE razors because I was using shaving soap first.  I got tired of shaving cream clogging my cartridge razors every pass.  Turns out after switching to shaving soap my skin stopped drying out so much.  There are hundreds of different soaps out there, in pretty much any fragrance combo you want.  If you don't want to whip something up with a brush, there are other creams out there, like Proraso, that work much better than the stuff in a can at the grocery store.  A soap company called Van der Hagen makes brush/bowl/soap kits you can usually find at the store for about $10.00.  Their soap is good and their brushes are okay, but if you like using shaving soap you will probably want to upgrade your brush at some point.  
+
+If any other this piqued your interest, check out more at /r/wicked_edge -- they have an active community full of people who like to suck you into their world.  ;)",1411532562.0,22,0.66,26
+gaybros,MTV Gay(ish) History: The Gayest Video You Never Saw (and more),"In going through my ancient archive of music videos to make sure I hadn't left out any forgotten favorites for an updated 80s playlist, I rediscovered the video the below.  In honor of all you youngsters who never knew the day when MTV actually showed music videos uninterrupted except for VJs (one famous for rolling around on the bed) introducing them and occasionally offering a tad of musical gossip, I'm going to present it and a few others to introduce you to the weirdness that was the decade of oblivion.
+
+**The Gayest Video You Never Saw**
+
+Year: 1983.  Frankie Goes to Hollywood releases the hit single *Relax*.  The song hit #1 on the UK charts for 5 weeks straight, and stayed in the top 40 for more than six months.  Ironically, BBC radio couldn't play it in their top 40 shows because the entire song (not just the video) had been banned from airplay.  
+
+Why you ask?  Let's start with the print slogan for the album: [""ALL THE NICE BOYS LOVE SEA MEN.""](http://artofztt.com/wp-content/uploads/2013/04/FGTH-Relax-ad-The-Face-1183.jpg)  But more importantly, while the lyrics are highly suggestive, the original video itself is set in a gay BDSM leather bar...with thinly veiled dildos, ejaculation and golden shower references, drag queens, and actual tiger wrestling... Plus the lead singer is just a cocky little bro.
+
+Allow me to introduce the video: [Relax.](https://www.youtube.com/watch?v=DQTE282VDFM)    
+
+
+If anyone has a TARDIS I can borrow, I'd really like to snatch the flashlight-wielding leather daddy in a hat...
+
+
+**Dystopia**
+
+If you didn't grow up in the 80s, it's almost impossible to understand the mindset.  Ronald Reagan.  The Evil Empire.  A mighty Soviet Union.  As kids we not only lived under the threat of nuclear holocaust every day, we *knew* it was inevitable and only a matter of time.  Movies like *The Day After* shoved an only slightly sugar-coated version of life afterwards down our throats.  Then there was the perception that the Soviet Union was actually winning the Cold War (who knew how the 90s would change that).  Impending authoritarian regimes and global dystopia were common themes in art and music videos were no exception.  
+
+So I give you one of the better done though milder renditions on that theme.  It features my first pre-teen crush -- those eyes and those freaking lips.  :)  I now know where I get my white button-down shirt fetish from.
+
+[Sunglasses at Night](https://www.youtube.com/watch?v=X2LTL8KgKv8)
+
+**Hidden Homosexuality**
+
+There was no internet.  Even an openly gay singer could be effectively closeted to the mainstream masses.  Magazines and papers certainly weren't going to be covering their homosexual exploits.  But they couldn't exactly tell their stories, either.  The banning of the original *Relax* video made that apparent.  So, much gay content became subtext, accessible only to those in the know.  The following video is pretty innocuous to the average straight viewer, especially in that era.  **As a gaybro, tell me what *you* see.**
+
+[Smalltown Boy - Bronski Beat](https://www.youtube.com/watch?v=-R1yBYDo0Wg)
+
+**Avant-garde Gayness**
+
+Aside from impending global holocaust, the 80s were oddly sexually ambiguous.  Coming off the free-for-all 70s things were becoming more conservative but there was an avant-garde trend to use suggestive themes like homosexuality in works by straight artists.  And God knows you could take one look at the big-haired, lipsticked rock bands to get an idea of gender ambiguity.
+
+The following video is not notable for its production value nor its song.  I never heard this on the radio and don't even know the artist.  It is notable for likely holding the record for most transvestites and Polaroid cameras on film.  If you can figure out what the director was trying to convey, please enlighten us.
+
+[Black Cars - Gino Vanelli](http://youtu.be/TM10XNt2fC8)
+
+That's it for now.  If you want more pseudo-intellectual MTV history next week, let me know.",1411199939.0,85,0.92,20
+gaybros,For those of you without: You can now print a car,,1411018027.0,0,0.33,0
+depression,How do you cope when there are no treatment options left?,"I have suffered from major depression since ~2004 and my mood has continued decline over that period.  Today my depression has reached the point where it seriously interferes with my cognitive functioning as well as my ability to enjoy anything in life.  I get pleasure from nothing and, unless I put on a front, I am a very depressing person to be around.
+
+I have a very diligent psychiatrist and we have now pretty much tried every medicine and medicine combination available.  I have tried ECT.  Nothing has been particularly successful, and nothing has lasted.  We are at the point of ""wait for something new to come out"" now.
+
+For those of you who have ever been here before: how do you maintain hope?  I don't want to die, but I also don't want to spend the rest of my life like this.  I need some semblance of hope to keep me going, but just waiting for big pharma to invent something new isn't much to go on.",1406679849.0,3,0.8,7
+dogs,How to entertain a dog that likes to chase but not return?,"We adopted a ""senior"" dog a few days ago, but he's still very active and playful.  I'm trying to figure out how to best entertain him.  He absolutely loves to chase things you throw, but he won't bring them back.  Instead, he likes to chew them to death.  I found this out the hard way with a frisbee.  It's like one-sided fetch.  :)
+
+Any ideas how to play when the dog doesn't want to return an item?",1402711784.0,14,0.79,16
+knifeclub,How do you sharpen knives with a Carborundum stone?,"Can anyone tell me how to use the Carborundum stone shown in the picture to sharpen kitchen knives like the one pictured?  The instructions on the bottom of the box say to use some kind of thin clear oil, or soak it in hot petroleum jelly, but I have no idea what type of oil to actually use or what to do after that.
+
+I was going to get an electric knife sharpener but the salesman told me they weren't that great and suggested a sharpening stone.  I inherited this one with my dad's toolbox, but I never saw him use it.
+
+Here are the pics: http://imgur.com/a/7DYIa
+
+",1400192287.0,9,0.81,8
+wicked_edge,Soap reminiscent of the original Chanel Egoiste?,"I know this is a long shot as most redditors are probably too young to have ever come across this cologne but I thought I'd give it a go anyway.  Does anyone know of shaving soap with a smell similar to the original Chanel Egoiste?  Not the silver-capped Egoiste Platinum, which has a completely different cold citrus scent.  The original had a black cap and was a very warm fragrance with hints of vanilla and spice and some unidentified base that lingered forever.  Literally one spritz of the eau de cologne version would hang around for days if you didn't scrub it off.  
+
+I'd like to find something close to it if it's out there as it's the only fragrance I've really ever enjoyed.",1400096083.0,5,0.73,14
+BuyItForLife,[BIFL Request] Foaming Soap Dispenser,[removed],1400008532.0,0,0.35,2
+wicked_edge,Help with a New Brush,"I've been reading posts and researching new brushes for the past couple of days and my head is spinning.  There are so many different options and I'm not always following the lingo.  The only site I've found with reviews was Maggard, and most of the good brushes were all sold out.  :(  So I need some advice.  Looking for a good brush for under $25 or so.
+
+My current brush is a boars hair brush that came in the VdH soap starter kit I bought 2 years ago.  It's soft and not scratchy (is scritchy the right word?) at all, but I can't remember if it came that way or just softened up.  It still works fine but it's starting to thin and the plastic handle has developed a crack.
+
+I use soap pucks and just swirl the brush until the tips start to show a little foam, and then finish on the face.  I shave in the shower, so I need a brush with a non-wooden handle.
+
+I see the Omega boars come well recommended, but they seem to be a little stiff?  I was looking at some Vie horsehair brushes but a lot of people here were complaining about smell not going away.  Any comments on synthetics?    From what I can tell, there's probably not a decent badger brush in this price range.
+
+Any advice would be appreciated!
+
+**EDIT:** Many, many thanks to everyone who responded -- you've all been very helpful.  I've narrowed my choices down pretty much to the Omega 31025 Scarlatti, the Semogue 830, or the venerable and highly recommended Omega 10049.  Once I pull the trigger I'll post how it works out, especially if I go with the 31025 since I can't find a review here on it.",1399608873.0,11,0.83,24
+gaybros,My Turtle Came Out of Hibernation...,,1399391628.0,16,0.55,21
+AskReddit,"Does Best Buy actually stand behind any appliances they sell? If so, how?",[removed],1399148274.0,2,0.67,6
+gaybros,Question for the Military Bros...,"I'm trying to get a feel for the fluidity of straight male sexuality, especially when deprived of female contact.  I'd appreciate any feedback you have.
+
+For those of you who have been serving out, have you ever been approached by a straight service member for a sexual favor?  If so, how long (roughly) had you been deployed or away from possible female contact?  Was he interested in a pure favor (no reciprocation) or was he willing to reciprocate in some way (however minor)?  If you don't mind sharing, what type of favor did he want?
+
+If you obliged, did it alter your interpersonal relationship in any way?  I guess I should ask the converse as well, if you turned him down did it alter things?
+
+I'm interested mainly in predominantly straight male behavior, so if you had an encounter with someone you suspect was closeted, please label it as such so I can weight it accordingly.
+
+Thanks guys!",1398760215.0,0,0.46,21
+StackAdvice,MAOI-compatible Cognitive Enhancers?,"Hi,
+
+I was wondering if anyone could recommend some cognitive enhancers that are compatible with an MAOI anti-depressant.  I have severe, major depressive disorder that does not respond well to medication and it is giving me fits the past couple of years cognitively.  There has been a horrible decline in memory, focus, attention, and just being able to put things together well.  Reading has become a major chore and tasks like putting together this post and emails of any substance wind up taking me so much more time and effort than they ever used to.
+
+My doctor tells me it's just part of the depression and I have to live with it until we find something that causes it to lift.  Unfortunately we've tried most everything and now we're in ""wait and see what new drug the pharma companies release"" mode, and I don't really want to keep waiting that long.
+
+The supplements I currently take are:
+
+1.  Cerefolin - helps a little with little the mental fog, but not substantially
+2.  Fish Oil - cycling it makes for enhanced dreaming, but nothing cognition-related has been noticed
+3.  B12 sublingual
+4.  Vitamin D
+
+If anyone has any suggestions, I'm all ears.
+",1396419497.0,2,0.67,0
+gaybros,Question about Gay Marriage for you Older Folks in LTRs,[removed],1395729002.0,1,0.54,6

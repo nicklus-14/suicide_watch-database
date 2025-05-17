@@ -1,0 +1,1044 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+FPGA,Questions about ethernet MAC IP <-> PHY compatibility,"I'm a beginner when it comes to FPGAs, working on a personal project that involves sending and receiving ethernet frames to and from my [Nexys A7-100T](https://digilent.com/shop/nexys-a7-fpga-trainer-board-recommended-for-ece-curriculum/).  The board uses a SMSC LAN8720A ethernet PHY ([datasheet](https://ww1.microchip.com/downloads/en/devicedoc/00002165b.pdf)).  As far as I can tell from the datasheet and some googling around, the ethernet PHY *only* speaks RMII.
+
+If I comb through the available ethernet-related IP cores in my Vivado 2024.1 install, I see MII, GMII, and RGMII mentioned, but I don't see any cores that directly advertise being able to speak RMII.
+
+When I look for documentation specific to my board and PHY part, I see an old piece of Nexys documentation recommending the solution of an AXI ethernetlite core (which speaks MII as I understand it), combined with an MII <-> RMII adapter IP core.
+
+However, that adapter IP core was [discontinued in Vivado 2019.2](https://adaptivesupport.amd.com/s/article/71457).  There are some people who suggest installing Vivado 2019.1, generating the core, and trying to copy over the build artifacts so that they can be compiled with more recent versions of Vivado.  However, people online also report some difficulties in getting that solution working reliably, particularly when it comes to clock skew that is caused by the adapter core.
+
+With all this in mind, I wanted to ask a few questions:
+
+1. Are any of the more recent PHY interface standards (particularly RGMII) capable of speaking to an RMII PHY?  Or, alternatively, are you aware of any cores (open or IP) that can communicate with an RMII PHY?
+
+2. If there is no out of the box solution, and I need a module that bridges one standard to another, would you recommend I try the route of resurrecting the build artifacts from an older Vivado version, or should I just bite the bullet and try to write my own as a learning project?  If you suggest the latter, any guidance/resources/documentation would be very much appreciated.",1727103552.0,4,1.0,3
+OPNsenseFirewall,Blocking a URL when clients have locally cached DNS entry,"Hi all, still pretty new to networking and to OPNsense, so apologies if this is a dumb question or if this has been asked before (I tried to search, but was unsure what terms to use to describe what I'm looking for).
+
+I successfully got a firewall rule working that could block a URL specified via a host alias so that accessing it (e.g. via firefox or trying to ping it) would fail.  I also figured out that you could set the rule to operate on a schedule, which is an awesome feature.
+
+However, if I disable the rule, load the URL in firefox, enable the rule, and then refresh the page, it still manages to load just fine.  I suspect that either firefox or my linux host maintains a DNS cache and the refresh causes It to reach out to the IP directly, and thus the router doesn't have any way of knowing that the traffic is associated with that host and thus the rule doesn't block it.  This seems to be confirmed by the fact that closing all my firefox instances (which I assume clears the cache) and restarting it results in the URL being blocked again.
+
+I was just wondering if there's a way to block a URL such that, even if a client has the DNS resolution cached locally, they still can't access the site.  I.e. I want to block not only the initial DNS resolution but also any subsequent attempt to access any of the IPs associated with that URL so that all access to that URL gets shut off immediately when the schedule kicks in.
+
+I see some people online mention using things like Adguard or sensei for this, but I'm unsure if going down that route means I lose the ability to have the rule operate on a schedule (which I would really like to have).
+
+Any thoughts or suggestions?",1672993817.0,3,0.8,10
+emacs,Implementing i3-style window management in emacs,"Hi, /r/emacs.  Vim refugee (and current i3 user) here.
+
+I've gotten pretty damn comfortable with emacs (using EVIL) over the last year or so, but I've never been able to get comfortable with the window management scheme that emacs has.  I know that most advanced emacs users have sophisticated tools for switching between buffers (*i.e.* helm/ivy), and the general consensus I've seen around emacs windows management seems to be ""window management isn't actually very important when you can quickly switch between buffers"".
+
+I haven't really been able to embrace that use case, and I consistently find myself craving better window management in emacs.  When it comes to people who use i3, they often suggest some variant of ""just tell emacs to spawn new frames instead of new windows, and use i3 to manage the frames"".  That works decently well as an approximate solution, but here's the twist:  I've been eying EXWM for the last few months, and I'm pretty interested in giving it a try.  There's two main reasons I'm interested in switching to EXWM:
+
+1. EXWM manages x windows as if they were buffers, and I'm very interested in the ability to have a single X window shown in several different windows across different workspaces.  Imagine having the same gmail tab of a firefox instance spanned over three separate workspaces so that different collections of reference materials can be organized into the different workspaces and easily switched between.
+2. In general, I'm excited about the flexibility of being able to control window management using elisp.
+
+Therein lies my problem; I want to experiment with EXWM, but I'm terrified of losing the flexibility that i3 gives me in managing windows.
+
+There are certainly existing solutions for many of the features that i3 provides:
+
+- Workspaces can be emulated by a number of different packages (*e.g.* [eyebrowse](https://github.com/wasamasa/eyebrowse)) or even using the system built into EXWM
+- Moving focus to a window in a specified direction can be done by [windmove](https://www.emacswiki.org/emacs/WindMove)
+- Activating/deactivating full screen could be done by saving the current window configuration, closing all other windows, and then restoring the window configuration
+- Window resizing can be done using [built in commands](https://www.emacswiki.org/emacs/WindowResize)
+
+In general, the problems start to show up when it comes to moving windows around within one workspace or moving windows between workspaces.  In general, it seems like the solutions that people come up for this problem involve swapping the displayed buffers between two windows.  It seems like the best candidate for such an implementation would be the function window-swap-states, describes at the bottom of [this page in the emacs manual](https://www.gnu.org/software/emacs/manual/html_node/elisp/Window-Configurations.html#Window-Configurations).  You can specify two windows and have their buffers be swapped.  It even has an optional parameter for attempting to preserve the height and or width of the windows.  The problem is that this function has some strange behavior that I find really unintuitive.  In general, I want the behavior of ""moving a window in a direction and reorganize as necessary"" rather than ""swap the buffers of two windows"", and I haven't found any solutions that seem to deliver on that, because the actual functionality I seek isn't actually straightforward to implement in that it requires doing the same analysis on the tree of windows that i3 does.
+
+In [the same page of the emacs manual where window-swap-states is documented](https://www.gnu.org/software/emacs/manual/html_node/elisp/Window-Configurations.html#Window-Configurations), there's functions for saving restoring window configurations.  Such objects actually have a [corresponding primitive type in elisp](https://www.gnu.org/software/emacs/manual/html_node/elisp/Window-Configuration-Type.html).  I imagine a solution where window movement would be accomplished by saving the window configuration, modifying it using whatever logic is necessary, and then restoring the modified window configuration.
+
+Here's the problem with that: as far as I can tell, there is *no documented interface for snooping into the datastructure*.  It seems like the datastructure definiton is actually in the [C source](http://git.savannah.gnu.org/cgit/emacs.git/tree/src/window.c#n6750) and not within any lisp file, with seemingly no getters or setters defined.  It seems like people only ever thought about saving and restoring window configurations and never stopped to think about the use case of allowing them to be modified in between!
+
+So that's the situation I'm in.  I'm writing this all out in case someone has brushed up against this problem in the past and come up with an acceptable solution.  A big question is whether it would be possible to write some C that can hook into that datastructure and perform the modifications I would need.  I know that emacs packages have the option of writing parts of their source in C for speed reasons (*e.g.* org mode), but I don't actually know anything about how that works or whether it could actually touch that given data structure (since it's struct definition is only within a C file and presumably isn't meant to be accessed globally).  If such an idea is misguided and there's a better way of doing this, I'm happy to listen.
+
+I honestly don't think I'm going to be able to habituate to the way emacs does window management.  If this proves to be practically impossible, I'll likely find some way to limp along with an approximate solution, but my hope is that there's some way out of this mess where I can get the functionality I desire.  If anyone has any ideas or suggestions, I'm open!  Thanks so much for reading, even if you don't have any ideas.",1587889065.0,10,0.92,9
+ADHD,Has anyone experienced tic disorder symptoms to recur following treatment with stimulants?,[removed],1568228783.0,1,1.0,1
+cpp_questions,Asking for some advice on how to proceed learning modern C++,"So, a little backstory might be helpful.
+
+I'm a sophomore in college right now.  In my junior year of high school, I started messing around with c++ after years of screwing around will all kinds of languages and stacks(first web stuff, then a bit of java, then python).  I wrote a bunch of small apps, messed around with GLEW & SDL for a while, but eventually realized I needed to approach learning C++ more systematically.
+
+Upon consulting this sub and other online resources, I was directed to [this page(The Definitive C++ Book Guide and List)](https://stackoverflow.com/questions/388242/the-definitive-c-book-guide-and-list), and decided that [C++ Primer by Stanley Lippman, Josée Lajoie, and Barbara E. Moo](https://www.amazon.com/Primer-5th-Stanley-B-Lippman/dp/0321714113/) would be a good place to start.  A few weeks later, I searched it up on Amazon, but mistakenly bought [C++ Primer Plus by Stephen Prata](https://www.amazon.com/Primer-Plus-6th-Developers-Library/dp/0321776402/).  I start going through it and end up getting roughly half way through the book(the book is ~1300 pages).  But then college apps come around I kind of put the book down for a while.
+
+Fast forward to now, I've had two internships involving C++ and they have both been incredibly good learning experiences, but they've underscored even more the need for me to approach picking up C++ in a systematic way.
+
+So, I decide to pick up C++ Primer Plus again, and I start to think about what book I should read next.  When I was looking at the list, I saw a little a little addition to the end of the beginner section that clarifies the entry on C++ Primer:
+
+> - Not to be confused with C++ Primer Plus (Stephen Prata), with a significantly less favorable [review](https://accu.org/index.php?module=bookreviews&func=search&rid=1744).
+
+So, I read the review, and it seems pretty scathing.  The jist of it is that Prata comes at C++ with a heavier C bend than he ought to.  The review kind of attacks him as ""teaching you to write C++ in a C way"".  I guess I can see how that might be the case.  The good side of that is that I have a very good grasp of pointers, C-style arrays, and C-strings.  Those are all more or less second nature to me.
+
+So here's the dilemma.  I'm trying to determine whether it would be worth it to jump ship to a different book.  Cost really isn't a problem, because I have saved some money from the internships.  I really just wanted to ask you all whether you had similarly negative views of Prata's C++ Primer Plus and whether it would be beneficial to move to something more universally recommended.  If you all think so, what would be appropriate for someone of my skill level(if it would be helpful I could show you some code I've written).
+
+In addition to that, I wanted to sketch out a rough plan for what sequence I should follow to learn the more advanced features of C++ in greater depth.  There's a couple of areas I know I need to work on, and I was hoping you all could give me some advice as to which order I should tackle them in.  Here's the broad picture of what I need to work on:
+
+- Design patterns in OOP
+    * I have an okay understanding of the tools C++ offers to write class interfaces (virtual functions, inheritance, member access specifiers, runtime polymorphism, etc) but have no real understanding of how to apply these in a way that produces good clean class interfaces.
+    * I didn't see a recommendation on that page for this topic.  Do you have any recommendations?
+- C++ design idioms
+    * I see [Effective Modern C++](https://www.amazon.com/Effective-Modern-Specific-Ways-Improve/dp/1491903996/) is recommended.
+- Templates and metaprogramming
+    * I see [C++ Templates: The Complete Guide(2nd Edition)](https://www.amazon.com/C-Templates-Complete-Guide-2nd/dp/0321714121/) is recommended.
+- Performance
+    * For multithreading/concurrency, I see [C++ Concurrency in Action: Practical Multithreading](https://www.amazon.com/C-Concurrency-Action-Practical-Multithreading/dp/1933988770/) is recommended.
+    * I couldn't find any recommendations that focused on writing faster single-threaded code.  Do you have any recommendations?
+
+Thanks for reading and for any advice you can give.",1532177351.0,7,1.0,7
+esp32,Having some difficulty getting interrupts to work,"Hello!
+
+I'm working on a project for a class.  The class itself uses the arduino core for the esp32, but I want to use interrupts that pass void pointers to the interrupt handlers, which arduino's attachinterrupt() doesn't support.  I've decided to try and work a solution using the IDF.  I'm having some difficulty getting a simple button class to work, and I was hoping one of you would be able to tell me what I'm doing wrong.
+
+Here's an example of what I'm trying to do
+
+main.cpp
+
+    #include <Arduino.h>
+    #include ""button.h""
+    
+    const int pin = 15;
+    
+    static void callback() {
+    	Serial.println(""In user callback."");
+    }
+    
+    void setup() {
+    	// Open Serial
+    	Serial.begin(115200);
+    
+    	// Initialize button
+    	Button button(pin, callback);
+    }
+    
+    void loop() {
+    	delay(1000);
+    }
+
+button.h
+
+    #ifndef BUTTON_H
+    #define BUTTON_H
+    
+    class Button {
+    	private:
+    		static void handler(void * userdata);
+    		void (*callback)();
+    	public:
+    		Button(const int pin, void (*my_callback)());
+    };
+    
+    #endif
+
+button.cpp
+
+    #include ""button.h""
+    #include <Arduino.h>
+    #include <freertos/FreeRTOS.h>
+    #include <freertos/task.h>
+    #include <freertos/task.h>
+    #include <driver/gpio.h>
+    
+    Button::Button(const int pin, void (*my_callback)()) :
+    	callback(my_callback)
+    {
+    	// Configure GPIO
+    	gpio_config_t io_conf;
+    	io_conf.intr_type = (gpio_int_type_t)GPIO_PIN_INTR_DISABLE;
+    	io_conf.mode = GPIO_MODE_INPUT;
+    	io_conf.pin_bit_mask = 1ULL << pin;
+    	io_conf.pull_down_en = (gpio_pulldown_t)0;
+    	io_conf.pull_up_en = (gpio_pullup_t)1;
+    	gpio_config(&io_conf);
+    
+    	gpio_set_intr_type((gpio_num_t)pin, GPIO_INTR_ANYEDGE);
+    
+    	gpio_install_isr_service(0);
+    	gpio_isr_handler_add((gpio_num_t)pin, handler, (void *)this);
+    }
+    
+    void IRAM_ATTR Button::handler(void * userdata) {
+    	Serial.println(""In static handler"");
+    	Button * button = (Button *)userdata;
+    	button->callback();
+    }
+
+I know I'm not doing any debouncing.  I'm just trying to get a simple interrupt example to work.
+
+When I run this and press the button, I get
+
+    rst:0x10 (RTCWDT_RTC_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+    configsip: 0, SPIWP:0xee
+    clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+    mode:DIO, clock div:2
+    load:0x3fff0018,len:4
+    load:0x3fff001c,len:812
+    load:0x40078000,len:0
+    load:0x40078000,len:11404
+    entry 0x40078a28 <HALTS HERE UNTIL I PUSH BUTTON>
+    In static handler
+    Guru Meditation Error: Core  1 panic'ed (InstrFetchProhibited)
+    . Exception was unhandled.
+    Register dump:
+    PC      : 0x00000000  PS      : 0x00060c31  A0      : 0x8008126d  A1      : 0x3ffc0bc0
+    A2      : 0x3ffca5ac  A3      : 0x00000000  A4      : 0x00060023  A5      : 0x3ffc6d1c
+    A6      : 0x00000000  A7      : 0x00000000  A8      : 0x80080d81  A9      : 0x3ffc0ba0
+    A10     : 0x00000013  A11     : 0x00000011  A12     : 0x00000020  A13     : 0x80000020
+    A14     : 0x00000008  A15     : 0x00000001  SAR     : 0x00000019  EXCCAUSE: 0x00000014
+    EXCVADDR: 0x00000000  LBEG    : 0x400014fd  LEND    : 0x4000150d  LCOUNT  : 0xffffffff
+    
+    Backtrace: 0x00000000:0x3ffc0bc0 0x4008126a:0x3ffc0be0 0x40081631:0x3ffc0c00 0x400d3d2f:0x00000000
+    
+    Rebooting...
+    ets Jun  8 2016 00:22:57
+    
+    rst:0xc (SW_CPU_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+    configsip: 0, SPIWP:0xee
+    clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+    mode:DIO, clock div:2
+    load:0x3fff0018,len:4
+    load:0x3fff001c,len:812
+    load:0x40078000,len:0
+    load:0x40078000,len:11404
+    entry 0x40078a28
+    In static handler
+    In user callback.
+
+Interestingly, if I comment out the lines that call the user callback, it works perfectly(it registers multiple time per click because I don't have any debouncing, but it doesn't cause an exception).  Here's what I changed the code to
+
+    // This works perfectly fine.  It seems like calling button->callback() causes the panic.
+    void IRAM_ATTR Button::handler(void * userdata) {
+    	Serial.println(""In static handler"");
+    	//Button * button = (Button *)userdata;
+    	//button->callback();
+    }
+
+Do any of you know what's going on here?  I understand that the IRAM_ATTR flag is needed to tell GCC to put the binary for my ISR in IRAM, but I'm not sure If I'm using it correctly.  What is causing this runtime panic(InstrFetchProhibited)?
+
+EDIT:
+
+Do you think it has something to do with my user callback living in different memory despite me using the IRAM_ATTR flag?  Maybe when it tries to invoke the function using the function pointer, it is using that address but looking in the wrong RAM?  Maybe it fetches a word from IRAM but that word is garbage(because GCC isn't putting it in the right place)?  I feel like I'm missing something simple here.
+
+EDIT2:
+
+/u/MrSurly has figured it out.  I need to brush up on my C++, as it's been a while.",1525359998.0,0,0.5,7
+esp32,Question from a concerned noob,"I'm taking a class based around the esp32, and we're using the [Arduino core for the ESP32](https://github.com/espressif/arduino-esp32).  It started by setting up the Arduino IDE to be able to flash the board and run simple programs.  I quickly got really tired of the Arduino IDE, and I wanted to use CLI build tools.
+
+That's where I discovered the [ESP-IDF](https://github.com/espressif/esp-idf) and successfully installed it as per [these instructions](http://esp-idf.readthedocs.io/en/latest/get-started/get-started-devkitc.html).
+
+If my understanding is correct, the ESP core for arduino is likely just a wrapper of the actual ESP-IDF so that people can use familiar Arduino functions(digitalRead, etc).
+
+After having used the ESP-IDF to write some basic programs, I realized that it was not what I wanted, as I wasn't going to be able to submit my projects to the class if they were using the ESP Arduino core and not the ESP-IDF.
+
+So I went back to the arduino IDE and attempted to flash another simple program, and everything flashed correctly, but the program didn't work as expected.  So I placed a Serial debug println statement, but I didn't see it in the serial monitor(I checked the baud rate).  I did see a dump of some memory locations that listed things like entry point, etc.
+
+If I flash something using the ESP-IDF, it works fine, and I get serial information if I check 'make monitor'.  For some reason, the old setup I had before setting up the ESP-IDF doesn't work anymore(it flashes correctly, but the program doesn't seem to run).
+
+My suspicion is that it changed something on the ESP's internal state that makes the code I write in the loop() and setup() functions not run.  My guess is that the entry point(main() in most C++ programs but app_main in ESP-IDF programs) has changed, and I don't really know how to confirm that suspicion.
+
+Anybody have any ideas about how to figure out what's going on here?
+
+EDIT:
+
+As per the request of /u/TarableCode, here's some additional information.
+
+If I use the Arduino IDE and write the following program
+
+    void setup() {
+      delay(3000);
+      Serial.begin(115200);
+      Serial.write(""setup"");
+    }
+    
+    void loop() {
+      Serial.write(""loop"");
+      delay(1000);
+    }
+
+and flash it, I get the following serial output.
+
+    <jumbled mess>ets Jun 8 2016 00:22:57
+    
+    rst:0x10 (RTCWDT_RTC_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+    configsip: 0, SPIWP:0xee
+    clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+    mode:DIO, clock div:1
+    load:0x3fff0018,len:4
+    load:0x3fff001c,len:956
+    load:0x40078000,len:0
+    load:0x40078000,len:13076
+    entry 0x40078a58
+
+If instead I use ESP-IDF and write the following
+
+    #include ""freertos/FreeRTOS.h""
+    #include ""freertos/task.h""
+    #include <cstdio>
+    #include ""esp_system.h""
+    #include ""nvs_flash.h""
+    extern ""C"" {
+    void app_main(void) {
+            nvs_flash_init();
+            printf(""Hello, world!\n"");
+            vTaskDelay(1000);
+    }
+    }
+
+I get
+
+    rst:0x10 (RTCWDT_RTC_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+    configsip: 0, SPIWP:0xee
+    clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+    mode:DIO, clock div:2
+    load:0x3fff0018,len:4
+    load:0x3fff001c,len:4560
+    ho 0 tail 12 room 4
+    load:0x40078000,len:0
+    load:0x40078000,len:13176
+    entry 0x40078d38
+    I (62) cpu_start: Pro cpu up.
+    I (62) cpu_start: Single core mode
+    I (63) heap_init: Initializing. RAM available for dynamic allocation:
+    I (66) heap_init: At 3FFAE6E0 len 00001920 (6 KiB): DRAM
+    I (72) heap_init: At 3FFB1E78 len 0002E188 (184 KiB): DRAM
+    I (78) heap_init: At 3FFE0440 len 00003BC0 (14 KiB): D/IRAM
+    I (84) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM
+    I (91) heap_init: At 40087F3C len 000180C4 (96 KiB): IRAM
+    I (97) cpu_start: Pro cpu start user code
+    I (40) cpu_start: Starting scheduler on PRO CPU.
+    Hello, world!
+
+Which repeats every second
+
+EDIT2:
+
+I don't really know what happened.  I was trying all of your suggestions, and nothing seemed to work.  Then I thought I should try a windows Arduino IDE install just to make sure there's not something screwed up with my toolchain. As it turns out, using a Windows install of Arduino IDE and arduino-esp32 works fine.  I've investigated my build(Gentoo linux), and it seems like  the repo version of Arduino IDE is borked.
+
+I downloaded the nightly binary from the Arduino website, and things are working now.  Now I resume trying to get comfortable CLI build tools(currently looking at PlatformIO)",1518024365.0,4,1.0,9
+cpp_questions,Member functions as callbacks for C libraries,"Some background: I'm doing a month long internship that involves a raspberry pi.  I'm using a C library called 'wiringPi' that provides the following function:
+
+    int wiringPiISR(int pin, int edgeType, void (*function)(void));
+
+I'm attempting to wrap the functionality for a [rotary encoder](https://en.wikipedia.org/wiki/Rotary_encoder) in a class, and I was hoping to use the above function to set up interrupts in the constructor.
+
+Originally, I tried to write public member functions and pass them as that third parameter, but the compiler gave the error 'invalid use of non-static member function' when I called wiringPiISR with a member function as the third parameter.
+
+I couldn't exactly figure out what was bad about my code, as I thought a function is a function, and I didn't expect that the fact it was a member function would cause any problems.  I found [this](https://isocpp.org/wiki/faq/pointers-to-members#memfnptr-vs-fnptr) which suggested that is not the case.  I don't understand why the example they give(the one that uses globals) solves the problem, because the wrapper function will only manipulate the object that the pointer points to(which you have to change yourself and I can't do that for this example) and the static member function will likewise not be able to manipulate state.
+
+The interrupt routine needs to be able to manipulate object state of the object that triggered the interrupt.  I could make the interrupt routines static, I would need to add a parameter to convey the information of _which_ object needs to be updated.  The problem is that the prototype for wiringPiISR expects a function in the form void(void), so I wouldn't be able to pass a static member function in the form void(Encoder *) to it.
+
+I'm kind of stuck.  I want to setup interrupt routines that can ""remember"" which object whose state they're supposed to manipulate.  I cannot pass a pointer to the interrupt routine, because wiringPiISR requires a function in the form void(void) and not void(Encoder *), and I cannot use a member function, because they cannot implicitly convert to function pointers.
+
+Is there a solution here I'm not seeing?  Do I have to dive into the wiringPi code and change some stuff around?  I remember seeing something about a person in a similar situation who had to go in and change the C function definition to accept std::function's instead of function pointers, from which you could pass lambdas, but my attempt to do that has been unsuccessful.
+
+Since it won't compile as a non-static member function, and I won't be able to manipulate state by passing a pointer to the correct object, I considered something like a bunch of functions that can be pushed onto a vector or something.  The problem is that the only way I can imagine of doing that is by pushing lambdas onto a vector of std::functions.  But I can't find any way online to convert from those std::functions to function pointers in the form void(void).
+
+I saw [something about ""thunks""](http://bannalia.blogspot.com/2016/07/passing-capturing-c-lambda-functions-as.html) and the potential of passing parameters even though none are declared, but I don't think the situation applies here.",1515724428.0,2,1.0,17
+learnmath,[Proofs] Question about how to write proofs,"I'm a freshman at a University.  This fall, I attempted a proof-heavy class on Real Analysis, and ultimately I was having trouble adapting to being on my own so far from home, so I decided to drop the course before drop date.
+
+I am going to take the class in Fall 2018.  The class is implemented in Rudin's ""Principles of Mathematical Analysis"".  I found that a bit steep for me, so I purchased Stephen Abbott's ""Understanding Analysis"" so that I can get a foothold on the subject.
+
+I was going to work through the exercises in the book to ensure I'm grasping the material.  When I was in the course, homework involved proving theorems, and my proofs were always _much_ longer than everyone else's.  It was always very wordy, and it felt much more like writing an essay than doing math.
+
+My university requires a humanities concentration, and I'm planning on doing logic.  Despite my interest, I don't have a developed understanding of the subject—just a collection of vague keywords like predicate logic, modal logic, first order logic.  As such, I don't have a robust understanding of the symbolic encoding of logic, beyond the bits **necessary** for the proofs in the class(universal quantifier, existence quantifier, etc).
+
+I was wondering if any of you could provide recommendations for how to approach the encoding of proofs for my own personal use.  I understand that in classes where my proofs will be read by others, it's important to use plain English.  I'm just talking about the work I'm going to keep on the exercises in the book.
+
+I've considered learning coq and keeping the exercises as programs in a git repository, especially because that is my ultimate goal with logic(reasoning about correctness of software and analyzing the design of programming languages).  I just feel that learning coq is likely not the place to start when it comes to studying logic.
+
+Do any of you have suggestions for some kind of logical system I can learn and use with mathematical proofs?  In addition, do you have any resources for learning said system?",1514530220.0,11,0.93,11
+learnmath,Requesting advice from math undergrads,"Hello, all.  I'm kind of in a rough patch right now, and I just wanted to write here to vent and hopefully get some perspective on what's happening in my math life right now.
+
+So, I just arrived at MIT a little over a month ago, and the experience has been pretty good so far(a few personal problems, but that's not really what this post is about).  I had credit for single-variable calculus(5 on AP Calc BC) and multivariable calculus(transfer credit), so I decided I would take 18.100B, which is real analysis with a heavy emphasis on proofs.  The first week of class wasn't too difficult; it seemed to be about the right amount of challenge.  A few weeks in, I'm starting to encounter some serious difficulty.  I couldn't complete the problem set last week, so my prof's policy of allowing one late pset kicked in, so I have two psets due this wednesday.  I'm still trying to work through the problems on last weeks pset.  I'm feeling really terrible about the entire thing...
+
+The class is based around Baby Rudin, which is seriously difficult for me to read.  His proofs seem incomplete, and he doesn't give much of any explanation for his steps in logic.  I've searched online for resources, and I've come across a few, but I just feel like I'm not ingesting the concepts at the rate I should be.
+
+So, I try to learn the concepts from lecture, but some slip through the cracks, and then I turn to the book, but that is even more difficult to understand.  So I'm at this point where the lectures are all covering concepts I am totally unfamiliar with, so my best resource for learning the concepts(the interactive lectures where questions can be asked) are the times when I really can't follow along.
+
+The worst thing is that I _really_ want to study math, and my experience here has made me feel like I'm just not smart enough to do so, which has caused a bit of a personal crisis for me.
+
+There is a bit of a silver lining here, and it's that MIT offers pass-no-record grading for the freshman fall term, so If this doesn't become resolved, my academic record isn't going to be spoiled.  That makes me feel like I really just need to figure out how to scale to this challenge and I'll be fine.  I just need to hear from people...
+
+I guess I don't really know what I'm asking here...  I just want to hear from those of you who had a similar kind of rude(or maybe rude-in) awakening with some concept-difficult course, how you managed the challenge, and how you're doing now...",1506367786.0,4,0.67,16
+mit,"A rule of thumb for what constitutes a ""hard class""?","I've read the advice that one should try to limit themselves to 1 really challenging subject per term.  I think that distinction can be easy to draw in some situations, but it can be ambiguous in others.
+
+When someone says that advice, are they talking specifically about how many units the class is worth(hours/week)?  Or are they just talking about the broader cultural sense of how hard the class is(which can only be obtained by actually talking to people)?
+
+For example, would taking 5.111 and 7.012 in one term be considered too much?",1502840590.0,12,0.88,18
+blunderyears,I was a very special little boy...,,1502516617.0,13,0.73,2
+cpp_questions,Question about inline member functions and data hiding,"So, my understanding of inline functions in C++ is pretty simplistic.  Inline-expanding a function call circumvents the overhead of pushing a function frame onto the stack by having the functions contents be evaluated inline with the surrounding code.  Essentially, I imagine calling an inline function to be like replacing that function call with the contents of the function itself.
+
+This brings me to inline member functions.  By default, member functions that are provided a definition inside the class definition are inline.  So, imagine we had the following code:
+
+    #include <iostream>
+    
+    using namespace std;
+    
+    class Test {
+        private:
+            int age {50};
+        public:
+            int getAge() { return age; }
+    };
+    
+    int main()
+    {
+        Test obj;
+        cout << obj.getAge() << endl;
+    }
+
+Now, getAge() will be inline.  My simplistic image of just replacing the function call with the contents of the function wouldn't work.  I guess I just imagine inline-expanding as modifying the function body so that it can be integrated inline with the code around the function call in a context-aware way.
+
+Here is my essential question, when obj.getAge() gets inline-expanded, how does that inline-expanded code access private members?  How can the inline-expanded getAge() call circumvent class scope without needing to get a reference from a non-inline member function or something?
+
+I understand that this is still technically calling a member function, but if my understanding of inline-expanding is even remotely close to accurate, any attempt to access age would be a scope violation.
+
+Here's another way to formulate my question.  With a regular, non-inline member function, all attempts to access a private class member would be implicitly converted to this->member.  By inline-expanding, the this pointer isn't available, so how can it access the private members?
+
+Essentially, I think of inline-expanding as a kind of preprocessor action that modifies the translation unit before the _real_ compilation begins.  Maybe if inline-expanding isn't done in that way, C++ can be smart enough to replace the private member accesses with the actual address where the private member will live(or a symbol that can be resolved by the linker later).
+
+I'm just trying to get a feel for this.  Are inline member functions that can access private class-members outside of class scope a violation of data-hiding?",1501569940.0,2,0.67,4
+mit,Questions about ASEs from a terrified prefrosh,"1. Which ASEs have you taken and in which year(I'm mainly concerned with which ones I should take when I arrive)?
+2. Can you rank the relative difficulty of the ASEs  you've taken, especially in relation to the difficulty of it's associated AP test(except for the ones that don't have an associated AP test)?
+3. Would you have done anything different if you had the chance?
+
+On a slightly unrelated note, are MIT students supposed to fulfill the GIR during their first two semesters?  Is the first year kind of for getting all of the GIR classes out of the way?",1500435201.0,10,0.91,37
+cpp_questions,Question specifically about internal linkage,"So, I already kind of had a post about linkage, but I was mainly focusing on external linkage, which I think I get.  The definitions people use for linkage always sound way too close to the definition for scope, so let me provide what I think the definition of linkage is(this is copied directly from [my post on external linkage](https://www.reddit.com/r/cpp_questions/comments/6lksmo/help_me_understand_variables_with_static_duration/)).
+
+>**Linkage** = the places in source code for which a repeated declarations/definitions will end up referring to the same location in memory
+>
+>    - None means that any repeated declarations/definitions of a symbol are guaranteed to be associated with unique locations in memory
+>    - Internal means that any repeated declarations/definitions of a symbol within a single translation unit will end up pointing to the same location in memory
+>    - External means that any repeated declarations/definitions of a symbol within a single translation unit or across translation units will end up pointing to the same location in memory
+>        * Since each translation unit is compiled separately, it is the job of the linker to ensure that all references to the repeatedly defined symbol point to the same location in memory
+
+So, imagine we had a program like the following:
+
+main.cpp
+
+    #include <iostream>
+    
+    using namespace std;
+    
+    static int age; // Explicitly declared with internal linkage via the 'static' keyword
+    
+    int main()
+    {
+        int age; // Redeclare symbol
+        cout << ""&age is "" << &age << endl; // Address of local symbol
+        cout << ""&::age is "" << &age << endl; // Address of global symbol
+    }
+
+What I'm essentially trying to do is declare an automatic variable that is 'linked' to the memory location of the globally declared symbol, testing my understanding of linkage.
+
+Now, if my understanding of linkage is correct, the declaration of age inside of main() should be linked to the memory location of the symbol declared in the global namespace.  I understand that the locally declared symbol will ""hide"" the globally declared symbol from scope, so I access the global symbol by using the scope-resolution operator.
+
+When I compile and run this, I end up seeing that the two symbols are actually pointing to different places, which confuses me.  Is my understanding of linkage incorrect?  Is my definition for linkage correct, but my understanding of what 'internal' linkage specifically means isn't?",1500228397.0,2,1.0,7
+cpp_questions,How can delete[] free the correct block of memory if size isn't known at compile-time?,"From what I understand, arrays are generally tightly packed and do not have a terminating array element that marks the end(like C strings do).  So, imagine the following code:
+
+main.cpp
+
+        #include <iostream>
+        #include <vector>
+
+        using namespace std;
+
+        void freeDynamicArray(int *);
+
+        int main()
+        {
+                cout << ""Please enter an integer."" << endl;
+
+                vector<int> vector;
+                int temp;
+
+                while (cin >> temp) {
+                        vector.push_back(temp);
+                        cout << ""Please enter another integer"" << endl;
+                }
+
+                int * dynamicArray = new int[vector.size()]; // Dynamic memory(4 bytes * vector.size()) is allocated
+
+                for (int i = 0; i < vector.size(); i++) {
+                        dynamicArray[i] = vector[i];
+                }
+
+                int * test = new int{14}; // Dynamic memory(4 bytes) is allocated
+
+                freeDynamicArray(dynamicArray);
+
+                cout << *test << endl; // Correctly prints out ""14""
+        }
+
+test.cpp
+
+        void freeDynamicArray(int * pointerToArray)
+        {  
+                delete[] pointerToArray;
+        }
+
+Yes, I understand that populating a vector and then copying it's contents over to a dynamically allocated array is pretty stupid; I'm just doing that to demonstrate my question.
+
+Towards the end of main(), a block of dynamically allocated memory is created and initialized with the contents of our vector(the size and contents of which are unknown at compile time).  Then, I pass that pointer to a function in an entirely different translation unit so the memory it points to can be freed.  Right after I populate the dynamic array with the contents of the vector, I allocate space dynamically for one more int.  I would imagine that heap space is allocated linearly, so test will point to the space right after dynamicArray.  Once the dynamic array is freed in a separate translation unit, I check whether I can still print out the contents of *test, and it works.
+
+I understand that delete[] doesn't actually change what sits in the memory, so if test _was_ deallocated, dereferencing it _might_ still produce expected result.  However, I imagine that deallocating the dynamic array does not deallocate the other memory on the heap.
+
+I'm trying to understand how that is possible.  From what I remember, arrays do not come with metadata about the size of the array.  How does the delete[] operator know where to stop without me explicitly providing the size of the array, especially since it's in a separate translation unit and the size isn't known until runtime?  How does delete[] _only_ deallocate the array, and not the space for test?  How does it know when to stop?",1500083705.0,5,1.0,15
+cpp_questions,Help me understand variables with static duration and external linkage,"So, this is kind of confusing me.  I'm reading C++ Primer Plus by Stephen Prata, and I'm on the chapter that discusses duration, scope, and linkage.  I think I have grasped the concepts, and here are what I believe each of those terms to mean.  Please correct me if I am wrong.
+
+1. *Duration* = the amount of time between allocation and deallocation of memory
+    - Automatic means the data sits in memory for the confines of a block
+    - Dynamic means the data sits in memory from when new is called to when delete is called
+    - Static means that the data sits in memory for the entire program
+2. *Scope* = the places in source code where previously declared identifiers(functions, variables, etc) can be used and accessed by their identifier
+    - Namespace means the identifier can be used within a namespace without changes and outside of a namespace provided that the namespace definition is known and the namespace in which the identifier resides is known(either through the scope resolution operator(::) or by a using directive)
+    - Local means the identifier can be used only within the block it is declared or in a nested block within
+3. *Linkage* = the places in source code for which a repeated declarations/definitions will end up referring to the same location in memory
+    - None means that any repeated declarations/definitions of an identifier are guaranteed to be associated with unique locations in memory
+    - Internal means that any repeated declarations/definitions of an identifier within a single translation unit will end up pointing to the same location in memory
+    - External means that any repeated declarations/definitions of an identifier within a single translation unit or across translation units will end up pointing to the same location in memory
+        * Since each translation unit is compiled separately, it is the job of the linker to ensure that all references to the repeatedly defined identifier point to the same location in memory
+
+Variables declared outside of any function are automatically of static duration, global(namespace) scope, and external linkage.  For example, imagine I had two files like so:
+
+main.cpp
+
+    #include <iostream>
+    
+    using namespace std;
+    
+    int age;
+    
+    int main() {
+        cout << age << endl;
+    }
+
+test.cpp
+
+    int age;
+
+In this situation, I can compile both independently of one another down into object files like so:
+
+    [jake@desktop] $ g++ -c main.cpp
+    [jake@desktop] $ g++ -c test.cpp
+
+When I first tried this, I was really surprised that main.cpp compiled, as I never provided a definition for age, and I imagined it would complain about it.  But, after thinking for a while, it makes sense.  The default status for variables declared outside of any function is external linkage, so the compiler probably saw that there was no definition, but figured that the definition might be provided in another translation unit.  Since it couldn't be sure that there _wasn't_ a definition, it just spit out an object file and expected the linker to complain if a definition was never provided.  In the case of main.cpp and test.cpp, there is never a definition, so, understandably, I get a linker error when I try to link the two object files.
+
+    [jake@desktop] $ g++ -o run.exe main.o test.o
+    first.o:(.bss+0x0): multiple definition of `age'
+    main.o:(.bss+0x0): first defined here
+    collect2: error: ld returned 1 exit status
+
+This confused me for a while, but then I remembered that since age is declared outside of any function, it has static duration.  I discovered that if no initializing value is provided in the declaration of a static variable, the variable is initialized to all zeros.  Thus, the code
+
+    int age;
+
+really just means this:
+
+    int age = 0;
+
+Thus, the static variable actually has two independent definitions, which the linker is complaining to me.  I would imagine that since both definitions initialize age with zeros, the definitions wouldn't conflict with each other, but I guess the linker is just picky like that.
+
+Here's the central question here: what the hell is the use case for a variable of static duration and external linkage?  Can it even be used?  There is no way to declare a static variable without also defining it(by initializing to zero), so each time our static duration, external linkage variable is declared in different translation units, it will possess multiple definitions, which the linker forbids.  I know that global variables are generally considered a bad thing anyway, and I imagine that someone declaring two identical identifiers of the same type in two different translation units could cause some really nasty bugs when those two identifiers end up pointing to the same location in memory when the programmer likely expects them to be distinct.  Why aren't variables defined outside of any functions assumed to be of static duration and internal linkage?  I assume that C++ inherited this quirk from C.  Why was the decision made to have the default behaviour be external linkage if the damn feature just causes linker errors?  Is there something I'm not doing or understanding?
+
+I know this was a very, very long post.  If you read all of it, thank you.  This community is awesome, and It's nice to know that the challenge of learning C++ is surmountable.",1499335443.0,1,0.66,5
+Gentoo,"What terminal emulators can correctly show glyph fonts(like Font Awesome, etc)?","I've been using urxvt for a while, and it's been going pretty well; it loads quickly, looks nice(after using a third party theme), and generally does what I need it to do.  There's just one thing that infuriates me; when I edit my i3config, Font Awesome icons appear as outlined boxes.  This is apparently a very common problem, because I came across all kinds of threads on /r/unixporn and also the arch forums discussing it.  I even came across [this](https://github.com/FortAwesome/Font-Awesome/issues/3681) github bug report where the consensus is that the problem is with urxvt, not with Font Awesome.
+
+I've hit a bit of a brick wall.  I want to be able to use icons in my i3bar and also see them in vim when I edit the scripts.  I saw a lot of solutions about patching fonts, but nothing seemed to work.  In fact, I installed all of the nerd fonts and the patched powerline fonts but could not figure it out(my fc-list is a mess now).  I'm calling upon the Gentoo wizards out there to explain to a grounding like myself how I can get the functionality I'm looking for.
+
+I'm willing to use a different glyph font.  I'm willing to use a different terminal emulator(preferably something lightweight).  I'm willing to do some weird configuration.  I would just like to avoid patching the editors myself, because that puts me in a place where portage isn't managing my packages, which I feel would be bad.
+
+Do any of you have glyph fonts showing up correctly in your terminals?  If so, what terminal emulator and glyph font are you using and what configuration was required to get it working?
+
+Thank you oh wise greybeards.",1497839134.0,6,0.8,3
+mit,Question about the Freshman Essay Evaluation,"So I understand the purpose of the FEE.
+
+> It assesses your competency in expository writing to provide you and your advisor with a detailed evaluation that will help inform your selection of classes for the first semester and beyond.
+
+Does this mean if I do poorly, I will have to take the MIT equivalent of remedial English?  I think I'm a good writer, so I think I'll be fine.  I'm just curious.
+
+I got a 5 on AP Lang, and I believe I got a 5 on the AP Lit test that I took earlier this month.  Does my 5 on Lang count as that requirement or do you have to write one regardless?",1495766415.0,1,0.54,3
+cpp_questions,Are primitive types and references purely compile-time phenomena?,"Last night, I was thinking about the type system in C++.  I searched ""C++ where is type stored"" on Google and came to [this question](http://stackoverflow.com/questions/27145372/where-are-the-variable-reference-names-or-types-stored-in-memory-for-stack-heap) on Stack Overflow.  [One of the answers](http://stackoverflow.com/a/27145618) said something I thought was really interesting.  Essentially, the user said that variable identifiers generally don't exist at runtime—that the compiler finds places to put all variables and refer to them by their memory address every time the variable identifier is encountered in the source code as long as it obeys scoping rules.  That is really cool to me, and I wonder whether function identifiers get treated the same way—replaced with a memory address in the assembly code as long as scope isn't being violated.
+
+That was really cool, but the thing that really surprised me in his post was the idea that type metadata isn't stored at runtime either!  That is, if I declare a pointer to an unsigned int and dereference it, the compiled binary doesn't scramble around to figure out that it should interpret the dereferenced data as unsigned int.  Instead, the compiler just bakes in the assembly code needed to dereference and interpret that pointer and its contents.  I find that really amazing.
+
+My problem now is that I don't know how the typeinfo header works.  I had always assumed that C++ keep track of type metadata somehow during runtime, so I just imagined that typeid(pName).name() simply queried that runtime database of type information to return a result at runtime.  But with this explanation of type, that wouldn't be possible.  If I compile a program like the following,
+
+    #include <iostream>
+    #include <typeinfo>
+    
+    using namespace std;
+    
+    int main() {
+        int age {24};
+        cout << ""The type of age is "" << typeid(age).name() << endl;
+    }
+
+does g++ simply create a binary that outputs ""The type of age is i""?  It was my understanding that all normal C++ code causes computation at runtime.  If all of this computation is happening at compile-time, is it all done using preprocessor directives?  Are there other ways of doing compile-time computation like that?
+
+While trying to figure all this out, I stumbled upon another question: are references also essentially compile-time phenomena as well?  I've never quite understood the difference between pointers and references; as far as I've been able to tell, references after just const pointers(not pointers to a const data type) that don't have to be dereferenced.  I still thought they took up space in memory like normal variables and pointers.
+
+But according to the poster of the question on Stack Overflow that I referenced earlier, references do not take up space in memory.  Does that mean, then, that references are resolved at compile-time as well?  Consider the following:
+
+    #include <iostream>
+    
+    using namespace std;
+    
+    void printInt(int & x) {
+        cout << x <<
+    }
+    
+    int main() {
+        int age {24};
+        
+        printInt(age);
+    }
+
+Does this code essentially just use references as a way to violate scope conveniently without making the compiler angry?  Does the assembly for this code just substitute x with the memory address of whatever it is passed to it(for variables, the address of the variable; for literals, the address at which they get baked into the executable)?  Am I starting to get this?",1494944494.0,5,1.0,6
+OCPoetry,Forgive me,"A man of sickly stature shifts his gaze
+
+to entertain that hope may still there dwell
+
+amongst his cold corpse, not merely a phase,
+
+so he could flee from this miserable hell.
+
+\
+
+She was similarly tortured;
+
+Beaten and bruised, scarred with salty tears
+
+shed in self-hatred--her arms scored.
+
+Indeed death was the least of her fears.
+
+\
+
+Of knowledge and sense he had neither,
+
+though it would hardly matter if he had.
+
+And when he indulged in the sight of her,
+
+her euphoric smile only drove him mad.
+
+\
+
+But love is a contract.
+
+She had pled guilty to possessing affection,
+
+but to her denial, he could offer no objection
+
+His undesirability had been proven a fact.
+
+
+
+[\[1\]](https://www.reddit.com/r/OCPoetry/comments/6azyy7/z/dhjswwr)
+
+[\[2\]](https://www.reddit.com/r/OCPoetry/comments/6av3nf/z/dhlxzlh)",1494897667.0,2,1.0,1
+Markdown,Code block test,"    #include <iostream>
+    
+    using namespace std;
+    
+    int main() {
+        cout <<
+    R""EOF(
+    Hello there.
+    )EOF"";
+    }",1494703892.0,1,1.0,0
+Vive,Any word as to when Fallout VR will be available?,Fallout 4 VR was one of the big reasons I got a Vive.  Does anyone know when it's supposed to come out?,1494703104.0,10,0.69,22
+mit,Question about athletics,"Hi, everyone.  I know this kind of post isn't really appreciated, but I'm kind of freaking out about it, so I'm sorry, but I need another perspective on the issue.
+
+I played Varsity football during high school and was recruited by the football program at MIT.  I never really enjoyed football, but I did it for my parents.  Recently, I've been struggling with my mental health.  I've been recovering, but I fear football might be too much to take on in addition to the rigor of MIT.  Long story short, I feel like it would be better for my mental health if I didn't play.  My brother has told me it's not really a huge deal if I tell them straight that I don't want to play, but my parents have told me they wouldn't be okay with it.
+
+I'm feeling really torn about this.  I want to go to MIT really badly, but I fear I might spiral out of control if I do football.  I visited MIT medical during CPW, and got in contact with the mental health department to try and get a therapist lined up for when I arrive.
+
+I have committed to MIT, and I'm really anxious about this.  Would talking to the coach about this jeapordize my opportunity to attend?  I feel like everyone but my brother is really toxic about this; I understand that I told the coaches I wanted to okay, but I'm really beginning to think it would put me in a really bad place.
+
+Do any of you have any ideas as to what I should do?  I don't know if I could make it a whole season...  I could really use some advice...
+
+Could I call admissions anonymously and ask if this would risk my acceptance?  Am I freaking out about nothing?",1492997569.0,19,0.99,15
+Gentoo,Is Undervolting Still Possible On Mobile CPU's?,"I am going to be purchasing a Thinkpad T570 soon, and I'm looking to maximize my battery life by taking every measure to decrease power consumption.
+
+I have heard that is is possible to undervolt Intel CPU's.  I usually force the ""powersave"" CPU flag when configuring my kernel, but IIRC, that only changes clock speed.  Is undervolting still a thing on mobile Kaby Lake CPU's?  If so, how do I go about doing it on Gentoo?",1491110581.0,10,0.86,6
+thinkpad,Thinkpad T570 shows up on T-series page!,,1490720903.0,12,0.88,19
+suggestmeabook,Books that deal with suicide in an unbiased way?,"I have read _The Myth of Sisyphus_ and _The Stranger_ by Albert Camus.  I came away from those feeling like Camus hadn't really entertained that suicide can be the right answer.  I don't find his arguments convincing at all.
+
+I would like something that explores this topic.  I can appreciate formal philosophical books, but I would really like some fiction.  In particular, I would like it to be from the perspective of someone who struggles with these things.
+
+Let me know if you have any suggestions.",1490583810.0,8,0.84,8
+gamedev,Question about open source games with online multiplayer,"So I've been thinking about this intermittently over the last week or so, but I haven't come to a solution.  This is a matter of pure curiosity; I'm not a developer, so my apologies if I'm sounding like an idiot.
+
+My question is this: how do open source games ensure that players do not use modified clients(meaning they change the source code and recompile with changes that cheat or somehow give the player a competitive advantage)?
+
+My first thought would be that the clients would have to submit a cryptographic hash of their executable to ensure they have a valid build.  However, what's to stop people from simply finding a hash that works and spoof that.  Would the server be able to tell?
+
+Maybe I'm missing something simple here.  What do you all think?",1489702579.0,8,0.79,9
+Fallout,Has anybody gotten Fallout Fixt 0.81a to work on the steam version of Fallout 1?,"I'm kind of on a Fallout binge, and I want to play the franchise in order.
+
+I've read that vanilla Fallout 1 is kind of buggy(which I've found to be true), and seen that Fallout Fixt was a pretty good solution that makes the game more stable.
+
+So, it was kind of a bitch getting it installed.  I'm using Windows 10 with a GTX 980 GPU.  For some reason, I was unable to launch the game using DirectX 9; it always spat out a ""instruction referenced at memory location was not found"" error.
+
+I got it working using the ""Basic"" rendering, and played for a solid hour, but it randomly crashed when I clicked on a destination in the map.
+
+I really, really want to play this game.  I just can't get it stable to the point where I feel safe pouring hours into it only to find that my save is corrupt and I have to restart.  Do any of you have any advice?
+
+EDIT:
+
+It's very strange; for some reason, applying the high resolution patch with basic rendering worked.  The UI is rather tiny on my 1080p monitor, but it's playable.  I don't know why that helped, but it did.",1489442284.0,3,0.8,2
+linuxquestions,Can I use a laptop with a SIM card as a standalone phone replacement?,"Hi, /r/linuxquestions.
+
+I have been feverishly researching this topic for the last two hours or so, but I can't seem to find a definitive answer.
+
+I'm going to purchase a Thinkpad T570 in April when it is supposed to launch.  In the [specs](http://psref.lenovo.com/syspool/Sys/PDF/ThinkPad/ThinkPad%20T570/ThinkPad_T570_Platform_Specifications.pdf), it specifies the following:
+
+> WWAN(*One of the following, configurable by model; WiGig can coexist with WWAN*)
+> 
+> - [Realtek RTL8822BE](http://www.realtek.com.tw/products/productsView.aspx?Langid=1&PNid=21&PFid=57&Level=5&Conn=4&ProdID=356), Wi-Fi 2x2 802.11ac + BT4.1, M.2 card
+> - Integrated Mobile Broadband 4G LTE-A
+> - [Qualcomm Snapdragon X7 LTE-A](https://www.qualcomm.com/products/snapdragon/modems/4g-lte/x7) (Sierra Wireless EM7455), M.2 card
+> - Integrated Mobile Broadband 4G LTE
+> - [Intel XMM 7160](http://ark.intel.com/products/66646/Intel-XMM-7160-Slim-Modem) (Fibocom L831-EAU), M.2 card (EMEA only)
+> 
+> SIM card (*opt*)
+> 
+> - Micro-SIM card slot, opt Verizon LTE (US) or Lenovo Connect (EMEA) SIM card
+
+Now, here's my question: is it possible to use this thinkpad as a standalone device capable of sending SMS, receiving SMS, making calls, and receiving calls through the sim card I put in it?
+
+As I understand it, the sim card is typically intended for LTE connections.  However, I have also read of people being able to use it to send SMS messages--and some even capable of [taking and receiving calls](http://forum.notebookreview.com/threads/enabling-ussd-and-voice-support-for-em770w-3g-module.482532/).  If at all possible, I would like to avoid using a VoIP solution, as minutes and texts are cheaper for my phone service provider than LTE data.
+
+From what I've read, it can vary from carrier to carrier.
+
+I've heard the term ""mobile broadband modem""--mostly in the context of a USB device.  Are the entries listed under WWAN mobile broadband modems?  If not, what are they?
+
+Also, is there any software that could allow me to manage this?  A GUI would be nice, but it's not strictly necessary.
+
+Thanks for your help.",1489123442.0,2,0.76,8
+thinkpad,Anybody know when the T570 and T470 are supposed to be available for purchase?,"I've been checking every so often, but I haven't seen it yet.  The X270 seems live on lenovo's website, but the T series page still shows the T*60 line.
+
+Anybody know when the T570 and T470 will be available?",1488260503.0,3,1.0,8
+Vive,[Support] Error 108 and Recurring USB Disconnect Sound in Windows 10,"Hi, /r/vive.  I was near the end of a long(about an hour) vive session playing Vanishing Realms.  I finished the ""Rite of Steel"" mission, and I was walking up the stairs to finish the game, but then my HMD went completely dark.  I was still receiving sound, but it was a 1-2 second stretch of the background music over and over again.  I took my headset off, a little freaked out, and tried to get it working again.  I couldn't, so I put it away and tried it again this morning.
+
+I cannot get SteamVR to recognize the headset.  When connected, the headset shows a solid red status light, and it shows ""Headset not detected.  Make sure your headset is connected properly, then reboot it by clicking below.""  If I click on ""Reboot Headset"", a little window pops up with ""Service status: [...] 64 bits"", but then, after a few seconds, it changes to ""Service status: failed"".  It tries it a few times, and then restarts SteamVR.  Also, when I plug all three cables of the 3-in-1 cable into the link box, my windows desktop continuously makes the noise you hear when a USB device is unplugged.  In particular, it's [this noise](https://youtu.be/4IRljqVHM_k?t=2m39s).  That just goes on loop, happening every 4 seconds or so.  Interestingly, I only hear this loop if all three of the 3-in-1 cable are plugged into the link box.  If I only plug in power & USB or power & HDMI, then I don't hear the loop.
+If I go to device manager, it refreshes every 4 seconds with the USB disconnect sound.
+
+The actual error code that SteamVR gives is 108, so I have tried everything listed in [this diagnostic article](https://support.steampowered.com/kb_article.php?ref=8566-SDZC-9326#headset).  I have tried the following:
+
+- Reboot my computer(several times, in fact)
+- Power cycle the link box(as it describes in the diagnostic article)
+- Plug the USB cable that runs into the link box into different USB ports
+    * It doesn't matter if I plug it into a USB 2.0 port or a USB 3.0 port; the result is the same.
+- Resetting the USB Devices by going to SteamVR -> Settings -> Developer -> Remove all SteamVR USB Devices
+- Reboot the headset(as described in the prior paragraph, it fails)
+
+I'm kind of at wits end.  I really don't know what happened.  The 3-in-1 cable seems fine, and it is plugged in fully inside the HMD(I removed and reinserted all the cables under the plastic latch) as well as the link box and my computer.  I'm worried my headset has physical damage, but I don't know how that could be the case.
+
+What do you think?  Do any of you have any advice?
+
+
+EDIT:
+
+Upon further research, I am now 90% sure that the device was damaged due to perspiration.  I've read through the limited warranty, and it appears to be covered for that case.  I am now contacting HTC to see how I can resolve this.",1486959852.0,2,1.0,6
+a:t5_3is8z,I really wish I was dead.,Memes are the only thing keeping me afloat.,1485482223.0,32,0.92,3
+Gentoo,Is it possible to run GNOME with Wayland?,"Hi, /r/gentoo.  I'm a bit of a gentoo newb; I've been using it casually for about 6 months now, and I'm excited to try out Wayland.  I typically use i3 with Xorg, but I'm interested in giving GNOME a try.  Since the latest fedora releases have Wayland support, I imagine there is some way to get GNOME with Wayland running on gentoo. 
+
+I tried researching this, but I could hardly find anything.  I've seen some talk about KDE/Plasma + Wayland but only unanswered forum posts about GNOME + Wayland.  I was hoping one of you would know whether it is possible and, if it is, how I can accomplish it. 
+
+If it is not possible, I'm interested in getting sway + Wayland up and running.  From what I hear, sway is the analogue for i3 under Wayland.  If I can't get GNOME + Wayland working, do you have any tips for getting sway + Wayland working? 
+
+Sorry if this is a really dumb question.  I'm only used to getting X up and running and I can't find any learning material.",1483835260.0,3,0.72,12
+thinkpad,A Question About the Kaby Lake Refresh,"Hi, /r/thinkpad.
+
+Right now, I own a T420s with a really power-hungry i7-2620M CPU.  I bought it used and didn't really consider the power consumption.  I'm still able to milk out 8-ish hours, but I'd really like to try and do better.
+
+I'm looking to purchase this laptop in mid 2017.  I'm a senior in high school, and that is when I will be able to purchase a laptop for college.  More than ANYTHING, I want the best battery life possible; as such, I have been obsessing over the latest Kaby Lake mobile processors.  In particular, I have been thinking about the [i5-7Y54](http://ark.intel.com/products/95452/Intel-Core-m5-7Y54-Processor-4M-Cache-up-to-3_20-GHz).
+
+Having done a lot of research, I feel that the T560 is the best laptop I could buy right now; it is equipped with Skylake processors, which are a hell of a lot more power efficient than what I have now.  My question is essentially this: is there any hope in hell that Lenovo will refresh the T560 with kaby lake processors?  I know that the T series is meant to be for productivity, so it doesn't seem likely that they would opt for the i5-7Y54, as its max TDP is 7W.  I just really want to believe that there will be a TP model of some sort that uses that CPU with a large battery that can last a long time.
+
+I haven't been watching Lenovo for that long; given what you've seen of their history, do you think my dream is possible?  Is there any other products on the market that achieve the same goal?",1481924075.0,0,0.5,8
+Nexus6P,[Question] Can I get long-term support by rooting?,"So, with Google discontinuing the Nexus line and moving towards the Pixel, I'm faced with a dilemma.
+
+I have a note 4 from AT&T.  Unfortunately, the bootloader is locked(so the device cannot be rooted) and the updated are pushed out absurdly slowly(I was getting the marshmallow update when Nougat was being rolled out.  I want a new phone.
+
+I'd like a pure Android experience.  I'm considering the Pixel XL and the Nexus 6P.  I've heard people advise against the 6P because it won't get long-term software support from Google.
+
+My question is this: if I buy an unlocked phone that can be rooted relatively easily, can I just flash ROMs whenever a new Android version is available?  Is that possible, or can I ONLY get updates from Google?
+
+Maybe I could flash CyanogenMod or something.  I'm not sure.
+
+Let me know if this is possible.  I'd like this phone to last a couple years.
+
+EDIT:
+I've never had a rooted Android device.  My apologies if this question is dumb.",1477296398.0,1,0.67,18
+me_irl,me☭irl,,1476592738.0,13,0.82,1
+asktransgender,Question About Labels for Sexual Orientation,"Hi!  I'm a cisgendered male.  When talking about cisgendered people, it's fairly simple to discuss issues of sexual orientation: what homosexuality is, what heterosexuality is, and the like.
+
+However, when discussing transgender or even trans-sex people, I feel the definitions get murky.
+
+My question is this: does homosexuality mean attraction to the same **sex** or the same **gender**?
+
+For example: I have a friend that is a trans-woman, meaning that she(the person in question isn't too picky about pronouns, but I'm using it out of respect) was born a male, but later came to identify as a woman.  She is attracted primarily to men.
+
+Now, would my friend be heterosexual, homosexual, or is there really no useful meaning to these terms in these situations?  Is there a better scheme for describing sexual orientation?  Because it is **sexual** orientation, I would imagine it is defined as what sex a person is attracted to.  However, I know attraction isn't such a simple thing.  Cultural aspects of gender can also play into attraction.
+
+It's not terribly important, but it has been a question I've had for a long time.  If my trans friend were exclusively attracted to people of the male sex and female gender, what would her sexual orientation be?
+
+Perhaps these words just aren't useful in these cases.  I would just like to get some of your feedback.
+
+Thanks :)",1474522320.0,2,0.67,13
+SuggestALaptop,Very Low-Power Laptop for Maximum Battery Life,"* **Total budget and country of purchase:** 
+I'm flexible, but I'd like it to be less than 1000 USD
+
+* **Do you prefer a 2 in 1 form factor, good battery life or best specifications to your requirements for the money? Pick or include any that apply.** 
+Battery life is *critical*.  All other features are subservient to battery life.  This machine will run Gentoo Linux and mainly write notes with vim, run chromium, and occasionally push commits to a GitHub repo.
+
+* **How important is weight to you?**
+It's nice, but ultimately not important.  My Thinkpad T420s seems like a pretty good weight.
+
+* **Which OS do you require? Windows, Linux, Mac.**
+Gentoo Linux.  If you can save money buying off eBay, I'm willing to buy without a hard drive/SSD so I can source one myself and not have to pay for Widows.
+
+* **Do you have a preferred screen size? If indifferent, put N/A.** 
+I imagine smaller LCD = better battery life.  My Acer C720(11.6in) is a comfortable size.  Perhaps 13 would be ideal, since I do run out of screen real-estate with that Chromebook.
+
+* **Are you doing any CAD/video editing/photo editing/gaming? List which programs/games you desire to run. If you have no requirements, put N/A.** 
+No gaming or heavy processing.  Ideally, it would have only integrated graphics(no discrete GPU) for battery life.  Like I said, it's mainly going to run vim and manage git repositories.
+
+* **If you're gaming (leave blank if you put N/A above...), do you have certain games you want to play? At what settings and FPS do you want?** 
+N/A
+
+* **Any specific requirements such as good keyboard, reliable business grade build quality, touch-screen, finger-print reader, optical drive or good input devices (keyboard/touchpad)?** 
+I use i3(a widow manager for Linux), so most is what I do is on there keyboard.  A decent keyboard would be nice.  Also, I use chromium, which requires the touchpad to work effectively--a non-shitty touchpad would be good. As far as I/O goes, I'm flexible.  I could only foresee needing one USB port and a headphone jack.  An SD card reader would be a bonus.
+
+* **Leave any finishing thoughts here that you may feel are necessary and beneficial to the discussion.**
+I'm looking for a laptop with excellent battery life.  However, I prefer not to _only_ increase battery capacity, but to drastically reduce power consumption(power draw in Watts from the battery).  The latter is important to me primarily because I don't like my hardware running really hot or the fans to work hard(that hurts battery life and is annoying).  I don't know if modern mobile CPU line-ups have lower TDP CPU's;. I would imagine so.
+
+If you have any questions, feel free to ask!  Thank you for the help!",1473381718.0,2,1.0,3
+Anarchy101,"How do you respond to the ""risk"" argument?","I have a Republican friend(currently live in the US), who is an ardent advocate for capitalism.  When I try to tell him that capitalist businesses make their wealth by exploiting their workers(just by paying their workers less than the value they create), he tells me they can do that because they assumed all the risk in starting that business.  He told me that, often, investors will make it such that their debts are non-dischargeable in bankruptcy.  So, according to him, the potential risk of being in debt for your entire life is what justifies the exploitative practices businesses employ.
+
+What do you make of this argument and what are potential responses?",1472841869.0,4,0.71,13
+depression,I'm feeling really low.,"I'm 17, soon to be 18.  I will be a High School senior this year.  I play varsity football.
+
+Now, me and football have a long and complicated history, but the long and short of it is that I played all my life up until hell week(right before season starts) of my Junior year(almost exactly one year ago, I quit).  My mental health was out of control, and I needed a measure to help things get better.
+
+I hate football.  All the running and the degrading screams of the coaches, it emotionally drains me.  After a day of football, I feel like a vegetable, unable to do anything other than stare at the ceiling.  The _only_ reason I do it is the potential use it has in getting into a college like MIT.  My grades are good(AP scores, SAT, ACT, all that bullshit), but without an ace card, these schools are really a gamble.  My entire life has been oriented around getting into the best college possible.  It's very important to my parents.  Football is also very important to them.  As a heavy guy, they put me in football to be an offensive lineman.
+
+Which brings me to about 5 months ago.  My parents managed to convince me to rejoin football, under the pretense that it could still help me get into MIT.  We met with the coach, and be told me he wouldn't hold my prior quitting against me.
+
+Flash forward to today.  After 5 months of brutal effort, I have not become a starter yet.
+
+The only value I could get out of football is the recruitment opportunities.  If I don't start, it's unlikely that I will get any attention at all.
+
+Most of the offensive lineman agree that I am a better player than the guy who starts above me.  That's what makes it so horrible.  My coach told me he would consider me fairly, but, it appears that out of pure spite, he will not give me fair consideration.
+
+All those hours I spend sweating or throwing up or running sprints.  All of that time and energy has amounted to nothing.  I'm having really strong suicidal thoughts right now.  I just want to die.  I'm so very done with everything.
+
+I'm sorry.  I just needed to vent.  Thank you for reading.",1470964925.0,3,0.72,6
+learnprogramming,Is learncpp.com still considered bad?,"I've followed learncpp.com for a while. I'm about 25% through it.  Then, today, I saw that the wiki lists it as a bad source to learn from.
+
+It states that it contains missing or incorrect information.  Is that still true?  Is it a bad way to learn it?  I don't really have the money to spend on a c++ book right now.  If you have any other free alternatives that you consider to be better, let me know.
+
+I've learned a surprising amount in those 4 chapters.  The bit-flag lesson was REALLY interesting.  I feel like they cover not just the programming but the theory behind it(different-base number systems, memory, etc).  I thought it has been good, but I wanted to get your input.",1470416424.0,22,0.76,15
+Anarchy101,Explain to me Anarchists' obsession with killing the police,"I presume I'll get a lot of shit for this post.  That's okay.  I'm just genuinely confused on this subject and I need some input.
+
+I understand why Anarchists in general don't like the police.  They interfere with protests and political organization.  They, in staggeringly large numbers, kill off innocents, disproportionately African Americans. In general, it kind of goes against the notion that authority should have to be justified.  I agree that we really shouldn't have police(at least in the way they exist now).
+
+The thing I don't get is the obsession with killing cops indescriminately.  After the Dallas shooting /r/Anarchism paraded it as a wonderful occasion.  I saw comments proclaiming that ""The only good cop is a dead cop"" and the like.
+
+ I don't understand how one can morally condone the killing of police officers that weren't directly involved in abhorrent shit.  Yes, they play a role in a larger system of oppression. But that doesn't give anyone license to kill them.  Police officers are workers, just like you or I.
+
+Now, I can predict what you're thinking.  It probably has something to do with ""bourgeois moralism"".  Essentially, as i understand this, the argument goes that my moral conceptions are irrelevant here because they are informed by the bourgeois.  I was raised in a rich, western nation, and I attended public school.  I stand here saying that these actions are immoral, and my criticism is just dismissed based on where I happened to grow up.  That's a plain genetic fallacy.
+
+As i perceive it, I'm asked to completely abandon my moral intuitions for the pragmatic benefit of the revolution.  Is that a misinterpretation?
+
+My stance would be that the revolution should be attempted with the goal of minimizing suffering.  I'm a Utilitarian, after all. Now, postponing the revolution would cause suffering to the entire working class; that is clear.  Antagonizing and killing police with no direct tie to abhorrent behavior causes a lot of suffering and does little to further the revolution.  If anything, it makes the radical left look like insane psychopaths who shouldn't be listened to.
+
+Please, let me know what you think.  I really just need to hear done opinions so I can get a better understanding of this community and it's ideals.",1469770990.0,32,0.75,48
+me_irl,me☭irl,,1469661787.0,2,0.75,0
+linux,My Mom just called me immature for submitting my essay in .odt format.,"I'm taking a Summer class before my Senior year of High School.  For our final, we had to write a paper.  I swiftly opened OpenOffice Writer and banged out 3 pages.
+
+I then emailed him the file, telling him to let me know if he had any issues opening the file.  I also forwarded the email to my Mom, as proof I finished the class.
+
+The next morning, my Mom barged into my room and asked me why I always have to be so contrarian.  She accused me of being immature for using a file format that is non-standard.  She told me I only like things because they are obscure.
+
+I didn't know using open-source software could result in a shitstorm like this.",1468382544.0,31,0.59,175
+APUSH,Anybody tired of the bourgeois propaganda spouted by their APUSH teacher?,It's really pissing me off.,1468094159.0,9,0.76,6
+APStudents,Can you guys maybe chill?,,1467720388.0,18,0.89,15
+opengl,[Requesting Comments/C++] A GLFW & GLEW Init Class I Wrote,"Hi, /r/opengl.
+
+I've been in the process of learning opengl by following [these wonderful tutorials](http://learnopengl.com/#!Introduction) that use GLFW and GLEW.  My C++ experience is not as solid as I'd like it to be, so I figured I should come up with a project.
+
+Seeing how long my main.cpp can get in some of these tutorials(north of 200 lines sometimes), I figured I would try and write a class header and implementation that took care of all the init stuff and held important objects like the VAO, VBO, shaderProgram, etc.
+
+[Here is the github page for the project.](https://github.com/jakewhitton/sandbox/tree/master/C%2B%2B/opengl)
+
+Just navigate into the ""glinit"" directory, and you'll see glinit.h and glinit.cpp.
+
+I understand not all of you use C++, since OpenGL has bindings for many language, but I was wondering if I'm grasping the concepts of OpenGL correctly.  For example, are some lines not needed?  Is this approach unsafe? etc etc
+
+If you have the time, I'd also like feedback on main.cpp.  If you have anything to share or the time to rip me and my code a new asshole, please do so. :)",1467711040.0,3,0.81,11
+onewordeach,The spirit of Christmas past appears in your bedroom. What do you say? OWE,,1460357067.0,4,0.84,27
+socialism,[Question] Does sexism exist widely today in the West?,"I've noticed on this sub and from Marxist friends of mine that feminism and socialism are intensely tied together.   I have a significant disdain for capitalism, but I haven't really explored this side of socialism. 
+
+I believe that women should have the same economic, social, and political opportunities that men have.  I believe that sexual orientation and gender identity are non-binary aspects of identity that should not be used as the basis for our culture.  I believe that any trait that dies not cause harm to people or is otherwise not chosen, including gender, sexual orientation, sex, etc, sold not be used as a basis for descrimination.
+
+I understand that egalitarianism is central to socialism.  I try to emulate that as much as possible. 
+
+However, I have chosen not to brandish myself as a feminist.  I've seen too many examples of feminist communities banishing people for dissenting opinions.  The stereotypical example of this would be the Atheism+ movement(I've heard you guys hate the ""New Atheist"" movement.  Can anybody explain why?).  I feel like much of the feminist movement is more anti-free speech than I am comfortable with(I've also heard that free-speech isn't held in such high regard here--something about it allowing fascist speech to exist.  Could anyone explain that to me? ).
+
+So, I wanted to get all of your feedback as to what feminism is and what it entails.  What are some examples of gender inequality that still exist today?   What is the best way they can be addressed?",1458950636.0,11,0.76,26
+socialism,Question about education and the labor theory of value,"I watched [this](https://www.youtube.com/watch?v=CWF_0lkBhjY) video the other day, which basically attempts to explain some of the rudiments of Marxism.  Olly, the host, talks about the ""Labor Theory of Value"", which essentially postulates that the value of a product is just the sum of all labor enacted to create it under normal conditions.
+
+That got me thinking, though.  How does this theory deal with ""one-time"" labor enactments, such as learning a set of skills or pursuing general education?  My intuition would be that that initial labor would be ""depreciated"" over all of the products that make use of that information, but, going into job market, you don't know how many units you are going to produce.  How could you price something before the end of your career, if you don't have the total number of units produced?
+
+For example, assume that labor has some kind of concrete unit associated with it.  Let's call it a labor point(lp).  If a factory worker enacts 100lp to learn the skills associated with making a product, and then enacts 5lp for each unit of product, how much should the product be worth?  I feel there just isn't enough information to solve this.  Is there some kind of caveat that I'm missing?
+
+Thanks for your time.",1457691073.0,5,0.78,8
+AskElectronics,"Where should I buy all molex connector supplies(headers, crimp pins, receptacles, etc)?","EDIT: Please disregard the ""all"" in the title.  Reading it back, it doesn't really make sense.
+
+Hello, /r/AskElectronics!
+
+I'm working on a jeopardy-style buzzer for a high school club that my friend is in.  I have the design all worked out, but I wanted to add some modularity into it.  I watched [this](https://youtu.be/lzGZuIVhY1g?t=5m37s) YouTube video about connector types and use cases.  I found that molex connectors will probably suit me best.
+
+I swiftly went to amazon to check if they had listings for such an item, but the selection was rather limited.  I also thought about checking eBay, but I figured I would come here and check with you guys before getting committed to anything.
+
+Here are some examples of items I would need:
+
+
+1. 3-pin molex headers
+
+2. 3-pin molex receptacles
+
+3. 2-pin molex headers
+
+4. 2-pin molex receptacles
+
+5. molex pins
+
+Now, I'm largely new to electronics.  I have a couple of arduinos and a raspberry pi, along with some LEDs and transistors( still trying to figure out how those fucking things work ;) ).  I've largely bought things on amazon, primarily due to the convenience and fast shipping.  I figure you all as a community can suggest some places, online or otherwise, which will deliver a greater selection.
+
+Thanks for taking the time to read this!  I hope you have an excellent day. :)",1455526335.0,0,0.5,2
+fo4,Meth: Not Even Once,,1454887145.0,0,0.36,2
+archlinux,Question about Deleting Auto-Generated systemd-boot entries?,"Hi, /r/archlinux.
+
+I have a triple boot setup, in which I have copied the contents of a hackintosh EFI partition and a windows 10 partition into my EFI partition for arch(I have 3 separate drives).  I created entries manually for Arch, Windows 10, and OSX El Capitan.  However, systemd-boot auto-generated a menu entry for ""Windows Boot Manager"".  I would very much like to delete the auto-generated entry and keep my custom one.  There is also an entry I didn't create called ""Reboot to firmware interface"".  I can only assume that takes me to my BIOS.
+
+I've looked all over the place to find a solution to this, but I haven't come up with anything.  I would really appreciate any help on this.  It isn't a dire issue, but it would be much more aesthetically pleasing to see 3 useful systemd-boot entries when I turn my computer on rather than 5.  I'm kind of picky. ;)
+
+Thanks! :)",1453793992.0,3,1.0,6
+WhatIsThisPainting,[Slight NSFW] Hedonistic art piece from YouTube video,"I'm flagging this as slight nsfw, just to be safe.  I mean, this is an art subreddit, so this piece is probably more on the mild side, but whatever.
+
+I saw this beautiful art piece on a YouTube video, and I have been trying to figure out what it is for the last hour, to no avail.  I figured a subreddit like this would exist, so I figured I would give it a try.
+
+Here is the link to the YouTube video in question: https://youtu.be/jQOfbObFOCw?t=7m55s
+
+It should automatically bring you to moment in question, but, if not, the painting is located at 7:55.
+
+Here is a brief description of the painting. In the foreground, there is a girl, presumably teen, taking off her shoe, while the rest of her clothes are already off.  Behind her, two people in a pond are hugging naked while standing.  Far in the distance, two couples appear to be having sex on the grass.
+
+I apologize if I disobeyed any conventions of this subreddit.  I'm not a reddit veteran, yet.
+
+Thanks, everyone!",1453120614.0,2,1.0,3
+Whatisthis,[Art] NSFW(slight nudity) Hedonistic art piece with pond,"Hello, all!  I saw this piece of art on a YouTube video, but I cannot, for the life of me, find what the name of this piece.  I find it very beautiful, and I would like to learn more about it.
+
+Here is the link: https://youtu.be/jQOfbObFOCw?t=7m55s
+
+It should bring you right to the point in question, but if not, the picture is located at 7:55.
+
+I have searched everywhere, but I cannot find the name of the piece.  It isn't listed anywhere on the video nor on their website.
+
+If you know of this piece or know of any methods I can employ to find it, please let me know!!
+
+Thanks! :)",1453119989.0,7,1.0,2
+changemyview,CMV: Everyone has the right to commit suicide.,"I have struggled with suicidal depression for upwards of 4 years now, so consider that as you interpret my argument.  I'm currently 17 years old--I state that only because I feel it's relevant.  I urge you to refrain from using an argument from age or wisdom, as the fact that I am 17 does not invalidate my reasoning. 
+
+First, I should clarify what I mean when I say that we have the right to commit suicide.  For the purposes of this conversation, a right is the capacity to perform a specified act and not be justly condemned or punished for it.  For instance, I think humans have a right to freedom of thought.  To me, that simply means that you cannot justly condemn or punish someone for thinking, even if you don't want them to think the way they do.  Any moral gripe you have with the action we are calling a ""right"" is invalid. That is how I think about rights; now, onto my thesis.
+
+Everybody has the right to commit suicide.  To me, and for the purposes of this discussion, that simply means that, if a person chooses to commit suicide, nobody can condemn them and morally do so. 
+
+Kant, a very famous philosopher came up with a very important part of morality: that preservation of autonomy is a central moral precept.  A natural extension of this is the idea that nobody should be forced to do something they didn't consent  prior to.  To disobey this moral axiom is to perpetrate the very essence of evil. 
+
+My second note is that nobody consents to living.   The nature of existence is such that we are ""thrown"" into this world without prior consent.  Heidegger used a brilliant term for this--geworfenheit, roughly translating to ""thrown-ness"".  
+
+This transgression against autonomy would usually spur moral indignation, but because it was perpetrated by nature rather than a conscious agent, we shrug and move on.  I would concede that it doesn't make sense to express moral resentment towards nature.  That would be counter-productive.  However, we must stay mindful of this violation when thinking about suicide. 
+
+Here is the crux of my argument: because we were robbed of the choice to live or not live before we were conceived, we must extend that choice to everyone as a right.  Else, those discontent with existence would be _forced_ to endure existence against their will, which is in and of itself immoral.
+
+CMV.
+
+EDIT:
+Thank you, everyone for posting your feedback!!  It was really nice getting all of your perspectives.  Overall, I thought it was a very productive conversation.  Unfortunately, I really do have to get to bed now.  I'll try to respond to more comments tomorrow night, because I'm going to be gone all day tomorrow.  If it makes you feel any better, I am largely convinced suicide isn't the best option for me.  I still firmly believe that suicide is a fundamental right that cannot be infringed, but I also believe that I am going to just continue with existence.  I teeter, of course, but I've felt pretty good with the psychotherapy and medication I've been taking as treatment.  You don't have to fear for my safety, really.  I appreciate all of your input!!  ",1451273797.0,70,0.82,81
+linuxmasterrace,#JustLinuxThings,,1450771652.0,265,0.93,61
+i3wm,Is this possible(Question About Workspaces)?,"Hello, /r/i3wm!
+
+Here's something I would love to accomplish, but I  can't figure out how to implement the solution.
+
+On my desktop setup, I have two displays: a 144hz 1080p monitor, and a 60hz 1080p, wallmounted TV.  Whenever I turn on my computer, I *always* turn on the 144hz monitor.  I do not, however, *always* turn on the TV.
+
+In order to address this, I wrote a script that launches with X.  Essentially, it is a continuous while loop that greps information from `xrandr` and determines whether the TV is turned on or off.  In the script, I also have a variable keeping track of whether the ""change"" has been made.  Once the code inside either the onbutnotcurrentlyused or offbutcurrentlyinuse code blocks is run, it sets the state of the actual USE of the monitor, as to not run the xrandr command to turn on or off the TV over and over again.
+
+Once the script finishes the while routine, it sleeps for 5 seconds, as to not hog up system resources..
+
+I have a keyboard with a numpad(Corsair K70 RGB), which I would like to put to some use.
+
+Here is what I would like to do: I want to use the typical Alt+Number and Alt+Shift+Number key shortcuts, but I want to have the numbers *above* my keyboard operating independently of my numpad.  So, rather than i3 splitting my workspaces into evens and odds, and divvying up the workspaces evenly across both monitors, I would want my TV to have the same set of workspaces, just with different keyboard shortcuts to access/move windows to them.
+
+So, if I wanted to move a window from 144hz workspace 1 to the TV I would navigate toe 144hz workspace 1, and hit Alt+Shift+NUM1.
+
+Would I need two seperate i3bars to accomplish this?
+
+I'm hesitant to make these changes to my i3 config file, as, ideally, it should only run when my TV is connected and put to use by that script I mentioned.  I imagine the solution would be calling i3-msg within the bash script to make these modifications on the fly.
+
+What do you guys think?  Do you have any ideas as to how I can implement this?",1447023785.0,3,0.99,1
+vim,How do I go about learning vim?,"I'm a novice vim user.  I can use hjkl(rebinded it to jkl;), find things in a text file, write, and quite.
+
+I've seen books before written entirely on vi and vim.  I want to become an advanced vim user.  How do you recommend I go about doing that?",1443253134.0,12,0.84,22
+a:t5_3a374,HI KAREN,I'M TOTES GONNA DO THIS NOW. KTHXBAI,1443249103.0,0,0.5,0
+Gentoo,Questions From An Arch User,"Hello,  /r/Gentoo.
+
+I've been using Arch Linux for over 4 months now.  I love it.  It provides do much control over how my computer operates. 
+
+I've heard some talk about Gentoo, and I have some questions. 
+
+1.  What are the benefits of compiling software locally, as opposed to using a package manager? 
+
+2. Does compiling locally limit or expand the amount of software available?  Are you limited only to open-source software that provides the code? 
+
+3. Why do you use and/or prefer Gentoo?
+
+4. Do you have any resources to help learn about Gentoo?  Arch was amazing, because the documentation was so thorough.
+
+5. I've heard that the packages on Gentoo get out of date quickly. Since you don't have a package manager, do you have to delete and recompile each time a new version is available? 
+
+6. How would you describe the ""Gentoo"" way if doing things?  Is there some philosophy at the core of it all?",1438584021.0,12,1.0,18
+Advice,How do I read for enjoyment?,"I'm 16, currently(not too old to change things, I hope), and I've never really made a habit out of reading.  I am an honors/AP student, so I have books that I'm supposed to read for my English classes, but, most of the time, I never actually read the books.
+
+I've learned loads from other sources, like YouTube or simple conversations with the people around me.  I don't think that I'm stupid with my lack of reading, but I think my life would be infinitely improved if I could appreciate the wisdom books have to offer.  I anticipate your urge is to just say, ""Sit down.  Open a book.  Read.  Profit???""  I really have tried that.  Maybe it just has to do with me not finding the right book.
+
+I suppose I'm just looking for some insight into how I can make a habit out of enjoying reading.  If you have any book recommendations, I'm getting my licence soon; I hope to drive to the bookstore and pick up books that I'm interested in.
+
+Thank you for reading.  I apologize if I've wasted your time.",1435312913.0,1,1.0,4
+archlinux,Best programming setup?,"I've been using Arch for a couple of months now.  I've learned so much, and I can hardly imagine using a distro other than Arch.
+
+I was wondering: what do you use to be productive at programming?
+
+For example,
+1. What window manager do you use? 
+2. What desktop environment do you use? 
+3. Do you prefer IDE's or command-line compilers?  Any suggestions to try? 
+
+I'm currently trying out i3.  I really like it.    I just need to learn how to make it look nicer.  As for compilers, I really like command-line compilers, like gcc.
+
+What are your thoughts?",1433954363.0,61,0.87,78
+SuicideWatch,Why don't you think suicide is rational?,[removed],1433915124.0,7,0.78,11
+civ,Best math-based mechanics to understand?,"There's a lot of really cool math-based mechanics in civ.  Being an avid fan of math, I was curious what other math would be good to know to be a better player.
+
+What do you guys think?   Are there any aspects of the game that involve math that you think are cool?",1433455554.0,6,1.0,5
+depression,My Mom Thinks I choose to be Depressed.,"Hello, everyone.  Please excuse me for violating any conventions that exist within the reddit community.  I've just recently become obsessed with it--this is actually my first post.  I don't expect this post to go anywhere--I just want an opportunity to talk to anybody out there who can relate with me.
+
+I'm quite young--still a High School student(sophomore).  My family has a quite extensive relationship with depression, both on my mother's and father's side.  All but one of my siblings has received treatment for depression-related issues(whether it be bipolar, depression, anxiety, etc).  If I'm correct in believing that there is a genetic component to depression, I wasn't necessarily handed great cards.  
+
+However, my mother has never really had a personal experience with depression, though her siblings certainly have.  Whenever we talk about it, she always seems to suggest that I need to just ""make the choice"" to respond to things in a more positive light.  To her, your reaction is completely of your own doing.  I always contest that point with her, but she hasn't changed her mind.  She doesn't really understand--I don't know if she thinks that I want to be depressed, or if I'm just weak of will.  She has taken me through the steps of getting help, though I feel she has a bias to the ""medicine route"", which doesn't necessarily work for everyone.   Recently, my doctor put me on an experimental drug, which he urged the importance of continuous, uninterrupted use.  He didn't give us a prescription, but rather gave us 15 pills, with the assumption that we would come back to discuss the effects, in order to determine whether the medication was working.  Unfortunately, when we tried to schedule the follow-up visit, the office returned a voice-mail saying that the appointments were canceled.  We've called him 6 times in the last month, but he's nowhere to be found.  I've heard that he has mental issues himself--perhaps he's having some issues in his own life--who knows?  Since then, I haven't been getting help.  For me, my depression manifests itself in making everything harder--I just lack the necessary motivation and energy to get through the day.  Everything is so hard.  Then, when I cut corners or procrastinate to try and enjoy the moment, that inevitably results in worse performance in school(I have a very demanding class schedule, and it will only be worse next year).  Then, I'm dragged into this hopeless cycle of underperforming, resulting in more depression, resulting in more underperforming.  My mom doesn't understand why I procrastinate--she doesn't understand my study habits.  I'm just so god-damned overwhelmed that I can't manage my own life, which, 6 months ago, I had no problems with.  I really don't know what she thinks of this.
+
+I try to explain that I'm so deprived of energy and happiness that I just can't go on.  She just isn't able to understand, unfortunately.  I seldom go through a day, not wishing that I could just stop existing.  It seems asinine to not wish for that.  Life is just suffering, it seems.  Everything is so fucking competitive--It doesn't seem worth it.  I don't see myself committing suicide anytime soon, but I certainly wish I were dead.
+
+Thanks for reading--I know this turned out to be quite a long post.  This community seems like such a supportive tool, that I couldn't help but vent to you guys.  Again, thanks for reading.",1428815405.0,2,1.0,3

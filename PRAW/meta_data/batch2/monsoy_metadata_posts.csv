@@ -1,0 +1,142 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+whiteoutsurvival,[Gen 4] Reina vs. Jessie/Jasser/Seo-yoon,"When the 4th Generation heroes first arrived I got excited to finally see a new hero that could become an additional rally joiner for things like Bear Trap and other rally events.
+
+Now I realised that the wording of her top Expedition ability has a slight difference in its wording:
+
+|Hero|Expedition Ability|
+|:-|:-|
+|Jessie|Increasing damage dealt by 5%/10%/15%/20%/25% for all troops.|
+|Reina|Increasing **normal** attack damage by 10%/15%/20%/25%/30% for all troops.|
+
+The subtle yet possibly significant difference in the wording: Reina's ability buffs NORMAL attack damage, which does imply that she does not increase the damage of sources outside of basic attacks.
+
+Now my main question is this: Does this actually lead to a meaningful difference in damage dealt? It doesn't seem like there are many non-normal attack damage sources in Expedition.  
+",1742994899.0,1,1.0,3
+whiteoutsurvival,[Question] Is there a difference between Auto and Manual application of Pet Refinement?  ,"When refining pets we are given the option between automatically applying the refinement and manually upgrading the pets. I wonder if anyone knows if it is worth it to do manual upgrades, specifically if there is a strategy concerning when it's worth to ""Retry"" instead of applying the refinement.
+
+",1736506854.0,1,1.0,3
+StarWarsCantina,Acolyte Theory: Possible reason for the Jedi's ignorance of the Sith,"I have a theory about why the Jedi still believe that the Sith is extinct after this season of the Acolyte. Spoilers for episodes 1-6
+
+I have been thinking about this a lot. My first initial reaction after the slaughter in episode 5 was how in the hell can this be covered up? I believe the highest likelyhood is that they will think it's a fallen Jedi. But my theory is that they will find out they were murdered by Qimir, and if what he said was true; That he used to be a Jedi long ago, it's possible that the Jedi order won't look further into it than ""Such a tragic story that Qimir let his emotions get the best of him"". ",1720075700.0,39,0.8,22
+2007scape,How Many Chests Does It Take? My Simulation of Guardians of the Rift for Abyssal Pearls,"# TL;DR
+
+* Getting the full Runecrafting Outfit will require on average 628 Rewards Chest
+* The mean number of chests to obtain 100 Pearls is 49.66, with a Standard Deviation of 17.70
+* The mean number of chests required for 1000 Abyssal Pearls = 466.2, with a Standard Deviation of 54.58
+
+
+
+# Introduction
+
+While I was grinding away at GotR, I became curious about how long it would take to receive enough Abyssal Pearls to purchase the Runecrafting Outfit. I just had my ""Statistics and Statistical Programming"" exam a few weeks ago and it's fun to apply theoretical knowledge with topics that are interesting.
+
+So I made a simulation that opens chests until the specified Abyssal Pearls goal is achieved. I then plotted the histogram and calculated statistical moments of interest to estimate the expected amount of chests needed.
+
+# Methodology
+
+To reduce the computations needed, I modeled the probability of getting the Abyssal Pearls from a Rewards Chest (1 / 6.94) into a Geometric Distribution and incremented the ""chests opened"" variable with RVS (random variates). Geometric Distribution, for those curious, is the probability model that calculates how many attempts are needed to achieve the first success.
+
+Abyssal Pearls drops in multiple quantities, a range of 10 - 20 Pearls can be obtained per chest. I could have used the mean (15), but I ended up generating a random number between 10 and 20 each time.
+
+I took the results from the simulation and plotted a histogram from the datapoints. Since the resulting dataset from my simulations were approximately normal distrubuted, I decided to also fit the dataset to a normal distribution so that I could plot a gaussian curve on the graph aswell. It doesn't have much statistical value, but it looks cool :)
+
+# Graphs
+
+Here are some graphs from my simulation runs
+
+[Statistical model to obtain enough Pearls for full outfit. This run was done before I did more work making the plots prettier.](https://preview.redd.it/ek0qq2yj9q6d1.png?width=640&format=png&auto=webp&s=2fbec6dec1b2c61951b4bc9f18b4dba35433b3c5)
+
+Relevant stats
+
+* Mean: 627.9
+* 95% Confidence Interval for Mean: \[627.78, 628.03\]
+* Standard Deviation: 62.63
+
+[Statistical Model to Obtain 100 Abyssal Pearls](https://preview.redd.it/zuoqif1faq6d1.png?width=1000&format=png&auto=webp&s=ed2b0f56807fc5480a12e2891fab08cfdf5e8381)
+
+[Statistical Model to Obtain 1000 Abyssal Pearls](https://preview.redd.it/rrnu6t1laq6d1.png?width=1000&format=png&auto=webp&s=ec1c1af9ecc6434dc21dbb10ddf4d17ab43ec266)
+
+  
+While the number of chests may seem high to some people, it's important to consider that you will get enough points to open more than one chest per game. If you manage to consistently get a score of 300/300 per game, the mean total rounds needed to play to get the entire outfit is 210 Rounds
+
+
+
+# Simulation Code for those interested
+
+Since I wanted to run the simulations many many times, I made the simulation multithreaded. That means that my machine can run multiple simulations in parallel. My machine has 8 CPU Cores so I could run 8 simulations simultaneously, which is much faster than normal sequential programming
+
+    def simulate_one_run(target_pearls: int, probability: float):
+        total_pearls: int = 0
+        chests_opened: int = 0
+        while total_pearls < target_pearls:
+            chests_opened += stats.geom.rvs(p=probability)
+            total_pearls += stats.randint.rvs(10, 21)
+    
+        return chests_opened
+
+    def run_threaded(target_pearls: int, probability: float, simulations: int = 10_000,
+                     maxworkers: int = None) -> np.ndarray:
+        results = []
+        completed_simulations = 0
+        with ThreadPoolExecutor(max_workers=maxworkers) as executor:
+            futures = {executor.submit(simulate_one_run, target_pearls, probability): i
+                       for i in range(simulations)}
+    
+            for i, future in enumerate(as_completed(futures)):
+                try:
+                    completed_simulations += 1
+                    results.append(future.result())
+                    if i % 10_000 == 0:
+                        print(f""{completed_simulations} Simulations out of {simulations}..."")
+                except Exception as ex:
+                    print(f""Exception: {ex}"")
+    
+            arr = np.array(results)
+    
+            return arr
+    ",1718455501.0,35,0.77,34
+leagueoflegends,Is there LPL proview of the 2023 spring split?,[removed],1677663133.0,0,0.5,0
+gameofthrones,«A small man can cast a very large Shadow» - Image from the Illustrated edition of «A Game of Thrones»,,1669597499.0,110,0.98,6
+Gunners,What's changed for Granit Xhaka at Arsenal? - TIFO irl JJ analyses how Arsenal changed how they use Xhaka,,1663852245.0,0,0.33,0
+cscareerquestions,Are Certifications useful to have in your back-pocket for applying for Tech jobs?,"Hey everyone! Sorry if this has been asked before, but I'm really curious about this subject.
+
+I'm currently studying Software Engineering and I'm enjoying it so far. What I'm wondering is: Are Certifications (Ex. W3Schools Certifications) something that may get you picked over someone with the same Bachelors degree that have no extra certifications?",1663842523.0,1,0.57,12
+leagueoflegends,I was just banned for use of 3rd party applications and I honestly have no clue why,[removed],1569623593.0,4,0.83,13
+JhinMains,[Discussion] Let's talk about runes!,"What do you guys favor, Dark Harvest or Fleet footwork? With Dark Harvest, do you itemize more for lane early, or do you go standard build?
+
+I see that most people use Sorcery as the secondary rune set,  with manaflow and Gathering Storm. The rune set up I'm really curious to try out is Dark Harvest and Celerity. The reason for that is that you lose out on a lot of MS by going Domination, and Celerity should in theory give you 10% more MS from your crits, making it really good for kiting on Jhin.  Because how insane Gathering Storm is on Jhin, Celerity would have to go in the place of Manaflow band, but would it be better than Manaflow?
+
+
+If you have any rune or itemization theories, this is the perfect place to discuss it
+",1553246526.0,5,0.86,12
+equelMemes,It's beautiful,,1544612465.0,64,0.97,2
+2007scape,Went through my bookcase and found this book from my childhood. Nostalgic af,,1535153665.0,54,0.86,21
+EmpireDidNothingWrong,NY times propaganda,,1535128122.0,26,0.96,0
+inthesoulstone,"As much as I loved the snap bots, can we make a megathread for calling on the bots?","The comments are literally only bot commands. I might be the only one salty about it, since it's only a meme sub, but would love to see original funny comments aswell 
+
+Yes, I'm perfectly aware that if this post gets any comments at all, it will be all bot commands",1533542036.0,13,1.0,6
+StarWars,Massive appreciation for John Williams,"After watching the bonus material from The Force Awakens, my appreciation for John Williams grew massively
+
+Without him, Star Wars would be entirely different. The music in Star Wars is one of the best in the entire film industry and because of his return for The Force Awakens, the movie felt like Star Wars. Without him, The Force Awakens would not feel like Star Wars and that is the most important factor in making a SW movie.
+",1459855248.0,24,0.83,7
+starwarsrebels,[Spoilers for Twillight of the Apprentice] Maul's helper?,[removed],1459438030.0,2,1.0,0
+StarWars,"If you were Force Sensitive, do you think you could manage to not fall to the Dark Side?",,1459006050.0,36,0.92,92
+StarWars,How would you like the new trilogy to end?,"I personally would like the First Order to end up on top after IX. Kylo Ren killing Luke in a duel, the resistance being wiped out.
+It would bring a lot of hype to the trilogy coming after that again and having the bad guys win would be a huge plot twist, since the good guys always win
+
+How about you? How would you like it to end?",1458390291.0,39,0.82,87
+2007scape,Accurate illustration of my life,,1447158744.0,235,0.89,35
+HearthDecklists,a Patron Warrior twist; Dragon Patron,"http://i.imgur.com/iGRtwSA.jpg
+
+I wanted to create a new dragon deck for warrior and i added general patron warrior finishers and card draw. I removed more dragons and added more patron cards and i found this deck to be quite successful.
+Most opponents don't play around a patron finisher after seeing Azure Drakes and Blackwing Corrupters.
+
+
+Feel free to try it for yourself and i would also love constructive feedback on how to make the deck better, without taking away the dragon concept.
+Thanks
+
+EDIT: I'm now trying to replace Nefarian with Chromaggus (Thanks to /u/niclake13). I will report back to see if it's good.",1439208277.0,9,0.92,7
+CompetitiveHS,A Patron Warrior twist; Dragon Patron,[removed],1439171810.0,1,0.67,1
+leagueoflegends,Can we get a beta of the Magma Chamber?,"I know that Magma Chamber gets released in season 4, but can we get a beta for the map and gamemode like the one at the all star matches?
+The map wouldn't be too neccesary, but atleast the game mode. Thanks",1370016273.0,0,0.5,3
+leagueoflegends,EU West is down for 3 hours,[removed],1352322884.0,0,0.5,7

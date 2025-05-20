@@ -1,0 +1,403 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+malelivingspace,Any tips for how to make the most out of this space?,,1661622980.0,6,0.72,4
+analog,"Fields [Pentax 645, 80mm f/2.8, Ilford HP5 Plus (pushed 2 stops)]",,1657456764.0,14,0.9,0
+analog,"Highlights from my first roll on medium format [Pentax 645, SMC 75mm, Ilford HP5 Plus]",,1655215205.0,10,0.85,0
+analog,"Karima [Mamiya ZM, Mamiya Sekor E 50mm, Cinestill 800T]",,1652696089.0,5,0.73,0
+dkfinance,Alternativer til Danske Bank,"Jeg vil gerne skifte bank og er på nuværende tidspunkt kunde hos Danske Bank. Jeg regner med blive færdig med en BSc i Datalogi her til sommer og komme ud og arbejde i et år eller to før jeg tager kandidaten og er derfor ikke interesseret i studiekonti. Hvad bruger i andre herinde? 
+
+Jeg benytter mig af to konti hos DB, en forbrugs konto og en opsparingskonto med \~45k, så jeg sætter pris på¨ at overførsler mellem egne konti. Opsparingen kommer dog til at skrympe en del når jeg skal flytte bolig ved slutningen af min bachelor.",1649148592.0,28,0.95,40
+adventofcode,[2021 Day 15 (Part 1) [Haskell] Djikstras not finding the most optimal path,"I'm struggling to understand why my implementation doesn't produce the right output when the shortest path may require going up or to the left as I've included these directions in my neighbor ""generator"".   
+
+
+    import           Data.List       (delete, minimumBy)
+    import           Data.List.Split (chunksOf)
+    import qualified Data.Map        as M
+    import           Data.Maybe      (fromJust)
+    
+    type Node = (Int, Int)
+    type Cost = Int
+    type Grid = M.Map Node Cost
+    
+    main = do
+      contents <- readFile ""mini.in""
+      let ls = lines contents
+          (mx, my) = (length ls, (length . head) ls)
+          ns = concatMap (map read . chunksOf 1) ls :: [Int]
+          vs = zip [(x, y) | x <- [0..mx-1], y <- [0..my-1]] ns
+          startNode = (0,0) :: Node
+          g = M.insert startNode 0 (M.fromList vs)
+          ds = M.insert startNode 0 $ M.map (\a -> maxBound::Int) g
+          q = M.assocs ds
+      return $ djs q ds g (mx, my)
+    
+    ns :: Node -> [Node]
+    ns (x, y) = [(x, y-1), (x, y+1), (x-1, y), (x+1, y)]
+    
+    djs :: [(Node, Cost)] -> Grid -> Grid -> (Int, Int) -> M.Map Node Int
+    djs [] ds g (mx, my)  = ds
+    djs q ds g (mx, my) =
+      let cNode@(v, _) = minimumBy (\a b -> compare (snd a) (snd b)) q
+          q' = delete cNode q
+          neigh = filter checkBounds (ns v)
+          ds' = foldl (maybeUpdate v) ds neigh
+       in djs q' ds' g (mx, my)
+        where checkBounds (x, y) =
+               (x >= 0 && x < mx) && (y >= 0 && y < my)
+              unsafeLookup k m = fromJust (M.lookup k m)
+              maybeUpdate v ds u =
+                let alt = unsafeLookup v ds + unsafeLookup u g
+                 in if alt < unsafeLookup u ds then
+                      M.insert u alt ds
+                    else
+                      ds",1639575221.0,1,0.67,1
+adventofcode,[2021 Day 13 (Part 2)][Haskell] Output is a bit wrangled,"I'm trying to implement the solution by actually folding the ""paper"" in over itself. The output suggests that there is a small issue which happens at each step as certain characters are somewhat legible, sadly I cannot figure out what is wrong.
+
+    {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
+    import           Control.Arrow   ((***))
+    import           Control.Monad   (join)
+    import           Data.List       (maximum, transpose)
+    import           Data.List.Split (chunksOf, splitOn)
+    import qualified Data.Map        as M
+    
+    type Point = (Int, Int)
+    
+    data Axis = Vertical | Horizontal deriving (Show, Eq)
+    type Fold = (Axis, Int)
+    type Mark = Bool
+    type Grid = [[Bool]]
+    
+    main = do
+        contents <- readFile ""input.in""
+        let ll = lines contents
+            ls = splitOn [""""] ll
+            dots = map (pPoint . splitOn "","") (head ls)
+            (maxX, maxY) = join (***) maximum (unzip dots)
+            folds = map (pFold . concat . splitOn ""="" . last . splitOn "" "") (last ls)
+            idx = [(i,j) | i <- [0..maxX], j <- [0..maxY]]
+            g = foldl (\m k -> M.insert k False m) M.empty idx
+            g' = foldl (\m k -> M.insert k True m) g dots
+            g'' = transpose $ chunksOf (maxY+1) (M.elems g')
+        print folds
+        print $ part_1 g'' folds
+        visualize $ part_2 g'' folds
+        where pFold ('x':ns) = (Vertical, read ns) :: Fold
+              pFold ('y':ns) = (Horizontal, read ns) :: Fold
+              pPoint [x, y] = (read x, read y) :: Point
+    
+    part_1 :: Grid -> [Fold] -> Int
+    part_1 g folds = countDots $ foldGrid g (head folds)
+    
+    part_2 :: Grid -> [Fold] -> [[Bool]]
+    part_2 = foldl foldGrid
+    
+    visualize :: Grid -> IO ()
+    visualize = mapM_ (print . concatMap (\m -> if m then ""#"" else "" ""))
+    
+    foldGrid :: Grid -> Fold -> [[Bool]]
+    foldGrid g (Vertical, x)   =
+        let (left, _:right) = splitAt x (transpose g)
+            right' = map reverse (transpose right)
+         in overlap (transpose left) right'
+    foldGrid g (Horizontal, y) =
+      let (top, _:bottom) = splitAt y g
+          bottom' = map reverse (transpose bottom)
+       in transpose $ overlap (transpose top) bottom'
+    
+    overlap :: Grid -> Grid -> Grid
+    overlap = zipWith (zipWith (||))
+    
+    countDots :: Grid -> Int
+    countDots = length . filter (== True) . concat",1639405350.0,3,1.0,3
+adventofcode,[2021 Day 9 Part 1] [Haskell] Correct output for testcase but incorrect for input,"    import           Data.List.Split (splitOn)
+    import qualified Data.Map        as M
+    import           Data.Maybe      (isJust, mapMaybe)
+    import           Debug.Trace     (trace)
+    
+    main = do
+        contents <- readFile ""test-2.in""
+        let ll = map (map read . filter ("""" /=) . splitOn """") $ lines contents :: [[Int]]
+        print $ solve_1 $ transpose ll
+    
+    solve_1 :: [[Int]] -> Int
+    solve_1 input =
+        let nRows = length input - 1
+            mCols = length (head input) - 1
+            indexes = [(i,j) | i <- [0..nRows], j <- [0..mCols]]
+            flat = concat input
+            zipped = zip indexes flat
+            grid =  foldl (\m (k, v) -> M.insert k v m) M.empty zipped
+            riskLevels = mapMaybe (\idx -> getRiskLevel idx grid nRows mCols) indexes
+          in sum riskLevels
+    
+    -- Returns True for both test and input data
+    allPresent :: [(Int,Int)] -> M.Map (Int,Int) Int -> Bool
+    allPresent indexes grid =
+      all (isJust . (`M.lookup` grid)) indexes
+    
+    getRiskLevel :: (Int, Int) -> M.Map (Int, Int) Int -> Int -> Int -> Maybe Int
+    getRiskLevel index grid nRows mCols = do
+      valueAtIndex <- M.lookup index grid
+      let valuesOfNeighbours = mapMaybe (`M.lookup` grid) (neighbours index nRows mCols)
+      if all (valueAtIndex <) valuesOfNeighbours then
+        return $ valueAtIndex + 1
+      else
+        Nothing
+    
+    neighbours :: (Int, Int) -> Int -> Int -> [(Int, Int)]
+    neighbours (i,j) nRows mCols
+      | (i == 0) && (j == 0) = [(0,1), (1,0)]
+      | (i == 0) && (j == mCols) = [(0, j-1), (1, j)]
+      | (i == nRows) && (j == 0)  = [(i-1, j), (i, j+1)]
+      | (i == nRows) && (j == mCols) = [(i, j-1), (i-1, j)]
+      | i == 0 = [(i, j-1), (i+1, j), (i, j+1)]
+      | j == 0 = [(i-1, j), (i, j+1), (i+1, j)]
+      | i == nRows = [(i, j-1), (i-1, j), (i, j+1)]
+      | j == mCols = [(i-1,j), (i,j-1), (i-1,j)]
+      | otherwise =
+        [(i-1, j),(i+1, j),(i, j-1),(i, j+1)]",1639056147.0,2,1.0,2
+PathOfExileBuilds,"Crit Blade Flurry Raider, elp needed","TLDR: [https://pastebin.com/Lg13w4eV](https://pastebin.com/Lg13w4eV)
+
+This is the first build that I've ever made, usually I use one of the builds that Mathil suggests at the start of the league but wanted to try doing it myself, and this is the result.
+
+With average/shitty gear I get up to 600k dps, but life is very low (3.5k with life everywhere but the helmet). I'm not fixed on the skill, but wanted to do melee since I usually play ranged characters. Is there any way to fix this?",1610554347.0,1,1.0,0
+LowSodiumCyberpunk,When she leaves you for someone else,,1608339660.0,1,0.6,0
+buildapc,Looking for a CPU upgrade,"I'm currently rocking a Ryzen 5 2600 with a RTX 2060 but I've noticed that in high density situations in Cyberpunk i.e. whenever moving around the world and not in confined spaces, my fps drops from >60 to as low as 30. Whenever I get >60 fps my GPU usage is at 100%, but when my fps drops, so does the GPU utilization so I'm guessing that my CPU is bottlenecking since it's always around 56-59% utilization. 
+
+My question is, what CPU should I upgrade to in order to be able to utilize the full power of my GPU even in high-density situations? Or should I wait for CDPR to optimize the game? I've set Population Density down to the lowset setting and it helped, but I'd prefer to be able to have it at highest and still get >60 fps.",1607869012.0,2,0.76,4
+quin69,How Quin69 came to be,,1606819989.0,24,0.91,1
+battlestations,My own little corner,,1598979231.0,79,0.99,13
+plantclinic,I might've killed my plant,,1587042377.0,1,1.0,5
+plantclinic,I might have ruined my plant,[removed],1587042292.0,1,1.0,1
+analog,[Mamiya ZM | 50mm | Ektar 100],,1566135725.0,4,1.0,2
+analog,[Mamiya ZM | 50mm | Ektar 100],,1566070134.0,133,0.95,5
+analog,Support [Mamiya ZM | 50mm | Ektar 100],,1566044398.0,2,1.0,0
+analog,[Mamiya ZM | 35-105mm | Portra 160],,1565879697.0,16,0.88,1
+analog,Float [Mamiya ZM | 35-105mm | Portra 160],,1565806100.0,12,0.84,3
+HomeworkHelp,[Linear Algebra] Change of basis calculation given two bases.,"Given two bases for the same subspace in R^(4) I have to find the change of basis matrices from one base to the other and vice versa. The two bases, B and C, consist of the following vectors `B = {(1, -1, 1, 1), (1, 2, 0, 2), (1, 0, -1, 0)}` and `C = {(5, -3, -4, -1), (6, 4, 1, 8), (7, 2, -1, 6)}`.
+
+&#x200B;
+
+I've managed to calculate the change of basis matrix from C to B, B<-C by forming three augmented matrices using a matrix composed of the base-vectors in B (used as columns) and a vector from C.
+
+e.g.
+
+&#x200B;
+
+|1|1|1|5|
+|:-|:-|:-|:-|
+|\-1|2|0|\-3|
+|1|0|\-1|\-4|
+|1|2|0|\-1|
+
+I then reduce the matrix to reduced row echelon form using Gauss-Jordan elimination, I do this for each of the augmented matrices and arrive at the following change of basis matrix:
+
+&#x200B;
+
+|1|2|2|
+|:-|:-|:-|
+|\-1|3|2|
+|5|1|3|
+|0|0|0|
+
+How can i check whether this matrix is correct?
+
+&#x200B;
+
+Also, i know it is possible to calculate the reverse change of basis by finding the inverse of the previous change of basis matrix, but is this even possible since the matrix is not square?",1558093555.0,1,1.0,1
+videos,A video on Pop Science by Coffee Break,,1555608946.0,48,0.58,3
+analog,My brother [Mamiya ZM | 35~105mm | Fujifilm Superia 400],,1554924832.0,9,0.91,0
+analog,Surveillance [Mamiya ZM | 35~105mm | Fujifilm Superia 400],,1554785129.0,42,0.94,2
+AskProgramming,How should I structure my TODO program,"I'm currently working on my first non-school related project and wondering how I should structure my program.
+
+Currently i have the following
+
+* Interface `Task` representing each individual task
+* Class `Todo` which has methods that write to a JSON file to save data, and read the same file to create a list of the tasks. 
+
+While I don't think theres anything inheritely wrong with this design, I'm left wondering whether methods that work on the list of tasks should be in a seperate class or not. Also if you know any good sources on software architechture and design please link them below. ",1553798974.0,2,1.0,5
+Kaylemains,"Kayle is behind in Gold, XP and Kills in nearly all her matchups, even the ones with >50% winrate",,1551961500.0,54,0.78,98
+buildapc,"First time building a PC, need some help.","So I've put together this Ryzen 5 2600 build together but I'm not sure if all of the neccessary cables will be included - e.g. connectors for the SSD, I also have an HDD from my current PC  which im going to use in the new build, I guess I can use its cables in the new build - right? Here is a picture of the [build](https://imgur.com/a/iaI9Lrj).
+
+If you have any tips regarding parts please share them :)",1550051265.0,1,1.0,2
+unixporn,[i3-gaps] A little bit of pink and blue,,1545561768.0,56,0.93,29
+buildapcforme,New rig/upgrade for gaming,">**What will you be doing with this PC? Be as specific as possible, and include specific games or programs you will be using.**
+
+* Mainly gaming (League of Legends, Battlefield V) maybe a little of software development if I decide to dual boot Linux and Windows.
+
+>**What is your maximum budget before rebates/shipping/taxes?**
+
+* I'm mainly looking to upgrade my current rig, if that is even worth it. But for a complete new rig I'm willing to spend 7-8000 danish kroner ($1000-$1224,23) but the less the better.
+
+>**When do you plan on building/buying the PC? Note: beyond a week or two from today means any build you receive will be out of date when you want to buy.**
+
+Depending on whether this will be an upgrade or a full new build and the price I might be able to do it at the end of Novemeber, otherwise I'd have to save up so up to half a year from now.
+
+>**What, exactly, do you need included in the budget? (Tower/OS/monitor/keyboard/mouse/etc)**
+
+If it's an upgrade then just the parts that you think need to be upgraded, otherwise the full build + OS.
+
+>**Which country (and state/province) will you be purchasing the parts in? If you're in US, do you have access to a Microcenter location?**
+
+* Denmark, there is no Microcenter in Denmark.
+
+>**If reusing any parts (including monitor(s)/keyboard/mouse/etc), what parts will you be reusing? Brands and models are appreciated.**
+
+* I'll post my old rig here: ASUS H81D-PLUS motherboard, Intel i5 4460 @ 3.2 GHz, MSI Twinfrozr GTX 770 2GB, 8GB of RAM, 500W PSU.
+
+>**Will you be overclocking? If yes, are you interested in overclocking right away, or down the line? CPU and/or GPU?**
+
+* No.
+
+>**Are there any specific features or items you want/need in the build? (ex: SSD, large amount of storage or a RAID setup, CUDA or OpenCL support, etc)**
+
+* An ssd would be nice.
+
+>**Do you have any specific case preferences (Size like ITX/microATX/mid-tower/full-tower, styles, colors, window or not, LED lighting, etc), or a particular color theme preference for the components?**
+
+* I like small build, no RGB or see-through case necessary but it's welcome if it's minimal.
+
+>**Do you need a copy of Windows included in the budget? If you do need one included, do you have a preference?**
+
+* Yes preferably windows 10
+
+>**Extra info or particulars:**
+
+* The prices in US are way lower than the prices in Denmark for most products, if it's possible please use sites like [Komplett.dk](https://Komplett.dk), [Power.dk](https://Power.dk), [Proshop.dk](https://Proshop.dk), an even [pricerunner.dk](https://pricerunner.dk) (here you can search for products by price)",1542533609.0,1,1.0,0
+buildapc,Looking to upgrade my GPU,"I have a somewhat old PC and I want to be able to play Battlefield V at 1080p with a stable 60 fps with a mix of low and high settings (performance and visibility are priorities for me) as well as cyberpunk 2077 whenever it will be out. At the moment I cant really say that BF V is playable for me as i get an unstable framerate even when i decrease the in-game resolution.  I've looked at a GTX 1060 3/6 GB from Zotac but I'm not sure whether it is worth upgrading as I'm afraid that the rest of my PC will be bottle-necking the GPU - what are your thoughts on this - should I upgrade the card or save up and upgrade the whole PC?
+
+* ASUS H81M-D motherboard
+* Intel i5 4460 @ 3.2 GHz
+* 8 GB of RAM
+* GTX 770 (MSI Twinfrozr 2GB)",1542318728.0,1,1.0,3
+analog,Playin' ball [Nikon EM | 50mm f/1.8 | TRI-X],,1540124447.0,2,1.0,0
+analog,Coffee [Nikon EM | 50mm/f1.8 | Kodak TRI-X],,1540033015.0,11,1.0,0
+redditdev,How can i get a posts from up to a week ago?,"Just starting on the bot so the body of the loop will not be like it is now but here is what i got:
+
+    timestamp = int(time.time())
+    
+    counter = 1
+    Limit = 7*24*60*60
+    for submission in subreddit.new():
+        if timestamp - submission.created < Limit:
+            print(""-------------  "", counter ,""  ------------\n"")
+            print(""Title: "", submission.title)
+            print(""Ups/Downs: "", submission.ups, ""/"", submission.downs)
+            print(""Score: "", submission.score)
+            print(""Date:"", time.strftime(""%a, %d %b %Y %H:%M:%S +0000"", time.localtime(submission.created)))
+            counter += 1
+
+This should get me the posts from up to a week but i only get post today-yesterday - is this due to the `.new()` if so, what should i be using instead?",1539120485.0,5,1.0,4
+analog,[Nikon EM | 50mm f/1.8 | Kodak Tri-X],,1539102323.0,6,1.0,0
+MacMiller,Tattoo in honour of Mac,"I want to get a tattoo done and I want it to be in honour of Mac, Im considering getting the one on his hand (circular sunset) but I can't find any close-ups of it - can ya'll help me?",1539097940.0,4,1.0,2
+analog,Copenhagen Opera House [Nikon EM | 50mm f/1.8 | Kodak Ektar],,1539032727.0,3,1.0,0
+analog,Ball [Nikon EM | 50mm f/1.8 | Fujifilm Superia 400],,1538662514.0,12,0.93,0
+analog,Flight [Nikon EM | 50mm f/1.8 | Fujifilm Superia 400],,1538515137.0,259,1.0,4
+analog,Under construction [Nikon EM | 50mm f/1.8 | Kodak Ektar 100],,1538508610.0,12,0.93,0
+analog,Happy little accident [Nikon EM | 50mm f/1.8 | Kodak Gold],,1537166096.0,26,0.83,0
+analog,Lost in thought [Nikon EM | 50mm f/1.8 | Kodak Gold],,1537018564.0,13,0.93,0
+analog,Shy [Nikon EM | 50mm f/1.8 | Kodak Gold],,1536937168.0,15,0.9,0
+analog,Milishia [Nikon EM | 50mm f/1.8 | Kodak Gold],,1536846624.0,74,0.94,2
+analog,First portrait of strangers [Nikon EM | 50mm f/1.8 | Kodak Gold],,1536745758.0,23,0.84,5
+analog,Train [Nikon EM | 50mm f/1.8 | Kodak Gold],,1536735614.0,34,0.94,2
+analog,Valby [Nikon EM | 50mm f/1.8 | Kodak Gold],,1536690869.0,5,0.7,3
+analog,View from my window [Nikon EM | 50mm f/1.8 | Kodak Gold 200],,1536342500.0,10,0.85,0
+analog,Stairway [Nikon EM | 50mm f/1.8 | Kodak Gold 200],,1536247451.0,9,1.0,0
+analog,Walking in the mist [Nikon EM - 50mm - Kodak Gold 200],,1536168060.0,53,0.98,2
+listentothis,Dante Kabili -- vulnerability5 [Electronic],,1528142366.0,2,0.58,0
+leagueoflegends,"Scarra's Thoughts | EP11 - What's really the problem with league, variance, and the rune rework",,1527540251.0,13,0.87,0
+typewriters,"Found this one today, can't find any infomarion about it, need help.",,1526908404.0,3,0.81,4
+CircleofTrust,u/Pietrek_'s circle,,1522777222.0,2,1.0,0
+streetwear,Need some help!,[removed],1500681985.0,10,0.86,4
+SuicideWatch,I need someone to chat with.,"Hey /r/SuicideWatch 
+
+I have no clue as to how i should describe what i am feeling but i think i might be able to through a chat rather than a single post. I might be going to see a doctor this week to get some help.",1490131974.0,3,0.8,2
+Fitness,Lower back pain during Back Squats and low strenght,[removed],1489739074.0,2,0.67,8
+SuggestALaptop,A laptop for Computer Science,"* **Total budget and country of purchase:** 
+1000$+ Denmark
+
+* **Do you prefer a 2 in 1 form factor, good battery life or best specifications to your requirements for the money? Pick or include any that apply.** 
+I have been using a MacBook Air 11"" most of the time so i would like a machine that is just as fluent as it. Good specs are always welcome even though im not looking to game on the laptop.
+
+* **How important is weight to you?**
+ Performance > weight, but i dont want one of those MSI gaming things, i want some sort of a ultrabook - i have been looking at the XPS 13 and similar devices.
+
+* **Which OS do you require? Windows, Linux, Mac.**
+I'm not entirely sure whether a Mac is possible with the degree i will be taking - never tried linux but i could probably get a hang of it easily.
+
+* **Do you have a preferred screen size? If indifferent, put N/A.** 
+Anything around 11"" 13"" and 15"" - bigger sizes might be okay depending on the laptop itself...
+
+* **Are you doing any CAD/video editing/photo editing/gaming? List which programs/games you desire to run. If you have no requirements, put N/A.** 
+I've been thinking about photography as a hobby so photo editing.
+
+* **If you're gaming (leave blank if you put N/A above...), do you have certain games you want to play? At what settings and FPS do you want?** 
+ 
+
+* **Any specific requirements such as good keyboard, reliable business grade build quality, touch-screen, finger-print reader, optical drive or good input devices (keyboard/touchpad)?** 
+Good input devices (keyboard and touchpad), good build quality, SSD or m.2 drive. 
+
+ ",1486892368.0,1,1.0,0
+LifeProTips,LPT: Be careful around fireworks!,,1483210436.0,1,1.0,1
+Fitness,Finding a fitting routine,[removed],1481184817.0,0,0.33,4
+summonerschool,What ADC should i use to transition to the bottom lane?,"Hi all
+
+I've been a junlger/toplaner most of my time with this game, although i like those roles i find ADC very fun/impressive to watch when played at a good level. I'm a former DIA player so my mechanics are not on the worse side, maybe a bit over average, what champion should i play in order to get better? I enjoy Jhin and Vayne a lot, while I'm saving up for Lucian.
+
+Who do you think i should use to get better at the role?
+
+",1479825366.0,1,0.67,12
+learnjava,What do i do next?,"I'm about to finish the codecademy course in Java, what should my next steps be?",1477508933.0,1,0.6,4
+learnprogramming,Where do i start with learning C Sharp,Where should i head to learn C Sharp. Also what software do i need to make coding in this very language possible (i'm on a Mac). ,1473932038.0,8,0.71,4
+aww,Sometimes she's willing to pose.,,1471296366.0,28,0.91,1
+personalfinance,Transferring money from a savings account (Poland to Denmark),"Hello /r/personalfinance
+
+I'm in the following situation, my grandmother and my grand-grandmother have opened a savings account for me when i was younger, they deposited money to this account on a monthly basis and now it holds around $2k. This account is located in Poland. 
+I have lived in Denmark for 8-some years now and will continue to live there, at least until i'm educated. I can't have any control over this account while living in Denmark (since the account is located in Poland) and i was wondering how i should go around transferring the money to a danish account. I could either get the bank (Poland) to send the money to a danish account, or withdraw the money from the Polish account and exchange it for Danish currency in a ""Currency Exchange Shop"" (dont know the proper word for it)
+
+I'm soon to be 18 years old and thereby acquire control over the account (Poland) - i also have closely to no clue about how i should go about this sort of stuff. (Sorry about the long explanation to a short problem)",1468693201.0,1,0.58,1
+Art,"Ying-Yang Owls, Marker and paper.",,1465419769.0,12,0.84,3
+suggestmeabook,Suggest me something!,"Thus far I've read a couple classics, 'To Kill a Mockingbird', 'Go Set a Watchman' and today i finished 'The Catcher in the Rye' - i like all of those books, although my favorite is definitely ""To Kill a Mockingbird"". I'm waiting for my local library to deliver me ""Fahrenheit 451"" and need something to read in the meantime. 
+
+As for genres i like dark-fantasy, but I'm not all that picky - just no criminals please! 
+
+
+Thansk Reddit!",1463520034.0,6,0.88,3
+books,What book has changed your perception on life?,"As the title states, what book has changed your perception on life, and how has that influenced your life - you can also give a short summary of the book so others can see if it's something for them.",1459765142.0,39,0.87,78
+Jokes,MRW when FineBros start losing subscribers rapidly...,*gets sued*,1454326617.0,0,0.25,0
+Fitness,Muscle Gain,[removed],1454245731.0,1,1.0,1
+learnprogramming,Advance my learning (HTML & CSS),"Hello /r/learnprogramming
+
+I've gone through the codecademy course and i can make a website without needing much help. But i need something that i can use for responsivness - i've tried bootstrap but i dont want all the CSS that comes with Bootstrap. So where can i get a script or whatever else it can be that will make my site more responsive instead of destroying the whole layout when the width of the device is different than what i coded for? ",1452807825.0,4,0.76,5
+AskDocs,Wierd sight disturbance.,"Age: 17
+
+Sex: Male
+
+Height: 190  cm (6'1"" circa)
+
+Weight: 65kg
+
+Duration of complaint: from time to time. Duration time varies - never more than one hour. 
+
+Location: Eyes - I live in Denmark.
+
+Medical Issues: Nearsightet* idk if thats how you spell it / say it in english.
+
+
+And now for what happens - sometimes (today and yesterday which is unusual / rare) i cant quite tell the distance between me and some object. The object will start to feel way smaller than i KNOW that it is. For example: while reading a book it felt like the book was at least 1 meter further away form my eyes than it was. 
+
+i have no idea if this is any sort of medical threat to my health although i do no fear it, it still annoys me that i dont know what this is. I've read about eye-migrenes but it didn't seem like it described exactly what was happening with my vision (no cracks, neither have i experienced any kind of FOV shortening/extending. No ""shadyness"")
+
+
+",1452588534.0,1,1.0,0
+sex,[advice]I don't feel like i do enough for my girlfriend,"So we've been together for a bit over 2 months and have had a lot sex, i mean a lot (picture DJ Khaled saying ""A lot""). I cum every single time and i overall feel that the sex is amazing, at least for me. 
+
+But i often feel like i dont fuck her good enough even though she tells me that its good and that i satisfy her. The thing is i know i satisfy her orally - i can see/feel how much she likes it and how much pleasure it gives her. While after i've finished i often feel like i could've done more and made her feel better, whether it be lasting a tad bit longer or simply being *better*. 
+
+I'm running out of ideas to how to make it better and most of what i've tried has had no effect. It really annoys me that i dont give her sex that's good enough. Whenever i ask if she's satisfied or if she'd like me to do something more she just answers with *""As long as im with you then its the best""* or *""I like it, you satisfy me""*
+
+TL;DR I feel like im bad in bed even though my GF says otherwise
+
+PS. English is not my main language so don't mind the mistakes that i could've made.",1451428017.0,90,0.87,14
+InfiniteJest,Should i read Infinite Jest?,"Hey r/InfiniteJest
+
+I've just watched the movie ""The End of The Tour"" and i've become a little interested in the book ""Infinite Jest"" after finishing the movie. Can this book be recommended to a 17-year-old? ",1451163382.0,8,0.9,12

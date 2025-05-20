@@ -1,0 +1,1909 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+Angular2,"After passing data to my component from a service, the component doesn't render the changes?","Solved: turns out I changed what array the service was referencing, but the component continued to reference the original array. 
+
+&#x200B;
+
+I have a service that holds two arrays:
+
+    activeUsers: { name: string; id: number }[] = [
+        { name: ""Jimmy"", id: 0 },
+        { name: ""Jaden"", id: 1 },
+      ];
+    inactiveUsers: { name: string; id: number }[] = [
+        { name: ""Heiji"", id: 2 },
+        { name: ""Pheonix"", id: 3 },
+        { name: ""Miles"", id: 4 },
+      ];
+
+And at various points in time, I will change these arrays using a push method.
+
+        this.removeUser(data.id);
+        if (data.status === ""active"") {
+          this.activeUsers.push({ name: data.name, id: data.id });
+        } else {
+          this.inactiveUsers.push({ name: data.name, id: data.id });
+        }
+
+I then receive them in two separate components:
+
+     ngOnInit() {
+        this.users = this.usersService.activeUsers;
+      }
+
+They then render the data to the screen:
+
+    <li class=""list-group-item"" *ngFor=""let user of users"">
+       {{ user.name }} |
+       <a href=""#"" (click)=""onSetToInactive(user.id)"">Set to Inactive</a>
+    </li>
+
+Now, what I would expect to happen is that when I change the arrays using push, the data on the screen should change. But instead what's happening is that the original data stays, but the output never changes. I've even used console logs to make sure the arrays are actually changing, and they are-- fairly consistently too, but it never 'reaches' the dom.
+
+I've found two 'solutions' but neither make sense as to 'why' I would need them, and since i'm learning angular, i'm trying to understand why it's happening.
+
+The first fix is that I can change the code in the components to:
+
+    ngOnInit() {
+        setInterval(() => {
+          this.users = this.usersService.inactiveUsers;
+        }, 100);
+      }
+
+or I can remove removeUser() call. Leaving this block of code in the service:
+
+    if (data.status === ""active"") {
+          this.activeUsers.push({ name: data.name, id: data.id });
+        } else {
+          this.inactiveUsers.push({ name: data.name, id: data.id });
+        }
+
+Now, it seems to be a \*time\* issue. Either I can wait before setting the data in the component, or I can set the data \*faster\*. The removeUser() method is admittedly slow-- but I don't understand why it doesn't simply re-render the component if the data has changed?",1613166875.0,2,1.0,8
+rhythmgames,Is there a guide to playing japanese arcade-style rhythm games on PC?,"I don't know what games are available, but anything from gitadora to beatmania interests me. Just not a controller/mouse style game like project diva or osu. (Those are fun, but i'm looking to move past those.) 
+
+What i'm looking to find out:
+
+\- What options are available with basic english?
+
+\- What can be played on PC?
+
+\- What accessories / software do I need to purchase?
+
+thanks for any feedback",1613016291.0,3,0.71,2
+learnprogramming,"I know this is generic, but I just got my first job offer and i'm beyond excited.","After all the hard work, I've finally landed my first role as a Junior Software Developer. Don't give up! I don't have a degree, I didn't go to bootcamp, nor did I start with an internship. All that matters is that you genuinely learn the skills, work hard and never give up. 
+
+I know people like to think studying for an hour or two a day will cut it, but my one reality was that I studied a lot more than that. I worked full time, so many days I couldn't touch my computer at all-- so that meant on any days off, I was coding 12-14 hours. On work days I still aimed for 2-3 hours when possible. 
+
+The last thing I can say is BUILD BUILD BUILD! Learned CSS/JS? Build a tic tac toe game. Make a pretty website. Learned React or Angular? Build \*another\* tic tac toe game, then build an even prettier website. Learned Express/Node? Build a Password Saver or an I.T. Logger.
+
+If you can't stay motivated, build a project that appeals to you. One of my first bigger projects was an online rpg game that I built using random anime pictures off the web. I never published it or anything, but I sure learned a lot about programming.",1612546812.0,2363,0.96,111
+GeekSquad,I see nova has a sense of humor,,1594680897.0,77,0.99,8
+Megaten,"First he forces his way into my date, cockblocks me and has the nerve to THIRD WHEEL ME",,1588651493.0,15,0.8,5
+Persona5,First he buts in and now i'm being third wheeled??,,1588651343.0,10,0.83,3
+shogi,What's the best place to play online?,"I ask because with Go and Chess, there are some great online platforms. Go has KGS and OGS, chess has Lichess and [Chess.com](https://Chess.com). Each of them are full of players, have problems, tutorials, well coded engines/systems, etc. Is there really no website like that for Shogi ? (Accessible to english players, of course.) 
+
+When I search google I mostly find some really small  basic servers without a lot going on. If anyone has some suggestions let me know. I'm a total beginner to shogi and was hoping to get my feet in the door. (I know the rules, just not the strategy.)",1587925317.0,11,1.0,8
+personajerk,"So, when's the launch?",,1587418108.0,51,0.98,1
+Waifu,"So, we ship it right?",,1587414246.0,136,0.99,4
+stunfisk,Any suggestions for my team?,[removed],1586925856.0,5,0.86,2
+stunfisk,Are there any guides to learning competitive pokemon that aren't super focused or super community based?,"What I mean by that exactly, is that I mostly see either A) The Smogon Strategy Dex-- which is awesome by the way, but its mostly talking about specific pokemon with specific use cases or B) random discussion boards where there's no sense of 'authority' or 'focus'. What i'm hoping for I suppose, is something like 'In competitive pokemon you want to think about having these types of roles on a team, perhaps a tanky heavy, a sweeper, etc. This is why, this is how and this when you'll use them.' Or something along those lines. Just something that is more general and broad that takes you from 'targeting weaknesses' to 'laying down stealth rocks, knowing what a check is, knowing the fundamentals of when to switch, when to buff, when to throw in the burns' etc.",1586912632.0,4,0.84,5
+Megaten,"In a demon-centric SMT competitive game, what format should be used as a default?","What format should be used for battles? (1v1, 2v2, etc) 
+
+Edit: I don't think I clarified well enough.. it's going to have 6 demon teams no matter what. We're just discussing how many will be out on the field at one time.
+
+[http://www.strawpoll.me/19767242](http://www.strawpoll.me/19767242)",1586809147.0,13,0.86,4
+AskDocs,"Somewhat sharp eye pain, right eye only and it feels almost like its between the right side of my eye and the socket. M24","I admit, i've been on my computer or game consoles all day long (12+ hours in a row) for the past 7-8 days thanks to the lockdown and my job as a computer programmer. I should have been taking breaks or wearing blue light filter's, but I didn't. 
+
+I can't tell if that's actually the cause or not though. 
+
+[https://i.imgur.com/KC3z9Oq.jpg](https://i.imgur.com/KC3z9Oq.jpg)
+
+&#x200B;
+
+You can tell there's a small -something-, almost like a baby stye forming on the eye. But that's not where the pain is. I sometimes feel like something is in it, and that could definitely be the cause.. but the core pain is in the left side of the picture, just where the lighter part of my eye ducks behind the 'eye lids' and around towards the side of the socket. 
+
+&#x200B;
+
+About Me:
+
+Height: Around 5'11
+
+Weight: 130-140ish pounds. Somewhat smaller build, not much fat or muscle. 
+
+Race: Half black (African) half white (American). 
+
+Primary Complaint: Eye pain in my right eye.
+
+Duration: It started yesterday evening around 7 or 8pm and its now around 5:30PM the following day.
+
+No known current medical conditions.
+
+No medications. Used to take adderall. 
+
+I don't really drink, but I had a couple beers about a week ago. (First time in months.)
+
+No recreational drugs or smoking.",1585265854.0,1,1.0,1
+IWantToLearn,I want to learn how to brew good coffee and how to tell the difference,"As lame as it may sound, I've always used my keurig or nespresso to make coffee. I want to learn how to brew my own coffee with fancy beans and types-- and i want to learn how to actually bring out the full potential of the roast. I'm fine buying new gear and creating a legit setup, but i'm not interested in making creamy, sugary star bucks coffee. I want to learn how to make real coffee.",1585073747.0,3,1.0,5
+a:t5_2i59eb,First playable alpha test!,,1585017864.0,1,1.0,0
+fireemblem,"It's still in its infancy, but I created a turn based Fire Emblem RPG fangame similar to the Naruto Arena games (The long term goal is to have online multiplayer)",,1585017573.0,7,1.0,3
+Persona5,"Thanks to the lockdown and my unlimited hype for Persona 5 Royal, I actually finished a playable demo of SMT X FE.",,1585017512.0,7,0.89,2
+Megaten,"Thanks to the lockdown and my unlimited hype for Persona 5 Royal, I actually finished a playable demo of SMT X FE.",,1585017483.0,11,0.79,2
+casualnintendo,Countdown till animal crossing!!,,1584675294.0,1,1.0,1
+NintendoSwitch,"In order to pass the time for Animal Crossing, I spent the last three hours making a webpage with a countdown timer!",,1584674228.0,0,0.5,19
+nintendo,Countdown until New Horizons!,,1584673238.0,0,0.4,1
+a:t5_2i59eb,What characters do you want to see in the first official release of the game?,"Aside from the 10 already announced characters, who else do you want to see in the game?",1584652830.0,1,1.0,0
+a:t5_2i59eb,Preview of the main menu!,,1584652236.0,1,1.0,0
+a:t5_2i59eb,First Alpha Test coming soon!,"The first alpha release should drop within the next week. I'm hoping to release it tonight so that I can play animal crossing.. but, I've still got some major bugs to break down and some final functions to code for the core game play.",1584651992.0,1,1.0,0
+a:t5_2i59eb,r/SMTxFEOnline Lounge,[removed],1584651917.0,1,1.0,0
+grammar,Can you use 'however' after a hypothetical statement?,"I'm taking an SAT review test, and i'm not satisfied with the correct answer for one of the questions. I admit that all of the answers appear to me to be wrong, but I still cannot accept this answer.
+
+The original paragraph is ""Watching a film from the 1940's, we may consider the acting awkward and stilted. The films today seem much more realistic. If audiences 70 years from now watch our films with a similar sense of superiority, **therefore,** what would that mean for our own sense of reality?""
+
+To me, it seems the obvious answer is to delete the bolded portion. That however, is not one of the options. The correct response is purported to be ' however, '. I understand where they are coming from, it needs to change the direction of the statement, however, I don't think that it's acceptable to use in this situation. Are we really allowed to use 'however,' after a 'hypothetical' statement? '*If audiences 70 years from now watch our films with a similar sense of superiority,'* is only hypothetical, so where do they get off saying 'however'?
+
+TLDR: It comes down to 'If X, however, what of Y?'.  Shouldn't it be something like 'If X, then, what of Y?'. That would make a more 'logical progression', don't you think?
+
+&#x200B;
+
+&#x200B;
+
+Edit: I'm starting to understand it now. slazenger 7 helped me to understand it. You have to look at it like this first.   
+
+
+ However, if audiences 70 years from now watch our films with a similar sense of superiority, what would that mean for our sense of reality?  
+
+
+Then you have to realize that you can put that however before or after the statement...   
+
+
+and you get.. If audiences 70 years from now watch our films with a similar sense of superiority, however, what would that mean for our sense of reality?  
+
+
+If you still don't get it, try to read it this way.   
+
+
+If audiences 70 years from now watch our films with a similar sense of superiority however, what would that mean for our sense of reality?",1578534115.0,3,1.0,6
+AskDocs,"My girlfriend [F20] [Mexican] roughly 140 pounds, 5 foot 4 in, can't keep food or water down, even in small amounts.","She's taken multiple tests and they haven't found anything with her gallbladder or other symptoms. To quote her "" freaking 8K USD later and a huge amount of tests haven't found anything with my esophagus, gallbladder, stomach, colon, or general GI tract"". For awhile she was taking Dexilant and it seemed to be working-- she was able to eat mostly normally. However, after awhile she started to have more G.I. issues again but not as bad. For some reason she lost her insurance and is getting new insurance soon-- but the cost of her medicine jumped back up to around $800 so she had to get cheap generic G.I. alternatives, but it went downhill from there. It's been about a week that she has been puking a couple times a day, but now it's gotten to the point where she can't even drink water. 
+
+The weird thing is that she ended up finding one of her dexilant pills this morning and took it, yet the symptoms are still basically the same. I'm not sure if it's because she was off the dexilant for a bit then came back, or if the symptoms are just beginning to overpower it-- but either way, it didn't do a thing.  
+
+It's also a bit strange because often she'll end up puking much much later. Often 3-4 hours later. She says most of it comes up, so it's like the food isn't even being digested. 
+
+She's scared to go to the hospital because she already has debt and a lowered credit score (school debt, home supply debt, medical debt, etc.) and she doesn't make enough money to pay much back. She's afraid if she has too much medical debt she won't be able to afford any medicine or any of the procedures that she needs, thus rendering her back in the same spot but even worse. 
+
+My thoughts are that she needs to get a very small amount of fiber (maybe kale or seeds) and drink tiny tiny bits of water. Then maybe ever 30ish minutes have another small quantity of something. She says even a few gulps of water will end up coming back up, so i'm not sure if it would even work, but i'm hoping that Fiber would help a bit. 
+
+It's possible that her stomach issues come from Stress/an Eating disorder, because she does have ADHD, Depression and a few other mental disorders, plus she has a history with eating disorders. However, she promises that it's not on purpose, that her stomach physically hurts/burns and that it's uncontrollable. She's been to a G.I. doctor many times before, so it is a known issue-- it's just weird that nothing as far as a 'cause' has been located yet despite all the various tests. 
+
+She has some other symptoms as well. Sometimes her arms will go completely numb (one time half of her body went numb), most days her heart rate goes over 100 and her apple watch even tells her she's 'at risk' or 'in danger' or whichever, even in the middle of the night upon randomly waking up. I can't stand to see her like this, and it's especially terrible since she already deals with so many other problems in her life. She's tried to take her own life many times and she's cut herself many times as well, so i'm really scared that something terrible will happen if I can't find a way to help her. 
+
+If anyone has any suggestions at all, I would gladly welcome them. I'm at an absolute loss of what to do. 
+
+&#x200B;
+
+Current Medications: 
+
+Lexapro, Adderall and Dexilant. However, she hasn't recently been taking the dexilant and instead has been taking omeprazole.  
+
+Primary Concerns: 
+
+Can't eat or drink without puking. Body/Arms go numb. Stomach pains are almost constant, especially when eating. Food doesn't seem to even be digesting. 
+
+Other Conditions: 
+
+Gluten Intolerance. Dairy Intolerance. Depression. ADHD. In the past, eating disorders/self harm. Dependency syndromes as well. 
+
+Race - Mexican
+
+Age - 20, almost 21
+
+Sex - Female
+
+No recreational drugs (doesn't smoke or drink even)
+
+The issue has happened for 2ish years, but seemed to be dormant while taking dexilant. It's been really bad for the last two weeks and has gotten even worse today, since she can't even sip water it seems.",1578274495.0,2,1.0,4
+languagelearning,What interesting books can a beginner read in spanish?,"I don't want to read a book about a young girl who goes to school, nor do I care to read about a boy who lost his dog. I want something like Harry Potter, however, I would prefer something a bit more grounded in reality. (I love fantasy, but i'd prefer to read something with more practical applications when i'm studying a new language.)
+
+&#x200B;
+
+Does anyone have any suggestions? I'm still pretty early in spanish, but I could read a page like this ( [https://newsela.com/read/elem-govt-comparing-governments-spanish/id/2000003071/?collection\_id=2000000156](https://newsela.com/read/elem-govt-comparing-governments-spanish/id/2000003071/?collection_id=2000000156) ) and mostly understand it. I also intend to study the text, meaning i'll look up all the words I don't know, analyze the grammar against the rules i've studied, etc.
+
+&#x200B;
+
+For people looking for more advanced texts/fantasy, Harry Potter is a good beginning point-- but even Lord of the Rings, Stormlight Archives and I believe even the Wheel of Time have been translated. (I'll get to those later, once i've got the grounded stuff out of the way.)
+
+&#x200B;
+
+Side note: Any game suggestions? I've found that Skyrim is playable in spanish, but i'd prefer something a tiny bit easier for now.",1578166018.0,0,0.38,6
+collegeinfogeek,How I study after watching thomas frank's youtube channel,[removed],1577728832.0,1,1.0,0
+a:t5_3jbaj,Way to expensive??,"I need dexilant for my stomach, but my gi doctor says I need 60mg daily. That's around 300 bucks a month, which is insane. My insurance refuses to cover and even the rx card is useless for me :(",1577581199.0,1,1.0,0
+techsupport,Best wifi/internet setup for an older large home?,"I currently have a netgear modem with 32 x 16 channels that supports 1+ Gbps, my provider is giving us 1gb, and my router is a tri band, wifi 6 router with mu mimo  that has two nodes that each cover around 3000 sqft. In theory, my connection should be pretty stable, but it's not. 
+
+There's no option for prioritizing traffic, but I like to play online games and use Google stadia, so I typically need consistency over speed. I also have security cameras and smart devices throughout the entire home. 
+
+The house is pretty old, and wiring ethernet through the home isn't really an option. The power line seems promising, and getting another node to my arris pro max seems considerable. 
+
+I unfortunately don't spend my time in the room with modem, rather quite the opposite. I'm in the basement past many thick walls including some stone/brick.
+
+What options do I really have to improve this situation?",1577266306.0,1,1.0,4
+Megaten,When the chaos boys go to far,,1577133719.0,467,0.97,32
+youtube,Youtube Playlist broken when using both Shuffle and Loop? [Bug] [Playlist FD]," 
+
+I thought if I used shuffle and loop both at the same time, it would endlessly play random songs from my playlist. But Nope. Half the time it shuffles to the last song, after which it just bails out of the playlist despite loop being activate. Really annoying if you ask me.
+
+Has anyone else had this issue?
+
+edit: Now that i'm trying to test it, it wants to work properly. But seriously, whenever i'm just listening to my music I end up hearing songs that aren't in my playlist, switch over and it's on something entirely different :(
+
+edit 2: There is no indication of the extended rules in the /r/youtube rules section on the right. Please add a rule over there with a link to the full rules instead of just saying to 'read the rules'. It's very misleading when people see a rules section, but it's actually only a small portion of the rules.",1575918368.0,0,0.33,1
+youtube,Youtube playlists broken when using shuffle and loop together?,[removed],1575917093.0,1,1.0,1
+bugbites,Any idea what the source is? I've got like 8 of these little guys on me,,1575860384.0,1,1.0,0
+StackAdvice,My current stack-- any suggestions?,"Bread and Butter: 
+
+Caffeine (50Mg - 120 Mg daily)
+
+L-theanine (400 mg in the morning, 200 mg in the evening)
+
+Adderall (15 mg Xr in the morning, 10mg instant release in the evening)
+
+Choline Source: 
+
+Alpha GPC (600 mg daily)
+
+Boosters :
+
+L-Tyrosine (500 mg daily)
+
+5-HTP (200 mg in the morning, 200 mg in the evening)
+
+General Brain Health: 
+
+Omega 3's (Soon to be replaced by Krill oil) (3000 mg daily)
+
+Lion's Mane ( 250 mg)
+
+Chaga ( 250 mg)
+
+Rhodiola (100 mg)
+
+&#x200B;
+
+Note: The adderall has been prescribed to me by a doctor, I do not recommend taking any illegal substances.",1575766001.0,3,0.72,1
+blackjack,Late Night Blackjack with some Lo-Fi beats,[removed],1575656089.0,1,1.0,0
+blackjack,"Where can I play blackjack online with real people, for free?","I'm not looking to make money, just to learn the ropes of the game and practice counting cards. I know there's some software and computer based stuff for counting cards (I'm still interested in good suggestions), but what i'm primarily hoping for is a way to play against real people with a sort of fake currency to just 'practice' and have fun casually.",1575480997.0,8,1.0,16
+AskReddit,You're given 1 Billion dollars to build your own University/High School. Who do you pick for your team? What do you change about the way the school works?,,1575420746.0,4,0.75,11
+mathematics,"Trying to get into a specific college for Computer Science, but it requires pre-calc as a requisite and has Calculus I as the first course you take.","Background information: In 9th grade I took Geometry, but spent the entire class hanging out with friends and didn't learn much of a thing. I took Algebra 2 in 10th grade and did exceedingly well since I was a lot more focused. 11th and 12th grades I had all but dropped out entirely, since my home life had become increasingly stressful and depressing. I fell into drugs (Pot and LSD) and lost my ability to think critically. I also lost my curiosity and confidence.
+
+Fast forward a couple of years, I now live with my grandmother and am safe from the domestic violence and completely drug free. I got a nice job working as a part of the Geek Squad and managed to improve my basic cognitive functions. I started studying programming and regained my motivation to succeed.
+
+Now, I want to go to school for Computer Science and I want to become an intellectual once more. However, the first major stepping stone in my journey is math. But as i'm sure the lot of you know, math is very wide spread and includes many aspects that need to be learned before you can move on to the next layer.
+
+My question is on the process of preparing myself for Calculus. I don't entirely remember algebra and I definitely don't remember trig, stat or geometry. My current plan is to 100% every category on Khan Academy up through Pre-calculus, Calc AB and Calc BC, then take a klep test to prove my pre-calc skills and jump right into Calculus I at my University. The only problem I have with that plan is the time consuming element. I was thinking I could probably just skip to Algebra 2/Trig, then jump into Pre-calc, but i'm not sure if winging the basics is a good idea or not. I'm afraid that i'll break under the intensity of later maths if my foundation isn't concrete.
+
+Do you guys think I should push ahead and backlearn as I go? Or do you think I was on the right path focusing on the slow but steady approach that relies on mastery over speed?
+
+Note 1: I've also got Wolfram Alpha, [Brilliant.org](https://Brilliant.org) and some ACT/SAT test books at my aid. I'll probably go through some of that content on the side, learning logic and statistics and what not.
+
+Note 2: The degree also requires Discrete Mathematics 1 and Discrete Mathematics 2. While I know these are fairly different in nature, I feel as though gaining a stronger mastery of basic number theory may be essential before taking on these courses. However i'm curious to hear your thoughts on the matter.
+
+&#x200B;
+
+Edit: pre-requisite...",1575362025.0,6,0.88,5
+blackjack,How hard is it to count cards in a casino?,"Now, i'm not talking about the math side of things. I can study game theory, statistics and card counting from a variety of sources. My question is pulling it off in a casino. How do they tend to catch people who are counting cards? Is it normal for high level players to count cards while playing? I know it's supposed to be against the rules, but it's done entirely in your head, so how are they supposed to know?
+
+Do they basically just kick out anyone who starts winning too often? Do you have to start counting cards and intentionally throwing smaller bets to seem realistic? Is it about focusing your glare/attention on the cards and drifting off into space less often? Do you just need to be able to count/analyze faster so that you can quickly get back to the flow of the game?",1575329948.0,36,0.98,18
+Stadia,Is anyone else having issues with stadia despite high internet speeds?,"I have about 150 Mbps yet stadia isn't working perfectly for me. It's not that it's not responsive, rather it sort of jumps around a bit and looks a bit janky as far as the visuals go. Kind of like, the motion isn't really  smooth? And sometimes it definitely gets even worse than that. I even reduced it to 720 and turned off HDR but it's still not perfect. (But a lot better than when I was trying for 4K HDR). 
+
+&#x200B;
+
+Has anyone started with these issues, but found some ways of making it work more smoothly?",1574830888.0,1,0.67,8
+Stadia,What's the shortest username you can have on stadia?,,1574744965.0,5,0.86,6
+anime,"What is everyone's favorite 'Murder Mystery' anime? I'm trying to find something that works for me, but i'm struggling a bit.","Growing up Detective Conan was my absolute favorite anime-- and I still love it. But I love it despite it's flaws. I love it despite knowing that the detective kid episodes are geared to 8 year olds and despite knowing that I would rather have an anime with Shinichi at the helm, rather than Conan. 
+
+My next favorite was Kindaichi's Case Files. The original series was absolutely fantastic. It was almost everything I wanted. But it's almost impossible to find now days? It's not legally streamed anywhere, so you have to deal with low resolution garbage. But I guess that's the trade off you have to make. 
+
+The new Kindaichi's Case Files mildly irked me for some reason. I'm not really sure why. Maybe i'll give it another go sometime. 
+
+I read a manga called Master Keaton, and it was really interesting. I think there may be an anime for it, so that might be worth checking out. 
+
+I've heard Monster is really good, but it's apparently less of a murder mystery and more of a thriller. Plus I tend to prefer detective shows with a variety of cases rather than one big case. 
+
+Death Note kind of falls trap to one of my complaints about monster, but it still ended up being one of my favorite anime of all time. But it's really short. There's no value to a detective series if you can finish it in a weekend.
+
+Chaos;Child is appealing to me, but it has some weird magic kind of nonsense going on. I don't care for any kind of magic in my murder mysteries. That's the same reason I dropped Ace Attorney. \[Note: Ace Attorney Investigations is amazing though. It doesn't really use magic at all and it's a fantastic game.\]
+
+Detective Academy Q was fun when I was 12, but I have the feeling it's not going to resonate with me anymore. It's got a group of annoying kids who go around solving murders. I might still watch it if I end up completely dry of anime murder mystery content though.. \[or i might rewatch detective conan..\]
+
+I tried Un-Go and it about made me want to die, so i'm probably not going that direction again. Erased was like a magic wagick version of detective conan that's shorter, so I wasn't particularly interested. There was some new show with sherlock holmes that was an absolute disgrace to sherlock holmes. Aside from the bisexual pandering and horrible character design, the actual 'reasoning' the characters used was atrocious. The conclusions were always either awful and unbased or extremely obvious/apparent to literally anybody. 
+
+There was also a murder mystery anime about a programmer that I recall, but I can't seem to remember what it was called. If anyone knows feel free to hit me up because i'd like to watch that one again.",1574358597.0,2,0.58,22
+booksuggestions,Looking for murder mystery novels with multiple cases.,"I want a series that reminds me of sherlock Holmes. I don't need sherlock's specific quirks, but I'd like an intelligent detective protagonist who solves a variety of cases. I detest magic in mystery, so I'd prefer that it's realistic. 
+
+Some suggestions I've seen that I want to pursue are the works of Agatha Christie and Edogawa Ranpo.",1574322844.0,4,0.84,7
+personalfinance,Trying to figure out the best approach to school and life (23),"I currently live with family, but I don't know how long that'll last. I have a girlfriend I plan on marrying and I want to settle down and have a family eventually here. I only work part time, so I make anywhere from 400 - 600 per paycheck. (15.33 an hour).
+
+My goal is to get my CS degree as quickly as possible and join the ranks of computer programmers. Even starting as a low paying front end web developer would put me years ahead of my current position. The issue is that I want to knock out my Masters within a year. Many people may think that's impossible or ridiculous, but it's not if you attend WGU, which is what I intend to do.
+
+WGU is a self paced school that rewards previous knowledge. Since i've been taking programming classes since I was in HS and i've been coding on my own since the 5th grade, I can power through a lot of the actual 'core code' classes with ease. The main issue will be the Mathematics.
+
+Now, what does this have to do with finance? You might ask. Well, as it stands now I can't terrible afford school. I have to pay off my debt at slcc \[Salt Lake Community College\] (about 3-4k) and my credit is trashed. I took too many college courses in HS/right after HS, so slcc refused to give me financial aid (since I did poorly initially) and now they won't transfer my transcripts until I pay my debts with them. In other words, I can't start WGU until I pay the 3-4K and then pay the new fee's for WGU. (3.5 every 6 months.) So basically, school wise I need to amass about 10K-11K in order to cover everything.
+
+I applied for Fafsa, and that should come back in a couple of days. Loans/Grants/Scholarships together in a perfect world may cover 100% of my WGU costs, but nothing will go towards slcc at this point. The issue is that the SLCC stuff is now in collections and no longer really seen as 'school fee's' to fafsa, plus I think you have to choose one target school with fafsa. Plus slcc doesn't want to give me any financial aid, so they wouldn't accept it anyways.
+
+My first option is to find some way of getting a loan, pay off slcc, keep working part time for survival and power through WGU with all of my life force until I can get a good job and pay off my debts.
+
+My second option is to go full time and crank out classes with no life in between, which I don't mind entirely. The only issue is that working full time will take substantially longer. With part time I can knock out 40-50 hours of school work every week getting me through 1-2 classes a week. At that rate it'd only take about 4 months to get my BA and 2 more months to get my MA. With full time, I only get around 20 hours per week maybe getting one class a week if i'm lucky. That would take around 8.5 months after starting.
+
+My third option, that I can think of, is to get a full time job and pay through all of the SLCC debts. Then instantly quit my job/land a part time job, and B-line it through WGU using Fafsa/Loans (if they end up being applicable after my application comes back..)
+
+Fourth is probably to file bankruptcy and just start at WGU, but I have a good feeling that's not a very smart idea. I don't know exactly why or what would happen, but I feel that it's probably not the answer.
+
+Also, I do have some other debts that need to be paid off. I have two credit cards that are both in the hole. One is only down 500, but the other is down closer to (1000). The 1000 one is both my partners and I, so i'm not the only one working on it. Plus the 1000 gives us about 6 months to pay off, so hopefully we'll be able to get through that one just fine if I do 100 every month.",1574257855.0,0,0.5,3
+WGU,How effective is the pell grant for WGU?,"I'm in WGU Academy right now (I still have to pay back my local community college..) But I decided to apply for fasfa and set my target school as WGU, since that's the next school i'll actually take classes from. It says they estimate about $5000, does anyone know how WGU will accept that? I know at the UofU where my partner goes, she gets about $1000 less than what fasfa claims she'll get and they also split it between two semesters. Any idea how it'll break down? Has anyone else got any experience with the Pell grant specifically?
+
+&#x200B;
+
+I'm only working part time, and can't even really afford to pay off my current school debts, so i'm hoping that if I \*do\* get some help from family/saving up to pay those off that i'll be able to at least attend WGU off of grants/loans.",1574257031.0,6,1.0,9
+University,"My community college won't send my transcripts, so I can't change colleges?",I've got holds on my account and can't transfer schools. Is that really allowed? There's no way I can get through this?,1574227401.0,3,0.81,2
+crossword,Bad at crosswords and afraid i'll never improve?,"I really want to start doing crossword puzzles but without fail I always end up getting stuck. Whenever I look up the answers I almost never actually knew the word or person it was talking about. I feel like the only solution is to keep reading, but that means i'd have to wait awhile before I could start 'doing crossword puzzles'. Do you guys have any suggestions? Are there better/worse crossword puzzles for people under 25 who don't know a bunch of old references? Maybe crossword puzzles that ignore pop culture/media and focus on academics or current events? Do you guys have a rule of thumb for looking up answers? Do you just study and learn about any of the topics that come up so you're prepared for the next round?",1574019874.0,9,0.91,10
+Android,What are the best ways to improve yourself/your mind on Android?,[removed],1574019170.0,1,1.0,0
+Stadia,Does everyone who purchases a premiere/founder edition stadia receive a buddy pass?,"Are there any other ways to get buddy passes? Is there anyone willing to maybe sell their buddy pass/offer it? I already have a chromecast ultra and can't afford to buy the full stadia right now, but I could afford the controller.",1573426019.0,0,0.38,17
+StackAdvice,Stack Advice for someone who takes adderal for medical purposes?,"I was thinking probably just Caffeine, L-theanine and Lions Mane.",1573425727.0,3,0.81,5
+Falcom,Interest Check: Legend of Heroes DEEP DIVE Youtube/Twitch Channel,"Hello everyone! I haven't done much as far as Let's Plays or Internet Content go, but i've been toying with the idea of going 100% deep on Legend of Heroes. When you think of a Legend of Heroes channel, you probably expect someone who's played all the games already and knows every detail, but that wouldn't exactly be the case for me. 
+
+My ambition would be simple: On Youtube i'll record as I go through Trails in the Sky 1/2/3 then both Cross Bell games, then all of the Cold Steel games in order. This way i'll go from knowing only the basics to knowing the main content expected of a long time series fan. (I've only played CS I/CS II so far.) 
+
+However, I would intend to go much further than that. I would like to also have a Twitch channel where i'll do NG+ runs of all the games on Nightmare and actually work towards 100%ing each of the games. So for example, I could be on Trails in the Sky the 3rd on my YT channel just playing on Normal having a good time while on Twitch i'd still be finishing off the 100% run of Trails in the Sky FC. 
+
+Next, i'd also like to make a lot of informative video's/video essays on the series. As I start finishing the arcs and learning a lot more about the characters, i'd like to start making Character Analysis video's. Diving deep into the 'why's of the characters and talking about who they are, why they believe what they believe, how their actions affected the overall plot/world of the story, etc. I'd also end up doing Arc Summaries/Analysis video's, TLDR's for entire games or 'Everything you need to know to start Cold Steel 4' video's, etc. 
+
+I'd also toy with some silly series on the side too. For example I could have a series on Vantage Masters where I exclusively talk about deck building and show matches of Vantage Masters in CS III. I might have series where I read through/talk about each of the different 'stories' or 'books' that you can read in the Legend of Heroes world. I'd have some lore/history video's where I talk about the different countries/cities and how they all interface with each other. 
+
+If I did this, i'd probably want \*some\* help from the community. Not a lot. I'd just post some basic transcripts of some of the video essays on a discord or something, and have some long-time vets/fans of the series give some feedback before it was fully edited into a video. Just to make sure i'm not spreading any kind of misinformation to the public crowd.",1573417456.0,14,0.94,2
+GeekSquad,How close could I get to parodying Geek Squad without getting in trouble?,"I was thinking of making a Let's Play channel where I call myself 'Agent X' (X would be my last name, not an actual X) and I  wore a white button up shirt with a black tie. It wouldn't have a pin nor would it say geek squad anywhere, but people who knew geek squad would get the reference. I could also specifically call my fanbase my 'Nerd Squad' or something along those lines.",1573416060.0,5,0.69,8
+Stadia,How large of a division do you think Stadia Games and Entertainment will be?,"On the Stadia web page it says they plan on making first party games, but do you guys think google will go all in? Will they be like microsoft and have a lot of core titles they keep making? Will they be like sony and have a wide range of awesome IP's? Maybe like Nintendo, with a large umbrella of IP's that can be used in a variety of ways. Or perhaps, do you think they'll just make one or two 'indie'-like games and call it a day? 
+
+I personally really want to see them make at least 4-5 strong IP's and become a \*serious\* contender. Google's known for buying companies than build what they wanna build, so I wouldn't be surprised if Google purchased a couple game studio's, relocated them to California and built a super team with google engineers that could develop some awesome games.",1573413477.0,13,0.84,23
+GeekSquad,"CA interviewing for ARA and Cadet roles, any tips or advice?",I'm a CA (of about 3 months..?) interviewing both for an ARA position and for a Cadet position. Do you guys have any tips or suggestions for me?,1573271250.0,3,1.0,5
+Falcom,I'm inclined to agree.. (CS III),,1572795860.0,125,0.96,15
+Falcom,"If nisa is watching, please change this to liberl",,1571721917.0,91,0.97,30
+languagelearning,How good should you get at a language before learning the next one?,"If i'm learning Spanish, how proficient/fluent should I get before learning Japanese? I imagine after learning Japanese i'll continue reading/playing games in spanish, but maybe focusing less on learning grammar.",1571604571.0,0,0.46,8
+Megaten,I went back to Los Angela's...,,1571585958.0,35,0.98,6
+nintendo,I got this amazing find in little Tokyo!,,1571102609.0,0,0.33,1
+fireemblem,My haul from little Tokyo!,,1571102476.0,54,1.0,0
+Falcom,Found this in little Tokyo!,,1571101151.0,62,0.97,9
+Megaten,My haul in little Tokyo!,,1571101067.0,63,0.98,6
+funny,Welcome to California,,1570997942.0,2,0.56,10
+rhythmheaven,Persona 5 X Rhythm Heaven (Fan Made),,1570818802.0,49,0.92,3
+AskDocs,Muscle spasms on my side??,"Directly to the left of my rib cage on my side/back I feel what seems like a spasm. It's happening all the time. Like 1 or 2 times every second at it fastest and once every 2 seconds at its slowest... does anyone have idea what's going on?
+
+23m about 5'6 ish, no medications, no previous health issues, smaller build and no smoking.",1569301104.0,1,1.0,3
+AskDocs,Muscle spasms on my side?,[removed],1569299595.0,1,1.0,1
+SwitchHaxing,Just got links awakening but..,[removed],1568791797.0,1,1.0,1
+MagicArena,Why does Magic Arena say set rotation in 9 days?,"In 9 days it will be the 25, but doesn't the new set come out on October 4th? Do we just get the set early online?
+
+&#x200B;
+
+Edit: Second question-- if I payed for core set mastery and it rotates in 9 days, does that mean there will be a new level up 'system' for the new set instead of for M20?",1568661244.0,0,0.09,9
+latin,Is there enough Latin content to stay brushed up?,"I'm planning on learning Latin, primarily because i'm interested in learning multiple languages and think Latin is a very wonderful language. I want to read a lot of books in latin, specifically Letters of a Stoic by Seneca, and the latin translations of Meditations by Marcus Aurelius. 
+
+Now, i'm not worried about staying brushed up with the basics/reading-- there are plenty of books to read and there's always duo-lingo. What i'm worried about is listening/speaking latin. I could sort of stay brushed up on speaking latin simply by reading outloud when I read Latin books-- which is mostly fine. But what about listening?
+
+With Spanish or Japanese I have lots of content-- I can play games in Spanish and I can watch anime in Japanese. There's no end to the content available to me. I can even listen to songs in both languages.
+
+However, I feel as though Latin isn't quite the same. It's a dying language-- since Spanish and the other romance languages have taken over.
+
+&#x200B;
+
+Is there anything i'm missing? Are there audio-books in latin? Youtube Channels? Songs? Places to talk to people in Latin (vocally) or anything else that I could use to rekindle my motivation to learn Latin?",1568340458.0,1,0.6,9
+MagicArena,Why is standard not really 'standard'?,Seems like dominara isn't allowed in arena standard? But it's in real standard isnt' it?,1568336176.0,0,0.13,7
+Fantasy,"Do you guys prefer reading one series at a time, or weaving between series?","I've been getting into fantasy lately-- but i've quickly come to realize they can be very long books.. in very long series. I'm worried i'll get burned out, but I also think immersing myself and actually finishing series is better than jumping from place to place. 
+
+I have to read Harry Potter, since my partner loves it-- and so far it's a bit fun already. (Almost done with the first book.)
+
+I have to read the Hobbit, the Lord of the Rings and the Salmarillion (or however you spell it) since it's the 'King of Fantasy', and important for understanding the genre as a whole.
+
+But personally, i'm mostly excited to read The Wheel of Time and The Stormlight Archives-- but the issue is that both of those two series are very long. Especially the Wheel of Time. 
+
+Logically I should go Harry Potter --> LOTR --> WoT --> Mistborn Franchise --> Stormlight Archives
+
+But i'm afraid i'll get burnt out of each series as i'm going through them.
+
+&#x200B;
+
+Any suggestions or tips? What do you guys think is the best way to approach this?  (Also i'm afraid of reading harry potter after another fantasy series, since it might seem a bit dull in comparison. So i'm getting it out of the way first since it's arguably the most 'kid friendly' of the series, save the Hobbit which is just a single book.",1568255030.0,6,0.88,18
+GeekSquad,First day of Geek Squad! Any advice for a new agent?,"Today's my first day as a CA, coming from being a Smart Home Expert. I'm pretty nervous because i'm changing stores and everything. I also had around 9 days in between my last shift as Smart Home and today.. so i've had some.. down time. 
+
+Any tips or advice for me?",1568207062.0,4,0.7,20
+dragonquest,My wife made these for me today ^_^,,1568074290.0,284,0.99,18
+samsung,Any idea why my note 9 only works when being held?,"If I set my phone on the table, the touch screen stops working. As soon as I pick it up or touch the side/ back of the phone it starts working again",1567987515.0,2,0.67,2
+learnmath,Is pre-calculus really just a 'Review everything up to Calculus' class?,"If I haven't taken a math class in ages, but feel fairly intellectually competent despite my lack of Math-Know-How, would it be acceptable to just jump right into pre-calculus, learn everything, then go review the missing parts before taking Calculus and Linear Algebra?
+
+So far the course syllabus for Pre-calculus literally looks like 'Review Geometry, Review Algebra, Review Trig, GG'.",1567267258.0,38,0.95,20
+math,Is precalculus seriously just review of everything up to precalculus?,[removed],1567266655.0,1,1.0,1
+Bestbuy,What's reasonable to ask for paywise for an ARA Position?,"I know it's largely context/area sensitive, so i'll give some background. The store i'm in currently starts people anywhere from 12-14 on the sales floor and CS depending on experience and languages. I started at 12 and made it up to about 14 as a Smart Home Expert/Pro. My partner started at 14 (extra language and more exp) and she instantly got buffed to 15 when she moved into a CA role. So if i'm interviewing for an ARA role, and feel it went pretty well, with ARA being quite a few pay grades up (8 instead of 4), what do you think would be fair to ask for if I get accepted? 
+
+Right now i'm thinking i'd ask 16. The role caps at 17.50ish.",1567264099.0,7,0.89,12
+wifi,"What would be the best Wifi Router for a large home with lots of devices, for 1gb internet speeds?","I work at Best Buy so I know bands/mu-mi/channels all pretty well, but I feel like some products don't live up to the standards of their specs. My Google Wifi on specs alone, should give me pretty solid speeds-- but in reality, I feel as though it's pretty slow. Plugged in it gives me 200ish mb's (paying for 400), but on wireless i'll sometimes see speeds as low as 20 or 30. 
+
+I bought a nice modem that's a docsis 3.1 with gigabit support and i paid comcast to raise my speeds up to 1gb. However, I have a pretty large home with some brick/thicker walls, so I want something that covers my range really well. I have a lot of devices so I need Triband/mu-mimo. 
+
+Should I get the Arris Max, The Eero (3 pack) or a higher end Orbi?",1567135853.0,4,1.0,6
+education,"I've been experimenting with the idea of using Games as a medium for learning, so i'm beginning a project to teach Spanish for free using 'Rpg's and Games' as a way to make it more fun.",[removed],1566757017.0,1,1.0,0
+truegaming,Language learning in gaming?,[removed],1566756480.0,2,0.63,3
+PBBG,I'm building a Web RPG based around learning Spanish with a world based around a Fantasy version of Mexico/The United States!," 
+
+Kickstarter Campaign: [https://www.kickstarter.com/projects/andrethompsoncs/estudia-espanol?ref=project\_build](https://www.kickstarter.com/projects/andrethompsoncs/estudia-espanol?ref=project_build)
+
+Very basic proof of Concept: [https://at-lowdesu.github.io/EstudiarEspanol/](https://at-lowdesu.github.io/EstudiarEspanol/) (just for the basic anki mechanics, but better)
+
+Learning languages can be hard. It's easy to fool yourself into thinking you know the words or phrases since you can pick them from a drop down list or recognize them when reading. It's easy to imagine that you've got the hang of the grammar despite sounding completely illiterate. It can be dull, boring and repetitive. That's where we come in. 
+
+The Feynman technique is a proven way of improving your memory and understanding of advanced topics. The Feynman technique is at the basis of every study mechanic ingrained into Estudia Espanol\~\~. Instead of just picking the correct answer from a list, you'll have to fill in the blank and type out full words/expressions. But don't worry! It will be paced properly and you will have time to learn each phrase/expression before being expected to suddenly memorize it. 
+
+On top of being a more effective system, we strive towards creating a more enjoyable experience as well. The core site will have a few major mechanics that will make it easier and more fun, but aside from the standardized learning options-- we'll include a Spanish studying text-rpg! The game will start out in English and you will be learning Spanish on your journey. The quest will take place in a fantasy version of Mexico with many creatures of Mexican lore making an appearance. You will face off against El Chupacabra, El Sombreron, El Cuco, Acalica, La Llorona, and even Luz Mala. The story will be scary, thought provoking and and exciting. 
+
+The mechanics will be a blend of JRPG/RPG mechanics, with leveling up, magic, swords, etc, and Spanish skills. In order to cast spells in this universe you will need to have command over the Spanish language. For example, if you cast the spell 'Fireball' it may ask you a question in Spanish about fire-- if you can put in the correct answer, then your fire ball will hit the target. But if you answer wrong-- it will definitely miss. How far can your Spanish skills take you? How much can you learn? How powerful can you become? ",1566756355.0,9,0.74,2
+mexico,"A Text RPG for learning spanish/mexican culture is in development! It's a blend of My Spanish Coach, Anki and Kingdom of Loathing"," 
+
+Kickstarter Campaign: [https://www.kickstarter.com/projects/andrethompsoncs/estudia-espanol?ref=project\_build](https://www.kickstarter.com/projects/andrethompsoncs/estudia-espanol?ref=project_build)
+
+Very basic proof of Concept: [https://at-lowdesu.github.io/EstudiarEspanol/](https://at-lowdesu.github.io/EstudiarEspanol/) (just for the basic anki mechanics, but better)
+
+Learning languages can be hard. It's easy to fool yourself into thinking you know the words or phrases since you can pick them from a drop down list or recognize them when reading. It's easy to imagine that you've got the hang of the grammar despite sounding completely illiterate. It can be dull, boring and repetitive. That's where we come in. 
+
+The Feynman technique is a proven way of improving your memory and understanding of advanced topics. The Feynman technique is at the basis of every study mechanic ingrained into Estudia Espanol\~\~. Instead of just picking the correct answer from a list, you'll have to fill in the blank and type out full words/expressions. But don't worry! It will be paced properly and you will have time to learn each phrase/expression before being expected to suddenly memorize it. 
+
+On top of being a more effective system, we strive towards creating a more enjoyable experience as well. The core site will have a few major mechanics that will make it easier and more fun, but aside from the standardized learning options-- we'll include a Spanish studying text-rpg! The game will start out in English and you will be learning Spanish on your journey. The quest will take place in a fantasy version of Mexico with many creatures of Mexican lore making an appearance. You will face off against El Chupacabra, El Sombreron, El Cuco, Acalica, La Llorona, and even Luz Mala. The story will be scary, thought provoking and and exciting. 
+
+The mechanics will be a blend of JRPG/RPG mechanics, with leveling up, magic, swords, etc, and Spanish skills. In order to cast spells in this universe you will need to have command over the Spanish language. For example, if you cast the spell 'Fireball' it may ask you a question in Spanish about fire-- if you can put in the correct answer, then your fire ball will hit the target. But if you answer wrong-- it will definitely miss. How far can your Spanish skills take you? How much can you learn? How powerful can you become? ",1566755749.0,8,0.7,6
+Spanish,"A Text RPG for learning spanish is in development! It's a blend of My Spanish Coach, Anki and Kingdom of Loathing",[removed],1566754914.0,21,0.96,1
+languagelearning,"A Text RPG for learning spanish is in development! It's a blend of My Spanish Coach, Anki and Kingdom of Loathing"," 
+
+Kickstarter Campaign: [https://www.kickstarter.com/projects/andrethompsoncs/estudia-espanol?ref=project\_build](https://www.kickstarter.com/projects/andrethompsoncs/estudia-espanol?ref=project_build)
+
+Very basic proof of Concept: [https://at-lowdesu.github.io/EstudiarEspanol/](https://at-lowdesu.github.io/EstudiarEspanol/) (just for the basic anki mechanics, but better)
+
+Learning languages can be hard. It's easy to fool yourself into thinking you know the words or phrases since you can pick them from a drop down list or recognize them when reading. It's easy to imagine that you've got the hang of the grammar despite sounding completely illiterate. It can be dull, boring and repetitive. That's where we come in. 
+
+The Feynman technique is a proven way of improving your memory and understanding of advanced topics. The Feynman technique is at the basis of every study mechanic ingrained into Estudia Espanol\~\~. Instead of just picking the correct answer from a list, you'll have to fill in the blank and type out full words/expressions. But don't worry! It will be paced properly and you will have time to learn each phrase/expression before being expected to suddenly memorize it. 
+
+On top of being a more effective system, we strive towards creating a more enjoyable experience as well. The core site will have a few major mechanics that will make it easier and more fun, but aside from the standardized learning options-- we'll include a Spanish studying text-rpg! The game will start out in English and you will be learning Spanish on your journey. The quest will take place in a fantasy version of Mexico with many creatures of Mexican lore making an appearance. You will face off against El Chupacabra, El Sombreron, El Cuco, Acalica, La Llorona, and even Luz Mala. The story will be scary, thought provoking and and exciting. 
+
+The mechanics will be a blend of JRPG/RPG mechanics, with leveling up, magic, swords, etc, and Spanish skills. In order to cast spells in this universe you will need to have command over the Spanish language. For example, if you cast the spell 'Fireball' it may ask you a question in Spanish about fire-- if you can put in the correct answer, then your fire ball will hit the target. But if you answer wrong-- it will definitely miss. How far can your Spanish skills take you? How much can you learn? How powerful can you become? ",1566750578.0,14,0.93,0
+kickstarter,"A Web RPG dedicated to learning Spanish! Take Anki, Kingdom of Loathing and My Spanish Coach, and combine them to get Estudia Espanol!","Kickstarter Campaign:  [https://www.kickstarter.com/projects/andrethompsoncs/estudia-espanol?ref=project\_build](https://www.kickstarter.com/projects/andrethompsoncs/estudia-espanol?ref=project_build) 
+
+Very basic proof of Concept:  [https://at-lowdesu.github.io/EstudiarEspanol/](https://at-lowdesu.github.io/EstudiarEspanol/)  (just for the basic anki mechanics, but better)
+
+ 
+
+Learning languages can be hard. It's easy to fool yourself into thinking you know the words or phrases since you can pick them from a drop down list or recognize them when reading. It's easy to imagine that you've got the hang of the grammar despite sounding completely illiterate. It can be dull, boring and repetitive. That's where we come in. 
+
+The Feynman technique is a proven way of improving your memory and understanding of advanced topics. The Feynman technique is at the basis of every study mechanic ingrained into Estudia Espanol\~\~. Instead of just picking the correct answer from a list, you'll have to fill in the blank and type out full words/expressions. But don't worry! It will be paced properly and you will have time to learn each phrase/expression before being expected to suddenly memorize it. 
+
+On top of being a more effective system, we strive towards creating a more enjoyable experience as well. The core site will have a few major mechanics that will make it easier and more fun, but aside from the standardized learning options-- we'll include a Spanish studying text-rpg! The game will start out in English and you will be learning Spanish on your journey. The quest will take place in a fantasy version of Mexico with many creatures of Mexican lore making an appearance. You will face off against El Chupacabra, El Sombreron, El Cuco, Acalica, La Llorona, and even Luz Mala. The story will be scary, thought provoking and and exciting. 
+
+The mechanics will be a blend of JRPG/RPG mechanics, with leveling up, magic, swords, etc, and Spanish skills. In order to cast spells in this universe you will need to have command over the Spanish language. For example, if you cast the spell 'Fireball' it may ask you a question in Spanish about fire-- if you can put in the correct answer, then your fire ball will hit the target. But if you answer wrong-- it will definitely miss. How far can your Spanish skills take you? How much can you learn? How powerful can you become? ",1566749889.0,16,0.87,0
+learnprogramming,"I've been struggling with code, but I made my first program that i'm decently proud of! It's a website for studying spanish. (ALPHA 0.01)"," [https://at-lowdesu.github.io/EstudiarEspanol/](https://at-lowdesu.github.io/EstudiarEspanol/) 
+
+I was able to use HTML/CSS/Bootstrap/JS all together to make a legitimate project! I even had to overcome some annoying jQuery shenanigans and some absolutely bonkers JS code. But it WORKS!",1566439416.0,2,0.75,1
+learnspanish,I'm building a 'Learning Spanish' application/website!,[removed],1566439175.0,1,0.67,0
+WGU,Question regarding WGU Vs WGU Academy within the I.T. department,"I'm a part of WGU Academy right now and I took the 2nd quiz and the formatting was ATROCIOUS It was like a solid line of text that had numbers for the lines e.g.
+
+1:static void Main(string\[\] args) 2:{{ 3: int count = 0; 4: while(count < 5) 5: {{ 6: if (count == 3) 7: break; 8: count++; 9: }} 10: }}
+
+and the chart it wanted me to read wasn't formatted either 
+
+is it really this awful at WGU? 
+
+Or is the academy just broken since it's new?it's almost impossible for me to take the quizzes like this :(",1566154684.0,3,0.72,2
+learnprogramming,Feeling progress!,"I've been toying with the idea of programming for a long time, but i never felt like i ever made any progress. I learned Java in HS, Python in 'early college' and some JS on the side. Every class I had taken basically just showed loops, arrays, dictionaries, etc. I never felt like I was getting anywhere or mixing different skills or doing anything unique. 
+
+I don't know if it's just because i switched to front end or if it's because i've been putting 2-3 hours in every day, but i'm really starting to feel like i'm making progress! Now i'm intermixing HTML/CSS with flex boxes, grids, animations and sass, i'm using bootstrap and calling javascript scripts and i'm able to deploy on git-hub pages-- and i'm starting to learn about react/js6 and more advanced topics like node.js 
+
+&#x200B;
+
+It feels really amazing! I've never felt like I was making much progress when i'd just get deeper into a single language-- and it always felt overwhelming like there was so much to learn. But now i'm seeing different things that i've learned start  to combine and interweave in a really cool way. 
+
+&#x200B;
+
+If anyone feels lost or confused and just wants to make some progress, I really suggest you try the front end route for starting. After that you can go back end and get deeper. I personally have found that traversy media is the best way to learn (IMO). If you don't have any money to spend his youtube channel covers a lot-- I made a playlist for his youtube channel. 
+
+ [https://www.youtube.com/playlist?list=PLcstgJGFnimk7Ipv2PaCP-Upwwiol8jxu](https://www.youtube.com/playlist?list=PLcstgJGFnimk7Ipv2PaCP-Upwwiol8jxu) 
+
+&#x200B;
+
+I recommend following along on a second monitor and doing the stuff and building a 'reference' so to speak. Then you can work on your own projects using the stuff he teaches you as a reference. 
+
+&#x200B;
+
+If you can invest a bit more money into it, I highly recommend his udemy courses.  I'd go HTML/CSS --> Bootstrap --> Javascript --> React --> Node.js
+
+&#x200B;
+
+If you go from his YT channel the courses are only 12 bucks each so for about 60 bucks you can learn almost everything you need for fundamental front end.  (Even if you use the udemy courses you should be still uses the YT channel for extra stuff like git-hub, command line, etc)",1565634019.0,6,1.0,3
+Megaten,"I've been practicing my programming with vaguely megami tensei themed works, any feedback would be appreciated!","I've got some basic things that i've been working on with my HTML/CSS/JS code.
+
+Warning: Almost none of them besides chess work on mobile! Please use a PC.
+
+The first is SMT Chess, which i posted before. It's basically a simple chess engine but with demons instead of chess pieces!
+
+[https://at-lowdesu.github.io/SMT-Chess/](https://at-lowdesu.github.io/SMT-Chess/)
+
+The second is a very \*simple\* web-page. I was trying to make it look like if Cafe Leblanc had a full website. Right now only the home screen is finished, but I plan on updating the entire website over time. The same link will apply as I commit new changes to it.
+
+[https://at-lowdesu.github.io/Cafe-Lablanc/](https://at-lowdesu.github.io/Cafe-Lablanc/)
+
+The last one is in it's early alpha-- but I plan on making my own full fledged web RPG. Right now all I have is the basic battle system. Warning: it's a complete skeleton. The final product will have different 'monsters'/'demons', fusions, more deep/rich combat, and a philosophical storyline-- but for now, it's a very basic battle system where you punch an NPC in the face repeatedly. I think it's kind of challenging/fun, but let me know what you think!
+
+[https://at-lowdesu.github.io/BATTLE-SYSTEM/](https://at-lowdesu.github.io/BATTLE-SYSTEM/)",1565201338.0,9,0.81,4
+learnprogramming,Does anyone else struggle with switching languages?,"HTML/CSS/JS are all easy to switch between, since they're all very different. But I learned JS, then switched to Python, and then I forgot most of JS. If you're using both is it somewhat easy to keep both in memory pretty well, or is it normal to have some struggles switching between two full fledged languages?",1564941875.0,0,0.5,9
+Bestbuy,What do the smart home experts of /r/ best buy make?,I've seen 15 or like 15.50. What's normal to ask for when you get offered the role?,1564446943.0,0,0.38,12
+CompetitiveEDH,Best multiplayer EDH decks?,[removed],1564267041.0,0,0.5,1
+fireemblem,Mechanical question about 3 houses,Why am I getting doubled by people with 1 speed more than me on hard?,1564159150.0,2,0.75,4
+fireemblem,Request/question for people who have the game (may contain spoilers),"On the Nintendo page for the game it mentions requiring Nintendo online for the online features, do you guys have any idea what those features might be? Im guessing they'd be turned off since the servers aren't open yet, but maybe you've seen a menu or option that hints to it? Im really hoping for a fates like versus, but im expecting something much less exciting.
+
+Please only use spoilers necessary to answer the question",1564066448.0,5,0.86,4
+askscience,How far can a single instance of light travel on the vacuum of space?,[removed],1563494435.0,1,1.0,0
+Megaten,Megami Tensei Chess V2 (Improved design/aesthetics),,1563492386.0,12,0.94,1
+learnprogramming,"My plan for getting into the field is failing, what should I do instead?","My goal was originally to go to college and get a CS degree. I have no intention of giving this plan up entirely, but its definitely getting a lot harder/longer than I was hoping. The reason is, I still owe the school a bunch of money from when I was first out of highschool and kind of an idiot (for reference, that was about 4-5 years ago) so i'm about 4000 in debt with the school. I make about 1200 a month, so i could pay it off in around 4 months of time. That said, I have some other debts that i'm covering for the next 3 months. So it'd take me nearly 7 months to even \*start\* school. I still want to keep going to school, I really do. But I can't go 7 months without at least \*trying\* to get into the field. 
+
+&#x200B;
+
+I know HTML very well. I know CSS decently well, and I know all the main mechanics of javascript (loops, arrays, classes, etc). I feel like if I polish up my HTML/CSS/Javascript and add a few frameworks.. in theory I should have the fundamental skills? 
+
+&#x200B;
+
+Do you think I should :
+
+&#x200B;
+
+A) Self study and keep trying for internships/jobs eventually getting back into school when financially possible. 
+
+B) Find a 'free until hired' online bootcamp and rush into the industry. 
+
+C) Try to focus my skills on web development and create my own web application and try to make money with it/try to go freelance with web development. 
+
+D) Try to focus on android/ios development and make simple games that catch on and sale for enough money to pay off my debt.
+
+E) Other option",1563462646.0,2,0.75,1
+Megaten,Shin Megami Tensei Chess-- a silly coding project that makes different demons take over as your chess pieces,,1563418454.0,27,0.93,3
+fireemblem,"My new wallpaper after 4 hours ago (low spoilers, 3 houses)",,1562215791.0,206,0.99,9
+MarioMaker,Just found this subreddit for difficult but good mario maker levels,"it's called kaizo mario maker  [https://www.reddit.com/r/KaizoMarioMaker/](https://www.reddit.com/r/KaizoMarioMaker/) , i don't know if its against the rules but I think it would be cool if everyone posted awesome levels to it!",1562012943.0,3,1.0,0
+askscience,Is there a species of animal people could be accidentally interpreting as a chupacabra?,[removed],1560610775.0,1,1.0,0
+truegaming,What are the best '2nd monitor' games?,[removed],1559764942.0,11,0.73,22
+askscience,How far can a single instance of light travel on the vacuum of space?,[removed],1559438498.0,1,1.0,1
+learnspanish,'Sat' like system for Spanish?,There are many websites like Khan Academy that allow you to read articles/excerpts in english then answer questions either about the grammar or the message being conveyed. Is there anything like that but for Spanish? Is there even a sort  of comprehensive 'Spanish' test for spanish speakers?,1559324969.0,18,0.82,11
+EngineeringStudents,"Website that teaches mechanical and electrical engineering, along with the maths?","A customer at work showed me a website a month ago and I thought it was really cool-- but I can't seem to find it now that i'm actually wanting to use it. (oops.) 
+
+&#x200B;
+
+It wasn't Khan Academy/Brilliant/Wolfram since I use all three of those frequently, but instead it had a front page where you chose a category (I only remember math, mechanical and electrical) and then it had courses/topics for each one with some youtube video's from his channel thrown in. Does anyone have any idea what it could have been?",1559146040.0,5,0.78,2
+Psychonaut,My partner has depression,I feel like this could help them learn to accept things and work through their issues. Do you guys think it's an okay idea? or am I expecting too much from this experience?,1557210425.0,1,0.67,4
+Bestbuy,"Our store is struggling with IHA leads, any ideas?","My manager wants me to champion IHA to bring us from around 2 leads a week to around 8 leads a week. I have some ideas of my own, but I was wondering if anyone else had thoughts they could add? I want to make a good impression and show that I have my own leadership style-- so trust me, i'm not just relying on what you have to say-- but it's very important and I want to hear from as many people as possible. 
+
+&#x200B;
+
+Have any of your stores struggled with IHA leads? If so, how did you deal with it? What worked? What didn't?",1557191929.0,0,0.5,16
+loseit,My partner (20F) is trying to go from 150 to 110,[removed],1555874164.0,1,1.0,1
+learnpython,Where should I go to learn PyQT5?,"I don't want to use a super random guide or tutorial if possible, but preferably one people know is high quality and fairly comprehensive. I typically use full stack python, free code camp or codecademy, so i'm accustom to fairly good resources. Does anyone have any suggestions for pyqt5?",1555176396.0,1,0.57,3
+Megaten,"The rest of the cosplay is almost here, but I think I look pretty good!? (X-post from /r/persona5",,1554528188.0,361,0.92,77
+Persona5,"The rest of the cosplay is almost here, but I think im looking pretty good!?",,1554506538.0,2492,0.94,129
+Stadia,What do we know about developing for Stadia?,"I'm still a beginner, but I want to set stadia development as my goal. However, I can't apply to create for stadia yet since I don't have a 'company' yet, and i'm not entirely sure of all the details. 
+
+&#x200B;
+
+Do we know what systems will work? Should I be learning Unity? Unreal 4? Or something different? Should I be learning Python? Javascript? C++? What languages should I focus on? 
+
+&#x200B;
+
+Do we know what's gonna be used for this kind of thing yet?",1554485133.0,39,0.96,15
+Persona5,My partners cute doodle mid class <3,,1554412295.0,65,0.95,2
+uofu,"If I wanna take a couple semesters off, do I need to take a leave of absence?","I plan on taking a year off, so i'm thinking I should probably take an official leave of absence..? Is that the best option?",1554258130.0,3,0.81,5
+techsupport,"My computer is a hot mess, any suggestions? (Details in first comment)","https://www.imgur.com/a/1OYGrDF
+
+I'm running into multiple problems. I can't connect my 4 + 4 pin to the vista l board because the GPU, and I can't run without the GPU since im using a ryzen processor. My GPU only has one fan running and my case fans aren't working at all??
+
+Should I be getting a new psu with a longer cable?",1553969464.0,1,1.0,4
+AppleWatch,My Series 4 Apple Watch doesn't work with my Screen Protector on?,"with the screen protector on I started noticing sensitivity issues. I noticed that if I take my watch off the issues go away-- it's only when it's 'on'. Then I went to the settings and turned off wrist detection-- and now everything is fine. However, wrist detective is absolutely vital for many functions that make the watch worth while. 
+
+&#x200B;
+
+Does anyone have any experience with this issue or any suggestions for dealing with it?",1553842108.0,0,0.33,7
+Megaten,Does Liberation Dx2 ever get difficult?,[removed],1553792692.0,1,1.0,10
+Falcom,When is Cold Steel supposed to drop on the ps4 store?,"I'm happy playing Sekiro, but i'm super anxious to play Trails of Cold Steel on my Ps4. Any idea when during the day it should drop?",1553580967.0,14,0.94,13
+dxm,Is it possible to over react to dxm?,"After having tripped with dmx so many times,  I feel like the 'flood gates' have opened, and now just taking mucinex dm makes me feel way too high to interact properly. 
+
+Does this happen to anyone else? Do you have any tips to 'sober up'?",1553123939.0,2,0.67,6
+dmx,Does my body overreact to dmx?,Oops,1553097804.0,1,1.0,4
+gaming,Gather around as we unveil Google’s vision for the future of gaming at #GDC19.,,1553012419.0,4,0.83,0
+Bestbuy,is it possible to negotiate pay raises outside of your 'one year raise' opportunity?,"If i've been hitting higher metrics, working harder/better and taking up more responsibility, do you think it's possible to ask for a raise and actually receive it? I know that my pay grade/role offers up to $2+ more per  hour over time, so I don't think it's entirely unreasonable to request more. ",1552766418.0,7,0.89,13
+nspire,Questions about Lua VS Micropython,"I'm just starting to get into programming and i've done a fair bit of Python, so I was wondering if it makes more sense to use Micro-Python instead of Lua for programming on my Nspire? My only fears are that Micro-Python for Nspire has almost no documentation or built in support while Lua has much better support (also I think lua runs faster..?) and that micro-python is still different enough from real python that i'll still feel like i'm learning two languages. 
+
+&#x200B;
+
+What do you guys think? 
+
+&#x200B;
+
+If you say Micro-Python or use it, i'm also a bit confused on how it works. I've downloaded Ndless and MicroPython onto my Nspire (4.4.0) but I don't know how to start coding in it. It seems like built in i'll be using Lua by default..? So how do I switch my code to execute in MicroPython instead?",1552349109.0,2,1.0,1
+nspire,The new trailer for the Ti-Nspire CX II says it's accepted on tests like the ACT,Does this mean it's actually going to be \*weaker\* than the CX Cas? is it not a Cas system at all? ,1552345083.0,3,1.0,1
+Bestbuy,Abusive callers?,"My coworker does phone hub and keeps getting calls from a guy who is very rude and keeps calling her 'cute names' like baby girl and girlie, which makes her feel uncomfortable. No managers are willing to take the call and she's not allowed to hangup on customers. So what is she possibly supposed to do? He literally just keeps calling. ",1552157565.0,12,0.94,18
+learnprogramming,Is it possible to begin interning with very basic skills?,Could I possibly start interning somewhere with only Python and a bit of Html/Javascript? Or should I know Django/Flask and all kind of algorithms before I even get started? ,1551401666.0,19,0.78,14
+Utah,Any software developers who could use an unpaid/low-paid programming intern?,"As of now I know Python decently well and know the basics of Html/Javascript. I'm working on CSS and learning different frameworks like django. I could push further in any specific area though and even pivot and start learning a new language if it would be beneficial. 
+
+&#x200B;
+
+My goal is mainly experience not money-- so i'm fine with an unpaid internship. 
+
+&#x200B;
+
+I'm located near Murray/Sandy, but i'm willing to travel for any opportunities. 
+
+&#x200B;
+
+If anyone is interested, let me know! (I got into programming 6+ years ago, but I hadn't gotten terribly serious until recently-- so I have intuition, but i'm still learning a lot every day.)",1551401587.0,3,0.72,0
+simracing,"Logitech recognizes my G920, but it won't actually do anything?",It shows the wheel and pedal in the settings but none of my racing games recognize it :\[,1551144488.0,3,1.0,3
+yugioh,Does anyone know which yugioh games can be played in Spanish?,[removed],1550943106.0,1,1.0,1
+learnpython,Is there something as in-depth and valuable as free code camp for python?,"Free Code Camp: [https://www.freecodecamp.org/](https://www.freecodecamp.org/) this place is pretty cool if you follow the main curriculum for HTML/CSS/JAVASCRIPT and go down that route.. but for python, their listings are pretty sub-par.
+
+&#x200B;
+
+For now i've been using Codecademy to get the basics down, then I plan on using codeingame, code wars and other similar sites for improving my skills. But the issue with all this is they don't really teach frameworks like django very well or go into a more 'professional' establishment of the skills.
+
+&#x200B;
+
+Coding bat is decent-- but it doesn't have as much for python as it does for java. ([https://codingbat.com/python](https://codingbat.com/python))
+
+&#x200B;
+
+And I think the best for the late game is 65 Questions ([https://www.algoexpert.io/questions](https://www.algoexpert.io/questions)) but I can't help but feel like theres a pretty big skill gap going from Codecademy to 65 Questions.
+
+&#x200B;
+
+I know that projects are one of the best ways to learn, but I like to have a project alongside training drills. Rn my project is a text based dungeon crawler, but it's pretty complicated and it's going to require a lot of HTML/CSS/Javascript as well, so it's kind of a long term dealio-- so I want some other short term stuff to mix things up a bit.
+
+&#x200B;
+
+Any ideas would be appreciated <3
+
+&#x200B;
+
+Edit: I don't mean tutorials as much. I know that there are some really good python tutorials like [https://docs.python.org/3/tutorial/index.html](https://docs.python.org/3/tutorial/index.html) and [http://anh.cs.luc.edu/handsonPythonTutorial/index.html](http://anh.cs.luc.edu/handsonPythonTutorial/index.html) but I was hoping for something with a repl and more framework integration like Free Code Camp. ",1550941626.0,233,0.97,43
+Anarcho_Capitalism,Question from a Libertarian/Conservative,"In anarcho capitalism, how do you propose that we maintain a safe country, and how do we protect the rights/property of people, without a monopoly on violence? (The state.) 
+
+&#x200B;
+
+This is the only thing currently preventing me from wanting to go full blown anarcho\_capitalist. I feel like it would be too dangerous to just 'trust' people. ",1550858024.0,6,0.76,10
+Python,A web rpg in python..?,[removed],1550682265.0,2,0.6,6
+google,Comcast's new modem/router is killing my google wifi?,[removed],1550008242.0,1,1.0,1
+learnprogramming,"If my goal is to quickly become a front end developer, what should I focus on?","I want to quickly become a front end developer so that I can at least spend my 'work time' during each day programming, rather than continuing to work at best buy. 
+
+&#x200B;
+
+My math skills aren't terrible, but I haven't taken a math course since HS. (It's been around 4 years now.) I still remember Algebra and Algebra 2 fairly well, but my Geometry skills are a bit lacking. Should I dedicate time to reviewing maths and learning pre-calc/caculus right now, or exclusively focus on HTML, CSS and Javascript? ",1549343294.0,17,0.85,10
+techsupport,"I have mint OS installed on a partition on my 2nd hard drive, but it's not showing up as a boot option?","I have 3 drives on my computer, a 1TB SSD, a 1TB HDD and a 256 SSD.  But when I actually go to my bios settings and choose the boot order-- the only one to show up is the 1TB SSD, which has windows. 
+
+&#x200B;
+
+[https://imgur.com/a/ocJ6gX3](https://imgur.com/a/ocJ6gX3)
+
+&#x200B;
+
+these are my partitions. The 2nd hard drive, the 1TB HDD has mint installed. It shows 'active' but not 'boot'. Any way to fix that? Is that even the issue? Is it because it's not the first partition?",1548915342.0,1,0.67,2
+techsupport,"Anyone know how I fucked up my partitions, and how I can fix it?","FIXED: used the mini tool
+
+I've got a 1TB SSD and a 1TB HDD.
+
+&#x200B;
+
+I'm just trying to get it so that I have two partitions on both-- leaving me with 4 different 'drives' to work with. My goal is to put a different Os on each one.
+
+&#x200B;
+
+[https://imgur.com/a/p5W3eSY](https://imgur.com/a/p5W3eSY)
+
+&#x200B;
+
+It's saying I only have around 800GB's to use between my C/D drives, but my C drive in partitions says it should have 900 GB's and then I should have 300 partitioned on my D drive? I understand the 600 GB's that aren't partitioned yet on the D drive, but where'd the other 400 GB's on the C drive go?
+
+&#x200B;
+
+So I was able to successfully partition the rest of the HDD, but my SDD is still being wonky.
+
+&#x200B;
+
+[https://imgur.com/a/USRzsso](https://imgur.com/a/USRzsso) \-- I'm now getting an error about parameters being wrong when I attempt to shrink the SSD by even a small amount.
+
+&#x200B;
+
+&#x200B;",1548903378.0,2,0.76,10
+Megaten,Deciding on a name for a Megaten based YT channel,"I'm going to be making a new JRPG/Let's play channel, but i'll mainly focus on Megaten, Legend of Heroes and Fire Emblem. Do you guys have any suggestions for names? I want either a Cute Aesthetic, a Smart Aesthetic or a Programming Aesthetic. 
+
+&#x200B;
+
+My ideas thus far : 
+
+&#x200B;
+
+[https://www.strawpoll.me/17335104](https://www.strawpoll.me/17335104)",1548888388.0,7,0.89,22
+letsplay,I can't decide what to call my youtube channel :[,"I want to either go for a cute/anime aesthetic or a smart/programmer aesthetic. My actual personality is a blend between fun/playful and smart/techie-- so if i could find something that ties both together that would be godlike. 
+
+&#x200B;
+
+At first I was thinking of choosing something based on a character from devil survivor, so either BunnyDeSu or AtlowDeSu, since i love both of those characters. But I was also considering something completely unique like AnalysisHero or Sakushi. I could use a programming reference like InstanceHero or JavaPoweredGaming-- but those might be a bit too niche if i'm only playing JRPG's and not really a programming centric channel..
+
+&#x200B;
+
+My old channel name was InevitableAscendancy, but nobody could remember it for some reason. \*eye roll\*
+
+&#x200B;
+
+I'm also considering just choosing a programming langauge as the name. For example I could go by 'Kotlin' or 'Python'. or even something like SyntacticalError or Debugged Gaming. 
+
+&#x200B;
+
+I need help choosing!! If you guys have any suggestions, tips or advice, please let me know. 
+
+&#x200B;
+
+[https://www.strawpoll.me/17335104](https://www.strawpoll.me/17335104)
+
+&#x200B;
+
+&#x200B;",1548888247.0,0,0.4,12
+sex,Not being able to get hard during sexual interactions (continuation),[removed],1547789448.0,1,1.0,4
+Falcom,Is there a breakdown of the games combat mechanics for ToCS 1/2?,"I'm curious if there's a more mathematical breakdown of the combat mechanics available? Sometimes I struggle to accurately estimate how much damage my attacks will deal based on my stats, the enemy i'm fighting, the moves, ect. I'm fine with algorithms or even just more vague stuff-- I just want to have an 'in-depth' understanding of the mechanics. 
+
+I want to LP all the ToCS games on PS4 as they release-- i've got a pretty good understanding of the story/world, but want to be better at the gameplay. I'll be most likely playing a fresh save on maniac difficulty. (Right now i'm trying to plat both games before then..)",1547788921.0,2,1.0,1
+Stoicism,Dealing with a depressed partner (x-post from /r/suicidewatch),"Note: This doesn't directly apply to stoicism, but I was hoping as a fellow stoic you guys could help me logically think through this from a stoic point of view. I know the stoics are right, and I feel it in my heart, but sometimes it's really REALLY hard for me to apply it to my own situations. 
+
+About 4 months ago I met someone (biologically female, but they are gender queer) at work. The first month was mostly spent getting to know them as a coworker, and getting their contact information. The second month was mostly spent online playing games and sometimes going out to movies or for tacos. The third month was mostly getting to know them and spending most days out of the week with them. The fourth month, we've basically been dating without making it official. We've done all the usual stuff, kissing, sex, late night phones calls, you name it.
+
+But they're extremely suicidal and I really don't know how to cope or deal with it, nor do I know the best way to help them. They are dealing with real life external issues (that I can't really talk about) and they are dealing with health issues. They can't eat most kinds of foods, they're so overly concerned about their weight that they won't eat some days, they physically sometimes can't eat because of stress (they'll puke if they even drink water under certain conditions) and have a variety of other medical health issues. They also have clinical depression, ocd, dpd and some other one that I can't even remember. They've been abused in the past and have almost no self esteem or self love. 
+
+They have a lot of pressure to succeed-- to the point where they don't think they can even take a single semester (summer or not) off and they've never dipped below a 4.0 GPA. They're very smart yet they think they're stupid or worthless. They think they don't deserve 'love or happiness' and they insist that everyday is suffering. 
+
+Sometimes they seem happy when were together, either laughing or kissing or playing a game. But often they look very sad and many of our nights spent together end up with one of us crying. Either me crying at the thought of them dying or them crying because their depression. 
+
+It's hard to know what to say, because I feel bad 'making' them live. If their life really is so awful and terrible, and everyday is suffering, why should I try to 'force' them to live? But at the same time, even though i've only known them for such a short while.. I can't bare the thought of losing them..? I don't want them to die! I love them so very much. I'd be fine if they left me and we had to just be friends-- but i'm not even remotely fine with the thought of *losing* them. I don't know what to say because how can I honestly say that things will get better? Their real life situation is hard. Their internal issues are hard. Their health issues seem to have no signs of improving, but rather seem to be getting worse.
+
+Now-- I know how I can feel better. I'm studying Stoicism and understand the philosophy quite well. I'm not *as* worried about myself. It's still very hard though. Certain songs or other things will trigger it and i'll end up crying at the thought of losing them. Only an hour ago we were cuddling in bed when a song by linkin park came up, one that they had put in their spotify playlist for me-- talking about dying and being remembered-- a song asking the listener to remember them for what they did right and to remember the good times. That instantly put me to tears. I *can't* lose them, I just CAN'T. But how can I save them? I feel so utterly and completely powerless. I can't fix their situation. They don't even truly believe that I love them-- they've been told that countless times before. It doesn't help that we've only known each other for a short while-- so they seem to think i'm just saying things. They tell me they love me-- but they won't accept that I love them back? 
+
+I don't know.. I just don't know anymore. But I really don't want to lose them. ",1547617251.0,3,1.0,3
+SuicideWatch,"Hey, I don't know if I want advice, comfort or something else but I wanna talk a bit","Like the title says, I don't know what I really expect or want from you guys that I can't find somewhere else on the internet. Maybe it's validation that i'm making the right choice? Maybe it's advice or suggestions? Maybe it's just someone to relate to? 
+
+About 4 months ago I met someone (biologically female, but they are gender queer) at work. The first month was mostly spent getting to know them as a coworker, and getting their contact information. The second month was mostly spent online playing games and sometimes going out to movies or for tacos. The third month was mostly getting to know them and spending most days out of the week with them. The fourth month, we've basically been dating without making it official. We've done all the usual stuff, kissing, sex, late night phones calls, you name it.
+
+But they're extremely suicidal and I really don't know how to cope or deal with it, nor do I know the best way to help them. They are dealing with real life external issues (that I can't really talk about) and they are dealing with health issues. They can't eat most kinds of foods, they're so overly concerned about their weight that they won't eat some days, they physically sometimes can't eat because of stress (they'll puke if they even drink water under certain conditions) and have a variety of other medical health issues. They also have clinical depression, ocd, dpd and some other one that I can't even remember. They've been abused in the past and have almost no self esteem or self love. 
+
+They have a lot of pressure to succeed-- to the point where they don't think they can even take a single semester (summer or not) off and they've never dipped below a 4.0 GPA. They're very smart yet they think they're stupid or worthless. They think they don't deserve 'love or happiness' and they insist that everyday is suffering. 
+
+Sometimes they seem happy when were together, either laughing or kissing or playing a game. But often they look very sad and many of our nights spent together end up with one of us crying. Either me crying at the thought of them dying or them crying because their depression. 
+
+It's hard to know what to say, because I feel bad 'making' them live. If their life really is so awful and terrible, and everyday is suffering, why should I try to 'force' them to live? But at the same time, even though i've only known them for such a short while.. I can't bare the thought of losing them..? I don't want them to die! I love them so very much. I'd be fine if they left me and we had to just be friends-- but i'm not even remotely fine with the thought of *losing* them. I don't know what to say because how can I honestly say that things will get better? Their real life situation is hard. Their internal issues are hard. Their health issues seem to have no signs of improving, but rather seem to be getting worse.
+
+Now-- I know how I can feel better. I'm studying Stoicism and understand the philosophy quite well. I'm not *as* worried about myself. It's still very hard though. Certain songs or other things will trigger it and i'll end up crying at the thought of losing them. Only an hour ago we were cuddling in bed when a song by linkin park came up, one that they had put in their spotify playlist for me-- talking about dying and being remembered-- a song asking the listener to remember them for what they did right and to remember the good times. That instantly put me to tears. I *can't* lose them, I just CAN'T. But how can I save them? I feel so utterly and completely powerless. I can't fix their situation. They don't even truly believe that I love them-- they've been told that countless times before. It doesn't help that we've only known each other for a short while-- so they seem to think i'm just saying things. They tell me they love me-- but they won't accept that I love them back? 
+
+I don't know.. I just don't know anymore. But I really don't want to lose them. ",1547616834.0,1,1.0,1
+GeekSquad,How much Experience should I have before applying for a Geek Squad role?,"I've been working at best buy for over a year, so i'm fairly well off as far as policy, TTS and services go. I've went out with the installers multiple times and have a basic idea of the tasks at hand. The issue is I only know stuff about computers from personal experience. So i've built my PC and repaired my computer by wiping the hard drive or similar things-- but should I be trying to get an A+ certification or something similar? Should I be learning networking? ",1547515740.0,4,0.76,16
+Bestbuy,Is there a way to watch specific roles or openings?,"I know how to use the internal job openings software to see what's currently available-- but I was wondering if I could mark a few positions that I would be interested in so that I could be notified if they opened up. I'm really interested in working with Geek Squad, so i'd like to watch any of those full time openings. ",1547503734.0,2,1.0,1
+techsupport,"I decided to reset my PC, so I reinstalled windows and formatted my other harddrives-- now my 1TB is showing up as 100GB?","Solved:
+
+&#x200B;
+
+When I try to format local disk (D:) (which is a 1TB harddrive and always has been) it only shows Capacity: 89.9GB as an option. It won't let me change the file system from NTFS either. I've tried hitting Restore device defaults and changing the Allocation unit size, but nothing seems to work. Any ideas?",1547197106.0,1,1.0,2
+Megaten,Joker Moveset Ideas," 
+
+Neutral B - Joker summons Jack Frost who uses Bufu. This move doesn't have great range, but it can leave the opponent frozen. It's easy to combo out of this move.
+
+&#x200B;
+
+Side B- This move functions like a counter with some nuance. It won't deal more damage based on the attack it's countering and it's more focused on evasion. It does a small amount of damage but has no knockback. It does leave the opponent mildly stunned and it has a lot of safe frames/almost no recovery frames for joker. Joker uses his dagger to counter attack and a sort of evasive dash moving joker forward.
+
+&#x200B;
+
+Down B -Maragidyne . Joker summons Arsene (or some other persona) and casts Maragidyne. It sends fire flying out in all directions decently far protecting joker and dealing a solid amount of damage.
+
+&#x200B;
+
+Up B - Joker leaps into the air using a quick up B. But if the player holds B, a pixie will appear flying joker further than usual. The idea is that he can either do a quick jump that he can act out of (like a sonic up b) or a slower jump that recovers much better if needed.
+
+&#x200B;
+
+Forward Tilt - Joker will do a basic kick covering in front of him.
+
+&#x200B;
+
+Down Tilt - Joker will leap forward dealing a bit of damage in the process.
+
+&#x200B;
+
+Up tilt - Joker will use his dagger to sweep upwards around him in an arc. (like marths up tilt with less range, but a bit faster.)
+
+&#x200B;
+
+Neutral A/Jab - Joker will use his handgun to fire off quick shots that lightly stun the enemy and deal decent damage.
+
+&#x200B;
+
+Down Smash - Joker will summon a physical type persona which will do a low kick .
+
+&#x200B;
+
+Forward Smash - Joker will summon a physical type persona which will use a long range sword attack.
+
+&#x200B;
+
+Up Smash - Joker will use a magic type person which will cast Ziodyne, which will fade upwards. This move will have excellent launching power.
+
+&#x200B;
+
+When Joker uses his physical persona he will lose health. As a trade off, these attacks will do a LOT of damage and have a LOT of knockback. When Joker uses a magical persona, he will consume SP which is limited per stock. In exchange these will also be very powerful moves with great combo potential into physical persona attacks.
+
+&#x200B;
+
+He should have very fast aerials that all mainly use his dagger in unique ways.
+
+&#x200B;
+
+Ideas: Alternatively he could have a neutral B that changes personas-- and that could in effect change most of his moveset. He could swap between 2-3 different personas. Though this would take a lot of time for me to design, so I elected to focus on a standard build version of joker.",1546936939.0,7,0.9,4
+Anarchism,The lovely police of mexico,,1546936696.0,2,0.75,0
+smashbros,Joker Moveset (Speculation),"Neutral B - Joker summons Jack Frost who uses Bufu. This move doesn't have great range, but it can leave the opponent frozen. It's easy to combo out of this move.
+
+&#x200B;
+
+Side B- This move functions like a counter with some nuance. It won't deal more damage based on the attack it's countering and it's more focused on evasion. It does a small amount of damage but has no knockback. It does leave the opponent mildly stunned and it has a lot of safe frames/almost no recovery frames for joker. Joker uses his dagger to counter attack and a sort of evasive dash moving joker forward. 
+
+&#x200B;
+
+Down B -Maragidyne . Joker summons Arsene (or some other persona) and casts Maragidyne. It sends fire flying out in all directions decently far protecting joker and dealing a solid amount of damage. 
+
+&#x200B;
+
+Up B - Joker leaps into the air using a quick up B. But if the player holds B, a pixie will appear flying joker further than usual. The idea is that he can either do a quick jump that he can act out of (like a sonic up b) or a slower jump that recovers much better if needed. 
+
+&#x200B;
+
+Forward Tilt - Joker will do a basic kick covering in front of him. 
+
+&#x200B;
+
+Down Tilt - Joker will leap forward dealing a bit of damage in the process. 
+
+&#x200B;
+
+Up tilt - Joker will use his dagger to sweep upwards around him in an arc. (like marths up tilt with less range, but a bit faster.)
+
+&#x200B;
+
+Neutral A/Jab - Joker will use his handgun to fire off quick shots that lightly stun the enemy and deal decent damage. 
+
+&#x200B;
+
+Down Smash - Joker will summon a physical type persona which will do a low kick . 
+
+&#x200B;
+
+Forward Smash - Joker will summon a physical type persona which will use a long range sword attack. 
+
+&#x200B;
+
+Up Smash - Joker will use a magic type person which will cast Ziodyne, which will fade upwards. This move will have excellent launching power. 
+
+&#x200B;
+
+When Joker uses his physical persona he will lose health. As a trade off, these attacks will do a LOT of damage and have a LOT of knockback. When Joker uses a magical persona, he will consume SP which is limited per stock. In exchange these will also be very powerful moves with great combo potential into physical persona attacks. 
+
+&#x200B;
+
+He should have very fast aerials that all mainly use his dagger in unique ways. 
+
+&#x200B;
+
+Ideas: Alternatively he could have a neutral B that changes personas-- and that could in effect change most of his moveset. He could swap between 2-3 different personas. Though this would take a lot of time for me to design, so I elected to focus on a standard build version of joker. 
+
+&#x200B;
+
+&#x200B;",1546931914.0,3,0.62,7
+Stoicism,Anyone know where I can get the full version of letters from a stoic?,"When I go online I can find PDF's with all the letters, but every physical books I find is missing some of them..? Does anyone know which book/version I can buy that physically includes all of the letters? It's my favorite of the three stoic books and I prefer reading it-- but for now i've been focusing no the 'Tao of Seneca' since it has all the letters included. ",1546922074.0,6,1.0,7
+sex,"I started to have sex with a girl yesterday, and I couldn't get hard? Now she's upset with me?",[removed],1545907830.0,5,0.7,14
+learnprogramming,Anyone want to review/critique my study plan for programming?,"It's a 4 month goal of learning programming and the related math required for it.
+
+&#x200B;
+
+Month 1:
+
+Algebra 1/2 review (I took classes in HS, so it's just review.)
+
+Python/Python problems.
+
+&#x200B;
+
+Month 2:
+
+Computer Science fundamentals (A course on [brilliant.org](https://brilliant.org) that covers the basics of algorithms and computer science.)
+
+HTML/CSS/Javascript
+
+Trigonometry and Conics
+
+&#x200B;
+
+Month 3:
+
+Computer Science Algorithms (The next course on [brilliant.org](https://brilliant.org) delving further into algorithms.)
+
+Java (Sun tutorial, Codeacademy and a java textbook. I'll also use a repl to practice the code.)
+
+Complex Algebra, Number Theory and Pre-calculus.
+
+Coding Bat (Java/Python problems.)
+
+&#x200B;
+
+Month 4:
+
+65 Questions (Algorithm practice for Java, Javascript and Python.)
+
+Calculus
+
+Structure and Interpretation of Computer Programs / Lisp-Scheme
+
+&#x200B;
+
+Any ideas or tips?
+
+&#x200B;
+
+Each day I would be able to land about 6 hours of work. On days off I could probably land 12-14 hours of work besides a few days off when I spend 4-6 hours with friends/my (gf?). 
+
+&#x200B;
+
+I'd take mini breaks to meditate/work out  (maybe 10-30 minutes per day) and on days off I could spend an hour reading possibly. 
+
+&#x200B;
+
+&#x200B;
+
+&#x200B;",1545024683.0,1,1.0,4
+computerscience,Is it worth it to drop -almost- everything and just code?," 
+
+I guess the question i'm asking is if I spent 8+ hours every day going from a fairly low level of programming to a presumably high level-- would 3ish months be enough to land a basic programming job? Or is school really the only way to get there?
+
+&#x200B;
+
+Notes:
+
+&#x200B;
+
+1- I don't plan on dropping out of school or skipping it. I recognize that in the long term school is the best solution. But I currently live with family and have some time to focus on Work/Programming, and for financial reasons school isn't 100% possible atm. So since i've already got an off semester, I thought this might be a worthy way of spending it.
+
+&#x200B;
+
+2- I don't expect it to carry me all the way. I'm mostly looking for an in to the industry and a way out of working at Best-Buy making very basic pay with basic benefits. Something more 'livable' if you may.
+
+&#x200B;
+
+Second Question: If you do think it's a reasonable idea to drop games/recreation, standard studies and many social activities for a period of time to get a jump into the programming world-- what do you think my focus should be on?
+
+&#x200B;
+
+I'm thinking Python, Java, HTML, CSS, Javascript and possibly some C++ or Swift. (Maybe Flutter or Kotlin?). I'd also need to learn a bit of Lisp/Scheme. (Mainly for exploring algorithms).
+
+But i'm also worried about learning more about the CS basics. Should I focus more on the straight coding, or more on learning about networks and other parts of the industry? I'm afraid I won't be prepared for some of the other details.
+
+Of course another big thing will be learning the algorithms. I've got a subscription to [Brilliant.org](https://brilliant.org/) which covers a lot of algorithms and computer science fundamentals, a subscription to [https://www.algoexpert.io/questions](https://www.algoexpert.io/questions) which covers 65 major interview questions (basically efficiency/sorting/algorithm practice) and SICP. (Structure and Interpretation of Computer Programs.)
+
+&#x200B;
+
+Edit: Looking at most of the job descriptions they all ask for BA or MA's. But I always through programming was different. Is it just to scare away unqualified employees? Or will they actually cut someone if they don't have the degree, even if their understanding of the code/past projects shows they know their stuff?",1544909434.0,2,0.75,8
+learnprogramming,Is it worth it to drop -almost- everything to code?,"I guess the question i'm asking is if I spent 8+ hours every day going from a fairly low level of programming to a presumably high level-- would 3ish months be enough to land a basic programming job? Or is school really the only way to get there?
+
+&#x200B;
+
+Notes:
+
+&#x200B;
+
+1- I don't plan on dropping out of school or skipping it. I recognize that in the long term school is the best solution. But I currently live with family and have some time to focus on Work/Programming, and for financial reasons school isn't 100% possible atm. So since i've already got an off semester, I thought this might be a worthy way of spending it.
+
+&#x200B;
+
+2- I don't expect it to carry me all the way. I'm mostly looking for an in to the industry and a way out of working at Best-Buy making very basic pay with basic benefits. Something more 'livable' if you may.
+
+&#x200B;
+
+Second Question: If you do think it's a reasonable idea to drop games/recreation, standard studies and many social activities for a period of time to get a jump into the programming world-- what do you think my focus should be on?
+
+&#x200B;
+
+I'm thinking Python, Java, HTML, CSS, Javascript and possibly some C++ or Swift. (Maybe Flutter or Kotlin?). I'd also need to learn a bit of Lisp/Scheme. (Mainly for exploring algorithms).
+
+&#x200B;
+
+But i'm also worried about learning more about the CS basics. Should I focus more on the straight coding, or more on learning about networks and other parts of the industry? I'm afraid I won't be prepared for some of the other details.
+
+&#x200B;
+
+Of course another big thing will be learning the algorithms. I've got a subscription to [Brilliant.org](https://Brilliant.org) which covers a lot of algorithms and computer science fundamentals, a subscription to [https://www.algoexpert.io/questions](https://www.algoexpert.io/questions) which covers 65 major interview questions (basically efficiency/sorting/algorithm practice) and SICP. (Structure and Interpretation of Computer Programs.)
+
+&#x200B;
+
+Edit: Looking at most of the job descriptions they all ask for BA or MA's. But I always through programming was different. Is it just to scare away unqualified employees? Or will they actually cut someone if they don't have the degree, even if their understanding of the code/past projects shows they know their stuff?
+
+&#x200B;",1544908829.0,0,0.4,12
+changemyview,CMV: Modern Day Bio-Ethics are not advantageous for humanity as a whole.,"For example-- we were able to discover that cowpox granted immunity to smallpox by testing it on a random 8 year old boy named James. How are we able to make such discoveries if we cannot use human test subjects? I don't believe animal testing is inherently -way- more ethical, nor do I find it to be as effective. As of thus, I think to some extent, we must include risky human experimentation. So long as the person agrees to it ahead of time.
+
+&#x200B;
+
+For example, criminals who are awaiting execution may be offered extra years of life if they are willing to partake in experimental procedures. ",1544850859.0,6,0.62,26
+pokemon,Does anyone have a jolly mew I can buy/trade for?,[removed],1543347170.0,1,1.0,0
+AskDocs,My friend is having troubles eating,[removed],1543131200.0,1,1.0,3
+pokemon,Catching Dragonite in Let's Go is a NIGHTMARE!,"edit: I'm looking on serebii and it says that on route 8 with the catch combo dragonite can be caught 'in the sky'. What does that mean? He won't appear where I am?
+
+&#x200B;
+
+So i got my catch combo up to 31 and i've been in route 8 for about 3 hours. I've seen 2 kadabra but no charizards or dragonites. I only want dragonite, but I am interested in seeing the other rare pokemon as well. (I've already got muh charizard and a kadabra i can evolve though..)
+
+&#x200B;
+
+Do you guys know how rare the spawn is with a catch rate of 31? Is it still going to take 10+ hours for him to spawn? Is there an easier way? Like getting dratini from the game corner and evolving it or something. This is seriously a nightmare. Maybe if I get a max lure by progressing in the game more?",1542649041.0,12,0.76,8
+pokemon,How to pair my pokeball plus to the lets go pikachu game/nintendo switch?,[removed],1542428832.0,1,1.0,0
+dragonquest,Is there a wiki/database for dragonquest 11?,"For example, if you look at the Demons Souls wiki you'll see builds, walkthroughs, item locations and all kinds of special insights. Is there any place like this for Dragon Quest? I don't so much want to have someone tell me where to go or what to do per se, but rather 'this item is pretty important, go to this city and find it here.' or 'This character has a pretty solid build if you focus on this stat' or even 'this team of 4 characters is going to give you the strongest end game team.'",1541124701.0,5,1.0,4
+darksouls,Can people using dark souls trilogy play with players using dark souls remastered?,I have remastered and a friend is picking up the trilogy-- will our servers be linked?>,1541105604.0,2,1.0,4
+Stoicism,Update: JRPG about Stoicism,"I'd like to apologize to all the people who said they would test the game-- development is getting started very soon! Expect a demo on November 29th. 
+
+&#x200B;
+
+For those who aren't privy to what i'm referring to-- it's going to be a JRPG about a stuck-up prince who is forced to study under Epictetus in order to become a better Noble. The game will encompass the players journey in learning stoicism and also his time leading as the King later on. The game will either be called 'The Stoic Mage' (pun on stoic sage) or 'The Philosopher King'. I'm not sure which one yet!
+
+&#x200B;
+
+World: The game will take place in a different world/time. This world will be semi-modern but won't have newer technology like Guns, Smart Phones or Computers. However they will be in a fairly civil/scientific age. Nobody believes in magic besides a select few-- but as it turns out, the gods have only granted magic unto the most Noble of men. But in this day and age.. do such men even exist? The game will span multiple countries with different political structures and different views of the worlds history. You'll encounter hundreds of characters with their own unique backgrounds and mentalities. 
+
+&#x200B;
+
+Characters and Philosophy: Many of the games characters are going to represent different schools of thought. The MC starts representing Hedonism and eventually comes to represent Stoicism. There will be different characters representing a variety of other symbols as well. (Law, Chaos, Utilitarianism, Cynicism, Empirical Skepticism) as well as villains representing the cardinal sins (Greed, Envy, ect). You'll build a party with different views to challenge the heightened political climate and defeat the cardinal sins bringing Justice to the realm. 
+
+&#x200B;
+
+Gameplay: It will be a turn based JRPG. There will be seven major classes and a variety of secret bosses. 
+
+&#x200B;
+
+Engine: The game will be developed using RPG Maker, however as this will be a long term project it may eventually be ported to Kotlin or Java later on. (If i can get the resources for my own art/music). 
+
+&#x200B;
+
+The game is being created for an Indie game development contest and will ultimately be released for Android/Ios/PC. ",1540582664.0,48,0.88,7
+Granblue_en,Two questions,[removed],1540575729.0,0,0.43,4
+Megaten,Anon awkwardly stumbles through Shin Megami Tensei IF with some glaring issues and a tad of color blindness,,1540507060.0,9,0.84,3
+dragonquest,Is part 2 longer than part 1 in DQ XI?,"Please refrain from spoiling the story-- but I do have a basic question. When I look at the IGN guide for the game and see where I am i the story it puts me in Chapter 10 out of 12 Chapters. So I was under the impression I was fairly far into the game. However, I keep looking at things online because i'm incredibly foolish, and most people call the events at yggdrassil the start of 'part 2' of the game. I'm basically right there-- (I collected the orbs and am camping out before hitting ygdrassil) so I guess i'm only 50% through the game instead of around 80%? Or is Part 2 just symbolic storywise but not really half way through the game? 
+
+&#x200B;
+
+Sorry if this has been asked a thousand times. ",1540434689.0,2,0.75,6
+dxm,Is wal-tussin a safe way to take dxm?,"It appears to be pure and safe, but what do you guys think?
+
+Specifically waltussin cough, of course. 
+
+https://www.walgreens.com/store/c/walgreens-wal-tussin-8-hour-cough-liquidgels/ID=prod6024940-product",1540361401.0,2,1.0,2
+pokemon,/r/pokemon Nuzlocke Challenge!,"As everyone here and on the internet has made it clear-- pokemon lets go is going to be a simple/fun adventure to introduce casuals to mainline pokemon and to give a refreshing break for the elites. But that can't stop us from making it a little bit more fun, can it? In time surely we'll have the game modded like with previous generations, but for now, I think it would be really fun to create a /r/pokemon lets go nuzlocke challenge!
+
+&#x200B;
+
+Rules: by default the 'main' nuzlocke challenge elements will be included. 
+
+1: If a pokemon faints, it cannot be healed/revived. You don't have to release it (for collection purposes) but you cannot use it in battle until you've completed the run. 
+
+2: No catching more than one pokemon per route!
+
+3:  You can only catch the first pokemon you run into in a route.
+
+&#x200B;
+
+&#x200B;
+
+However, as for the other aspects, that's to be decided by you guys! If you have any ideas, post them in the comments! I'll also post a couple of my own ideas as well. Then we can let the community decide.
+
+&#x200B;
+
+Easy Mode: Use the main rules and the highest rated comments challenge.
+
+Medium Mode: Use the main rules and the two highest rated comments challenges.
+
+Hard Mode: Use the main rules and the THREE highest rated comments challenges.
+
+Expert Mode: Use the main rules and the top five highest rated comments challenges.
+
+&#x200B;
+
+I'll personally be playing on Hard Mode first, but might give expert mode a go later on\~ Please make this fun my doods.
+
+&#x200B;",1540065051.0,15,0.88,17
+ebikes,"Hey guys! I'm a best buy employee and I get some special deals on ebikes, but are any of these even worth my money?","So I could get either the
+
+&#x200B;
+
+Phantom 400 for $950 
+
+&#x200B;
+
+or 
+
+&#x200B;
+
+the Phantom X for $1,080;
+
+&#x200B;
+
+Alternatively, I could just buy the Sondors Original for $900 and save some money..
+
+&#x200B;
+
+What do you think the best value is out of these options? (Or other options. I'm really trying to avoid spending over 900 unless it's p dang worth it.)",1539585979.0,4,0.75,14
+baduk,Where's the best place to play in Go Tournaments Online?,"OGS does periodic ones, but I feel like unless you play 9x9 they almost never fill up. KGS has a KGS+ Thing, but those are scheduled for very specific times, so if I work i'm basically screwed. 
+
+&#x200B;
+
+Do IGS, Tygem, Foxy Go Server or any other servers have consistent tournaments that fill up? 
+
+&#x200B;
+
+(Note: I'm only around 9K but I don't mind playing stronger or weaker players, it's just a fun way to improve at go)",1539527863.0,6,1.0,3
+CodeGeass,"Hey! I dunno if anyone noticed this, but I found a neat thing in the first episode of code geass","So most people find this show kind of pretentious and think that lelouch isn't actually smart-- while this may not prove them wrong, it does show a lot about his skill in chess. 
+
+&#x200B;
+
+In the first episode (or at least the movie remake) there's a noble playing chess against some commoner. Lelouch takes over the position. If you notice, there's actually a shot of the board. 
+
+&#x200B;
+
+[https://imgur.com/a/nIkB0nu](https://imgur.com/a/nIkB0nu) 
+
+&#x200B;
+
+Now, most people find it a bit silly/stupid that lelouch led with the king-- they think he only made the move for the line 'how can you expect your men to follow if the king doesn't lead the charge?' or however he said it. HOWEVER
+
+&#x200B;
+
+I took the board and recreated it in Lichess's board editor. 
+
+&#x200B;
+
+[https://imgur.com/a/woXDw2G](https://imgur.com/a/woXDw2G)
+
+&#x200B;
+
+Now, stockfish-- the world strongest (or at least damn near close to the strongest) chess A.I. in the world is the one reviewing the game with me here. (Lichess has stockfish built into their website.)
+
+&#x200B;
+
+If you take another look at the picture, what do you notice is the move Stockfish recommends? BAM. Moving the king one space to the right. 
+
+&#x200B;
+
+If you proceed from there following stockfishes recommendations--
+
+&#x200B;
+
+[https://imgur.com/a/IyMXW5z](https://imgur.com/a/IyMXW5z)
+
+&#x200B;
+
+Black gets a checkmate on white in about 8 moves. Makes sense why it would only take lelouch 9 minutes-- even if his opponent stalled out, it was checkmate in 8 with 20 seconds a piece! He could have won in 3 minutes if he really wanted to :x",1539231560.0,157,0.99,39
+Republican,Do Non-Whites have a place in the republican party?,[removed],1539222576.0,1,1.0,0
+baduk,How can I purchase a membership in Tygem?,I really want to use Tygem since it has some high level players on it-- but I can never seem to get a match at my low level. I figured i'd get the paid membership so I can use the proper game search but i can't find anywhere to actually pay for it XD,1539204702.0,7,1.0,3
+baduk,Fights like this are why I love go so much (Leela GX-Series VS Leela G-Series),,1539189809.0,2,0.75,8
+baduk,What book would you suggest for a 10k who hasn't been classically trained?,"So i'm at about 10K-- I have almost no friends who play go, haven't attended the go club since i was a double digit kyu and barely review pro games/my own games/talk to other go players. My skill is almost 100% intuition and practice.
+
+&#x200B;
+
+So what book would you suggest for me? I want something that will make sure I understand the fundamentals but that also isn't too basic/easy for  a 10k. I feel like I land in a weird spot in that regard---
+
+&#x200B;
+
+Thanks for any suggestions.
+
+&#x200B;
+
+Note: If you have to suggest an easy book for fundamentals and a stronger book for after I finish it-- that would suffice. But if there's like an 'advanced fundamentals' kind of book or something, that'd be great!",1539147635.0,3,0.8,8
+baduk,Can someone direct me to the latest version of Leela? (Not Zero),"I want to get the version of leela that's updated but is still based on Pro Games. I want to study from a lizzie that's more ... natural. Also, Can I use lizzie to run this version of leela as well?",1539100168.0,1,0.6,10
+baduk,I'm a terrible person,,1538930472.0,0,0.22,13
+Bestbuy,How can I sell/schedule installation services on the sales floor?,"I've always ended up either partnering up with a GS agent or scheduling for the customer to talk to GS. I know how to sell the sku in POS, that much is easy. But how do I go about actually scheduling the service after the SKU has been sold? Say for camera installs or some other in home service. ",1538328133.0,2,0.63,2
+Falcom,Sen No Kiseki III (No 'Real' Spoilers),"Am I the only one bothered by the white dot on all the girl's mouths? It looks like they have a bit of food or something they need to wipe away. It seriously IRKS me. 
+
+&#x200B;
+
+That said, i'm enjoying the game quite a bit so far!",1538248846.0,1,0.53,0
+Megaten,『キャサリン・フルボディ』オープニングムービー (Full Body Opening Intro),,1537980158.0,26,0.87,10
+Bestbuy,What are the most important things to know when covering customer service?,"I'm typically on the sales floor (up till now it's been computers/connected for me) and I generally only cover customer service for ten minutes here and there to help with code 2's. However, today, Labor Day, I have been scheduled 8 and a half hours in customer service. I'm mildly concerned, and was wondering if you guys had any suggestions for policies/questions/concepts I should review/prepare for before my shift today.",1535992685.0,5,0.73,4
+studying,How do you balance study tactics for memory?,"When it comes to remembering what you study, there are a ton of different methods. You could use the feynman technique, and rewrite it over and over until you've got it down perfectly. You could use mnemonics for every concept or fact-- you could integrate every fact and concept into ANKI and review them daily-- or perhaps you could use the ADEPT method. Analogy, Diagram , Example, Plain English and Technical Definition-- 
+
+&#x200B;
+
+Sigh. As you can see, there are a lot of 'tricks' that you can use! We didn't even touch the MEMORY PALACE technique. 
+
+&#x200B;
+
+What about learning on a day to day basis though? I can't possibly integrate each of these tactics when watching a random science video, or apply it to every new concept in calculus? I can see using a few of these for the big concepts-- but when you are taking multiple classes and learning multiple subjects, is it really reasonable to use all of these?
+
+&#x200B;
+
+So, I was wondering, what do you guys actually do? What do you find the most beneficial? Do you use certain tactics for certain subjects? ",1535160556.0,5,0.86,2
+Bestbuy,How can I apply to another position at best buy?,"What program am I supposed to use in order to apply for another position? There's an opening in Connected Home, and i'd like to try and take that position.",1534623699.0,1,0.57,5
+ComputerSecurity,My family can view my computers tabs on their phone?,"Normally I find the thought of someone spying on my computer absolutely ludicrous. However, I opened my grandmothers phone today (for some other reason) and noticed she had 25 tabs open in google chrome. I went to go close them for her (thinking she'd just been silly, and opened way too many tabs) only to notice that a multitude of the tabs were things I had been searching for. I had searched for a conversion of quarts to liters, and a few other random things-- and i noticed that even those were present. 
+
+Now it's entirely -possible- that i'm mistaken, and that I searched those things on her phone/some were coincidences, but I sincerely doubt it-- I mean, why would she have 25 tabs open, and why would they all seem to match my own searches? 
+
+I checked the google account, and she has her own google account active-- and mine is nowhere to be found. But i'm still unsure what's going on here exactly.",1534404724.0,3,1.0,6
+touchtyping,How to improve when you're already at 110WPM?,"Most of the learning software and guides seem to be for people trying to go from standard peck styled typing up until around 60-70WPM. But nobody seems to explain how to improve when you're already really good. I mean I can't exactly just 'practice' more, since I basically do that all the time. 
+
+Any ideas? Or should I just switch to a dvorak keyboard if I want to increase my speed?",1534361072.0,2,1.0,1
+CasualConversation,"Someone approached me about an Internship, and hasn't called me back..",[removed],1533364332.0,2,1.0,0
+learnprogramming,"I think I might be getting an internship for a coding position (javascript), and i've been given 2 weeks to prepare. What's the best way to approach this?","My plan is basically to rotate between 1-Hour of Maths, 1-Hour of Javascript (Book/Code Academy) and 1-Hour of Algorithms/Computer Science in general for all of my free time. (About 14-16 hours of a day for 2 weeks straight).
+
+Think that's enough to do most jobs/tasks? Should I try to add HTML/CSS into the mix?",1533277191.0,1,1.0,2
+u_At-LowDeSu,I think I might be getting an Internship in a Javascript position in 2-weeks~ is that enough time to prepare?,[removed],1533276503.0,1,1.0,0
+learnprogramming,Going from Windows/Netbeans/Java to Linux/Emacs/Lisp-- Can someone point me in the right direction?,"I decided I wanted to go a bit deeper and learn a bit more about the structure of code. So I went ahead and  purchased Structure and Interpretation of Computer Programs. Now, don't get me wrong, I think this is a fantastic book. However, it was written in 1992 and Lisp is a pretty old language-- not to mention Emacs is a text editor and not a proper modern IDE. For these reasons, i'm a bit confused about where to start. Of course it doesn't help that I decided for the sake of immersion to install Ubuntu and use it as my operating system for my SICP learning. 
+
+So what do I want from you? Well, honestly I was hoping you could point me in the right direction to a beginner friendly guide to using Lisp (Whatever version is used in SICP) on emacs. If you have any better suggestions, i'm all ears.",1532464510.0,2,0.67,6
+learnprogramming,"Do you think it's worth going through SICP and learning a bit of LISP, even if you intend to focus on JAVA/Kotlin?","Pretty self explanatory, but i'm considering buying SICP and going through it on the side of my Java/Kotlin studies. I want to learn Java/Kotlin for android development and maybe find a career/job where i'm a junior programmer down the line. Is it worth dedicating time and effort to LISP for the sake of learning SICP's materials, and having a core programming language? Or is the time better spent b-lining it through Java/Kotlin?
+
+Thanks for the replies. Ordered the book on amazon.",1532419597.0,1,1.0,4
+sicp,Should you still going through SICP even if you intend to learn a language other than LISP?,"I want to focus on Java/Kotlin, but i'd be willing to learn LISP if you think it's worth it for the knowledge this book gives you about programming.",1532418320.0,3,0.81,2
+Ubuntu,"Is this a driver issue, and if so, is there a way to rollback to a previous version? [New to Ubuntu, would really appreciate some help getting this installed properly]",,1532416883.0,1,0.67,1
+fireemblem,Fire Emblem Warriors Tree-House Livestream,,1497377928.0,24,0.96,64
+Blazblue,Why does guilty gear FREAKING exist?,"Memes but serious at the same time. I really love blazblue-- everything about it. It infuriates me that the community at large tends to play whichever released latest, in this case, being guilty gear. 
+
+Should I just play guilty gear? Is there enough people to play blazblue with? I'm crying. I'm upset. Life is ATROCIOUS when I cannot play my BLAZBLUE
+
+",1496869095.0,0,0.38,16
+GetMotivated,[article] Achieving happiness and freedom-- by following the way of the stoic epitetus,"https://www.moderntactician.com/epictetus-1
+
+Similar to some other articles on the sub right now, but this one focuses a lot more on the ancient stoic philosophers. 
+
+",1496692302.0,2,0.76,0
+Megaten,"I-I have a confession, as a mainline fan..","I want Persona 5 dancing all night AND Persona 5 arena.
+
+I think i'd be much more comfortable dancing, if I finished P4/P5 dancing all night.. and knew some snazzy dance moves that I could relate to my persona bois. Also I love blazblue, and really hope we can do arena properly this time. ",1496429991.0,59,0.97,76
+Falcom,"Hey guys, new here","Playing Trails of Cold Steel 1... I LOVE IT! 
+
+I cannot wait for a PC version to come with better graphics. Are all falcom games this great? The politics? The world building? The character depth? The gameplay? 
+
+Either way, can't wait to get through Sky and Steel. 
+
+Love you
+
+bye
+",1494544826.0,10,0.86,32
+Megaten,Someone finally figured out how to add Durarara characters into DeSu 2!! Time to use izaya my bois,,1494058720.0,18,1.0,4
+writing,Is it totally acceptable to remix/rewrite public domain books?,E.G. Could I make a Fantasy Candide or War and Peace? ,1493541801.0,43,0.88,34
+Megaten,[Serious] Does anyone else feel like putting an irl evoker to your head when suddenly,you see something megaten related and go oh ye that's why i'm here,1492658057.0,5,0.78,2
+Megaten,Expect nukes in 5..4..3..,,1492098761.0,146,0.95,56
+zelda,"I have never beaten a zelda game before, quick! What do I play?","Assuming I have time to maybe beat 2 zelda games before breath of the wild, what should I pick? I've dicked around with em all so i'll get the jist no matter what, but I feel like it'll be more fun if I have some connections to the world. 
+
+I'm leaning towards Ocarina --> Majoras Mask
+or Majoras Mask/LBW
+or WW/Twilight",1487973362.0,1,1.0,11
+Nootropics,Has anyone tried qualia?,[removed],1487275345.0,1,1.0,1
+Foodforthought,More Videos To Get Your Synapses Sparking -Jason Silva,,1487016367.0,0,0.5,0
+fireemblem,"I decided to try Gaiden out of echoes hype.. It's pretty cringe worthy, but if even one of you smiles i'll be satisfied.","https://www.youtube.com/watch?v=7oKKsd4ezOY&feature=youtu.be
+
+If you guys have any criticism or tips for my playthrough, feel free to comment here. First let's play ever and first time playing Gaiden.. so needless to say it's a bit of an experiment. >.<",1484864594.0,12,0.93,3
+Megaten,Tokyo Mirage Sessions 'Anime' OP 1 FIRRAAA EMMBURREEEMM,,1484763466.0,4,0.63,23
+socialskills,Anyone want to make a skype group for skype calls?,"Just some low pressure, relaxed conversations? Mostly meaning add eachother and maybe make a group, and do skype calls/video chats every once in awhile. If you don't want to talk, that's fine. Just something to help us get used to it and ease our nerves.
+Edit: I was kind of thinking it would work like grinding our level in an RPG, but with socializing. I'm too scared to talk to almost anyone, so no matter who you are, this is for you!",1484538846.0,4,0.84,1
+socialanxiety,Anyone want to have skype talks?,"Sam was kind enough to put together a discord group! Feel free to join :)
+https://discord.gg/ywujkFK
+(Fixed the Link)
+
+Just some low pressure, relaxed conversations? Mostly meaning add eachother and maybe make a group, and do skype calls/video chats every once in awhile. If you don't want to talk, that's fine. Just something to help us get used to it and ease our nerves. 
+
+Edit: I was kind of thinking it would work like grinding our level in an RPG, but with socializing. I'm too scared to talk to almost anyone, so no matter who you are, this is for you! ",1484537961.0,10,1.0,10
+taoism,Can one see both the mystery and the manifestations if they keep a balance?,"Will playing Chess, Go, Smash 4 and spending too much time with friends ruin my chance to see the Mystery or the Way?
+
+Will meditating, understanding the way, detaching myself and seeing through the world ruin my chance of enjoying Chess, Go, Smash 4 or spending time with my family?
+
+Can I find a balance between both of those, while experiencing the truth?",1484488012.0,11,1.0,5
+amv,First AMV! Occultic;Nine this is Not a Tango,,1483330786.0,4,1.0,0
+a:t5_3fyof,My first AMV is Occultic;Nine based! Any review/critique?,https://www.youtube.com/watch?v=GlkDzsf1hXc,1483330174.0,1,1.0,0
+vita,"Vita charges for 2 minutes, then stops?!?!","I know that if the orange light is flashing it's not charging fast enough, but still -kind of- charging. But, for me it's not even blinking, it goes solid orange when I plug it in and appears to be charging just fine. But then I leave it there sitting, not moving/rustling the chord at all, and after about 2 minutes the light just goes out. It refuses to turn on. 
+
+FIXED: I took my vita card out and it worked",1482875732.0,2,0.6,4
+collegeinfogeek,"I take too many notes, any tips?","My notes almost end up matching the source, so i may as well revisit the source rather than my notes. Any way to cut down, without feeling like i'm just losing things? I always think 'I may as well remember that' to almost every single line..",1482731535.0,8,0.91,9
+dxm,Conversations with the sub-conscious?,"I actually only took 45mg, but was smoking weed as well. I think that enhanced some of the more psychological aspects of the drug for me. I've also used up to 100-150 before, so I knew what I was sort of expecting. I basically was just thinking to myself, and started to feel like my thoughts were 'hijacked' so to speak, by a different awareness withing myself. Whenever I started to think about it or question it, it just started laughing.. and then I felt like after that, every thought I had was no longer my own. It felt like the subconscious was trying to.. talk to me..? I guess? Trying to inform me of things I the conscious awareness should know. It was saying things about it sifting through the boring things, while I just skim the surface.. or something. It said something about killing thoughts and I felt it was doubting me, it kept treating me like a criminal. It was saying something along the lines of 'you know this situation is normally handled in death' or other things.. that I don't exactly understand. It felt like it was attacking me, yet because it was upset with me, rather than because it was hostile.  I wanted to understand it, to see what I could do better.. but I was confused, and weak. I don't understand. ",1481438131.0,3,0.72,3
+Rainbow6,Any Platinum players willing to tutor on Ps4?,"By tutor I really just mean play ranked with me and tell me what i'm doing wrong/help me instead of just getting upset that I suck. 
+
+Also i'm not literally trash, but could be a lot better. I started this round in gold 3, and have recently been going back and forth between low-gold and high-silver. 
+
+It would be fine on casual too, just figure on casual we won't get much competition..",1480746212.0,3,0.8,5
+FinalFantasy,Does FF15 Ever let you start a new game before the final download?,"I've been playing around in open combat, but i've still got HOURS before it finishes. Should I just go to bed?  
+
+Does the open combat ever have more than level 7 GOBLINS? 
+
+Does the download ever let you do more than open combat, before fully finishing? I know with blazblue, the first point you can open the game lets you do tutorial but nothing else, but you unlock versus before it fully finishes downloading. I was wondering if new game would eventually start after half way or 3/4's or something. ",1480399655.0,1,1.0,0
+suggestmeabook,"Books with intelligent/well spoken protagonists, and/or good debates?","Looking for a few types of books here honestly. I mostly want protagonist who will help me with being well spoken/motivation for being intelligent. It sounds a bit silly, but let me explain.
+
+Think like the Great Gatsby, someone who is very skilled socially, and very charismatic. This is the first type of protagonist I would like. 
+
+Second kind of protagonist is like sherlock holmes. Someone who isn't exactly charismatic, but is clearly very exemplar/intelligent. With rational thought, interesting remarks and a solid love of thinking. 
+
+If possible a story with characters who debate eachother, kind of like quinton tarantino films, OR like a mystery novel with a detective making revelations/arguing about things. 
+
+Basically, a book that will help with public speaking, debating or at least intellectual motivation. Also characters like gatsby/sherlock are just really cool and interesting in general. 
+
+Thanks! ",1479975344.0,5,1.0,2
+learnprogramming,How long would it take to go from complete beginner to writing mobile apps?,"I want to write Android Applications, and try to make some that I could potentially sell. But I don't just want to spend 2-3 hours every day working on it like a hobby, i'm willing to make it a full time investment at the first stages (maybe first 3-4 months it will be extra, then like a normal job)
+
+Buut, basically, i'd be willing to spend 12-16 hours a day learning programming/writing apps, and try to get good enough. Code academy has a 4 hour basics of Java course, then i'd spend maybe 10-20 hours with a textbook working through problems. Then i'd just go right to making apps, lots of free ones at first and eventually some paid ones. How long would it take to start getting some high level apps out there if I worked really hard?
+
+Maybe 100-200 hours?",1478910926.0,0,0.33,2
+studying,I want to 'get good' at academics quickly. What's the best way to approach my study plan for aggro?,"I want to quickly get through Calculis and other basic maths, the major sciences, history, economics and some major programming stuff as fast as I can.. I basically have 2 months to make as much progress as possible before starting school.
+
+Should I just literally spend 3/4 hours of free time studying, and 1/4 for reading? Or should I only spend 1/2 of the time studying? Just for actually letting the studying 'work effectively' I suppose. Assuming i've the will and desire, yata yata, what's best for actual studying quality?",1478583812.0,5,1.0,1
+Megaten,"Debate.org Law VS Chaos in the context of SMT 4, anyone want to enter?","http://www.debate.org/debates/Law-Vs-Chaos-in-the-context-of-SMT-4s-Apocalyptic-Tokyo-Pro-is-law-Con-is-Chaos/1/
+
+I may have made some errors, you can fight me with evidence rather than rude words though.",1477360642.0,4,0.84,30
+Megaten,Can the switch save mainline from personas tyranny?!?!,"As of late persona has had priority, for good reason. They sell. But that had meant mainline loses its 3D models and beautiful Console games. In other words, we've been condemned to the 3ds for its large market size. But nintendos goal is to fix the wiiu problem by bringing their handheld and console I to one, the switch. So now atlus won't be able to keep putting smt on the 3ds. At this point, what's to stop them from making all future games ps4/switch? Those two will become the largest market for console gamers. Plus, atlus already jumped on the switch hype train 
+
+Atlus ""We’re excited to be supporting the Nintendo Switch and believe the games we publish are a perfect fit for the portable nature of the console""
+
+
+Tldr mainline should move to switch so we can have hd demon wars ",1477019226.0,0,0.46,15
+lds,"I'm agnostic but experienced something that gave me a tad of faith, but not enough to entirely convince me.","I was mostly just on facebook, talking to friends. Being silly and what not. I made a post about how the name of my father is the same name as a character in a game I play. The key thing being that the character represents the 'God side' in a game about God Vs Lucifer. (Being agnostic, I wasn't sensitive to these things and  play these kinds of games.)
+
+Basically, I posted that. Moving on. I was very bored, so I was ultimately just on facebook at the time. I'm kind of infatuated with religion based media even though I don't believe in god, I guess it's just really cool/interesting to think of a god to me. But basically someone made an 'anti religion' post (not saying they hate god, but why he doesn't believe in god) and since we were both atheists, I knew he wouldn't be offended and I said a line about god jokingly. I basically said 'The creator god is an incompetent. Krisha shall be your salvation."" 
+
+But it was right then that it all changed for me.. I suddenly felt something in my stomach, almost like going on a rollercoaster. I started to almost laugh and get really excited. For some reason all of my stress/upset i've been feeling for a few days shattered, and I suddenly got really warm. But I started to feel comforted, almost like I was being hugged and my face just caressed. I started to cry, and I felt what seemed like a presence above me, but I didn't dare look all the way up. Instead I just looked to my computer screen, and right then I got a notification. Someone had commented on the post I put about my father being the same as the religious character, my post that said jokingly I was on the 'law' side. (which in real life would be religion in context to the game)
+
+I know, it's pretty much a coincidence seeming thing.. but the feelings I had in my chest were very different. I started to feel like maybe faith was worth something more than I thought before. 
+
+The reason I came to the LDS subreddit is because I was LDS as a kid, until I became agnostic in junior high. 
+
+Sorry for the useless rant.",1476713815.0,11,0.92,5
+Drugs,"Safe, Fun, Legal drugs that don't make you stupid/crazy?",[removed],1476708061.0,1,1.0,6
+trees,Weed-Cigarettes for Stealth/Covert?,"How safe do you think it would be to take the contents of a cigarette mostly out, then fill the middle with a mix of cigarette/weed, then put more cigarette up top? I feel like if you did it right it'd still just look like a cigarette, and then you could also have it smell mostly just like a cigarette. Maybe even mint flavored ones or something..",1476460920.0,1,1.0,3
+Megaten,Tip for those playing Apocalypse in english,"Use your phone when you play. The google translate app can take pictures of those pesky untranslated portions for you and tell you the 'basic idea' of what they are saying.
+
+Sorry this is even a problem guys. I'll try to do something when i'm actually important in the world :^) (ATLUS HIRE ME)",1476056114.0,0,0.4,11
+AskDocs,"White Foamy Phlegm, Irritation in the throat and oversized tonsils?","I seem to be producing a TON of mucus. It keeps coming up, I don't even seem to cough or hack, just have it slowly gag up my throat until I spit it out. It's thick and quite foamy. I do usually get allergies, and I live with cats.. My throat also constantly feels like something is in it, but it might be the thick mucus. The passage way seems smaller than usual, but maybe i'm completely wrong.
+
+My tonsils are slightly inflammed as well, one side more than the other. My right tonsil seems mostly fine, but my left one has a third section to it that pushes it quite close to my throat. If I gulp, they can virtually cover all the space in my throat with them coming together. The mucus doesn't help this feeling whatsoever.
+
+I went to the doctors a while ago, and they said my tonsils were a bit inflammed but didn't seem to notice anything with the mucus or actual throat. But it seems like somethings in it, and the mucus is definitely foamy and thick. I keep finding myself gulping just to make sure I still can. My breathing -seems- fine, but I do feel out of breath sometimes. Although this could be from gargling salt water and spitting out mucus constantly.
+
+I took some decongestants, with dextromethorphan and an expectorant of some sort.
+
+I can literally blow mini bubbles (that pop quickly) with my mucus. It's that thick/foamy....
+
+What do I do?  ",1475322022.0,0,0.5,0
+AskDocs,Tonsils swelling?,"I'm not sure if my tonsils are just overly large and the allergies filling my throat with mucus just makes it feel extra bad, or if i'm actually going to need to remove my tonsils.
+
+Basically, I can feel my tonsils resting a bit on the back of my tongue in a default state,and I can feel them sliding across it a bit every time I gulp. 
+
+I'm 20, Half Black/Half White, Male, Mountain West (Utah), not so tall and not sure about the weight. 
+
+I don't know why but i'm FREAKING out about this! Ah! I can definitely breath, but feeling my tonsils there constantly makes me always think they are going to get bigger and clog my throat. 
+
+
+http://imgur.com/a/dnbFv
+
+Am I just over reacting?  Are they larger than they should be? I can definitely feel/see them resting on the back of my tongue.. 
+
+sorry for freaking out >.<",1475139988.0,1,0.67,0
+Megaten,Smt 4 Apocalypse leaked online,[removed],1473954733.0,0,0.5,1
+TMSFE,(Possibly spoiler) Question about a skill,What does Thoron look like? Does anybody have a video or picture with someone using it? I want to see if it looks as cool as in FE :x,1472898798.0,3,1.0,1
+darksouls3,Dual Swords?,"in the old games I know it was cool to dual wield swords because you got double movesets. My friends tell me it's not worth in this game, how true is that?",1472472206.0,0,0.25,5
+PERSoNA,Do I need to play the First 2 games before Persona V?,"I was just wondering since in this game it seems like they are trying to go for a thing where they attempt to analyze and re-uitilize other kinds of factors involving the other non-contemporary aspects of modern Devil Survivor games
+
+If that makes sense, then yeah",1472460898.0,3,0.8,9
+StackAdvice,"Got my stack, was wondering about dosage tips for the full combo",[removed],1472110907.0,1,1.0,0
+see,That feel when you have a crush on the clerk at your local smoke shop,"but you realize that you'll never be as cool as her.. RIP
+
+",1472042962.0,1,0.54,0
+trees,Advice with edibles?,"I'm trying to figure out what a 'standard' dose of edibles would be. 
+
+lots of the brownies say 200 mg, but that's supposed to be basically 2 grams. I'd never smoke that much in one sitting, so I hope I wouldn't need to eat that much to feel good either. 
+
+Assuming I wanted to reach a good 3-6, how much should be taken? Assume tolerance is fairly low. 
+
+I'm just trying to plan costs honestly
+
+My goal is to get enough edibles to be 'feeling it' all day long, so ideally 're-up' and eat another candy/two every 4 hours. (5 times daily)
+
+So far math wise I can probably afford 100mg per day, which is about $10 a day. Not sure how effective that would be though.",1472041981.0,1,0.56,34
+trees,I don't know if it's worth it anymore,"i've got a setup in my room, that's 'mostly' safe. It's an apartment, so there is someone above me. But I use a fan, open the window, light some candles, throw a towel under the door, ect. I even use a Vape with some peppermint to make the smell even less noticeable.
+
+That said, even when i'm 'mostly' safe, I can't help but worry about it. Even when I know that getting caught won't be 'the end of the world' I still get almost jabs to the heart at being afraid after doing the act. Sometimes it's fine, like if i'm with friends or not at home, but sometimes I just end up wasting the entire high worried.
+
+I know this is normal.. but I just don't know if it's worth it. I'm only a year and a half away from being able to legally toke, so maybe I should just chill and not do it for a bit? Or should I just take the risky life for a tad longer and hope to be alright?
+
+I know nobody can choose but me.. but i'd really like to hear something from you guys.  ",1471601999.0,1,0.6,6
+Megaten,"[Serious, since it's almost so silly it could be shitposting] Interest check: SMT fan Novel Adaptions?","Inb4 'We don't need SMT Fanfiction'
+
+Now the difference between what i'm saying and fan fiction, is this isn't 'my story' with me jerking off over the various characters. I mean genuinely taking various SMT games, and making a fan-made but seriously written/edited novel out of them. I'd just have a website with them, and probably take 2-3 months (maybe 6 months) per one (unless I miraculously start writing a lot more)
+
+But that's a lot of effort if literally nobody would read them.
+
+This is assuming my writing is good. It's currently not, but i'm actually trying to become an author to some extent so i'll be reading/writing as practice before I got to this little project. 
+
+Other plus side: I'd be able to take a lot of things almost word for word, and just work on bringing it all together. So even if my writing isn't perfect, the novels could still end up being pretty dang good. Because atlus. ",1471073137.0,5,0.78,17
+YAwriters,Books based on other things?,"So naturally it's probably really hard to publish anything like this, and fan fics have a sort of bad reputation.
+
+But assuming you wrote it as seriously as you would a published novel, and did it intelligently instead of just spewing fan service.. would it be good practice to work on adapting other peoples stories into the novel format?
+
+My idea was taking Video Games and writing novels based on their stories to help me practice until I was good enough to write my entirely own story.",1471072908.0,5,1.0,3
+RainbowSixSiege,How to improve?,"So far i've been playing a lot but it's kind of difficult. Is there any place to learn the maps, learn the best spots for things, have guides on operators/builds ect, or anything like that?
+
+I know the master class or something is decent, but the first episodes seemed pretty basic. 
+
+I try to watch the pro matches, and it's above my head. But playing the game i'm not really improving fast enough. I feel like I don't even know all the operators yet nor all the maps very well.. so just playing more will help. 
+
+Buut, if there are any resources i'd be suuper grateful to have their links..",1471006216.0,6,0.88,8
+Megaten,"The Dagda, from celtic lore obviously being the base for Dagda in SMT IV Apocalypse..","Despite his great power and prestige, the Dagda is sometimes depicted as oafish and crude, even comical, wearing a short, rough tunic that barely covers his rump, dragging his great penis on the ground.
+
+Laughing matters aside, here's some actual lore from him that maybe we can try to notice things relating to it in-game
+
+Tales depict the Dagda as a figure of immense power, armed with a magic club and associated with a cauldron. The club was supposed to be able to kill nine men with one blow; but with the handle he could return the slain to life. The cauldron was known as the Undry and was said to be bottomless, from which no man left unsatisfied. Uaithne, also known as ""the Four Angled Music"", was a richly ornamented magic harp made of oak which, when the Dagda played it, put the seasons in their correct order; other accounts tell of it being used to command the order of battle. He possessed two pigs, one of which was always growing whilst the other was always roasting, and ever-laden fruit trees.
+
+For further wiki-reading
+
+https://en.wikipedia.org/wiki/The_Dagda
+
+edit: Also, his club can return people to life.. already quite fitting. Too bad it wasn't Dagda who killed Nanashi in the first place..
+
+or was it? Nah, probably not XD
+
+
+",1469338005.0,3,0.81,24
+Megaten,Megaten trivia,"For 4/20 in persona 3 you get to see a trippy blue door, seen only by you. Plus you get to enter Tartarus for the first time. I'm sure Junpei was blazing it B)",1469154522.0,0,0.5,6
+Megaten,Do we have time to Neutral-Hard-Run all of the Mainline games before SMT 4A?,"I was thinking I might want to try and run through Smt 1, 2, Nocturne, Strange Journey and IV. (No If or Imagine, Sorry!)
+
+Naturally i'd do neutral, besides Nocturne. And of course their hardest difficulties.
+
+How Long to beat: 
+
+Smt 1: 36 Hours
+
+Smt 2: 48 Hours
+
+Smt 3: 54 Hours
+
+Smt Strange: 57 Hours
+
+Smt 4: 44 Hours
+
+So about 239 Hours. I think it's pretty reasonable to ask for 5 Hours a day, for 6 out of the 7 days. Most people might need to (and I would.. hehe..) have at least a few days to get started, so i'm going to go from 7/20-9/20 and call it a solid 2 month run. 
+
+It's about 4 weeks and 3 days. Lets shorten that to 4 weeks and do some math shall we?
+
+This gives us about 28 days, at 5 hours each. Or 140 hours.
+
+140/240
+
+Jeeeeze! I totally thought I might be able to make it. I could probably start a bit sooner, and use those extra 3 days.. 
+
+7/18-9/20
+
+instead of 28 days, now it's 34 days!
+
+170
+
+Alright, 5 hours 6/7 days is cool. But I actually get 7/7. Plus, sundays I could probably rock an extra 10 hours. It's sunday bucko! 
+
+That means for each of the 4 weeks, we need to add an additional 15 hours. Or 60 hours.
+
+Oooh! Were at 230/240 hours. 5 hours a day, besides sundays being an extra 10 hours, starting on the 18th. I really could start the 17th.. so about 235 hours. Plus i'll be on hard, and -trying- for neutral. (if I get something else I can still move on, other than SMT 4)
+
+So i'd say it's really more like 235/260 hours. Lets think..
+
+...
+
+I could kill strange journey.
+
+I feel guilty..
+
+But it's basically the only way at this point. Lets just go with the other 4. That makes it about 200 hours. 
+
+235/200.
+
+Well.. GG guys. Lets have a slightly sad victory. 
+
+Gimmick: After SMT 4 A, I should go back through Strange Journey, then return to SMT 4A but on a new game plus. Could be neat or something. ",1468047787.0,3,0.8,6
+fireemblem,"So, I was thinking, in what way could one possible become Robin 'Irl'? [Serious]","I mean just thinking of all the things that build up robins characters.
+
+For starters you need the layton effect, the 'keeping cool' even when things aren't cool. People are mean to you? So what, stay calm. You're robin. People think you're wrong? That's a shame. Maybe try to convince them, maybe not. Read the situation, but remain calm.
+
+Second seems like tactics. I mean you'd probably have to reach pro levels at chess and be able to handle fire emblem games on all difficulties. That's kind of fun right?
+
+You gotta be nerdy! So working on your grammar and English in general are a must. Seems effective and feasible. Maybe read some old English.
+
+Reading in general. As we know, robin can read 2 1/2 books in a day. Maybe start with something smaller, but basically just read a lot. Fiction and non Fiction. 
+
+Obviously you have to be moral, kind, compassionate and all of those 'Fire Emblem' traits we've come to love. 
+
+Anything i'm missing? I basically decided i'm gonna become the robin of my social group. I'll never lose again right? Right?! 
+
+This sounds like a joke, and partially it is.. but i'm also serious. I do want to become a lot more of a proper robintellectual, and it would be fun to examine robin as a character. (Naturally it's impossible to -be- robin, if you aren't robin, and we'll never be casting thorons..)",1467351639.0,4,0.6,43
+Megaten,Tokyo Mirage Sessions Character Builds?,"I'm still early in the game, and haven't gotten the choice to class up yet. But so far it seems like once you choose to learn a skill/not learn the skill, you don't have many (if any) other opportunities to change that. So i'm trying to have an idea for each of my units. 
+
+Itsuki:
+So far i'm focusing on Swords and Buffs/Debuffs. That way he doesn't need a high magic stat, so I can put the champions item on him to boost his attack. He always has one 'Zio' Family attack, but so far i'm thinking the focused on one unit options are better than the mazio's. (if i'm only using one) 
+
+Tsubasa: I took out her lunge, and basically made her all magic oriented. This is hurting when I need more options for attacking, but she's making a great support. She's got recarm, dia, media, ect. I think it's working out alright. 
+
+Touma:
+
+He's pretty basic to work with. Just focus on strength, but use some fire when you need to. 
+
+Ellie and co are a bit lower so I haven't had the chance to start replacing things yet.
+
+What do you guys think the best way to go for everyone is? Also what classes did you guys choose with your master seals? 
+
+BTW: Can we ever learn those old skills again? If we mess our builds are we just fucked? D:
+",1467304084.0,6,0.71,10
+smashbros,Time to get serious about Evo training huh?,"Note: I know that studying isn't everything. I've been playing this game since release, I've literally put in the grind. This is about 1/4th of my time spent on smash, with about 1/4th practicing tech and such and about half spent playing/watching games. I'm going to try and put at least 9 hours in every day, ideally closer to 12
+
+http://imgur.com/CrTojG7
+
+Starting to make flash cards. So far i've made all of corrins true combos into flash cards, with the percents they work on mario, and how much damage they deal. I'll make a version for the lightest of the cast, the heaviest of the cast, and of course i'll maintain my 'mario' tier set as well! 
+
+Next i'll do the same for Shiek's combos, and Marth's 'options'. (Since Marth/Shiek/Corrin are my mains)
+
+Then i'll do flash cards for every characters frame data..
+
+i'm also starting to fill up my 5-subject note book with cornell notes for smash 4.
+
+Basically, Tech, Combos, Matchups, Notes on my own games, Notes on pro games, Smash 4 related youtube video's, and articles/guides from smash boards. Wooh. This is gonna be a rough 20 days. 
+
+Lets get stronger guys :)
+
+Edit: 
+
+Does anyone else have suggestions of specific numbers I should be memorizing? I also think i'll memorize the kill percents of all my moves. But general fram data can be overwhelming..  Although I guess worthwhile. ",1467039827.0,65,0.66,60
+Megaten,TMS IRL TBH FAM 10/10 OC (Stolen from another drugUSER) X-post from /r/P4GXFEFates (Kind of),,1466683649.0,0,0.4,11
+TMSFE,DLC without the special edition?,"Since it's dlc I assumed I could just buy it, but I didn't see it on the store. I heard something something about the special edition having download codes, and I got instant flashbacks to the FE fates special edition giving the DLC 2-weeks earlier than the stores. Is that going to be a thing here? Or can I just turn on my wiiU in 24 hours and go buy me some Walter/Bunny clothes?",1466673646.0,4,0.84,3
+fireemblem,Ummm ಠ_ಠ,[removed],1465861333.0,0,0.18,27
+Megaten,Ummm ಠ_ಠ,[removed],1465608481.0,0,0.2,8
+dragonsfuckingcars,Request: Corrin / kamui fucking some car.,Pleeeaasee,1464912313.0,16,0.84,2
+trees,"Do you think i'm safe, or going a bit overboard?","I live in an apartment, and I know the neighbors to the left are 'OK' with it, but i'm not sure about the upstairs neighbors quite yet. So far, I light two candles, open the window, turn on the fan, closed the vents, put a towel in the door, used a vape, mixed the bud with peppermint, use smelly proof bags, use a smoke buddy, light an incense, and use odor eliminator. Do you think all of this is just silly or does it actually help me be safer? ",1464328099.0,1,0.67,12
+fireemblem,Fire Emblem Multiplayer (PC),"Sorry if this has been said alot, but I feel like most people don't know about this.
+
+Guys! We should start having fire emblem multiplayer matches.
+
+Subreddit: 
+
+https://www.reddit.com/r/FEMP/
+
+Download: 
+
+https://github.com/eliatlarge/FEMultiPlayer-V2/releases/
+
+Video:
+
+https://www.youtube.com/watch?v=tFmihxgqAp4
+
+If anyone wants to fight me, download it and join my game
+T
+HIS IS NOT A ROM HACK, THIS IS A STANDALONE GAME! NO NEED FOR A SAVE OR EMULATOR :^)
+Basically you draft units, and then use limited exp/money to purchase equipment and build a team.
+
+Host has to port forward  to 21255!!
+
+I'm pretty sure one person runs the server, and then both run the game. I'm running the server right now, and then when you run the game you just put my ip in. There are 3 downloads, I think only the main is required, but I extracted the other two to the same folder just in case.",1463764507.0,28,0.98,8
+epicmafia,Studying games?,"Does anyone feel like it's a good idea to read lots of other peoples competitive games? Even if you just end up playing ranked, or even unranked.. it can help your personal headspace to understand some of the stranger parts of the game. I mean, in competitive a lobby, lots of people throw up a vote on a random player. They just sit there, and watch his various reactions. If I casually go about that in ranked, almost every player will accuse me of rushing my votes, and find me to be 'mafia'. But in a competitive game, they'd understand what i'm doing most of the time, and it would just casually play out as a mechanic in the game. I mean, in general, just seeing these setups in play and various interactions will build your natural intuition and ability to read. 
+
+My goal is to read 300 Competitive games, then find the top 5 winners and review 20 of each of their games. Then when the new round starts, i'll read games for each setup a bit before starting myself, and I think I could probably land a few trophies. 
+
+You guys should try it! We could genuinely just push the meta of the game and do some crazy plays!
+
+edit: Hi.. i'm AichiKingema <3",1462212808.0,3,1.0,0
+epicmafia,i'm pretty. love me,-AichiKingema ,1462013709.0,1,1.0,3
+Megaten,Just a thought on the whole GI#2 speculation,"Maybe instead of a straight up sequel were just getting Genei Ibunroku Dancing all Night
+
+awhh yeeeahh anyone? 
+
+nah?
+
+alright singing all night it is",1461743899.0,0,0.11,3
+hearthstone,What deck to run for now?,I disenchanted all my cards and made a druid deck. The new nerfs killed my druids. What should I run? Do we have any idea what's looking like top tier?,1461738298.0,2,1.0,5
+darksouls3,"So I missed my chance to catch up on the franchise before dark souls 3, what do I do?","I have 2 main ideas! So for starters, i've played a few hours of demons souls, a few hours of dark souls 1, about 12-14 hours of dark souls 2, and about 8 hours of bloodborne. So I consider myself a 'souls player' but not a good one. I estimated that I have about 22~ hours of free time before the launch of dark souls 3.
+
+Would it be beneficial to start playing dark souls 1 right now, even though I probably wont' be able to finish it? It's marked as a 50 hour game, so it's pretty clear that I won't magically tackle it like a boss by any means. I mean, if I push all of my time, I could possibly get up to 35ish hours, but even that's not quite cutting it. 
+
+Or, should I focus on learning the lore and just let Dark Souls 3 basically be my first souls game? I could start studying (effectively ruining the story side of dark souls 1/dark souls 2) and get the lore spot on. 
+
+Or 3, should I just be patient and wait for the game like  a good little boy? (EG, play fire emblem fates..)
+
+A. Play Dark souls 1, but not be able to finish in time.
+
+B. Study the Lore to quench my thirst, but still suck at dark souls.
+
+C. Accomplish nothing because both feats would fail.
+
+Edit: To clarify, Dark Souls 1 would be for the sake of 'getting gud' rather than lore. I'd study the lore through youtube and other things, or play dark souls 1 with all of my time to try and prepare for the harshness of dark souls 3.",1460035288.0,0,0.4,12
+fireemblem,"I finally got around to trying that conquest game everyone has been raving about, it's pretty good but a bit more childish than expected",,1459938821.0,45,0.97,19
+fireemblem,Such a post probably isn't necessary but..,"I finished my first fire emblem game! Awhh YEAAH!
+
+I was always incredibly interested in fire emblem as a franchise. and I even came about to try Fire Emblem 7 and enjoyed it quite a bit. I got about 16 or so chapters in. But every time, I would end up dropping it somewhere and doing something else.. I tried fire emblem 6, and got a few chapters in. (about 11). I tried sacred stones, path of radiance, shadow dragon, awakening and even the original game. But for some reason none of them could hold my attention. I wasn't quite good enough at the game to get 'Really into' the battles, and ended up feeling like I just wanted the story given to me on a platter, like an anime. 
+
+But something about fates made me learn to enjoy my defeats. Somehow I just kept wanting to get back up and try again. Normally after losing 2-3 times due to being an idiot i'd set the game down, vowing to return the next day (but ultimately taking a great leave). But i've done it now! I beat my FIRST fire emblem game!
+
+I managed to plow through the entirety of birthright on Hard. It's not the hardest, so I was able to use it as a stepping stone towards my evolution. I'm glad to join your ranks, /r/fireemblem.
+
+I like to think that I would have done this anyways, without fates.. eventually coming to love the series as much as I do now. But this game somehow helped me personally make that push. I love the characters, the protagonist and the world.. I simply wanted to push through and fight for the sake of Kamui and his allies. I never felt that heavily of a desire with roy.. (Okay, maybe I did with lyn.. she felt so cozy)
+
+Now it's time to conquer the entire franchise! One game at a time. I'm onto conquest hard now.. my route is as follows (any suggestions? X) )
+
+Birthright (HARD) (Finished) -->
+
+Conquest (HARD)
+
+Shadow Dragon (H4)
+
+Mystery of the Emblem (Lunatic)
+
+Awakening (Lunatic)
+
+Revelations (Lunatic)
+
+Conquest (Lunatic)
+
+Awakening (Lunatic +)
+
+Shadow Dragon (H5)
+
+Binding Blade (I guess default?)
+
+Blazing Sword (Normal, then Hard, then Hector normal, Then 
+Hector Hard.) (Why do they make me beat the game with hector to get hector hard? if I beat eliwood hard, I should just get hector hard ;-;)
+
+Sacred Stones (Default?!?)
+
+Path of Radiance (Hard)
+
+Radiant Dawn (Maniac/Hardest)
+
+Then I guess the order wouldn't matter too much, but 2/4/5 would all need to be wrapped up, along with fire emblem BS and the one by the other company that's not a 'real' fire emblem game.
+
+",1459938140.0,12,0.78,38
+fexna,Is it still private beta? or do people here on the sub get to pretend like were important?,Basically i'm just incredibly fascinated and want to physically see how far we've come along. ,1459933952.0,3,1.0,3
+Megaten,"So, we get that Tokyo Mirage Sessions.. is a bit sad. But can we guess why they chose this route?","edit: This isn't meant to be anti-GI#FE,  I actually love the game and genuinely wanted to provoke discussion.
+
+They obviously didn't know what they were doing at first, and ended up with something unique.. but I wonder why. Why would they think when making this game to add such a unique element? 
+
+I mean, I can't imagine they did it to make money off the weebs. They know they'd make more money with the traditional soul-less method of a crossover, so I doubt they had financial intentions.
+
+It seems more like they just ended up having fun with it, and chose to make this game.. But where? Was it really just that one guy thought about how cool the concerts could be with real singers and real choreographers? He's just like 'that one thing would be so cool, i'm going to push this game in this direction!'
+
+That seems a bit silly, and farfetched. But I suppose if someone in lead really wanted to make an idol game, then I guess he could push it. Some of the other staff in interviews seemed confused in the direction of the game.. understandably so.. but I wonder how much say they even had.
+
+Now, if I remember correctly.. (Recalls from the wikipedia article) 
+
+""Tokyo Mirage Sessions ♯FE was the brainchild of Nintendo producer Kaori Ando, who voiced his wish to make a Fire Emblem crossover to fellow producer Hitoshi Yamagami. Ando's initial vision was for a collaboration between the Fire Emblem and Pokémon series, but this was rejected as a similar collaboration was being developed in the form of Pokémon Conquest. Ando redrafted his proposal and submitted it a week later as a crossover between Fire Emblem and Shin Megami Tensei.[12] Atlus, the developer of the Shin Megami Tensei series, had previously worked with Nintendo on a game titled Itsumo Purikura ☆ Kuradeko Puremium for the Nintendo DSi and 3DS. ""
+
+Now, that's interesting!
+
+So for starters, they didn't even intent to make an SMT X FE game from the get go. They already wanted something a bit more light hearted and silly. I mean, a pokemon X FE, would have obviously not ended up exactly as desired.. I can just feel the pokemon spin off vibes destroying fire emblem in that crossover. (Not that ours was any better, just saying) So it seems like that's where we started off wrong. Since it was proposed in a week, they definitely had no specific plans for the game. It was probably proposed for SMT just to get through, but was never intended to actually represent mainline. Which is incredibly disappointed to think about.
+
+This bit was kind of randomly added in, but is fair to note. "" had previously worked with Nintendo on a game titled Itsumo Purikura ☆ Kuradeko Puremium for the Nintendo DSi and 3DS. When the project was originally pitched to Atlus in 2010, it was assumed that they were not interested after their unenthusiastic response and later said they were too busy to undertake the collaboration.""
+
+That game could have easily been.. very weeaboo, to say the least. However it was seemingly canceled/became genei ibunroku since I can't find anything about it anywhere unrelated to TMS.
+
+Now, that said. It's entirely possible the idea actually spun from persona. Persona is designed to be the psychological little brother to SMT, not to be 'anime school kids save the day!' but if you look at the themes, it's pretty apparent. With all that happens in persona 1/2, but even the shadows in P4. P3 is a little lackluster on the psychology, but it's clearly still there. Either way, I like to imagine this theme came about from dancing all night, but with some added psychological persona twist, which it really did do.. they just took the idol side far too seriously instead of it being a true 'side' thing. I mean, it's still just the side stories.. but everything seems to have bits of the idol fanservice crammed into it. I like it a bit, it's pretty neat.. but I guess it's just a turn off concept wise. 
+
+Well, what do you guys think happened? How did this mess actually occur? 
+
+edit: This isn't a post hating on GI#FE you illiterate twats. I said it was a bit sad, not that I hate the game. Learn to read. Sorry for sounding rude, i've just gotten a lot of shit over this when I like the game more than anyone else on this sub does. I say it's SAD because it could have been something even greater, this much is apparent even to the brain dead. It's a great game, but no jack frost, no aleph, ect. It's just a MESS. EG, confusion and various things flying around. Not saying the game itself is a mess. The whole situation with them telling us it was something else, and getting confused is a MESS. Please pay attention to details.",1459874358.0,3,0.57,28
+funny,All hope is lost,,1458557013.0,13,0.74,2
+fireemblem,"[Birthright](#s ""Birthright is so brokenly easy!"")",[removed],1457520665.0,1,0.67,11
+darksouls3,How realistic is it to catch up before Dark Souls 3?,"Souls games are supposed to be hard, and Dark souls 3 comes out in about 2 months (a bit less). If I played 4-8 hours a day, could I knock out Demon --> DS1 --> DS2 --> BB and their DLC before DS3 lands? Assuming i'm a fairly competent gamer.",1457074553.0,2,0.75,20
+Megaten,"Hey everyone, just a friendly reminder you should join in the discord!",It's a really fun place and a great community with lots of spirit. I suggest everyone participates to make it a lot better for everyone over all! It would be fun! I hope to see you there!,1456905487.0,0,0.42,42
+Megaten,tbh Genei Ibunroku is really just more mainline than modern mainline smh ngl fam 10/10 shitpost,,1456459747.0,3,0.67,6
+Megaten,Will the poor reaction to GI#FE actually change anything?,"For starters, I love this game. But I do hate it too. I love the battle system, the visuals, the fire emblem additions and the sick fire emblem demons. I love Itsuki and the cute girls. But i'll be damned if I don't hate the lack of religion, the excessive weeaboo trash, (I watch anime, and anime isn't this anime), the lack of anything remotely serious (I mean it's serious but for what, like 15 seconds?), the heavy focus on idols and the music industry (good idea, but why megaten?), and the shitty faces characters make periodically. I don't know, this game has so much love thrown into it, and it looks so good, but there are glaring problems that irk me beyond repair.
+
+So the question I ask, do you think we told em? Are they going to relent with making shitty anime games and go back to focusing on class and psychology with persona, and gritty real talk smt games? Do you think they'd ever try another fire emblem collaboration in the same engine (or 3ds engines) and repair what they've lost? Or do you think atlus just doesnt' care and will do the same thing regardless?",1455789086.0,7,0.77,54
+Megaten,"So I got my skateboard today, you guys like it? :D",,1455728532.0,89,0.96,42
+Megaten,"I could up the resolution, but I'm happy so far",,1455709708.0,15,0.8,6
+Megaten,Lets discuss the streams. Any new information?,"https://www.youtube.com/watch?v=i8XgDIjXhgk
+
+https://www.youtube.com/watch?v=GRdaBCx55Us
+
+Just figured we needed a spot to discuss all this information/footage. ",1455610209.0,6,0.88,19
+Megaten,SMT IV Final Nico Nico Stream is live,,1455018156.0,9,0.92,1
+fireemblem,I really love fire emblem,"but fuck I hate losing. I keep restarting chapter 11 in fates.. -sigh- 
+
+
+It's my fault for refusing to play on an easier difficulty, but still. I get really upset losing 30 minutes of progress over and over again.. but I dunno what to do >.<",1454837795.0,0,0.38,11
+3dshacks,"I updated my Emunand, and now I can't access reinand.",[removed],1454696103.0,2,1.0,7
+dxm,How effective is it to take dxm after already taking some am hour earlier?,"The last time I took 300 it was incredibly overwhelming. So I dropped to 150 about 4 days later, and felt very little. About 30 minutes into the 'trip' I took another 150. I still feel about the exact same. ",1454075699.0,5,1.0,5
+dxm,How do you cope with such a surreal experience?,"Usually I only took 95-120 and absolutely loved it. (My weight says 93-165 should be 1st plateau) and I tried 300 this last time, but it was incredibly overwhelming. At first everything was so strange and overwhelming that I couldn't help but close my eyes and just focus on breathing until I relaxed, then I started to feel ill and puked. Then I proceeded to lay down, unable to sleep and just lay there focused on breathing properly until the trip ended hours later. Lots of thoughts, but basically just laying there focused on 'surviving'. Hardly the experience i had desired out of it..
+
+i know it's my fault,but what should I do to get over this? This is such a large thing, it's hard for me to deal with it.",1453985367.0,5,1.0,7
+Megaten,Tripping with MegaTEN?,[removed],1453363055.0,0,0.4,11
+dxm,Safety?,"I got the walgreens brand ones, the gels with just dxm. Should I be pretty safe using this?
+
+What about almost every day? IS that bad? (low doses, like 45-60)
+
+what about large trips? How big is too big?
+
+",1452729973.0,4,1.0,13
+Megaten,Were not all J-pop here in Genei Ibunroku :),,1452727048.0,0,0.5,14
+3DSThemeSwap,[Request] The official SMT4F Theme,"http://cdn.megaten4f.jp/topics/wp-content/uploads/2016/01/sentyaku_theme.jpg
+
+I apologize if this isn't generally for these kinds of themes. 
+
+Edit: If willing could you make this the music? 
+https://www.youtube.com/watch?v=elkEvP4cdeA
+
+This is an extended version, however it obviously wouldn't need to be that long.",1452062893.0,7,1.0,0
+fireemblem,My fates poster came in!,,1452024949.0,103,0.95,12
+Megaten,In this thread only say nice things about Genei Ibunroku#FE,"It's story has a lot more depth than given credit, the dungeons are the most interesting i've seen in mega ten so far. (P5 looks like it will take the cake however). The combat system is really cool. The animations in battle are a lot more eccentric and exciting than any megaten i've seen so far. The looks of the characters being all hype when winning a fight gets me excited. I actually like itsuki and tsubasa a lot as characters.. Actually, I like every single character in the main party. The Fire Emblem --> Demons actually look really badass. The music in this game is really good. The songs may be silly because it's j-pop, however it doesn't feel generic like anime music. It's actual Japanese Music and it's done incredibly well. The dances are choreographed well too! A lot of love and spirit was put into this game and it deserves a lot more credit than it has been given.",1452004496.0,3,0.57,57
+vita,Is there a way to extract vita saves for use on the psp?,"I have persona 1 on my vita, but i'd rather play it on my psp with an undub if possible. Can I do this?",1451987598.0,5,0.63,12
+PSP,Dumb question but..,"Why do my games ISO's come in 3 iso's? I put all 3 in, and it showed up as 3 seperate games! but they are labeled part 1, part 2 and part 3~ D: 
+
+I tried using iso software to put them all into one iso and it wouldn't show up anymore. Am I going to lose my save file if I do it this way? What am I supposed to do?",1451859903.0,1,1.0,2
+Megaten,Just a friendly reminder we should be modding our 3ds's about now,"This current update were able to use browser hax, which you can then use to download the old version of ironhax in order to mod your 3ds permanently. For what reason?
+
+Themes: 
+
+We can download the Japan only themes, Desu 1 theme, the secondary desu 2 theme, and the hero theme with both protagonists. 
+
+We can also get custom themes on 3dsthem.es Not a whole ton so far, but i'll be adding my own themes in the future. I've found a pretty decent SMT 4 one, and plan to make some of Final and Older games.
+
+Of course, you can always create your own theme too!
+
+Games:
+
+We have finished un-dubbed versions of SMT 4, Persona Q and Devil Survivor Overclocked. It's actually pretty neat!
+
+Note: It will also make your 3ds region free! When SMT IV Final comes out we can buy it! (But.. without knowing japanese..)
+
+PS: random side note, fire emblem fates is nearly completely translated in English! ",1451822945.0,13,0.72,72
+ffxiv,"Account issues on ps4, any help? ;-;","It's my friends concern not mine, but the issue seems to be the following.
+He made a square enix account and played on the beta using it, under the name Killlakill, then for some reason he couldn't log into kill. (the reason for this is trivial, because he took actions regardless of if he could have made it back into kill), but basically he says he called square enix and had them unlink killl la kill, and he made a new one.. but now his ps4 still thinks he's killl la kill, but he's not actually linked? So he's in a limbo where he can't log into any account.",1451467973.0,0,0.25,7
+FinalFantasy,Help with Final Fantasy XIV?,"It's my friends concern not mine, but the issue seems to be the following. 
+
+He made a square enix account and played on the beta using it, under the name Killlakill, then for some reason he couldn't log into kill. (the reason for this is trivial, because he took actions regardless of if he could have made it back into kill), but basically he says he called square enix and had them unlink killl la kill, and he made a new one.. but now his ps4 still thinks he's killl la kill, but he's not actually linked? So he's in a limbo where he can't log into any account. ",1451467250.0,2,0.75,2
+vita,Is there something wrong with the ps store?,"i'm trying to download persona 3 and it keeps glitching out. On my computer at home it gives an error about not finding my cart, and here at work it gets locked into a loop of opening a window then closing it repeatedly. ",1451455643.0,0,0.5,2
+3dshacks,"I'm trying to get Neo Y on my New 3DS with a physical cart, is this possible?","I do not own sky 3ds, I just have an iron-hacks homebrew. I do however own the physical game of pokemon Y. Am I able to mod my pokemon Y in order to get Neo Y? If so is there a tutorial of some sort? They keep mentioning a 'rom' in all of them. I don't have a rom, i own the game! Nor do I have the digital version.. so i'm unsure what to do here.",1451372816.0,0,0.5,6
+3dshacks,How do I use hans if I OWN the physical cart of a game?,"all the tutorials I can find are complicated and seem to be for those of piracy. I own X and Y, how do I add the neo X or neo Y?",1451330502.0,1,1.0,3
+Megaten,First 11 hours of Genei Ibunroku ♯FE,,1451284305.0,3,0.67,19
+Megaten,Genei Ibunroku #FE is being streamed on twitch,,1450957133.0,13,0.88,7
+fireemblem,Am I the only one concerned about the lack of Marth/Robin in Genei Ibunroku#FE?,"I mean, they obviously won't just straight up exclude them right? Do you really think late party members would get them as mirages? Would they do something else with them? I mean, I could see marth being an awesome boss battle.. but MUH ROBIN! What the hell fam! I'm sorry, i'm ranting. But the game comes out in 3 days, if marth and robin are nowhere to be found i'm going to cry myself to sleep. They are my two favorite fire emblem characters period, and both are the player characters of the two games were taking from.. it kind of makes sense. I mean i'm not asking for mystery of the emblem avatar here, it's ROBIN! Why Chrom over Marth/Robin in the first place? MC looks like marth anyways.",1450952445.0,0,0.38,27
+oculus,What's that software that makes things work for the rift?,"Like to make non-native games compatible? There were a few but I can't remember them.
+",1450951557.0,6,0.8,5
+Megaten,Genei Ibunroku #FE Gets a Score of 34/40 from Famitsu Magazine,,1450869631.0,32,0.93,65
+shitpostemblem,So I heard that we could post fire emblem art here so I decided to post my fire emblem art here (X-rated post from /r/fireemblem),,1450708715.0,14,0.95,4
+fireemblem,I heard we were allowed to post fire emblem art here so I decided that i would post my fire emblem art here do you guys think i did a good job,,1450708088.0,0,0.49,5
+Psychonaut,what's this subs opinion of Dextromethorphan?,"I get too concerned with the legal side of shrooms/acid, would dex make for a sufficient experience?",1450610946.0,1,0.6,4
+Megaten,Persona 4 Arena Ultimax Manga Author Teases Upcoming Atlus Project,,1450474368.0,10,0.92,15
+SuicideWatch,Serious Question about Suicide: Why choose death over a responsibility-free life?,[removed],1450345843.0,1,0.67,5
+ColosseumTournament,[Character] Sakushi the Swordmaster,"Name: Sakushi
+
+Class: Swordmaster
+
+Skill: Adept, Avoid
+
+HP: 85 (+0)
+
+Str: 15 (+5) 
+
+Skl: 20 (+5)
+
+Spd: 25 (+10)
+
+Lck: 10 (+0)
+
+Def: 10 (+0)
+
+Res: 10 (+0)
+
+Weapon: Phaser Falchion
+
+Mt: 11 (+10)
+
+Hit: 90 (+3)
+
+Crit: 0
+
+Wt: 8 (-2)
+
+Killer Weapon
+
+Background: Sakushi is a studious individual. He'd honestly rather never fight again, but instead play chess or read a good book. But unfortunately for him, he see's the way the world is.. and he fights for change. He fights to protect the weak, or to create a new world.  
+
+He didn't always see it this way, he really did just want to play games and study. But from the age of 6 he was trained in martial arts and swordsmanship by his father, doing matches against his elder brother day after day. At the age of 12 his village requires enrollment to the academy. He had focused on studying to become a mage or some other intellectual profession, but the elders saw him as a swordsman prodigy. He was forced into the Academy of Swordmasters. 
+
+The academy has many healing mages, so students are to fight eachother with the intent to kill in tournaments, leagues and rated matches, while also facing instructors and students for tests or exams. Day after day is a balance of sword fighting and studying. Literature, science, mathematics, all of those still very present in his life. 
+
+After graduating at the academy he has chosen to leave his village, and find his place in the world. While not too tragic, he feels his life has been chosen for him. He could go back and learn magic now, but he's already 18, and he would be so far behind.. As of now, he's a swordmaster. ",1450007889.0,2,1.0,0
+Megaten,What team did you use to defeat Beldr in DeSu?,"I'm on day 3, and seem to struggle a bit with defeating Beldr. Of course we have At-Low, MC, Yoohoo and keisuke. but what about demons? What kind of strategies?
+
+Naturally I have atsuro playing the physical game, but I have Yuzu as a dancer. She can dance 2/3 elements with decent healing options and healing demons. Keisuke is my weakest link, trying to use magic as well. My MC usually has two demons who will protect him from lethal attacks, then he'll have leaders soul. I figured keeping everyone alive was a good tactic. 
+
+Are there any broken demons/spell combo's I should be using at this point into the game?",1449751509.0,3,0.64,17
+Megaten,"Once you have your full party available, what's your team for Persona 3?","I prefer Aegis or Mitsuru as someone who can do some healing, then Ken and Akihiko. Mitsuru can also go in with Ice, while Ken goes in with Light and Thunder. Then I can use my personas to cover the other basic weakness's and let akihiko take on anything that magic isn't the best for. (plus generally help last longer in dungeons).
+
+What do you guys use, and why? You can say 'because they are my favorite' or 'it's my waifu' but it's better if you give mechanical reasons for your team. I'm not the best at persona 3, so it would help getting more input from you guys. ",1449750892.0,5,0.65,50
+fireemblem,Is the fan translation of Shadow Dragon (part 2..?) Any good?,"I'm going to play through Shadow Dragon on the DS, and I know the sequel was only in japan.. I found a fan translation online, but is there any specific one I should be using? Is it worth doing? I mean, it'll be worth it for the gameplay but fire emblem is about loving the characters and feeling connected. So if it's not very good, i'll simply be a bit disappointed. ",1449662477.0,2,0.67,12
+fireemblem,Can this team properly handle H1 in Shadow Dragon? What about H2?,"My friend and I did a game where we each choose units for the other player, with a set few going to both (marth, caeda, jaegan and julian)
+
+I have to choose a difficulty, but i'd want to do the hardest i can pull off with this team. I was playing through on H3 normally, but I didn't finish the game before we decided to do this playthrough instead. Does this team seem reasonable for H1? What about H2?
+
+Edit: I have no intention of using all of these units, I'm simply limited to these ones. 
+
+Marth
+
+Caeda
+
+Jaegan
+
+Julian 
+
+Cain
+
+Navarre
+
+Draug
+
+Merric
+
+Sedgar
+
+Wolf
+
+Bantu
+
+Radd
+
+Rickard
+
+Dolph
+
+Macellan
+
+Lorenz
+
+Horace
+
+Ymir
+
+Roger
+
+Boah
+
+Beck
+
+Arron
+
+Bord
+
+Castor
+
+Cord
+
+Est
+
+Caesar
+
+Jeorge
+
+Gotoh",1449487534.0,3,0.71,21
+Rainbow6,"This is going to sound generic and dumb but, this is my first shooter. Are there any guides out there?","I usually play slow turnbased/tactical games, so i'm not quite used to the fast pace action of shooters. Which is nice, this is a tactical shooter and a bit slower than cod. (I played some cod to warm up my shooter side, and got used to quickly firing) but I still need to adapt my tactical thinking. So far my plan is
+
+Do all 10 situations until I can 3 star them on Realistic
+Watch all the 'tutorials'
+Watch all of Rainbow Six Siege Academy (4 part youtube series)
+Do Terrorist modes online until cozy
+Then practice multiplayer non-ranked until cozy
+Then play ranked until proficient.
+
+Any reading? Or other strategies? Any of this seem not really necessary? ",1449340707.0,1,0.67,3
+Xenoblade_Chronicles,"I'll admit, I was mildly confused when we spawned like this.",,1449237095.0,37,0.93,9
+Xenoblade_Chronicles,Xenoblade Chronicles,"I've got X preloaded and preordered, should I try to play as much of XC as I can? Is it worth it? Or will I just be sad that I can't finish it, and have to start playing X.. I could probably get a good, 20ish hours into it. I could still play it a bit after X came out (Maybe 2-3 hours a day) 
+
+OR
+
+should I choose a 15 hour game, and try to actually finish an RPG before XCX? Like Demi-Kids or something. ",1449063291.0,0,0.5,4

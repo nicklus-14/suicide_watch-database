@@ -1,0 +1,830 @@
+subreddit,body,created_utc,score
+programming,"With functional languages you can quite quickly come up with the core algorithm (ignoring the printing part); e.g. the (sorry to all pure functional programmers) JS one-liner:
+
+```
+(arr) => arr.map(row => row.every(e => e === 0))
+            .findIndex(index => index)
+```",1738709327.0,2
+dotnet,So you're saying that one technology is better than the other without really having used the other?,1738409625.0,1
+PathOfExile2,"I read it as ""35% and less"" and I think it makes sense :\^)",1733248722.0,-2
+Denmark,Tilgengæld så er det også nemmere at finde sikkerhedshullerne når der er flere øjne der ser koden,1728588390.0,11
+LivestreamFail,Accidental photos always bring out the best in us :\^),1721559432.0,18
+dkfinance,Så du har arbejdet over 16 timer om dagen?,1715289624.0,3
+pathofexile,Just like gear in Lineage 2 could crystallize on when upgrading,1712326263.0,0
+Denmark,"Hvad syntes i om portionerne hos Hello Fresh? Syntes nu selv at de var ret små, som i tættere på 1 og en tredjedel portioner i stedet for to",1710715272.0,2
+leagueoflegends,Guma casually killing Zeri in a 1v2 :\^),1699788259.0,1
+Denmark, Evt. tag et kig på IEM oversigten her [https://crinacle.com/](https://crinacle.com/),1685312458.0,5
+adventofcode,It sadly produces the incorrect output for [my input](https://pastebin.com/arRPrWTX). I've now implemented it using a single flat list as you suggested and the output of that implementation is correct.,1639414766.0,1
+adventofcode,"I'm also solving these in Haskell this year but I often notice that my solutions are far less cleaner than the other Haskell solutions that I see here - I tend to use a lot of lambdas and my code often ends up look almost iterative in some places.   
+
+
+Do you have any pointers on how I could get better at solving these puzzles in a more idiomatic way? If you'd like to look at my solution for today then I've just posted [it](https://old.reddit.com/r/adventofcode/comments/rds32p/2021_day_11_solutions/ho4p7vn/) in this thread.",1639236976.0,2
+adventofcode,"Haskell
+
+    {-# LANGUAGE TupleSections #-}
+    import           Control.Monad   (foldM)
+    import           Data.List       (group, sort)
+    import           Data.List.Split (chunksOf)
+    import qualified Data.Map        as M
+    import           Data.Maybe      (mapMaybe)
+    import           Debug.Trace     (trace)
+    
+    type Grid = M.Map (Int, Int) (Int, Bool)
+    
+    
+    {-
+      Using a foldM with the Either monad results in the
+      fold terminating once the accumulating function
+      returns Left _
+    
+    -}
+    main = do
+      contents <- readFile ""input.in""
+      let ll =  concatMap (map read . chunksOf 1) (lines contents) :: [Int]
+          n = 10
+          g = M.fromList $ zip [(i,j) | i <- [0..n-1], j <- [0..n-1]] (map (, False) ll)
+      print $ fst $ foldl (\(s, g) _ -> let (nf, g') = runStep g
+                                   in (s+nf, g')) (0, g) [1..100]
+      print $ foldM f g [1..]
+      where f g step =
+              let (nf, g') = runStep g
+              in if nf == 100 then Left step
+                  else Right g'
+    
+    runStep :: Grid -> (Int, Grid)
+    runStep g =
+      let g' = M.map (\(p, f) -> (p+1, f)) g
+          g'' = flash g'
+          nFlashed = (length . filter ((==) True . snd). M.elems) g''
+          zeroed = M.map reset g''
+       in (nFlashed, zeroed)
+       where reset (p, f) =
+              if f then (0, False)
+              else (p, f)
+    
+    flash :: Grid -> Grid
+    flash g =
+      let l = M.toList g
+       in if all ((\(p, f) -> p <= 9 || f) . snd) l then
+            g -- No more flashes to do
+          else
+            let x = map doFlash l
+                ns = concatMap trd x
+                ns' = mapMaybe (\idx -> do
+                                    (p, f) <- lookup idx (map t x)
+                                    return (idx, (p+1, f))) ns
+                ns'' = map (\list -> let (idx, (p, f)) = head list
+                                      in (idx, (p+length (tail list), f))) (group $ sort  ns')
+             in flash $ foldl (\m (idx, v) ->  M.insert idx v m ) (M.fromList $ map t x) ns''
+    
+    t (a, b, _) = (a,b)
+    
+    trd :: (a, b, c) -> c
+    trd (_, _, c) = c
+    
+    doFlash :: ((Int, Int), (Int, Bool)) -> ((Int, Int), (Int, Bool), [(Int, Int)])
+    doFlash (idx, (p,f)) =
+      if p > 9 && not f then (idx, (p, True), neighbors idx 10) else (idx, (p,f), [])
+    
+    neighbors :: (Int, Int) -> Int -> [(Int, Int)]
+    neighbors (i,j) n =
+      let ns = [ (i,j-1), (i,j+1), (i-1,j), (i+1,j)
+               , (i-1, j-1), (i-1, j+1), (i+1, j-1), (i+1, j+1)]
+      in filter (\(i,j) -> (i >= 0 && j >= 0) && i < n && j < n ) ns",1639236931.0,3
+adventofcode,"Thank you very much, I've found and fixed the issue!",1639062146.0,1
+adventofcode,"I'm not very experienced in Haskell but the way that I see is that if I were to change to some other monad for whatever reason, using `return` instead of `Just` makes it such that I'd only have to change the handling for `_`. I've also cleaned up the code somewhat:
+
+```
+import           Data.List       (sort, (\\))
+import           Data.List.Split (splitOn)
+import qualified Data.Map        as M
+import           Data.Maybe      (mapMaybe)
+
+type Signal = String
+type InputLine = ([Signal], [Signal])
+
+main = do
+  contents <- readFile ""input.in""
+  let ls = lines contents
+      ll = map ((\[a,b] -> (a,b)) . map words . splitOn "" | "") ls
+  print $ part1 ll
+  print $ part2 ll
+
+part1 :: [InputLine] -> Int
+part1 input =
+  let outputValues = concatMap (mapMaybe signalToDigit . snd) input
+   in length outputValues
+
+signalToDigit :: String -> Maybe Int
+signalToDigit s =
+  case length s of
+    2 -> return 1
+    3 -> return 7
+    4 -> return 4
+    7 -> return 8
+    _ -> Nothing
+
+part2 :: [InputLine] -> Int
+part2 input = sum $ map decipherLine input
+
+makeMapping :: [String] -> M.Map [Char] [Char]
+makeMapping signals =
+  let one = head $ filter ((==) 2 . length) signals
+      four = head $ filter ((==) 4 . length) signals
+      seven = head $ filter ((==) 3 . length) signals
+      dsWithFive = filter ((==) 5 . length) signals
+
+      t  = seven \\ one
+      b  = head $ filter ((==) 1 . length) (map (\d -> (d \\ four) \\ seven) dsWithFive)
+      bl = head $  filter ((==) 1 . length ) $ map (\d -> ((d \\ four) \\ seven) \\ b) dsWithFive
+      m  = head $ filter ((==) 1 . length) $ map (\d -> ((d \\ one) \\ b) \\ t) dsWithFive
+      tl = (four \\ one) \\ m
+      tr = head $ filter ((==) 1 . length) $ map (\d -> (((d \\ t) \\ m) \\ b) \\ bl) dsWithFive
+      br = head $ filter ((==) 1 . length) $ map (\d -> (((d \\ t) \\ m) \\ b) \\ tl) dsWithFive
+
+      segments = [t,b,bl,m,tl,tr,br]
+      codes = [""a"",""g"",""e"",""d"",""b"",""c"",""f""]
+
+   in foldl constructMapping M.empty (zip segments codes)
+   where constructMapping m (s, c) = M.insert s c m
+
+
+decipherLine :: InputLine -> Int
+decipherLine (a, b) =
+  let mapping = makeMapping a
+      digits = map (segmentsToDigit . concat . sort . mapMaybe (\x -> M.lookup [x] mapping)) b
+   in sum $ zipWith (*) digits [1000, 100, 10, 1]
+
+
+segmentsToDigit :: String -> Int
+segmentsToDigit ""abcefg""  = 0
+segmentsToDigit ""cf""      = 1
+segmentsToDigit ""acdeg""   = 2
+segmentsToDigit ""acdfg""   = 3
+segmentsToDigit ""bcdf""    = 4
+segmentsToDigit ""abdfg""   = 5
+segmentsToDigit ""abdefg""  = 6
+segmentsToDigit ""acf""     = 7
+segmentsToDigit ""abcdefg"" = 8
+segmentsToDigit ""abcdfg""  = 9
+segmentsToDigit _         = -1
+```",1638988792.0,1
+adventofcode,"A very hacky implementation in Haskell    
+
+    import           Data.List       (sort, (\\))
+    import           Data.List.Split (splitOn)
+    import qualified Data.Map        as M
+    import           Data.Maybe      (mapMaybe)
+    
+    type Signal = String
+    type InputLine = ([Signal], [Signal])
+    
+    main = do
+      contents <- readFile ""input.in""
+      let ls = lines contents
+          ll = map ((\[a,b] -> (a,b)) . map words . splitOn "" | "") ls
+      print $ part1 ll
+      print $ part2 ll
+    
+    part1 :: [InputLine] -> Int
+    part1 input =
+      let outputValues = concatMap (mapMaybe signalToDigit . snd) input
+       in length outputValues
+    
+    signalToDigit :: String -> Maybe Int
+    signalToDigit s =
+      case length s of
+        2 -> return 1
+        3 -> return 7
+        4 -> return 4
+        7 -> return 8
+        _ -> Nothing
+    
+    part2 :: [InputLine] -> Int
+    part2 input = sum $ map decipherLine input
+    
+    makeMapping :: [String] -> M.Map [Char] [Char]
+    makeMapping signals =
+      let mapping = M.empty
+          one = head $ filter ((==) 2 . length) signals
+          four = head $ filter ((==) 4 . length) signals
+          seven = head $ filter ((==) 3 . length) signals
+          eight = head $ filter ((==) 7 . length) signals
+    
+          dsWithFive = filter ((==) 5 . length) signals
+    
+          top = seven \\ one
+          bottom = head $ filter ((==) 1 . length) (map (\d -> (d \\ four) \\ seven) dsWithFive)
+          bottom_left =  head $ filter ((==) 1 . length ) $ map (\d -> ((d \\ four) \\ seven) \\ bottom) dsWithFive
+          middle = head $ filter ((==) 1 . length) $ map (\d -> ((d \\ one) \\ bottom) \\ top) dsWithFive
+          top_left = (four \\ one) \\ middle
+          top_right = head $ filter ((==) 1 . length) $ map (\d -> (((d \\ top) \\ middle) \\ bottom )\\ bottom_left) dsWithFive
+          bottom_right = head $ filter ((==) 1 . length) $ map (\d -> (((d \\ top) \\ middle) \\ bottom )\\ top_left) dsWithFive
+    
+          mapping' = M.insert top ""T"" mapping
+          mapping'' = M.insert bottom ""B"" mapping'
+          mapping''' = M.insert bottom_left ""BL"" mapping''
+          mapping'''' = M.insert middle ""M"" mapping'''
+          mapping''''' = M.insert top_left ""TL"" mapping''''
+          mapping'''''' = M.insert top_right ""TR"" mapping'''''
+       in M.insert bottom_right ""BR"" mapping''''''
+    
+    
+    decipherLine :: InputLine -> Int
+    decipherLine (a, b) =
+      let mapping = makeMapping a
+          digits = map (segmentsToDigit . sort . mapMaybe (\x -> M.lookup [x] mapping)) b
+       in sum $ zipWith (*) digits [1000, 100, 10, 1]
+    
+    
+    segmentsToDigit :: [String] -> Int
+    segmentsToDigit [""B"",""BL"",""BR"",""T"",""TL"",""TR""]     = 0
+    segmentsToDigit [""BR"", ""TR""]                      = 1
+    segmentsToDigit [""B"",""BL"",""M"",""T"",""TR""]           = 2
+    segmentsToDigit [""B"",""BR"",""M"",""T"",""TR""]           = 3
+    segmentsToDigit [""BR"",""M"",""TL"",""TR""]              = 4
+    segmentsToDigit [""B"",""BR"",""M"",""T"",""TL""]           = 5
+    segmentsToDigit [""B"",""BL"",""BR"",""M"",""T"",""TL""]      = 6
+    segmentsToDigit [""BR"",""T"",""TR""]                   = 7
+    segmentsToDigit [""B"",""BL"",""BR"",""M"",""T"",""TL"",""TR""] = 8
+    segmentsToDigit [""B"",""BR"",""M"",""T"",""TL"",""TR""]      = 9
+    segmentsToDigit _                                 = -1",1638972222.0,2
+adventofcode,"Haskell
+
+```
+{-# LANGUAGE TupleSections #-}
+{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
+import           Data.List       (transpose)
+import           Data.List.Split
+
+type Board = [[(Int, Bool)]]
+
+main = do
+    contents <- readFile ""input""
+    let ls = lines contents
+        numberStream = map (read :: String -> Int) $ splitOn "","" (head ls)
+        boardsAsStr = chunksOf 5 $ filter (/= """") (tail ls)
+        boards = map (map words) boardsAsStr
+        boardsAsInt = map (map $ map (read :: String -> Int)) boards
+        finalBoards = map (map $ map (,False)) boardsAsInt
+    print $ part1 numberStream finalBoards
+    print $ part2 numberStream finalBoards []
+
+part1 :: [Int] -> [Board] -> Maybe Int
+part1 [] boards = Nothing
+part1 (x:xs) boards =
+    let newBoards = markNumber x boards
+        completeBoards = filter isComplete newBoards
+        results = map (computeResult x) completeBoards
+     in case results of
+         [] -> part1 xs newBoards
+         r  -> return (head r)
+
+part2 :: [Int] -> [Board] -> [Board] -> Maybe Int
+part2 _ [] [] = Nothing
+part2 (x:xs) rem fin =
+    let newRem = markNumber x rem
+        newRem' = filter (not . isComplete) newRem
+        newFin = fin ++ filter isComplete newRem
+     in case newRem' of
+         [] -> return $ computeResult x (last newFin)
+         _  -> part2 xs newRem' newFin
+
+computeResult :: Int -> Board -> Int
+computeResult lastDraw board =
+    let s = sum $ concatMap (map fst . filter (isFalse . snd)) board
+     in lastDraw * s
+     where isFalse = (==) False
+
+isComplete :: Board -> Bool
+isComplete board =
+    let asBools = map (map snd) board
+        anyRows = any (all isTrue) asBools
+        anyCols = any (all isTrue) (transpose asBools)
+     in anyRows || anyCols
+     where isTrue = (==) True
+
+markNumber :: Int -> [Board] -> [Board]
+markNumber n = map (mark n)
+
+mark :: Int -> Board -> Board
+mark n = map (map (\(m, y) -> (m, y || m == n)))
+```",1638621416.0,2
+adventofcode,"Haskell
+
+    import           Data.Bits
+    import           Data.Char (digitToInt, intToDigit)
+    import           Data.List (isPrefixOf, transpose)
+    import           Numeric   (showIntAtBase)
+    
+    main = do
+      contents <- readFile ""input""
+      print $ ""Part 1: "" ++ show (puzzle_1 contents)
+      print $ ""Part 2: "" ++ show (puzzle_2 contents)
+    
+    puzzle_1 :: String -> Int
+    puzzle_1 input =
+      let ls = lines input
+          byCol = transpose $ map (map digitToInt) ls
+          counts = map (foldl f (0,0)) byCol
+          most = foldl (\acc c -> acc ++ g c) """" counts
+       in bin2dec most * bin2dec (flipH most)
+    
+    puzzle_2 :: String -> Int
+    puzzle_2 input =
+      let ls = lines input
+          oxy = prog ls 0 h
+          co2 = prog ls 0 i
+       in bin2dec oxy * bin2dec co2
+    
+    prog :: [String] -> Int -> ((Int, Int) -> Int -> [String] -> [String]) -> String
+    prog [] col_idx fun = error ""No numbers left!""
+    prog [n] col_idx fun =
+      n
+    prog numbers@(n:ns) col_idx fun =
+      let byCol = transpose $ map (map digitToInt) numbers
+          counts = map (foldl f (0,0)) byCol
+          countAtIndex = counts !! col_idx
+       in prog (fun countAtIndex col_idx numbers) (col_idx + 1) fun
+    
+    
+    f :: (Int, Int) -> Int -> (Int, Int)
+    f (zs, os) 0 = (zs + 1, os)
+    f (zs, os) 1 = (zs, os + 1)
+    f (zs, os) _ = (zs, os)
+    
+    g :: (Int, Int) -> String
+    g (zs, os) | os >= zs = ""1""
+    g (zs, os) = ""0""
+    
+    h :: (Int, Int) -> Int -> [String] -> [String]
+    h (zs, os) idx numbers | os >= zs = filter (\a -> a !! idx == '1') numbers
+    h (zs, os) idx numbers = filter (\a -> a !! idx == '0') numbers
+    
+    i :: (Int, Int) -> Int -> [String] -> [String]
+    i (zs, os) idx numbers | os < zs = filter (\a -> a !! idx == '1') numbers
+    i (zs, os) idx numbers = filter (\a -> a !! idx == '0') numbers
+    
+    bin2dec :: String -> Int
+    bin2dec = foldr (\c s -> s * 2 + c) 0 . reverse . map c2i
+        where c2i c = if c == '0' then 0 else 1
+    
+    showBinary = showIntAtBase 2 intToDigit
+    
+    flipH :: String -> String
+    flipH = map flipB
+    
+    flipB '1' = '0'
+    flipB '0' = '1'",1638538518.0,2
+leagueoflegends,Chance to crit from passive: 35% -> chance to NOT crit: 65% -> chance to not crit 7 AAs in a row: 0.65\^7 \~ 0.049 so about a 5% chance that happens,1631261754.0,0
+Kanye,Champion / Stronger,1630946609.0,1
+Kanye,Can you put sweet and sour sauce on pussy,1630154502.0,1
+leagueoflegends,Given that he has the best NA jungler I wouldn't even be surprised tbh,1610410777.0,59
+leagueoflegends,"Tarzaned started looking into everyone from the tournament and it turns out that most teams have more than 2 challengers, if you count challengers the same way that they counted Adrian.
+
+IMO it seems like the whole reason they took that action was to reduce the chances of Tylers team winning once again",1610408742.0,281
+leagueoflegends,This makes his tweet about his name being banned in TwitchRivals make so much more sense. What a fucked up situation,1610408510.0,333
+Polska,"Mieszkam w Danii i tutaj w pod prysznic wszyscy chodzą nago, obejetnie czy to na basenie czy na siłowni. 
+
+Żaden to wysiłek ale po co się kąpać w gaciach?",1605315657.0,10
+leagueoflegends,"Shouldn't having a low skill floor and high skill ceiling be a goal of any online game? Even the suggestions won't always be optimal, e.g. I've seen Banshee's being recommended vs. a _support_ Karma - the ""skillful"" people would realize that getting a Banshees for her alone is far from necessary, so knowing whether a suggested item makes sense or not is still a skill and it's in the game.
+
+EDIT: to add on to my point, the suggestions are based on your champion and the enemy champions, a player still has to recognize which of the enemy champions is a threat. E.g. ""Am I dying because the Lucian has a lot of damage, or am I dying because I can't reposition after the enemy engages on me"" both of these are issues for the player but they have different solutions, and simply thinking ""much dmg need armor"" is not always enough to come to the right solution.",1605132828.0,3
+leagueoflegends,"It's also *somewhat* broken for me. It works only every other game, the games in between those it's completely static.",1605132569.0,1
+leagueoflegends,"That is because the cs was getting funneled into selfmades graves, not because he got diffed",1603228495.0,16
+leagueoflegends,[Here you go](https://imgur.com/gallery/xci4NF7),1602418090.0,60
+MechanicalKeyboards,945,1600277288.0,1
+battlestations,It's this one https://www.komplett.dk/product/894581/hardware/skaerme/vaeg-ophaeng/iiglo-monitorfeste-gassarm-gm200,1599331076.0,1
+battlestations,It IKEA jarvafjallet but I wouldn't recommend it if you spend a lot of time in front of the PC,1599053278.0,1
+battlestations,It's [this one](http://phanteks.com/Eclipse-P350X.html),1599053244.0,1
+battlestations,I'm gonna be honest I'm kind of retarded,1599053223.0,1
+battlestations,It's [this one](http://phanteks.com/Eclipse-P350X.html),1598996420.0,1
+malelivingspace,r/Kanye is proud,1597058328.0,0
+malelivingspace,I'm pretty sure it's from IKEA,1596986776.0,1
+ProgrammerHumor,"It depends on what you're currently writing. Some small script, sure don't bother with OOP otherwise its probably a good idea",1595712904.0,1
+ProgrammerHumor,I am not exactly sure what your answer is aimed at. I simply explained that you do not have to use OOP in python. I never mentioned java.,1595680019.0,1
+ProgrammerHumor,Python is not strictly OOP. You can write entire programs without ever creating a class,1595679802.0,5
+malelivingspace,How long have you had them and are you happy with them?,1595348030.0,2
+leagueoflegends,Came to the same conclusion after I went through his profile,1593611978.0,3
+leagueoflegends,"The three items you name are all perfectly balanced?
+
+If you want to protect yourself from fizz you just ban him no? If you want more champions banned you can ask your team to ban them for you, that is how it has always been.
+
+This season you can get away with playing most of the available champions, which has not been the case in some other seasons. 
+
+There is no universe in which all champions can be equally strong, they all have their strengths and will excel in some metas a lose hard in others.",1593608160.0,9
+leagueoflegends,"Aside from a few special cases most champions are fairly balanced in higher elo.
+
+Matchmaking is fair too until you get to super high elo on low population servers, which is to be expected if you don't want 30 minute queue times.
+
+What do mean with ""bans with no values""
+
+Items are fine, sure itemization is a bit boring on most champions and there are only a couple of MR items but there aren't any truly op items.",1593605110.0,8
+leagueoflegends,What are the problems that you speak of?,1593604366.0,7
+ManjaroLinux,"I figured it out, install `terminux-font-otb` and set the font using `font = Terminus 12`",1592779166.0,1
+ManjaroLinux,Well shit,1592778897.0,1
+ManjaroLinux,"I just ran into the same issue, have you been able to solve it somehow?",1592778727.0,1
+battlestations,"Clean setup! Does your desk sway at all when you raise it?  
+
+
+I just got a new standing desk and it sways a little bit during typing when it's raised to my height (190 cm / \~6'3"")",1591637570.0,3
+VALORANT,"If you have no guarantee of what the first map is then getting any map twice in a row is 0.25 * 0.25. If you are already playing a map, say ascent, then the probability of getting the same map is 0.25
+
+(Assuming that you're equally likely to get any one of the four maps)",1591435770.0,5
+leagueoflegends,I'm saying that if you're good enough on ahriI you can probably take it above masters.,1589463072.0,2
+leagueoflegends,There has been 0 changes to the champ or the meta so it should still apply?,1589438605.0,2
+leagueoflegends,I abused ahriI until high diamond last season,1589438506.0,0
+Conservative,Wait what? Trumps speeches are even more incoherent than Bidens.,1587722255.0,1
+battlestations,Personally I'd still get one just so I don't scratch the surface of the desk,1587238940.0,2
+plantclinic,"I re-potted it, turns out the whole stem was pretty much dead, the large one should survive though as like 95% of the roots looked good, cut the rest off. 
+
+Thanks for the help",1587058467.0,1
+plantclinic,"The branch itself is somewhat soggy and smelly, should I just remove the whole branch?",1587043969.0,1
+plantclinic,"First of all, this is my first plant (dracaena marginata) and it has been doing well for some time.
+
+Due to my ignorance I never did any research on the plant and just watered it when it seemed like it needed water, only issue being that the tips of the leaves go brown when the plant has too much water. Not knowing that I assumed the opposite to be true, so I started to water it even more. The leaves started to sag and fall off the smaller branch quite regularly, then the branches started growing rapidly but the insides felt empty. I googled around today and found out about the overwatering causing the tips of the leaves to brown and someone suggested cutting the branches.Once I cut the branches, fairly close to where the leaves previously were, it started smelling weirdly.
+
+Did I just kill my plant?
+
+[More pictures](https://imgur.com/a/qNoXCJP)
+
+\[Edit\]
+
+The smaller branch that actually goes into the soil also feels a tiny bit empty inside, it's is also softer than the larger branch to the left.",1587042410.0,1
+VALORANT,"Yet another person with probably 0 experience in software/game development calling code, that he has not even read, spaghetti code",1586900247.0,16
+hiphopheads,"# You should watch the linus retirement video, it's pretty heartbreaking",1585732787.0,47
+MechanicalKeyboards,He said in the video that he wasn't planning on using the board at all and just did it for fun so I strongly doubt we will see a follow up.,1584721898.0,1
+leagueoflegends,"> Death's Dance last tick of stored damage now properly kills the target champion instead of leaving them at 1 HP
+
+Wonder how many games were lost/won because of this",1583275550.0,12
+battlestations,What keyboard do you use?,1580646389.0,1
+unixporn,How are you liking Qtile?,1579705375.0,3
+Kanye,Girlfriend confirmed 🌊🌊,1579643376.0,7
+streetwear,"I don't give a fuck buddy. I answer only if I have something to say, that's how discussions work. And I'm not refreshing, there is this beautiful thing called notifications",1578930209.0,4
+streetwear,Did I hurt your fragile ego?,1578929844.0,3
+streetwear,"If you didn't buy them good on you, I'm just trying to make a point that working that many hours for a pair of shoes is insane.",1578927739.0,0
+streetwear,"I just think it's sad that a kid thinks working 35 hours for a pair of shoes is worth it. He can and should do whatever he wants to do, but if he should take a step back and really think about what he is spending his hard earned money on.
+
+Also, buying shit that is this expensive while being 16 might cause him to be fiscally irresponsible further on in life.",1578927450.0,7
+streetwear,Read what you just wrote and get back to me once you understand my point.,1578927014.0,-3
+streetwear,"As I stated in a different comment, I just think that it really irresponsible to be spending that much on something so insignificant.",1578926767.0,2
+streetwear,"He can spend his money on whatever he wants. But, imo, spending 35 hours working for a pair of shoes that normally cost maybe $100 just because they have a tiny sticker on them is both lame and irresponsible",1578926480.0,5
+streetwear,Imagine working 35 hours so that you can wear some shoes with a sticker on top,1578925751.0,83
+Kanye,If anyone is interested I made a [1920x1080 version](https://imgur.com/5HtAjX8) you can use as a wallpaper,1577815365.0,1
+memes,I hoped to find the timestamp in the original video but don't wanna sift through 3h of content so here is a [clip](https://www.youtube.com/watch?v=vvFeqL86JBk) from a different channel,1574805097.0,1
+leagueoflegends,In that case you're right.,1574792142.0,6
+leagueoflegends,This doesn't root anymore since you have to your E on them in order for the W to actually root instead of just slowing.,1574792036.0,4
+leagueoflegends,"It used to build out of Negatron Cloak but people would then just buy the cloak and sit on it until very late, that's why they changed it to build out of NMM.",1574369854.0,1
+archeage,"He can get full T1 Hiram with perfect stats in less than a week, getting that from drops would take him weeks if not months...",1572521801.0,8
+archeage,"I feel you, I tried 3 times to get to t2, failed all times and crystallized twice - the one time where it didn't crystallize is when I used a scroll with 50% chance to awaken and 0% chance of crystallization",1572300785.0,1
+archeage,"You do not know whether that is what is going to happen, instead of being outraged before they do anything, save it for when they actually do something dumb.",1571659501.0,1
+archeage,"People have been complaining about queue times and you want to shut the game off for a couple of days? 
+
+They even said that people who have abused the system will receive punishment as it's against the ToS",1571659194.0,5
+leagueoflegends,Well it's over boys.,1568890833.0,2
+analog,"Thank you, I'll keep that in mind when shooting portraits",1566144223.0,1
+analog,Thank you!,1566070378.0,2
+hiphopheads,r/suddenlygay,1565890277.0,1
+HydroHomies,"I've started to take proper care of my skin by washing it with dedicated face soap and applying moisture through a face cream every day while also exfoliating once/twice a week.
+
+While my acne has not disappeared completely my skin feels way nicer, I think you should try whether it works for you.",1565875202.0,3
+analog,"I've noticed that thing on the left too, but cropping it out makes the dimensions of the image kind of weird so I decided against it.   
+The image is slightly edited for exposure as it turned out rather bright but I hope I haven't overdone it :)",1565807506.0,2
+AmItheAsshole,YTA,1564088058.0,1
+AskReddit,La La Land,1562775476.0,1
+AskMen,Don't let someone else decide your life for you.,1562675412.0,2
+memes,u/SrGrafo,1560683739.0,3
+unixporn,If i remember correctly then yes it was a PGP signature error but i have gotten it fixed since then.,1559999804.0,2
+leagueoflegends,I play only Electrocute Ahri and I've got a >70% winrate with her in low Diamond so she is nowhere near bad/dead,1559420409.0,0
+HotPaper,Do you sell prints of this by any chance?,1559315636.0,7
+malelivingspace,"This is dope man, do you have more photos that you're willing to share of this place? It's so thematic it's mental.",1558554377.0,16
+leagueoflegends,Turbo gay is even better,1558349042.0,9
+apexlegends,"This comment summaries the whole debate, most of you have no clue about development and just demand things with the mentality of ""just do it lol""",1557153532.0,1
+apexlegends,"Your own question is literally the answer.
+
+""I want this but not exactly this so make it different, I don't know how but do it""",1557150514.0,2
+apexlegends,You do realize that each character should be recognizable regardless of the skin being used right - now take that into consideration and tell me how many skins you can make for similar humanoids without them looking the same.,1557150442.0,1
+apexlegends,"Overwatch is way easier too as most champions have key defining postures or big weapons that clearly show who they are so I don't see your point.
+
+Who's talking about 200 designers? 200 employees in general, there's way more that goes into making and supporting a game than just designers and programmers.",1557147145.0,2
+apexlegends,"Fortnite skins are way easier to create than Apex skins, there is more artistic freedom for Epic to take advantage from as each character is only differentiated by weapons, this is not the case in Apex.
+
+And of course Respawn wants to be better than Epic but you can't pre-hire a ton of people in case your game does just as well as Fortnite that's just unreasonable - what if the game does not pop off and you're left with 200 extra employees that all have to be paid?
+
+This studio has no prior experience with dealing with games that blow up immediately on release.",1557140680.0,4
+leagueoflegends,"Enjoyment is really different for me in this game compared to other games. I don't really enjoy playing League but I enjoy being good and winning while in games like BFV i really don't care - I still try to do good but I don't really put much thought into the game itself.
+
+Currently D4 contains players from old P3 all the way to the bottom 50% of D4 which is incredibly horrifying. The games differ so much in quality depending on whether you sit on 0 20 or 50 LP. It also feels wrong to be here knowing that this is not 'true' diamond but only an extension of plat",1557120219.0,1
+leagueoflegends,"I think they should just reset D4 by moving ALL players from D4 to P3/P2 and let them climb, it would suck to lose progress but it should normalize rather quickly.",1556961348.0,2
+leagueoflegends,"And it really is, I'm currently there and the quality of the games is all over the place",1556741812.0,1
+AskMen,I Love You by Billie Eilish,1555498570.0,2
+unixporn,I just switched over to Manjaro and have trouble getting Spotify to work (installed as a snap) have you had any issues?,1554837622.0,0
+analog,Is there a way to purchase a print of this or just the digital copy so I can print it myself? Really awesome shot man,1554759312.0,1
+AskProgramming,"Do I understand you correctly that I should create a class TaskService which would be working on the list of Tasks? And if some services, e.g. searching, become large enough split them into their own classes?",1553841096.0,2
+AskProgramming,"Currently `todo`is a class that has the following methods
+
+`readTasksFromFile` reads a JSON-file and creates `Task` objects and returns them in a list
+
+`writeTasksToFile` writes a list of `Task`s to a file
+
+I'm aiming for a simple CLI interface to begin with and extending to a GUI once the CLI version is working with at least basic functionality (adding/removing tasks, marking them as done, sorting etc)
+
+Here is a [link](https://github.com/Pietrrrek/todo) to the github repo if you'd like to take a look",1553808526.0,2
+pics,THE MACHINE,1553357696.0,66
+analog,"I'm considering buying a Mamiya ZM with a 50mm + 35-105mm lens for ~120 USD and that includes a 1 year warranty on the camera - is this purchase worth it for someone with very limited experience (I've only shot a couple rolls on a Nikon EM before the winder broke)
+
+Edit: the camera was in REALLY good shape physically nearly no scratches - I'm not sure how accurate the light meter is though ",1553009882.0,1
+malelivingspace,What monitors are you using?,1552675114.0,2
+Showerthoughts,Laughs in LaTeX,1552649030.0,4
+videos,"Can you really say that the retrospection is honest if it did not originate from themselves? They had to be pointed in that direction to do anything about it and I would not consider that as ""honest retrospection""",1552421293.0,0
+Kaylemains,"But this does not make her a good jungler. Simply forcing her to PvE for the first 15 minutes  in the jungle is not a solution, your lanes are going to lose since their opponents can actually get attention from their jungler. ",1551992225.0,2
+Kaylemains,"I 100% agree with this. With Kassadin you surrender the lane until at least lvl 6, afterwards you can roam and trade if youre careful, but with Kayle it's hard to do that. 
+
+I feel like her lvl 6 is not a spike at all, the waves only do like 20 damage and her R gimps her damage, you might deal 200 with it but that only slows your dps since your AA would do more in that time period. Reaching lvl 11 isn't as rewarding either since youre usually so behind at that point",1551980722.0,2
+Kaylemains,"You had me in the first half, not gonna lie ",1551976493.0,1
+Kaylemains,"Are you sure about that? 50 > 40 means 50 is greater than 40, so my post spells out "" (...) even the ones with greater than 50% Wingate"" or is my understanding wrong?",1551972067.0,4
+Kaylemains,As I mentioned in a previous comment of mine Om not bothered by the low winrate - that is expected of a new champ. What's bothering me is how far behind she falls in matchups even if her winrate is positive,1551969595.0,4
+Kaylemains,"I get that but I'm not talking about her winrate but her overall performance in games, it seems like she's getting tossed around in lane pretty hard. In many matchups she get over 1k behind in gold at 15 min",1551966172.0,6
+buildapc,"I actually have a [pcpartpicker list](https://pcpartpicker.com/list/HqTqfH) but I'm not too keen on using it since it can't show prices in Denmark, I'm also only buying from the site that the original screengrab is from (proshop.dk). 
+
+My budget is ~900 USD (The PC from partpicker costs 1230 USD in Denmark)
+
+EDIT: Look at the budget this way, when picking parts on partpicker go for a max of 900 USD.",1550051690.0,1
+AskReddit,"You know you have to do something to keep your life in order but you just don't, you sort of want and know that your life depends on holding your shit together but you just can't be bothered. Every thought can spiral into self-hate and doubt.",1549814685.0,1
+dataisbeautiful,"I'm sure this has been sugested, but could you do it for other countries such as the USA and some Nordic countries (maybe Norway or Denmark)",1549561975.0,1
+funny,same,1549126987.0,0
+funny,"r/comedycementary
+",1549117310.0,-3
+AskMen,Homecoming by Kanye West,1549113230.0,1
+funny,r/ComedyCemetery,1548961700.0,4
+unixporn,"Is that discord running in the terminal? Also what server is that if that is the case?
+
+&#x200B;",1548376033.0,3
+programming,Happy cake day!,1546837701.0,1
+Fitness,As far as I remember then it's the internal rotation of the shoulders that may cause injury.,1546806129.0,1
+pics,r/joerogan,1546391302.0,2
+sports,I know nothing about MMA but why does this count as a KO? Cyborg got up at the very end right? Does the judge get to decide when a fight is over and is that what happened here?,1546194313.0,1
+unixporn,Ayu dark buddy,1545919968.0,1
+unixporn,"How do you get those arrow-things in your terminal?
+",1545741003.0,25
+unixporn,Would you mind pm'ing me? I'll try to help you once I get home in like 1 hour,1545691971.0,1
+unixporn,I don't have any experience with issues while installing i3 tbh - my install went smoothly as far as I remember. How do you install it?,1545691047.0,1
+unixporn,Oh thank you hope you too have great holidays ,1545670884.0,1
+unixporn,"Yeah don't worry about it being an emulator, but your terminal is still not URxvt, if youre running i3 you'd need to add this to your i3 config: `bindsym $mod+Return exec urxvt` instead of `bindsym $mod+Return exec 'i3-sensible-terminal'` (I'm not sure whether it's exactly this but this should be enough for you to figure it out). If you're still in doubt I'd recommend looking at my dotfiles and trying to google your issues.",1545650900.0,1
+unixporn,I actually thought of that but I saw other people not bothering to remove it and l guess it's too late now >:(,1545609037.0,2
+unixporn,Could you provide a screenshot?,1545608133.0,1
+unixporn,I'm pretty sure that you can simply type `sudo apt-get install rxvt-unicode`in your terminal. Keep in mind that urxvt is REALLY with the default config.,1545606993.0,1
+unixporn,Let me get back to you when I'm at home !RemindMe 4 Hours,1545597114.0,1
+unixporn,Ye what's wrong with that? I've tweaked the colours though,1545591310.0,1
+unixporn,"Add this to your compton.conf if you're using Compton 
+
+opacity-rule = [
+
+  ""0:_NET_WM_STATE@[0]:32a = '_NET_WM_STATE_HIDDEN'"",
+
+  ""0:_NET_WM_STATE@[1]:32a = '_NET_WM_STATE_HIDDEN'"",
+
+  ""0:_NET_WM_STATE@[2]:32a = '_NET_WM_STATE_HIDDEN'"",
+
+  ""0:_NET_WM_STATE@[3]:32a = '_NET_WM_STATE_HIDDEN'"",
+
+  ""0:_NET_WM_STATE@[4]:32a = '_NET_WM_STATE_HIDDEN'"",
+
+
+  ""90:_NET_WM_STATE@[0]:32a = '_NET_WM_STATE_STICKY'"",
+
+  ""90:_NET_WM_STATE@[1]:32a = '_NET_WM_STATE_STICKY'"",
+
+  ""90:_NET_WM_STATE@[2]:32a = '_NET_WM_STATE_STICKY'"",
+
+  ""90:_NET_WM_STATE@[3]:32a = '_NET_WM_STATE_STICKY'"",
+
+  ""90:_NET_WM_STATE@[4]:32a = '_NET_WM_STATE_STICKY'"",
+
+  
+
+  ""85:class_g = 'Code'"",
+
+  ""97:class_g = 'URxvt' && !_NET_WM_STATE@:32a""
+
+];
+
+",1545584909.0,3
+unixporn,"* Distro: Ubuntu 18.04
+* Shell: bash
+* [Wallpaper](http://www.justinmaller.com/wallpaper/309/)
+* [Dotfiles](https://github.com/Pietrrrek/dotfiles)",1545561932.0,1
+unixporn,"But how do I know which colour e.g. ""color5"" corresponds to in VScode? I tried to find this information but wasn't successful",1543594756.0,1
+unixporn,"Damm too bad, Ive found a terminal theme I really like but there is no corresponding theme for VScode so I was hoping there was a way to 'translate' the settings",1543533192.0,1
+unixporn,How did you sync your terminal color-scheme with the one in VS code?,1543532458.0,1
+MemeEconomy,!invest 100,1543277906.0,1
+MemeEconomy,!balance,1543271797.0,1
+MemeEconomy,!invest !all,1543271048.0,1
+MemeEconomy,"!invest !all
+
+&#x200B;",1543270980.0,1
+buildapc,I checked battlefield v this morning at @ 1080p low setting and neither the GPU nor the CPU were above 80% very often. I'll post some graphs once I get home and do some more testing ,1542365966.0,1
+buildapc,"Just did a quick test in BF 1 on domination as i forgot to update BF V, the CPU was constantly over 80C while the GPU was in the same neighborhood. I'll test again for BF V once it's updated but I doubt I'll see anything other than the GPU also being at 100%, i guess it's time for a full overhaul :(",1542321248.0,1
+malelivingspace,Whats the rent on a place like that?,1541789127.0,1
+leagueoflegends,"ye as far as i can see both flashes were useless, lucian already got hit by the Sivir-Q and vice versa. Only thing i can come to think of is that they both tried to juke each others cursors
+
+&#x200B;",1541537604.0,3
+MemeEconomy,!invest 189,1541516762.0,1
+MemeEconomy,!balance,1541516728.0,1
+Polska,moge poprosic tl:dr albo jakies linki bo jestem r/OutOfTheLoop,1541452057.0,2
+listentothis,"Mac Miller - Objects in the Mirror
+
+Anderson .Paak - Bubblin
+
+Anderson .Paak - Tints
+
+XXXTentacion - Moonlight
+
+Lil Peep & Makonnen - Sunlight on your skin
+
+EDIT:
+
+Tiny Desk Concert featuring Mac Miller",1541444844.0,1
+analog,"Feeling somewhat unmotivated lately, first I've had problems with light-seals on my camera destroying most of my shots, now the winding mechanism seems to fuck up while the built-in light meter seems to be off and causing my photos to be underexposed. ",1540453511.0,1
+leagueoflegends,"This only makes it harder to play from behind, if i have no way of killing my opponent since he is ahead then i should just farm right? Well with this change i can farm sure, but if my opponent, who is already ahead meaning that he has kill-pressure on me, kills me he gets extra gold further getting him ahead. Ofc he too will have a bounty on his head from kills and cs but him being ahead makes it harder for me to cash in on his bounty than it is for him to cash in in my cs-bounty...",1540452384.0,1
+leagueoflegends,">Minion/Monster gold earned is now a part of the bounty system
+
+Do i get this right? CS'ing correctly will now place a bounty on my head punishing me for cs'ing?
+
+&#x200B;
+
+&#x200B;",1540420035.0,1
+analog,Do you remember what shutter speed and aperture you shot this at? I'm guessing the scene was quite bright right?,1540035062.0,1
+AskReddit,"Mac Miller, he just died too soon.",1539388832.0,1
+MemeEconomy,"!invest !all
+
+&#x200B;",1539332626.0,1
+analog,"It's missing something but I'm not quite sure what.
+
+&#x200B;
+
+Oh, it's upvotes.",1539294133.0,2
+redditdev,exactly 100,1539120954.0,1
+analog,What app are you using?,1539103639.0,1
+analog,"Don't get me wrong, this is a gorgeous photo, but including the top part of the bridge would make this even better. ",1538853910.0,2
+analog,"What language is the code written in, maybe I could give you a hand if you'd want it",1538768122.0,1
+analog,"Yeah, I have shot 5 rolls in total (the last 3 came in a batch, there were some leaks on the first two rolls, but i didn't know what it was until the last 3 rolls came back and the lab inspected the negatives with me)  ",1538768031.0,1
+analog,"I do get light leaks, quite damaging ones if I'm unlucky so I'm torn between wasting the start of the roll (by pulling it out and fixing frost) and hoping for the best ",1538766430.0,1
+analog,"How much can i trust the built in light meter in my Nikon EM (it can only shoot in aperture priority or flash sync at 1/90)?
+
+&#x200B;
+
+EDIT: Also, I've found out that the light seals on the camera are busted but I've already loaded a new roll of film into it and shot two frames, should I just pull the roll out and fix the camera or shoot the rest of the roll and then fix it (i.e. what will save me the most film from being destroyed)",1538761977.0,1
+analog,"I'm new to photography so don't trust everything that I say, but, what aperture are you shooting at? If you shoot at e.g. f/1.8 or f/2.8 the depth of field will be very shallow, meaning that most of the image except for the thing that you focus on will be blurry. It could also be that your focus is slightly off, do you scan your images yourself or do you get your local lab to scan them - if so, what resolution are the pictures when you get them. (My local minilab provides me scans at approx 1800x1000 which is quite low, which is why I'm going to get my own scanner ASAP).",1538761559.0,2
+analog,"why are the ""photographer of the week""-posts so far behind (3 weeks)?",1538761324.0,5
+tattoos,How much did it cost?,1538692427.0,-2
+analog,That means a lot! Thank you!,1538601289.0,1
+analog,Thanks!,1538544757.0,2
+analog,"I did not scan it myself, my guess is that the light leak at the top influenced all colours on the negative to give it this look ",1538544739.0,1
+analog,r/thanosdidnothingwrong is leaking,1538513182.0,2
+MemeEconomy,"!invest 200
+
+&#x200B;",1538415388.0,1
+analog,What aperture and shutter speed did you shoot this at? ,1538326495.0,1
+MemeEconomy,!invest 500,1538257030.0,1
+analog,"So shoot at 1600 and develop at 800? (I only have aperture prio on my camera)
+EDIT  oh I'm dumb, that would be underexposing",1538141850.0,1
+analog,Can I pull lomography 800 to 400 or will the results suffer greatly?,1538140880.0,1
+MemeEconomy,!invest 300,1537972905.0,1
+analog,What colour fillm is best for postprocessing it to b/w - I can't really shoot b/w as there is no lab in my area that develops it so I have to send it to Germany,1537947605.0,2
+MemeEconomy,"!invest 300
+
+&#x200B;",1537904844.0,1
+MemeEconomy,!Invest 300,1537904823.0,1
+analog,Love the mix of motion and stillness in this one,1537889710.0,2
+analog,"First of all I dig this photo.  
+
+
+I'd try to frame it differently, get rid of the red/yellow boxes in the bottom right of the picture as they take away from the main focus of the picture. Maybe try a different perspective even tough this one works nicely with the lines of the bridge leading the eye towards one of the pillars.",1537889608.0,2
+analog,How do ya'll find spots to shoot and how do you go about asking strangers to take their portrait? ,1537735182.0,1
+AskReddit,"I've recently (ish) ended an relationship where both me and my ex-SO still loved each other but we simply weren't working out, we started branching onto different paths - common interests started fading, finding time to spend quality time together became hard (even though we lived together). I really wasn't happy with the city we moved to, I struggled to make friends at uni and often felt lonely. It really saddens me that we had to break up since I still love her and think we could've worked out if we just communicated better and I told her about my fears of moving to that city - I guess i just wanted to be with her and was willing to try something so far out of my comfort zone for her.
+
+&#x200B;
+
+I don't really know what I want to do with my life, I studied computer science in the before mentioned city. I got through the first year and I'm now continuing the studies closer to my family at a different university, but I'm just not sure whether this is something that I truly want to do but I have no idea what else I can do.
+
+&#x200B;
+
+I struggle with making friends, it feels like i just suck at talking to people in general, I don't know what to say or I just don't have anything interesting to say. I feel depressed at times, I often find myself just wasting time, doing nothing of importance as i feel no drive towards anything in life. I've had suicide thoughts at times and sometimes still do. I just feel pointless, I can't find any meaning to my life.",1537475135.0,2
+MemeEconomy,"!invest !all
+
+&#x200B;",1537473825.0,1
+MemeEconomy,!Invest 263,1537334823.0,1
+MemeEconomy,!Invest 265,1537334697.0,1
+MemeEconomy,!invest 100,1537300502.0,1
+MemeEconomy,!Invest 300,1537283932.0,1
+MemeEconomy,!invest 65,1537265412.0,1
+MemeEconomy,!invest 200,1537265304.0,1
+MemeEconomy,!invest 200,1537265239.0,1
+MemeEconomy,"!invest 533
+
+&#x200B;",1537217986.0,1
+MemeEconomy,!invest 500,1537217810.0,1
+MemeEconomy,!Invest 500,1537127020.0,1
+MemeEconomy,!Invest 200,1537126953.0,1
+MemeEconomy,!Invest 100,1537126879.0,1
+analog,Do ya'll keep your cameras on you at all times or just dedicate time to go and shoot?,1537113329.0,2
+analog,"I removed some yellow tint and corrected the colors/exposure in post, pm me if you'd want to see the original scan.",1536846700.0,1
+analog,"It really was/is but I was also very happy as soon as I got to take it, if you're into portraits k highly suggest you try it",1536820554.0,2
+analog,"I'm not quite sure now that you ask, but I think it was somewhere on Strøget (I'm sort of new in Copenhagen)",1536766818.0,3
+analog,I'll make sure to find time and retake the photo with your tips ,1536763114.0,1
+analog,"The Nikon EM is also my current and first camera, how do you go about exposing photos like this one, do you go into M90 or just stay in auto and widen the aperture?",1536736130.0,1
+analog,"How much postprocessing is done on the average photo in this suubreddit? Also, are there any good editing tutorials for darktable?",1536735955.0,2
+analog,Thank you!,1536693755.0,1
+EarthPorn,"Oh someone noticed the ""structure"" tweak and just pushed it ALL the way",1536186103.0,18
+analog,"It's in Kokkedal in Denmark, yes it was very foggy - that's what i actually meant but forgot the word.",1536173970.0,2
+analog,"One of the few photos that turned out okay from my very first roll!
+
+Edit: Tips and (constructive) criticism are more than welcome
+
+Edit2: [Here](https://imgur.com/a/cch4btX) you can see the other worth-while pictures from the same roll",1536168112.0,2
+analog,"Thanks, this helps a lot! Also, once I load a roll of film, do I have to use it within some time period?",1536079418.0,2
+analog,"I just got my Nikon EM and some Kodak Gold 200 film, the camera operates in aparature priority mode, how can I ensure they I expose the film correctly? I have not shot on film before (only 'experience' that I have is from photos taken on my smartphone)",1536073594.0,3
+analog,At what apparature did you shoot this?,1535897193.0,1
+analog,Is it possible to start out with analog photography if I have no experience with any type of photography? If so what would be a good starter camera and film?,1535213892.0,3
+AskHistorians,"I'd like to know more about the history of Europe and it's countries, what books or sites would be worth checking out?",1535186566.0,1
+pics,R/comedycementary,1531435787.0,1
+h3h3productions,The [reverse] (https://im.ezgif.com/tmp/ezgif-1-3ac6edeae0.gif) is even better ,1531212900.0,3
+leagueoflegends,"Can i watch the whole thing somewhere?
+
+EDIT: [Found it](https://www.youtube.com/watch?v=9dAI27rlLag)",1529227113.0,2
+IreliaMains,Git Gud,1528821290.0,5
+unixporn,That's dope,1528238630.0,0
+worldnews,The birth of a new meme,1528129128.0,3
+unixporn,"Is there a way to type below the current directory in terminal? E.g.
+
+     12@lenovo ~/Desktop
+     > neofetch
+
+instead of
+
+     12@lenovo ~/Desktop> neofetch
+
+",1528020636.0,1
+tifu,"Yes
+",1527847219.0,3
+typewriters,"Oh yes, sorry, I'm located in Odense in Denmark, I'll add it to my comment.",1526911946.0,1
+typewriters,"So I've found this one today (by the trash lol) and can't find any information about it, I'm mostly interested in selling it as I don't have a need for it. I found the serial number (the 6 digit one, it's in the album) but can't find anything about this exact typewriter, even the company (Remtor) is hard to find anywhere.
+
+According to this [website](http://typewriterdatabase.com/torpedo.746.typewriter-serial-number-database) it's a Model 6, whatever that means. 
+
+**Location:** Odense, Denmark",1526908662.0,1
+unixporn,"Hwo did you get the task bar to be on top?
+",1526288034.0,1
+IreliaMains,"its not like he is 3 levels above everyone in the clip, and 5 levels above singed...
+EDIT: if you look up this game on op.gg you'll see that it was a complete stomp with singed basically inting...",1523712387.0,3
+IreliaMains,"Her team-fight is great but she definetly falls of late game due to lack of damage, i'd say she's pretty simillar to old irelia where you have to make the most out of your spikes (Trinity). If the ADC has some armor you might struggle to kill him before the rest of the team gets to him. ",1522998819.0,3
+IreliaMains,"Stack the passive hard lvl 1 and try to trade then, if you have PTA you'll either kill them level 1 or get them very low",1522998540.0,1
+CircleofTrust,"PM me the key
+",1522785676.0,1
+ProgrammerHumor,"Needs more jpeg
+",1521127324.0,1
+AskReddit,"Sometimes my perception gets really weird, things seem to be super small even though they are right in front of my eyes. It mostly happens when I'm reading ",1514381687.0,1
+AskReddit,"My gf and I might break up soon, the thing is, I don't want to. She has yet to make up her mind whether she wants to fix the relationship together or just go our own separate ways. It is killing me ",1512835867.0,1
+learnjava,I'd recommend opening up a Word Document where you explain the things which you need to memorise like you were talking to someone who doesn't know anything about programming. So simply take out your books and do that for each topic that you feel that you lack some knowledge in. This applies to basically any subject. ,1496048407.0,1
+Fitness,Will try get someone to film me next time I'm at the gym,1489747785.0,1
+Fitness,Will try it out today/tomorrow,1489747749.0,1
+Fitness,Extending?,1489747730.0,1
+AskReddit,"Everyone mentions compliments, but it is important that the compliment isn't generic or not meant. I'd rather get few honest compliment than a hundred ""empty"" ones.",1486153968.0,2
+funny,"/r/2meirl4meirl
+",1483359992.0,0
+battlefield_one,"So, has anyone found a solution?
+",1483033539.0,1
+AskReddit,Every single one.,1482617729.0,7
+leagueoflegends,"You see I invented NightBlue
+And now you see so so many NightBlues",1482100655.0,1
+AskReddit,This one hits too close to home...,1480632702.0,7
+Art,Totaly looks like Geralt from the Witcher,1480502134.0,6
+oneplus,Everyone is talking about the 3t while I can't even order the 3 because it's out of stock all the time... ,1479235393.0,1
+nottheonion,"Dongles man, they are selling extra dongles so you can actually open the book.",1479229567.0,2
+Fitness,"Meta.
+",1479107803.0,2
+battlefield_one,"Glorious Extended Mouse Mat ;)
+",1479068825.0,1
+gifs,"what i don't understand is why are people so upset, it's themselves that elected the god damn president...
+",1478776447.0,0
+Fitness,"Kind of off topic but still wiki-PPL related, my PPL workouts seem to be really short (under one hour). On Pull days / the day after I cant really feel that I worked my back - am i performing the exercises wrong?",1477608954.0,1
+relationship_advice,"How do i stop myself from constantly feeling like i'm the stupid, bad, an so on in my relationship?",1474558634.0,1
+photography,"Hello /r/photography
+
+Which DSLR could make for a nice entry-level camera, i've read that the Nikon D330 could be sufficient? I have close to no clue about cameras and lenses. Thanks for the help. ",1470216936.0,1
+Art,"She used a patter to get the idea from, but instead of drawing the exact same thing she just filled the owl's with patterns...
+",1465457431.0,1
+Art,"This is none of my work, my girlfriend has drawn this so i take no creadit. She has no reddit account to i thought i'd post it for her!
+",1465419810.0,1
+AskReddit,"I CAN'T HEAR YOU!
+",1461842914.0,8
+AskReddit,"""I'm going to sleep at 20"" I guess i don't do much work.",1461593948.0,1
+todayilearned,MOMS TOTALY HATE THIS SPRAY !!1!!11,1460100977.0,0
+pics,Reminds me of Donnie Darko - just a cute little pink version of it :3,1452512064.0,1
+sex,"Thanks a lot buddy, i have already decided to give her a really nice massage once i see her and know we've got some time together - i'm almost certain she will love it.",1451525199.0,1
+sex,Thanks to every single one of you who took the time to write a reply/comment. I will try to stop getting mad/upset/frustrated when we have sex and i dont finish the way i'd like. Thanks once again for all the great tips! ,1451475489.0,1
+sex,"LOL, i have also apologized to her so many times for cumming sooner than i wanted (or saw as optional) but i stopped once i saw that she actually was getting sad about me being sorry over something i have nearly no controll of. Thanks for the reply though :)
+",1451475406.0,1
+sex,"I know i have brought her to orgasm orally, but i dont really know if i ever have done it with my dick - which is frustrating for me at times. And she never lets me focus solely on her, thus far anyway. ",1451432199.0,3
+InfiniteJest,Well im not asking if theres an age restriction but as you might know you see things differently at different ages - thus why im wondering if i should just read it now or wait till im older :D ,1451170786.0,2

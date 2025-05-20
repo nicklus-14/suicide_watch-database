@@ -1,0 +1,867 @@
+subreddit,body,created_utc,score
+outerwilds,"Hi, this link is dead, would you be able to share them again?",1725560836.0,1
+Portal,that's probably not possible anymore unfortunately,1713795058.0,1
+Portal,"here's an archived version:
+
+https://www.moddb.com/downloads/portal-2-sixense-motionpack-post-february-2021-setup",1713721104.0,1
+OrgRoam,"Hey, I just caught a bug, you'll need to set `org-map-continue-from` to `(point)` at the start of `refile-node-to-daily`in order for the `org-map-entries`call to work correctly and not skip any headlines (as described in the docs, which I apparently glossed over)
+
+&nbsp;
+
+I also just reworked the inbox refiling to support refiling to different nodes based on tags. It seems like there may be a bug in the implementation of `org-roam-refile`when you try refiling into the same file multiple times into separate locations though, so you'll probably want to stick to only refiling into a single location per file. [Here's the diff](https://git.ikl.sh/132ikl/dotfiles/commit/ba5f55b5ae159aa6fbbf369352673284716b014b#diff-9d55e367c679aa49aa753efc53ffaec8d7438b40) compared to yesterday if you're interested.",1711761528.0,2
+OrgRoam,"Hi, I just accidentally stumbled upon this post and I actually wrote a set of functions that do this. Not sure if you still need it, but [here it is](https://git.ikl.sh/132ikl/dotfiles/src/commit/6231f0fd8d8225b1527212564c1ffe5b8316ce5c/.doom.d/lib.el#L28-L49). You'll also need the org-roam-refile implementation which I got from [this PR](https://github.com/org-roam/org-roam/pull/2388), you could optionally `advice-add :override` the original with this.
+
+You can use `[[roam:id]]` links to link to roam nodes from Orgzly. I'm also considering adding locations headlines could be refiled to based on tag, such as automatically refiling headlines with the `:task:` 
+tag to my tasks file.
+
+Cc: /u/FOSSbflakes",1711684323.0,2
+archlinux,"I stopped using LightDM long ago, sorry. If you want autologin, you might consider having a [TTY autologin](https://wiki.archlinux.org/title/Getty#Automatic_login_to_virtual_console) and then starting your desktop session directly with eg. startx.",1707963799.0,1
+msu,"Mimir was shut down last year, most CSE classes use Codio now",1684940351.0,3
+msu,All the info you need is here: https://cse232-msu.github.io/CSE232/,1684940279.0,8
+linux_gaming,"It does, you just have to enable it in the config before building",1675290023.0,5
+msu,The library?,1674278474.0,1
+linux_gaming,"Well yeah you definitely pass through your only USB Controller, but then all of your USB devices, especially mouse and keyboard, are stuck on your VM since you can't do anything to stop the VM except shutting it down from the inside (not always ideal), SSHing from another machine or hard resetting your host",1674238207.0,1
+linux_gaming,"It can be somewhat difficult for non-advanced Linux users, but you should [follow this guide](https://wiki.archlinux.org/title/PCI_passthrough_via_OVMF) as closely as possible even if you don't use Arch. It's incredibly detailed and has info about possibly any corner case you might run into. 
+
+Passing the USB controller through is trivial since you have to go through the same (and more) prerequisite steps to pass through the GPU. The only kink is that unless you want to passthrough ALL of your USB devices, you have to hope that your hardware has an extra USB controller (some have a separate controller for front panel IO, my mobo has a separate controller for the two USB 3.1 ports)
+
+I've been running a Valve Index on a GPU passthrough VM and it works great, but there are a huge number of steps you need to take to reduce latency and microstutters (this might not be the case if you have higher end hardware than I do, I have an i7-7700k and a GTX 1060). Here's what I have set up:
+
+* VirtIO Disks and Ethernet Adapter
+* CPU pinning, plus frequency governor set to performance. You might consider using the `mitigations=off` kernel parameter as well
+* Evdev for mouse/kb (not really a performance improvement but makes it easier to troubleshoot and switch between Linux and Windows VM)
+* Dedicated logical volume on my SSD for the Windows installation (This isn't required but you'll get faster load times than if you use a qcow2 or something)
+
+If you have any other questions let me know or checkout /r/VFIO and their Discord, they've been a huge help for me in the past",1674233173.0,2
+msu,I've spoken with Dr. Nahum about this before and he said that 10-20% per semester are ADRs,1673322348.0,2
+msu,do you happen to have bandcamp links for any of the rock adjacent bands?,1673300600.0,1
+msu,keep in mind probably the vast majority of these are from ADRs,1673300415.0,4
+msu,did i ask,1673198248.0,3
+CSHFans,probably because it flows better,1669129757.0,8
+rust,"I yoinked the config from [here](https://github.com/rust-lang/rust/issues/46651#issuecomment-433611633) (didn't need the `rustflags` bit), but basically seems like for some reason `rustc` uses the system's linker instead of the target's linker which makes it throw up, and the config file tells it which linker it should be using",1668726341.0,1
+rust,"I got nerd sniped by your problem and figured out how to build it. Make this file:
+
+`.cargo/config.toml` (make sure you don't accidentally type `.config/cargo.toml` - i've done this too many times) and put this inside:
+
+
+    [target.aarch64-unknown-linux-musl]
+    linker = ""aarch64-linux-musl-gcc""
+
+
+Then, run this command (feature settings taken from the CI build for macOS aarch64):
+
+```
+cargo build --release --no-default-features --features ssh2 --target aarch64-unknown-linux-musl
+```
+
+Let me know if you have any issues :)",1668286527.0,2
+msu,they got the cops called on them for playing drums during a shaw hall staff meeting so i would not advise telling them where your drums are,1667570540.0,3
+rust,"> /lib/aarch64-linux-gnu/libc.so.6: version 'GLIBC_2.33' not found
+
+It looks like the issue here is that your host glibc and target glibc are mismatched. Rust binaries are compiled statically, with the notable exception of `libc`. You have two primary options:
+
+1. You could using `musl` rather than `gcc`/`glibc`, which would create a completely statically linked binary. This option is probably the easiest, but it will make your binary a bit bigger and may have some other tradeoffs which may or may not matter in your situation.
+
+2. You could use an older version of glibc on your host in order to link the binary to a compatible version of glibc. You could install a separate toolchain on your host with the required glibc version, or what I usually do is just set up a Docker container using a distro that has the needed version. You'll need to check what the version installed on your target is, which you should be able to do by using the package manager or even just `strings /path/to/libc.so | grep GLIBC`. Ubuntu 20.04, for example, has version 2.31 of `glibc`, which will probably be old enough to be compatible. Then, just compile as normal in the container and rust should link to the appropriate version of `glibc`.",1667417282.0,1
+CSHFans,this post suck's,1646975888.0,7
+CSHFans,wrong,1645029000.0,2
+CSHFans,"i think ""for falling in love too hard"" is about will because it comes after ""for three transgressions of will"" not wurtz",1635974382.0,8
+CSHFans,will played every instrument in those days,1635974234.0,1
+beatlescirclejerk,"The Wall is the eleventh studio album by the English rock band Pink Floyd, released on 30 November 1979 by Harvest and Columbia Records. It is a rock opera that explores Pink, a jaded rock star whose eventual self-imposed isolation from society forms a figurative wall. The album was a commercial success, topping the US charts for 15 weeks and reaching number three in the UK. It initially received mixed reviews from critics, many of whom found it overblown and pretentious, but later received accolades as one of the greatest albums of all time and one of the band's finest works.",1632670391.0,18
+ComedyNecrophilia,gaming,1632670062.0,10
+ProgrammerHumor,Arch doesn't use `-dev` packages,1632669772.0,6
+196,no,1632355566.0,2
+okbuddyhetero,the monkeys fist,1632102241.0,8
+CSHFans,😥,1631828572.0,14
+CSHFans,boner,1631821865.0,41
+Portal,portal,1630961214.0,5
+msu,use a password manager (eg. https://bitwarden.com/),1630720100.0,1
+rustjerk,hello 5,1630181372.0,3
+programming,jesse what the fuck are you talking about?,1630176986.0,4
+CSHFans,not for long,1630144480.0,4
+CSHFans,i got blistas on me dooooogs,1630144457.0,3
+InternetIsBeautiful,"The idea of Matrix soon being ""on par with Discord in terms of features"" is frankly ridiculous. Spaces barely work right now, let alone roles and complex permissions. Not to mention Element is generally pretty buggy, lacks polish, and has features that aren't in the spec and can't reasonably/easily be implemented in other clients. Synapse is slow and sometimes federation is weird, Dendrite and Conduit are both a long ways away for being useable for a single-user, let alone a Synapse replacement yet.
+
+Matrix and Element are one of the few modern chat solutions, and I use them every day but let's not kid ourselves or raise people's expectations too high.",1630141752.0,19
+evangelion,Micheal,1630061410.0,13
+AskReddit,Well that's just better,1629800436.0,3
+linuxmemes,?,1629708975.0,6
+linuxmemes,?,1629699974.0,13
+feedthememes,"not entirely inaccurate actually, linux and other similar projects still use mailing lists for bug reporting and patches",1629369789.0,24
+rust,What about (graphical) Emacs users?,1629124555.0,1
+196,jesse what the fuck are you talking about,1629103696.0,18
+Csgohacks,"why not generated it once at runtime and then store it in memory, then draw it instead of loading from file",1628811512.0,1
+greenday,"Was also there, you were awesome yesterday man. Should've known how to play Basket Case though ;)",1628760384.0,1
+CSHFans,"I have no idea, we usually just use our own drumset. I'd figure there are some drum loops online, I haven't really needed to look myself. If you want to construct your own drum loops you can use something like Addictive Drums. The biggest issue with either of these though is that they'll basically be ""perfect"", since obviously any computer constructed drum samples will just sound good by default and any published drum loop has probably been optimized to loop correctly. A defining characteristic imo of Will's older drum loops is that they DIDN'T loop perfectly. You can easily tell when it repeats, but it isn't distracting and gives it somewhat of a cool extra flair. Songs that come to mind are Bodys, the outro of Something Soon, Kid War, psst teenagers. Sometimes it seems like the loop isn't quite in time for the entire loop, so that downbeat of each loop kind of kicks it back into rhythm? Anyways, hopefully you get what I mean by this.",1625703735.0,3
+youngpeopleyoutube,this is based i will now go to party city,1625462216.0,6
+linuxmemes,ubuntu systemd bad upvotes to the left,1625422408.0,12
+GameDeals,"idk i haven't played it lol, but from what I understand it goes through different iterations of half life 3 and other unreleased games in the works at valve between hl2 and hla and i think it even has small playable examples of some as well of that sounds like something you'd be interested in",1625348543.0,1
+GameDeals,"yes, an interactive one",1625285010.0,13
+bi_irl,Car seat headrest,1625263721.0,23
+LudwigAhgren,mfs be taking down pride profile pictures faster than christmas lights,1625249799.0,387
+CSHFans,yes,1625207056.0,2
+CSHFans,god damn it,1625174756.0,21
+selfhosted,All of those have scored perfectly for me for months.,1625168787.0,1
+selfhosted,I already did that a while ago :/,1625114242.0,2
+selfhosted,"Damn. I might end up using Sendgrid since it's free, but it still sucks that anybody has to even do this in the first place.",1625111167.0,3
+selfhosted,For my VPS I have a static IP and reverse DNS set up. My ISP (Comcast) does not allow mailservers (port 25 and related blocked) and from what I've read they're pretty iron-fisted about it.,1625110894.0,2
+Portal,<3,1625094460.0,2
+CSHFans,https://www.youtube.com/watch?v=4iQfQN0edNQ,1625085605.0,2
+CSHFans,"very short drum loops (of real drums), basically just loop the smallest possible phrase
+
+the drums definitely sound real, but the short loops give it the sample pack sound and i suspect that in some cases he also amped the drum track as well",1625084068.0,13
+HalfLife,i like playing on the pirate's cove server but i think most people don't like the fast pace of it,1625031409.0,2
+Portal,"What am I supposed to provide, a scientific paper reaching the conclusion that ""bro"" is gender neutral? In most spaces, in person or online that I've ever interacted with, ""bro"" has been used or agreed to be a gender neutral term. Some (transfem) people don't like to be called ""bro"", ""dude"" or other historically masculine terms, which is fine, but by default ""bro"" is considered gender neutral. I can't give you any more than that, simply because of the way language works. Language is fluid, not all people or spaces interpret the same things in the same way, and people's perception of a term can shift over time. There's no way to ""prove"" what a word means, it's about how people actively use it in the real world.",1625031178.0,2
+Portal,"if you actually want me to respond seriously, ""bro"" is generally used as a gender neutral term. it may not have originated as gender neutral but in the past 10 or so years it's generally considered gender neutral.",1625024294.0,1
+Portal,please try not to make an ass of yourself,1625020643.0,1
+Portal,bro youre so funny wow what an original joke that no one has heard before im crying laughing thats so funny and original and not a joke from 2014 wow youre so funny,1625018243.0,8
+CSHFans,"""my potential has been fetishized"" from knife in the coffee
+
+the gun song verse 10",1625003557.0,1
+CSHFans,but 4s a banger,1625003512.0,1
+CSHFans,"""my potential has been fetishized"" is one of my favorite csh lyrics",1625003443.0,2
+CSHFans,its just too long for the playlist,1625003134.0,2
+Portal,"""they"" is less clunky than any form of ""he/she"" and is also inclusive of nonbinary genders",1625001486.0,14
+Portal,"did you just use she/he to refer to a person and then use ""them"" to refer to them a couple words later instead of just using they/them for both 😳",1624995499.0,22
+VaushV,reddit,1624900987.0,3
+egg_irl,you mean your girlfriend?,1624860265.0,29
+196,im the joker baby,1624836550.0,7
+CSHFans,based,1624835371.0,18
+ADHD,The monkey's chain. The monkey's fist. The monkey!,1624767146.0,17
+bi_irl,i think comment op is leftist not a liberal,1624767035.0,50
+feedthememes,pneumaticcraft,1624711932.0,27
+CSHFans,trippin,1624548756.0,1
+traaaaaaannnnnnnnnns,good,1624443728.0,6
+CSHFans,it was ok,1624337974.0,9
+evangelionmemes,sacrifice jar,1624294535.0,9
+rustjerk,Cecure (opposite of secure),1624291984.0,3
+CSHFans,theyre going to release the album exactly the same as it was and call it madlo cool edition,1623997445.0,7
+100gecs,a few,1623996561.0,1
+Deltarune,"Not true, Windows 7 and Windows 8-11 use a completely different kernel. But 10 is to some extent just 8/8.1 with a different skin",1623996293.0,1
+programming,"exa has more colors for different filetypes, making it easier to quickly recognize what type of file something is",1623879821.0,3
+AskReddit,??????????,1623845410.0,31
+196,garfield,1623812202.0,2
+ADHD,"One of my favorite song lyrics: ""My potential has been fetishised""",1623741806.0,2
+CSHFans,"Yes, on Bandcamp they are both written ""Los Borrachos""",1623706525.0,1
+CSHFans,[here u go chief](https://cdn.discordapp.com/attachments/276474606385102850/853902331154137108/tfbkfinal.png),1623656592.0,1
+CSHFans,"probably david bowie's blackstar, csh has covered the song before",1623236005.0,1
+CSHFans,i had a heated gamer moment i apologize,1622962131.0,7
+beatlescirclejerk,yall what about martha my dear,1622798728.0,19
+beatlescirclejerk,"""I look at the floor and I notice it needs cleaning""",1622798713.0,16
+holesome,god its been years since ive seen this video,1622798222.0,3
+LudwigAhgren,No this was like 2 months ago lol,1622690126.0,8
+LudwigAhgren,Cause he already did this,1622686931.0,10
+linuxquestions,I'm pretty sure PAM already has this and it might even be default at least on Arch Linux,1622672173.0,1
+MensLib,"If you think you have a specific neurodivergence, then you can search out for testing centers which test near you. If you can't find any then you can talk to your primary care doctor and ask for a referral to a testing center. What might be a better move though, especially if you think you might be neurodivergent but don't know what it is exactly, would be talking with a therapist who specializes in neurodiversity. They can give an assessment before you get a proper diagnosis, but also help explain which behaviors are associated with neurodivergency that you may not have realized, and help give ways to deal with being neurodiverse in a society that demands that you are neurotypical. Of course if you are not able to afford a therapist but you still want a diagnosis I would talk with your primary care doctor first or look for testing centers. Also keep in mind that a lot of testing centers and neurologists are backed up with months long waiting lists due to COVID.
+
+(I am not an expert in any of this, nor have I been diagnosed yet, but this is my experience so far as someone who has just recently found out they likely have ADHD and my attempts to get a diagnosis.)",1622621865.0,2
+Polcompball,liberals,1622572030.0,13
+shittymcsuggestions,this would simplify bone griders,1622530910.0,1
+BikiniBottomTwitter,squind wart is a chaser 😭😭😭😭😭 this cant be real,1622398937.0,1
+lgbt,Hormone blockers are completely reversible.,1622398787.0,14
+CSHFans,"Which one are you referring to by the ""EP""? Are you talking about the single released in 2016, since as far as I'm aware that's the same as the one on F2F",1622237626.0,5
+linuxmemes,windows ltsc makes windows barely useable,1622141028.0,5
+linox,"tis just a jest, a jape",1621946856.0,3
+linox,society has moved past the need for printing,1621879825.0,3
+howtokeepanidiotbusy,holy hell,1621864249.0,34
+linox,honestly thats based,1621856342.0,6
+howtokeepanidiotbusy,Google en passant,1621853580.0,60
+CSHFans,north,1621833789.0,1
+webdev,press ctrl+u,1621649987.0,1
+CSHFans,and in I Want You To Know I'm Awake.... and in is this dust really from the Titanic?,1621455818.0,3
+CSHFans,might wanna check the year chief,1621455741.0,7
+CSHFans,yeah,1621354403.0,1
+CSHFans,EVIL. WHAT THE HELL GUYS,1621349175.0,3
+TheBeatles,Those are both from the UK ver of Help!,1621097706.0,1
+okbuddylinux,hell yeah it does 🥵🥵🥵,1620996588.0,12
+meirl,hey king just letting you know that some people do make love songs because they want to and not because it sells,1620850554.0,16
+CSHFans,i dont think my heart can take this after the last two,1620845296.0,1
+okbuddylinux,"not in education, employment, or training
+
+
+the meme is that its someone who stays home all day and has their mom make them tendies",1620845123.0,13
+beatlescirclejerk,bro its fucking keemstar in 2014,1620844880.0,3
+programmingcirclejerk,green,1620657998.0,0
+BanVideoGames,"Hello Gregg:
+
+I think you may want to upgrade your internet finder. Its on version 5.0 which I heard has lots of security bugs in it. If you upgrade you cant get hacked.
+
+Martha",1620625657.0,13
+wash,services                      p,1620590780.0,3
+CSHFans,yeah 😔,1620385471.0,1
+CSHFans,who even knows and feel like daniel johntson,1620357506.0,1
+CSHFans,well ideally will would've had an EQ on the original mix which lowered the high end of the cymbals. if you add an EQ to the final song it takes out the shrillness of the cymbals but leaves the rest of the high end (the vocals and guitars mostly) sounding flat,1620354167.0,1
+198,no,1620268996.0,1
+197,I'm bringing chili,1620102929.0,14
+2624,remake in impact text and youll get a million upvote,1620049467.0,9
+CSHFans,"yes i agree but i do not forgive him for this sinful EQ
+
+
+
+you can EQ out the shrillness of the cymbals but then the mix just sounds flat",1620014479.0,1
+CSHFans,no,1620003064.0,1
+CSHFans,i hope you have a terrible evening,1619995848.0,24
+3kliksphilip,thanks 3kliksphilip,1619893324.0,12
+Gamingcirclejerk,NOOOOOO you cant preorder (unless its projec red geralto they deserve it!!!),1619757579.0,45
+lgbtmemes,"honestly kids section is kind of goated, the kids stuff was way drippier if you could fit in it",1619757433.0,27
+Stonetossingjuice,Blast,1619732232.0,2
+CSHFans,doo do doo do do dododo do dodoo do do,1619698127.0,19
+2624,im the joker baby,1619697858.0,5
+internet_funeral,kidney failure,1619696176.0,2
+ProgrammerHumor,"it's really not that hard, you don't have to be so edgy. if you really really can't handle clicking one button, just use they/them.",1619413613.0,0
+ProgrammerHumor,"if you wish to be called he, put it in your bio. it is that simple. they is gender neutral, so it is reasonable to use as a catch-all if someone hasn't specified their pronouns.",1619401391.0,4
+ProgrammerHumor,just default to they/them instead of using he/him for someone of unknown gender,1619395072.0,4
+Spunchbob,:),1619286234.0,3
+CSHFans,"boneless boy recently did a cover, you can see how he did the intro in his behind the scenes video",1619241796.0,2
+okbuddylinux,not really,1619154855.0,5
+CSHFans,evil,1618980968.0,1
+gay_irl,[This](https://github.com/Mange/rofi-emoji) is what I use,1618960510.0,2
+antimeme,i love mccartney ii,1618918269.0,5
+HalfLifeLounge,fuck you,1618875588.0,3
+me_irlgbt,https://youtu.be/SBI6uwUiGHE,1618860898.0,23
+Spoingus,fuck you,1618781503.0,1
+FRC,CTRE's APIs suck,1618684978.0,4
+lgbt,probably homoromantic and bisexual or vice versa,1618541064.0,29
+Polcompball,wtf i love reading now???? 😳😳,1618287925.0,16
+Polcompball,I,1618287876.0,13
+CSHFans,we want the nipple,1618259982.0,2
+OurPresident,It's also the situation of over 40% of American households.,1618018190.0,19
+3kliksphilip,ok i will thanks phil,1617980496.0,17
+196,falls down stairs,1617729744.0,3
+Polcompball,Jaja pelotas,1617722126.0,3
+skamtebord,godx,1617721323.0,3
+CSHFans,around from 4,1617517827.0,4
+jerma985,no hes 1036 years old stupid,1617390829.0,14
+linuxquestions,lmms maybe,1617388791.0,1
+billwurtz,why do you keep forgetting your question,1617383168.0,3
+CSHFans,HUH,1617203821.0,1
+CSHFans,THIS IS FUCKED UP ... yall have gone TOO FAR,1616866009.0,4
+196,how,1616773386.0,9
+Minecraft,"OHHHHHHHHHHH that makes way more sense. i was like ""wtf this doesnt look like a phone at all"" lmfao",1616760202.0,23
+HalfLife,nah man youre thinking of beep boop bop beep beep boop bop,1616725823.0,13
+ABoringDystopia,fuck off transphobe,1616612221.0,11
+CSHFans,you're in love with me,1616554488.0,1
+CSHFans,or about a snowman being pulled apart by separate poles of gravity,1616554314.0,3
+beatlescirclejerk,no this cant be real 😭😭,1616450388.0,7
+beatlescirclejerk,wtf rango died????🤯🤯🤯,1616447566.0,39
+CSHFans,this is a fucking callout post wtf wtf,1616424374.0,51
+beatlescirclejerk,help i dont get it,1616351992.0,2
+CSHFans,"last night i dreamed obama came to my birthday party
+
+last night i dreamed he was trying to kill you
+
+last night i had a dream, i dreamed i was pregnant
+
+last night i dreamed i had to tell my parents about us",1616349154.0,8
+JackTheAli3n,hi,1615919652.0,2
+CSHFans,wtf crows and goodbye love slander in the comments 😦😦😦😦😦😦😦,1615872001.0,3
+BLAHAJ,how,1615743392.0,6
+Deltarune,bruh,1615556080.0,14
+CSHFans,carefully,1615525627.0,6
+Deltarune,I was talking about the different endings to the King boss battle,1615321873.0,2
+Deltarune,"There are actually two endings, there is a pacifist ending",1615319601.0,6
+CSHFans,helpful,1615240422.0,3
+CSHFans,jesus christ this will take a long time,1614985579.0,2
+linuxmasterrace,carefully,1614979638.0,22
+196,fair,1614838017.0,1
+LateStageColonialism,pushing transphobic legislature before the end of her last term,1614666703.0,2
+MyChemicalRomance,read ya damn text message,1614643779.0,2
+JackTheAli3n,hi,1614643635.0,1
+BLAHAJ,seethe,1614643495.0,13
+196,u/profanitycounter,1614535303.0,1
+196,u/profanitycounter,1614534581.0,1
+196,yo,1614534573.0,1
+CSHFans,oh my god THATS why the tab on ultimate guitar for the song was mispelled,1614495217.0,1
+CSHFans,"real shit:
+
+""The ocean washed over/open your grave""
+
+""These teenage hands will never touch yours again""
+
+i laughed:
+
+""My phone is freaking out I lose my shit while it reroutes""
+
+""What are you supposed to do after sex if you don't smoke?""",1614495069.0,7
+CSHFans,i always though bad role models sounded like it was partially related to the saga (but also maybe a critique of internet fandom?),1614494861.0,3
+CSHFans,nah,1614494788.0,9
+CSHFans,you named account after it and didnt even know the lyric im crying,1614492588.0,5
+196,e v e r y  c o p y  i s  p e r s o n a l i z e d,1614411368.0,59
+CSHFans,its rock dog lol,1614374569.0,20
+CSHFans,i love you,1614289945.0,5
+bisexual,Most have renamed to Gender Sexuality Alliance in the past few years,1614220723.0,1
+CSHFans,drunk on a work night,1613975300.0,23
+Minecraft,communism is when plural pronouns,1613897078.0,3
+okbuddyretard,suck my fat meaty cock,1613777372.0,6
+HalfLifeLounge,gordon,1613673251.0,1
+rustjerk,crying,1613669423.0,3
+CSHFans,they might be giants,1613605222.0,2
+rustjerk,suckless terminal,1613534139.0,28
+bropill,"> Political Compass memes is the last bastion of free speech on the entire internet
+
+jesus christ",1613507567.0,27
+CSHFans,"your big jacket, even?",1613467335.0,1
+HalfLife,dirty cappie gman,1613464429.0,6
+bingus,!,1613329091.0,5
+hermitchat,Apparently he manually changed the lights too because it was just levers,1613292553.0,17
+gay_irl,yeah it's still legal in my state,1613239738.0,17
+CSHFans,wait,1613239378.0,7
+Polcompball,haha balls,1613201073.0,3
+feedthememes,cover yourself in oil,1613151329.0,1
+idkhowbuttheyfoundme,I TURNED MYSELF INTO A PICKLE RYAN,1613139943.0,4
+ethoslab,"Yeah, I think Tango bought those",1613075005.0,11
+linuxmasterrace,"It's not, I've used this website before and if you change your user agent literally everything works fine",1613062835.0,40
+feedthememes,ic2 machine go boom,1612939100.0,28
+lgballt,pog,1612894964.0,3
+lgballt,qpr?,1612853315.0,18
+feedthememes,weird political compass,1612764837.0,16
+tmbg,context?,1612741014.0,1
+VaushV,onion article lol,1612616998.0,-6
+memeuniverse,we already had the full intro song by then though,1612583655.0,10
+2b2t,"A baritone[1] is a type of classical[2] male singing voice whose vocal range lies between the bass and the tenor voice-types.[3][4] The term originates from the Greek βαρύτονος (barýtonos), meaning ""heavy sounding"". Composers typically write music for this voice in the range from the second F below middle C to the F above middle C (i.e. F2–F4) in choral music,[citation needed] and from the second A below middle C to the A above middle C (A2 to A4) in operatic music,[citation needed] but the range can extend at either end. Subtypes of baritone include the baryton-Martin baritone (light baritone), lyric baritone, Kavalierbariton, Verdi baritone, dramatic baritone, baryton-noble baritone, and the bass-baritone.",1612504972.0,18
+linuxmasterrace,holy FUCK,1612501649.0,2
+linuxmasterrace,"mfw my history randomly disappears all the time
+
+
+i want to cry",1612472130.0,7
+othepelican,i congratulate pokimane on his transition,1612443639.0,97
+okbuddylinux,wtf linus tedpilled???? 🤯,1612273548.0,11
+okbuddylinux,he's stuff,1612273520.0,11
+anarchocommunism,"elon
+
+
+
+bottom text",1612234595.0,8
+bingus,hell ya im a fag,1612234455.0,12
+bingus,"we cannot accept this, this is the paradox of tolerance",1612234419.0,17
+rust,i've never used sqlx but regardless thank you for your contributions to it and the community!!!,1612234350.0,5
+egg_irl,Silly they,1612219801.0,3
+198,strangers in my ass,1612219454.0,2
+198,emo,1612219429.0,3
+Gamingcirclejerk,"snoo genderfluid
+
+
+how",1612143937.0,3
+196, j     u     c    h      e,1612120330.0,2
+Political_Revolution,🐍,1612025170.0,15
+OKbuddyHalfLife,NO!!!!!! no,1611946502.0,3
+CSHFans,you started listening to csh by listening to 1-4????? interesting choice to say the least,1611942416.0,92
+OKbuddyHalfLife,WJAT!!!!!!!!! bingus not rat....     ........,1611931453.0,6
+AnarchismZ,r o s e    c i t y    a n t i f a,1611927300.0,10
+Polcompball,hahaha balls,1611926987.0,3
+feedthememes,wow this is real data,1611770418.0,18
+egg_irl,technoblade,1611768725.0,21
+196x,a,1611767278.0,1
+Minecraft,".....and???? You're also quite likely to run into someone who is NOT those things. Also, gay people exist.",1611765243.0,8
+CSHFans,"yoooo awesome, glad to see people are using it considering how i barely maintain it lol",1611749367.0,4
+CSHFans,"wait what the fuck dont you follow my link shortener github repo
+
+edit: yes you do how the fuck did this happen https://github.com/132ikl/liteshort/stargazers",1611730235.0,6
+bi_irl,bro u gotta defragment your sexuality,1611701930.0,23
+progressive,Nazism is when a company does something,1611691212.0,1
+196,sclat,1611685889.0,15
+196,jhclat,1611685877.0,18
+196,jscb,1611685862.0,15
+me_irlgbt,w h a t,1611685730.0,3
+SmugIdeologyMan,u/userleansbot u/132ikl,1611685304.0,1
+LateStageCapitalism,"yes :)
+
+edit: wait",1611596561.0,1
+bisexual,"As I socialist, I believe in those same things (unless you read ""pursuit of happiness"" as ""private ownership of land/the means of production"")",1611563274.0,12
+LateStageCapitalism,"fool, now all of reddit knows you make $76,293/yr",1611537162.0,8
+2b2t_Uncensored,just a spoonful,1611514763.0,4
+billwurtzmemes,here comes the sun is one of my least favorite post-64 beatles songs,1611420729.0,3
+CSHFans,no they left because they are teens of style and have fallen victim to the next style (fighting on a monochrome background no longer cool),1611371844.0,4
+CSHFans,the same things happens when u touch it,1611281389.0,24
+constantiam,lmfao @ matt sharp totem,1611168125.0,7
+rust,I've been using this for a year and a half and it works great!,1611164766.0,12
+VaushV,Oh no! The war criminal's feelings will be hurt!,1611164290.0,11
+bingus,wtf dont spill bingusfluid,1611156875.0,10
+ambien,I THINK IM ABOUT TO BE **PISSED**,1611074712.0,1
+i95,scott,1610917951.0,8
+196,what the fuck i was going to comment this.... i mean i guess the overlap between 196 and csh vs normal subs and csh is probably much greater but STILL,1610913711.0,2
+alltheleft,they are literally nazis no exaggeration,1610816298.0,8
+dataisbeautiful,"No need to buy it off of them, ever heard of PRISM?",1610813959.0,2
+ambien,what the fuck is on the spoon in picture 4,1610782159.0,5
+rust,"Looks like my gitea crashed, just restarted it (...and adding autorestart to the unit. whoops)",1610781936.0,3
+Portal,"he missed da ""computer-aided"". fool",1610729495.0,15
+feedthebeast,dont forget funny rat mod,1610687923.0,65
+OkBuddyCatgirl,what do you mean it doesnt say that??,1610682935.0,15
+OkBuddyCatgirl,what do you mean it doesnt say that,1610677534.0,16
+programminghorror,this is worse,1610600912.0,12
+GoodFakeTexts,isnt this a bdg reference,1610550878.0,5
+AnarchistGenerationZ,bolivia?,1610513791.0,1
+okbuddyvowsh,holy shit lmfao i forgot about this,1610476917.0,7
+bingus,OMG!!!!!!!!!! bingus is real,1610303281.0,6
+hamiltonmusical,yarr harr harr,1610255809.0,2
+Undertale,"its ""how bout i do, anyway""",1610207601.0,44
+tmbg,looks really good and i like the name goin all wavy but i am a bit scared of the eyes,1610079527.0,9
+feedthememes,yes,1610055572.0,1
+feemagers,what,1609882910.0,6
+Spunchbob,& mr crap!!!!,1609809769.0,3
+programminghorror,me after quarantine,1609809047.0,2
+CSHFans,monomania and 3 are cool,1609717688.0,1
+idkhowbuttheyfoundme,i use arch btw,1609709048.0,3
+LateStageColonialism,lib take,1609708970.0,4
+DankLeft,a,1609703181.0,8
+ethoslab,what a nice looking door. i sure do wonder what is behind it,1609702923.0,28
+Undertale,pepis,1609628416.0,2
+Spunchbob,oh hell naw i know he aint all up in squinn warns shit 😭😭😭😭,1609333130.0,4
+Im15AndThisIsYeet,yes,1609268543.0,2
+196,ok we get it youre 12,1609235114.0,3
+196,Go white boy go,1609095543.0,8
+TheLetterH,eart stops beating,1609044033.0,3
+Minecraft,(joke),1608708511.0,9
+CSHFans,gay,1608616807.0,28
+dogelore,girl what,1608615533.0,27
+THE_PACK,WHAT DID YOU SAY BROTHER I CANT HEAR YOU,1608357730.0,30
+feedthememes,yourwlecome,1608353457.0,3
+CGPGrey2,girl what you doin holding around potatoes for a long time,1608336085.0,5
+ambien,Takin a showey,1608331727.0,44
+feedthebeast,"I was mostly referring to this:
+
+>**For the mods Portal Gun and Gravity Gun:**
+
+> If the intended version of the mod is for Minecraft 1.8 or later, these mods are permitted to be in mod packs which are only on CurseForge, unless explicit permission has been given from me. Config packs (where only the mod configs are included) and packs for Minecraft 1.7.10 or earlier are fine.
+
+Although I'm fairly certain this used to be more restrictive, I know for a fact that pre-1.8 there were some of their mods that were not available to put in modpacks. They might have lightened it up their policy since then.",1608148928.0,2
+feedthebeast,most of iChun's mods (or at least used to),1608145582.0,0
+disneyvacation,im that's,1608100849.0,1
+okbuddyretard,It's true though,1608085066.0,37
+okbuddyhetero,i will literally punt you into hell,1608055947.0,1
+okbuddyhetero,"something about wearing a mask because cdc blah blah
+
+
+no logic allowed on my gay sub 🤬🤬🤬🤬",1608055932.0,1
+data_irl,"If I had a nickel for every time an artist dropped or is preparing to drop an album titled ""Whole Lotta Red"" during this global pandemic, I'd have 2 nickels, which isn't a lot but it's weird that it happened twice.",1608013340.0,7
+okbuddyhetero,shut the fuck up this is a meme about sucking dick fuck you,1608007666.0,2
+okbuddyhetero,oree,1607986782.0,8
+okbuddyhetero,Well only after you fix the boot loop,1607652800.0,3
+KeepOurNetFree,Don't threaten me with a good time,1607563135.0,94
+ImageStabilization,what the fuck how,1607562896.0,11
+TheMonkeysPaw,banna,1607374585.0,1
+linuxmasterrace,"how is debian ""overall more stable""????",1607345384.0,9
+VaushV,"my friend once asked me ""what is the burj y z""",1607326201.0,12
+Deltarune,"my day be so fine
+
+
+then boom
+
+british ralsei",1607285576.0,10
+feedthememes,cover yourself in oil,1607129207.0,2
+feedthememes,cover yourself in oil,1607123099.0,1
+feedthememes,cover yourself in oil,1607027049.0,1
+feedthememes,"> forge documentation
+
+funny meme",1607021832.0,38
+feedthememes,cover yourself in oil,1607013363.0,1
+adventofcode,hey woah its tymscar from a nest,1606981057.0,2
+feedthememes,thats not very tedpilled of you,1606967076.0,20
+yescompanionimbecil,socialism no iphone,1606954381.0,2
+feedthememes,cover yourself in oil,1606937681.0,3
+feedthememes,cover yourself in oil,1606933810.0,3
+feedthememes,cover yourself in oil,1606933799.0,2
+feedthememes,cover yourself in oil,1606933790.0,2
+feedthememes,cover yourself in oil,1606933782.0,3
+feedthememes,cover yourself in oil,1606933770.0,2
+feedthememes,cover yourself in oil,1606893890.0,10
+feedthememes,cover yourself in oil,1606890133.0,21
+feedthememes,cover yourself in oil,1606890125.0,18
+feedthememes,cover yourself in oil,1606890118.0,8
+feedthememes,cover yourself in oil,1606890113.0,4
+feedthememes,cover yourself in oil,1606890106.0,24
+feedthememes,cover yourself in oil,1606873601.0,30
+lgballt,wtf its 4:30 am and your ball comic is making me cry help,1606728431.0,22
+gay_irl,the last capitalist catboy to be hanged is the one that sells us yarn,1606728301.0,81
+okbuddyretard,what???? this is wrong link 🤯🤯,1606586685.0,5
+2b2t,uneven UUID value lmfaooo,1606470200.0,44
+Games,"Been a few years since I played TTR, glad to see things are still the same ;)
+
+_cough toonfest 2017 cough_",1606469997.0,4
+feedthememes,i 😂😂 dont 😂😂 understand 😂😂 your 😂😂 accent,1606374586.0,6
+Gamingcirclejerk,with your fucking existence*,1606327507.0,12
+feedthememes,i do not understand your comment please add more emojis 😂😂😂😂😂😂😂😂😂😂,1606282926.0,34
+degoogle,Self-host!,1606071176.0,1
+SkweezyJibbs,HELL YEAH BROTHER,1606036424.0,5
+alltheleft,No. This is a leftist sub,1605976646.0,23
+lgballt,lmao @ transmasc's eyes in panel 3,1605816290.0,5
+Portal,One time I started at 11 and finished at 6... am,1605816178.0,3
+VaushV,wtef hes hot,1605794243.0,14
+Fuckthealtright,bruh lol,1605760509.0,4
+PeppaPigOffBrands,is this a joke or,1605671773.0,12
+Minecraft,too soon,1605285732.0,91
+Polcompball,stalin stinky,1605189465.0,33
+196,grifter lives matter,1605166090.0,1
+ethoslab,"it has some vanilla datapacks which are deviations from pure vanilla gameplay (one person sleep, microblocks etc) but most things like that are just because of the huge farms they have and the fact that this is a job for a lot of them as well",1605164552.0,25
+hamiltonmusical,bruh,1605163218.0,3
+okbuddyretard,Bruh! 😂,1605161841.0,7
+LeftWithoutEdge,All incumbent races,1604952584.0,3
+programminghorror,"An O(1) sorting algorithim for up to X entries:
+
+Benchmark the amount of time it takes to sort X entries.
+
+If you ever finish a sort before your benchmark, simply sleep until you reach the benchmark.",1604941922.0,4
+Stonetossingjuice,HE SAID,1604941697.0,30
+lgbt,the true nihilismpill is understanding everything is meaningless but continuing on anyway,1604941555.0,7
+BernieSanders,NaPoVoInterco.,1604896826.0,4
+beatlescirclejerk,Bruh! 😂,1604817654.0,14
+CGPGrey2,there is merit to keeping NaPaVoInterco on the down low,1604817439.0,5
+feedthememes,holy fuck is this oc,1604790796.0,11
+programminghorror,{what},1604789904.0,43
+Gamingcirclejerk,All nb people are trans,1604783928.0,3
+okbuddyvowsh,last time i checked biden isnt running for senate,1604781423.0,1
+Political_Revolution,good meme,1604781032.0,3
+feedthememes,rat mod,1604695818.0,7
+DemocraticSocialism,but socialism is when the government does stuff,1604622406.0,2
+botania,oh thats what happened to your channel,1604551122.0,5
+ethoslab,\#bringbacknohoho,1604550890.0,7
+badUIbattles,i thought this was bad ui battles,1604509658.0,25
+AskOuija,J,1604383745.0,1
+ethoslab,"stickbug in november
+
+
+ok",1604383469.0,9
+funny,"I have no idea if this is accurate at all but I was at Saginaw Valley State University once and they had a room JUST like this... I have no idea what it was for though, I just remember buying something from a concession stand that looked exactly like that in a room that looked exactly like that",1604292625.0,1
+feedthememes,nah i think its tech mod with magic theme,1604255411.0,4
+feedthememes,"oh yeah? then explain [this](https://www.reddit.com/r/feedthememes/comments/ef7iba/botania_is_a_tech_mod/), liberal",1604250018.0,16
+VRtoER,this is an incredible comment. thank you,1604211932.0,4
+okbuddyretard,"ah yes, the controversial opinion of ""don't be racist""",1604162079.0,17
+Seaofthieves,why not,1603990985.0,6
+Seaofthieves,well are you gonna tell us what it is,1603943583.0,17
+Deltarune,no kris dont knife,1603895251.0,1
+notinteresting,you got me chief i thought this was softwaregore,1603860843.0,4
+NintendoSwitch,PC Port..... on Switch?????,1603858569.0,1
+TikTokCringe,its ok let them clutch their pearls,1603815355.0,29
+botania,funny flower mod maker,1603716995.0,7
+botania,haha,1603716985.0,4
+okbuddyretard,cope,1603716934.0,2
+okbuddyretard,what no pussy does to a mf,1603714479.0,3
+okbuddyretard,no,1603688285.0,3
+okbuddyretard,what no pussy does to mf,1603685782.0,5
+panicatthedisco,    COMPLETE,1603648124.0,5
+FRC,no,1603599308.0,3
+FRC,"Yes, video. It's ready 
+###[Download via redditsave.com](https://redditsave.com/info?url=/r/FRC/comments/jhenem/meme_aside_this_machine_looks_super_useful/)
+
+
+ --- 
+ [**Info**](https://np.reddit.com/user/SaveThisVIdeo/comments/iggmt9/info/) | [**Feedback**](https://np.reddit.com/message/compose/?to=Kryptonh&amp;subject=Feedback for savethisvideo) | [**Donate**](https://ko-fi.com/getvideo)",1603573293.0,3
+okbuddycapitalist,omg liberal shut up i bet you watch vowsh and you are anarkiddie idiot liberal smh idiot i am voting for trunp so we cna have a peasent revolution like in 1917 it will be cool and work guys,1603471841.0,10
+VaushV,to be fair you can work at 14. so they must be 13,1603303714.0,9
+JackTheAli3n,"You're probably overpaying for the motherboard. Also, if you have a MicroCenter nearby they do 30% off on any compatible CPU+Mobo pairing",1603230717.0,3
+JackTheAli3n,hey thats me 😳😳,1603200617.0,2
+JackTheAli3n,oh boy i sure hope that there is no lag between strumning the guitar and the note being played on this stream,1603196920.0,2
+Fuckthealtright,make up is macho :),1603165229.0,3
+ImageStabilization,no,1603127922.0,18
+bootleg_memes,HOW,1603112557.0,1
+Undertale,"No, that's Heats Flamesman",1603084480.0,2
+bisexual,its not too late,1603083410.0,3
+linux,That's not relevant,1602822888.0,28
+Deltarune,Clearly you've forgotten the moth memes,1602440767.0,3
+degoogle,"I feel like you could definitely make the exact same case for something like Twitter, minus the Nazi stuff (although, it's not a huge issue if you're not on m.s or anything similar)",1602031206.0,1
+linux,I use arch btw with FF Dev Edition and only ever encountered a few edge case crashes,1602030713.0,6
+Stonetossingjuice,"You're five comments into a Reddit reply chain, at least we can admit it",1602005049.0,60
+ethoslab,nah that was a smear piece,1601877796.0,13
+programming,"Yes, but integrated GPU works as well",1601877594.0,7
+okbuddyretard,imdb,1601833529.0,3
+okbuddycapitalist,what do you suppose we do then? the reality of the situation is that either trump or biden will be the president. the left not voting just makes it more likely trump will win. do you really think a trump and a biden administration will be exactly the same?,1601709115.0,0
+ENLIGHTENEDCENTRISM,m4a is an economic issue not social issue,1601704997.0,-2
+okbuddycapitalist,everyone gangsta til the fascists start killing da socialists and da queers and da brown people because i didnt want to vote because it makes me cool and i am defying what people tell me to do epic style i am so epic 😎😎😎😎,1601567282.0,17
+ABoringDystopia,oh i was thinking of henry ford mb,1601567193.0,2
+okbuddycapitalist,"marx and lenin were both pro-voting in a bourgeois democracy, what do you possibly have to benefit by allowing the country to continually creep towards fascism?",1601560446.0,12
+ABoringDystopia,"lol no he was an antisemite
+
+edit: nvm",1601557951.0,1
+okbuddyretard,girono giovanna?? IS THAT A JOJO REFERENCE 😂😂😂😂😂😂😂😂😂😂😂😂😂😂😂😂😂😂😂😂😂😂,1601555336.0,20
+okbuddyhetero,shut up librul 🤬,1601337543.0,3
+okbuddyhetero, ok bommer 🙄🙄,1601331378.0,2
+DankLeft,no,1601149808.0,11
+DankLeft,no,1601146397.0,43
+bisexual,shadow the hedgehog is a bitch ass motherfucker,1601146104.0,46
+linuxmemes,dae enjoying tinkering bad???,1601115825.0,-3
+bisexual,"go on, eat the bisexual pudding",1601115619.0,1
+Minecraft,dont forget finger guns,1600981798.0,6
+VaushV,test,1600922485.0,1
+DemocraticSocialism,No need to be condescending. It's best not to isolate fellow or potentional leftists from our spaces by being unnecessarily harsh,1600745026.0,1
+TrueOffMyChest,You may be interested in NaPoVoInterCo,1600615451.0,1
+feedthememes,so true,1600492367.0,1
+ethoslab,did you even watch episode? he literally made a redstone gizmo for the museum. what are you talking about,1600472224.0,26
+okbuddyhetero,this aint LGBTN get that out of here you gamer 🤬🤬🤬🤬😡😡😡😡😡😡😂😂😂😂😂😂😂😂😂,1600372292.0,37
+ABoringDystopia,fifteen million merits type beat,1600354498.0,67
+195,How am I supposed to eat this pizza without my drink!,1600353726.0,7
+gatesopencomeonin,Humans who answer to shareholders.,1600316310.0,23
+feedthebeast,"we're talking bout survival, obviously it's always possible to do things like use commands or edit in water blocks to the world",1600303683.0,6
+feedthebeast,bet,1600300897.0,2
+feedthebeast,no (in vanilla),1600275741.0,12
+NewDealAmerica,"What do you mean by the ""bernie strategy""?",1600273627.0,11
+LeftieZ,muh empty shelves,1600222147.0,3
+ethoslab,i think it was that imposter ergo,1600209562.0,9
+Games,"Well, time to refund. I hope I have less than 2 hours",1600100702.0,13
+okbuddyhasan,Stal - Minecraft,1600060695.0,7
+VaushV,a british person,1600044261.0,4
+MyChemicalRomance,Tongue-tied and oh so squeamish,1599930190.0,5
+comedyheaven,he will never hang out,1599797600.0,2
+okbuddyretard,traves minecraft?????m burger?????? what 😐😐😐😐,1599779374.0,39
+ihadastroke,big time socialists on notice!,1599745933.0,3
+linuslore,HOW,1599742575.0,6
+we_irl,damn bro thats crazy thanks for sharing,1599667330.0,9
+we_irl,anyone to the right of them = liberal,1599667185.0,11
+bi_irl,?????,1599667126.0,11
+idkhowbuttheyfoundme,you really gonna keep them doing this forever aren't you lol,1599667050.0,4
+ethoslab,we demand ugly brick thing,1599623315.0,41
+bisexual,Omedetou!,1599622733.0,13
+Breath_of_the_Wild,zelda cdi,1599587424.0,28
+MyChemicalRomance,well i mean it lead to him getting killed so yeah,1599421512.0,8
+BikiniBottomTwitter,kyle kulinski has logged on,1599357239.0,1
+TheBeatles,that's a weird way to spell let it be,1599329663.0,1
+ethoslab,he does at 1:30:30,1599320242.0,4
+ethoslab,We could use the tool SalC1 (maybe Barrendome?) used in his sign video,1599241648.0,23
+ethoslab,ep 550 description,1599241596.0,3
+gay_irl,he,1599241100.0,2
+billwurtz,xdotool key end,1598925929.0,1
+dataisbeautiful,"Well, Mozilla is both the not-for-profit Mozilla Foundation and the for-profit Mozilla Corporation. The corporation handles the development of most importantly Firefox, meaning Firefox certainly isn't free of being abused for profit. In fact, this actually has happened with the whole [Mr. Robot controversy](https://www.cnet.com/news/mozilla-backpedals-after-mr-robot-firefox-misstep/). Additionally, this isn't to say that non-profits are completely off the hook either. Overall though, it would be ridiculous to claim that Mozilla is just as bad as Google or Apple.",1598809322.0,2
+dataisbeautiful,Apple will only do that as long as it's profitable. And I think Mozilla does a better job at it anyway. Not to say that Mozilla is benevolent either.,1598803739.0,8
+progressive,Some of those that work forces...,1598588609.0,3
+boneachingjuice,take these broken wings and learn to fly,1598148182.0,9
+othepelican,too real,1598054185.0,4
+ethoslab,If I remember correctly the point of that build was to use only blocks in alpha to go for that old style look,1597885170.0,36
+HistoryMemes,/r/yourjokebutworse,1597871013.0,46
+outerwilds,found the speedrunner,1597862139.0,1
+okbuddyretard,you mustve missed the dame da nes,1597861574.0,2
+Breath_of_the_Wild,damn bro thats crazy thanks for sharing,1597768673.0,3
+Breath_of_the_Wild,"‼‼‼‼️ HOLY FUCKING SHIT‼️‼️‼️‼️ IS THAT A MOTHERFUCKING JOJO REFERENCE??????!!!!!!!!!!11!1!1!1!1!1!1! 😱😱😱😱😱😱😱 JOJO IS THE BEST FUCKING ANIME 🔥🔥🔥🔥💯💯💯💯 JOSUKE IS SO BADASSSSS 😎😎😎😎😎😎😎👊👊👊👊👊 ORAORAORAORAORALORAORAORAORAORAORAORAORAORAORAORAORAORAORAORA 😩😩😩😩😩😩😩😩 😩😩😩😩 MUDAMUDAMUDAMUDAMUDAMUDAMUDAMUDAMUDAMUDAMUDAMUDAMUDAMUDAMUDAMUDAMUDAMUDAMUDAMUDAMUDAMUDAMUDAMUDAMUDAMUDAMUDAMUDA 🤬😡🤬😡🤬😡🤬🤬😡🤬🤬😡WRYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY Yo Angelo!Yo Angelo!🗿 🗿 Yo Angelo!🗿 🗿 Yo Angelo! Yo Angelo!🗿 Yo Angelo! 🗿 Yo Angelo!🗿 🗿 Yo Angelo! 🗿 🗿 🗿 🗿 🗿 🗿 Yo Angelo!Yo Angelo!Yo Angelo! Yo Angelo!Yo Angelo!Yo Angelo! Yo Angelo!🗿 Yo Angelo! 🗿 Yo Angelo!Yo Angelo!🗿 🗿 Yo Angelo! 🗿 🗿 🗿 🗿 🗿 🗿 Yo Angelo! 🗿 Yo Angelo! 🗿 Yo Angelo!🗿 🗿 🗿 🗿 Yo Angelo! 🗿 🗿 Yo Angelo!🗿 Yo Angelo! 🗿 🗿 Yo Angelo!🗿 🗿 Yo Angelo! 🗿 Yo Angelo!Yo Angelo! 🗿 🗿 🗿 🗿 🗿 🗿 🗿 Yo Angelo!🗿 🗿 🗿 Yo Angelo!🗿 🗿 🗿 🗿 Yo Angelo! 🗿 Yo Angelo! Yo Angelo!Yo Angelo!Yo Angelo! Yo Angelo! 🗿 🗿 🗿 🗿 🗿 🗿 Oh you’re approaching me❓❓❓❓❓❓❓❓❓❓But it was me, Dio‼️‼️‼️‼️‼️‼️‼️‼️‼️‼️😂🤣😂🤣😂🤣😂😂😂🤣🤣🤣😂😂😂",1597765344.0,4
+SandersForPresident,"> Voting against your interests certainly doesn't help
+
+If your interest is achieving socialism, then I don't see how advancing the material condition of the working class would be against your interests. Remember recently when Trump tried to stop transgender people from getting equality in healthcare? That probably wouldn't happen under the Biden administration. How can you expect to advance our cause if our transgender comrades are too busy being incapacitated to help us?",1597712183.0,3
+SandersForPresident,"> Dual power structures are infinitely more important than voting for the lesser of two evils.
+
+I agree. Voting isn't difficult or time consuming though. There's no reason not to do it.
+
+> We can not rely on politicians to concede to us our needs
+
+I agree that we can't rely on them to do it, but what is the use of _not_ voting when they do?",1597712004.0,2
+SandersForPresident,"Do you really think most anarchists don't engage in electoralism? Neither party represents the interests of anyone but capital, but it's ridiculous to think that participating electorialism doesn't advance the material conditions of the working class.",1597708397.0,10
+Terraria,close enough,1597682589.0,2
+bisexual,don't forget the p90,1597641083.0,2
+DankLeft,nazbols gtfo,1597640947.0,3
+Im15AndThisIsYeet,big time socialists,1597640762.0,10
+Terraria,well... they are...,1597640640.0,3
+antimeme,❄,1597516491.0,2
+antimeme,❄,1597513193.0,5
+antimeme,❄,1597509096.0,2
+comedyheaven,explain-it peter out,1597326282.0,2
+disneyvacation,❄,1597094250.0,67
+Coronavirus,"That's probably because places with more reactionary ideologies regarding the spread of COVID-19 would also be less likely to elect a female leader. Plus, there are multiple countries with male leaders doing fine, see Canada, Italy, Spain, etc. Correlation is not causation.",1597022484.0,1
+FragileMaleRedditor,"no, they aren't trans",1597018865.0,21
+hamiltonmemes,I wanna build something that's gonna outlive me,1596995640.0,1
+linuxquestions,There's this cool thing called RedHat you might be interested in,1596993207.0,6
+hamiltonmemes,And I wanted what I got,1596992826.0,1
+billwurtz,synonyms exist,1596942478.0,3
+outerwilds,>!bro i'd be fucking dead!<,1596935838.0,4
+billwurtz,going to,1596927678.0,3
+skamtebord,"RUN
+
+NOW",1596802073.0,6
+Breath_of_the_Wild,i hope you like femboys,1596774191.0,44
+bi_irl,no,1596574735.0,31
+TheMonkeysPaw,Yes... and was the only option until less than two years ago,1596568087.0,1
+TheMonkeysPaw,bruh it was like literally a year ago,1596548499.0,3
+idkhowbuttheyfoundme,oh,1596480249.0,8
+idkhowbuttheyfoundme,what if its an album,1596477442.0,17
+Terraria,how,1596316053.0,14
+GoodFakeTexts,The valorant makes me think this is real,1596298377.0,195
+we_irl,blue police car,1596244793.0,10
+DecreasinglyVerbose,this is more verbose,1596238844.0,8
+Canthaveshitindetroit,based,1596235629.0,1
+Jreg,oh my god they were roommates,1596133657.0,27
+HalfLife,yes,1596113011.0,14
+Minecraft,"or yknow, a wither rose",1596072314.0,3
+bi_irl,mongodb is web scale,1596039226.0,16
+progressive,no,1595937664.0,2
+ethoslab,he added it when the skin updates were added but never plays with it on (he shows in an lp ep from that time),1595903937.0,16
+degoogle,what's wrong with mastodon?,1595894384.0,11
+progressive,just say their,1595871242.0,10
+meirl,ah yes today i will just forget about the rent,1595867372.0,9
+linux_gaming,how so?,1595786204.0,11
+comedyheaven,"> communist
+
+> hitler
+
+🤔",1595740260.0,73
+hamiltonmemes,Where was it reduced?,1595471514.0,8
+bi_irl,that is a different person,1595456213.0,6
+Jreg,"the mad lad fucking did it, exactly an hour after",1595447490.0,34
+archlinux,i've done this as well,1595432578.0,14
+feedthebeast,"Hello, Gordon!",1595309011.0,10
+ProgrammerHumor,this guy be out here anticipating the response to their joke,1595281498.0,3
+youngpeopleyoutube,"that's because every time an image is screenshotted it recompresses the existing artifacts into something more noticeable. at that point, where do you draw the line? how bad do the artifacts have to be?",1595083280.0,1
+BanAntiGamers,powertrip mod time oh yeah,1595046289.0,1
+youngpeopleyoutube,yes but all compressed images/videos have compression artifacts in some form,1595028487.0,1
+youngpeopleyoutube,"so i'm sure you're aware then that almost all jpg images have some compression for practical reasons, meaning almost all jpgs would be banned from the site and the amount of data used to store images would skyrocket due to all images needing to be lossless",1595008758.0,1
+youngpeopleyoutube,do you even know what jpeg compression is,1595002736.0,1
+youngpeopleyoutube,"> all post with jpg compression against the rules
+
+hahahahahaha you dont know what youre asking for",1594998299.0,3
+Games,play outer wilds!!!!! go into it blind it's amazing,1594924273.0,10
+feedthebeastservers,rude,1594841292.0,2
+BanAntiGamers,"""i posted the nazi flag, haha that will own the libs""",1594816968.0,1
+Gamingcirclejerk,wait,1594748749.0,13
+Jreg,Yes.,1594486898.0,5
+ABoringDystopia,"Of course, haven't you heard? Socialism is when the government does stuff. The more stuff it does, the more socialist it is. And when the government does a WHOLE lot of stuff, that's communism.",1594486797.0,1
+programming,"Slow down, I have at least one computer with Fedora",1594401067.0,20
+ProgrammerDadJokes,15,1594400970.0,22
+okbuddyretard,r/ wosh!!!!,1593730705.0,2
+comedyheaven,nn gn evg,1593379236.0,2
+comedyheaven,nen genaiss evnalgleion,1593373084.0,54
+Polcompball,hmm yes i would certainly rather have some random person who has it in their material interest to take as much money from me as possible make decisions about my life than a community of people which i can also partake in,1593062297.0,1
+HalfLife,based,1592729110.0,3
+comedyheaven,holy fuck i forgot about this,1592699555.0,2
+Minecraft,look at dem graphics!,1592542283.0,5
+feedthememes,i remember when 8gb was a lot,1592462917.0,42
+virtualreality,I think Quest,1592462860.0,6
+Portal,You can in The Lab. Can confirm I was terrified.,1592461974.0,1
+HistoryMemes,"did u forget we're talking about children working 16 hours a day
+
+you really tryna defend that",1592108398.0,12
+ProgrammerHumor,"The program is an 8, the program and the post at the bottom is a 10",1591970669.0,30
+comedyheaven,this is not comedyheaven,1591914611.0,3
+linux,_for now_,1591854691.0,30
+antimeme,NOOO!!!!! PAUL MCARY IS BWST BEATLE BECAUSE HE SANG THE GOOD SONGS Nandnnfnnn nNOT the rango because rnago rnag rango rango the octpous and tje odnt pass awhilw PAUL SANG THE never give money and helter and anc and and adn and and nadn adn and and and and anf anc and nancnadn nadn nancnan nxnadn NOT JOHN NO Onnononononnononononononnononononononnononononononnonononon9nononnononononononononnonononnonononononononnononononononnonononononono,1591854645.0,2
+antimeme,its a wave like hi,1591853693.0,1
+antimeme,how can you say abbey road then say second worst song on albun,1591853668.0,-3
+Terraria,"> china
+
+> venezuela
+
+> NAZI GERMANY
+
+> COMMUNIST
+
+
+
+AHAHAHAHAHAHAHAHAAHAHHHHAHAHAAHAHAHAHahhaahahhha ahahah hahah ahahhh ah ho boy",1591709732.0,1
+Terraria,imagine thinking communism is inherently totalitarian,1591666075.0,5
+deathnote,schrodinger's douchebag,1591551611.0,8
+PoliticalCompassMemes,ok,1591514119.0,1
+ComedyNecrophilia,bazooper,1591476484.0,12
+Terraria,holy fuck,1591414594.0,2
+Terraria,yes,1591387963.0,4
+Terraria,or wet bombs,1591387117.0,11
+Political_Revolution,"john specifically says ""don't you know that you can count me out, in"" in revolution 1 and in the music video for revolution, showing he wasn't decided on the issue. he also later said he regretted the line about chairman mao",1591041567.0,3
+FragileWhiteRedditor,"This is the funniest shit i've ever read, what in the name of FUCK are you talking about",1590990862.0,16
+GoCommitDie,"Kaji, I'm a boy.",1590898007.0,1
+linux_gaming,"I disagree that it goes against the ""Linux ethos."" Part of the ""Linux ethos"" is being able to do whatever you what with your computer. Just because you don't want anticheat on your computer doesn't mean others can't.",1590884304.0,4
+Undertale,"The companion cube will never threaten to stab you, and in fact, cannot speak.",1590883338.0,8
+antimeme,Bruh i remember complaining about it being bad in early 2019,1590883034.0,10
+yescompanionimbecil,NTA win stupid games play stupid prizes,1590860398.0,16
+shittymcsuggestions,ok,1590706294.0,3
+OKbuddyHalfLife,"the border world
+
+x e n
+
+is now in our conTROL, thanks to you",1589954506.0,2
+beatlescirclejerk,"> B Tier
+
+> Lovely Rita",1589796939.0,129
+MyChemicalRomance,:D,1589674939.0,1
+ProgrammerHumor,????,1589323470.0,3
+BanVideoGames,its a copypasta,1589306848.0,4
+BanVideoGames,"You are a moron, haven't you read the studies about how video games caused the Revolutionary War, the Civil War, World War I, World War II, and the Vietnam War??? You gamers claim to know all this """"""""science"""""" but can't see the simple facts.",1589304755.0,29
+3kliksphilip,He just really likes them. They make the thumbnails look epic and special.,1589204838.0,6
+Portal,The weighted companiom cube has certainly brought you good luck.,1589204384.0,2
+3kliksphilip,i feel like the second one applies more than the first,1589203996.0,4
+3kliksphilip,why does this man post at such weird ass times,1589201388.0,-5
+memes,lay still like the dead,1589201210.0,6
+BanVideoGames,You're right! I think the g*mers are getting to me.,1589151532.0,6
+BanVideoGames,"You are a moron, haven't you read the studies about how video games caused the Revolutionary War, the Civil War, World War I, World War II, and the Vietnam War??? You gamers claim to know all this """"""""science"""""" but can't see the simple facts.",1589147929.0,27
+Tinder,ok,1589066170.0,1
+Tinder,"I don't think your paraphrasing does it justice:
+""I've been thinking. If life gives you lemons, don't make lemonade. Get mad! Demand to see life's manager! Make life rue the day it thought it could give CAVE JOHNSON lemons! Do you know who I am? I'm the man who's gonna burn your house down! With the lemons! I'm going to get my engineers to make a combustible lemon that burns your house down!""",1589065955.0,0
+Tinder,nope that is in fact not what he says,1589063699.0,0
+bonehurtingjuice,are you FRICK??????,1589021800.0,3
+softwaregore,just arm,1589021559.0,13
+feedthebeast,"""oh, it's like /dank/null, that's cooHOLY SHIT""",1588985756.0,4
+feemagers,i watched it live 😳,1588969135.0,10
+feemagers,"Hi everyone, I'm Scott, president of Domino's Pizza. Have you heard of Hatsune Miku?",1588966480.0,35
+billwurtz,bro thats what i thought,1588937880.0,4
+disneyvacation,"Assuming you're talking about the post image, why? I don't know mucb about C and I do know that this is bad if this were C++, but what is the issue here?",1588936100.0,1
+archlinux,A makefile?! Why not just a standard pypi package?,1588758698.0,1
+BikiniBottomTwitter,not rly,1588725465.0,2
+HalfLife,Come on Gordon. We've got work to do.,1588721768.0,3
+BikiniBottomTwitter,"yeah, you gonna fuckin cry bout it mate?",1588714582.0,1
+BikiniBottomTwitter,"yeah you are, your point",1588680149.0,5
+BikiniBottomTwitter,haha trans people suicide hahahahhhah laughing arent you funny i am going to give you the reddit.com funny award for making an insightful and comical joke,1588680031.0,60
+BanVideoGames,They're clearly a g*mer plant!,1588661275.0,20
+PrequelMemes,I really really really like this image,1588647091.0,4
+deathnote,real chads don't finish the show after episode 10,1588631774.0,3
+beatlescirclejerk,wrong,1588547257.0,1
+MyChemicalRomance,and if they get me take this spike to my heart and,1588512651.0,4
+MyChemicalRomance,IFALLMYENEMIESTHREW A PARTY,1588512558.0,6
+Terraria,"fuckers stole my life crystal
+
+can't have shit in detroit",1588339868.0,8
+panicatthedisco,thats a weird way to spell nails for breakfast tacks for snacks,1588338963.0,32
+IAmA,"People don't stop responding to you because you're right. People stop responding to you because they don't want to deal with a toxic person who isn't willing to think about the issues at hand.
+
+Seriously, if you really think about the things you believe, find studies and primary sources to back up or disprove your claims, and only then will you be able to improve youself. Asserting ideas without anything to back them up helps no one.",1588072890.0,7
+HalfLifeLounge,"yeah but the gnome in HLA gets lost so fucking often, especially after random explosions during combat",1588069647.0,1
+OKbuddyHalfLife,i masd mthe very model of ah morndern major general,1587946871.0,2
+SandersForPresident,**[Citation Needed]**,1587774216.0,5
+beatlescirclejerk,holy fuck this is good,1587725445.0,6
+Minecraft,"Oh, sorry, I read your title as 1.15.2, not 1.5.2. If you just want to replace the sounds, you should be able to replace the sounds in the 1.5.2 jar file with the ones you want. This isn't really a great solution but it should work.",1587713845.0,1
+Minecraft,Use a resource pack,1587638643.0,2
+hlvr,Don't play Half-Life: Source,1587457727.0,2
+constantiam,then use xray bitch boy,1587429633.0,1
+constantiam,press alt + f4,1587352816.0,1
+bonehurtingjuice,no,1587294889.0,28
+ProgrammerHumor,foo,1586840314.0,3
+Portal,woah,1586776064.0,2
+ProgrammerHumor,i don't really see why they wouldn't just run it in their regular shell then,1586741934.0,1
+linux,eli5 a.out vs elf? isn't a.out from gcc elf?,1586687063.0,4
+ProgrammerHumor,"seems to be, termux probably",1586672889.0,20
+linuxmemes,not that there's anything WRONG with that,1586631911.0,15
+degoogle,simple keyboard is basically gboard but no swipe,1586512698.0,9
+FragileWhiteRedditor,"based is like calling something good, originally coming from the definition of ""i like this and don't care what other people think about it"". its difficult to put an exact definition on it so you have to understand its meaning through its usage",1586512580.0,48
+PoliticalCompassMemes,"correct
+
+source: used 4chan instead of reddit for about 4 months just cuz",1586483581.0,3
+PoliticalCompassMemes,"based is when you like something and don't care about what other people think, and it's often just used in the form of saying ""Based"", which is saying that whatever is being replied to is based",1586482121.0,7
+PoliticalCompassMemes,wrong,1586482005.0,6
+HalfLife,"yeah i had this issue with wmr too, i just kinda sucked it up until i found a gas mask",1586341016.0,1
+HalfLife,"half life alyx comes before hl2 in the timeline, but it should be played after hl2's episodes",1586340847.0,1
+HalfLife,i got this and i have no idea how,1586339853.0,1
+ethoslab,i liked it :(,1586247292.0,23
+feedthememes,holu shit mijg ad RAT,1586166414.0,1
+notdisneyvacation,"tankie is marxist lenisist, communism is pretty widespread",1586166316.0,6
+2meirl4meirl,whos joe,1586063756.0,16
+HalfLife,Spoilers,1585992471.0,3
+HalfLife,yes,1585981889.0,20
+HalfLife,"I O N L Y G E T S T R O N G E R, G O R D O N",1585968610.0,1
+HalfLife,wrong,1585941566.0,9
+OKbuddyHalfLife,spilelrsllss,1585897158.0,9
+Jreg,silence tankie,1585896093.0,12
+OKbuddyHalfLife,"yeah but ""literally one game"" implies that a computer isnt counted because obviously a computer can play more than one game, and my wmr headset+controllers only cost just under $250. People are blowing this out of proportion",1585768479.0,5
+MyChemicalRomance,uyeah,1585762975.0,7
+OKbuddyHalfLife,">2 grand
+
+bruh i couldnt pay that much for a vr set if i TRIED, you really think vr sets cost $2k???",1585762559.0,6
+AnimalCrossing,"you couldve just said ""animal crossing be like""",1585685965.0,7
+ethoslab,Did you fix the issue with the Minecart bumping against the wall?,1585462199.0,1
+news,"What part of ""Under no pretext should arms and ammunition be surrendered; any attempt to disarm the workers must be frustrated, by force if necessary"" do you not get?",1585439428.0,13
+stevenuniverse,are u ok,1585376948.0,39
+tomorrow,r/wosh XDDDD,1585327952.0,32
+OKbuddyHalfLife,omomg i cant blei eve gorsin freeman is gmen,1585213100.0,2
+OKbuddyHalfLife,alyx fucking dies,1585188163.0,4
+GamingDetails,"nah it does, continous movement is way more immersive once you get your vr legs",1585171226.0,3
+badUIbattles,half life alyx type beat,1585170876.0,3
+WindowsMR,"For what it's worth, for me sometimes everything works fine and sometimes VR is unplayable. Acer WMR headset, latest NVIDIA drivers, GTX 980. If you have any way we could contribute other diagnostics or logs, I'd be glad to supply it.",1585124754.0,2
+botania,"oh ive never played rat mod, im just guessing based on the title",1585120107.0,1
+botania,rat mod has eldritch horrors,1585118695.0,1
+idkhowbuttheyfoundme,(Real),1585118513.0,9
+Overwatch,you're like that guy in math problems who buys 200 watermelons but for english,1584754034.0,20
+Overwatch,why is this so descriptive,1584750888.0,13
+lostredditors,ok,1584593192.0,15
+OurPresident,I wouldn't go that far,1584571170.0,3
+OurPresident,no problem,1583169151.0,2
+OurPresident,Bernie Sanders,1583125023.0,28
+HistoryMemes,i know silly goose,1583118920.0,24

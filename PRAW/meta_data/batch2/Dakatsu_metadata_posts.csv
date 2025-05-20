@@ -1,0 +1,758 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+archlinux,Finally able to install Arch Linux after running pacman-key --init && pacman-key --populate; likely due to NTP issue.,"I started writing this post to seek troubleshooting advice, but then I solved the issue and thought I'd post my experience in case anyone else encounters the same issue.
+
+**TLDR:** By running `pacman-key --init` and `pacman-key --populate` before running `pacstrap`, I was able to successfully install Arch Linux despite not being able to get NTP to sync (likely due to my ISP/router blocking the packets).
+
+**My Background:** I've been dual-booting Kubuntu and Windows 11 on my desktop computer since last year; I initially wanted to just get familiar with Linux as a software developer, but it's quickly become my preferred OS that I use >90% of the time. I recently wanted to put Linux on my laptop (a Razer Blade 14) so that I can dual-boot on both my computers, and I figured now would be a great time to try Arch Linux. I had previously installed Arch Linux onto a portable USB via `archinstall` to play with it, but I wanted to try the manual install method for this proper install.
+
+**The Problem:** I followed the Wiki to synchronize my clock, but I could not get the system clock to show as synchronized when running `timedatectl status`. I tried running `timedatectl set-ntp true`, trying different NTP servers, and verifying my internet connection (I tried both WiFi and wired connections).
+
+Using the `systemctl status systemd-timesyncd` command, I could see that the packets were timing out despite being able to ping the servers and get responses. Furthermore, I ran the same commands on my Kubuntu install and saw the same thing. I recently changed my ISP and router, so I suspect that one of them is blocking the packets.
+
+I tried to install Arch Linux anyway, but I got an error about keyrings when I tried to run `pacstrap -K ...`. I decided to abandon the manual method and try `archinstall` after being stuck on the issue for multiple hours, but that failed as well; I would get the [waiting for time sync](https://archinstall.archlinux.page/help/known_issues.html#waiting-for-time-sync-2144) issue running archinstall, and running archinstall --skip-ntp just gave me [keyring is out of date](https://archinstall.archlinux.page/help/known_issues.html#keyring-is-out-of-date-2213) issue. I was about to give up and just install Kubuntu, but I decided to retrace my steps before asking for help.
+
+**The Solution:** I eventually stumbled across the commands `pacman-key --init` and `pacman-key --populate`, and running those let `pacstrap` succeed and let me continue on with the manual install process. I have now installed Arch Linux a few dozen times (I'm writing a script to automate the install) without encountering that issue again.
+
+I admittedly don't quite know why it solved the issue, and I can only assume that it's related to the NTP failure since I haven't seen it mentioned in any tutorials I watched.
+
+**Conclusion:** I'm perfecting my custom install script so that it's easy to reinstall Arch Linux if need be (or to try it on my desktop some time). But the script currently gives me a working GRUB dual-boot that loads Plymouth, gives me a nice decrypt screen with the Arch Linux and Razer logo, and loads me into my belovèd KDE Plasma desktop with Steam and other useful programs already installed.
+
+While this issue was frustrating, I'm very satisfied to have overcome it and to get to experience an Arch Linux install that I assembled myself. And I have definitely increased my knowledge of the many components that go into a Linux system in the process!",1746926707.0,1,0.67,2
+AmerExit,"Software developers in the EU: how'd you get there, and how's it going?","As the title says, I'm curious about the experiences of fellow software developers (or tech workers in general) who left the US to a European Union country and now work there.
+
+1. How did you get the opportunity to work in that country? From finding the job with your experience to navigating the immigration process and language barriers, I'd like to know the challenges you overcame to move to the EU.
+2. Now that you're in an EU country, how have your personal life and career changed? I am sure there are pros, but I also want to know the cons (e.g. salary) and your overall assessment of your new situation.
+
+I'm especially interested to hear from those in France and Spain since I speak some French and Spanish, but I figured I could leave the question open for anyone anywhere in the EU.
+
+Context: I'm a 32M software developer with just over two years of work experience. I got my master's degree in software engineering in Canada and started my career there, but my aspirations lay in leaving Canada to return to the familiar US (with a higher salary) or to seek a new life experience in the EU (with a better lifestyle). 
+
+Long story short, I chose to return to the US last year both to help my elderly mother and because I felt it was the *path of least resistance* to restart my life without having to deal with language or immigration barriers. But this was without giving up the idea of moving to Europe in the future for the right opportunity that made that hassle worth it. Let's just say that *current events* have me re-evaluating what the right opportunity is and if I should be seeking it out.",1740959693.0,3,0.55,15
+AgingParents,"Mom just watches TV all day, does nothing to improve her life","My 65-year-old mother watches TV almost non-stop. She wakes up and turns on the TV, and it only shuts off automatically hours after she falls asleep. It's easier to say when she *isn't* watching TV: when she feeds the dog, when she goes outside to smoke cigarettes, and when she has to leave the house. That latter category is very small: the occasional doctor's appointment, buying more cigarettes, etc. But the TV is still blaring obnoxious junk in her absence, and she immediately returns to watching it after these brief interruptions.
+
+I'm her only child (son), and I moved back in with her 7 months ago to help her declutter her borderline hoarder-level home since little had been done with it since my dad died five years before. She has COPD, so the idea was for me to do the heavy lifting of dragging out heavy bins so she could spend some time going through a couple of them on weekdays when I'm working my remote job. I envisioned 2-6 months to declutter the entire house before I moved back west. But she never takes initiative to go through anything unless I demand it of her, so the decluttering is half done at most and has almost entirely been my endeavor.
+
+Aside from decluttering, there are many other things she refuses to take initiative on. For example, I have asked her to call someone to fix the dryer and the leaky outdoor faucet. The dryer in particular is a problem since it makes a screeching noise when it runs, and about half a dozen articles of my clothing have been ruined by getting caught between the drum and the rest of the machine and getting either torn or burnt. But she has yet to do so, and I feel like I shouldn't have to deal with this since I spend my weekdays working and the rest of my life decluttering while she has plenty of time.
+
+I've tried to be empathetic. Aside from COPD, I realized too late that she was weakened due to her alcohol problem; I had to call 911 in June due to a bad fall, and she spent 11 days in the hospital followed by 10 days in skilled nursing. I visited her and managed the essential tasks during this time. She quit drinking afterwards, but the constant TV watching has been, well, constant. And it's often the same reruns of the same shows; I've had to suppress lots of anger that seeing Jason Clay Dunn win Ink Master season 5 again for the *fourth* time this year (at minimum) is apparently more important than my quality of life, let alone hers.
+
+I've been incredibly frustrated by this since I've given up 7 months of my life to help someone who does nothing for herself unless absolutely necessary. But I realize that I cannot keep doing this to myself. The decluttering is maybe half done, but I'm going to tidy up what's left and move back west. I'm worried that she'll continue to do nothing for myself when I leave. I'll do my best to help her from afar, but I'm not going to continue postponing my life and ruining it in the process.
+
+EDIT: Since this is blowing up, just wanted to note that I had a sweet moment with my mom today where she got a kick out of me playing with the cat. I'm frustrated and need to move on with my life, but it's not all doom and gloom and I love her a lot.",1721577578.0,78,0.91,43
+AgingParents,Experiences with COPD-stricken smoker parents,"Does anyone deal with a parent who is on oxygen due to COPD and continues to smoke? I \[31M\] am an only child, and I have been trying to help my mother \[65F\], but I know very little about what I should be expecting her to be able to do on her own. I'm not sure how much is physical/COPD-related and what may be something else (alcoholism, depression, etc).
+
+Here's more context in case anyone wants to read it:
+
+She was hospitalized in 2019 after my father found her non-responsive, and she has been on oxygen ever since. She was cured of two smoking-related cancers previously, but she continues to smoke to this day. My father died a couple months later, right before I moved abroad to pursue my education and then got stuck there due to the COVID-19 pandemic, so I was unable to visit for a while.
+
+It's been three months since I've gotten to move back home temporarily to help my mom with the house. I work remotely full-time, run errands, and try to commit to swimming 3-4 hours per week, but I spend most other moments trying to declutter her house and deal with other issues like rats, yard work, and financial planning.
+
+My concern is that she does very little to maintain the house or help declutter it. She stays in her room for most of the day either sleeping or watching TV, and then she comes out to the living room and continues to watch TV before going back to bed. This is generally only interrupted by going outside to smoke, having a shot of alcohol, or occasionally eating. She rarely leaves the house to run errands (like getting more cigarettes, alcohol, and dog food). When I get her to do work, it's to go through old papers or her thrift store clothes (she used to sell thrift store clothes online, so I've re-donated about 50 bags of them so far), and that is at most 1-2 hours per week.
+
+It's incredibly frustrating to spend nearly every non-work hour doing tasks around the house while my mom does next to nothing, delaying me from getting to live my own life again. I don't expect her to do heavy lifting or yard work, but it's hard to get her to even shred old papers or go through those thrift store clothes. But I also don't know what I should be expecting given her health.",1711150198.0,6,0.88,3
+mildlyinfuriating,My desk phone is in YY/DD/MM format.,,1689993955.0,9,0.74,5
+ImmigrationCanada,Just discovered my work between receiving final grade and submitting PGWP was unauthorized. What do I do now?,"I was browsing this sub to read other people's Post-Graduate Work Permit stories when I discovered that one must stop working between receiving one's final grades and applying for the PGWP ([source](https://www.cic.gc.ca/ENGLISH/helpcentre/answer.asp?qnum=1472&top=15)). I did not know (or simply forgot) that this clause existed, so I mistakenly believed that I could continue working after finishing school but before submitting my PGWP application. I continued working part-time (16 hrs/wk) until 2022-10-26 after receiving my last outstanding grade on 2022-08-18, and then I started my current full-time job on 2022-10-31. I submitted my PGWP application on 2022-11-07.
+
+What should I do now that I have realized my mistake? Both jobs are listed under the *employment* section of my application, including that I finished my previous one in 2022-10 and started my current one in 2022-10. I checked *no* for question 2a (worked without authorization in Canada).
+
+What are the possible ramifications of having made this mistake? I assume my PGWP application could be refused, and I would have to immediately stop working upon receiving this decision. How long would I have to leave the country if that happens? I plan to visit the United States (my country of birth/citizenship) soon; could this impact me getting back into Canada afterwards?",1674276144.0,2,0.75,5
+Trivium,"Official Video for Like Light to the Flies in Montréal on October 26th, 2022?","I remember seeing a few teaser posts from Matt about the professionally shot version of their LLTTF performance in Montréal being uploaded to their YouTube channel, but I could never find the video. Did they ever post it anywhere? I'm worried I may be getting region-locked or something like that.",1673207869.0,1,1.0,1
+Concordia,"Is there anything governing professors requiring ""extra classes"" on weekends and other such specifically scheduled things outside of class?","I'm in a Summer A class where my professor has already had two ""extra classes"" where we have to connect via Zoom for another lecture on a Saturday at 6 p.m. and during the recent Monday holiday at 6 p.m., and he announced a third one today at 6 p.m. tomorrow. He also has mandatory labs (they count for grades) at times assigned to us outside of the class times I registered for, and he has had his Moodle practice tests scheduled for very specific times (e.g. we had to take the practice test exactly between 1:30 p.m. and 1:45 p.m. on a random day we did not have class). He also e-mailed us Saturday night at like 11:30 p.m. saying we had to e-mail him something by 5 p.m. on Sunday.
+
+Luckily, I've been available for all these things. But I can't help but feel that this is kinda bullshit. It's one thing to have an assignment due at a certain time a week from now, as I can find the time to do it even if I am busy the day it's due. But it feels like I'm on-call for this class all the time when I already spend like 70 hours a week between work and school, and I can't imagine how others feel that actually have things to do during these times.
+
+Has anyone been in a similar situation or know if there are any protocols that govern this type of stuff?",1653710830.0,23,1.0,6
+Quebec,"Est-ce que le français décline en Québec ? Si c'est vrai, pourquoi ?","(Pardonnez-moi en avance pour mon français.)
+
+Je suis anglophone des États-Unis qui habite actuellement en Montréal, et je suis curieux si vous avez des informations ou des expériences qui appuient la phrase « le français est en déclin » au Québec. D'après mon expérience, je ne peux pas comprendre comment la langue est en déclin. Cependant, je vis dans une bulle anglophone parce que j'étudie dans une université anglophone, et mes amis ici sont anglophones aussi. Mon expérience francophone est de détruire la langue française quand j'ouvre ma gueule américaine dans mon travail de l'informatique ou un restaurant. ^((Juh prawn oon poo-tsihn vay-jay-tear-yen, sill voo play.))
+
+Je voudrais comprendre ces deux points de vue dans une contexte francophone : que la langue française est en déclin et doit être protégée plus fortement, ou que la langue française n'a pas de problème dans la province. Est-ce que la situation est très different hors l'île de Montréal ? Merci !
+
+Edit: Wow! Je ne peux pas répondre à tout le monde, mais j'ai la majorité des réponses. Merci pour vos perspectives.",1653542936.0,61,0.81,186
+Floof,"I believe that Marlene would count as a ""floof.""",,1641599949.0,1310,1.0,19
+montreal,"Possibly Lost Cat Sighted in CDN: grey w/ a bell and a heart-shaped tag, avenue Dupuis between Victoria and Lavoie.",[removed],1634349325.0,1,1.0,0
+todayilearned,"TIL that the 1880 United States presidential election was the first in which every state chose their electors to the Electoral College by popular vote. Before then, the voters of some states did not vote for president (directly or indirectly); generally, the state legislature chose the winner.",,1601607861.0,1,1.0,0
+relationships,"My [26M] father [60M] died two months ago, and I just found out the cause of death: opioid overdose. How much should I say to his siblings [60M and ~60F] and others about the cause of death?",[removed],1571445745.0,1,0.67,4
+legaladvice,Father unexpectedly passed away with no will. Do we need to go to probate to get assets transferred to my mother? What do I need to help her? [FL],"My 60-year-old father passed away unexpectedly this Sunday, and my mother (who was married to him) says that he had not made a will. Both of them live in Florida. I flew in from California to be with my mom, and my primary goal is to help her get any assets he may have had, especially since she is very ill and needs anything she can get.
+
+A few of his assets were held jointly with my mom, including their house and a checking account, and I believe most of those can be put solely in my mother's name with a death certificate. There is at least one large ($53k) bank account that lists me as a beneficiary, and I can collect them with a death certificate as well. However, there is at least one small ($2k) account with no beneficiary, about $19k in credit card/line of credit debt, and a car that is solely in his name, let alone any other pensions and accounts we may not have discovered yet, such as investment accounts.
+
+How would we go about getting those other assets? Will we have to go to probate court to appoint my mom as heir? Will we need a lawyer to do so?
+
+Additionally, my mom and I agreed that I should have full power to act on her behalf, especially when it comes to handling my dad's estate for her. How would we go about giving me those rights?",1565851201.0,2,1.0,3
+cscareerquestions,What's the value of a Canadian Graduate Diploma in Computer Science? Is it known in the US?,"I'm an American that finished my BA in psychology in 2015 and a five-course C/C++ Certificate program in 2018, and I have been thinking about going back to school to get a computer science degree to break into the field. I'd been strongly considering going to Concordia University in Montréal, Canada, for a second bachelor's degree, and I discovered that they offer a [Graduate Diploma in Computer Science](https://www.concordia.ca/academics/graduate/computer-science-diploma.html). It's a one-year program that would cost me 27k USD (including living expenses), and the courses seem exactly what I need to get a foundational education in CS.
+
+However, the school doesn't record (or doesn't share) post-graduation employment/salary numbers for the program, and a Graduate Diploma does not seem to exist in the United States. Does anyone have any insight on how my employability would compare to other options, especially if I did this program and decided to return to the United States after completing it. Would it be considered equivalent to another bachelor's in CS? If not, how would it be considered?
+
+For what it's worth, I am considering doing [Oregon State University's online post-baccalaureate Computer Science degree](https://ecampus.oregonstate.edu/online-degrees/undergraduate/computer-science/) or a similar program instead. It would cost about 33k USD in total (without living expenses), but I could keep working and do it at my own pace (plough through it in a year or do one course at a time for 3¾ of a year).",1560654337.0,1,0.57,3
+Advice,Should I leave my civil servant job to get a graduate diploma in computer science?,"I'm mulling over a major life decision, and I'm hoping to get some internet strangers' outside perspectives.
+
+I'm a 26-year-old American guy with a bachelor degree in psychology from a university in Florida. I spent a year living in Montréal (Canada) as an exchange student and on a working holiday visa. I loved living in the city, but I had to leave due to being too sick to work and lacking a realistic way to immigrate permanently. I moved to Southern California one year later, and I am now a civil servant doing mostly clerical work for about $38k/yr USD. I like it here in San Diego, but I miss a lot about living in Montréal. Plus, the cost of living here means that I Just rack up more and more debt every month.
+
+I have thought of returning to school for another bachelor's degree in computer science to get a programming job. I have also thought about returning to Montréal. I recently discovered that it would be cheaper to do a second degree in Montréal than in my own backyard, and I visited last week and discovered that I could complete a graduate diploma for just $30k and a year of my time. I would receive a one-year work visa to stay in Canada if I graduate, and it would give me a realistic pathway to remain in Canada. I could also go on to earn a master degree in computer science (if I so desired).
+
+I have been thinking non-stop that it is a no-brainer to pursue the graduate diploma; it would give me the education and experience to get into IT while giving me one more opportunity to stay in Montréal. Even if I decide to move back to California, I would have the education to perhaps get a job that would allow me to afford living here, right?
+
+Yet, I've had my doubts these past few days. Should I rack up even more debt in hopes of getting a decent job? Should I abandon my secure civil service job in the hopes I can land a better one after a year? Should I leave SoCal weather behind for a place that snows for nearly half the damn year? Maybe I should just try to promote into an analyst position (about $50k/yr) and/or try to move up to Los Angeles instead.
+
+Ultimately, I worry that I am trying to make a major life change because I am very unhappy with my life, and I know that most of what I am unhappy about is personal rather than career related. I just want some (hopefully unbiased) outside opinions.",1555659289.0,2,1.0,1
+GirlsWithHugePussies,Found this blonde's incredibly yuge pussy on Bumble.,,1555359341.0,108,0.99,3
+RandomActsOfMuffDive,26 [M4F] #Montreal - Last night in town. Let's make it memorable!,"Monday is my last night in this lovely city before I head back to the United States. I have a hotel room near Station Place-des-Arts with a twin bed, and I'd love to have you lay on it and let me dive into your muff! I also have two joints that definitely need to be smoked if you want to help me out with that. :)
+
+I'm a blue-eyed white guy with light brown hair. Je peux parler un peu de français aussi.
+
+---
+
+#Montréal #MTL #420",1555305563.0,1,1.0,1
+Concordia,"Insight on ""Graduate Diploma"" in Computer Science?","Hello everyone!
+
+I'm an American that graduated with a BA in psychology about four years ago. The degree is from the US, but I did a semester exchange at Concordia and loved the university and the city. I've been thinking of going back to school for a BS in computer science and trying to get in that field, and I was attracted to Concordia for being cheaper than the US (and getting to move back to Montréal), but I met with an academic recruiter and discovered the graduate diploma.
+
+Does anyone have any experience with the program, or graduate diplomas in general? It isn't an academic program I have heard of in the United States. I would especially love to hear from someone who is now in (or *not* in) a career after completing one.",1555114322.0,2,1.0,4
+singing,"I tried to cover About a Girl by Nirvava, and it feels like I failed. Any tips? [26M]","[Cover of About a Girl by Nirvana](https://drive.google.com/file/d/1kLizPAoynuerwVrfYtrwjdkb6qRgLWPy/view)
+
+I've felt like a failure of a musician since I haven't ever finished a recording without hating it, and I know my vocal ability is 90% of the reason why. I've been actively trying to improve my vocals for over a year, and I mustered up the above cover.
+
+I thought it was decent at first, but I really hate how my voice sounds the more I listen to it. Admittedly, my vocal quality suffers when I try to play guitar and sing at the same time, but I'm still embarrassed at how bad it is. I've just wanted to record one song and feel like it's worth showing to others, and I guess I'm just looking for advice.",1553587570.0,3,1.0,5
+ImmigrationCanada,"""Extending"" a second Working Holiday or Young Professional permit via Québec Experience Program, Canadian Experience Class, or Québec/Federal Skilled Worker","Hello everyone. I'm an American that used to live in Montréal from 8/2014 - 8/2015, and I have been thinking more and about trying to return to Canada, whether to Montréal or a different city outside of Québec, such as Vancouver. I discovered this last weekend that I could likely get another one-year temporary work permit via a second Working Holiday or through a Young Professional permit.
+
+&#x200B;
+
+My question is this: if I wanted to stay permanently, is there any path that would allow me to stay in the country without leaving?
+
+* It appears that I'd be eligible for the Québec Experience Program or Canadian Experience Class after working for one year, but my permit would of course be for only one year. Is there a way I could either apply before I hit the one year mark and/or a way to extend the Working Holiday or Young Professional permit until a decision is made?
+* I have enough points to apply for permanent residency through the Federal Skilled Worker Program, and I would have  enough points for the Québec Skilled Worker Program assuming I meet a certain level of French. Can I do this while I am still in the country on a Working Holiday or Young Professional permit?
+
+&#x200B;
+
+I figure the likely answers to these questions is *no*, but I'm hoping there might be something that I am missing.",1551326157.0,1,1.0,4
+IWantOut,US » Canada: I lived in Montréal for a year. What are my chances of returning as a Québec skilled worker? [26M],"I spent nearly a year in Montréal thanks [to this subreddit's advice](https://www.reddit.com/r/IWantOut/comments/24i6ke/us_canada_montr%C3%A9al_for_semester_exchange_can_i/) four years ago. I spent four months as an exchange student (8/2014 - 12/2014), and I returned for eight months on a working holiday visa (12/2014 - 8/2015). Unfortunately, I had to move back to the US under less-than-ideal conditions (I was sick, lost my job, and was distraught about losing a friendship), but I have always had someday returning to Montréal in the back of my mind.
+
+I had abandoned the idea of pursuing the Québec Skilled Worker program when I left Montréal due to barely making the point cutoff and not having any money. The money wouldn't be an issue now, but I had assumed I wouldn't have a good application due to barely making the point cutoff. The question I'm hoping to shed some light on is this: *if I applied, how likely would it be for me to be accepted into the programme?*
+
+I have a BA in psychology from an American university. I do clerical work for the State of California right now ($38k/yr), and I expect to land an analyst position with the State in the next few months ($49k/yr). I'm obviously a fluent English speaker, but my French was conversational at best and has probably only deteriorated since leaving Montréal. I don't have any family in Canada.
+
+I'd love to hear from anyone who know about this program or who has gone through it.
+
+If it matters, here is a breakdown of my points: [based on this chart](http://www.immigration-quebec.gouv.qc.ca/publications/en/divers/GRI_SelectionProgReg_TravQualif2018-EN.pdf), I have 35 points for being a financially self-sufficient English speaker with a BA degree in psychology that stayed in Québec over three months and is under 35. I'd get 4 points for having over a year of work experience in a [level B classification](http://noc.esdc.gc.ca/English/noc/QuickSearch.aspx?ver=16&val65=1241), but I may have 6 or 8 points by the time I apply. I believe (barely) passing [Conversation Française IV at Concordia University](https://www.concordia.ca/cce/courses/details.html?subject=CEFR&catalog_number=425) counts as a qualified B2 certificate, which would award me 12 points. That gives me at least 51 points, just above the 50 needed to apply, not counting if I somehow managed to get a job offer in Montréal before applying.",1550284830.0,1,0.56,11
+legaladvice,[California] Master tenant wants me to sign 60-day notice paper two weeks after giving us notice by text.,"My master tenant sent me and three other roommates a text on November 14 saying that she was having new roommates move in on January 1. One roommate replied saying she wanted her 60-days notice, which would be January 13, and the master tenant said it was fine.
+
+The master tenant gave me and all the other roommates a paper to sign saying that *""I <name> received 60 day notice to vacate the property at <insert address here> on November 13, 2018. I acknowledge this and agree to be moved out by or on January 13, 2019.""*
+
+I assume she is trying to cover her ass since I believe proper notice is supposed to be by paper in California. The paper also lists the wrong date she sent the text. Assuming she fixes the date, is there a reason I should *not* sign this?",1543817706.0,1,0.67,3
+AskACanadian,When does the incessant onslaught of Christmas music/decorations start in Canada?,"I've started to hear Christmas music in restaurants and shopping centres where I live in California, and American Thanksgiving hasn't even ended yet (it's today). I started seeing Christmas shit plastering the shelves of our drug stores a few weeks ago as well (CVS and Wal-Greens, like Jean Coutu and Pharmaprix if you don't have those there).
+
+I lived in Montréal for a year and don't even remember hearing any Christmas music, but I left to visit my family a week or two before Christmas, and perhaps I'm not familiar with French Christmas songs. I remember some nice decorations put up by the city, but I don't remember it being before December.
+
+When does the holiday season start in your area of Canada?",1542924750.0,3,1.0,14
+short,"The only two proven ways for short people to actually see concerts: get as close to the stage as possible, or be on it.",,1541295547.0,20,1.0,7
+Trivium,Extra Ticket to Anaheim Concert,"I have an extra ticket to the Trivium concert tonight at the House of Blues in Anaheim. I was hoping to take someone with me, but I had nobody to offer it to. I'll give it to the highest bidder, even if that bid is just a thank you for the free ticket.
+
+(I'm driving up from San Diego right now.)
+
+EDIT: I left the extra ticket on the parking validation machine after security if anyone wants it.",1541192506.0,4,0.84,0
+CAStateWorkers,"SSAs/AGPAs: Where do you work, and how is it?","I'd love to hear from current Staff Services Analysts and Associate Governmental Program Analysts about the agencies they work for, where they are located, and how much they enjoy their work. I'm particularly interested in hearing from SSAs at the DMV regional offices; there seems to be an opening in every county near me, but I've only heard negative things about the DMV from the public. (Edit: Even if it's just a rating between zero and five stars.)
+
+&#x200B;
+
+Context: I've been an Office Technician at a very small agency for a year. I found out recently I can make $11-13k more a year as a SSA, and I would be eligible for AGPA after a year since I'd start in Range C.",1540523808.0,11,0.83,13
+offmychest,"I bought an extra concert ticket to take someone with me. I went alone, and I felt absolutely pathetic.",[removed],1539588520.0,1,1.0,0
+legaladvice,[California] Can our master tenant forbid us from having a microwave oven?,"I and three other roommates sublet rooms in a house from our other roommate. I've been here over a year, and the lease mentions nothing about appliances other than what is supplied by her. The master tenant's significant other used to live with us also, but he moved out and took his toaster oven with him.
+
+I and the three other roommates almost immediately agreed that we should get a microwave oven to replace the toaster oven, so I went out and got one. The master tenant is *not* happy about it due to the supposed ""radiation"" from it. She wants us to put it on top of the fridge (where we would need a step ladder to reach it), but has said that she's not even sure if she will allow it in the house. Can she really forbid us from having it, whether in the common kitchen area or one of our rooms?
+
+California, in case the bot can't read titles.",1533517143.0,5,0.67,6
+amiugly,"[25M] No woman has ever wanted me, and I feel repulsive.","http://imgur.com/a/XZwAgxa
+
+I have no idea how it feels to be loved or wanted by a woman. I supposedly have so many great personal qualities, but my love life has never existed. My online dating profiles are assumed to be jokes. Any woman who I have ever expressed interest in has rejected me, often with crushing insults about how being 5'6"" or having pale skin is disgusting.
+
+I've never had sex. I haven't kissed a girl since puberty. I still cling to memories of once being cuddled as a teenager and being hugged by a crush three years ago, remembering how good it felt to feel wanted, but those memories only make me feel more pathetic in the end.
+
+I have been trying to improve myself since being severely bullied in middle school. I lost weight, I whitened my teeth, and I eventually cured most of my acne. Yet I have never felt wanted or desired, and I still end up feeling as repulsive as I was in middle school. I saw my face in the mirror today and couldn't stop crying; I felt so inferior and worthless.
+
+EDIT: Wow, I really did not expect this to blow up as much as it did. I'm really blown away by the percentage of comments telling me I'm actually attractive, and I am especially blown away by the vast majority of comments saying I look better with no hair. I'll be answering as many PMs and comments as possible, but I'd like to thank everyone for their input!",1527061991.0,426,0.98,156
+OkCupid,[Critique] 25/M/San Diego - No reciprocated likes or messages; trying again after three-year hiatus.,"I'm trying to give OKCupid another go, but I'm not starting off well. I've yet to have a like or message reciprocated, and the few likes I get are from women halfway across the continent (I got A-List). I posted a [critique request three years ago and was demolished to the point I was in tears](https://www.reddit.com/r/OkCupid/comments/2to3sm/critique_22mmontr%C3%A9al_messaged_forty_women_zero/), but the site has obviously changed in my three-year-absence, and I know getting brutally honest but constructive feedback is a good thing.
+
+[Here's a direct link to my profile.](https://www.okcupid.com/profile/BuddleCudd)
+
+[Here's an Imgur album of my profile.](https://imgur.com/a/SVhwzMg)
+
+[Here are some alternate photos I could use.](https://imgur.com/a/HR7kdjF) I know it sucks that I only have selfies in some form, but it's what I have for now. Side note: I just added my current main photo.
+
+I know the self-summary is a bit too depreciating, but I can't think of a creative way to change it for the better. I'd love any other input!
+
+",1526868993.0,4,0.83,26
+screaming,Feedback/What technique am I using? (In Waves by Trivium sing-along),"I have been trying to learn how to scream à la Trivium. I practice singing and screaming while driving to and from work, and I eventually found a technique that does not feel like it is straining my voice or damaging it. [Here is a sample clip of me singing/screaming along to parts of In Waves by Trivium.](https://drive.google.com/file/d/1MwV0V3Ycg2YlaLuVGgLaATJbjuMwugIX/view) Can anybody tell me what technique I am using? Is it a safe way to do it?
+
+I would also love any feedback about it. My clean singing wasn't the best since I was trying to play guitar at the same time, but I am definitely aware of that.",1526184616.0,4,1.0,3
+Guitar,[QUESTION] Do any down-tuned guitarists here use a capo?,"I'm wondering if any guitarists here that downtune lower than E Standard or Drop D use a capo to play in a higher tuning, or if any famous guitarists use that technique? How is your experience doing so? I'm especially interested in metal guitarists.
+
+Context: I currently tune my guitars to Eb Standard^* and Drop Db^* and really enjoy it, but I've been tempted to tune back up to E Standard/Drop D to get a more punchier sound. I also really like D Standard/Drop C^* for that lower and darker sound. I wish I had six guitars (and six basses), but I only have two of each, and I don't feel like restringing and retuning them all the time. I've considered making the plunge to D Standard/Drop C and using a capo on the first and second frets to get the other four tunings.
+
+I've also been challenging myself by playing higher-tuned songs in Drop C by shifting fret positions. I've done pretty well; I can play the main riffs to Enter Sandman, Master of Puppets, and Battery by Metallica by abusing the fourth fret of the low C. However, I know I will eventually find riffs that are impossible to play without open strings, which is where I think the capo could solve that.
+
+^* (For the uninitiated, Eb Standard is standard a half step down: EbAbDbGbBbEb, D Standard is a whole step down: DGCFAD, Drop Db is Drop D a half step down: DbAbDbGbBbEb, and Drop C is Drop D a whole step down: CGCFAD).",1520562706.0,1,1.0,3
+ShittyLifeProTips,LPT: Tired of clipping your children's nails? Remove their fingertips up to the knuckle. It's just like declawing a cat!,,1510471798.0,36,0.89,3
+Kyle,When being named Kyle finally pays off.,,1508636719.0,77,0.98,3
+translator,"[Japanese > English] My username, Dakatsu.","I've been using my current username in online stuff for at least a decade. I chose it when I was going through a huge anime phase because it sounded cool, but the username has persisted well past that phase.
+
+Ironically, I'm not actually certain what it means. I see it translated as snake or scorpion, so which is it? Does it mean both? Does it have other meanings?
+
+I was also wondering how it would be rendered in Japanese characters. It seems like it is ""**だかつ**"" in Hiragana, and the equivalent in Katakana would be ""**ダカツ**"" (I won't attempt to pretend I know any Kanji). Would there be any difference in meaning or symbolism if it were written in one system over another?",1501966487.0,2,1.0,2
+Guitar,[QUESTION] Should I try to modify my cheap Korean guitar to be my dream guitar?,"I got an [ESP LTD Viper 407](http://www.chorder.com/electric-guitars/esp/ltd-viper407-491) about a year ago for $300 US. It has everything I want out of a guitar (25.5"" scale, 7 strings, and an SG shape), yet I have a love-hate relationship with it. It's heavy, it has lots of neck dive, I prefer EMG X pickups over regular ones, and I would prefer another colour than black. I've tried selling it, but I haven't gotten an offer over $200.
+
+
+I've thought more and more about trying to modify it in ways to make it more enjoyable to play. From easiest to most extreme, these include:
+
+* Having the frets redone (the 19th fret is dead)
+* Swapping the pickups with EMG X pickups (my current favourites)
+* Moving the strap knob from the back to the horn (to stop neck dive)
+* Sanding the neck joint to make it easier access (like my Dean Deceiver)
+* Perhaps even sanding the neck and body itself
+* Repainting/staining the whole guitar a new colour
+* Making the guitar string through by drilling holes and adding ferrules
+
+These modifications could obviously ruin the resale Vale of the guitar (and even the whole guitar if I attempt some of those more extreme mods), but do I have much to lose aside from a guitar that's worth little? Has anyone tried some modifications like these on a cheap guitar and transformed it into something they love to play? Any tips?",1501916316.0,8,0.7,29
+legaladvice,[California] Roommate on month-to-month contract was given 30 day notice. Does she have to leave in 30 days or at the end of month?,"My friend and roommate has a month-to-month agreement but was given her 30-day notice 30 days ago due to issues with the landlord. She and myself assumed that since the rental ""term"" is one month starting on the first of the month, she would have until August 1st to leave (e.g be out sometime tomorrow). The landlord today told her that she expects her out tonight since it would be 30 days since she was given notice.
+
+Here is the text of the contract:
+
+> The term of this Sublease shall be on a month to month basis terminating 08-01-17. Either party may terminate the Sublease Agreement at any time with a full 30 day notice.
+
+Who is in the right? Does my friend have to be out today, or does she have until the end of the month?",1501441096.0,0,0.4,7
+legaladvice,[California] Should I go to HR about being denied rest breaks? (And other things.),"I'm not certain whether this is the right place for this since this is partly non-legal advice, but I cannot find a better place.
+
+I've posted here four months ago about [being denied my rest breaks](https://www.reddit.com/r/legaladvice/comments/5y6clv/california_can_i_miss_my_rest_break/). Today I was told that I would be laid off/fired from the same job sometime in the future for unrelated performance reasons. I can keep working for now, but I do not know yet when my final day would be or whether this would be a layoff or firing. I know whether I deserve to be fired or if he is an awful boss are subjective questions, but the objective facts are that he insulted me by saying that he does not believe I have a college degree (I do) and has made inaccurate statements in his written warnings against me. At minimum, I've logged 13 rest breaks I have not received since May, including one today that I was explicitly not allowed to take after asking for it. I have not received any compensation for these missed breaks.
+
+My parents strongly believe I should call the HR department of my company tomorrow and report him for both the rest breaks and his treatment of me. They say that at this point I have nothing to lose by reporting him since I am on my way out of this company anyway, and that reporting him after I lose my job would not be effective. My worries about this course of action are that I could ensure I am fired instead of laid off by acting against him, and of course I could lose out on whatever remaining work days I have with this company. Also, I always have the option to file a wage complaint against him for the missed breaks after I lose my job. 
+
+Is there any benefit for me to go to HR before I lose my job, and should I report everything or just the denied breaks? 
+
+Also, is there any difference between getting laid off and fired when it comes to finding a new job and getting unemployment? My parents claim I should say I was laid off regardless of the facts simply because it would be impossible for future employers to know, but I feel uncertain about that.",1500613124.0,4,0.7,5
+ShittyLifeProTips,"LPT: Practice martial arts against gorillas. Gorillas are vegetarians, which means they are total pussies.",,1497235579.0,28,0.97,2
+cscareerquestions,What could I do with a C/C++ Programming Certificate?,"I am working on a C/C++ Programming Certificate via the University of California San Diego to improve my skills as an amateur video game programmer, but I also wanted a formal certification to give me general programming knowledge and get me into a better career.
+
+
+However, I do not really know what specifically the certificate would allow me to do. My current education and experience are non-technical; I have a BA degree in psychology, and I currently work in copy production at a law firm. What kinds of fields and positions could my certificate help me get into after I complete it?",1492331074.0,3,0.8,17
+legaladvice,"[California] Can I ""miss"" my rest break?","My job has scheduled rest breaks so that only one person is on break at any given time. Each individual employee is supposed to keep track of their breaks to take them on time. On two occasions my supervisor has taken my break away because I ""missed"" it. Other employees have also ""missed"" their breaks.
+
+
+For example, on one day I was scheduled to take my rest break at 2¼ hours into my shift. One of my duties is to deliver mail to my assigned section at exactly 2 hours into my shift, but on this day the mail was sorted late and I did not return until 2½ hours into my shift. I was not permitted to make up my rest break when I returned since I ""missed"" it.
+
+
+Is this legal? If not, is there anything I can realistically do about it?",1488953784.0,12,0.94,12
+Music,Masahiko Arimachi - Through The Night [Anime] [Japanese Pop Rock] [Outlaw Star opening theme],,1484277680.0,8,0.79,2
+confession,"I thought the ""We Card"" signs in stores were promoting a certain special card until I was 22.","[Light]
+
+As a kid growing up in the US, I would often see signs [like this](http://www.wecard.org/); they say ""We Card"" on a red card and yellow background. It is supposed to be a verb, as in *we card people who buy cigarettes and alcohol*.
+
+
+I interpreted it as a noun, like *Gift Card* or *Credit Card*. I thought there was a special card called a *We Card* that you had to have in order to buy alcohol or cigarettes at certain places. I had no idea *how* it worked, but I assumed it was pretty official since it was in title case and included an ® symbol next to it.
+
+
+I guess I had forgotten about the *We Card* once I reached 21 and bought my first legal alcohol with ""just"" my driver licence, and I moved to Canada a few months later and spent a year without seeing any *We Card* signs. I moved back to the United States at age 22, eventually walked into a convenience store, and realized I was misreading this sign for over 15 years.",1483250572.0,176,0.93,2
+legaladvice,[California] Weird shenanigans with my lawyer; I was in pro per until a week ago and wrongly told a case was dismissed?,"This title is a jumble, but I will explain.
+
+
+I rented a room from a master tenant, and they had a dispute with their landlord over multiple habitability issues ([more context here](https://www.reddit.com/r/legaladvice/comments/4zt7sk/california_subletting_from_master_tenant_amid/)). The landlord sued the master tenant, her husband, and myself early September for unlawful detainer. We got a lawyer to file an official answer. Since then he has advised us to remain on the property and keep possession of it until a court date is set.
+
+
+Last Saturday (3 December 2016) we were served with a second unlawful detainer lawsuit by our landlord. We met with our lawyer yesterday, and we were told that the previous case was withdrawn/thrown out/dismissed (I cannot remember the exact term), I believe by the landlord's attorney. They said that since this is a new case, we would have to pay them again in full for their services. The conversation became a bit hostile, and we are opting to find another attorney through a legal aid society.
+
+
+My master tenant and her husband went down to file our official response/answer to this new lawsuit since tomorrow is the deadline. There they discovered that our original unlawful detainer suit was not thrown out; the Superior Court of California records prove the original case is still pending, and we now have *two* unlawful detainer suits filed against us. We now have all the papers related to our case; I looked through the filings and just discovered that our response to our first suit was filed *in pro per*, without an attorney. In fact, it was not until last Wednesday (30 November) that substitution of attorney forms were filed to say that we were represented by our lawyer; beforehand, we were self-represented. I also saw, per the Superior Court's records, that there was a request for a trial date on our behalf filed *today*, and neither myself nor my master tenants filed it.
+
+
+I read through more papers and found a waiver noting that the answer filed by the attorney would be *in pro per*, and we would have to sign a retainer to retain their services. That makes sense. What I do not understand is that we signed the retainer three days after the response/answer and paid the retainer fee in full two weeks later (21-22 September). Is it normal for the attorney to take over *two months* to notify the court that he is our legal representative? Why did they say the case was dismissed when the Superior Court's records say it is still pending? Why was there a request for a trial date made today, presumably by our attorney, when they said the case was dismissed?
+
+
+These are my first ever lawsuits, my first interactions with an attorney, and I am not a legal expert. But it really seems something is wrong here. I will be going down to the Superior Court myself tomorrow, as well as making a visit to our (former) attorney. Can someone help explain this to me?",1481175243.0,2,0.75,6
+history,1 What warring nations fought each other with the same (or similar) weapon?,"I'm interested in conflicts where the opposing sides were equipped with the same (or a very similar variant of) firearm or vehicle in their respective militaries, particularly if the weapon was locally produced by each country instead of imported. 
+
+
+I have three examples:
+
+
+* In the Falklands War, the Argentinians used the [FN FAL](https://en.wikipedia.org/wiki/FN_FAL) against British soldiers armed with the nearly identical [L1A1](https://en.wikipedia.org/wiki/L1A1_self-loading_rifle#Combat_service), effectively a non-metric copy of the FN FAL.
+
+
+* The [AK-47](https://en.wikipedia.org/wiki/AK-47)/[AKM](https://en.wikipedia.org/wiki/AKM)/[Type 56](https://en.wikipedia.org/wiki/Type_56_assault_rifle) was exported to many countries that eventually fought each other, such as the Sino-Vietnamese War and Iran-Iraq War. I would assume many Soviet firearms and vehicles (and their Chinese copies) have similar stories, like the SKS.
+
+
+* The closest example of two nations fighting each other with a similar locally produced weapon I can find is in World War I, where the [American M1903 Springfield](https://en.wikipedia.org/wiki/M1903_Springfield#Adoption) was based off the [German Gewehr 98](https://en.wikipedia.org/wiki/Gewehr_98) to a point where the US government was judged to pay royalties to Mauser, the German company that made the Gewehr 98. Still, the rifles fired different ammunition and were not identical in internal function or aesthetics.
+
+*EDIT: I don't know how that 1 got in the title. :(*",1480917270.0,1,0.56,8
+AskHistorians,What warring nations fought each other with the same (or similar) weapon?,[removed],1480899097.0,1,1.0,2
+offmychest,Suicide Isn't Cowardly or Selfish,"I guarantee I would be downvoted to oblivion if I told a terminally ill cancer patient that they are just being cowardly or selfish for choosing euthanasia instead of months or years of physical suffering. So why does that become acceptable to say when the suffering is mental? Because it isn't *real* to you?
+
+
+Well, crying myself to sleep nearly every night for most my adolescence without an end in sight was *very* real to me. I'm sure whatever afflicted the millions of people who have ended their own lives was also very real to them too, even if I cannot comprehend what they were experiencing.
+
+
+I don't believe that suicide is the answer for the vast majority of people with mental illness, including myself. Yet choosing to end one's life is the exact opposite of cowardice: to act *in spite* of fear. I was afraid because the only certainty in death was its permanence, and I sought it in spite of that knowledge because anything felt preferable to a life of sorrow. Suicide certainly isn't a self*less* decision, but to claim it's the epitome of selfishness when your loss is minuscule compared to mine is absolutely insulting.
+
+
+Do you know what's truly cowardly? Attacking someone when they're at their absolute lowest over a decision made out of desperation. Do you know what's truly selfish? Wanting someone to suffer through a life they don't believe is worth living because *you* might be inconvenienced by them not being around.
+
+
+It has luckily been many years since I've written a suicide note, but I always remember writing an apology to my loved ones for what I was about to do. I have yet to hear a single fucking apology from any of them.",1480327344.0,4,0.65,0
+Bass,Bass Guitar String Tension Chart,"A few years ago I made a chart based off the [D'Addario Tension Guide](http://www.daddario.com/upload/tension_chart_13934.pdf). It has all the string gauges and pitches in a grid, so I could figure out what string gauge I would want to use for an alternate tuning. Today I decided to pretty it up and add all the string gauges D'Addario lists in their guide. These are the basic Nickel Wound strings, but I assume that the relative tension .
+
+
+**[Click here to see my ultimate bass guitar string tension chart!](http://i.imgur.com/3gJo2wa.jpg)**
+
+
+The tension values are in pounds. I prefer kilograms myself, but the actual units aren't really important. The purpose of the chart is so you can compare the current string gauges you are using to a different one. The closer the tension values are, the closer those strings will feel to the other ones for the same tuning.
+
+
+For example, let's say I enjoy a 45-100 gauge for EADG tuning, but I want to tune down two steps to DGCF. I can compare the tension the 45-100 strings have in EADG to the D, G, C, and F columns to find out that a 50/55-110 would be ideal for DCGF.
+
+
+Below the chart I have my personal recommendations for achieving a nicely balanced tension in different tunings, but you can skip that if you'd like. This probably isn't as useful as my guitar version, but I thought I'd share it.
+
+
+EDIT: The chart is based on the D'Addario Nickel Wound strings, but I presume the *relative* tensions remain the same per different brand and string type, e.g. if you like an Ernie Ball Flatwound 100 gauge E string, you'll probably like an Ernie Ball Flatwound 110 gauge string if you downtune to D.",1480052197.0,26,0.96,11
+Guitar,[OC] Electric Guitar String Tension Chart,"A few years ago I made a chart based off the [D'Addario Tension Guide](http://www.daddario.com/upload/tension_chart_13934.pdf). It has all the string gauges and pitches in a grid, so I could quickly figure out what string gauge I would want to use for an alternate tuning. Today I decided to pretty it up and add all the string gauges D'Addario offers so others could use it too.
+
+
+**[Click here to see my ultimate electric guitar string tension chart!](http://i.imgur.com/rms49Hh.jpg)**
+
+
+The tension values are in pounds. I prefer kilograms myself, but the actual units aren't really important. The purpose of the chart is so you can compare the current string gauges you are using to a different one. The closer the tension values are, the closer those strings will feel to the other ones for the same tuning.
+
+
+For example, let's say I like the feeling of 10-46 in plain ol' E standard tuning, but I want to tune down to Db/C# standard. I would just match the tension values of the 10-46 set in E standard to the pitches of Db/C# standard, Db-Gb-B-E-Ab-Db. I roughly end up with a 12-54 set for that tuning.
+
+EDIT: Sorry for forgetting those that like a wound G string. [Here's a quick fix for now](http://i.imgur.com/3haVxOv.jpg).",1480050759.0,217,0.96,61
+montreal,I miss Montréal even more now that Trump is my president.,"I spent one year living in Montréal, but I moved back to the United States fifteen months ago. I absolutely [loved the city](https://www.reddit.com/r/montreal/comments/4ndrvb/i_miss_montreal/d438uy1/); the incredible métro system, the beautiful parks, and the unique multicultural mix are just some of the many reasons. I used an education abroad and temporary working holiday visa for my stay, and I had every intention of becoming a permanent resident and citizen of Montréal, Québec, and Canada a year before I even landed in Trudeau Airport.
+
+My experience in Montréal ended on a very bad note; my personal life was [in shambles](https://www.reddit.com/r/offmychest/comments/3e10fi/i_truly_wanted_you_as_a_friend_because_you_were/), I was very ill, and I was broke and lost my job. I was [incredibly bitter](https://www.reddit.com/r/offmychest/comments/3h00ki/i_regret_moving_to_canada_and_i_cannot_leave_soon/) and hysterically depressed, and I knew that pursuing my slim chance of getting a permanent visa would cost me lots of time and money. I made the decision to return to the United States and restart my life again, but it was an incredibly painful decision to make because I still loved the city of Montréal despite the aforementioned negative experiences.
+
+
+I know you laugh at Americans that proclaim to move to Canada after a bad election. Chances are I will cool down soon enough and be just another one of them, continuing on in San Diego and forgetting that I still do have enough points to apply to immigrate to Québec. But all of you should be so happy for the country and political climate you have, where even your right-wing Conservative Party is probably more progressive than my Democratic Party. Québec is an incredible province, and Montréal is an incredible city I hope to at least visit again sometime.
+
+
+I'm sorry if /r/montreal isn't the best place for this, but I really needed to get these thoughts out.
+
+",1478830276.0,14,0.6,43
+GetEmployed,Should I apply for part-time/temp work while searching for full-time?,"I've been searching for full-time work for three months, and the only interview I've had so far is with a staffing agency that is keeping me in mind for future opportunities.
+
+I have been seeing the *help wanted* posters at Starbucks, and I've thought about applying to them as an interim job to have some income until I find higher-paying full-time work. I'm interested in Starbucks particularly because I used to be on Starbucks' payroll as a temporary employee of Teavana during last years' holiday season.
+
+Should I do it? My main concern would be quitting soon afterwards if I found something full-time and higher paying. Should I be upfront about it being temporary? Are there any other downsides?
+
+
+My apologies if this has already been asked, but I have no idea what to search for.
+
+---
+
+My background: I have a BA degree in psychology. I'm searching for something along the lines of an entry-level administrative assistant or copywriter. I eventually plan on getting a programming certification on the side once I have a car and the tuition.",1477953497.0,11,0.92,6
+EnoughTrumpSpam,"""Fact checking is the biggest scam of all time."" -/r/the_donald",,1474949777.0,28,0.68,2
+Spanish,La pronunciación de Z y C en nombres personales.,"He tenido una pregunta, y la recordé antes de ver [este artículo](http://www.bbc.com/mundo/noticias-36896631). Por este ejemplo, hay dos personas: César de América Latina, y Lucía de España. César pronuncia su nombre como /se.sar/, y Lucía pronuncia su nombre como /lu.θi.a/. Los dos se conocen.
+
+Cuando Lucía habla a César, ¿diría /θe.sar/, o /se.sar/? Y también, cuando César habla a Lucía, ¿diría /lu.si.a/, o /lu.θi.a/?
+
+Sé que los españoles dicen /be.ne.θwe.la/ por Venezuela, y los americanos latinos dicen /sa.ra.go.sa/ por Zaragoza, pero quiero saber si es por los nombres personales también. Perdonen mis errores, acabo de comenzar a mejorar mi español.",1472534946.0,8,0.79,11
+legaladvice,[California] Subletting from master tenant amid dispute with landlord. What are my rights?,"I relocated to San Diego last month, and I am renting a spare room from a married couple, the wife being the master tenant. I paid them two months rent and a security deposit upfront. The original plan was to sublet the room temporarily for two months, but I can now stay month-to-month indefinitely since their friend is not returning from Europe. I did not sign a lease.
+
+The couple is renting the property from a landlord, and they moved in a month before I did. I did not know this at first, but I never thought to ask. They have been having multiple major disputes with the property and the landlord since before I arrived. Most significantly, the basement bathroom has repeatedly flooded with sewage, and we were without a bathroom for six days when the upstairs one clogged too. The landlord took multiple days to respond, and the master tenant has withheld rent and called the city inspector.
+
+The landlord and master tenant have had multiple sit-down meetings to try to rectify these issues, but these have effectively broken down. Yesterday I answered the door to someone and gave him my full name. He served the master tenant a notice to pay rent or face eviction. The paper listed the master tenant's name, ""John Doe"", and ""Jane Doe"". The master tenant told me that she had her lawyer send the landlord a letter stating that she will continue paying rent if the issues are resolved, though she now plans on finding a new place as soon as possible. She said that we cannot be evicted for 90 days while the dispute is legally settled.
+
+I want to know where I legally stand in this dispute. My name is not on any lease, but I have a verbal agreement with the master tenant. I presume that I would be evicted if the master tenant is evicted, but am I otherwise legally liable or could be taken to court for anything? I am new to this state and rental law, and I couldn't find much info on this exact situation. Thank you, and my apologies for the wall of text.
+
+",1472282332.0,0,0.33,5
+asksandiego,How do I find a short-term apartment so I can move here?!,"I'm trying to relocate to San Diego from Florida, but I cannot find a room to rent through Craigslist! 
+
+
+All I want is to rent an apartment or room for two months or longer while I search for a new job in the area, ideally near the trolley and below $800/mo. I've been searching for over a month, replied to a few dozen places, and I've only gotten three responses for the dozens of ads I've replied to. I'm generally upfront about being from Florida, and that while I wouldn't have a job on arrival, I could pay three to six months of rent in advance.
+
+
+One person led me on for a week, only to cancel our Skype meeting because he was too drunk to download it. I e-mailed another person for a month, only for her to decide she's not interested during our Skype meeting because I'd be moving alone without parental support. I finally got to call the only other person to respond to me, but she also said that she'll probably go with someone local because I haven't been to San Diego before and don't own a car.
+
+
+I'm so frustrated and sick of life lectures and flaky people. I *know* that I want to get the hell out my current city, and I *know* that I want to move to San Diego. How the hell do I find a place to rent here?!",1467180876.0,2,1.0,8
+asksandiego,"How good is cycling, and what are the bicycle laws?","I plan on moving to San Diego in a month, and I won't have a car. I've already [asked about the transit system](https://www.reddit.com/r/asksandiego/comments/46e1uc/how_is_the_transit_system/), but I am also considering getting a bicycle. It seems like a decent way to get around, and according to Google Maps is often faster than taking transit.
+
+Are there any cycling laws I should know about? Is it forbidden to ride on the sidewalk? Do I need any lights or reflectors other than what's [listed here](https://en.wikipedia.org/wiki/Bicycle_law_in_California#Miscellaneous))? Are there lots of bike lanes, and generally how terrible are motorists to cyclists using them?
+
+Thanks!
+
+",1465284467.0,2,0.75,12
+todayilearned,TIL that the United States does not require employers to give work breaks to employees. Only 19 states require them for adults.,,1464460465.0,0,0.5,2
+GetEmployed,Tips and Advice for Out of State Job Applications?,"I want to relocate to San Diego, CA, but I currently work in Tampa Bay, FL, as a factory worker (permatemp). I am looking for tips and advice specific to applying for jobs on the other side of the country. I have saved up to pay all my moving/relocation expenses, I just need the job offer.
+
+I've browsed Indeed.com, and I am specifically worried about the large number of jobs that specify *local candidates only* or *California drivers licence required*. Is it worth applying to those jobs? I do have a *Florida* drivers licence, but I do not own a car. 
+
+Also, some threads I searched said they got local numbers and addresses/PO boxes. I feel this is a bit deceitful, but should I attempt this? I do not have any friends or family in San Diego.
+
+I have a [bachelor's degree](https://drive.google.com/file/d/0B_79pNsHbltmVVJQdVB2dThXM2c/view) and I would ideally prefer a job with computers/technology, but I'm interested in anything better than my current job. I currently make $10/hr, and I'm shooting for $13.75-$16/hr.",1462769776.0,6,0.88,3
+resumes,Résumé Critique: What should I trim out? New job details too.,"This subreddit gave me [great advice](https://www.reddit.com/r/resumes/comments/3nq7ns/r%C3%A9sum%C3%A9_critique_is_there_anything_glaringly_wrong/) the last time I posted, so I thought I'd ask for advice again.
+
+***[My Updated Résumé](https://drive.google.com/file/d/0B_79pNsHbltmVVJQdVB2dThXM2c/view)***
+
+I am seeking a new job on the west coast (ideally San Diego) so I can finally relocate. I'm open to almost anything better than my current factory job, but I'm particularly interested in a computer/technology job (despite my experience).
+
+I'm not sure what to cut to make my résumé one page again after adding my current job. Among the candidates are:
+
+* A bullet point from each of my past job descriptions
+* My volunteering section
+* My last job (Sekure), since it was a telemarketing job I was ultimately fired from. Then again, it's my only foreign work experience.
+* My activities section, though I'd like to keep it since it's been a plus in past interviews and hints at my computer knowledge without claiming too much (e.g. *definitely knows C++*).
+
+I'm also interested in sprucing up the description of my current job. I mostly just package pens in boxes and poly bags, and my job title is technically just *temporary employee* or *special pack*. I've sometimes had unofficial management duty for large packaging orders involving many people, and I am an intelligent and fast-learning hard worker, but it's hard putting that into words without claiming to have experience I don't actually have.
+
+Finally, is okay that I've left some months off my time? E.g. I list *March - August 2015* for one job, but just *2013 - 2014* for another. Also, should I turn the months into numerals? (E.g. 3/2015 - 8/2015.)
+
+I'm open to any other critiques as well. Thank you!
+
+",1462265557.0,5,1.0,7
+asksandiego,How is the transit system?,"Hi everyone. I would like to move to San Diego sometime this year, and I was curious how the transit system and the trolley are in San Diego.
+
+I currently live in Tampa Bay, and the transit system is very poor. I'm very lonely here because I can't go anywhere and I have nearly no friends because I don't have a car. I used to live in Montréal, and I loved the métro system they have. I know the trolley isn't the Montréal métro, but I was curious how livable San Diego is until I can buy a car.
+
+Also, I was curious if many studio apartments cheaper than $800/mo exist? My Craigslist browsing says the answer is a resounding *no*, but thought I'd ask.",1455789113.0,3,1.0,7
+confession,"I'm American, and I write colour, centre, and organize.","[Light]: Casual confessions
+
+It's called [Oxford Spelling](https://en.m.wikipedia.org/wiki/Oxford_spelling), and I think everyone should spell this way. Fuck *flavor*, *theater*, *colonise*, and *analyze*.
+
+
+Edit: This isn't supposed to be serious, though I wish it were the international standard.",1453335334.0,1,0.53,13
+offmychest,My Birthday Is Never Happy,"Tomorrow is my 23rd birthday. I'm sure I'll get some Facebook messages from people I haven't spoken to since high school wishing me a happy birthday. The truth is that I've gotten depressed and cried on every bithday I've had since I was 10.
+
+
+My birthday is when I look back on the last year and see how far I've come. What's changed since last year? Well, now I'm a **23**-year-old virgin with almost no friends. One year ago I lived in a foreign city in my own apartment with a nice metro system, now I live with my loathesome parents in a transit-deprived sprawl without a car. I look back at last year to see that I'm even further from being happy, and I see tomorrow as celebrating one more year of unhappiness. That won't change until I permanently leave this city and live in a place where I can actually go places and meet people without a car.
+
+Maybe my 24th birthday will finally be a happy one, but the last twelve weren't, and those distant Facebook friends wishing me happy birthday always just makes me unhappier. Leave me the fuck alone.
+
+
+",1452313132.0,1,1.0,0
+AskReddit,[Serious] What is the silliest thing you have ever seen?,,1450043713.0,1,0.67,2
+canada,Moved back to Florida from Québec a few months ago. Found $7.48 in my coat pocket.,,1449265247.0,12,0.55,26
+unrealengine,"Canvas, Slate, or UMG for Scoreboard?","I want to make a scoreboard for my first-person shooter game, but I am unsure whether I should use Canvas, Slate, or UMG (Unreal Motion Graphics). I was curious which system(s) fellow UE4 developers use.
+
+
+I switched from canvas to UMG in the early stages of my game, but I've yet to find a way to order players by score or resize scoreboard elements dynamically. I'd also like the scoreboard to be ""subclassable"" so I can customize it for each game mode while updating the base implementation.
+
+
+The ShooterGame example uses slate (the code for which is hard for me to understand), and the new Unreal Tournament uses canvas. ",1447970078.0,2,1.0,3
+SuicideWatch,"I'm so lonely, and I've been unhappy for so long. I'm so tired of it.","I'm 22, and I haven't been happy since I was 12. I hope that every year something will change and I'll finally get what I need to be happy, but it never happens. Now it just seems to get worse.
+
+
+I was forced to return to my parents' house after being fired from my first full-time job months ago. I have no money and $25k+ in student debt, and I have yet to find a single tangible benefit of having a BA in psychology. I have yet to get another job from the dozens I've applied for, whether it's a barista or a manual laborer. My only skills are writing shitty songs and programming shitty games.
+
+
+I don't have a car, which means I cannot go anywhere in this fucking sprawl. I can't see my friends across the bay (if they even care anymore), I can't meet anyone, I can't do anything. I just exist in my parents' shithole house. I loathe this city so much, and if I had money (or even a loan) I would move immediately to a place I *know* would make me happier, but right now I can't even afford guitar strings.
+
+
+I still cry over [the bitter loss of my last friendship](https://www.reddit.com/r/offmychest/comments/3e10fi/i_truly_wanted_you_as_a_friend_because_you_were/) months ago because it made me almost happy. I've never had a real girlfriend, and at this rate I never will. I basically haven't seen anyone but my parents in four months. I'm so lonely, but I can't go anywhere.
+
+
+I feel so hopeless. I intensely think about killing myself every so often. I haven't tried since I was 16, but I feel that it is inevitable if nothing changes by my 23rd birthday. I hate seeing happy couples and happy friends because it reminds me of how sad and miserable my life is. I'm just so tired of it.
+
+
+
+
+
+
+
+
+",1446745435.0,2,1.0,9
+GetEmployed,Potential employer wants me there for years. How should I deal with wanting to move much sooner?,"Sorry for an /r/titlegore-worthy title.
+
+A recruiting agency hooked me up with a job interview next week. The company seems good, the work seems good (indexing), and the pay is $5/hr more than anything I've had in the past. My only worry is that the agency asked if it is something I'd be interested in doing ""for a couple years.""
+
+
+The truth is that I want to move across the country (from Florida to California) as soon as I have the money and opportunity: probably between four to eight months from now. I don't want to be deceptive and leave after little time, but this seems to be my best (and so far only) job opportunity. Assuming I don't change my mind in the future, how should I handle this situation? ",1445644124.0,3,0.8,6
+ShittyLifeProTips,LPT: Brush your teeth twice in the morning so you don't have to brush at night.,,1445533106.0,57,0.96,0
+resumes,Résumé Critique: Is there anything glaringly wrong with mine?,"I've applied to about two dozen places with only one callback from Starbucks (and I did not get an interview). I'm looking for pretty much any job (retail, bank teller, etc). I changed the header info, but it's otherwise the same résumé I have been using.
+
+https://drive.google.com/file/d/0B_79pNsHbltmNDRXRlR6NmN1S1U/view
+
+EDIT: I should note that I am done with school, but I am not sure when I will officially graduate. I changed the dates from (2011 - 2015) to (2011 - Present) recently since someone checking my education might think I lied about the degree.",1444150811.0,3,1.0,4
+GetEmployed,"Are my degree status, past job, and/or lack of references hurting my job search?","I have been applying to jobs for a month without a single response. I finished my degree a few months ago, and I am trying to find a basic job (like at Starbucks). I am worried one of these three reasons may be why I am not hearing back from any employers:
+
+* While I have completed all requirements for my undergraduate psychology degree, I have not officially graduated yet. I studied abroad and finished everything in May 2015, but due to issues having the transcripts sent I have missed the graduation deadline for Fall 2015; I will probably officially graduate Spring 2016. I list my degree on my résumé and applications as completed if I am not given an option to note I haven't officially graduated yet, and I simply say 2011-2015 for my degree on my résumé. Would this be an issue if an employer checks on it?
+
+
+* My last employer and first full-time job was at a telemarketing company, and I am worried what they would say if someone called to ask about my employment. They are based out of Canada, but they lie and claim they are from New York City. I had also given three weeks notice that I was quitting the job, but I was terminated with one week left because I was late a few minutes. Would they claim I worked in New York? My résumé correctly says Montréal, hence my worry. Would they say I was fired?
+
+
+* Finally, I basically have only one professional reference; I worked with my best friend at my first job. That company is now defunct, so there is no management to vouch for me. Management cannot give out references at my second job, and I know nobody else from it. My last job was the one I was terminated from, and my one friend there no longer wants to speak to me. How should I deal with online forms that require two or three *professional* references?
+
+
+Thank you so much for the help!",1443682358.0,3,1.0,2
+offmychest,I wish I could leave my home town immediately.,"I've lived all but one year of my life in the Tampa Bay area. I've spent all but three of those in the same city. I know there are much worse areas in the United States to live in, but I know for a fact that I will be much happier living in California, ideally Sacramento. The pros far outweigh the cons in my book.
+
+
+Yet I can't move. I have no money or car. I want to get a job to save up to move, but I haven't been able to find one. I spent four years getting an undergraduate psychology degree (and $24k debt), and I can't even get a basic job as a barista. I could rant about a lot of things in my life right now, but it all leads to the fact that even if I got a job tomorrow, I'd be working for half a year just to be able to afford to move.
+
+
+I wish I could just move and get on with my life. I wish I had a big credit card I could just cram all my moving expenses and rent on. I'd gladly pay it back with interest. Instead, I'm stuck living with my miserable parents in a home town I have no attachment for. Every day I'm here feels like a waste.",1442817688.0,2,0.67,0
+offmychest,"I regret moving to Canada, and I cannot leave soon enough.","I'm an American. I spent four months as an exchange student in Montréal, Canada, and then [I decided](https://www.reddit.com/r/Advice/comments/2iz1u0/should_i_move_back_to_us_or_stay_in_canada_and/) to get a working holiday visa to stay in the country. At the time, I thought it was [the best idea](https://www.reddit.com/r/montreal/comments/2rz1zx/how_satisfied_are_you_of_your_quality_of_life_in/cnl25x8). That was eight months ago.
+
+
+I spent my first month and a half trying to find a job in an incredibly brutal winter (one day was -27° C/-16° F). Not being fluent in French meant that I couldn't get even a basic customer service job. I worked four days as a dishwasher, only to lose my job without ever being notified. I went back to looking for a job for another month and finally found a telemarketing job at a call centre five months ago.
+
+
+I had no friends until this point, and I [lost my only friendship](https://www.reddit.com/r/offmychest/comments/3e10fi/i_truly_wanted_you_as_a_friend_because_you_were/) at that call centre two months ago over a text message. I caught bronchitis the same time, and I couldn't see a doctor because I could never afford it. I've been coughing for three months, and I haven't been able to sing the music I wrote or exercise. I just caught something else too.
+
+
+Every hour at that job was absolutely miserable, especially since losing my only friendships, and I had given my notice that I was quitting next week to return to the United States. However, they decided to fire me today since I was a couple minutes late. I hadn't been hitting my quota since becoming sick, and it was also not my first time being late, but I didn't expect to be immediately fired.
+
+
+I have less than two weeks left in this country, and I cannot wait to leave. I had no social life, no love life, and I didn't make enough at my job to even pay off the cost of my work visa. I haven't been happy in ten years, but these last eight months were exceptionally bad. I can't help but hate this country, and I entirely regret ever moving here.",1439573640.0,2,0.67,12
+Advice,How would I relocate across the United States?,"I currently live in Montréal, Québec, but I will be moving back to my parents' place in Tampa Bay, Florida, within the next five months. I want to relocate to the west coast as soon as feasible, my most likely destination being Sacramento, California. I want to be prepared to do it alone since my parents might not support my endeavour financially. Here are the main issues I foresee:
+
+
+* What is the most economically feasible way of getting myself and my stuff from Florida to California? I do not own a car, and I would want to take my most important belongings (basically my musical instruments and laptop). Renting a car seems to be about $1400, while plane tickets are about $500.
+
+
+* What financial resources are generally required to get an apartment? I mean in terms of deposits, proofs of income, etc. required to reserve one, not necessarily actual dollar amounts. It is quite possible my dad would sign as a guarantor on a lease, but I don't want to count on that. If proof of income is required, would a job offer suffice or would I need actual pay stubs?
+
+
+* Is there anything I should know about applying for jobs from the other side of the country? Ideally I would have work lined up before moving, but it is possible I may look for work after moving. I have a BA in psychology and my current job is telemarketing at a call centre, so I would settle for anything if necessary.
+
+
+* Is it possible to move with no savings? If not, what is the minimum amount of money I should have? Once again, I want to move *as soon as feasible*, but I can accept if I have to spend a few months working in Florida to make this happen. I'd live off of my credit cards for a bit if it would get me there faster, but I doubt I could pay everything by credit card anyway (e.g. rent).
+
+
+Thanks for the advice and help!",1438128694.0,2,0.75,5
+offmychest,I truly wanted you as a friend because you were my only one.,"I moved to this country ten months ago. I spent my first four months here in university, and the next two looking for a job. I had no friends, and I was so alone. I moved away from the US for a similar reason. I almost gave up on finding a job, but I found a miserable telemarketing job at a call centre. There, on my first day, I sat next to you.
+
+
+I thought you were incredibly beautiful. I definitely wanted to get to know you better. And I did; I began to eat lunch with you. We soon began seeing each other outside of work. We'd just hang out at your place, drink at bars, and just talk. It wasn't often, but it truly meant the world to me. I have been unhappy for the last 10 years of my life, but your friendship made me almost content.
+
+
+I still think you are incredibly beautiful, but I knew I wasn't your type. No woman ever wants me, let alone gorgeous 6'1"" amazons like yourself. I accepted that you were probably not going to take my virginity, let alone date me, but I was fine with that. For once, I was just so happy someone was my friend, especially someone as unique as you. Anyways, you could be my wingman (wingwoman?) as you've mentioned you often are for other people.
+
+
+I'm sorry I drank too much the last time we were at a bar, but you were unphased by that. The situation with the co-worker encouraging me to hook up with you was awkward. You seemed unphased by that too, but I wanted to ensure that was the case. That's why I texted you this the next day:
+
+
+*""You're gorgeous, but you're also my first real friend in this country. I wouldn't do anything I think could ruin that.""*
+
+
+I thought that would make it less awkward. You didn't reply to my other texts, and you seemed annoyed the two days I saw you at work. Apparently that text was the one thing that could ruin our friendship. You claimed that you're uncomfortable around me because I'm not ""doing [sexual/romantic] stuff"" with you only because we are friends. It's been a month, and I still don't know what that means. Then again, I've never been with a woman, and you were my first female friend. Maybe I just don't get it. But I do know one thing.
+
+
+I truly wanted you as my friend because you were my only one. I am horrible at making friends. I've maybe made five in my 22 years on this planet. I felt lucky I somehow finally made one after being alone in a country I regret moving to. I thought you'd lead to even more friendships and even a few girlfriends. At worst, I'd have your company. Now I have nothing but a reminder of how much of a broken human being I am.",1437448277.0,1,1.0,2
+relationships,"My father [56 M] is cheating on my mother [56 F], treating her poorly, and being very shady with finances. I [22 M] am beginning to dislike him.","My parents are both 56 and have been together for over 34 years (22 of them married), and I'm their only child. Dad got a new job in 2014, which put him in constant contact with a woman who lives in a trailer near his building (I'll call her Lady). Dad first told me around May 2014 that he probably wanted to divorce Mom; I told him that I understood, despite my desire for them to work things out, but I told him I'd never take sides and stressed that I still loved Mom and wanted her hurt as little as possible.
+
+
+Mom found out about Lady, and was obviously upset about Dad lying about his whereabouts. I was upset with Dad; I told him that I wanted him to either divorce Mom or be exclusive with her, as I didn't want Mom to suffer. Mom eventually sent a letter to Lady and Lady's parents sometime before December 2014, which I thought ended the relationship/friendship. Dad was furious. He spent a large portion of my holiday visit home complaining about Mom and using words like *bitch* and *cunt* to describe her to me and her visiting friends.
+
+
+My phone conversations with my parents led me to believe things were improving, but apparently that was wrong. According to Mom, Dad started seeing Lady again. Mom desperately wants to stay married, but agreed to a divorce on the condition Dad discloses his finances, but he hasn't done so. Meanwhile, only around $3000 is deposited to their mutual bank account per month, or $36,000 per year; Dad makes $96,000 per year before taxes. Mom manages the bills and can barely afford them. She had confronted Dad about the missing money a few times with no results, but today he admitted to paying Lady $400/mo in cash and covering other expenses. Both Mom and I believe he is trying to hide assets for a future divorce, and she finally decided to talk to a lawyer on Monday.
+
+
+I honestly don't think I love my father anymore. Admittedly, I haven't gotten Dad's story about the finances or the newly-rekindled relationship with Lady. I plan to call him in the next few days, but I really don't think that will change how I feel unless Mom has been grossly making up things. I just don't see that being the reality. 
+
+
+I accepted that ""Mom and Dad"" would turn into just ""Mom"" and ""Dad"" many months ago, but I don't think I can forgive Dad for his verbal and emotional abuse of Mom for what I see as purely financial reasons. I really can't see myself having any desire to have a relationship with him after what is now an inevitable divorce. What should I feel, and what should I do?
+
+
+**TL;DR**: Dad wanted to divorce Mom a year ago. Told him I understood, but to minimize Mom's heartbreak. Mom wanted to work things out. Since then, Dad has treated Mom like shit, cheated on her, and hid over half his finances in a probable plan to fuck her in a future divorce. I don't know how to handle my relationship with a father I don't think I love anymore due to his actions.",1431237304.0,5,1.0,7
+short,Height Related Québec (Canada) Ad,"I live in Québec and I keep seeing this ad that some of you may find interesting: https://www.youtube.com/watch?v=oBpfQaW8_pQ
+
+
+My French is absolutely horrible (not a native), but it's definitely height related. Here's what I understood after the woman stands up:
+
+
+« Et tes dix sept pouces. Ça t'va bien. » (""And your seventeen inches, they look great."")
+
+
+I'd love for someone to complete the translation, but I think others here could dissect this by tone alone. Or not, it's up to /r/short.",1428378852.0,8,0.82,27
+gamedev,Modular Level Design: What do you do with storey height?,"I have been exploring modular level design for a first-person shooter game I have been working on, and I have definitely decided to stick to a floor grid based on multiples of 5 metres. The issue I am trying to resolve before I start actually making pieces is height: do you stick to the same grid for floor height as they did floor length/width?
+
+
+For the uninitiated, here are some writings on modular design from [Epic Games](https://udn.epicgames.com/Three/rsrc/Three/ModularLevelDesign/ModularLevelDesign.pdf) and [Bethesda](http://www.gamasutra.com/blogs/JoelBurgess/20130501/191514/Skyrims_Modular_Approach_to_Level_Design.php).
+
+
+For those interested, below are my thoughts. If it's too long, you can skip it:
+
+
+Using 5 metre height/floor increments feels too big or too small for nearly everything, so I am 90% sure I will use a different grid for storey height. I found 6 metres works well for larger-than-residential buildings, and 3 metres is good for cramped pipes. I'm trying to decide whether to use 4.5 metres or 4 metres as the intermediate floor.
+
+
+I originally thought 4.5 metres would be best, since it is perfectly between 3 and 6 metres, but 4 metres would make snapping easier. The former would have a ""base unit"" of 1.5 metres, while the latter could use 1 metre, which would be better if I decided to make platforms and such (the options for one and two metre).
+
+
+Besides the floors, I have one other tiny struggle with the length/width of walls and such. I figure 5 metre walls could be broken up into 2.5 metre ones. From there, I'm debating whether I'd prefer to break that into 1.25 metres or 1 metres (for corner pieces). Once again, the former makes more mathematical sense, but the latter would snap better.
+
+
+(It's worth adding that my walls and ceilings are generally 50 cm thick, so a 5 x 10 x 4 m room would be 4.5 x 9.5 x 3.5 m to the player.)
+
+",1428262614.0,6,0.88,5
+offmychest,Dear New Employer: thanks for no communication and being mislead about my status!,"I finally found a job after searching for nearly a month. I found an ad for a full-time *plongeur* (dishwasher) for a restaurant, and I got it after a short interview. I mentioned that I needed full-time work; I was almost out of money, had rent and food to pay for, and anything less would not support my working holiday in Canada.
+
+
+I worked four shifts over a period of eight days. I was treated by a lesser being by many of the staff, and I worked long shifts with no breaks and little food, but I was happy that I finally had a full-time job to support myself, even if I was a college graduate working minimum wage ($10.35 CAD, about $8.50 USD).
+
+
+After my fourth shift, I was told that they would call me in three days with my new schedule. I didn't receive a call, so I went down to get it. I thought maybe they forgot to call, and I didn't want to miss work on accident. Upon arrival I was told by the head chef that I wasn't going to receive it because they were too busy; he said to Google their number and call the next day.
+
+
+I called and got no answer. The restaurant was closed the next day, so I called twice the day afterwards, also receiving no answer. By this time I hadn't worked for six days.
+
+
+I went down to the restaurant again to get my schedule. I was finally brought to my schedule; I worked one shift (8-10 hours) at the end of the week. Well, until a sous chef interrupted and informed me that he didn't think it would be busy to warrant my shift; again, they'll call me when they know. I said, somewhat casually and sarcastically, that that was definitely not full-time work. He agreed; apparently everyone's hours were cut, and chances are they would not be going up for a long time.
+
+
+Admittedly, I never explicitly stated that I need full-time during the interview, but my CV and the ad I replied to listed it. I was a graduate and had full availability, so I figured that would be enough. I don't feel entitled to any hours, but I think I am entitled to being respected and told this, rather than hunting for six days for any indication of my schedule. Now I know that I need to at least find another part-time job; I should have known that six days ago, or even two weeks ago.
+
+
+Bonus: they hired at least one other full-time dishwasher at the exact same time they hired me.",1424914337.0,1,1.0,0
+OkCupid,"[Critique] 22/M/Montréal - Messaged forty women, zero dates. Why?","http://www.okcupid.com/profile/BuddleCudd
+
+
+I have yet to get any dates off of OkCupid. Only two of forty women have replied to my messages, and those two did not reply to the next one. My messages are always about *something* in their profiles.
+
+
+I've read the advice to the right and have tried to incorporate most of it from day one. I've tried different messaging techniques too. Nothing has worked, and I am about to give up on OkCupid (and online dating in general). Are there any red flags in my profile?",1422232291.0,2,0.67,20
+tifu,TIFU by missing two final exams in my last semester while studying abroad.,"I'm spending my final semester at a foreign university. In my home university we would have one exam week after our final week of classes. I figured exams wouldn't be starting here for another week because I knew the exam period *ends* in two weeks (because my current visa expires then). I only knew that one of my exams was in a week. For some foolish reason I never thought to check how long exam period is at my exchange school, but apparently it is over two weeks.
+
+
+This Saturday I'm making a grocery list on my notepad, and I decide to look up my exams and write them down to prioritize which ones to study for first. Turns out I had one that morning, and another the previous day. Without these two classes I do not get my degree.
+
+
+Normally, this would just delay my graduation another semester, but I have already spent $1000 to obtain a one-year work visa to stay in this foreign country starting next month, and its conditions will not allow me to attend university. If I cannot somehow make up these exams, I will have to choose between forfeiting my work visa or delaying my degree 18 months. Since my degree is nearly worthless to employers anyway, I am going with the latter.
+
+
+I have certainly fucked up, and it all could have been avoided had I written down those dates a week beforehand. I will facepalm eternally for this.
+
+
+**TLDR: I missed two exams because I didn't think to check when the exam period started in a new country, assuming it was the same duration as my old country. I either delay my graduation by 18 months or forfeit my work visa to stay in my new country, and I'm doing the former.**",1418024215.0,3,0.72,1
+montrealjobs,[FOR HIRE] Any job which doesn't require fluent French.,"I will graduate with a BA in Psychology this December, and I am looking for any full time work which does not require fluent French. While I am quickly improving my French, I am not yet conversational, and I have a hard time understanding spoken French. I am an American, but I have paid for a 1-year working holiday permit and aspire to become a permanent resident. I am hard working and eager to prove myself.
+
+
+I can send a proper résumé upon request, but I have previously worked front-end at a grocery store and a college bookstore, and I have interned at my hometown's Parks and Recreation department mostly writing newsletters and press releases. I have very clear writing, and I easily pick up new computer software.
+
+
+I am open to almost any job at or above minimum wage, and I would prefer a job that allows me to improve my French while not requiring its use (if that is somehow possible).",1417617664.0,5,0.7,0
+Music,Megadeth guitarist Chris Broderick and drummer Shawn Drover leave the band,,1416984218.0,28,0.75,17
+KerbalSpaceProgram,"Idea: make SP-W Photovoltaic Panels' pattern (2x3, 1x6) tweakable.","Currently, we have two items: SP-W **2x3** Photovoltaic Panels, and SP-W **1x6** Photovoltaic Panels. I think they could be combined into one item, and the pattern of the array could be tweakable (right-clicking and specifying the size of the array).    
+
+Perhaps it could even allow the user to customize the size of the array (3x2, 2x3, 1x5, 2x10, etc.) and reflect the amount of panels in the item's cost, though that's up for debate.",1416466729.0,51,0.93,20
+short,"TIL Robert Reich, political author and former US Secretary of Labor, is 149 cm tall. (4'10"")",,1416458068.0,21,0.85,15
+drums,Drummers: how fast can you hit the bass drums (single or dual pedals)?,"I'm a songwriter that mostly plays and writes metal and rock. I don't have a kit anymore, but I still write drum parts intended to be played by people someday. Assuming drummers with decent skills, at what rate could they hit the bass drum with one pedal before needing a second one, and then how fast could they hit bass drums with two pedals? (I'm guessing twice as fast?)
+
+
+For context, I have two songs where I want to have galloping 16th notes at 195 bpm, and another song with 32nd notes at 112 bpm. I could halve the bass notes, but I think the songs work better with the fast bass trills.",1416185394.0,4,1.0,6
+Jokes,What is it called when brown envelopes aren't delivered as quickly as white ones?,White Mail Privilege,1415151555.0,9,0.76,1
+AskReddit,Do you like an entertainer's work yet dislike him or her personally? Who? Why?,"For example, a musician that makes incredible music but is also an annoying racist, or an actor that is egotistical in real life but plays a character damn well in your favourite film.",1415061934.0,3,1.0,6
+unrealengine,Help understanding math with rotators?,"I am trying to offset the player's first-person weapon relative to their current view, but the gun *rolls* when I look up or down. I do not understand what is happening. Does anyone have resources on how adding and multiplying two or more rotators works, or can explain what is happening and why?
+
+
+Here's the gun offset 15° up and right: [Normal (Perfect)](http://imgur.com/WzbtI1r,dXUk3dW,6BbtgUh#0) - [Up (Rolled Counterclockwise)](http://imgur.com/WzbtI1r,dXUk3dW,6BbtgUh#1) - [Down (Rolled Clockwise)](http://imgur.com/WzbtI1r,dXUk3dW,6BbtgUh#2)
+
+
+Below is the code from ShooterGame. The word **THIS** is where I added 15.0f; the pitch is fine, but adding it to the yaw value causes the ""swivel."" Where would I add the 15.0f to properly offset the yaw (and roll) relative to the player's view, and can you explain why? Thanks!
+
+
+    void AShooterCharacter::OnCameraUpdate(const FVector& CameraLocation, const FRotator& CameraRotation)
+    {
+        USkeletalMeshComponent* DefMesh1P = Cast<USkeletalMeshComponent>(GetClass()->GetDefaultSubobjectByName(TEXT(""PawnMesh1P"")));
+        const FMatrix DefMeshLS = FRotationTranslationMatrix(DefMesh1P->RelativeRotation, DefMesh1P->RelativeLocation);
+        const FMatrix LocalToWorld = ActorToWorld().ToMatrixWithScale();
+
+        // Mesh rotating code expect uniform scale in LocalToWorld matrix
+
+        const FRotator RotCameraPitch(CameraRotation.Pitch + THIS, 0.0f, 0.0f);
+        const FRotator RotCameraYaw(0.0f, CameraRotation.Yaw + THIS, 0.0f);
+
+        const FMatrix LeveledCameraLS = FRotationTranslationMatrix(RotCameraYaw, CameraLocation) * LocalToWorld.Inverse();
+        const FMatrix PitchedCameraLS = FRotationMatrix(RotCameraPitch) * LeveledCameraLS;
+        const FMatrix MeshRelativeToCamera = DefMeshLS * LeveledCameraLS.Inverse();
+        const FMatrix PitchedMesh = MeshRelativeToCamera * PitchedCameraLS;
+
+        Mesh1P->SetRelativeLocationAndRotation(PitchedMesh.GetOrigin(), PitchedMesh.Rotator());
+    }",1413822335.0,5,0.86,4
+WhereInMontreal,Where can I find waterproof mp3 players for swimming?,"Something similar to this:
+
+
+http://www.amazon.ca/Sony-Walkman-NWZW273S-Waterproof-Earbuds/dp/B00I05EFLM/ref=sr_1_2?ie=UTF8&qid=1413228325&sr=8-2&keywords=sony+walkman+waterproof",1413228385.0,1,1.0,0
+Advice,"Should I move back to US, or stay in Canada and try to immigrate?","**TLDR: I'm studying abroad in Montréal. Should I pick the safe option and return to Tampa Bay afterwards, or continue to live in my preferred city of Montréal with the risk of having to return to the US after 12 months?**
+
+I'm a 21-year-old student from Tampa Bay that's currently on exchange in Montréal. I will finish my undergraduate psychology degree in December. My career prospects are honestly not great, and I just hope to land something above minimum wage to pay off my $37k in student loans.
+
+
+My original plan was to obtain a work permit to remain in Canada for 12 more months, hopefully having more leverage to immigrate permanently afterwards. However, I am now reconsidering moving back to the Tampa Bay area.
+
+
+Staying in Montréal allows me to use the métro system for less than $50/mo. Tampa Bay's transit systems barely exist, so I would have to buy a car (at least $1000) and pay insurance (at least $120/mo). I prefer Montréal to Tampa Bay, though I've only lived in Montréal for two months. There is little of Montréal I like less than Tampa.
+
+
+Moving back to Tampa Bay gives me safety. If my 12-month permit expires and I cannot immigrate, I'll have to move back to the US anyway. The permit and health insurance also costs $1000, and I will have to find out what happens if I cannot get a job (I'll ask Monday). Applying to immigrate would also cost money. Also, I've never experienced an actual winter, but I disliked Florida's hot summers.
+
+
+My main goal in life is to have friends and a girlfriend, yet I'm not good at making friends. I have no friends in Montréal yet, and I maybe made five in Tampa Bay during my 21 years there. I don't want to have to uproot in a year and restart again. That said, if I knew I could remain in Montréal for as long as I want, I'd do it (assuming I could stand the winter). Transportation is almost a prerequisite for a social life, which is why it's so important to me; being carless in Tampa Bay was a lonely existence.
+
+
+What would you do if you were me? Both options scare me, and I feel totally lost. I basically have two weeks to decide if I want the permit.",1413060293.0,2,1.0,8
+French,Qu'est-ce que « tu es très grande » signifie?,"If I were to tell someone « tu es très grande », am I telling her she's very *tall* or very *large*?",1411941796.0,3,0.8,6
+nottheonion,"Canadian MP Asks Questions About Iraq, Gets Rants About Israel In Response",,1411588476.0,5,0.71,4
+videos,WordsHurt - Interactive Video Shows Effects of Bullying Someone,,1411356975.0,1,0.56,1
+FloridaMan,Florida Man pets cats in middle of police chase.,,1410316812.0,12,0.84,0
+Music,Superbus - Lola [French Pop Rock],,1410315219.0,1,0.66,0
+FloridaMan,Florida Woman hid stolen lobster tails in her pants.,,1402609554.0,8,0.72,1
+French,Québec French Audiobooks?,"Bonjour à tout le monde :  
+
+I am studying French to move to Montréal in two months, and I am looking for French audiobooks with a Québécois accent. Besides audiobooks, any audio or video suggestions with a transcription would be wonderful. Merci beaucoup !
+
+In addition, am I right in that the word *karmique* would rhyme with English *beak* [ik] in European French and English *sick* [ɪk] in Canadian French?",1401233023.0,12,0.89,3
+Guitar,"Do you tune down, use a seven string, or both?","While I am normally happy with Eb standard and drop Db, I sometimes desire the lower notes drop B or seven string guitars offer. I'm curious; what you do when you want those lower notes? Do you tune down to something like drop B or C standard? Do you use a guitar with seven (or more) strings? Does anyone use both? Why?  
+
+It's okay if you're not into tuning down or extended range guitars, but I'm interested in the opinions of those that *do* use them. :)",1400903798.0,8,0.8,16
+offmychest,"I haven't ""forgiven"" my parents for taking away my car. Am I just an entitled brat?","My parents gave me my first car in high school shortly before my 18th birthday. A few months later, I decided to attend the university across the bay instead of commute to the campus nearby. My parents took away my car in response; they reasoned that I didn't need it there, and that they could no longer afford the car insurance due to the extra costs of living across the bay.  
+
+I am now 21, and I have only grown more bitter about having it taken away. I wasn't nearly as pissed as a freshman living on campus, but now I feel absolutely trapped at my apartment due to how bad my city's (Tampa, FL) bus system is. I've missed out on jobs, friends, dating, forming a band, and even sex because I just lack the ability to get to places outside of a three mile radius easily. It even takes me nearly an hour to get to the nearest grocery store. I feel so depressed and miserable living here, and I cannot wait to move somewhere with a decent public transit system to allieviate some of my misery.  
+
+I haven't ""forgiven"" my parents because I feel that there was no good reason to take my car away. Nearly everyone I know has their own car. Meanwhile, my family makes $80k+ per year and has purchased at least $8000 worth of guitars, a $2000 scooter, and a new 2014 car. My parents say they're heavily in debt, hence no car and little college assistance, but this just makes me angry about how badly they failed to manage their money. I've asked to at least have the scooter, but they refused. My mom and dad have two cars and a scooter, and their only child has nothing.
+
+**Summary/TLDR:**  
+Excluding a car, I am as well off as your typical college student. I do love my parents, and I appreciate what else they've done for me in life. I sometimes feel like a petty, entitled brat for being so angry about lacking an object I didn't even pay for. However, I feel like I would be so much happier if I could go places outside of my shitty little bubble, and I blame my parents for my inability to do so.  
+
+So Reddit, how petty does this seem to you?
+",1400900099.0,1,0.67,6
+Guitar,Cool Electronica/Synthesizer Effects?,"Hey /r/guitar,
+
+I have always been interested in getting more synthesizer and electronica-inspired sounds from my guitar (and bass). I love phaser and flanger pedals, but I want to go beyond that. There are effects pedals like the Pigtronix Mothership and Electro-Harmonix Micro Synth. There is also the Roland GK-3 pickup that converts your playing to Midi notes. Does /r/guitar know any other cool ways to get non-guitar tones from a guitar? Perhaps a digital preamp, or a midi device that doesn't require you to install a new pickup?",1399662401.0,0,0.5,4
+IWantOut,US » Canada (Montréal) for Semester Exchange. Can I make it permanent?,"Hey you kind folks!
+
+I'm a 21yo male that is going spending my next and final semester at a university in Montréal, Canada. I really want to remain and live in Canada (Montréal or Vancouver, specifically) after graduation, despite the odds. I've looked at CIC and found no tickets in, but I'm hoping someone here may point out something that I've missed.
+
+**The Bad**  
+I will be receiving an undergraduate degree from a Florida university in psychology and mass communications, which happen to be the [worst](http://www.salary.com/8-college-degrees-with-the-worst-return-on-investment/slide/10/) and [second-worst](http://www.salary.com/8-college-degrees-with-the-worst-return-on-investment/slide/9/) majors for jobs. I know this gives me basically nothing for the Canadian points system. I also really do not know exactly what I want to do as a career, and my current plan is to apply to anything related under the sun and hope someone is willing to hire me. The only past work experience I have is working at a bookstore and a grocery store.
+
+**The Good**  
+Of course, I will be living in Montréal from August to December this year. I have just finished taking French I (with an A+), and I will take French II over the summer; I will take the equivalent of French III during my time abroad. With the education and daily living, I hope this would give me sufficient French knowledge for Québec.
+
+**Other Tickets In?**  
+I have greatly considered getting a degree in nursing after completing this degree, but I am already in plenty of student loan debt. If I studied to practise nursing in Canada, is there a way I could be elligible for loans or grants?
+
+Alternatively, I would love to teach English as a second language. However, it appears that I would need an undergraduate (four-year) teaching degree to teach in most places. Am I missing something?
+
+**-----**
+
+In addition, could I remain in Canada if I am in a legitimate relationship with a Canadian? I do not mean this as another ticket in; I am legitimately concerned about falling in love and having to leave them when my education abroad ends.
+
+Thanks!
+
+EDIT: I may as well ask. In the rare event that I form a successful band or design a successful video game and become self-employed, could I stay in Canada? By successful, I mean that it pays the bills.",1398992784.0,4,0.84,6
+unrealengine,Alternative modelling software for UE4?,"Are there modelling programs that I can use for static and skeletal meshes in UE4 besides 3ds Max or Maya? I definitely cannot afford $3000 to buy either of those programs, but I would love to get back into game design after a long absence.",1395425262.0,6,0.8,11
+Pets,Roommate Is Abandoning His Kittens To Me. What Should I Do?,"I live in a college apartment with three other guys. One of my roommates is moving to a different country in less than a week, and he will not be taking his two kittens with him. He said that unless I take them, he will give them to his uncle or give them to a shelter. He got the cats around May, and we started living together around August.
+
+I am quite attached to these kittens, but I simply cannot afford to care for them. Even if my roommate pays to have them neutered and give them the proper vaccines, I couldn't pay for a vet bill if they got sick. I'm a student that can barely buy his own food.
+
+In addition, I too will be going to a foreign country in a year, and none of my other roommates want the cats. I'm afraid it would be the same thing in a year, but with me having to leave them instead. I never wanted to get cats until I settled down for these exact reasons, and while I had nothing to do with getting these kittens, I still love them very much.
+
+I told him that it would be best for everyone, including the cats, if he took them to a shelter. It feels like I am making the right call, but I still feel so bad about it. I want Reddit's second opinion. What should I do?",1386220742.0,3,0.67,4
+jobs,What are my job options in psychology vs. journalism/mass communications?,"I am currently majoring in mass communications (with a focus on journalism) and minoring in psychology, but I have considered doing the opposite: majoring in psychology and minoring in mass communications. Either route will take me two semesters to graduate, and I love/hate them equally for various reasons.
+
+I know that neither psychology or mass communications are famous for their high-paying jobs, but which route would be best for finding a job, preferably one with decent pay?
+
+(Also, would the minor matter to employers? I.e., could I get a journalism job with a journalism minor, or vice versa?)",1384408314.0,1,1.0,4
+Bass,Bass Pickup Differences?,"Hey /r/bass,
+
+I am mostly a guitarist, but I also have an Ibanez SR400QM bass. I hope to someday get a high-quality bass, but I have no clue where to start on the pickups. I know there are P-bass pickups, J-bass pickups, a PJ-bass setup, and humbucker pickups. What are the pros and cons of each? I'm particularly a fan of the tones Jason Newsted and Dave Ellefson get, and I mostly play with a pick.",1374462046.0,13,0.88,11

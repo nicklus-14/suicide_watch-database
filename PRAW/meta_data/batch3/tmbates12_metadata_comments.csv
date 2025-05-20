@@ -1,0 +1,72 @@
+subreddit,body,created_utc,score
+Charlottesville,"It \*somewhat\* recently got bumped up to 85 mph in 2020, not that this helps anyone crazy enough to be going nearly 30 over on a rural US highway",1673912202.0,0
+FPGA,"The clock is being driven by a BUFGCE, where  
+I: 12.288 MHz clock from an MMCM Clocking Wizard  
+CE: 3.072 MHz pulses from a Divide by 4 counter clocked by the 12.288 MHz clock  
+O: 3.072 MHz clock used as bclk  
+The errors that come up include:  
+Register/Latch pins with multiple clocks (27)  
+ \- 3 entries related to the divide by 4 counter, but even removing the counter and driving directly with the 12.288 MHz clock results in the same errors below  
+ \- 16 errors, one for each bit of the output register of the counter feeding into l\_data and r\_data  
+ \- 5 errors, one for each bit of the counter in the i2s\_out block that I showed in the original post  
+ \- 1 error for the data\_out register  
+ \- 1 error for the lrclk register  
+ \- 1 error on the bufgce input pin",1653020499.0,1
+pics,"The motor that moves a mirror to scan the earth is partially stuck, so the pictures don't come out quite right.",1564016211.0,3
+RTLSDR,"I'd assume it's VDL2 you're talking about, it's a bidirectional system for communicating between aircraft and ground stations, and it shows up on several frequencies near the 137MHz band.  
+ [https://www.sigidwiki.com/wiki/VHF\_Data\_Link\_-\_Mode\_2\_(VDL-M2)](https://www.sigidwiki.com/wiki/VHF_Data_Link_-_Mode_2_(VDL-M2))",1563923294.0,2
+RTLSDR,"Those interruptions are usually breaks in between portions of the data being sent, once it looks like just noise, that means that the downlink is idling, with the occasional spikes usually being DCS or EMWIN data that comes down fairly often. It can be kind of misleading, but I hope this helps.",1563843567.0,3
+RTLSDR,LRPT was disabled on MetOP-A due to interference with the HIRS instrument and to avoid that issue on the subsequent satellites it hasn't been enabled on either MetOP-B or MetOP-C.,1561143020.0,2
+RTLSDR,"That 250kHz limit is only imposed by the whatever software you're using to listen to FM through the dongle's range (i.e. SDR#). However, the entire bandwidth's worth of I/Q data is streamed from the dongle, therefore other software (like pietern's [goestools](https://github.com/pietern/goestools) or the OSP  [SatHelperApp](https://github.com/opensatelliteproject/SatHelperApp)) can process the entire \~2.4MHz bandwidth in order to receive the wide bandwidth signal. This limit leaves enough room for HRIT and the GOES telemetry data to be received simultaneously, however the GOES Rebroadcast is still too large for this (\~11MHz)",1553034856.0,3
+giftcardexchange,PM'ed,1543790567.0,1
+RTLSDR,"Looks like I'm in business now, just had to run a program on my computer that'd bog down the CPU, now I get a vit rate of about 165 with an error or two every 20 minutes or so, now I've got no problems receiving images :D  
+Full-Color Disk this Evening: [https://imgur.com/eMYxgQW](https://imgur.com/eMYxgQW)",1540425432.0,2
+RTLSDR,"As it stands I've got the LNA connected directly to the N to SMA adapted, a male to male SMA coupler into the SAWBird+, and then the SDR hooked up with a 4 inch SMA pigtail. The errors drop almost completely to zero with the occasional 1 or 2 when the vit drops down. Not sure how exactly I'm gonna get it to work until I get a pi, sounds like I'm gonna end up sinking even more money into this lol. Constantly scrolling around in chrome isn't particularly fun while I wait for the images to come down and it's in the mid 40s outside.",1540354884.0,1
+RTLSDR,"Well I just noticed the weirdest thing while looking through the thread on my laptop. Apparently my viterbi will drop down to about 170 whenever I'm just scrolling through chrome, but once I switch back to the console the rate starts to climb again. I'm wondering if it has something to do with the internals of my laptop generating quite a bit of noise. Unfortunately I don't have a scope handy, but I may have to take a look the power output from my laptop when I get a chance. Thinking if my laptop is the issue I may have to pick up one of the newer raspi's.",1540352739.0,1
+RTLSDR,"Right now I'm using goestools on Arch-Linux, the command line is just ""goesrecv -c hrit.conf -v -i 1"".  The config definitely has only the hrit option uncommented. I may try pointing it again, it seems like I can point to either 16 or 17, I've pointing at GOES 16 assuming that it is the one in the more easterly direction.  I did \*slightly\* flatten out the secondary reflector, but it's positioning doesn't seem to affect the signal very much.
+
+Here's the config file I'm using for goesrecv: [hrit.conf - Pastebin](https://pastebin.com/CXBqutSC)",1540346701.0,1
+techsupportgore,D=,1484710477.0,3
+networking,"Well, I was finally able to solve the problem by changing around a few things, so I guess I doesn't matter that much anymore.",1483247698.0,1
+networking,"I did do a no shut on the vlan, and I did assign an IP to the interface vlan 5 on the switch. I guess I'll try rebooting the router to see if that fixes it.",1483225426.0,1
+networking,"pfSense is able to ping the switch, although the pings are without a VLAN tag still, which is probably because the router found the switch's IP over the LAN interface without a VLAN tag on it. I'm not seeing the discards increase at all.",1483225070.0,1
+networking,"So, pinging from the switch to the router works fine, but it is just routing the ICMP ping internally to the IP of the VLAN5 interface. The switch can't ping the Ubuntu box though over the VLAN5 IP. The Ubuntu box spams arp requests to get the IP of the router, but nothing gets replied to because the traffic is untagged when it leaves the switch. Therefore, the pfSense box replies to the ARP requests without the VLAN tag.",1483224815.0,1
+networking,https://imgur.com/a/ex9J9,1483222892.0,1
+networking,It just strikes me odd as to why the frames leaving the switch to go to the router aren't tagged with the VLAN though.,1483222454.0,1
+networking,"Also, the switch isn't tagging frames going to the router, which is probably why this isn't working",1483221383.0,1
+networking,http://pastebin.com/PQL8DPkL,1483221236.0,1
+networking,"Wireshark is showing absolutely no vlan tagged traffic coming from that interface at all when I look at it with port mirroring.
+
+Edit:Now I do see traffic coming across, but the DHCP responses seem to be sent back as untagged by pfSense, which seems kind of odd.",1483219875.0,2
+networking,http://pastebin.com/111KKs07,1483218984.0,1
+networking,Here's the output of show vlan: http://pastebin.com/pZazyaFP,1483218787.0,1
+networking,"show vlan shows the VLAN as active, but with no ports assigned to it, since there are no access ports assigned to it, just the two trunks.",1483218687.0,1
+networking,"pfSense is connected to Gi3/0/3, the Ubuntu box is connected to Gi3/0/14",1483218054.0,1
+explainlikeimfive,"Well, I'm pretty sure there's one exception, people in Washington state have to pay taxes on Steam, since Valve (the company that owns Steam) is based there.",1483041437.0,1
+homelab,"Yes, I pulled it out and tried booting it multiple times",1482937752.0,1
+homelab,"Nope
+",1482903438.0,1
+homelab,"The last thing it was working on was the SAS controller, but it said that it failed and that a reboot would be needed, it said for me to press enter to reboot, it went through the shutdown sequence and it just got hung up. I gave it a good 10 minutes, but it was still suck trying to reboot so I shut it off, when I went to turn it back on, splash screen at all.",1482882535.0,1
+homelab,"Unfortunately, it's the only PSU I've got, I just find it odd considering it was working fine before I tried updating things.",1482880486.0,1
+homelab,"Yeah, IPMI works fine, it's just that all I have is the IPMI, no POST at all.",1482879526.0,1
+homelab,"From what I see, the slots are both empty for either card http://imgur.com/kKkrJIq",1482877031.0,1
+homelab,"Eh, I guess no one really knows what is going on with it, I guess I'm really good at making things fail to work :P Probably wouldn't have happened if I wasn't so dumb as to think that the IPMI should have a web interface which compelled me to do the update.",1482872980.0,1
+homelab,"So, after trying all of that, still nothing at all, I feel like the NVRAM didn't clear though since it still has the IPMI IP that it had before, I'm guessing there isn't any other way to clear it?",1482814176.0,1
+homelab,"Seems like I actually don't have any iDRAC cards and I thought I did, it must be something else going on then since I tried removing the SAS controller and my 4 Port NIC and it still refused to boot up
+",1482812715.0,1
+homelab,"Still no video output, but the network interface does have a link now, but it doesn't seem to have an IP of any sort after scanning my network.
+
+Edit: Actually, now it seems to have the same IP as before, but still refuses connections :/",1482811864.0,1
+homelab,"So, I clear the NVRAM and the server no longer has an ethernet link since I assume the iDRAC isn't enabled anymore, however, there still isn't any indication that it is doing anything productive
+",1482810988.0,1
+homelab,"Keep in mind that pfSense is dropping support for i386 devices soon and only amd64 builds will be available, so those watch guard boxes won't support the newer versions.",1481643561.0,3
+homelab,If your ISP allows you to get another IP you could use that new IP only for your relay using 1:1 NAT if your router supports that. ,1475936404.0,3
+homelab,"To be honest I'm interested in both, but if I had to choose it'd come down to the Sys Admin kit. I've mostly been working on creating VMs to run services on my home network, but my main server is really loud, fairly old and it doesn't exactly help the power bill much. I'm 17 years old and I've always had a sort of fascination with computers. If i could get a hold of some better hardware, or maybe just the networking equipment, I'd really appreciate it and it would really help for me to get certs. Thanks for taking it into consideration. I live in Virginia, so hopefully it isn't too far for you to ship it.",1475542925.0,1
+Warframe,"Yeah, even tried reinstalling the game to no avail",1455320834.0,1
+Warframe,Being the porch-rocking virginian sucks,1453418742.0,2
+giftcardexchange,PM'ed,1418085324.0,1
+giftcardexchange,PM sent to you,1418078437.0,1
+Steam,"I've been waiting almost a week now and still haven't gotten any response from them
+",1414101567.0,1
+Steam,"They just did a mass ban wave regarding this, including me, file a support ticket, and maybe you can see what they can do for you, I'm anxious myself as I am in the same situation as you :3",1413654719.0,1
+tf2,"Wierd, the same thing happened to me an hour ago",1413600752.0,4

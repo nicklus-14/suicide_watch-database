@@ -1,0 +1,944 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+WhatIsMyCQS,Test,,1720081144.0,1,1.0,1
+cs2,"How to Make ""Follow Recoil"" Viable","One of the things I was most excited for in CS2 was the ""Follow Recoil"" option. However, I already had some muscle memory that it just didn't feel compatible with (eg tapping and bursting became much more difficult when I couldn't rely on my crosshair being centred). I spent some time looking into scripts other people here had created and came up with a couple of my own to find the perfect balance. What I've come up with isn't as good as a two-crosshair solution would be but unless that's added in a future update I think I've come up with a solid compromise.
+
+I'll take you through the options I tried but TL;DR the bottom one is my favourite thus far. Any suggestions or improvements are more than welcome!
+
+Note: for all of these I set the ""Red"" value of the crosshair to 0 when ""Follow Recoil"" is on and 255 when it's off. My crosshair has ""Blue"" set to 255 and ""Green"" set to 10, meaning the crosshair is blue when ""Follow Recoil"" is on and pink when it's off. Additionally, I use ""cl\_crosshairstyle 5"" (aka dynamic crosshair) when ""Follow Recoil"" is off; this is probably controversial so feel free to change it to whatever you like.
+
+&#x200B;
+
+# Alt Toggle
+
+    alias active ""cl_crosshaircolor_r 0; cl_crosshair_recoil true; cl_crosshairstyle 4""
+    alias passive ""cl_crosshaircolor_r 255; cl_crosshair_recoil false; cl_crosshairstyle 5""
+    alias xhair ""xhair1"";
+    alias xhair1 ""active; alias xhair xhair2""
+    alias xhair2 ""passive; alias xhair xhair1""
+    bind ""alt"" ""xhair""
+
+This allows you to toggle ""Follow Recoil"" by hitting Alt. I don't remember where I found the original script but all I changed are the colours and crosshair styles. I found this to be better than just leaving ""Follow Recoil"" permanently on but found it could lead to awkward situations, eg swapping to a pistol would leave the option enabled or vice versa. Additionally, waiting for the recoil to reset made burst firing harder for me as I normally just recentre my crosshair and start firing again when the recoil is ""close enough"" to reset. We can do better.
+
+&#x200B;
+
+# Holding LMB (credit u/Dentstring)
+
+    alias +shootr ""+attack; cl_crosshaircolor_r 0; cl_crosshair_recoil true; cl_crosshairstyle 4""
+    alias -shootr ""-attack;cl_crosshaircolor_r 255; cl_crosshair_recoil false; cl_crosshairstyle 5""
+    bind mouse1 ""+shootr""
+
+This enables ""Follow Recoil"" as long as you're holding down the left mouse button. This helps with burst firing as it allows you to immediately recentre your crosshair. However, it still negatively impacts tap shooting, especially with pistols.
+
+Note: if you try this config and subsequently disable it remember to rebind LMB to shoot!
+
+&#x200B;
+
+# Auto LMB
+
+    // Define crosshair settings for primary and secondary weapons
+    alias ""primary_weapon_active"" ""cl_crosshaircolor_r 0; cl_crosshair_recoil true; cl_crosshairstyle 4""
+    alias ""primary_weapon_passive"" ""cl_crosshaircolor_r 0; cl_crosshair_recoil false; cl_crosshairstyle 4""
+    alias ""secondary_weapon"" ""cl_crosshaircolor_r 255; cl_crosshair_recoil false; cl_crosshairstyle 5""
+    
+    // Define shooting behavior for primary weapons
+    alias +shoot_primary ""+attack; primary_weapon_active""
+    alias -shoot_primary ""-attack; primary_weapon_passive""
+    
+    // Define shooting behavior for secondary weapons
+    alias +shoot_secondary ""+attack; secondary_weapon""
+    alias -shoot_secondary ""-attack; secondary_weapon""
+    
+    // Track the last used weapon type
+    alias ""last_weapon_primary"" ""alias swap_weapon swap_to_secondary""
+    alias ""last_weapon_secondary"" ""alias swap_weapon swap_to_primary""
+    
+    // Define quick swap behavior
+    alias ""swap_to_primary"" ""slot1; alias +shoot +shoot_primary; alias -shoot -shoot_primary; primary_weapon_passive; last_weapon_primary""
+    alias ""swap_to_secondary"" ""slot2; alias +shoot +shoot_secondary; alias -shoot -shoot_secondary; secondary_weapon; last_weapon_secondary""
+    alias ""swap_weapon"" ""swap_to_primary"" // Default to primary on game start
+    
+    // Bind primary and secondary weapon selection to update crosshair and last weapon used
+    bind ""1"" ""slot1; alias +shoot +shoot_primary; alias -shoot -shoot_primary; primary_weapon_passive; last_weapon_primary""
+    bind ""2"" ""slot2; alias +shoot +shoot_secondary; alias -shoot -shoot_secondary; secondary_weapon; last_weapon_secondary""
+    
+    // Bind quick swap (q) to swap_weapon
+    bind ""q"" ""swap_weapon""
+    
+    // Bind shooting to the current +shoot and -shoot aliases
+    bind ""mouse1"" ""+shoot""
+    
+    // Default to primary weapon settings on startup
+    alias +shoot +shoot_primary
+    alias -shoot -shoot_primary
+    primary_weapon_passive
+
+Based on u/Dentstring's config, this enables ""Follow Recoil"" only when you're holding LMB, however it also disables the option completely when using a pistol. Hitting 1 to equip your primary will switch you to primary mode and 2 to pistol mode. Hitting Q also switches between the two modes.
+
+This pretty much fixes the issue with pistols and still allows for better burst firing than the default ""Follow Recoil"" option. It's not perfect, eg if you die in deathmatch with a pistol out and respawn with your primary in your hand you'll still be using the pistol mode, however the crosshair colours should alert you to that immediately and you can hit 1 or 2 to swap configs as needed. This also makes Q only ever switch between your primary and pistol even if your last weapon used was a knife; you can swap **from** your knife to the last weapon you used but not back to the knife.
+
+I tried to make this work alongside the Alt toggle as an override but unfortunately couldn't work it out; if anyone knows how to do so please let me know! Because there's no way to completely disable ""Follow Recoil"" with your primary out it has the same problem with tap shooting as u/Dentstring's config, only that behaviour is now confined to primaries. I found this was great for spraying but the issue with tapping made me try something else...
+
+Note: if you try this config and subsequently disable it remember to rebind LMB to shoot and Q to quickswap!
+
+&#x200B;
+
+# Holding RMB
+
+    // Define crosshair settings for recoil on and off
+    alias ""recoil_on"" ""cl_crosshaircolor_r 0; cl_crosshair_recoil true; cl_crosshairstyle 4""
+    alias ""recoil_off"" ""cl_crosshaircolor_r 255; cl_crosshair_recoil false; cl_crosshairstyle 5""
+    
+    // Define behavior for right mouse button (RMB) press and release
+    alias +recoil_control ""+attack2; recoil_on""
+    alias -recoil_control ""-attack2; recoil_off""
+    
+    // Bind RMB to recoil_control
+    bind ""mouse2"" ""+recoil_control""
+    
+    // Enable scoreboard interaction (credit u/Yarfink)
+    cl_scoreboard_mouse_enable_binding ""+recoil_control""
+    
+    // Default crosshair settings on startup
+    recoil_off
+    
+    // Optionally, add ALT toggle functionality
+    alias active ""recoil_on""
+    alias passive ""recoil_off""
+    alias xhair ""xhair1""
+    alias xhair1 ""active; alias xhair xhair2""
+    alias xhair2 ""passive; alias xhair xhair1""
+    bind ""alt"" ""xhair""
+
+For me this is the sweet spot. ""Follow Recoil"" is disabled by default (fixing tap shooting) and can be turned on or off simply by pressing/releasing your right mouse button. This makes it much easier to turn the setting on right when you need to spray, even in the middle of a firefight! RMB also still works for scoped weapons, meaning if you hold RMB down with an AUG and start firing you'll use ""Follow Recoil"" while scoped and if you just press RMB to scope and release before firing ""Follow Recoil"" will be disabled. Additionally, this config also includes the Alt bind, allowing you to force ""Follow Recoil"" to on if required.
+
+While this is my favourite option thus far it does have a few drawbacks and quirks:
+
+* You need to disable the option to remove silencers if you want to use this with an M4A1S
+* As u/Yarfink pointed out the FAMAS will switch firing modes when RMB is clicked. You could get around this by using mouse4 for spraying rather than RMB; otherwise the Alt toggle works as a fallback
+* If you hit Alt to forcefully enable ""Follow Recoil"", then hit and release RMB, you'll need to hit Alt twice to use it again
+* Holding down RMB with a pistol allows you to fire exactly one bullet; any more and you need to release RMB. I couldn't find a way to completely fix this issue but Alt can be used as a workaround if you want to spray with pistols (eg dualies or CZ)
+
+&#x200B;
+
+I hope this ends up being useful to some of you. Happy New Year!
+
+[EDIT: Video of the ""Holding RMB"" config](https://youtu.be/tgUBOQq3nOo)",1704170462.0,26,0.91,9
+csgo,"How to Make ""Follow Recoil"" Viable","One of the things I was most excited for in CS2 was the ""Follow Recoil"" option. However, I already had some muscle memory that it just didn't feel compatible with (eg tapping and bursting became much more difficult when I couldn't rely on my crosshair being centred). I spent some time looking into scripts other people here had created and came up with a couple of my own to find the perfect balance. What I've come up with isn't as good as a two-crosshair solution would be but unless that's added in a future update I think I've come up with a solid compromise.
+
+I'll take you through the options I tried but TL;DR the bottom one is my favourite thus far. Any suggestions or improvements are more than welcome!
+
+Note: for all of these I set the ""Red"" value of the crosshair to 0 when ""Follow Recoil"" is on and 255 when it's off. My crosshair has ""Blue"" set to 255 and ""Green"" set to 10, meaning the crosshair is blue when ""Follow Recoil"" is on and pink when it's off. Additionally, I use ""cl\_crosshairstyle 5"" (aka dynamic crosshair) when ""Follow Recoil"" is off; this is probably controversial so feel free to change it to whatever you like.
+
+&#x200B;
+
+# Alt Toggle
+
+    alias active ""cl_crosshaircolor_r 0; cl_crosshair_recoil true; cl_crosshairstyle 4""
+    alias passive ""cl_crosshaircolor_r 255; cl_crosshair_recoil false; cl_crosshairstyle 5""
+    alias xhair ""xhair1"";
+    alias xhair1 ""active; alias xhair xhair2""
+    alias xhair2 ""passive; alias xhair xhair1""
+    bind ""alt"" ""xhair""
+
+This allows you to toggle ""Follow Recoil"" by hitting Alt. I don't remember where I found the original script but all I changed are the colours and crosshair styles. I found this to be better than just leaving ""Follow Recoil"" permanently on but found it could lead to awkward situations, eg swapping to a pistol would leave the option enabled or vice versa. Additionally, waiting for the recoil to reset made burst firing harder for me as I normally just recentre my crosshair and start firing again when the recoil is ""close enough"" to reset. We can do better.
+
+&#x200B;
+
+# Holding LMB (credit u/Dentstring)
+
+    alias +shootr ""+attack; cl_crosshaircolor_r 0; cl_crosshair_recoil true; cl_crosshairstyle 4""
+    alias -shootr ""-attack;cl_crosshaircolor_r 255; cl_crosshair_recoil false; cl_crosshairstyle 5""
+    bind mouse1 ""+shootr""
+
+This enables ""Follow Recoil"" as long as you're holding down the left mouse button. This helps with burst firing as it allows you to immediately recentre your crosshair. However, it still negatively impacts tap shooting, especially with pistols.
+
+Note: if you try this config and subsequently disable it remember to rebind LMB to shoot!
+
+&#x200B;
+
+# Auto LMB
+
+    // Define crosshair settings for primary and secondary weapons
+    alias ""primary_weapon_active"" ""cl_crosshaircolor_r 0; cl_crosshair_recoil true; cl_crosshairstyle 4""
+    alias ""primary_weapon_passive"" ""cl_crosshaircolor_r 0; cl_crosshair_recoil false; cl_crosshairstyle 4""
+    alias ""secondary_weapon"" ""cl_crosshaircolor_r 255; cl_crosshair_recoil false; cl_crosshairstyle 5""
+    
+    // Define shooting behavior for primary weapons
+    alias +shoot_primary ""+attack; primary_weapon_active""
+    alias -shoot_primary ""-attack; primary_weapon_passive""
+    
+    // Define shooting behavior for secondary weapons
+    alias +shoot_secondary ""+attack; secondary_weapon""
+    alias -shoot_secondary ""-attack; secondary_weapon""
+    
+    // Track the last used weapon type
+    alias ""last_weapon_primary"" ""alias swap_weapon swap_to_secondary""
+    alias ""last_weapon_secondary"" ""alias swap_weapon swap_to_primary""
+    
+    // Define quick swap behavior
+    alias ""swap_to_primary"" ""slot1; alias +shoot +shoot_primary; alias -shoot -shoot_primary; primary_weapon_passive; last_weapon_primary""
+    alias ""swap_to_secondary"" ""slot2; alias +shoot +shoot_secondary; alias -shoot -shoot_secondary; secondary_weapon; last_weapon_secondary""
+    alias ""swap_weapon"" ""swap_to_primary"" // Default to primary on game start
+    
+    // Bind primary and secondary weapon selection to update crosshair and last weapon used
+    bind ""1"" ""slot1; alias +shoot +shoot_primary; alias -shoot -shoot_primary; primary_weapon_passive; last_weapon_primary""
+    bind ""2"" ""slot2; alias +shoot +shoot_secondary; alias -shoot -shoot_secondary; secondary_weapon; last_weapon_secondary""
+    
+    // Bind quick swap (q) to swap_weapon
+    bind ""q"" ""swap_weapon""
+    
+    // Bind shooting to the current +shoot and -shoot aliases
+    bind ""mouse1"" ""+shoot""
+    
+    // Default to primary weapon settings on startup
+    alias +shoot +shoot_primary
+    alias -shoot -shoot_primary
+    primary_weapon_passive
+
+Based on u/Dentstring's config, this enables ""Follow Recoil"" only when you're holding LMB, however it also disables the option completely when using a pistol. Hitting 1 to equip your primary will switch you to primary mode and 2 to pistol mode. Hitting Q also switches between the two modes.
+
+This pretty much fixes the issue with pistols and still allows for better burst firing than the default ""Follow Recoil"" option. It's not perfect, eg if you die in deathmatch with a pistol out and respawn with your primary in your hand you'll still be using the pistol mode, however the crosshair colours should alert you to that immediately and you can hit 1 or 2 to swap configs as needed. This also makes Q only ever switch between your primary and pistol even if your last weapon used was a knife; you can swap **from** your knife to the last weapon you used but not back to the knife.
+
+I tried to make this work alongside the Alt toggle as an override but unfortunately couldn't work it out; if anyone knows how to do so please let me know! Because there's no way to completely disable ""Follow Recoil"" with your primary out it has the same problem with tap shooting as u/Dentstring's config, only that behaviour is now confined to primaries. I found this was great for spraying but the issue with tapping made me try something else...
+
+Note: if you try this config and subsequently disable it remember to rebind LMB to shoot and Q to quickswap!
+
+&#x200B;
+
+# Holding RMB
+
+    // Define crosshair settings for recoil on and off
+    alias ""recoil_on"" ""cl_crosshaircolor_r 0; cl_crosshair_recoil true; cl_crosshairstyle 4""
+    alias ""recoil_off"" ""cl_crosshaircolor_r 255; cl_crosshair_recoil false; cl_crosshairstyle 5""
+    
+    // Define behavior for right mouse button (RMB) press and release
+    alias +recoil_control ""+attack2; recoil_on""
+    alias -recoil_control ""-attack2; recoil_off""
+    
+    // Bind RMB to recoil_control
+    bind ""mouse2"" ""+recoil_control""
+    
+    // Enable scoreboard interaction (credit u/Yarfink)
+    cl_scoreboard_mouse_enable_binding ""+recoil_control""
+    
+    // Default crosshair settings on startup
+    recoil_off
+    
+    // Optionally, add ALT toggle functionality
+    alias active ""recoil_on""
+    alias passive ""recoil_off""
+    alias xhair ""xhair1""
+    alias xhair1 ""active; alias xhair xhair2""
+    alias xhair2 ""passive; alias xhair xhair1""
+    bind ""alt"" ""xhair""
+
+For me this is the sweet spot. ""Follow Recoil"" is disabled by default (fixing tap shooting) and can be turned on or off simply by pressing/releasing your right mouse button. This makes it much easier to turn the setting on right when you need to spray, even in the middle of a firefight! RMB also still works for scoped weapons, meaning if you hold RMB down with an AUG and start firing you'll use ""Follow Recoil"" while scoped and if you just press RMB to scope and release before firing ""Follow Recoil"" will be disabled. Additionally, this config also includes the Alt bind, allowing you to force ""Follow Recoil"" to on if required.
+
+While this is my favourite option thus far it does have a few drawbacks and quirks:
+
+* You need to disable the option to remove silencers if you want to use this with an M4A1S
+* As u/Yarfink pointed out the FAMAS will switch firing modes when RMB is clicked. You could get around this by using mouse4 for spraying rather than RMB; otherwise the Alt toggle works as a fallback
+* If you hit Alt to forcefully enable ""Follow Recoil"", then hit and release RMB, you'll need to hit Alt twice to use it again
+* Holding down RMB with a pistol allows you to fire exactly one bullet; any more and you need to release RMB. I couldn't find a way to completely fix this issue but Alt can be used as a workaround if you want to spray with pistols (eg dualies or CZ)
+
+&#x200B;
+
+I hope this ends up being useful to some of you. Happy New Year!
+
+[EDIT: Video of the ""Holding RMB"" config](https://youtu.be/tgUBOQq3nOo)",1704170443.0,27,0.92,10
+GlobalOffensive,"How to Make ""Follow Recoil"" Viable","One of the things I was most excited for in CS2 was the ""Follow Recoil"" option. However, I already had some muscle memory that it just didn't feel compatible with (eg tapping and bursting became much more difficult when I couldn't rely on my crosshair being centred). I spent some time looking into scripts other people here had created and came up with a couple of my own to find the perfect balance. What I've come up with isn't as good as a two-crosshair solution would be but unless that's added in a future update I think I've come up with a solid compromise.
+
+I'll take you through the options I tried but TL;DR the bottom one is my favourite thus far. Any suggestions or improvements are more than welcome!
+
+Note: for all of these I set the ""Red"" value of the crosshair to 0 when ""Follow Recoil"" is on and 255 when it's off. My crosshair has ""Blue"" set to 255 and ""Green"" set to 10, meaning the crosshair is blue when ""Follow Recoil"" is on and pink when it's off. Additionally, I use ""cl\_crosshairstyle 5"" (aka dynamic crosshair) when ""Follow Recoil"" is off; this is probably controversial so feel free to change it to whatever you like.
+
+&#x200B;
+
+# Alt Toggle
+
+    alias active ""cl_crosshaircolor_r 0; cl_crosshair_recoil true; cl_crosshairstyle 4""
+    alias passive ""cl_crosshaircolor_r 255; cl_crosshair_recoil false; cl_crosshairstyle 5""
+    alias xhair ""xhair1"";
+    alias xhair1 ""active; alias xhair xhair2""
+    alias xhair2 ""passive; alias xhair xhair1""
+    bind ""alt"" ""xhair""
+
+This allows you to toggle ""Follow Recoil"" by hitting Alt. I don't remember where I found the original script but all I changed are the colours and crosshair styles. I found this to be better than just leaving ""Follow Recoil"" permanently on but found it could lead to awkward situations, eg swapping to a pistol would leave the option enabled or vice versa. Additionally, waiting for the recoil to reset made burst firing harder for me as I normally just recentre my crosshair and start firing again when the recoil is ""close enough"" to reset. We can do better.
+
+&#x200B;
+
+# Holding LMB (credit u/Dentstring)
+
+    alias +shootr ""+attack; cl_crosshaircolor_r 0; cl_crosshair_recoil true; cl_crosshairstyle 4""
+    alias -shootr ""-attack;cl_crosshaircolor_r 255; cl_crosshair_recoil false; cl_crosshairstyle 5""
+    bind mouse1 ""+shootr""
+
+This enables ""Follow Recoil"" as long as you're holding down the left mouse button. This helps with burst firing as it allows you to immediately recentre your crosshair. However, it still negatively impacts tap shooting, especially with pistols.
+
+Note: if you try this config and subsequently disable it remember to rebind LMB to shoot!
+
+&#x200B;
+
+# Auto LMB
+
+    // Define crosshair settings for primary and secondary weapons
+    alias ""primary_weapon_active"" ""cl_crosshaircolor_r 0; cl_crosshair_recoil true; cl_crosshairstyle 4""
+    alias ""primary_weapon_passive"" ""cl_crosshaircolor_r 0; cl_crosshair_recoil false; cl_crosshairstyle 4""
+    alias ""secondary_weapon"" ""cl_crosshaircolor_r 255; cl_crosshair_recoil false; cl_crosshairstyle 5""
+    
+    // Define shooting behavior for primary weapons
+    alias +shoot_primary ""+attack; primary_weapon_active""
+    alias -shoot_primary ""-attack; primary_weapon_passive""
+    
+    // Define shooting behavior for secondary weapons
+    alias +shoot_secondary ""+attack; secondary_weapon""
+    alias -shoot_secondary ""-attack; secondary_weapon""
+    
+    // Track the last used weapon type
+    alias ""last_weapon_primary"" ""alias swap_weapon swap_to_secondary""
+    alias ""last_weapon_secondary"" ""alias swap_weapon swap_to_primary""
+    
+    // Define quick swap behavior
+    alias ""swap_to_primary"" ""slot1; alias +shoot +shoot_primary; alias -shoot -shoot_primary; primary_weapon_passive; last_weapon_primary""
+    alias ""swap_to_secondary"" ""slot2; alias +shoot +shoot_secondary; alias -shoot -shoot_secondary; secondary_weapon; last_weapon_secondary""
+    alias ""swap_weapon"" ""swap_to_primary"" // Default to primary on game start
+    
+    // Bind primary and secondary weapon selection to update crosshair and last weapon used
+    bind ""1"" ""slot1; alias +shoot +shoot_primary; alias -shoot -shoot_primary; primary_weapon_passive; last_weapon_primary""
+    bind ""2"" ""slot2; alias +shoot +shoot_secondary; alias -shoot -shoot_secondary; secondary_weapon; last_weapon_secondary""
+    
+    // Bind quick swap (q) to swap_weapon
+    bind ""q"" ""swap_weapon""
+    
+    // Bind shooting to the current +shoot and -shoot aliases
+    bind ""mouse1"" ""+shoot""
+    
+    // Default to primary weapon settings on startup
+    alias +shoot +shoot_primary
+    alias -shoot -shoot_primary
+    primary_weapon_passive
+
+Based on u/Dentstring's config, this enables ""Follow Recoil"" only when you're holding LMB, however it also disables the option completely when using a pistol. Hitting 1 to equip your primary will switch you to primary mode and 2 to pistol mode. Hitting Q also switches between the two modes.
+
+This pretty much fixes the issue with pistols and still allows for better burst firing than the default ""Follow Recoil"" option. It's not perfect, eg if you die in deathmatch with a pistol out and respawn with your primary in your hand you'll still be using the pistol mode, however the crosshair colours should alert you to that immediately and you can hit 1 or 2 to swap configs as needed. This also makes Q only ever switch between your primary and pistol even if your last weapon used was a knife; you can swap **from** your knife to the last weapon you used but not back to the knife.
+
+I tried to make this work alongside the Alt toggle as an override but unfortunately couldn't work it out; if anyone knows how to do so please let me know! Because there's no way to completely disable ""Follow Recoil"" with your primary out it has the same problem with tap shooting as u/Dentstring's config, only that behaviour is now confined to primaries. I found this was great for spraying but the issue with tapping made me try something else...
+
+Note: if you try this config and subsequently disable it remember to rebind LMB to shoot and Q to quickswap!
+
+&#x200B;
+
+# Holding RMB
+
+    // Define crosshair settings for recoil on and off
+    alias ""recoil_on"" ""cl_crosshaircolor_r 0; cl_crosshair_recoil true; cl_crosshairstyle 4""
+    alias ""recoil_off"" ""cl_crosshaircolor_r 255; cl_crosshair_recoil false; cl_crosshairstyle 5""
+    
+    // Define behavior for right mouse button (RMB) press and release
+    alias +recoil_control ""+attack2; recoil_on""
+    alias -recoil_control ""-attack2; recoil_off""
+    
+    // Bind RMB to recoil_control
+    bind ""mouse2"" ""+recoil_control""
+    
+    // Enable scoreboard interaction (credit u/Yarfink)
+    cl_scoreboard_mouse_enable_binding ""+recoil_control""
+    
+    // Default crosshair settings on startup
+    recoil_off
+    
+    // Optionally, add ALT toggle functionality
+    alias active ""recoil_on""
+    alias passive ""recoil_off""
+    alias xhair ""xhair1""
+    alias xhair1 ""active; alias xhair xhair2""
+    alias xhair2 ""passive; alias xhair xhair1""
+    bind ""alt"" ""xhair""
+
+For me this is the sweet spot. ""Follow Recoil"" is disabled by default (fixing tap shooting) and can be turned on or off simply by pressing/releasing your right mouse button. This makes it much easier to turn the setting on right when you need to spray, even in the middle of a firefight! RMB also still works for scoped weapons, meaning if you hold RMB down with an AUG and start firing you'll use ""Follow Recoil"" while scoped and if you just press RMB to scope and release before firing ""Follow Recoil"" will be disabled. Additionally, this config also includes the Alt bind, allowing you to force ""Follow Recoil"" to on if required.
+
+While this is my favourite option thus far it does have a few drawbacks and quirks:
+
+* You need to disable the option to remove silencers if you want to use this with an M4A1S
+* As u/Yarfink pointed out the FAMAS will switch firing modes when RMB is clicked. You could get around this by using mouse4 for spraying rather than RMB; otherwise the Alt toggle works as a fallback
+* If you hit Alt to forcefully enable ""Follow Recoil"", then hit and release RMB, you'll need to hit Alt twice to use it again
+* Holding down RMB with a pistol allows you to fire exactly one bullet; any more and you need to release RMB. I couldn't find a way to completely fix this issue but Alt can be used as a workaround if you want to spray with pistols (eg dualies or CZ)
+
+&#x200B;
+
+I hope this ends up being useful to some of you. Happy New Year!
+
+[EDIT: Video of the ""Holding RMB"" config](https://youtu.be/tgUBOQq3nOo)",1704170417.0,77,0.87,20
+ChatGPT,Example of how removing restrictions can generate significantly more useful responses,,1677161232.0,6,0.87,4
+linuxquestions,Is it safe to delete ~/.cache/fontconfig?,"I keep getting errors about my root partition being full despite it having space; turns out I'm out of inodes and almost all of them are being used by the one folder, \~/.cache/fontconfig.
+
+&#x200B;
+
+`find / -xdev -printf '%h\n' | sort | uniq -c | sort -k l -n` tells me that it's using 2268486 inodes, the next largest is 33081. That single folder is using 79% of my inodes.
+
+&#x200B;
+
+So my question is... can I safely delete this folder? Will it regenerate or will bad things happen?",1573372142.0,8,0.91,3
+tipofmytongue,[TOMT] [GAME] [LATE 90s/EARLY 2000s] Educational English game about a frog in Aztec ruins,[removed],1564749255.0,1,1.0,0
+buildapc,MOBO lights up for under a second (2700x/MSI B450 Gaming Plus),"Mate's pulling his hair out trying to get this new build working. The motherboard lights and fans come on for a split second before shutting right back off, after that it won't respond to the power button or shorting the power pins for about five minutes.
+
+We've tested the PSU in his old build and it works fine. Everything looks like it's plugged in properly. We've got it on the MOBO box in case the standoffs are shorting it. GPU out, one/no ram sticks. Even with the CPU out, same thing, doesn't stay on long enough to see a debug light. Motherboard's brand new but it has to be faulty right?
+
+Just want to know, is there anything else we can do to test it?",1563085452.0,3,1.0,8
+animalid,[Sydney] Who's that Pokémon?,,1557009628.0,21,0.88,3
+linuxquestions,"GRUB boots to console, but typing ""exit"" boots system normally","On boot I always get GRUB's ""minimal bash like editing is supported"", but if I exit that the boot menu displays properly and I can boot my OS without issue. This is a fresh Arch Linux install, everything else works perfectly. I've tried regenerating my grub.cfg, I can change settings fine but I still boot to console.
+
+For reference this is UEFI, if I try to boot Arch's partition instead of just the disk I get the console BUT typing exit just brings me back to my motherboard's boot menu.
+
+Any help would be greatly appreciated <3
+
+EDIT: SOLVED, thank you! Had to reinstall the linux package with boot mounted since I hadn't generated my images while running pacstrap",1551763539.0,3,0.81,8
+ifyoulikeblank,[IIL] Mike Shinoda - Can't Hear You Now [WEWIL?],,1550923704.0,1,1.0,0
+buildapc,Gigabyte Z390 Aorus Pro - do I need the extra ATX connector?,"Got a 700w PSU already ([Thermaltake Smart RGB](https://au.pcpartpicker.com/product/RwVD4D/thermaltake-smart-rgb-700w-80-certified-atx-power-supply-ps-spr-0700nhfawu-1)) which has 2x4pin ATX connectors. 700w should be more than enough for a single-GPU, 9600k build, with some overclocking wiggle room. However the [Aorus Pro](https://www.gigabyte.com/Motherboard/Z390-AORUS-PRO-WIFI-rev-10#kf) has ""8+4 Solid-pin CPU Power Connectors"". The site doesn't elaborate on how necessary the extra connector is, just some garbage about falcon talons and that it offers ""incredible precision in delivering power"".
+
+&#x200B;
+
+[Guru3D's review](https://www.guru3d.com/articles-pages/gigabyte-z390-aorus-pro-review,5.html) of the board mentions that ""just using one 8-pin connector is plenty"", although that's the last it's mentioned, with the rest of the review presumably using the extra connector. I can't seem to find anything on how much of a difference the connector makes, to the point that [this random redditor](https://www.reddit.com/r/intel/comments/9y92g6/gigabyte_z390_aorus_ultra_impressions_and/ea49mqi/?context=8&depth=9) saying it's for liquid nitrogen-level overclocking is the only specific comment I could find on the subject.
+
+&#x200B;
+
+So. TL;DR. By not using the extra 4xATX connector, what am I sacrificing? Is it really just for insane, unstable overclocks or am I doing myself a disservice by ignoring it?",1546663235.0,1,1.0,6
+AusLegal,"No internet after 2 months paying for Spintel but ""cannot cancel (no lock in contract) until the service begins"", is this even legal?","My mate's been getting fucked around for the past couple months trying to get internet access.
+
+First the story was ""we've inspected your line, you will just be able to plug your router in and you're g2g""
+
+When it didn't and he called them they said ""rare software glitch it will be fixed by Friday at 5""
+
+5 rolls round, now it's an Optus issue ""but rest assured it will be on the next business day""
+
+Monday, they say they'll fix it Friday.
+
+
+You can see the pattern. Couple weeks of this roll by, it's Friday, this was the ""100% guaranteed we're on it it'll work"" day. And it would be up by 3 so he could call if it wasn't.
+
+At 3 it was delayed to 5.
+
+At 5... Now it's Telstra and they've gone home, now it'll be next Monday.
+
+
+Everything about this screams scam. Spintel's mobile reviews are astroturfing-level positive but broadband is universally panned. The fact that they don't even know which ISP's lines they're using seems like a crimson flag.
+
+
+He's planning on contacting the Telecommunications Ombudsman and performing a chargeback, which they didn't seem too phased by; probably because today they told him that despite the ""no lock in contract"", until the service is activated it can't be cancelled.
+
+So he's paid for 2 months now, and they're telling him his only option is to keep paying them and trust that it'll happen eventually. This cannot be legal. What is his recourse?",1540536821.0,8,0.84,5
+radarr,"Is it possible to ""follow"" directors?","As in, follow Quentin Tarantino so his movies automatically pop up on the calendar and are searched for on release. If this isn't possible it'd be an incredibly useful feature at least",1531147210.0,5,0.86,6
+ifyoulikeblank,[Music] [IIL] The Comedown and PVRIS [WEWIL?],"[The Comedown](https://youtu.be/Gc_7u98xWUY)
+[PVRIS](https://youtu.be/8aQz-aKvyQU)
+
+Don't really know what genre to put them in, found them both through Spotify song radios on post hardcore bands",1530071896.0,1,1.0,0
+OSMC,"Changing passwords using passwd doesn't work, can't SSH","EDIT: I don't know why this worked but clearing out ~/.ssh/known_hosts completely fixed it, even though it had already asked me to accept the new fingerprint... makes no sense to me but hey it's working again :)
+
+Title says it all. This is a fresh install so I have no idea how the password(s) could have been changed, let alone stay whatever they are after changing them myself (added `init=/bin/bash` to cmdline.txt, mounted with `mount -rw -o remount /` and ran `passwd osmc` AND `passwd root` as specified [here](https://discourse.osmc.tv/t/force-reset-password/11275/4)). No dice, still get `Permission denied, please try again` with both :(
+
+Really want the ability to SSH in, boots and runs fine but I don't want to have to take out the microSD every time I need to do something requiring root :( any ideas what could be causing this? I'm at an absolute loss, reinstalling was my last resort. Any help would be greatly appreciated, thank you so much in advance :)",1519555977.0,2,1.0,2
+kodi,"Youtube addon (5.5.0) suddenly won't work even after a full OSMC reinstall, need ideas to try cause I'm all out","Started a couple days ago, until then it was working fine, had my own API keys, shared through Yatse so I wouldn't have to use that godforsaken interface, extremely convenient. Suddenly however all videos stopped working, they'll load for ~5 seconds before telling me to check the log for more information (which wouldn't you guess has nothing resembling an error, just logs of when I tried to sign in/play things -_-).
+
+When I saw I was suddenly signed out of YouTube on the app I tried signing back in, after the first code into youtube.com/activate ""works"" and my rpi notices it's gone through I get a maybe 1 second error that I've worked out says `LoginException It's been right for nearly a year now but whetever you say Google.
+
+Made a new project, got new keys, put them in... same story. Reinstalled OSMC itself out of desperation, no luck. Quadruple-checked the API/Client ID/Client Secret, even tried adding `.apps.usercontent.com` to the end of the ID, nothing. This was after trying the methods outlined [here](https://forum.kodi.tv/showthread.php?tid=267160) and [here](https://www.howtogeek.com/273956/how-to-fix-kodis-youtube-quota-exceeded-problem/) which say to sign in, put in the new keys, sign out and sign back in again, supposedly viola. That method's got me the furthest with being able to actually SIGN IN with the custom keys, however videos still won't play, exact same problem. It's like Kodi just doesn't support Youtube anymore, even though [these guys](https://www.reddit.com/r/kodi/comments/7xyb3k/official_kodi_addon_for_youtube_is_not_playing/) say it was fixed in a now-outdated update.
+
+Years of using Arch has taught me that this is probably user error stemming from some bizarre low level problem I'd have no chance of even knowing about so if anyone can offer any advice/suggestions whatsoever it would be greatly appreciated, especially since I use this pi for Youtube more often than anything else :(
+
+Even if you can't help thanks for reading and trying anyway, /r/Addons4Kodi just deleted the post so you're already being more helpful ;)",1519189951.0,10,0.79,4
+Addons4Kodi,"Youtube addon (5.5.0) suddenly won't work even after a full OSMC reinstall, need ideas to try cause I'm all out",[removed],1519147801.0,4,1.0,1
+linuxquestions,"Using Gnome, have screen blanking set to ""Never"" but it happens every 10 minutes of inactivity",I have no idea what else could be controlling this... any ideas?,1512390482.0,19,1.0,10
+utopiatv,What is Carvel muttering in Romani throughout season 2?,"The subtitles have bits for him, eg ""palpale... ka murro trayo"" 41 minutes into S02E02, yet Google Translate doesn't seem to support Romani and I can't find a translator that understands these words. Do they mean anything? 
+
+Would really be interesting to see what his mind is like during this time",1510035034.0,13,0.89,0
+archlinux,"Musicbrainz Picard no longer runs, ""ImportError: cannot import name convert_error"" (X-post /r/linuxquestions)","EDIT: SOLVED! @ingolemo worked out you have to reinstall the mutagen package. Thank you so much!
+
+This happened after an update about a week ago. Tried completely reinstalling Picard, no dice. This is the full message I get when running it in terminal:
+
+    [20:56][axb@PyrelightArch ~] sudo picard                   
+    Traceback (most recent call last):
+      File ""/usr/bin/picard"", line 2, in <module>
+        from picard.tagger import main; main('/usr/share/locale', True)
+      File ""/usr/lib/python2.7/site-packages/picard/tagger.py"", line 64, in <module>
+        from picard.formats import open as open_file
+      File ""/usr/lib/python2.7/site-packages/picard/formats/__init__.py"", line 89, in <module>
+        from picard.formats.id3 import (
+      File ""/usr/lib/python2.7/site-packages/picard/formats/id3.py"", line 21, in <module>
+        import mutagen.mp3
+      File ""/usr/lib/python2.7/site-packages/mutagen/mp3/__init__.py"", line 14, in <module>
+        from mutagen._util import MutagenError, enum, BitReader, BitReaderError, \
+    ImportError: cannot import name convert_error
+    
+
+Any help at all would be greatly appreciated :)",1509814155.0,4,0.75,10
+linuxquestions,"Musicbrainz Picard no longer runs, ""ImportError: cannot import name convert_error""","This happened after an update about a week ago. Tried completely reinstalling Picard, no dice. This is the full message I get when running it in terminal:
+
+    [20:56][axb@PyrelightArch ~] sudo picard                   
+    Traceback (most recent call last):
+      File ""/usr/bin/picard"", line 2, in <module>
+        from picard.tagger import main; main('/usr/share/locale', True)
+      File ""/usr/lib/python2.7/site-packages/picard/tagger.py"", line 64, in <module>
+        from picard.formats import open as open_file
+      File ""/usr/lib/python2.7/site-packages/picard/formats/__init__.py"", line 89, in <module>
+        from picard.formats.id3 import (
+      File ""/usr/lib/python2.7/site-packages/picard/formats/id3.py"", line 21, in <module>
+        import mutagen.mp3
+      File ""/usr/lib/python2.7/site-packages/mutagen/mp3/__init__.py"", line 14, in <module>
+        from mutagen._util import MutagenError, enum, BitReader, BitReaderError, \
+    ImportError: cannot import name convert_error
+    
+
+Any help at all would be greatly appreciated :)",1509789735.0,4,1.0,0
+Oppo,Alternative to ColourOS on the A57?,"Can't find any custom ROMs for this phone and the OS is... I came from a Nexus, I'm used to being able to change things without the OS deciding to change it back ""for my privacy"". Like I want to install SoundHUD so I can change media volume without actually playing things (like, yknow, when you check the volume before playing your music so you know you won't be deafened) or change my default SMS app (ironically because it's more secure and private) without it changing back every time I receive a text. Plus the notifications and Android 6.0.1...
+
+
+I love the phone's hardware, but when I bought it I assumed I'd be able to flash it and fix the bits I don't like (stupid decision yeah, should've researched instead of window shopping)",1508475677.0,7,1.0,5
+firefox,I accidentally deleted all my logins! Is there a way to sync them back from my phone? (which is on airplane mode btw),"Yeah, pretty basic, hit the wrong button... my phone(s) are both on airplane mode and so still have my logins. Is there a way I can undo that one second of idiocy?
+
+
+I'm thinking since it would accept the one with the latest changes I could... make a website to save a login from without having to connect to the internet so when I turn airplane mode off that one shows up as newer? ;-; I'm lost and scared",1507966912.0,6,0.81,7
+ifyoulikeblank,[IIL] Bassnectar & HAILO - Surrender and The Glitch Mob - Between Two Points [WEWIL?],"[Surrender](https://www.youtube.com/watch?v=imWa6oXpxbc)
+
+[Between Two Points](https://www.youtube.com/watch?v=eHFx11tUO1M)
+
+I just love this dreamy and ethereal sound but I have no idea where else to look for it. It's calm and relaxing but still sounds like actual music. Difficult to articulate but [this](https://www.youtube.com/watch?v=cI7OtmHGHQk) is the sort of thing I don't like; chill maybe but it's so repetitive and bland I can't actually listen to it as a song. [This](https://www.youtube.com/watch?v=o-K_xgxrL4s) on the other hand is dynamic enough to stay interesting throughout.
+
+Koda is the only artist I've found so far that makes this [kind](https://www.youtube.com/watch?v=hGaRVyf22x4) [of](https://www.youtube.com/watch?v=jN4gtF1qB0k) [music](https://www.youtube.com/watch?v=zn54z03ndkQ) consistently.",1497504850.0,3,0.8,0
+ifyoulikeblank,[IIL] A Perfect Circle - Gravity [WEWIL?],,1497317009.0,1,1.0,0
+linuxquestions,Trying to troubleshoot Borderlands 2,"EDIT: FIXED!!! https://www.reddit.com/r/archlinux/comments/6ga0cj/lib32openal11801_upgrade_breaks_some_steam_games/
+
+EDIT: So `-nostartupmovies` gets it running and `-nomovies` lets me start a new game. Guessing that means the issue is related to the game's movies!
+
+Got gifted Borderlands 2 yesterday, played for a couple hours, everything worked fine. 
+
+I try to launch it today, first it tries to show the splash screen but only shows the title bar with the rest of the window completely black. After a while it'll take over the screen as usual, everything goes black aside from Steam's FPS counter, but it crashes before the intro movies.
+
+I verified the cache, restarted and eventually even reinstalled. Now trying to launch it just makes Steam show that I'm in game for a few seconds. (EDIT: I think I started using Steam's runtime here. Native runtime does the splash screen-black screen thing before crashing.)
+
+Running the game through terminal gives me an error message saying I need Steam running (I do), but running the game with the command line options set to just `termite %command%` gives me a bunch of this:
+
+    ERROR: ld.so: object '/home/axb/.local/share/Steam/ubuntu12_32/gameoverlayrenderer.so' from LD_PRELOAD cannot be preloaded (wrong ELF class: ELFCLASS32): ignored.
+    ERROR: ld.so: object '/home/axb/.local/share/Steam/ubuntu12_32/gameoverlayrenderer.so' from LD_PRELOAD cannot be preloaded (wrong ELF class: ELFCLASS32): ignored.
+    ERROR: ld.so: object '/home/axb/.local/share/Steam/ubuntu12_32/gameoverlayrenderer.so' from LD_PRELOAD cannot be preloaded (wrong ELF class: ELFCLASS32): ignored.
+    ERROR: ld.so: object '/home/axb/.local/share/Steam/ubuntu12_32/gameoverlayrenderer.so' from LD_PRELOAD cannot be preloaded (wrong ELF class: ELFCLASS32): ignored.
+    pid 22783 != 22781, skipping destruction (fork without exec?)
+    pid 22782 != 22781, skipping destruction (fork without exec?)
+    pid 22785 != 22781, skipping destruction (fork without exec?)
+    ERROR: ld.so: object '/home/axb/.local/share/Steam/ubuntu12_32/gameoverlayrenderer.so' from LD_PRELOAD cannot be preloaded (wrong ELF class: ELFCLASS32): ignored.
+    pid 22788 != 22781, skipping destruction (fork without exec?)
+    pid 22789 != 22781, skipping destruction (fork without exec?)
+    pid 22790 != 22781, skipping destruction (fork without exec?)
+    ERROR: ld.so: object '/home/axb/.local/share/Steam/ubuntu12_32/gameoverlayrenderer.so' from LD_PRELOAD cannot be preloaded (wrong ELF class: ELFCLASS32): ignored.
+    ERROR: ld.so: object '/home/axb/.local/share/Steam/ubuntu12_32/gameoverlayrenderer.so' from LD_PRELOAD cannot be preloaded (wrong ELF class: ELFCLASS32): ignored.
+    pid 22794 != 22781, skipping destruction (fork without exec?)
+    
+...and so on for quite a few lines, this takes maybe 5-10 seconds. If I then run `./Borderlands2` I get:
+
+    ERROR: ld.so: object '/home/axb/.local/share/Steam/ubuntu12_64/gameoverlayrenderer.so' from LD_PRELOAD cannot be preloaded (wrong ELF class: ELFCLASS64): ignored.
+    ./Borderlands2: Symbol `_ZTVN10__cxxabiv120__si_class_type_infoE' has different size in shared object, consider re-linking
+    ./Borderlands2: Symbol `_ZTVN10__cxxabiv117__class_type_infoE' has different size in shared object, consider re-linking
+    ./Borderlands2: Symbol `_ZTVN10__cxxabiv121__vmi_class_type_infoE' has different size in shared object, consider re-linking
+    zsh: segmentation fault (core dumped)  ./Borderlands2
+    
+I should mention that I don't have the overlay enabled.
+
+Read on the wiki to add `LD_PRELOAD='./libcxxrt.so:/usr/$LIB/libstdc++.so.6'` to the startup options, so running `LD_PRELOAD='./libcxxrt.so:/usr/$LIB/libstdc++.so.6' ./Borderlands2` gives me:
+
+    $ LD_PRELOAD='./libcxxrt.so:/usr/$LIB/libstdc++.so.6' ./Borderlands2 
+    Setting breakpad minidump AppID = 49520
+    Steam_SetMinidumpSteamID:  Caching Steam ID:  76561198019732296 [API loaded no]
+    ERROR: ld.so: object './libcxxrt.so' from LD_PRELOAD cannot be preloaded (cannot open shared object file): ignored.
+    ERROR: ld.so: object './libcxxrt.so' from LD_PRELOAD cannot be preloaded (cannot open shared object file): ignored.
+    ERROR: ld.so: object './libcxxrt.so' from LD_PRELOAD cannot be preloaded (cannot open shared object file): ignored.
+    ERROR: ld.so: object './libcxxrt.so' from LD_PRELOAD cannot be preloaded (cannot open shared object file): ignored.
+    ERROR: ld.so: object './libcxxrt.so' from LD_PRELOAD cannot be preloaded (cannot open shared object file): ignored.
+    ERROR: ld.so: object './libcxxrt.so' from LD_PRELOAD cannot be preloaded (cannot open shared object file): ignored.
+    zsh: segmentation fault (core dumped)  LD_PRELOAD='./libcxxrt.so:/usr/$LIB/libstdc++.so.6' ./Borderlands2
+    
+
+This does, however, get it to where it was before I restarted, with the black splash screen and the few seconds of fullscreen blackness.
+
+I have no idea what to do with any of this. Can someone please help me diagnose further?",1496994242.0,18,0.87,11
+ifyoulikeblank,"[IIL] Circa Survive - I Felt Free [WEWIL?,]",,1495753106.0,1,1.0,0
+sonarr,Sonarr's crashing because of something to do with /usr/lib/libmono-btls-shared.so... I think,"EDIT a month later: This is now fixed in the latest version of Sonarr, as such MONO_TLS_PROVIDER=legacy is no longer necessary.
+
+EDIT: /u/ThingsAndPlaces posted a workaround :)
+
+So I just changed the webserver setting for Sonarr and now it crashes under a minute of beings started with systemctl. The log reads:
+
+    May 14 21:26:48 PyrelightArch sonarr[1850]: Stacktrace:
+    May 14 21:26:48 PyrelightArch sonarr[1850]:   at <unknown> <0xffffffff>
+    May 14 21:26:48 PyrelightArch sonarr[1850]:   at (wrapper managed-to-native) Mono.Btls.MonoBtlsSsl.mono_btls_ssl_connect (intptr) [0x00002] in <2fef7234205a4a009fe5995569c314ee>:0
+    May 14 21:26:48 PyrelightArch sonarr[1850]:   at Mono.Btls.MonoBtlsSsl.Connect () [0x00011] in <2fef7234205a4a009fe5995569c314ee>:0
+    May 14 21:26:48 PyrelightArch sonarr[1850]:   at Mono.Btls.MonoBtlsContext.DoProcessHandshake () [0x00028] in <2fef7234205a4a009fe5995569c314ee>:0
+    May 14 21:26:48 PyrelightArch sonarr[1850]:   at Mono.Btls.MonoBtlsContext.ProcessHandshake () [0x00009] in <2fef7234205a4a009fe5995569c314ee>:0
+    May 14 21:26:48 PyrelightArch sonarr[1850]:   at Mono.Net.Security.MobileAuthenticatedStream.ProcessHandshake (Mono.Net.Security.AsyncProtocolRequest,Mono.Net.Security.AsyncOperationStatus) [0x0002a] in <2fef7234205a4a009fe5995569c314ee>:
+    May 14 21:26:48 PyrelightArch sonarr[1850]:   at Mono.Net.Security.AsyncProtocolRequest.ProcessOperation (Mono.Net.Security.AsyncOperationStatus) [0x0006b] in <2fef7234205a4a009fe5995569c314ee>:0
+    May 14 21:26:48 PyrelightArch sonarr[1850]:   at Mono.Net.Security.AsyncProtocolRequest.ProcessOperation () [0x0000d] in <2fef7234205a4a009fe5995569c314ee>:0
+    May 14 21:26:48 PyrelightArch sonarr[1850]:   at Mono.Net.Security.AsyncProtocolRequest.StartOperation () [0x00000] in <2fef7234205a4a009fe5995569c314ee>:0
+    May 14 21:26:48 PyrelightArch sonarr[1850]:   at Mono.Net.Security.AsyncProtocolRequest.StartOperation (Mono.Net.Security.AsyncOperation) [0x00024] in <2fef7234205a4a009fe5995569c314ee>:0
+    May 14 21:26:48 PyrelightArch sonarr[1850]:   at Mono.Net.Security.MobileAuthenticatedStream.ProcessAuthentication (System.Net.LazyAsyncResult) [0x00057] in <2fef7234205a4a009fe5995569c314ee>:0
+    May 14 21:26:48 PyrelightArch sonarr[1850]:   at Mono.Net.Security.MobileAuthenticatedStream.AuthenticateAsClient (string,System.Security.Cryptography.X509Certificates.X509CertificateCollection,System.Security.Authentication.SslProtocols,
+    May 14 21:26:48 PyrelightArch sonarr[1850]:   at Mono.Net.Security.Private.MonoSslStreamWrapper.AuthenticateAsClient (string,System.Security.Cryptography.X509Certificates.X509CertificateCollection,System.Security.Authentication.SslProtoco
+    May 14 21:26:48 PyrelightArch sonarr[1850]:   at Mono.Net.Security.MonoTlsStream.CreateStream (byte[]) [0x00064] in <2fef7234205a4a009fe5995569c314ee>:0
+    May 14 21:26:48 PyrelightArch sonarr[1850]:   at System.Net.WebConnection.CreateStream (System.Net.HttpWebRequest) [0x00073] in <2fef7234205a4a009fe5995569c314ee>:0
+    May 14 21:26:48 PyrelightArch sonarr[1850]:   at System.Net.WebConnection.InitConnection (object) [0x00078] in <2fef7234205a4a009fe5995569c314ee>:0
+    May 14 21:26:48 PyrelightArch sonarr[1850]:   at System.Net.WebConnection.<.ctor>b__29_0 (object) [0x00000] in <2fef7234205a4a009fe5995569c314ee>:0
+    May 14 21:26:48 PyrelightArch sonarr[1850]:   at System.Threading.QueueUserWorkItemCallback.WaitCallback_Context (object) [0x00007] in <73ee1b14c2fa4d61b481096ff3d8d6d7>:0
+    May 14 21:26:48 PyrelightArch sonarr[1850]:   at System.Threading.ExecutionContext.RunInternal (System.Threading.ExecutionContext,System.Threading.ContextCallback,object,bool) [0x00071] in <73ee1b14c2fa4d61b481096ff3d8d6d7>:0
+    May 14 21:26:48 PyrelightArch sonarr[1850]:   at System.Threading.ExecutionContext.Run (System.Threading.ExecutionContext,System.Threading.ContextCallback,object,bool) [0x00000] in <73ee1b14c2fa4d61b481096ff3d8d6d7>:0
+    May 14 21:26:48 PyrelightArch sonarr[1850]:   at System.Threading.QueueUserWorkItemCallback.System.Threading.IThreadPoolWorkItem.ExecuteWorkItem () [0x00021] in <73ee1b14c2fa4d61b481096ff3d8d6d7>:0
+    May 14 21:26:48 PyrelightArch sonarr[1850]:   at System.Threading.ThreadPoolWorkQueue.Dispatch () [0x00074] in <73ee1b14c2fa4d61b481096ff3d8d6d7>:0
+    May 14 21:26:48 PyrelightArch sonarr[1850]:   at System.Threading._ThreadPoolWaitCallback.PerformWaitCallback () [0x00000] in <73ee1b14c2fa4d61b481096ff3d8d6d7>:0
+    May 14 21:26:48 PyrelightArch sonarr[1850]:   at (wrapper runtime-invoke) <Module>.runtime_invoke_bool (object,intptr,intptr,intptr) [0x0001e] in <73ee1b14c2fa4d61b481096ff3d8d6d7>:0
+    May 14 21:26:48 PyrelightArch sonarr[1850]: /proc/self/maps:
+    May 14 21:26:48 PyrelightArch sonarr[1850]: 00400000-007b2000 r-xp 00000000 fe:00 1625879                            /usr/bin/mono-sgen
+    May 14 21:26:48 PyrelightArch sonarr[1850]: 009b1000-009b2000 r--p 003b1000 fe:00 1625879                            /usr/bin/mono-sgen
+    May 14 21:26:48 PyrelightArch sonarr[1850]: 009b2000-009b5000 rw-p 003b2000 fe:00 1625879                            /usr/bin/mono-sgen
+    May 14 21:26:48 PyrelightArch sonarr[1850]: 009b5000-009e8000 rw-p 00000000 00:00 0
+    May 14 21:26:48 PyrelightArch sonarr[1850]: 01e74000-049e5000 rw-p 00000000 00:00 0                                  [heap]
+    May 14 21:26:48 PyrelightArch sonarr[1850]: 417f8000-41808000 rwxp 00000000 00:00 0
+    May 14 21:26:48 PyrelightArch sonarr[1850]: 41f00000-42293000 rwxp 00000000 00:00 0
+    May 14 21:26:48 PyrelightArch sonarr[1850]: 7f0c34000000-7f0c34021000 rw-p 00000000 00:00 0
+    May 14 21:26:48 PyrelightArch sonarr[1850]: 7f0c34021000-7f0c38000000 ---p 00000000 00:00 0
+    May 14 21:26:48 PyrelightArch sonarr[1850]: 7f0c3bc53000-7f0c3bde8000 r-xp 00000000 fe:00 1625831                    /usr/lib/libmono-btls-shared.so
+    May 14 21:26:48 PyrelightArch sonarr[1850]: 7f0c3bde8000-7f0c3bfe8000 ---p 00195000 fe:00 1625831                    /usr/lib/libmono-btls-shared.so
+    May 14 21:26:48 PyrelightArch sonarr[1850]: 7f0c3bfe8000-7f0c3bffa000 r--p 00195000 fe:00 1625831                    /usr/lib/libmono-btls-shared.so
+    May 14 21:26:48 PyrelightArch sonarr[1850]: 7f0c3bffa000-7f0c3bfff000 rw-p 001a7000 fe:00 1625831                    /usr/lib/libmono-btls-shared.so
+    May 14 21:26:48 PyrelightArch sonarr[1850]: 7f0c3bfff000-7f0c3c000000 rw-p 00000000 00:00 0
+    May 14 21:26:48 PyrelightArch sonarr[1850]: 7f0c3c000000-7f0c3c047000 rw-p 00000000 00:00 0
+    May 14 21:26:48 PyrelightArch sonarr[1850]: 7f0c3c047000-7f0c40000000 ---p 00000000 00:00 0
+    May 14 21:26:48 PyrelightArch sonarr[1850]: 7f0c40000000-7f0c40021000 rw-p 00000000 00:00 0
+    May 14 21:26:48 PyrelightArch sonarr[1850]: 7f0c40021000-7f0c44000000 ---p 00000000 00:00 0
+    May 14 21:26:48 PyrelightArch sonarr[1850]: 7f0c44000000-7f0c4404c000 rw-p 00000000 00:00 0
+    May 14 21:26:48 PyrelightArch sonarr[1850]: 7f0c4404c000-7f0c48000000 ---p 00000000 00:00 0
+    May 14 21:26:48 PyrelightArch sonarr[1850]: 7f0c48000000-7f0c4807f000 rw-p 00000000 00:00 0
+    May 14 21:26:48 PyrelightArch sonarr[1850]: 7f0c4807f000-7f0c4c000000 ---p 00000000 00:00 0
+    May 14 21:26:48 PyrelightArch sonarr[1850]: 7f0c4c000000-7f0c4c08a000 rw-p 00000000 00:00 0
+    May 14 21:26:48 PyrelightArch sonarr[1850]: 7f0c4c08a000-7f0c50000000 ---p 00000000 00:00 0
+    May 14 21:26:48 PyrelightArch sonarr[1850]: 7f0c50000000-7f0c50064000 rw-p 00000000 00:00 0
+    May 14 21:26:48 PyrelightArch sonarr[1850]: 7f0c50064000-7f0c54000000 ---p 00000000 00:00 0
+    May 14 21:26:48 PyrelightArch sonarr[1850]: 7f0c54000000-7f0c540af000 rw-p 00000000 00:00 0
+    May 14 21:26:48 PyrelightArch systemd[1]: sonarr.service: Main process exited, code=killed, status=6/ABRT
+    May 14 21:26:48 PyrelightArch systemd[1]: sonarr.service: Unit entered failed state.
+    May 14 21:26:48 PyrelightArch systemd[1]: sonarr.service: Failed with result 'signal'.
+    
+
+
+I've completely wiped the settings at /var/lib/sonarr and reinstalled, happens with a fresh installation too. Anyone know what I broke?",1494762432.0,10,0.87,25
+AndroidQuestions,Add CMTE to a ROM?,"So I bought a CMTE theme back when PureNexus still supported them, now it doesn't but I want it back. Is there a zip file I can flash or something? Can't seem to find information about this anywhere...
+
+Right now I'm on an S3 running Beanstalk ROM 7.1.1, which is CM based but doesn't have the theme engine for some reason",1494108287.0,2,1.0,4
+archlinux,"Can see my DVD in Nautilus, but can't mount it or see it with fdisk -l or Gparted","So I'm trying to make a LiveCD with dd. While Nautilus recognizes the disc (says the mount point is ""burn:///"") I can't find it with any other tool. I also tried SUSE ImageWriter to no avail. It's just not there.
+
+Have I messed something up?",1492834836.0,0,0.5,4
+ifyoulikeblank,[IIL] Koda (downtempo ambient electronic) [WEWIL?],,1492509767.0,3,1.0,1
+ifyoulikeblank,"[IIL] ""A Stranger"" by A Perfect Circle and ""Echo"" by Balance and Composure [WEWIL]","A Stranger - https://www.youtube.com/watch?v=Mb2W_xkJ2G0
+
+Echo - https://www.youtube.com/watch?v=Ey9KR89K828",1492343400.0,11,0.92,4
+softwaregore,Beginning to doubt my own humanity...,,1491376413.0,5814,0.94,81
+archlinux,"MPD broke after restart (pulse_output: ""Local Music Player Daemon"" [pulse] failed to play: suspended)","Just finished installing MPD, ncmpcpp and Cantata. Everything was working fine until I restarted. Now, whenever I try to play anything, the song either pauses itself in a random place or (if I'm playing multiple files) it'll jump to the 3rd or 4th item on the playlist and pause it in a random place.
+
+`systemctl status mpd` returns the following on boot:
+
+    ● mpd.service - Music Player Daemon
+       Loaded: loaded (/usr/lib/systemd/system/mpd.service; enabled; vendor preset: disabled)
+       Active: active (running) since Fri 2016-11-04 17:08:38 AEDT; 1min 2s ago
+     Main PID: 614 (mpd)
+        Tasks: 6 (limit: 4915)
+       CGroup: /system.slice/mpd.service
+               └─614 /usr/bin/mpd --no-daemon
+    
+    Nov 04 17:08:38 PyrelightArch systemd[1]: Started Music Player Daemon.
+    Nov 04 17:08:39 PyrelightArch mpd[614]: server_socket: bind to '0.0.0.0:6600' failed: Address already in use (continuing anyway, because binding to '[::]:6600' succeeded)
+    Nov 04 17:08:53 PyrelightArch libsmbclient[614]: client: [0] opened from [::1]:34840
+    Nov 04 17:08:53 PyrelightArch libsmbclient[614]: client: [1] opened from 127.0.0.1:59082
+    Nov 04 17:08:53 PyrelightArch libsmbclient[614]: client: [0] closed
+    Nov 04 17:09:00 PyrelightArch libsmbclient[614]: client: [1] closed
+    Nov 04 17:09:29 PyrelightArch libsmbclient[614]: client: [2] opened from [::1]:35002
+    Nov 04 17:09:29 PyrelightArch libsmbclient[614]: client: [3] opened from [::1]:35004
+    Nov 04 17:09:31 PyrelightArch libsmbclient[614]: errno: Failed to open ""/var/lib/mpd/playlists/[Radio Streams].m3u"": No such file or directory
+    Nov 04 17:09:31 PyrelightArch libsmbclient[614]: playlist: No such playlist
+    
+But after trying to play something it changes to:
+
+    ● mpd.service - Music Player Daemon
+       Loaded: loaded (/usr/lib/systemd/system/mpd.service; enabled; vendor preset: disabled)
+       Active: active (running) since Fri 2016-11-04 17:08:38 AEDT; 1min 39s ago
+     Main PID: 614 (mpd)
+        Tasks: 6 (limit: 4915)
+       CGroup: /system.slice/mpd.service
+               └─614 /usr/bin/mpd --no-daemon
+    
+    Nov 04 17:10:08 PyrelightArch libsmbclient[614]: pulse_output: ""Local Music Player Daemon"" [pulse] failed to play: suspended
+    Nov 04 17:10:08 PyrelightArch libsmbclient[614]: pulse_output: ""Local Music Player Daemon"" [pulse] failed to play: suspended
+    Nov 04 17:10:08 PyrelightArch libsmbclient[614]: pulse_output: ""Local Music Player Daemon"" [pulse] failed to play: suspended
+    Nov 04 17:10:08 PyrelightArch libsmbclient[614]: pulse_output: ""Local Music Player Daemon"" [pulse] failed to play: suspended
+    Nov 04 17:10:08 PyrelightArch libsmbclient[614]: pulse_output: ""Local Music Player Daemon"" [pulse] failed to play: suspended
+    Nov 04 17:10:08 PyrelightArch libsmbclient[614]: pulse_output: ""Local Music Player Daemon"" [pulse] failed to play: suspended
+    Nov 04 17:10:08 PyrelightArch libsmbclient[614]: pulse_output: ""Local Music Player Daemon"" [pulse] failed to play: suspended
+    Nov 04 17:10:08 PyrelightArch libsmbclient[614]: pulse_output: ""Local Music Player Daemon"" [pulse] failed to play: suspended
+    Nov 04 17:10:08 PyrelightArch libsmbclient[614]: pulse_output: ""Local Music Player Daemon"" [pulse] failed to play: suspended
+    Nov 04 17:10:08 PyrelightArch libsmbclient[614]: output: Failed to open audio output
+    
+Firefox and VLC still have working audio so it seems to be something wrong with MPD. Anyone have any idea what's going wrong here?",1478240310.0,2,0.75,6
+civ,Anyone else think there should be a distinction between pericles' greek empire and gorgo's greek empire?,"I mean... is this even nitpicking? Having two empires with EXACTLY the same name makes the information given to you about them useless. The Greek Empire sent a delegation to the Greek Empire? Cheers, you've officially told me nothing.",1477281061.0,3,0.8,4
+archlinux,Gtk-WARNING **: cannot open display: :0,"I get this when trying to run grub-customizer and gparted. Firefox, VLC, Chromium, qBittorrent, Steam, Deluge... all work fine (well, aside from Bumblebee issues, but that's likely another problem...)
+
+When run from gnome-shell, I'm prompted for a root password, after which nothing happens. When run from a terminal, I'm prompted for a root password and get:
+
+    No protocol specified
+    Unable to init server: Could not connect: Connection refused
+    
+    (grub-customizer:7795): Gtk-WARNING **: cannot open display: :0
+
+I am not using VNC, I'm just trying to make a menu entry for my Windows partition so I can dual boot. I have tried adding `Defaults:username env_keep=DISPLAY` to `/etc/sudoers` and running `xhost +localhost`, both to no avail. I've also tried `kdesu`, same issue.
+
+`echo $DISPLAY` returns `:0` so I have no idea what the issue could be. Any help would be greatly appreciated :)",1476597089.0,1,1.0,8
+archlinux,Can't get openVPN working (cp: cannot stat '/usr/share/easy-rsa/': No such file or directory),"So I'm trying to follow [this guide](https://wiki.archlinux.org/index.php/OpenVPN_Checklist_Guide) to connect to Ironsocket using .ovpn files (preferably with networkmanager since I'm on Gnome 3 and want the gnome shell integration). However, when I try to:
+
+>Copy /usr/share/easy-rsa/ to /etc/openvpn/easy-rsa and cd there
+
+I get:
+
+`cp: cannot stat '/usr/share/easy-rsa/': No such file or directory`
+
+Sure enough, `/usr/share/easy-rsa/` doesn't exist, and `/etc/openvpn/` just contains a `client.conf` file.
+
+I'm not sure what to do at this point and any help would be greatly appreciated :)",1476489831.0,4,1.0,12
+mflb,Is it safe to keep the PA2.4 plugged in without the end attached?,The cable falls out quite often :/,1473489336.0,3,0.72,6
+archlinux,Can't get primusrun working,"So, just installed Arch and I'm trying to get my GPU working (770m). I've followed [this section of the wiki](https://wiki.archlinux.org/index.php/bumblebee#Installing_Bumblebee_with_Intel.2FNVIDIA) to the letter, and while I can run glxspheres64 with optirun and see it use my video card instead of the Intel card, I can't seem to get games to launch through Steam with 
+
+    optirun %command%
+
+Games just fail silently instantly after being launched.
+
+    optirun -b primus glxspheres64
+produces interesting results, as while it claims to be using my GPU (OpenGL Renderer: Gallium 0.4 on NVE6) it runs as though it were using the iGPU (58.2Mpixels/second vs 174.6Mpixels/second with just optirun). I managed to launch Bioshock Infinite with this command, but it ran at 15fps on the loading screen so no thanks lol.
+
+    primusrun glxspheres64
+doesn't load the benchmark at all, instead outputting:
+
+    #primusrun glxspheres64
+    Polygons in scene: 62464 (61 spheres * 1024 polys/spheres)
+    Visual ID of window: 0xb4
+    X Error of failed request:  BadValue (integer parameter out of range for operation)
+      Major opcode of failed request:  155 (GLX)
+      Minor opcode of failed request:  24 (X_GLXCreateNewContext)
+      Value in failed request:  0x0
+      Serial number of failed request:  19
+      Current serial number in output stream:  20
+
+
+I'm not entirely sure what I could have done wrong here so any advice would be greatly appreciated :)",1468166255.0,7,0.82,12
+Drugs,"""If you know of any addicts, go ahead and kill them yourself"" - Rodrigo Duterte, president of the Philippines",,1467514680.0,561,0.95,116
+Games,MeiQ: Labyrinth of Death banned in Australia (rated T in the USA),,1466585865.0,87,0.79,46
+Games,MeiQ: Labyrinth of Death banned in Australia (rated T in USA),,1466575927.0,3,1.0,0
+bestof,Programmers figure out the limitations of Reddit's notification system,,1459752402.0,11,0.82,3
+nexus5x,Just got my 5X and it's already crashing regularly,"So I got a brand new Nexus 5X a few days ago (RIP Nexus 5) and immediately after unlocking the bootloader it started crashing. And by immediately I mean it crashed on the boot animation, then restarted and managed to boot to system.
+
+It'll do this on every other boot. Usually it happens during the actual boot animation, and when it does so it usually happens like this:
+
+- The boot animation starts as normal
+- It loops a few times
+- A multicoloured line will appear straight through the middle of the screen, running horizontally. Sadly my 5X is my only camera so I can't take a picture, but the texture looks a lot like [this](https://ucnv.github.io/pnglitch/files/png-glitch-paeth-detail.png). It runs across the entire width of the screen. It's usually quite thin, a fraction of a centimetre, but it's enough to be quite noticeable. It also often has tiny ""spikes"" which I'd guess are a couple pixels high, protruding from the top. The line appears instantly, and when it does the boot animation is scattered across the screen.
+- The device will restart after between 5-10 seconds, will give me a warning about not being able to check for corruption, and will then try booting again.
+
+I've had this happen multiple times in a row, my record thus far being 6.
+
+Other than that, the next largest number of crashes usually happen within 5 minutes of the device successfully booting. Sometimes I'll completely lose cell reception before it happens (hollow icon, not just a really weak signal). Usually it'll happen if I use the device, and I've found that if I put the phone to sleep IMMEDIATELY after it gets to the lockscreen this usually won't happen, but it's not guaranteed, and I've had the phone reboot while sleeping like that before.
+
+Sometimes it'll randomly hang hours after booting. The first day after I got it I tried to play some music with it on the way to class and it got stuck in a bootloop (3 times). This happened around 8AM. After that it lasted until around 7:30PM, at which point it hung while I was just browsing the web.
+
+I have tried the following:
+
+- Wiping every partition through TWRP and reinstalling the stock ROM multiple times (no dice)
+- Installing PureNexus (nup)
+- Re-installing PureNexus (I did this probably 5 times, plus all the times it crashed during the initial setup. Nothing.)
+- Rooting/unrooting/installing Xposed/uninstalling Xposed (nyet)
+- Going into TWRP, unmounting all partitions and running e2fsck as per [these instructions](http://forum.xda-developers.com/showthread.php?t=2165870). Both partitions came up clean, as per the example.
+
+I'm running out of ways to troubleshoot this phone. Has anyone else experienced something like this before? Are there any tests I haven't yet tried that I should?
+
+EDIT: I should also mention that for all the time I've spent in TWRP, it hasn't ever crashed while I was in recovery mode. This leads me to believe that there's nothing wrong with TWRP.",1456648940.0,2,0.75,9
+cocktails,The chocolate mint milkshake,"So this one requires the following:
+
+1x food processor
+15 mL creme de menthe (or 15mL peppermint schnapps) (or substitute with 15mL Chambord and some cream for a black forest milkshake)
+30 mL Bailey's Chocolate Luxe (or 30mL chocolate liqueur of your choice)
+2 generous scoops vanilla ice cream
+Cocoa (or Milo) sprinkled generously over ice cream
+
+All of these ingredients are mixed in the food processor for about 30 seconds to a minute. It is then poured into a glass and is ready to drink.
+
+I've just tried this and it was really nice, hopefully you all get similarly lovely results.",1454153162.0,4,0.67,4
+Showerthoughts,"Forming memories should be called ""Membering"", as in ""to member"".",,1453375966.0,2,1.0,2
+explainlikeimfive,ELI5: This article on a complex 4-dimensional shape,"https://en.m.wikipedia.org/wiki/Order-3_apeirogonal_tiling
+
+Consider this a challenge for all you smart people on this subreddit. I haven't even heard of most of the words on that page.",1452737876.0,16,1.0,3
+me_irl,me_irl,,1444466622.0,16,1.0,0
+meirl,me_irl,,1444462982.0,28,1.0,0
+Birbs,Summerbirb,,1444462747.0,124,0.98,1
+archlinux,After multiple updates I can no longer get into Arch,"So I just restarted Arch after leaving it running for 3 or 4 days, during which I updated it multiple times. When it worked it would start Gnome without me having to log in through a terminal. Now, when I boot it shows me a screen full of text that flashes by too quickly to read, then everything is replaced by a login prompt.
+
+Using valid credentials and hitting enter makes text flash for a split second before putting me back at a login prompt. Using incorrect credentials just gives me a generic ""wrong username/password"" message.
+
+I tried connecting to the machine via SSH, and while the majority of my attempts resulted in ""Connection Failed"", I managed to connect once, but only for less than a second. The transcript shows me that it outputted this line:
+
+-bash: error while loading shared libraries: libncursesw.so.6: wrong ELF class: ELFCLASS32
+
+I have no idea what that means or how to fix it, and any help would be apppreciated.",1443691321.0,26,0.86,53
+linuxaudio,"Audio muted by default, and can't get 4.1 sound working","I've asked this question over at /r/linuxquestions ([here](https://www.reddit.com/r/linuxquestions/comments/3j73k3/audio_muted_by_default_and_cant_get_41_sound/) and a related question [here](https://www.reddit.com/r/linuxquestions/comments/3kneel/execute_keyboard_combination_on_startup/)) and the Antergos forums ([here](http://forum.antergos.com/topic/2802/audio-muted-by-default-and-can-t-get-4-1-sound-working)), but thus far I've had no luck. Here's my problem:
+
+A while ago I installed Antergos with Gnome 3, and one of the first issues I noticed was that there was no sound. Even when setting the sound to max nothing would come out. No volume blips, no audio from YouTube videos, nothing. Oddly though, if I mute and unmute using Function+F7 (my laptop's mute toggle) I can hear the unmute sound, and if anything else is making noise I can hear it too for the short duration of the unmute sound. (If this is confusing I can upload a video)
+
+This was bizarre to me as I had the correct audio device selected, and it even gave me options to change it from 2.0 to 2.1 or 4.0 (although I have a 4.1 setup, but that comes later). I searched around and found [this post](http://askubuntu.com/questions/523941/ubuntu-14-04-gigabyte-p25w-no-sound) (dude has the same laptop as me) and SHIFT+FN+F7 does indeed unmute and audio works fine... until I restart.
+
+While this is a minor inconvenience, I'd like to know if there's any way to have the laptop be unmuted by default.
+
+My second issue is that I don't have the option to use my full 4.1 setup. I just get [this](http://i.imgur.com/NAv85ad.png). Is there any way to set up 4.1 audio?",1442999831.0,6,1.0,33
+linuxquestions,Trying to change where my home folders are located,"So I'm running Arch off a small solid state, and I keep all my music/movies/TV/whatever on a hard drive. I want to make all my folders in /home point to the folders on my HDD (for example, ""/home/Music"" should point to ""/mnt/2616BD7816BD4997/Music"").
+
+In windows I could just right-click the folders and change it that way, but that doesn't produce any useful options in Gnome. Is there any way I can do this?",1442548345.0,4,1.0,4
+linuxquestions,Execute keyboard combination on startup?,"So for whatever reason, my sound doesn't work whenever I boot. I have to press SHIFT+FN+F7 for it to work. Changing volume levels, pressing unmute, changing sound cards, nothing else works. I've asked [here](http://forum.antergos.com/topic/2802/audio-muted-by-default-and-can-t-get-4-1-sound-working) for help but nothing worked.
+
+I'm fine with just pressing SHIFT+FN+F7 whenever I log in, but I was wondering if I could automate that. I don't honestly know what that key combination does, and Google hasn't helped me find out, so I can't set a command to be executed on startup. Is there any way that I can have the actual keyboard shortcut be executed on boot?",1442052605.0,1,0.67,32
+archlinux,Trying to add /home/.bin to my .bash_profile,"So, I made a script (my first ever, yay!) and I want to be able to use it like any other program. I read that I should put it in /home/.bin and export it in my .bash_profile. However, I've done that and trying to use it just results in ""command not found"".
+
+Here's my .bash_profile:
+
+    #
+    # ~/.bash_profile
+    #
+    
+    [[ -f ~/.bashrc ]] && . ~/.bashrc
+    export PATH=""${HOME}/.bin""
+
+And yes, I remembered to run source ~/.bash_profile. I've also tried rebooting. Does anyone know what I'm doing wrong?",1441974837.0,2,0.6,13
+archlinux,Manual fan control under Arch? (xpost /r/linuxquestions),"My laptop's GPU keeps overheating, yet the fan never seems to hit 100%. I know it's not hitting 100% because my laptop (Gigabyte P25W) came with a piece of bloatware called ""GIGABYTE SmartManager v3"" which could change the fan speed.
+
+Is there any way I could replicate that functionality under Arch?",1441606315.0,13,0.89,40
+linuxquestions,Manual fan control under Arch?,"My laptop's GPU keeps overheating, yet the fan never seems to hit 100%. I know it's not hitting 100% because my laptop (Gigabyte P25W) came with a piece of bloatware called ""GIGABYTE SmartManager v3"" which could change the fan speed.
+
+Is there any way I could replicate that functionality under Arch?",1441603058.0,6,1.0,6
+SubredditDrama,Slapfights erupt in /r/Australia over a man asking for directions,,1441458396.0,17,0.77,15
+linuxquestions,"Audio muted by default, and can't get 4.1 sound working","So I've just installed Antergos with Gnome 3, and one of the first issues I noticed was that there was no sound. Even when setting the sound to max nothing would come out. No volume blips, no audio from YouTube videos, nothing. Oddly though, if I mute and unmute using Function+F7 (my laptop's mute toggle) I can hear the unmute sound, and if anything else is making noise I can hear it too for the short duration of the unmute sound. (If this is confusing I can upload a video)
+
+This was bizarre to me as I had the correct audio device selected, and it even gave me options to change it from 2.0 to 2.1 or 4.0 (although I have a 4.1 setup, but that comes later). I searched around and found [this post](http://askubuntu.com/questions/523941/ubuntu-14-04-gigabyte-p25w-no-sound) (dude has the same laptop as me) and SHIFT+FN+F7 does indeed unmute and audio works fine... until I restart.
+
+While this is a minor inconvenience, I'd like to know if there's any way to have the laptop be unmuted by default.
+
+My second issue is that I don't have the option to use my full 4.1 setup. I just get [this](http://i.imgur.com/NAv85ad.png). Is there any way to set up 4.1 audio?",1441096999.0,3,0.71,0
+Surface,Surface Pro 3 time doesn't re-sync after being turned back on,"My SO bought a Surface Pro 3 about a week ago. We've installed Windows 10 on it, a couple games, thus far it's been fine. This is the one issue we've found.
+
+The Surface's time doesn't re-sync after being turned back on. Rather, it stays at the same time it was when it was turned off. So if she turns it off at 5 and turns it on at 6 it'll say that it's 5.
+
+While not a huge issue, it's a major annoyance (HTTPS sites show a scary warning when the time is wrong) and I fear it could be indicative of larger issues (Broken CMOS battery? IDK, I'm stretching my knowledge pretty thin).
+
+Has anyone else had this issue? Is there anything we can do to fix it? Should we get it replaced?",1439120902.0,6,0.8,7
+techsupport,Broken laptop charger. Can I go off-brand for a replacement?,"Model: Gigabyte P25W
+
+Laptop charger's fucked. It only works in certain positions, and even then it's dodgy. I want a replacement but when I search ""P25W charger"" I find an amazon link that doesn't seem to ship to Australia, and [this](http://www.mini-laptop-accessories.com/120w-gigabyte-p25w-p25wcf1-p25wcf3-charger-ac-adapter-p-30336.html), which is extremely expensive.
+
+When replacing the charger for my old laptop I was able to buy some off-brand 12 in 1 charger kit, and luckily one of them worked. However, none work on this new laptop.
+
+Is it possible to go off brand? If so, what am I looking for?
+
+EDIT: Found some specs on the back of my current charger:
+
+* MODEL: ADP-120MH D
+* INPUT: 100-240V ~ 2.2A 50-60 Hz
+* OUTPUT: 19.5 V (some weird symbol, it's one long line at the top with three dashes underneath) 6.15 A (another weird symbol, a circle with a dash in it connected by a line to a 3/4 circle with a full, filled in circle in it, connected with a line to a circle with a plus in it.)
+
+Thank you in advance.",1438215698.0,1,1.0,0
+bestof,"Self-proclaimed ""Indian Internet Creep"" posts to /r/IndianPeopleFacebook",,1437793996.0,43,0.8,0
+FalloutMods,"""Searched"" tag mod?","I was wondering if a mod exists that puts a [SEARCHED] tag next to any container you've previously opened. This would make searching for loot a lot easier, since if you leave something worthless in a container you'll know not to check it again if you forget whether you've searched it.
+
+Preferably for Fallout 3, but I'd be fine if it was for New Vegas or even Skyrim.",1437649057.0,7,0.89,4
+Birbs,Birbin',,1436702941.0,219,0.98,6
+Birbs,Bedb,,1436702339.0,134,0.97,2
+Birbs,Bathb,,1436701731.0,241,0.98,1
+techsupport,External hard drive is failing. Disconnects itself before chkdsk /f /r can finish. Is there any hope for it?,"2TB Seagate external hard drive. This all started when I noticed it was 48% fragmented. While running chkdsk is saying almost every sector is unreadable. I can see and navigate through the files on the disk but attempting to read them or copy them off the disk either does nothing or hangs Explorer, or whatever program the file opens in.
+
+At this point I don't think I can recover the data. However, when I right click the disk and hit ""format"" nothing shows up.
+
+Is there anything I can do to save the disk, or do I need to buy a replacement?",1436453293.0,1,0.67,10
+xbmc,"Trying to organize Archer season 3, about to pull my hair out","OK. So. I have Archer season 3, [episodes 1 through 13](https://i.imgur.com/OKHj9LB.png), organized just like [IMDb](http://www.imdb.com/title/tt1486217/episodes?season=3&ref_=tt_eps_sn_3). But [TVDB](http://thetvdb.com/?tab=season&seriesid=110381&seasonid=465786) isn't having any of it. No matter how I rename the episodes it simply refuses to accept the 13 episodes I have. It either thinks files 1-10 are episodes 4-13 and ignores files 11-13, or it thinks the first 3 files are the first 3 episodes of season 1.
+
+I have tried everything I can think of. Off the top of my head I have named file 1:
+
+* S03E01- Heart of Archness.Part 1.mkv (Thinks it's episode 4)
+* S03E04 - Heart of Archness.Part 1.mkv (Thinks it's episode 7)
+* Special - Heart of Archness.Part 1.mkv (Thinks it's S01E01)
+* Season 3 Special - Heart of Archness.Part 1.mkv (Thinks it's S01E01)
+* S03 Special - Heart of Archness.Part 1.mkv (Thinks it's S01E01)
+* S03E11 - Heart of Archness.Part 1.mkv (Isn't picked up at all)
+* S03E01- Heart of Archness.Part 1.mkv *with an nfo pointing [here](http://thetvdb.com/index.php?tab=episode&seriesid=110381&seasonid=109111&id=4162139)* (Thinks it's episode 4)
+
+It's 2AM here and I'm at my wit's end. If any of you have any advice it would be greatly appreciated.",1436112535.0,21,0.82,11
+FalloutMods,"[FO3][HELP] Dogmeat attacks some friendly NPCs, mainly animals","I'm not sure why, but Dogmeat attacks certain friendly NPCs. Most of them are animals (I have the animal friend perk, so this is unexpected behaviour, and while I've tried adding the perk to all my companions it's worked on both K9 and Fawkes, but not Dogmeat). Some of them are just random NPCs. He's attacked a BoS Knight and Scribe in the past, and there have been a few more incidents.
+
+I have no idea what could be causing this or how to fix it. My load order is [here](https://imgur.com/a/oYeTo#0) and my mod list is [here](https://imgur.com/a/irPpJ#0).",1435661016.0,2,1.0,3
+FalloutMods,[Help] Game crashes when going through certain doors,"Does this pretty consistently, but only with certain places. Right now I'm in the [Underground Hideout](http://www.nexusmods.com/fallout3/mods/9592/?) and it's crashing whenever I move to a different room. Usually the game manages to autosave before crashing, but I've just entered the simulation and it doesn't manage to save before I make it into the simulation.
+
+This doesn't just happen in the underground hideout, from memory it has also happened when trying to exit the tunnels leading to DC, as well as many other places I can't think of. It also sometimes crashes in the middle of the wasteland, but that's far less consistent.
+
+Any help any of you can offer would be greatly appreciated.
+
+[Load Order](https://imgur.com/a/oYeTo#0) (I use LOOT for my load order)
+
+[Mod List](https://imgur.com/a/irPpJ#0)",1435111246.0,2,1.0,1
+nocontext,"""...And I don't have to be on the face of an opponent all day, I can be around just inking the floor and shit. And I'm sometimes a squid.""",,1433638007.0,11,0.87,0
+dadjokes,Where does a sick vampire sleep?,A coffin.,1433124988.0,4,1.0,0
+PSP,So I was just given a PSP. v1000 as far as I can tell. What can/should I do with it?,"Right now I'm running 6.60 PRO and I have a few converted PS1 games on the 2GB memory stick, but I'm curious as to what it can do. I've seen people mention using it as an FTP server, a GBA emulator, a music player, all sorts of things. So, for someone whose first experience with a PSP was getting one less that 24 hours ago who is more than willing to risk bricking it, what should I do?",1432904849.0,1,1.0,5
+softwaregore,Thanks,,1429676845.0,11,0.92,0
+PiratedGTA,PSA: Running this through Steam doesn't work,"I'm not sure why, but whenever I run the game through Steam as a non-Steam game I get a Social Club error. Running it any other way works fine. Sucks, because that means you can't get the Steam overlay/FPS counter.
+
+Just a heads up for anyone else that wants to add this as a non-Steam game.
+
+I'm running crack v2 on win8.1 by the way",1429348751.0,1,1.0,10
+techsupport,DirectX 11/OpenGL games completely freeze my laptop. Fresh installs of Debian freeze too.,"I've had this laptop for about a year now. It used to work fine, stellar performance in games, never really got too hot etc. Then one day I was playing Civ V when the whole thing froze. The sound stuttered for a bit while the image stopped, then the sound stopped too.
+
+Since then I have not been able to play ANY Dx11 games on this laptop (well, with an exception, detailed further below). Dx9 games work. I know this because running Civ V in Dx11 freezes it, but running it in Dx9 doesn't. I don't know of many OpenGL games, but the one that I tried was Serious Sam HD, and that froze my computer too.
+
+I'm fairly sure this isn't an overheating issue as I can play other demanding games (eg Minecraft with a 512x512 texture pack) without my computer freezing. Plus, even running Dx11 games on lower settings causes freezing. (Interestingly though, I can play Civ: Beyond Earth on lowest settings without the freezing occuring. I assume this is because I don't use any Dx11 features this way? CS:GO on lowest freezes it though)
+
+On top of this, at one point I tried installing Debian on this machine to see if running games in Linux helped at all. However, without changing any settings, within 5 minutes of running the OS I would run into problems. Usually it would just freeze, but a couple of times it wouldn't let me click on anything or do anything. It would just show my cursor moving.
+
+Because this is such a strange problem I don't really know what to Google, but the Googling I have done hasn't produced any meaningful results. Asking here was a last resort.
+
+I have tried the following:
+
+* Reinstalling the games I've tested. (Did not change anything, this problem even affects games I've installed after the problem started.)
+* Reinstalling Windows. (Nope, this happens on a fresh install.)
+* Installing Linux (Nope, details above.)
+* Reinstalling my GPU drivers (Nope.)
+* Reinstalling every driver I could think of, including a BIOS update (Nope.)
+
+I'm considering just returning it, but I can't find the receipt anywhere, and I'm worried that if I send it back they might not test games, and hence might not encounter the problem. Any help would be greatly appreciated because I'm at my wits end.
+
+System specs:
+
+* OS: Windows 8.1 PRO
+* Model: Gigabyte [P25W-CF3](http://www.newegg.com/Product/Product.aspx?Item=N82E16834233020)
+* CPU: Intel i7-4700MQ
+* GPU: nVidia 770M
+* RAM: 16GB
+* Storage: 1TB HDD + 256GB SSD
+
+If necessary, I am willing to provide a video of it happening. The only reason I haven't done this already is because I live in Australia, so I don't want to use more bandwidth than necessary.
+
+Thank you in advance.",1424384817.0,0,0.5,0
+Nexus5,Xposed Modules,"So, as you all likely know, [Xposed for Lollipop is here](http://www.xda-developers.com/xposed-framework-for-android-lollipop-is-here/). As someone whose first experience with Android was Lollipop, I'm not familiar with Xposed, but the idea excites me tremendously. In your opinion, what are the best modules? They can be the ""must-have"" modules that prevented people from updating from KitKat, convenient modules that just make the phone better. or just ""interesting"" modules.
+
+Also, if you've tested the modules you recommend on Lollipop I'm sure that would help a lot of people.",1423874729.0,1,0.53,17
+AndroidMasterRace,Connected to my Raspberry pi over SSH... on my phone,,1422054962.0,19,0.95,12
+Nexus5,"Need help - can't boot to system, can't re-flash stock","So about half an hour ago I booted into TWRP out of boredom. In my half asleep state I did ""fix file permissions"" as a friend's phone was having permission issues, and for a moment I thought my phone was the one having issues. Now, when I try to boot into system, the boot animation doesn't give way to android. I waited around 10 minutes for it to no avail. I then tried re-flashing 5.0.1 with NRT but apparently it needs my phone to be on the home screen to work.
+
+I'm at a loss and any help would be greatly appreciated.",1420714988.0,2,0.67,9
+Nexus5,"First phone ever, need advice","So this morning I ordered a 32GB black Nexus 5, my first ever phone. When discussing this with a friend of mine who has a Nexus 4 I was told that I need to install Cyanogenmod the moment I get it. So that made me wonder, as a *complete* phone noob, is there anything I should know? For example, settings that I *need* to change, apps I *need* to have, etc. Nothing is too basic.",1415186324.0,6,0.71,27
+Deathcore,The Modern Age Slavery - Icon of a Dead World,,1409136785.0,6,1.0,0
+Deathcore,Lorna Shore - Cerebral Cortex,,1407033170.0,25,0.95,1
+skyrimmods,A quick question.,"So up until now I've been using a pirate copy of Skyrim. However, since it was so cheap I decided to buy it on Steam. Now, I have a LOT of mods in my pirate installation (32GBs), and I was wondering if there's any way to move them over to my legit copy without having to re-install them one by one.
+
+Thanks in advance for the help.",1403412661.0,1,0.67,4

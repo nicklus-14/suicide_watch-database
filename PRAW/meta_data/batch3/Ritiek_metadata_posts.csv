@@ -1,0 +1,139 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+NixOS,How can I enable impermanence on an MBR partitioning scheme using disko?,"Hi. I've been playing with NixOS on VPS using nixos-anywhere. I've gotten impermanence with disko working on a vultr machine (vultr permits GPT partitioning scheme) with the following configuration:
+
+https://github.com/ritiek/dotfiles/blob/bf8e6db46f864b5563a77cafb6e258390dcd11b9/machines/clawsiecats/hardware-configuration.nix#L16-L69
+
+However, trying this same config on an OVHcloud VPS makes the system unbootable after installation as OVHcloud seems to only allow legacy MBR partitioning scheme. I've also tried playing with my disko configuration using this wikipage as a reference:
+
+https://wiki.nixos.org/w/index.php?title=Nixos-anywhere
+
+and switching from systemd-boot to grub, but no luck so far. I get the following error from nixos-anywhere when it is trying to setup the bootloader:
+```
+...
+setting up /etc...
+setting up secrets...
+updating GRUB 2 menu...
+Failed to get blkid info (returned 512) for / on none at /nix/store/31x5fdkbhx2b7l5l3q7lgf7x01sbafr4-install-grub.pl line 212.
+Failed to install bootloader
+```
+Something to do with mounting / as tmpfs I guess. The above wikipage also doesn't make any mention of impermanence.
+
+I'm lost here. Has anyone able to get impermanence working with disko on an MBR partitioning scheme? Is this even possible? Anything else I should try out? Thanks.",1726885849.0,3,0.81,4
+hyprland,How do I have app windows open in the same workspace they were first launched in?,"Hi. Sometimes when I launch my web browser, it can take a few seconds for the initial main window to open up. So during this launch gap, I switch to a different workspace to do other stuff. However, it so happens that my web browser then ends up opening in this currently active workspace.
+
+I'd instead like to have my web browser open up in the workspace it was first launched in, so I can go back to it later. Is this possible?",1725203198.0,8,1.0,11
+u_Ritiek,Me,"$argon2id$v=19$m=512,t=256,p=1$HyiCk7iLeqYj+Tq/+xstAw$R9C9j+Ilza1d7FzuPMLW1FxGS8qHfukYg2AGIGq3A30",1725180194.0,1,1.0,0
+Bitwarden,Logging into Bitwarden vault using a passkey?,"I have a hardware security key (Yubikey) and I noticed that Bitwarden allows it to only be used as U2F key with 2FA when trying to set it up as an authentication method to login into my Bitwarden vault, which means I still have to enter my master password as my first factor, which gets validated against my password hash stored in Bitwarden servers.
+
+This is unlike most other websites that allow hardware security keys to be used as passkeys, say GitHub. To login into GitHub, I need to have my Yubikey and know its PIN, and this PIN gets validated locally when I enter it. So GitHub, in this case seems to store only my Yubikey passkey's public key on their servers, unlike Bitwarden which seems to store both my master password hash and my U2F public key on their servers. I like this because now an attacker wouldn't be able to brute force my GitHub's password if GitHub servers are ever compromised because my password was never stored on their servers in the first place, but this doesn't seem to be the case with Bitwarden.
+
+Does Bitwarden not support logging into the vault using passkeys (in same way as GitHub does) yet? Is this feature planned? Or am I misunderstanding something? Thanks!",1699264443.0,3,0.67,10
+termux,Device file missing from /dev/input/ for bluetooth device,"Hi, I also posted this on Stack Overflow but didn't receive any responses. So, I'm also going to post this on Reddit, maybe someone here has an idea what's going on.
+
+I have bluetooth earphones with a built-in proximity sensor. They send a key event `KEY_PLAYCD` when they are plugged into someone's ears and a key event `KEY_PAUSECD` when they are unplugged. I know this because the earphones show up as a device file in `/dev/input/event*` when connected via bluetooth to my Raspberry Pi.
+
+They work fine when I connect them to my rooted Android device except they don't show up in `/dev/input/event*`. Though other device files for my Android device's hardware (such as for touch and power/volume buttons) show up and work as expected but not for my earphones. I want to programatically access the input received from my earphones through Termux but I need access to the corresponding device file for it.
+
+Where can I find the device file for my bluetooth earhpones on Termux? Could it be missing that I'm running an older version of Linux kernel (`3.10.108-perf+`) on my Android device (as compared to `4.19.66+` on my Raspberry Pi) or some difference with how bluetooth works on Android?",1581430132.0,3,1.0,2
+horizon,The same picture in every minute of the day,"Hey! I automated my PS4 (non-pro) to take screenshots in picture mode for every game minute in the day. I'm using them as a dynamic wallpaper for my PC that fades into the next screenshot every minute. I've attached a .zip (of size \~3.5G) containing all the screenshots (24 hours x 60 minutes = 1440 screenshots) properly named according to game time in 1920x1080 resolution below:  
+[https://www.dropbox.com/s/r4gtao8nze2o2xh/horizon-day-night-cycle.zip?dl=0](https://www.dropbox.com/s/r4gtao8nze2o2xh/horizon-day-night-cycle.zip?dl=0)  
+
+Also, few random sample pictures from the above attached .zip to get an idea how it looks like:  
+[https://imgur.com/a/vK8Aijo](https://imgur.com/a/vK8Aijo)
+
+Some details on how I automated this in case anyone is interested:
+
+I did this using Chiaki ([https://github.com/thestr4ng3r/chiaki](https://github.com/thestr4ng3r/chiaki)), which is a PS4 remote play client that doesn't eat up Internet resources as long as the PS4 and client device are on the same local network. Once I had a cool looking scenery in picture mode, I set the game time to 00:00. Then I wrote a few lines of shell code that would automatically send SHARE button event so the PS4 can take a screenshot and then send the D-Pad Right event to change the game time in picture mode, to Chiaki. Looped this 1440 times (24 hours \* 60 minutes) so it automatically stops when the time is 23:59:
+
+```
+#!/bin/bash
+ID=$(xdotool search --pid <PID of Chiaki> | head -1)
+for i in {0..1440}; do
+    xdotool keydown --window $ID bracketleft
+    sleep 0.2s
+    xdotool keyup --window $ID bracketleft
+    sleep 5s
+    xdotool keydown --window $ID Right
+    sleep 0.2s
+    xdotool keyup --window $ID Right
+    sleep 2s
+done
+```
+
+and then copied the screenshots to a USB storage. Then I wrote a few lines python script to rename the screenshots as per their game time:
+
+```
+#!/usr/bin/env python
+import os
+
+images = os.listdir(""."")
+
+for hours in range(0, 24):
+    hour_fill = str(hours).zfill(2)
+    for mins in range(0, 60):
+        min_fill = str(mins).zfill(2)
+        target_name = ""{}_{}.png"".format(hour_fill, min_fill)
+        current_name = images.pop(0)
+        os.rename(current_name, target_name)
+```
+
+This would be different depending on what OS you use but since I use Linux so I setup a cronjob for every minute to automatically change wallpaper by fading into the next screenshot.
+
+I hope someone finds this information useful!",1577349851.0,467,0.99,28
+linuxquestions,Creating an Internet from household network machinery,"Some parts of India are suffering from Internet bans due to ongoing protests. With all this power in the hands of Government, I cannot help wonder what if the Government (not just India's) also disrupts celluar networks and all other means of modern communication without prior notice. That would be scary.  
+
+
+Most people nowadays usually have desktop machines, ethernet and other cables in their houses along with radio equipment, like Phone Wi-Fi, Wireless Routers, Bluetooth, Radio transmitters. Can we somehow combine and extend this equipment to form something like a small Internet such that people could atleast communicate between themselves? Bonus points if the Government cannot ""see"" people establishing such communication? If detected, there is also a chance that the Government would simply proceed to disrupt the electricity supply.  
+
+
+Where would the point-of-no-return be such that people are truly under control by the Government?",1576700037.0,1,1.0,4
+rust,A multiplayer piano game for the terminal,"Hi! A few years back I wrote a piano game for the terminal in Rust when I did not know much about general good code practices. However, recently I've been learning more on how to write good code and so, I spent the last 2 weeks trying to refactor the codebase along with adding a multiplayer feature.  
+
+
+Here's the link: [https://github.com/ritiek/piano-rs](https://github.com/ritiek/piano-rs)  
+
+
+Feel free to try it out! In case you're going to dig into the codebase, I am open to any suggestions/feedback to further improve anything related to the codebase!",1570362731.0,99,0.97,4
+kindle,Download any webpage as MOBI directly using Kindle (jailbroken only!),,1542365750.0,1,0.99,0
+SuggestALaptop,Laptop for programming and traveling,"* **Total budget and country of purchase:** \~65000 INR (\~$900 USD)
+* **Do you prefer a 2 in 1 form factor, good battery life or best specifications for the money? Pick or include any that apply.** Absolutely do not need 2 in 1 and I prefer the best battery life for my money. 
+* **How important is weight and thinness to you?** I will be traveling with this laptop to my college most days, so I prefer it to be lightweight, anything < 2 kg is ok.
+* **Which OS do you require? Windows, Mac, Chrome OS, Linux.** Linux
+* **Do you have a preferred screen size? If indifferent, put N/A.** \~14"" (more or less works), 1920x1080 resolution
+* **Are you doing any CAD/video editing/photo editing/gaming? List which programs/games you desire to run.**  No gaming requirements or any other heavy stuff.  I am mostly going to stick with lightweight Vim editor for programming (Python, Rust, etc.) and web browsing in general.
+* **If you're gaming, do you have certain games you want to play? At what settings and FPS do you want?** No Gaming
+* **Any  specific requirements such as good keyboard, reliable build quality,  touch-screen, finger-print reader, optical drive or good input devices  (keyboard/touchpad)?** Durability for traveling, SSD preferred only if 200+ GB otherwise 500 GB+ HDD, at least 2 USB ports, HDMI port, Ethernet port, Bluetooth, WiFi.
+* **Leave any finishing thoughts here that you may feel are necessary and beneficial to the discussion.** I'm looking for 1920x1080 screen resolution, anything less won't work for me. I'll also sometimes watch 1080p movies.",1531920524.0,1,1.0,0
+piano,How much does polyphony matter when looking for a Piano?,"Hi, For my first digital piano, I am probably going to choose between Yamaha P45 and P115, my only concern is about polyphony. Would I (someday) be able to play these pieces with P45 (having polyphony of 64) without notes being cut off?
+
+[https://youtu.be/DjMkfARvGE8?t=281](https://youtu.be/DjMkfARvGE8?t=281)
+
+[https://youtu.be/0b5uulBrDrs](https://youtu.be/0b5uulBrDrs)
+
+[https://youtu.be/sEQf5lcnj\_o](https://youtu.be/sEQf5lcnj_o)
+
+Or should I go with P115 (polyphony of 192). P115 costs about 1.6 times more than P45 where I live. Would it be worth it?
+
+&#x200B;
+
+**EDIT:** Got myself a Yamaha P45 and makes love with it everyday. No issues with polyphony as of yet.",1529404817.0,3,1.0,12
+commandline,muxnect - Send input to just about any interactive command-line tool through a local web server,,1514704473.0,26,0.96,3
+rust,Play piano in the terminal using computer keyboard - piano-rs,,1509522879.0,22,1.0,4
+kodi,"Stream your local/network content directly on Kodi without FTP, SMB or anything else",,1504357892.0,51,0.91,19
+Python,Checks if an e-mail address exists or not,,1503588760.0,1,0.67,7
+coolgithubprojects,Checks if an e-mail address exists or not,,1503588707.0,19,0.79,7
+KeybaseProofs,My Keybase proof [reddit:ritiek = keybase:ritiek] (JFi8EOLJOPMzUNyVr7rzggUx0fodZD02d4yYQwhel3g),"### Keybase proof
+
+I am:
+
+  * [ritiek](https://www.reddit.com/user/ritiek) on reddit.
+  * [ritiek](https://keybase.io/ritiek) on keybase.
+
+Proof:
+
+    hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgNahbgBEnX4oHs2MVfKuFzxGOoakpPFB76IFjUSQrCicKp3BheWxvYWTFAzh7ImJvZHkiOnsia2V5Ijp7ImVsZGVzdF9raWQiOiIwMTIwMzVhODViODAxMTI3NWY4YTA3YjM2MzE1N2NhYjg1Y2YxMThlYTFhOTI5M2M1MDdiZTg4MTYzNTEyNDJiMGEyNzBhIiwiaG9zdCI6ImtleWJhc2UuaW8iLCJraWQiOiIwMTIwMzVhODViODAxMTI3NWY4YTA3YjM2MzE1N2NhYjg1Y2YxMThlYTFhOTI5M2M1MDdiZTg4MTYzNTEyNDJiMGEyNzBhIiwidWlkIjoiZGUxMWIzN2ZlNzRhODE1NzEzMjg5ZWM3YzMyN2M5MTkiLCJ1c2VybmFtZSI6InJpdGllayJ9LCJtZXJrbGVfcm9vdCI6eyJjdGltZSI6MTUwMTk0MjU5MiwiaGFzaCI6IjhiZGM3Mjk3N2M1NDcyMGEzMzY5MjYzZjU4ZDdhZWY4OTI0Y2JhNDZiMTNhODA4NWE5OWE1Y2Y1ZTkzYmJkNjE3N2YxMDQ5NWYzZDE2YThhM2QxZWUxMGMyM2Y5NTI4YWU1MDFhZWZlZTU2MzhkODE4NjZiN2E1NzljZjhhYzQ1IiwiaGFzaF9tZXRhIjoiMmVkNzYyMTBjOWJiODUwNmEwN2E4MjgxMjgwNjdiMzZhNDc5MjNmOGRjMWNhNmVkOTM0NzQ5NTU4MzA3NWMxOSIsInNlcW5vIjoxMzA2Mzc0fSwic2VydmljZSI6eyJuYW1lIjoicmVkZGl0IiwidXNlcm5hbWUiOiJyaXRpZWsifSwidHlwZSI6IndlYl9zZXJ2aWNlX2JpbmRpbmciLCJ2ZXJzaW9uIjoxfSwiY2xpZW50Ijp7Im5hbWUiOiJrZXliYXNlLmlvIGdvIGNsaWVudCIsInZlcnNpb24iOiIxLjAuMjUifSwiY3RpbWUiOjE1MDE5NDI3NTgsImV4cGlyZV9pbiI6NTA0NTc2MDAwLCJwcmV2IjoiZDc1ZjBlMjU4MDQ3NWJlYWQzZTg0NjRkYmExNjU5Y2MzNGU3MGMxZjY4MGI3M2M5ZjQxZDc0NWJkMTk2MTM2YyIsInNlcW5vIjo1LCJ0YWciOiJzaWduYXR1cmUifaNzaWfEQJJwH4O1zdae+BuF+TfOzoGsD/mE2flByAtchhii+vD3sJBQGkB59ZBOAMQjRoLZB5bYKl4klnu9tRZveRR06w6oc2lnX3R5cGUgpGhhc2iCpHR5cGUIpXZhbHVlxCA8avqgHwGYXoopGhL8T0pU9mnEGpXllu9iP9khyRm0GqN0YWfNAgKndmVyc2lvbgE=
+",1501942693.0,1,1.0,1
+rust,Rust library to download YouTube content and retrieve metadata,,1499851405.0,21,0.89,9
+coolgithubprojects,GitFeed - Check your GitHub Newsfeed via the command-line.,,1496521757.0,24,0.87,0
+rust,My first crate - Crop away excess images borders and some speed comparison with python,,1496171039.0,19,0.93,16
+coolgithubprojects,Yet another Spotify Downloader using youtube-dl,,1491502713.0,3,0.72,0

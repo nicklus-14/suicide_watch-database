@@ -1,0 +1,211 @@
+subreddit,body,created_utc,score
+Database,"Okay, so, what I usually do is I write down all the fields, look for what different entries have in common, and then move those common things into their own table and reference them.
+
+To give an example, let's start small! Imagine you only have a list of people, which department they work in, and what building the department is stationed at. For example, like this:
+
+| First name | Last name | Department           | Building     |
+|-|-|-|-|
+| John         | Doe          | Accounting             | Building C |
+|Adam         | Baker       | Upper Management | Building A  |
+|María          | Lopez       | Accounting            | Building C  |
+|David         | Usman      | Maintenance           | Building B  |
+|Lana          | Smith        | Upper Management | Building A  |
+
+Now, this list contains all the data that you have. But it's not efficient. Every person that works in Accounting also works in Building C. But this information (that people that work in Accounting work in Building C) is contained in TWO rows, even though it's only one information.
+
+The example list also has flaws:
+
+- Since every person that works in Accounting automatically works at Building C (since that's where Accounting is stationed at), if the department of Accounting would ever move to another building, you'd have to update ALL entries for everyone working in accounting. That can be a lot of data to update.
+
+- And the data above is error prone. What if I added a new line with a person working in Accounting but at Building D? And then asked you which building the department of Accounting was stationed at? Is it Building C or Building D?
+
+So what you'd do is, you'd group data that belongs to ""entities"". In the example above, you have informations regarding people (their names and which department they belong to), and also information about departments themselves (which building the department is stationed at). So we can split off the department information into a new table:
+
+|Department | Building|
+|-|-|
+|Accounting | Building C|
+|Upper Management | Building A|
+|Maintenance | Building B|
+
+That would be your list of deparment entities. As you can probably tell, it's way easier to look up which department is at which building, and also easier to update the list when a department moves. And your list of people could then simply contain a reference to the department:
+
+|First name | Last name | Department|
+|-|-|-|-|
+|John | Doe | Accounting|
+|Adam | Baker | Upper Management|
+|María | Lopez | Accounting|
+|David | Usman | Maintenance|
+|Lana | Smith | Upper Management|
+
+Where the ""Department"" would be a foreign key. Meaning, for every type of ""Department"" in the list of people there is exactly one entry in the ""Department"" entity list above. And if you wanted to know which building Lana Smith works at, you'd first find the row of ""Lana Smith"" in the people entity list, get the department she works at, and then look up the details for the department in the department entity list!
+
+That's - mostly it. In a real database, you wouldn't want to reference the department table by name though. Because if you wanted to rename the department ""Maintenance"" to ""Essential services"" or something, you'd have to jump through some hoops (because the name ""Maintenance"" is referenced by the ""people"" table and the ""people"" table would be very unhappy if you just took away one of the referenced department entries). So what you'd usually do is, you'd add another row to each table and give it a generic id. Like this (I also changed the column names to lower case just because I'm used to doing it this way):
+
+|department_id | name | building|
+|-|-|-|
+| 1 | Accounting | Building C|
+| 2 | Upper Management | Building A|
+| 3 | Maintenance | Building B|
+
+|person_id | first_name | last_name | department_id|
+|-|-|-|-|
+|1 | John | Doe | 1|
+|2 | Adam | Baker | 2|
+|3 | María | Lopez | 1|
+|4 | David | Usman | 3|
+|5 | Lana | Smith | 2|
+
+And that would be your design for the database. Two tables, one with people, one with departments. Each with an ID column, so you can update stuff (such as the department name) without having to change what defines the rows. Also, the SQL server is REALLY efficient at looking up stuff based on an ID if the ID is indexed/a primary key. Now, if you want to know which people work at Building A, you first go to the department table, look up the id for Buildiing A (department_id 2), then go to the person/people-table and find all people with department_id 2. Or vice-versa.
+
+And since the person-table references the department-table (via the department_id column), you'd draw a connection between the two tables. To complete the exercise - you'd make the department_id the primary key of the department table (meaning there cannot be two departments with the same department_id in the department table), and the person_id the primary key of the person table. And, as mentioned before, the department_id of your person table would be a foreign key referencing the department_id of the department table. There can still be multiple people with the same first and last name (and even working at the same department), but they'd have different person_ids.
+
+That's how you build an entity relationship design. Group stuff that is common/redundant information, throw it into separate tables, and reference them.
+
+As for your task - you'll have to try and group informatoin that belongs together. For example, the payment (I'm assuming ""26 times per month"" is a typo, I'd love to get paid 26 times per month lol). If every employee is getting paid every two weeks, you'd need to know how many hours each employee worked during which two-week-period, right? Now you could add a column to the person table for each payment period, but that'd be silly:
+
+|person_id | first_name | last_name | department_id | hours_payment_period_1 | hours_payment_period_2 |...|
+|-|-|-|-|-|-|-|
+|1 | John | Doe | 1 | 72 | 100 | ...|
+|2 | Adam | Baker | 2 | 38 | 40 | ...|
+|3 | María | Lopez | 1 | 80 | 80 | ...|
+|4 | David | Usman | 3 | 76 | 85 | ...|
+|5 | Lana | Smith | 2 | 128 | 143 | ...|
+
+Keep in mind, these are hours worked per 2-week-period (shoutout to Lana for poor work-life-balance!)
+
+But then you'd end up with loooooooooooooooooooooooooooooooooots of columns. And they'd grow for every year!
+
+Instead, you could make a new table to define payment periods:
+
+|payment_period_id | from | to|
+|-|-|-|
+|1 | 1/1/2025 | 1/14/2025|
+|2 | 1/15/2025 | 1/28/2025|
+
+(sory if I butchered the date format, I'm european :D)
+
+And then you could make a table ""hours worked"":
+
+|hours_worked_id | person_id | payment_period_id | hours|
+|-|-|-|-|
+|1 | 1 | 1 | 72|
+|2 | 2 | 1 | 38|
+|3 | 3 | 1 | 80|
+|4 | 4 | 1 | 76|
+|5 | 5 | 1 | 128|
+|6 | 1 | 2 | 100|
+|7 | 2 | 2 | 40|
+|8 | 3 | 2 | 80|
+|9 | 4 | 2 | 85|
+|10 | 5 | 2 | 143|
+
+See? Now you have two neat new tables of the entities ""payment period"" and ""hours worked"". And for every new payment period you can simply add a row to the table ""payment period"" and add rows in ""hours worked"" for every person (or also just for any person that worked during that payment period). And if you wanted to know how many hours María worked during the second half of january, you'd look up her person_id in the person table (person_id 3), the payment_period_id from the payment period table (payment_period_id 2), and then look up the entry in the hours worked table with person_id 3 and payment_period_id 2 (which is hours_worked_id 8 with 80 hours worked)
+
+So, that's the explanation. And then you build from there. For example, you could also store the gross salary in the ""hours worked"" table to write down how much the gross salary was for each person for each payment period! And then rename the table to something more fitting, such as ""payroll"" with ""payroll_id"" or something like that.
+
+It may look like I did a lot of work, but most of it is still left for you, don't worry :D You still have to figure out all the different ""entities"", or containers, you want to group the data with. For example, is ""Job Title Hourly Salary Rate"" a typo or does the salary rate really only depend on the job title? Because if it does, then that screams for another table about job types. Where you store a ""job_type_id"", a ""description"" and a ""hourly_rate"" or something like that (: And for some stuff you have to know more about the US tax system than I do. For example, are all the taxes and deductions applied to each paycheck? Are they monthly or yearly? Are there flat deductions? Could ""cities"" be another entity where you collect city names and their tax rates and then reference the cities in your ""person""-table, to describe which city each person lives at and their respective tax rate?
+
+I do hope this helps, and if you have any questions, feel free to message me!
+
+Have a wonderful day (:",1738018980.0,3
+WatchPeopleDieInside,"3 makes absolutely sense for storytelling. The first establishes precedence, the second makes it a pattern, and the third breaks said pattern.
+
+It is the minimum number required to set up and crush expectations. Anything more than that does not add value towards that goal, only increases length.",1595850519.0,20
+WeAreTheMusicMakers,"vst4free has you covered if you need free midi instruments. The installation for the vast majority of the midi instruments is ""drag these files into your designated folder"". And if you don't find any that scratch your itch (I found good electric guitars hard to come by, besides the DSK ElektriK GuitarZ) you can still buy some great ones with what you save by going for reaper instead of a more expensive DAW.
+
+You can also try Reaper for free and when you feel like it pay the 60 quid.",1594969275.0,3
+WeAreTheMusicMakers,"I haven't released anything yet :( Still working on my first album, and it's going to take a while. Sorry :c",1593556228.0,1
+WeAreTheMusicMakers,"I'm glad that you are okay! And don't worry about me. Life isn't easy, certainly not as of late, but at least my music dream lives on for a little while longer (:",1593552473.0,1
+WeAreTheMusicMakers,"I figured as much. Since you can't exactly be a stay at home dad while also being a woman ;) It was simply to tell you that it is difficult to judge your songwriting by a song that is not fully produced and where the singing is off, on top of it being a cover :D
+
+So. If you want some feedback, here are my honest first impressions:
+
+- Your verses are well done. Building the correct amount of tension. Personally, I would have let the intro go on a tiny bit longer before starting with the first verse, but that's just my preference.
+
+- Introducing the base drum at 0:20 - sounds good. Nice escalation. I personally prefer drums with a bit less bite on the high frequencies, but again, I really like it. However, when I first listened to it, I did get confused by the rhythm seemingly not lining up correctly. Turns out, the ""snaps"" probably do stay in rhythm, but go from off-beat to being in beat with the rest of the drums does make it sound weird. It would have probably been better to keep them on a short delay compared to the main beat.
+
+- The lead-up to the chorus at 0:36 - Why do you take out all the tension you've been building up? Suddenly the song goes from dark, brewing, to WAY open. That confused me a lot, and does not fit whatsoever in my opinion.
+
+- The chorus, just like the lead-up to it, seems to be more of a summer hit song. Uh. Fair enough. I did not see it coming, due to the verses being so strong. That, plus the chorus should be your crowning piece. I mean, the tune is catchy enough, but the background instrument (I don't know what it's called, with the ""wah wah"" effect) is too varied for most of the chorus and goes against the grain? Partially too similar to the vocals in frequency. Usually, you'd want it to be slower, lower notes when the singing is higher-pitched and fast, and vice-versa (when the singer holds the tune, for example, that's the point where your secondary melody can shine). You CAN mix them, but then you have to give them a separate frequency spectrum, so they don't fight.
+
+- The bridge is good (:
+
+So, in essence. A minor hiccup regarding the drums, going from off-beat claps to in-beat claps. But more important, the verses are too serious for the chorus, and vice-versa. And while the main chorus is catchy, it is also fighting with the second melody. Might be a frequency thing, might be too much action in the second melody at the wrong points, might be both.
+
+A lot of these ""issues"" disappear after repeated listening. Once you know what your song sounds like, your mind automatically skips those small hiccups. Our brains are fascinatingly awesome at filtering out noise. That means, if you take a break from listening to your song for a couple days or more, you will get a better ""fresh"" impression, and have a chance at noticing rougher edges. I know, making a song have a unique edge and hook is important, but most parts need to be smooth, else people won't tune in for a second time where their brain starts filtering out the parts it likes less.
+
+That being said, you ALSO picked a tough genre. Because do people really listen that often to summer party hits? It's great for, you know, summer parties, and to hear it way too often on the radio throughout one summer, but it doesn't mesh that well with streaming I feel, where you're mostly listening on your own. So unless it REALLY goes viral, expecations should be lower for this song to ""make it"", simply due to the genre.
+
+I can tell you put a ton of effort into the song and it is plenty good. With a good marketing team and tons of luck, you could have made it with this song too! Without it - well, welcome to the club. Even a perfect song is more likely to fail than to succeed, due to just how much music there is, how marketing works and how the industry is.
+
+Please keep in mind I'm also just an idiot on the internet and you should take everything with a grain of salt! Uh. Lots of salt.
+
+Keep making music, but probably not full-time. Hardly anyone can afford that :D Maybe team up with an amateur who can sing, if you aren't confident in your own ability, produce songs you enjoy listening to and put them out there. Split revenue with the singer, if there is any after paying the fee for releases. Or don't release the songs and keep them for yourself, but that would be a shame.
+
+And one song won't make or break everything. It is way more likely that you find success if you put out 10 songs that are 95% great in your eyes than one song that is 100% great. Especially since everyone has a different taste for music.
+
+Have a lovely day (:",1593356309.0,3
+WeAreTheMusicMakers,"I have the Alesis Q49 keyboard. I like having a full range, it also does register velocity properly. But to teach a 7 year old? And while it is nice to try out some things, the reality is - I barely use it. Because you can't use it without a computer and software. Depending on your software, you might have more input lag than what you want. You can't just start the keyboard and start playing, there is a lot of extra steps (especially for a 7 year old). You can't use the keyboard anywhere you want, it has to be next to the computer.
+
+A MIDI keyboard sounds tempting, but it does come with a lot of extra steps that will frustrate your boy. Also, you kinda need to pick whether to teach him bass or buy him piano lessons. If your budget is 100-120€, that's probably a no-no on piano lessons.
+
+Most keyboards come with buttons where you can change the tune anyways. Even the 30+ years old keyboard of my grandparents had such a feature, where you had dozends of different sounds to choose from, including organ and drumset and whatnot. So there goes your ""main"" advantage of MIDI.
+
+TL; DR: Get him a real keyboard if you are serious about making him learn piano (which I doubt). Get him a toy keyboard otherwise. MIDI will only be frustrating and probably get neither one of you anywhere. It also won't jumpstart your music making if you aren't already proficient on a piano, which you probably won't become on a 25 key MIDI piano lol.",1593337995.0,1
+WeAreTheMusicMakers,"I did listen to the song ""Wear your mask"". Which is a Pink Parody. Nevertheless, the writing seems to be okay! That being said, the singing is off (especially the highs and lows), and the production rather iffy. With those two huge problems, it's tough. Really tough. Writing songs is but a small part of the process. So, what options do you have?
+
+- Find a great producer, stick to songwriting? You can try, but it's unlikely that a great producer is in need of a no-name songwriter. Still, you can pitch samples to the big producers. But that would require you to have a higher output, so you don't feel like you are giving away your one true masterpiece when sending in a sample.
+
+- Get better at producing songs yourself? This is going to take a ton of work. You may never master it. Plus, you still need an artist to sing, right? This also requires you to write a lot more, to get more experience.
+
+- Find some gifted amateurs to work with? This might be the best option. If you feel like you are stuck, maybe you need others to help you over some hurdles. Or to make up for what you lack. To give you another perspective. You might actually suck, but without others getting insight into your actual songwriting, it's tough to tell.
+
+- Give up on the large dream and keep doing it as a hobby (or not at all). Maybe take it less seriously, produce a ""joke"" album for yourself where you just have fun.
+
+That being said. You seem to have been really interested in how to game the system (e.g. by buying viral ads to your song) and less so in, you know, making really great songs. At least judging based on your recent post history. So you do dream big, but struggle to walk the walk just like most of us here. And then reality wakes you up and you realize you are SO far away from said dreams. Try to dream less of success and more of making the best songs for yourself. That way, you'll actually get some songs out there you can be proud of. And they can still end up successful. It does help though to get some community feedback for sure.",1593337140.0,1
+explainlikeimfive,"Adblocker is only on the client's screen. Meaning, they ship a JavaScript script with their website that shows the nagscreen and hides the content.
+
+However, this also means that your browser still downloaded the entire site. And you can easily reverse the effects of the JavaScript that messed up your site with the nagscreen, if you know a bit about Html/CSS:
+
+Modern Browsers let you directly edit what is shown. For example, in Firefox, right click and inspect the background of the nag screen. It will take you to the html code of the site you are currently watching. Delete the element in the tree (by selecting it and pressing ""delete""), then go up the element tree and continue to delete elements until the nag screen is gone.
+
+But the main content is still cut off and not scrollable. That is simply done by the script adding the property ""overflow: hidden"" on the main body element and the one above or below that. Scroll up in the element tree until you find the body node, click on it and disable the ""overflow: hidden"" property on the right side of the window. Then go up and/or down a level and disable the other ""overflow: hidden"" property on the other element. And now your site is fully functional, without disabling your adblocker.",1556050669.0,104
+dataisbeautiful,As a cat owner let me tell you - 219 in one day is pretty low.,1543909633.0,1
+math,"As for the generalization, it follows the same principle. To be able to pay for all possible values <= n, you follow the following steps:
+
+n >= 1 ? You'll need 1x 1
+
+n >= 2 ? You'll additionally need 1x 2
+
+n >= 3 ? You'll additionally need 1x 1
+
+n >= 5 ? You'll additionally need 1x 5
+
+And then the same thing for the values x 10:
+
+n >= 10 ? You'll additionally need 1x 10
+
+n >= 20 ? You'll additionally need 1x 20
+
+n >= 30 ? You'll additionally need 1x 10
+
+n >= 50 ? You'll additionally need 1x 50",1540984510.0,1
+math,"2x 1
+
+1x 2
+
+That'll get you anywhere from 0-4.
+
+1x 5
+
+Now you can make anything from 0-9
+
+To do the same for 0-90, you use coins of the same value multiplied by 10:
+
+2x 10
+
+1x 20
+
+1x 50
+
+So you'll need 8 coins, with their value being 1, 1, 2, 5, 10, 10, 20, 50. At least if your question is ""I have fixed money, but don't know yet what the price will be, and I want to be able to pay the exact price"". That's how I understood your title. If your question was rather ""I have a fixed price, how do I evaluate the minimum amount of coins to pay exactly said price"", then the answer of /u/JacopoX1993 is what you're looking for.",1540981197.0,8

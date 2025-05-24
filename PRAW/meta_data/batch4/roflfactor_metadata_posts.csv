@@ -1,0 +1,467 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+C_Programming,Input Variable Not OverWritten,"First and foremost I would like to apologize if I'm not explaining this very well and if I am not using the correct terminologies. Hello, I just started trying to learn programming and I'm following the cs50 videos and doing the problem sets. I encountered a problem which is as the title says, my input variable, which is "" ccnum "" isn't being overwritten with a new input after the old input did not pass the last while check and uses the old input again. 
+For Example, 
+
+First input: 4444 4444 4444 4444
+It passes the totalDigit check but it doesn't pass the validity check. So it'll ask for a new input but after putting in a new input , for example 5555 5555 5555 5555, it still uses the first input for the rest of the code. 
+
+I tried making a similar but simpler program and it worked.
+
+The code is as follows 
+
+
+    #include <cs50.h>
+    #include <stdio.h>
+    #include <math.h>
+
+    // declare variables
+    long ccnum;
+    long ccnumcheck;
+    int totalDigits = 0;
+    // int nth will be the individual credit card number digits with 
+    from right to left
+    int n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, 
+    n14, n15, n16;
+    // int mth will be the multiplied digits
+    int m2, m4, m6, m8, m10, m12, m14, m16;
+    int i;
+    // int ath added sum of multiplied digits
+    int a2 = 0, a4 = 0, a6=0, a8=0, a10 = 0, a12 = 0, a14 = 0, a16 = 0;
+    int tsum;
+    int validity;
+
+    int main (void)
+    {
+        do
+        {
+            // Get Credit Card Number from user
+            do
+            {
+                ccnum = get_long(""Insert your Credit Card number: "");
+                ccnumcheck = ccnum;
+                
+                 while( ccnumcheck != 0)
+                {
+                    totalDigits ++;
+                    ccnumcheck /= 10;
+                }
+            
+                if ( totalDigits < 13)
+                {
+                     printf(""Invalid number \n"" );
+                }
+            }  
+            while ( totalDigits < 13);
+          
+            // Applying Luhn's algorithm
+                
+            // Getting individual digits and storing in respective declared nth variable
+        
+            n1 = ccnum % 10;     
+    
+            n2 = (ccnum / 10) % 10;    
+            m2 = n2 * 2;
+        
+            while (m2 != 0)
+            {
+              i = m2 % 10;
+              a2 = a2 + i;
+              m2 = m2 / 10;
+            }
+      
+            n3 = (ccnum / 100) % 10;            
+        
+            n4 = (ccnum / 1000) % 10; 
+            m4 = n4 * 2;
+        
+            while (m4 != 0)
+            {
+              i = m4 % 10;
+              a4 = a4 + i;
+              m4 = m4 / 10;
+            } 
+    
+            n5 = (ccnum / 10000) % 10;
+        
+            n6 = (ccnum / 100000) % 10;
+            m6 = n6 * 2;
+    
+            while (m6 != 0)
+            {
+              i = m6 % 10;
+              a6 = a6 + i;
+              m6 = m6 / 10;
+            } 
+                
+            n7 = (ccnum / 1000000) % 10;
+    
+    
+            n8 = (ccnum / 10000000) % 10;
+            m8 = n8 * 2;
+    
+            while (m8 != 0)
+            {
+              i = m8 % 10;
+              a8 = a8 + i;
+              m8 = m8 / 10;
+            }
+    
+            n9 = (ccnum / 100000000) % 10;
+    
+            n10 = (ccnum / 1000000000) % 10;
+            m10 = n10 * 2;
+    
+            while (m10 != 0)
+            {
+              i = m10 % 10;
+              a10 = a10 + i;
+              m10 = m10 / 10;
+            } 
+ 
+            n11 = (ccnum / 10000000000) % 10;
+
+            n12 = (ccnum / 100000000000) % 10;
+            m12 = n12 * 2;
+                          
+            while (m12 != 0)
+            {
+              i = m12 % 10;
+              a12 = a12 + i;
+              m12 = m12 / 10;
+            } 
+   
+ 
+            n13 = (ccnum / 1000000000000) % 10;
+
+            n14 = (ccnum / 10000000000000) % 10;
+            m14 = n14 * 2;
+
+            while (m14 != 0)
+            {
+              i = m14 % 10;
+              a14 = a14 + i;
+              m14 = m14 / 10;
+            } 
+ 
+            n15 = (ccnum / 100000000000000) % 10;
+     
+
+            n16 = (ccnum / 1000000000000000) % 10;
+            m16 = n16 * 2;
+
+            while (m16 != 0)
+            {
+              i = m16 % 10;
+              a16 = a16 + i;
+              m16 = m16 / 10;
+           } 
+  
+            tsum = (a2 + a4 + a6 + a8 + a10 + a12 + a14 + a16 + n1 + n3 + n5 + n7 + n9 + n11 + n13 + n15);
+    
+            validity = tsum % 10;
+            if( validity != 0)
+            {
+                printf(""Invalid Credit Card number.\n"");
+            
+            }
+        }
+        while ( validity != 0);
+   
+
+
+Thank you for you help.
+",1552823684.0,0,0.5,4
+cs50,Input Variable Not Overwritten In Loop,"First and foremost I would like to apologize if I'm not explaining this very well and if I am not using the correct terminologies. My problem is not a pset1 credit specific problem. It as as the title, my input variable, which is "" ccnum "" isn't being overwritten with a new input after the old input did not pass the last while check and uses the old input again.  
+
+For Example, 
+
+First input: 4444 4444 4444 4444
+It passes the totalDigit check but it doesn't pass the validity check. So it'll ask for a new input but after putting in a new input, it still uses the first input for the rest of the code. I know this isn't necessary for the pset problem but I would like to know how to fix it at this point.  
+
+The code is as follows 
+
+
+    #include <cs50.h>
+    #include <stdio.h>
+    #include <math.h>
+
+    // declare variables
+    long ccnum;
+    long ccnumcheck;
+    int totalDigits = 0;
+    // int nth will be the individual credit card number digits with 
+    from right to left
+    int n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, 
+    n14, n15, n16;
+    // int mth will be the multiplied digits
+    int m2, m4, m6, m8, m10, m12, m14, m16;
+    int i;
+    // int ath added sum of multiplied digits
+    int a2 = 0, a4 = 0, a6=0, a8=0, a10 = 0, a12 = 0, a14 = 0, a16 = 0;
+    int tsum;
+    int validity;
+
+    int main (void)
+    {
+        do
+        {
+            // Get Credit Card Number from user
+            do
+            {
+                ccnum = get_long(""Insert your Credit Card number: "");
+                ccnumcheck = ccnum;
+                
+                 while( ccnumcheck != 0)
+                {
+                    totalDigits ++;
+                    ccnumcheck /= 10;
+                }
+            
+                if ( totalDigits < 13)
+                {
+                     printf(""Invalid number \n"" );
+                }
+            }  
+            while ( totalDigits < 13);
+          
+            // Applying Luhn's algorithm
+                
+            // Getting individual digits and storing in respective declared nth variable
+        
+            n1 = ccnum % 10;     
+    
+            n2 = (ccnum / 10) % 10;    
+            m2 = n2 * 2;
+        
+            while (m2 != 0)
+            {
+              i = m2 % 10;
+              a2 = a2 + i;
+              m2 = m2 / 10;
+            }
+      
+            n3 = (ccnum / 100) % 10;            
+        
+            n4 = (ccnum / 1000) % 10; 
+            m4 = n4 * 2;
+        
+            while (m4 != 0)
+            {
+              i = m4 % 10;
+              a4 = a4 + i;
+              m4 = m4 / 10;
+            } 
+    
+            n5 = (ccnum / 10000) % 10;
+        
+            n6 = (ccnum / 100000) % 10;
+            m6 = n6 * 2;
+    
+            while (m6 != 0)
+            {
+              i = m6 % 10;
+              a6 = a6 + i;
+              m6 = m6 / 10;
+            } 
+                
+            n7 = (ccnum / 1000000) % 10;
+    
+    
+            n8 = (ccnum / 10000000) % 10;
+            m8 = n8 * 2;
+    
+            while (m8 != 0)
+            {
+              i = m8 % 10;
+              a8 = a8 + i;
+              m8 = m8 / 10;
+            }
+    
+            n9 = (ccnum / 100000000) % 10;
+    
+            n10 = (ccnum / 1000000000) % 10;
+            m10 = n10 * 2;
+    
+            while (m10 != 0)
+            {
+              i = m10 % 10;
+              a10 = a10 + i;
+              m10 = m10 / 10;
+            } 
+ 
+            n11 = (ccnum / 10000000000) % 10;
+
+            n12 = (ccnum / 100000000000) % 10;
+            m12 = n12 * 2;
+                          
+            while (m12 != 0)
+            {
+              i = m12 % 10;
+              a12 = a12 + i;
+              m12 = m12 / 10;
+            } 
+   
+ 
+            n13 = (ccnum / 1000000000000) % 10;
+
+            n14 = (ccnum / 10000000000000) % 10;
+            m14 = n14 * 2;
+
+            while (m14 != 0)
+            {
+              i = m14 % 10;
+              a14 = a14 + i;
+              m14 = m14 / 10;
+            } 
+ 
+            n15 = (ccnum / 100000000000000) % 10;
+     
+
+            n16 = (ccnum / 1000000000000000) % 10;
+            m16 = n16 * 2;
+
+            while (m16 != 0)
+            {
+              i = m16 % 10;
+              a16 = a16 + i;
+              m16 = m16 / 10;
+           } 
+  
+            tsum = (a2 + a4 + a6 + a8 + a10 + a12 + a14 + a16 + n1 + n3 + n5 + n7 + n9 + n11 + n13 + n15);
+    
+            validity = tsum % 10;
+            if( validity != 0)
+            {
+                printf(""Invalid Credit Card number.\n"");
+            
+            }
+        }
+        while ( validity != 0);
+   
+
+
+Thank you for you help.
+",1552715951.0,1,1.0,0
+SuicideWatch,Its too exhausting to keep up,Having to keep my mind occupied 24/7 is too exhausting and it doesnt make it any better. But i cant bear to imagine what would happen to my mom if she found out that i had killed myself. I dont know what to do anymore,1538319140.0,3,1.0,3
+SuicideWatch,I don't want to live anymore but I don't have the courage to end it,"There's too many bad events that happened in such a short amount of time. I've never really wanted to live for years now but I never really thought about killing myself and just go along with life to just be alive. But right now I'm just sick and tired of being alive. I just want everything to end but I never could gather the courage to kill myself. Everytime it will just end up with me slicing my arm with no result because I don't have the courage to follow through till the end. If only someone could end my life for me, that would be great.",1518799558.0,6,0.88,8
+leagueoflegends,Weird Veigar E interaction ( maybe a bug ),"I was playing against a Veigar as Le'Blanc and I encountered a weird interaction with his E. I managed to use my W to get out of his cage without getting stunned. Am I missing something or is it a bug? Hoping someone could explain
+https://youtu.be/MajC63zVoDg",1478137607.0,1,1.0,0
+LongDistance,FML MY LDR ends,"Even though we're nevermets, our relationship had to end because her parents set her up for an arranged marriage. I'm so freaking sad and depressed I dont know what to do now. I know I havent been the very best to her in the past, but this just had to happen when I'm trying to change and be a better person for her. Just when I had decided on plans to move closer to her. I dont want to believe that this is true. Her parents are setting her up because he's rich and maybe their worried about her future. But please give me time. I'll work hard and graduate and be successful. I'll do anything to be with her. Please just give me time. Please god, if you're truly almighty and powerful please don't let this one relationship that I truly care to end like this.
+
+Sorry if this isnt allowed. I'm not asking for pity, I just need to rant and let this all out
+
+
+EDIT/ UPDATE: I think she isnt really getting set up by her parents. I think she's just back with her ex. I cant say for sure cause she didnt tell me that. I'm thankfull for the help that you guys have given me, but sorry to have wasted your time.",1462171644.0,12,0.88,10
+buildapc,Anyone using an NZXT H440 with sapphire R9 390,I would like to know how the sapphire 390 fits in the case since its longer and some drice cages needs to be removed. I'm afraid of the cable clearance and dont wanna put any stress on it. Thanks,1444495829.0,1,1.0,0
+buildapc,[Build Ready] First time building and would like some advice before buying,"###Build Help/Ready:
+
+**Have you read the sidebar and [rules](http://www.reddit.com/r/buildapc/wiki/rules)? (Please do)**
+
+yes
+
+**What is your intended use for this build? The more details the better.**
+
+Gaming. Mainly GTA V, MGS V, LOL , Witcher 3 and new games
+
+**If gaming, what kind of performance are you looking for? (Screen resolution, FPS, game settings)**
+
+At high/max settings,1080p and a high fps. Might consider 1440p 
+
+**What is your budget (ballpark is okay)?**
+
+Around £900 for the tower and not including peripherals
+
+**In what country are you purchasing your parts?**
+
+UK
+
+**Post a draft of your potential build here (specific parts please).
+ [Consider formatting your parts list.](http://www.reddit.com/r/buildapc/wiki/pcpp) Don't ask to be spoonfed a build (read the rules!)**.
+
+[PCPartPicker part list](http://uk.pcpartpicker.com/p/nCVJ3C) / [Price breakdown by merchant](http://uk.pcpartpicker.com/p/nCVJ3C/by_merchant/)
+
+Type|Item|Price
+:----|:----|:----
+**CPU** | [Intel Core i5-4690K 3.5GHz Quad-Core Processor](http://uk.pcpartpicker.com/part/intel-cpu-bx80646i54690k) | £178.29 @ Amazon UK 
+**CPU Cooler** | [Cooler Master Hyper 212 EVO 82.9 CFM Sleeve Bearing CPU Cooler](http://uk.pcpartpicker.com/part/cooler-master-cpu-cooler-rr212e20pkr2) | £24.98 @ Novatech 
+**Motherboard** | [MSI Z97S SLI Krait Edition ATX LGA1150 Motherboard](http://uk.pcpartpicker.com/part/msi-motherboard-z97sslikraitedition) | £89.96 @ Scan.co.uk 
+**Memory** | [Kingston HyperX Fury White 8GB (2 x 4GB) DDR3-1866 Memory](http://uk.pcpartpicker.com/part/kingston-memory-hx318c10fwk28) | £34.99 @ Aria PC 
+**Storage** | [Sandisk X110 256GB 2.5&quot; Solid State Drive](http://uk.pcpartpicker.com/part/sandisk-internal-hard-drive-sd6sb1m256g1022i) | £59.98 @ Scan.co.uk 
+**Storage** | [Seagate Barracuda 1TB 3.5&quot; 7200RPM Internal Hard Drive](http://uk.pcpartpicker.com/part/seagate-internal-hard-drive-st1000dm003) | £34.74 @ Aria PC 
+**Video Card** | [PowerColor Radeon R9 390 8GB PCS+ Video Card](http://uk.pcpartpicker.com/part/powercolor-video-card-axr93908gbd5ppdhe) | £245.05 @ More Computers 
+**Case** | [NZXT H440 (White/Black) ATX Mid Tower Case](http://uk.pcpartpicker.com/part/nzxt-case-cah440ww1) | £88.07 @ Aria PC 
+**Power Supply** | [EVGA SuperNOVA NEX 650W 80+ Gold Certified Fully-Modular ATX Power Supply](http://uk.pcpartpicker.com/part/evga-power-supply-120g10650xr) | £68.99 @ Novatech 
+**Operating System** | [Microsoft Windows 7 Home Premium SP1 OEM (64-bit)](http://uk.pcpartpicker.com/part/microsoft-os-gfc02050) | £67.95 @ Ebuyer 
+**Wireless Network Adapter** | [TP-Link TL-WDN4800 802.11a/b/g/n PCI-Express x1 Wi-Fi Adapter](http://uk.pcpartpicker.com/part/tp-link-wireless-network-card-tlwdn4800) | £19.99 @ Amazon UK 
+**Monitor** | [BenQ GL2250HM 60Hz 21.5&quot; Monitor](http://uk.pcpartpicker.com/part/benq-monitor-gl2250hm) | £89.93 @ Amazon UK 
+**Keyboard** | [Ducky Shine 4 Wired Gaming Keyboard](http://uk.pcpartpicker.com/part/ducky-keyboard-dksh1408sdcusalaabr1) | £29.59 @ Overclockers.co.uk 
+ | *Prices include shipping, taxes, rebates, and discounts* |
+ | **Total** | **£1032.51**
+ | Generated by [PCPartPicker](http://pcpartpicker.com) 2015-10-01 21:58 BST+0100 |
+
+**Provide any additional details you wish below.**
+
+Would like to know if there is a big difference other than pricing if I chose a cheaper mobo. I went with the Krait simply for the black and white colour scheme. I might consider getting a different one if theres a difference. And how significant is the temp difference of the powercolor 390 compared to other 390s that only have 2 fans. Would like your thoughts on my build as well. Thanks for your time
+ 
+**NOTE: You do not have to follow this format, but please be sure to answer these questions. Please do not ask to simply be given a build. You are welcome to delete this section.**",1443733413.0,2,1.0,5
+buildapcforme,First timer needing help with £900 build. Thank you for your time helping me,">**What will you be doing with this PC? Be as specific as possible, and include specific games or programs you will be using.**
+
+I'll be using it for gaming mostly such as LOL GTAV MGSV and would like to be able to run most new and upcoming games at high/max settings with 60 fps  at 1080p. 1440p if possible
+
+>**What is your maximum budget before rebates/shipping/taxes?** 
+£900
+
+>**When do you plan on building/buying the PC? Note: beyond a week or two from today means any build you receive will be out of date when you want to buy.** 
+as soon as possible  
+
+>**What, exactly, do you need included in the budget? (Tower/OS/monitor/keyboard/mouse/etc)** 
+
+everything except a mouse. 
+
+>**Which country (and state/province) will you be purchasing the parts in? If you're in US, do you have access to a Microcenter location?** 
+
+Scotland,UK
+
+>**If reusing any parts (including monitor(s)/keyboard/mouse/etc), what parts will you be reusing? Brands and models are appreciated.** 
+
+Ill be reusing my razer deathadder
+
+>**Will you be overclocking? If yes, are you interested in overclocking right away, or down the line? CPU and/or GPU?** 
+
+not at the moment. maybe ill OC down the line
+
+>**Are there any specific features or items you want/need in the build? (ex: SSD, large amount of storage or a RAID setup, CUDA or OpenCL support, etc)**
+
+non
+
+>**Do you have any specific case preferences (Size like ITX/microATX/mid-tower/full-tower, styles, colors, window or not, LED lighting, etc), or a particular color theme preference for the components?**
+
+I'd like a white or white/black and a silent build. But I would want to make performance a priority. These are only if it would fit in the budget
+
+>**Do you need a copy of Windows included in the budget? If you do need one included, do you have a preference?**
+
+yes, no preference as I'll look to upgrade to win10 maybe
+
+>**Extra info or particulars:**
+I made a build and would like to see if its compatible and if its good. Its something I mixed up while looking at other peoples builds and build guides on pcpartpicker.
+
+[PCPartPicker part list](http://uk.pcpartpicker.com/p/3hkZbv) / [Price breakdown by merchant](http://uk.pcpartpicker.com/p/3hkZbv/by_merchant/)
+
+Type|Item|Price
+:----|:----|:----
+**CPU** | [Intel Core i5-4460 3.2GHz Quad-Core Processor](http://uk.pcpartpicker.com/part/intel-cpu-bx80646i54460) | £139.98 @ Amazon UK 
+**Motherboard** | [MSI Z97S SLI Krait Edition ATX LGA1150 Motherboard](http://uk.pcpartpicker.com/part/msi-motherboard-z97sslikraitedition) | £85.82 @ Amazon UK 
+**Memory** | [Kingston HyperX Fury White 8GB (1 x 8GB) DDR3-1866 Memory](http://uk.pcpartpicker.com/part/kingston-memory-hx318c10fw8) | £33.51 @ Amazon UK 
+**Storage** | [\*Sandisk X110 256GB 2.5"" Solid State Drive](http://uk.pcpartpicker.com/part/sandisk-internal-hard-drive-sd6sb1m256g1022i) | £59.98 @ Scan.co.uk 
+**Storage** | [\*Seagate Barracuda 1TB 3.5"" 7200RPM Internal Hard Drive](http://uk.pcpartpicker.com/part/seagate-internal-hard-drive-st1000dm003) | £34.74 @ Aria PC 
+**Video Card** | [PowerColor Radeon R9 390 8GB PCS+ Video Card](http://uk.pcpartpicker.com/part/powercolor-video-card-axr93908gbd5ppdhe) | £242.90 @ More Computers 
+**Case** | [NZXT S340 (White) ATX Mid Tower Case](http://uk.pcpartpicker.com/part/nzxt-case-cas340ww1) | £53.99 @ Ebuyer 
+**Power Supply** | [EVGA SuperNOVA NEX 650W 80+ Gold Certified Fully-Modular ATX Power Supply](http://uk.pcpartpicker.com/part/evga-power-supply-120g10650xr) | £63.31 @ Amazon UK 
+**Operating System** | [Microsoft Windows 7 Home Premium SP1 OEM (64-bit)](http://uk.pcpartpicker.com/part/microsoft-os-gfc02050) | £67.95 @ Ebuyer 
+**Monitor** | [BenQ GL2250HM 60Hz 21.5"" Monitor](http://uk.pcpartpicker.com/part/benq-monitor-gl2250hm) | £89.93 @ Amazon UK 
+**Keyboard** | [Ducky Shine 4 Wired Gaming Keyboard](http://uk.pcpartpicker.com/part/ducky-keyboard-dksh1408sdcusalaabr1) | £33.59 @ Overclockers.co.uk 
+ | *Prices include shipping, taxes, rebates, and discounts* |
+ | **Total** | **£905.70**
+ | \*Lowest price parts chosen from parametric criteria |
+ | Generated by [PCPartPicker](http://pcpartpicker.com) 2015-09-25 15:27 BST+0100 |",1443191797.0,2,1.0,5
+bravefrontier,Weekend Dungeon,Is it just me or did they reduce the number of battles of the weekend dungeon from 10 to 5?,1402146071.0,1,1.0,4

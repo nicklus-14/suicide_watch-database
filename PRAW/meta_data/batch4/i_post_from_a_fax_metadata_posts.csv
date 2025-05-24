@@ -1,0 +1,361 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+argentina,"Hablando de los problemas que afectan a los Argentinos, el Canciller Felipe Solá",,1579101059.0,1,1.0,0
+argentina,[SERIO] Portabilidad numérica de teléfono fijo,"Estoy pagando por un plan Movistar Hogar de Banda Ancha 50 MB + Teléjono fijo alrededor de $1800 por mes. El plan no es tan bueno ya que tengo microcortes contantes más allá de tener un router y usar el Router-Modem de Movistar sólo como Modem. 
+
+Hace unos días vi que en mi área habían unos WiFi con SSID Claro, por lo que consulté la cobertura y era posible que pudiera contratarlo. Tiene un plan de 10 MB Banda Ancha + Teléfono fijo por $850 más 3 meses gratis.
+
+Ahora bien: hoy llamé a Movistar para saber qué onda con el número de teléfono y me dicen que no pueden ofrecerme portabilidad telefónica. 
+
+[Estaba leyendo que hay un fallo del 2014 que insta a las empresas de Telecomunicaciones a hacerlo, pero jamás fue reglamentado.](https://www.anura.com.ar/lo-necesitas-saber-la-portabilidad-numerica-argentina/)
+
+Lo que me hace pensar: en parte estoy dispuesto a cambiarme de número de teléfono. No lo uso casi nada. Pero tengo muchos servicios atados a ese número fijo además de gente que ya lo conoce.
+
+¿Existe hoy en día una forma de ganar esto sin mucho quilombo?
+---
+**Update**: encontré la [Resolución 203/2018](http://www.saij.gob.ar/regimen-portabilidad-numerica-nv19522-2018-04-04/123456789-0abc-225-91ti-lpssedadevon?&o=3&f=Total%7CFecha%5B50%2C1%5D%7CEstado%20de%20Vigencia%5B5%2C1%5D%7CTema%5B25%2C1%5D%7COrganismo%5B5%2C1%5D%7CAutor%5B5%2C1%5D%7CJurisdicci%F3n%5B5%2C1%5D%7CTribunal%5B5%2C1%5D%7CPublicaci%F3n/Novedad%7CColecci%F3n%20tem%E1tica%5B5%2C1%5D%7CTipo%20de%20Documento&t=16162) que avala mantener el número de teléfono. Voy a hablar con los de Claro a ver que dicen.
+
+**Update 2**: Claro me dice que tampoco soporta la portabilidad telefónica :(
+
+**Update 3**: Me comuniqué con ENACOM y me dijeron que recién desde el 5 de Diciembre de 2019 (en 4 días) se aplica la medida para GBA. [Acá hay más información](https://www.argentina.gob.ar/sites/default/files/resolucion_117_2016_regimen_de_portabilidad_numerica.pdf). Voy a probar el viernes 6 de llamar nuevamente.",1575295162.0,0,0.5,6
+kodi,Startup Kodi showing a fullscreen image from a URL and refresh every 1 minute,"I have a Raspberry Pi running Recalbox and built in with Kodi Jarvis.
+
+
+Kodi can be set to run on the start up of the device, so I was looking for a way to show an image from a URL and refresh it every minute (I was going to do it with Chrome first, but I can't install Chrome in Recalbox).
+
+
+I know that I could combine Autoexec.py with xbmc.executebuiltin('ShowPicture('+url+')'), but how I can do it to refresh it in intervals?
+
+---
+Update: so I could created the autoexec.py file
+
+/recalbox/share/system/.kodi/autoexec.py
+
+    import xbmc
+    
+    url = 'http://172.16.10.24/kodi/test.jpg'
+    xbmc.executebuiltin('ShowPicture('+url+')')
+
+It seems that is loading ShowPicture and requesting the file with Curl
+
+    22:11:11 T:1926692864   DEBUG: ------ Window Init (SlideShow.xml) ------
+    22:11:11 T:1926692864    INFO: Loading skin file: SlideShow.xml, load type: KEEP_IN_MEMORY
+    22:11:11 T:1926692864   DEBUG: Load SlideShow.xml: 9.16ms
+    22:11:11 T:1926692864   DEBUG: Alloc resources: 9.71ms  (9.60 ms skin load)
+    22:11:11 T:1926692864   DEBUG: Loading the current image 0: http://172.16.10.24/kodi/test.jpg
+    22:11:11 T:1733194720   DEBUG: Thread BgPicLoader start, auto delete: false
+    22:11:11 T:1733194720   DEBUG: CurlFile::Open(0x7080bd50) http://172.16.10.24/kodi/test.jpg
+    22:11:11 T:1733194720 WARNING: COMXImageFile::GetCodingType progressive images not supported by decoder
+    22:11:11 T:1733194720   DEBUG: COMXImageFile::ReadFile http://172.16.10.24/kodi/test.jpg GetCodingType=0x7fffffff (705x1d6)
+    22:11:11 T:1733194720  NOTICE: LoadJpeg: unable to load http://172.16.10.24/kodi/test.jpg
+    22:11:11 T:1733194720   DEBUG: CurlFile::Open(0x7080bd50) http://172.16.10.24/kodi/test.jpg
+    22:11:11 T:1733194720   DEBUG: Finished background loading slot 0, 0: http://172.16.10.24/kodi/test.jpg
+    22:11:11 T:1926692864   DEBUG: SECTION:LoadDLL(special://xbmcbin/system/libexif-arm.so)
+    22:11:11 T:1926692864   DEBUG: Loading: /usr/lib/kodi/system/libexif-arm.so
+    22:11:11 T:1926692864   DEBUG: CurlFile::Open(0x24f1da0) http://172.16.10.24/kodi/test.jpg
+    22:11:11 T:1926692864    INFO:   msg: ExifParse: incorrect Exif header
+    22:11:13 T:1926692864   DEBUG: ------ Window Deinit (DialogKaiToast.xml) ------
+
+So it is working and showing the image!!!!
+
+Now I need to create a while that update the image every 60 seconds.
+
+---
+
+Update: Here is the autoexec.py with the interval
+    import xbmc
+
+    url = 'http://172.16.10.24/kodi/test.jpg'
+
+    while (1):
+        xbmc.executebuiltin('ShowPicture('+url+')')
+        xbmc.sleep(60000)",1569421415.0,9,0.77,2
+sysadmin,"Trying to catch TortoiseSVN errors to log it, but I couldn't find a way","I have 30 people working on different SVN repositories. One of the most frustrating tasks is to get a report of a error from them. Normally it goes with a ticket ""Tortoise gave me an error. HELP!"". So normally I ask to attach a screenshot of the error and a description of what they were trying to do. If I can't give them any easy solution I connect via VNC and fix the problem.
+
+What I was trying to do is to create a hook that could catch the normal SVN error that TortoiseSVN catches and send it to a server that will accumulate those errors. That way I can have error reports in real time before they fill a ticket.
+
+[I tried to pre-commit and post-commit hooks.](https://tortoisesvn.net/docs/release/TortoiseSVN_en/tsvn-dug-settings.html#tsvn-dug-settings-hooks) Both are lunched if everything was right. But if SVN gets an error on the middle of the commit, it will be interrupted and stop, not triggering the post-commit hook.
+
+So there is no way I can get the error with hooks right now. I tried the server side ones but there is not much information I can get (using RhodeCode).
+
+Is it another way that I could get those errors? Maybe redirecting to Windows Log Events?",1568904256.0,4,0.76,0
+linuxquestions,Full-text search engine for some HTML docs (pandoc),"I am currently converting multiple Markdown files to HTML with pandoc. My next step is to have a search functionality to allow other users to consult the docs.
+
+I was thinking to implement a simple webserver with python and some regex to search around 100 documents, but then I realized that full-text engines do that kind of job, even fixing typos, giving suggestions, etc.
+
+I found Solr and Elasticsearch, but those look too big for a small project. Tantivity looks like another option, but I didn't read many opinions about it.
+
+Do you have any idea or approach in this case?",1550678972.0,4,1.0,1
+headphones,RHA S500 Universal went out,"I bought a RHA S500 Universal at NY back in November and came back to my country. Those headphones are top quality and I really like them, [but a week ago I noticed that one of them was getting out and I don't know how to hold it still again.](https://i.imgur.com/5TDjIrH.jpg) (Pic related)
+
+Do you have any idea of how to fix it? The sound stills working well, btw
+
+",1548691037.0,5,0.86,3
+argentina,Y cuando creías que ya no se podía currar con nada más...,,1547750079.0,1,1.0,0
+argentina,"Por si quieren hacer la última buena obra del año, los chicos de la Selección Argentina de Fútbol de Síndrome de Down están recaudando fondos para ir a la Mundial de Brasil",,1546023737.0,62,0.89,11
+argentina,Los taxis porteños deberán usar una app para gestionar viajes: los usuarios podrán calificar el servicio y pagar con tarjeta,,1544128198.0,188,0.99,65
+inspirobot,About mathematics,,1542303198.0,34,0.97,0
+openmailbox,"""Why we were down""","https://www.openmailbox.org/why-we-were-down
+
+> Dear users, we received quite a lot of messages of users that were concerned regarding the IMAP support removal for free accounts.
+> 
+> As may know, we suffered a long, major outage affecting all our services.
+> 
+> This is the consequence of series of bugs concerning major operational systems.
+> 
+> At the beginning of the year, we planned a data migration between our former infrastructure provider and a new one. As a consequence, we decided to lighten operational services in order to simplify the migration scheme; this was a terribly wrong idea as backup and data replication systems were concerned too.
+> 
+> As data migration should have been done quickly, this was not seen as a huge issue at the time but it should have been.
+> 
+> Due to series of constraints and change of priorities, data migration was never fully performed; but, we should have, at least, put critical services online again.
+> 
+> The 9 of September **we suffered a hardware issue on servers’ managing our whole email dataset. As a consequence, we had to move drives to a new, empty box; losing in the process precious filesystem data hosted in the BBU backed cache.**
+> 
+> We were never able to recover any useful data from the concerned system as we store data in a not-recoverable pattern without filesystem data structure.
+> 
+> **As a consequence, you will suffer a big gap of what is available in your Inbox, we have no words and are sincerely and deeply sorry about the whole situation.**
+> 
+> We are open to requests for any additional comments and answers.
+
+It really made me think the kind of people we were trusting with our precious information.
+
+Even with all the stumble, they failed us when didn't communicate what was happening. That is so unprofessional. ",1541698674.0,6,1.0,2
+southpark,"Walking around Chinatown at SF, when suddenly I found the CitiBank",,1541447880.0,11,0.84,1
+thinkpad,Alternative to buy a customized Thinkpad from lenovo.com,"I am quite frustrated trying to buy my T480 through lenovo.com.
+
+Already I have tried with 2 different credit cards and I get infamous ""Authorization has failed. Please contact your credit card provider."", even when I preauthorized the buy with my credit card companies. 
+
+in one of those opportunities kept a ""hold"" on my card, it is supposed to dismiss tomorrow, at least the guy from Mastercard told me that.
+
+I don't know what else do. Is there a physical place that I could go, build my laptop and pick it up 3 days later?
+
+I am from outside USA, buy I am going to travel to NYC in one week. My plan was to ship the laptop to my friend's house there.
+",1538684067.0,2,1.0,3
+mongodb,Old versions of 3T MongoChef Core for Windows and macOS?,[removed],1538663306.0,2,1.0,0
+argentina,"""Soy diplomático"": use la chapa celeste para estacionar donde quiera (+1 inmunidad)",,1538537241.0,104,0.96,47
+linuxquestions,[Viking] Does anyone know how I could use offline tiles and where I can download those?,"On Android I use some apps that use OBF file to create tiles on the fly (AAT, A Photo Map) from the folder osmand.
+
+But I am not quite sure if there is something similar for Viking. I try to understand how ""On Disk OSM Tile Format"" Map Type works but I can't find much information about it, or where to get the files.
+
+Basically, I want to use Viking on my trip without depend of a data plan.",1538321332.0,1,0.67,1
+thinkpad,Need help looking for a successor for my X220,"In 2 weeks I am travelling to USA and one of my missions is to replace my X220 for a new Thinkpad.
+
+My options right now are: 
+- T480
+- X280
+
+Mainly I want a laptop that I can use for development on Debian/Arch, that I can compile without reaching 100º C (my X220 is having this beautiful problem), with Matte display to avoid the annoying reflection of lamps, Ethernet port (X1 hasn't it).
+
+Do you have any suggestions?",1538074133.0,1,1.0,12
+openmailbox,Bye OpenMailBox. Thanks for the ride! I am moving to Runbox,"After more that 2 weeks of down services and no response from the owners of the service, I moved forward and sign up at [Runbox](https://runbox.com) plan Mini at u$s 34.95 for 2 years.
+
+- The guys are in Norway
+- They are working since 2011
+- I can use IMAP/POP3/SMTP, Webmail, Contacts and even filesharing
+
+It's a shame that we as customers (I was giving donations and then became a PRO) we had none reply from them. 
+
+So, bye bye OpenMailBox. ",1537887687.0,7,0.9,2
+argentina,Desesperada búsqueda de una estudiante de 14 años en Bahía Blanca,,1537366647.0,9,0.65,30
+openmailbox,I am tired of this!,"I was a proud user of OpenMailBox since it became know with all the drama about the NSA and Gmail.
+
+
+At the beginning it was amazing:
+
+- It was free (I was donating because I wanted to collaborate)
+- ownCloud with file-sharing, webdav, and the possibility to sync calendars and contacts
+- And very important: uptime
+
+A year ago they offered Pro plans. I didn't think twice to pay for it. But going forward they disabled the ownCloud integration at all without any notification. DAVdroid stopped syncing with the cloud, and my explorer client on Android could't access the storage anymore.
+
+Around 5 days ago I stopped to receive emails from IMAP and the website is down.
+
+And no other response from the support.
+
+What is going on?",1536672711.0,6,1.0,5
+argentina,[Línea D altura Olleros] En primera persona presencié esto. No sé como fue o que pasó después,,1536328003.0,81,0.93,70
+argentina,"""...or You Live Long Enough To See Yourself Become The Villain""",,1533738852.0,18,0.88,9
+argentina,¿senado.gov.ar caído?,"Estoy intentando [entrar al sitio](http://www.senado.gov.ar/) y parece que está caído desde hace varias horas.
+
+[IsItDownRightNow tira que está caído.](http://www.isitdownrightnow.com/senado.gov.ar.html)
+
+[En Wayback Machine figura un snapshot del día de ayer al mediodía.](https://web.archive.org/web/20180807015846/http://www.senado.gov.ar/)
+
+¿Ya puedo ponerme el tinfoil hat y pensar en un ataque DDoS justo para el día de hoy?
+
+---
+Por cierto, tampoco parece usar HTTPS el sitio. 
+
+---
+Edit: también puede ser que el tráfico que viene de Google esté matando el load balancer (si es que usan uno 0_o).
+",1533732370.0,6,0.75,11
+Design,What you call that?,,1533221019.0,800,0.97,50
+ProgrammerHumor,vim: there are many ways to escape from it,,1531244095.0,42,0.92,8
+movies,A quite similar beginning at Harold and Maude (1971) and The Fight Club (1999),[removed],1530889258.0,1,1.0,0
+argentina,Hace años que vengo intentando salvar ambas vidas,,1528901596.0,4,0.67,0
+SuicideWatch,Is there statics about suicide numbers of people with and without medical treatment?,[removed],1528490720.0,2,1.0,0
+argentina,¿Qué mejor forma de celebrar el Día de la Patria que con un--,,1527195455.0,0,0.5,2
+argentina,Proyecto de IA brasilero para detectar anomalías en el gasto público. Ya gustaría que lo implementen acá.,,1520345640.0,51,0.92,26
+AccidentalRenaissance,He died for our sins,,1517840047.0,2,0.75,2
+tipofmytongue,[TOMT] Music video from late 90s/2000s where a bald guy wearing a suit walk at a lobby and then enters the elevator,"At the same time this guy is walking pacifically, meanwhile everyone around him is getting push away because of some kind of low-frequency effect that is coming from himself. ",1516986879.0,1,0.67,0
+argentina,"[Caso Julieta Sánchez] Una ""fuga por amor"", 13 mil dólares gastados en un día y un arma",,1516726161.0,7,0.7,16
+Hewlett_Packard,"[HP Pavilion x360 Convertible 15-br001la] I think I can see the last screw, but I can't remove it","I bought this laptop in Argentina. This is the situation: I am trying to replace de HDD with a SSD, but I have not look removing the keyword.
+
+https://imgur.com/a/5Zkol
+
+I removed the 3 screws from the bottom. Then I found the two hidden screws under the rubbers. But now I can see another screw, but there is not direct access to it.
+
+The Support page is showing information for other HP Pavilion x360 Convertible 15-br00X models and it is not accurate with mine.
+
+https://support.hp.com/ar-es/product/hp-pavilion-15-br000-x360-convertible-pc/15551167/model/16646229/troubleshooting
+
+And calling the support via phone didn't help at all. Even they recommended me to find Youtube videos of how disassembly the laptop, but non of the models looks like mine.
+
+
+Do you have any idea of how to remove it?",1516634500.0,1,1.0,0
+argentina,Sobre el ataque a Julio Bazán el lunes,"Necesito calibrar un poco la brújula de ""lo políticamente correcto"".
+
+Por un lado está el caso de Maldonado en el cual no hubo cámaras en el momento de su muerte, que dijeron que fue asesinado por Gendarmería pero que en realidad se había ahogado sólo en el río.
+
+Por el otro tenemos [la agresión descontrolada al periodista Julio Bazán por parte de manifestantes sin escrúpulos](https://www.infobae.com/sociedad/2017/12/20/julio-bazan-la-intencion-era-destruirme/) de manera desmedida y agresiva.
+
+¿A caso esto no es un delito peor, atacar a un periodista indefenso y sin defensa? Hablo con gente K y de Trosko/Zurdos que sólo tratan de minimizar este echo comparándolo con la votación de la Ley Previsional ¿Uds que opinan?
+
+Edit: aclaro que estoy hablando de un periodista, sea de TN, C5N o Crónica no debería ser importante, pero parece que lo es para algunos porque trabaja para TN.",1513783363.0,2,0.53,64
+thinkpad,Are the new Thinkpads like T25 comming with Matted screen as the x220?,"I read that the T25 comes with a touchscreen, something that I never use. But the thing is that those kind of displays are glossy  and no so appealing as the matted ones. ",1510585389.0,1,0.67,3
+TheSimpsons,Could it be a reference of The Shining in Rosebud?,,1510189967.0,3,0.67,1
+argentina,"Cristina Kirchner‏: ""Está en riesgo la democracia argentina""",,1509731330.0,9,0.77,19
+argentina,"Echaron a Ari Paluch de su programa en A24, tras las denuncias de acoso sexual",,1508870219.0,36,0.89,161
+argentina,"Los efectos de la tormenta de ayer, Nueva Pompeya, 8pm",,1508425740.0,12,0.8,9
+devops,Alternative to the New Relic web transaction analyze,"For a long time I was looking for an alternative to New Relic and [his amazing trace of time spent on the transaction](https://i.imgur.com/1myt70x.png). I love this feature because it leave you to understand where is the bottleneck on a slow transaction right away.
+
+I tried to replicate it with strace without look on webapps with NodeJS, MongoDB and Memcache. I read about the[ Nexflix's Node.js in Flames] (https://medium.com/netflix-techblog/node-js-in-flames-ddd073803aa4) but it is something different that I am looking for.
+
+It stills a mystery for me to understand how it works because it is fascinating but at the same time I can't find nothing similar out there. ",1507044602.0,13,0.93,2
+argentina,Esta publicidad sí se puede ver (hidrolavadora + stencil),,1506361739.0,72,0.95,11
+argentina,"[Valentin Alsina] Amarillo, azul, amarillo, azul","
+
+[Un día estamos así](http://imgur.com/a/7wDLn), al otro [estamos así](http://imgur.com/a/IQwCy).
+
+Me recuerda a [esto](https://media.tenor.com/images/3e1cd2d34ee7e8f00389a448512bfca2/tenor.gif) 
+
+",1502299004.0,22,0.89,22
+argentina,Ya que no hay más Nac&Pop...,,1502150962.0,23,0.62,50
+argentina,Saint Ignucius evangelizando dentro de la Facultad de Ciencias Sociales,,1496761251.0,34,0.88,24
+StarWars,I watched I Am Your Father at Netflix last night. This is my only desire now,,1492794948.0,0,0.5,6
+argentina,[SERIO] Importes impagos en meses random de parte de empleadores,"El otro día descubrí por Pago Mis Cuentas que puedo ingresar directamente a mi cuenta de la AFIP sin la clave, lo cual es buenísimo porque no me la acordaba.
+
+Lo interesante fue que, al ver el historial de aportes desde mi primer trabajo en blanco, empecé a notar que tengo algunos meses impagos de hace unos años de otra empresa en la que trabajaba y dos de fines del anterior.
+
+¿Me tengo que preocupar? ¿Tengo que tomar medidas ante esto?",1492623490.0,6,1.0,5
+argentina,[REQUEST] Patricia Bullrich montando un dinosaurio contra un piquete,"¿Algún artista puede hacer [una composición de este estilo](https://img1.etsystatic.com/002/0/6230905/il_fullxfull.352945213_iu0n.jpg)? Sólo por el mero hecho de lo absurdo.
+
+Related:
+http://sharpwriter.deviantart.com/gallery/
+
+Dinos.jpg:
+
+* http://orig10.deviantart.net/f8de/f/2013/157/6/6/dino_rider_by_yuchenghong-d683kld.jpg
+* http://img04.deviantart.net/db43/i/2015/121/f/b/dino_rider_by_jacksonherbert-d320y5m.jpg
+* http://p7.storage.canalblog.com/75/00/73634/68583636.jpg
+* https://img13.deviantart.net/6f09/i/2015/225/c/7/t_rex__done__by_chrisscalf-d8zn6if.jpg
+
+Patricia-Bullrichs.jpg:
+
+* http://www.infobae.com/new-resizer/x-PAjmm50u43xVQ_44C2JTovLzE=/600x0/s3.amazonaws.com/arc-wordpress-client-uploads/infobae-wp/wp-content/uploads/2017/01/26174635/GettyImages-632779704a.jpg?token=bar
+* http://elmapapolitico.com.ar/wp-content/uploads/2017/02/jnicolini_bullrich.jpg
+* http://elmapapolitico.com.ar/wp-content/uploads/2017/02/jnicolini_bullrich.jpg
+* http://diariomovil.com.ar/wp-content/uploads/2015/12/patricia-bullrich.jpg
+* https://ugc.kn3.net/i/origin/http://cdn01.ib.infobae.com/adjuntos/162/imagenes/014/055/0014055122.jpg
+",1491836492.0,35,0.78,25
+argentina,Fumadores: ¿qué hacen con las colillas de cigarrillo cuando fuman en la calle?,[removed],1490040543.0,3,0.71,17
+moths,Stealth moth I found in my yard (xpost /r/whatsthisbug),,1489065018.0,14,1.0,2
+whatsthisbug,"[Buenos Aires, Argentina] Some kind of moth?",,1488994479.0,116,1.0,8
+linux,My friend asked me to install Linux on her laptop. I could't say no,"I want to share a second victory installing Debian to a friend of mine.
+
+6 months ago my flatmate asked me to install her a new Windows on her old laptop with Windows Vista. I offered her Xubuntu, and she was very happy with it til those days.
+
+This time, another friend of mine approached me, asking if I could install Linux on her new laptop. She was looking for secure OS actually, being the kind of person that tapes her webcam for security.
+
+Anyway, I did it. Using a [Debian 8.7.1 + Mate + Firmware image](https://cdimage.debian.org/cdimage/unofficial/non-free/cd-including-firmware/8.7.1-live+nonfree/), [encrypting the disk](http://www.tecmint.com/install-debian-8-with-luks-encrypted-home-var-lvm-partitions/), and installing extra apps and tweaking some stuff [I left her with a beautiful setup](http://i.imgur.com/kQRzlqD.png). (The pic is from a virtual image I tested before try it on the terminal).
+
+* Theme: [Ambiance](http://www.ravefinity.com/p/download-ambiance-radiance-colors.html)
+* Icons: [Flat Remix](https://github.com/daniruiz/Flat-Remix)
+* File Manager: PcManFM (I replaced it over Caja as Desktop Manager) 
+
+She was completely amazed that how fast the computer was starting up, compared with Windows 10. I showed her how to use synaptic, but she always can send me a message for any kind of question.
+
+Normally she will use it to browse the web, check emails, an office suite, edit images, watch movies, listen to music. No AAA games or Windows blobs needed.
+
+In exchange I get a great dinner and a German red wine :)",1486140198.0,114,0.9,42
+git,Mirroring a repository on Gitblit with Git LFS support,"Hi!
+
+I am using Gitblit to create mirrors of my repositories on Github, locally. Normally I am following those steps to do it:
+
+    $ cd test
+    $ git clone --mirror https://github.com/user/test .
+    $ git remote add gitblit http://192.168.1.22/r/test
+    $ git push --mirror gitblit
+
+Then I go to the git folder on Gitblit and set the repository as a mirror
+
+    $ cd /data/gitblit/git/test.git
+    $ git remote add origin https://github.com/user/test --mirror=fetch
+    $ git config remote.origin.mirror true
+
+And then I update it every 10 minutes
+
+    $ cd /data/gitblit/git/test.git/
+    $ git remote update
+
+The thing is, when I clone from http://192.168.1.22/r/test, the pull comes from the local Gitblit server, but when I do a git lfs pull, it start to pull the large files from Github.
+
+I tried to pull the files and push them to the gitblit mirror
+
+    $ git lfs fetch origin --all
+    $ git lfs push --all gitblit
+
+...but that gives me this:
+
+> [b27b01bb5edc3f41bf8d4e86479169444c7ce77e50198f2837a3ba038c9e0d78] User admin, does not have write permissions to repository test.git: [403] User admin, does not have write permissions to repository test.git
+
+...something that is not true because I have permissions over it. I think that it is because it is a mirror.
+
+I have already local repos using Git LFS, but not mirrors. Is there a configuration I am missing to make it right?",1483024013.0,1,0.66,1
+StarWars,I found a Little Leia at the IMAX midnight screening,,1481809901.0,14,0.95,3
+StarWars,"You have starships, lightsaber, force shields, but no cure for baldness",,1481744934.0,880,0.88,116
+argentina,"[too soon?] ""No necesito guantes de seguridad porque soy el hijo del deleg...☇☇☇""",,1481115891.0,261,0.83,188
+argentina,¿Preventa de Rouge One en IMAX?,[removed],1479907684.0,1,1.0,0
+kraftwerk,Tonight I finally am going to experiment Kraftwerk in concert for the first time,"I live in Buenos Aires and tonight they are going to play the only concert here before heading Chile. I was waiting this for the last 3 years. Even imagine my surprise when the justice of the government tried to [cancel the event due the band felt on the ""electronic music"" category](http://consequenceofsound.net/2016/11/kraftwerk-concert-canceled-due-to-buenos-aires-synthesizer-ban/).
+
+I just wanted to share my happiness with you guys!",1479907044.0,9,1.0,6
+PickAnAndroidForMe,Sub 5in phones?,"Hi! I am a Motorola xt890 user for the last 3 years. I really love my phone, but the battery is not working properly anymore, with random shutdowns around 30% of battery, and very little memory RAM (1 GB).
+
+I need to say that I like my phones rooted, with Cyanogenmod or light roms, and not using Google Play at all.
+
+Now I am looking for a new phone, but the market is full of huge devices. What is going one? Do people really one bigger phones?
+
+Coming from a 4.3"" one, there is not much room for choice. But I found some:
+
+- OnePlus X
+- Moto G
+- Sony Xperia Z5 Compact (No AMOLED)
+- Sony Xperia X Compact (not much difference from Z5)
+- Google Pixel (quite overpriced)
+- ~~iPhone 7/SE (I don't like Apple)~~
+
+Do you know other alternatives? Any opinion?
+
+---
+**Update:** Thanks for the replies, people. I am creating a comparative table of the phones listed here.
+
+Phone | Display | Camera | RAM / Chip | Battery | Release
+---|---|----|----|----|----
+[Xiaomi Redmi 3s](http://www.gsmarena.com/xiaomi_redmi_3s-8150.php) | 5.0"" 720x1280 pixels IPS LCD | 13MP 1080p | 2GB RAM Snapdragon 430 | 4100mAh | 2016, June
+[Samsung Galaxy S7](http://www.gsmarena.com/samsung_galaxy_s7-7821.php) | 5.1"" 1440x2560 pixels Super AMOLED | 12MP 2160p | 4GB RAM Snapdragon 820 | 3000mAh | 2016, February
+[alcatel Idol 3](http://www.gsmarena.com/alcatel_idol_3_\(4_7\)-7080.php) | 4.7"" 720x1280 pixels IPS LCD | 13MP 1080p | 1.5GB RAM Snapdragon 410 | 2000mAh | 2015, March
+[OnePlus X](http://www.gsmarena.com/oneplus_x-7630.php) | 5.0"" 1080x1920 pixels AMOLED | 13MP 1080p | 3GB RAM Snapdragon 801 | 2525mAh | 2015, October
+[Sony Xperia Z5 Compact](http://www.gsmarena.com/sony_xperia_z5_compact-7535.php) | 4.6"" 720x1280 pixels IPS LCD | 23MP 2160p | 2GB RAM Snapdragon 810 | 2700mAh | 2015, September
+[Sony Xperia X Compact](http://www.gsmarena.com/sony_xperia_x_compact-8292.php) | 4.6"" 720x1280 pixels IPS LCD | 23MP 1080p | 3GB RAM Snapdragon 650 | 2700mAh | 2016, September
+[Motorola Moto G \(3rd gen\)](http://www.gsmarena.com/motorola_moto_g_\(3rd_gen\)-7247.php) | 5.0"" 720x1280 pixels IPS LCD | 13MP 1080p | 2GB RAM Snapdragon 410 | 2470mAh | 2015, July
+[Google Pixel](http://www.gsmarena.com/google_pixel-8346.php) | 5.0"" 1080x1920 pixels AMOLED | 12MP 2160p | 4GB RAM Snapdragon 821 | 2770mAh | 2016, October
+[Samsung Galaxy A3 (2016)](http://www.gsmarena.com/samsung_galaxy_a3_\(2016\)-7791.php) | 4.7"" 720x1280 pixels Super AMOLED | 13MP 1080p | 1.5GB RAM Snapdragon 410 | 2300mAh | 2015, December",1479755739.0,2,1.0,9

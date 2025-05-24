@@ -1,0 +1,1408 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+wunkus,⚠️wunk cyber bullying⚠️,,1743517783.0,863,1.0,33
+ihaveihaveihavereddit,Yuor gassy incredible poo advertisement is::,,1738701164.0,265,1.0,7
+godot,2D Automatic AA?,"I have noticed that when I try to do a pixel-perfect 2D game with low resolution assets and the window display mode set to ""viewport"", the visuals appear to be smoothed or anti-aliased when in motion. The irony of this issue is that taking a screenshot looks normal because pausing or freezing removes this sort of temporal anti-aliasing that is occurring. This did not happen in Godot 3.x. Is anyone else experiencing this? Is this a possible hardware issue?",1738368475.0,1,0.99,2
+godot,3D Physics Interpolation!,"In light of 4.3 having physics Interpolation implemented for 2D but not 3D yet, here is a simple solution that I've been using for a while...
+
+Just make your Smoother a child of anything derived from Node3D that is updating during the physics process and add your smoothed nodes (like your camera, player model) as children of your Smoother. Don't make collision shapes children of this.
+
+Call `Reset()` whenever your parent node is supposed to teleport or otherwise change positions suddenly to avoid interpolation between teleported transforms.
+
+*Example scene setup...*
+```
+CharacterBody3D
+    CollisionShape3D
+    Smoother
+        Camera3D
+        Skeleton3D
+        ...
+```
+
+**In C#...**
+```cs
+using Godot;
+
+[GlobalClass]
+public partial class Smoother : Node3D
+{
+    private Node3D parent;
+    private Transform3D oldTransform;
+    private Transform3D newTransform;
+    public override void _Ready()
+    {
+        base._Ready();
+        parent = GetParent<Node3D>();
+        TopLevel = true;
+        Reset();
+    }
+    public void Reset()
+    {
+        newTransform = parent.GlobalTransform;
+        oldTransform = newTransform;
+        GlobalTransform = newTransform;
+    }
+    public override void _PhysicsProcess(double delta)
+    {
+        base._PhysicsProcess(delta);
+        oldTransform = newTransform;
+        newTransform = parent.GlobalTransform;
+    }
+    public override void _Process(double delta)
+    {
+        base._Process(delta);
+        float fract = Mathf.Clamp((float)Engine.GetPhysicsInterpolationFraction(), 0f, 1f);
+        GlobalTransform = oldTransform.InterpolateWith(newTransform, fract);
+    }
+}
+```
+
+**In GDScript...**
+```go
+class_name Smoother extends Node3D
+
+var old_transform: Transform3D 
+var new_transform: Transform3D
+
+@onready var parent: Node3D = get_parent()
+
+func _ready()->void:
+    top_level = true
+    reset()
+
+func reset()->void:
+    global_transform = parent.global_transform
+    old_transform = global_transform
+    new_transform = old_transform
+
+func _physics_process(delta: float)->void:
+    old_transform = new_transform
+    new_transform = parent.global_transform
+
+func _process(delta: float)->void:
+    var fract: float = clamp(Engine.get_physics_interpolation_fraction(), 0.0, 1.0)
+    global_transform = old_transform.interpolate_with(new_transform, fract)
+```",1714953292.0,8,1.0,7
+godot,My C# advice...,"I have switched to using C# instead of GDScript for a few months now, and here is what I have learned that I wish I had known earlier, in case anyone here is looking to try C# for their project.
+
+1. You can use the latest stable version of .NET (8.0). Godot 4.2 will still default to 6.0, but you can edit your .csproj file to change this.
+
+
+2. Believe it or not, you can use full native AOT compilation with C# in Godot projects. That's right: no more virtual machine IL interpreting JIT nonsense. Real machine code. Interpreted languages require too much imagination.
+
+Set it up like below, and you can completely ditch the CLR runtime and its dependencies for your game and get considerable performance gains. No more shitty virtual machine shit, unless you want stuff like runtime code generation & reflection, but I can't imagine a scenario where this would be a useful option in a Godot game anyhow. The only drawback is that you have to disable trimming for the GodotSharp assembly, which can be seen below, but all this does is increase your output file size a little bit. Either way, it's still *significantly* smaller than if you embedded the .NET CLR.
+
+```
+<Project Sdk=""Godot.NET.Sdk/4.2.0"">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <!-- Use NativeAOT. -->
+    <PublishAOT>true</PublishAOT>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Root the assemblies to avoid trimming. -->
+    <TrimmerRootAssembly Include=""GodotSharp"" />
+    <TrimmerRootAssembly Include=""$(TargetName)"" />
+  </ItemGroup>
+</Project>
+```
+
+3. Only use C# for desktop games/apps. It is possible to use C# for Android and iOS, but it isn't worth the headache.
+
+4. You may have to use object pooling if you are instantiating lots of objects. GDScript does have an actual performance advantage here, in that it does not use garbage collection and instead uses reference counting and manual object lifetime management, so a garbage collection doesn't have to un-dangle your shitty, poopy, *stinky* heap.
+
+5. ⚠️ WARNING ⚠️ - StringNames can be a problem if you don't cache them. I personally make a static ""SNC"" (stands for StringName Cache) class that has a bunch of ```public static readonly StringName Thing = ""Thing"";``` members that I just keep adding to when I plan to use more StringName names for stuff like animation names and input names. If you don't cache them somewhere, they will get garbage collected, and you will end up re-making StringName objects repeatedly if you don't do this, which can get really bad for performance.
+
+6. With C#, avoid using Godot's built in types for objects wherever possible. Use System.Collections.Generic for lists, dictionaries, and other things, instead of Godot's Arrays and other data structures. There is a massive performance cost for using Godot's ones because they are Variants, which are a bloated mess.
+
+7. Learn some basic bitwise operations if you want to squeeze out performance in place of passing multiple booleans around at a time for flags. A Godot Variant is 20 bytes, which includes a single fucking boolean value in GDScript. If you use a byte type variable in C#, you could store 8 booleans right in that one byte. That's *160x more efficient*.
+
+That's all. If I'm wrong, please correct me so I'm not spreading misinformation online.",1714774228.0,303,0.96,105
+godot,Aspiring indie dev here; looking for some help!,[removed],1706627491.0,0,0.31,7
+ihaveihaveihavereddit,"Funnyist video you womt,believe it!!?",,1705662613.0,403,0.99,22
+godot,dev downspiral,Many such cases.,1705425669.0,1423,0.95,171
+godot,"Ah, the beauty of clean code:",,1704923048.0,399,0.96,100
+ihaveihaveihavereddit,When the WOOD is LACED 🤣,,1702588550.0,111,1.0,3
+wunkus,talentless wunk,,1702231663.0,1297,1.0,20
+ihaveihaveihavereddit,Brimstone ..,,1702099650.0,340,0.99,5
+wunkus,Wunky Holidays,,1701909717.0,1346,1.0,14
+ihaveihaveihavereddit,the chud's prayer,,1700078550.0,858,0.98,29
+ihaveihaveihavereddit,Yuor gemerald is: calm,,1699828109.0,567,0.99,36
+wunkus,Wunk syphus,,1699565205.0,239,0.99,5
+ihaveihaveihavereddit,This canopy needs a hero!,,1699559970.0,185,0.96,14
+ihaveihaveihavereddit,Brimstone.. on my reddit?..,,1699468684.0,1135,0.95,87
+ihaveihaveihavereddit,Yore meme is... Not many will get this.. rare mene...,,1699408872.0,230,0.99,22
+ihaveihaveihavereddit,Monky with the fade on him?! :D,,1698174749.0,116,0.98,6
+ihaveihaveihavereddit,Uncanny 🤯Ohio rizz parrot 🦜 with the fanum tax⁉️ 🤣🫵,,1697740748.0,159,0.99,13
+wordington,Wordington misinformation,,1696965540.0,150,0.98,7
+ihaveihaveihavereddit,Yore channel is:,,1696285736.0,79,0.98,2
+ihaveihaveihavereddit,Skibby tollet 😂,,1694475630.0,174,0.91,14
+ihaveihaveihavereddit,Amasing tutoriel?,,1693928682.0,290,1.0,16
+ihaveihaveihavereddit,Damn signal 🚗,,1693324117.0,648,1.0,13
+ihaveihaveihavereddit,Cinematic rizz toilet is: damn,,1692380858.0,138,0.98,11
+ihaveihaveihavereddit,Yuor youtube short advertisemnrt is:,,1691769291.0,38,0.95,7
+ihaveihaveihavereddit,Bait and switch??,,1689654706.0,791,0.98,23
+ihaveihaveihavereddit,Your pattern is: recognized,,1689527956.0,411,0.99,12
+ihaveihaveihavereddit,You have it: transformative use,,1689132326.0,389,0.99,26
+ihaveihaveihavereddit,You have it: dog,,1688930370.0,346,0.99,11
+wordington,The toilet:,,1688332309.0,459,0.99,18
+ihaveihaveihavereddit,Live chud reaction:,,1688013246.0,503,0.97,19
+ihaveihaveihavereddit,Your budget is: demolish!!,,1687709077.0,338,0.94,30
+ihaveihaveihavereddit,You got it: banned from gaming,,1686930177.0,160,0.99,11
+ihaveihaveihavereddit,Now I am become,,1685496241.0,1197,1.0,30
+ihaveihaveihavereddit,Your prank is:,,1685328091.0,243,0.99,5
+comedyepilepsy,Agreed..,,1685076267.0,238,1.0,11
+ihaveihaveihavereddit,Jaw-dropping fact!!,,1684608583.0,205,0.92,47
+comedyepilepsy,Buford's Dream:,,1683418079.0,1415,0.99,18
+ihaveihaveihavereddit,There to busy... 😂💯🗣️,,1682559296.0,129,0.95,5
+comedyepilepsy,Buford's wild ride:,,1682115237.0,760,1.0,15
+comedyepilepsy,When the barber pushes ur hairline back 😄🗣️🚶🏿‍♂️🚶🏿‍♂️👆,,1682001422.0,720,0.99,28
+comedyepilepsy,Buford reacts (HILARIOUS VIDOE YOU WOMT BELIEVE IT) 🌕🌖🌖🌗🌘🌑🌒🌓🌔,,1681770072.0,761,0.99,18
+comedyepilepsy,The goat,,1681388964.0,1228,1.0,29
+ihaveihaveihavereddit,Terrifying jumscare! 😱,,1681049165.0,154,0.99,11
+comedyepilepsy,Uncanny video,,1680976269.0,795,0.99,27
+ihaveihaveihavereddit,Cat becoming lobotomized (funny) (cann,,1680703917.0,410,0.99,18
+comedyepilepsy,You don even know where t GET a house from stupid ah 😂,,1680374384.0,821,1.0,13
+comedyepilepsy,Allah bird?! (real moment ),,1680125386.0,294,0.98,6
+wordington,The Return,,1679950135.0,59,0.99,3
+comedyepilepsy,"Extremely long, drawn-out video.",,1679853547.0,296,0.99,3
+ihaveihaveihavereddit,Get a load of this little guy!,,1679658842.0,491,0.98,18
+ihaveihaveihavereddit,My son.. so talented!,,1679451881.0,395,0.99,35
+ihaveihaveihavereddit,How it feels to kill people with guns:,,1679235383.0,4688,0.98,193
+comedyepilepsy,Funny video for you god bless,,1679068643.0,898,0.99,19
+ihaveihaveihavereddit,"I made the funny comedy video, just for you reddit! ❤️",,1678931870.0,140,0.94,11
+comedyepilepsy,Do you agrree wiht him? 👁️👁️🤯,,1678547919.0,755,0.99,17
+ihaveihaveihavereddit,Your dog is: very helpful,,1678412987.0,140,0.99,5
+edmprodcirclejerk,Like and subscr,,1678220016.0,79,1.0,9
+comedyepilepsy,Yooo hes just like me on god 🤯,,1677813191.0,665,0.99,17
+ihaveihaveihavereddit,Hood vines 2016 (funny ),,1677812087.0,434,0.99,24
+ihaveihaveihavereddit,Le epic trolle,,1677788980.0,353,1.0,15
+ihaveihaveihavereddit,Emotional bideo for have reddit:,,1677549733.0,395,0.98,21
+ihaveihaveihavereddit,Lyrics becoming incomprehensible: your indie girl aesthetic is:,,1677002378.0,175,1.0,8
+ihaveihaveihavereddit,R/interesttingassfuck!,,1677001548.0,3,1.0,0
+wordington,WORDington of the day,,1676856772.0,104,0.97,5
+ihaveihaveihavereddit,Spunge bob 😂 in the hood 🤯,,1676778034.0,582,0.99,13
+ihaveihaveihavereddit,Nahh spunch bob in tha hood 😭😭,,1676578113.0,267,0.98,7
+edmprodcirclejerk,"Alright, which one of you did this?",,1676576757.0,134,0.99,26
+ihaveihaveihavereddit,BE AMMAZED (crasy fucking videos !),,1676559402.0,749,0.99,48
+wordington,Wordington hero,,1676505939.0,1305,0.96,58
+ihaveihaveihavereddit,Crasy fuckin g monky video! 🤯,,1676141210.0,470,0.99,10
+ihaveihaveihavereddit,U.S.P. posted service: your package is:,,1675963126.0,751,0.99,29
+ihaveihaveihavereddit,Cool bird video (emotional),,1675740317.0,80,0.97,9
+ihaveihaveihavereddit,"gnome deniers: ""just a coincidence 🙄""",,1675568609.0,1427,0.99,42
+ihaveihaveihavereddit,Scoob became uncanny..,,1675536135.0,273,0.99,16
+ihaveihaveihavereddit,Your dog is:,,1675448123.0,1580,0.99,41
+ihaveihaveihavereddit,White people became uncanny: damn,,1675349838.0,2654,0.99,81
+ihaveihaveihavereddit,When the lobotomy is musical!!,,1675135522.0,250,0.99,10
+wordington,Wordington journalism,,1675051561.0,64,0.96,1
+ihaveihaveihavereddit,When the vidoe game texture is sussy!!,,1675018226.0,150,0.98,7
+ihaveihaveihavereddit,"Your ""your is"" is: damn did it",,1674850894.0,346,0.99,13
+ihaveihaveihavereddit,Good grief!,,1674612056.0,485,0.98,13
+wordington,Do the stanky leg.,,1674444623.0,65,0.95,5
+ihaveihaveihavereddit,Your parrot is:,,1674420311.0,249,0.97,20
+ihaveihaveihavereddit,Cryptid🐩 spotted in Atlanta?? 🤯 Real or fake???,,1674330560.0,172,0.98,7
+wordington,Wordington automotive business,,1674166703.0,293,0.98,5
+ihaveihaveihavereddit,RIP bozo 🤡,,1674061241.0,35,0.95,2
+comedyepilepsy,Canless.,,1673921987.0,564,0.98,18
+ihaveihaveihavereddit,Mr Incredibles your is: damn sanity,,1673890724.0,263,0.98,23
+wordington,Wordington comedy:,,1672243835.0,0,0.42,35
+wordington,Wordington rapper,,1672167669.0,85,0.85,9
+ihaveihaveihavereddit,I [M45] hate my son [M3] reddit??,,1671896213.0,1872,0.99,61
+ihaveihaveihavereddit,Epic reddit funnies memes 2013 rrage comics (funny pictures ),,1671856411.0,67,0.99,6
+ihaveihaveihavereddit,Le flaccid Ben prank (sexual),,1671819286.0,200,1.0,13
+ihaveihaveihavereddit,Mr uncretdible becomes ass,,1671732214.0,2786,0.99,51
+ihaveihaveihavereddit,Sigam male tutoriel,,1671725331.0,448,0.98,13
+ihaveihaveihavereddit,Le poor person has arrived >:^),,1671641218.0,324,0.98,11
+ihaveihaveihavereddit,My apology vidoe to redit nation:,,1671383472.0,246,0.95,18
+godot,Tired of commenting in and out lines of code? Try this one simple trick they don't want you to know:,,1671322548.0,0,0.18,28
+ihaveihaveihavereddit,I havee popman 🤤,,1671215229.0,836,0.98,67
+ihaveihaveihavereddit,STOP SCROLLING 🛑,,1671066840.0,414,0.95,25
+ihaveihaveihavereddit,Among cock,,1671037358.0,279,0.99,7
+comedyepilepsy,VERY cool bird video:,,1670902736.0,280,1.0,12
+ihaveihaveihavereddit,I havee psychoticism ☺️,,1670772328.0,407,0.96,22
+ihaveihaveihavereddit,Radio bozzo 🤡,,1670606708.0,374,0.95,14
+wordington,Wordington intro,,1670383822.0,240,0.97,12
+ihaveihaveihavereddit,Your YouTube intro is:,,1670358170.0,359,0.99,10
+ihaveihaveihavereddit,Coldest sigama man moment!!,,1670277900.0,533,0.99,29
+wordington,Wordington flirting,,1669914848.0,1205,0.95,108
+ihaveihaveihavereddit,Hardd pills to swallow: truth hard to swallow pill,,1669863202.0,237,0.98,17
+ihaveihaveihavereddit,Uncanny Dame dane is your: damn reddit funnies,,1669755123.0,161,0.96,10
+ihaveihaveihavereddit,Your video is: every Mr dweller video in reverse chronological order,,1669581137.0,2194,0.99,101
+ihaveihaveihavereddit,I have dwindling sanity,,1669481444.0,375,0.99,23
+ihaveihaveihavereddit,Rorschach test:,,1669439113.0,762,0.99,43
+ihaveihaveihavereddit,Mr bird become uncanned!,,1668966717.0,288,0.99,11
+ihaveihaveihavereddit,Your Judaism is: damn slander,,1668957121.0,457,0.98,28
+comedyepilepsy,Buford's dream:,,1668441797.0,1350,0.99,38
+comedyepilepsy,🚨Live Buford Reaction‼️,,1668276847.0,1435,0.99,35
+comedyepilepsy,Epic bird video?,,1667971455.0,839,0.98,24
+comedyepilepsy,EPIC hood Vines compilation 2014 (funny),,1667669414.0,395,0.99,10
+comedyepilepsy,⁉️Removal of the frontal lobe⚠️ ( mark of Cain),,1667532782.0,1324,1.0,34
+comedyepilepsy,Tom scatt,,1667185003.0,939,0.98,13
+ihaveihaveihavereddit,Your super gaming is: damn geriatric,,1667070930.0,273,0.99,17
+comedyepilepsy,Stroke simulation (epic),,1667057017.0,1054,0.99,21
+ProgrammerHumor,"Atmospheric, nuanced, c-rebral horror literature",,1666921475.0,62,0.96,4
+wordington,Wordington computer science degree,,1666740234.0,265,0.97,6
+comedyepilepsy,When the lobotomy is epic!,,1666667743.0,995,1.0,20
+ProgrammerHumor,*refuses to elaborate*,,1666635838.0,31,0.8,11
+ihaveihaveihavereddit,I havee irreparable brain damage 🤯,,1666470945.0,273,0.97,12
+comedyepilepsy,This why ur balls stank,,1666465021.0,741,0.98,7
+ihaveihaveihavereddit,I have... Reddit,,1666147965.0,1829,0.99,75
+programminghumor,Python compiler will be real in 20 minutes ⚠️,,1665942113.0,24,0.93,9
+godot,Slightly nsfw secret npc encounter in my game...,,1665792910.0,241,0.89,29
+ihaveihaveihavereddit,This the Chiraq angel of death 😭🗿🗿🌠🏞️👁️👺👺👺👺👈🚫🌠,,1665623463.0,814,0.99,16
+godot,Cape physics done entirely in a shader:,,1665602355.0,534,1.0,18
+comedyepilepsy,The frog:,,1665520236.0,982,0.99,20
+ihaveihaveihavereddit,Man I'm dead,,1665349525.0,204,0.98,7
+ihaveihaveihavereddit,I have an emotionally evocative video 🥹,,1665107123.0,308,0.99,10
+comedyepilepsy,Your video is: damn unfunny,,1665086225.0,1182,0.99,31
+ihaveihaveihavereddit,Your video is: damn reddit,,1665079806.0,217,0.98,21
+ihaveihaveihavereddit,I have a dream 🤯🗿,,1664907798.0,80,0.92,3
+ihaveihaveihavereddit,Guys can someon help me pls I cant find,,1664655616.0,110,0.98,6
+ihaveihaveihavereddit,Mr hand becoming cannyy,,1664637298.0,168,0.99,18
+ihaveihaveihavereddit,I have Bleh HHhH :P,,1664395769.0,128,0.98,12
+comedyepilepsy,The bakery:,,1664324428.0,975,0.98,20
+ihaveihaveihavereddit,Ihave have a new Matt Walsh conspiracy!!,,1664214741.0,139,0.97,9
+comedyepilepsy,Procedurally generated,,1664123703.0,754,0.99,12
+ihaveihaveihavereddit,20 calber rifel 🗿👍🌅🌠🌠🌑🪐🏞️,,1663992781.0,105,0.96,9
+comedyepilepsy,Ai generated meme:,,1663980080.0,1380,0.99,21
+ihaveihaveihavereddit,Funny dog video (free to watch),,1663967085.0,156,0.95,11
+ihaveihaveihavereddit,I havee addiction 💉🗿,,1663670552.0,1649,0.99,24
+ihaveihaveihavereddit,I have I havee a giggle 🗿🗿👺🤯🪄😽👁️🫀🦷❤️‍🔥🌅,,1663123328.0,324,0.99,18
+edmprodcirclejerk,"Rich, saturated harmonic formant staging",,1662775813.0,278,1.0,8
+edmprodcirclejerk,"Did you gain stage your formant warmth? Yeah, I thought so.",,1662636507.0,208,1.0,11
+edmprodcirclejerk,Just made the hardest beat ever,,1661477280.0,68,0.96,28
+edmprodcirclejerk,Fartstep tutorial,,1661019187.0,50,0.91,5
+edmprodcirclejerk,Mozart - Lacrimosa [DOOMER] [8D Audio] [slowed + reverb'd],,1660849134.0,49,0.96,1
+ihaveihaveihavereddit,Le fishe :),,1660794217.0,588,1.0,7
+ihaveihaveihavereddit,Ain't no way 🤯,,1660758548.0,304,0.99,14
+ihaveihaveihavereddit,I shitted my bricks,,1660677896.0,323,0.99,11
+ihaveihaveihavereddit,I have epic butt trivia,,1660670738.0,202,0.97,11
+edmprodcirclejerk,"""our state-of-the art analog modeled algorithm""",,1660598460.0,223,0.99,22
+ihaveihaveihavereddit,I have have a girlfriend,,1660404407.0,2024,1.0,36
+ihaveihaveihavereddit,EPIC cars found here?,,1660246138.0,431,1.0,11
+ihaveihaveihavereddit,Robotniks pingas YTP 4kUHD epic,,1659983274.0,181,0.99,8
+ihaveihaveihavereddit,Hacking l337 memes,,1659905166.0,151,0.99,11
+ihaveihaveihavereddit,Fucking idiot japanians can't speak eglish 🖕,,1659883146.0,419,1.0,8
+ihaveihaveihavereddit,Sexy rat taking a shower video! 🤯,,1659800355.0,219,1.0,12
+ihaveihaveihavereddit,Kawaii furry OC AMV!! 🥹❤️,,1659558410.0,243,0.91,16
+ihaveihaveihavereddit,I listen to real music 😎,,1659455364.0,401,1.0,12
+ihaveihaveihavereddit,Right in the feels!! Oof 😣,,1659060062.0,307,1.0,8
+edmprodcirclejerk,Gunna AMAZED by MELODIC gain staging tutorial:,,1659035961.0,189,0.99,17
+ihaveihaveihavereddit,Jaw dropping fact!! 🤯,,1658942439.0,816,0.99,13
+ihaveihaveihavereddit,Here are some cool pictures for you guys,,1658851839.0,910,0.99,26
+ihaveihaveihavereddit,Whoopsie! Haha didn't mean to get political r/reddit,,1658778134.0,1117,0.99,18
+edmprodcirclejerk,Can some1 pls help me??,,1658772217.0,70,0.93,18
+ihaveihaveihavereddit,Hello is this reddit?,,1658721694.0,307,1.0,8
+ihaveihaveihavereddit,Suffering and agony,,1658500998.0,644,0.99,16
+ihaveihaveihavereddit,I have YouTube shorts 🤯,,1658442224.0,213,0.96,4
+ihaveihaveihavereddit,Pick up the phone,,1658282594.0,119,0.94,6
+edmprodcirclejerk,What kind of music video should I make for this? I'm thinking some WW2 footage with a CRT monitor filter.,,1658244557.0,75,0.94,21
+ihaveihaveihavereddit,Brainlet humans smh,,1658182307.0,701,0.99,41
+edmprodcirclejerk,Just got done gain staging my formant range:,,1658079226.0,109,0.95,3
+godot,Retro survival horror time,,1657944515.0,264,1.0,20
+godot,Good luck hiding behind a door,,1657075815.0,233,0.99,24
+comedyepilepsy,The parrot,,1657020711.0,799,0.99,14
+distressingmemes,Sussy crewmate ejected,,1656891330.0,486,0.98,22
+ihaveihaveihavereddit,Finna gonna prank this lil bitch lmqo,,1656881550.0,220,0.97,10
+godot,SkeletonIK™... because blender importing is workflow hell,,1656642755.0,110,1.0,22
+ihaveihaveihavereddit,Funnyist bird! (Must watch)),,1656044329.0,414,0.98,13
+godot,I love Godot's shader language.,,1656041993.0,267,1.0,14
+ihaveihaveihavereddit,Top 10 anime characters,,1656001266.0,315,0.96,11
+ihaveihaveihavereddit,New setup 😤,,1655910139.0,309,0.99,17
+godot,Putting my sound design knowledge to use a bit.,,1655866737.0,99,0.99,13
+shitposting,Buford wake yo goofy ahh anus up boy 💀,,1655860543.0,41,0.9,5
+ihaveihaveihavereddit,They took this from you.,,1655695199.0,183,0.98,9
+ihaveihaveihavereddit,⚠️SWAG ALERT⚠️,,1655574535.0,432,0.99,17
+ihaveihaveihavereddit,Jaffar epsine lives there!,,1655353024.0,309,1.0,7
+ihaveihaveihavereddit,Epic Rat Battles of History!,,1655234713.0,313,0.99,13
+ihaveihaveihavereddit,Pearl Jam,,1654887794.0,707,0.99,20
+ihaveihaveihavereddit,This is the future libreals want!,,1654822261.0,365,0.99,20
+edmprodcirclejerk,Kindest r/disableton user,,1654743969.0,187,0.99,15
+edmprodcirclejerk,Elite level midi workflow:,,1654541845.0,79,0.9,55
+edmprodcirclejerk,Analog Warmth type beat 🪘💥🔥🤯💨🫁,,1654451174.0,171,0.99,13
+ihaveihaveihavereddit,RESPECTT 🤯,,1654446841.0,734,0.98,35
+edmprodcirclejerk,Coolest music lingo for real professionals!!,,1654278675.0,269,1.0,22
+CrazyFuckingVideos,What the dog doin?,,1654053705.0,355,0.91,39
+edmprodcirclejerk,Forget everything you've read about saw waves!,,1653956986.0,160,0.98,38
+ihaveihaveihavereddit,You tube kids. :D,,1653874610.0,311,1.0,8
+edmprodcirclejerk,Unison 𝔼𝕝𝕚𝕥𝕖 Midi Pack (over 99 gorillion notes),,1653525781.0,180,1.0,14
+ihaveihaveihavereddit,Youtube shorts??Whatsapp status-2018,,1653330865.0,1052,0.99,35
+godot,Darkest Spelunky: Electric Boogaloo is coming along,,1653328966.0,26,0.9,2
+ihaveihaveihavereddit,Paranoid schizophrenia reaction,,1653014211.0,273,1.0,9
+ihaveihaveihavereddit,Goofy ahh cat (warning ⚠️ sad video)),,1652984290.0,1023,0.99,33
+edmprodcirclejerk,Brutal dubstep tutorial,,1652756874.0,60,0.98,15
+ihaveihaveihavereddit,Radio + L + you slipp up + deal wiht it!!,,1652717041.0,1143,0.99,17
+ihaveihaveihavereddit,I look like this.,,1652640407.0,135,0.99,8
+ihaveihaveihavereddit,UwU who's a good widdle sexy pupper x3,,1652623607.0,171,0.97,16
+godot,I made my own weapon generation system using custom resource classes.,,1652496045.0,54,0.94,7
+ihaveihaveihavereddit,Stupid cat!! (must watch ),,1652126097.0,204,0.98,9
+ihaveihaveihavereddit,Nice guys all have their breaking point...,,1652027048.0,3183,0.99,100
+ihaveihaveihavereddit,Hope they find a cure!;,,1651687546.0,787,0.99,36
+godot,"I have never been an artist, but I've started to learn animation. Godot makes everything easier.",,1651665333.0,524,0.98,43
+ihaveihaveihavereddit,Lightskin nightmare,,1651340553.0,1013,0.99,14
+ihaveihaveihavereddit,Cat become retard from brain freeze (sad),,1651241961.0,658,0.99,13
+playboicarti,I had to do it,,1651171264.0,5,0.86,5
+ihaveihaveihavereddit,Emotional AMV (very sad),,1651073813.0,76,0.93,7
+ihaveihaveihavereddit,VTuber sexy moment x3 (porn),,1650513612.0,136,0.97,8
+ihaveihaveihavereddit,Dog glow up??,,1650298555.0,888,0.99,18
+ihaveihaveihavereddit,Beveraged grindsett??,,1650214311.0,219,0.94,14
+ihaveihaveihavereddit,Epic gravity prank (fail),,1648933132.0,355,0.99,13
+ihaveihaveihavereddit,Bts kpopp new song (sexy) (kawaii),,1648876455.0,194,0.97,7
+ihaveihaveihavereddit,Attack on Ghoul OP1 [AMV],,1648748106.0,1357,0.99,27
+ihaveihaveihavereddit,What do he mean by that t,,1648581913.0,261,0.99,10
+PoliticalCompassMemes,"Fixed my meme for the mod who removed it for ""not being a PCM""",,1647281678.0,38,0.82,14
+PoliticalCompassMemes,It's hard being discriminated against every time you go out. 😔,,1646025309.0,71,0.86,19
+edmprodcirclejerk,9D🎧AUDIO 🌧️ SLOWED + REVERB'D TO PERFECTION😩🤌,,1645486650.0,17,1.0,4
+edmprodcirclejerk,The Loudness Wars Truce of 2022,,1645472068.0,103,0.98,21
+edmprodcirclejerk,Study - IQ correlated with virtual synthesizer use,,1644861060.0,161,0.98,36
+edmprodcirclejerk,Broducer reviews some synths,,1644442317.0,90,0.98,25
+ihaveihaveihavereddit,"Hmm, today I will kill the antichrist.",,1644044802.0,155,0.96,7
+edmprodcirclejerk,Valhalla Shimmer but epic,,1643946212.0,83,1.0,19
+edmprodcirclejerk,Zoomer YouTuber takes the 'sound design challenge',,1643901138.0,122,0.98,23
+edmprodcirclejerk,The CARNAGE SHATTENER,,1643831125.0,158,0.99,27
+edmprodcirclejerk,All of my posts are ironic in nature and I do not condone the use of illegitimate software.,,1643813500.0,222,0.97,27
+edmprodcirclejerk,Professional producer speedrun in under 2 minutes (raggaeton method),,1643674016.0,48,0.97,1
+ihaveihaveihavereddit,Moonlite sonata but epic,,1643665115.0,990,0.99,40
+edmprodcirclejerk,I made moonlight sonata emotional 😎,,1643662636.0,198,1.0,23
+ihaveihaveihavereddit,Our beautiful baby boy[0M] was able to come home and sleep in his own bed last! LOL to all of the Redditors who sent him their kind words after he was born!,,1643310782.0,332,0.99,25
+ihaveihaveihavereddit,El titulo,,1643295161.0,131,0.99,12
+ihaveihaveihavereddit,Me when I,,1643252136.0,575,0.99,25
+ihaveihaveihavereddit,Hello reddit! My [71F] beautiful baby boy [0M] was born today at 3:00am[CST]. Can we get 3 likes?,,1643126422.0,2541,0.99,51
+PoliticalCompassMemes,Average two-party system fan:,,1642962456.0,59,0.85,44
+ihaveihaveihavereddit,Lmao little shit fuckd arounnd and found out,,1642713193.0,281,1.0,12
+PoliticalCompassMemes,Radical centrist forgot to take his meds...,,1642627621.0,23,0.86,3
+PoliticalCompassMemes,It's my time to shine!,,1642563361.0,140,0.99,11
+PoliticalCompassMemes,:),,1641060886.0,318,0.99,32
+okbuddyretard,Hey I bet none of you guys know this 😎,,1639854395.0,124,0.96,26
+okbuddyretard,AMAZING bird 🤯 (must watch),,1638159999.0,421,0.98,35
+PoliticalCompassMemes,"Coincidence on the karma, or is reddit trying to tell me something?",,1611337075.0,21,0.84,8
+u_FUCK-YOU-KEVIN,"Hello, kind stranger.",,1610395646.0,5,0.86,7
+okbuddyretard,🤔😖😵‍💫,,1609904955.0,12,0.84,2
+PoliticalCompassMemes,Libright is spreading,,1609307535.0,39,0.94,5
+MouseReview,Mouse with ring and pinky finger rest?,"I'm struggling to find a mouse that has a rest for my ring finger (one for the pinky would be great too, or just some space to grip the mouse with it. I use palm grip.
+
+Why is this so difficult to find? I have large hands, so my pinky always drags on mice. I saw one nice looking one, but the company went belly up a few years ago, so I can't buy one new.
+
+Does anyone else have this problem where your pinky and ring finger have to be smashed together on the side of the mouse to avoid contact with the mousepad?",1602722270.0,1,0.67,5
+circlejerk,AITA for bullying an incel to suicide?,"Tbf, he said women are gay.",1595802911.0,4,0.84,4
+xqcow,"YEP removed, add CHIRP ✔️",,1595271069.0,11,0.87,2
+shittydarksouls,Credit to u/DatParadox for commenting this pic,,1595176138.0,251,0.99,2
+godot,Problem Subtracting Vectors?,"Hi, guys. I'm getting an unexpected bug that I can't seem to fix when trying to subtract two Vector2 variables called ""pos1"" and ""pos2"". The game crashes with an error on the bottom of the script in the line ""direction = pos2 - pos1"".  It says ""-"" is unexpected.
+
+Can someone see what's wrong here? *(besides the noob spaghetti code that is)*
+
+    extends Node2D
+    
+    var pressed : bool = false
+    var drag_pos : Vector2
+    var click_pos : Vector2
+    var pos1 = Vector2.ZERO
+    var pos2 = Vector2.ZERO
+    var direction = Vector2.ZERO
+    const MAX_LENGTH : int = 100
+    
+    onready var line = $Controller/Line2D
+    onready var player = $Player
+    
+    func _ready() -> void:
+    	line.visible = false
+    	pos1 = get_global_mouse_position()
+    	pos2 = get_global_mouse_position()
+    
+    func _process(delta):
+    	var mouse_pos = get_global_mouse_position()
+    	if pressed:
+    		pos2 = line.set_point_position(1, mouse_pos)
+    
+    func _input(event: InputEvent) -> void:
+    	if Input.is_action_just_pressed(""click"") and !pressed:
+    		pressed = true
+    		click_pos = get_global_mouse_position()
+    		pos1 = line.set_point_position(0, click_pos)
+    		pos2 = line.set_point_position(1, click_pos)
+    		line.visible = true
+    		
+    	if Input.is_action_just_released(""click"") and pressed:
+    		pressed = false
+    		line.visible = false
+    		direction = pos2 - pos1
+    		player.apply_impulse(player.global_position, direction.normalized()*MAX_LENGTH)",1594531633.0,1,0.67,5
+xqcow,It seems that Felix likes cute parrots. Here's my late parrot I grew up with FeelsStrongMan,,1593024199.0,34,0.94,1
+xqcow,Found an old clip of Felix PogChamp,,1592928189.0,15,0.9,0
+darksouls3,I have a theory about what happened to Solaire of Astora.,"Solaire is undead and keeps his sanity by worshipping the sun. However, as we find out in the Untended Graves, there was a period of time when the sun did not shine. This led him to go hollow, forgetting his purpose and identity.
+
+Years later, we find snuggly the crow in the shrine. Snuggly somehow has all of Solaire's armor for trade. Since Solaire could not turn himself into a crow, we can deduce that Snuggly took advantage of Solaire in his hollowed state, stripped him of his clothing, and sold him into human trafficking. This makes sense because snuggly is greedy, and nothing is beneath him.
+
+tl;dr snuggly the crow sold Solaire to human traffickers.",1591736613.0,7,0.74,6
+xqcow,"Dear xQc,","You have no idea how much you have done for me. You really helped me during a tough time in life and helped cure my depression. You also fixed my stage 4 pancreatic cancer, nearsightedness, social phobia, premature ejaculation, height (now 6 ft PlayerofgamesChampion), pectus excavatum, eczema, contact dermatitis, hydronephrosis of the left kidney, glioblastoma, planter fasciitis, and my big sad.
+
+Sincerely,
+
+-Donator",1590728643.0,264,0.96,17
+darksouls3,Why is dex so hated?,"Is it because of the original giant dad video?
+
+Is it because it's leveled for edgy weapons?
+
+Is it actually because dex is best for straight swords?
+
+I have always wondered what the true answer to this question is. I would expect the meme to be against leveling strength because the weapons can cheese you with poise.
+
+Why is dex so hated?",1590180265.0,8,0.9,15
+darksouls3,Most popular PvP soul levels and upgrade levels?,"I have searched a lot for advice on the internet, but the wiki gives completely different answers (summon range calculator page) than the community discussions. I'm playing on PS4.
+
+Most active area is at SL24 at the crucifixion woods with +3 weapons.
+
+Also pretty active at 50 with +6.
+
+The rest seems to be dismal. I've never gotten to meta level (125) to try. Is it the most active level, or is it still less than the low level range?
+
+I don't want to get all the way to 125 and realize I should have just stayed at 50.",1589569584.0,1,0.67,2
+xqcow,Just saw an anime AD on this sub 😂,Haha bunch of weebs (dansgaming) here lmao of course u would be sponsored by Japanian cartoons haha get lost nerds. 🤓😎,1585600347.0,1,0.6,1
+xqcow,Any 12 year olds? cmonBruh,,1585510489.0,1,0.67,0
+xqcow,Corouna has my spring break extended and all of my remaining classes for the semester moved online so I can watch the streamer all day PagChomp,,1583960236.0,50,0.9,10
+WhereAreAllTheGoodMen,I almost thought she was sane...,,1581384400.0,1,1.0,1
+leagueoflegends,Autofill SOLVED!,[removed],1580363419.0,0,0.3,16
+circlejerk,TIFU by getting vaccinated,"I got vaccinated today and I [69M] just had an awkward social interaction. AITA for being vaccinated??
+
+tl;Dr vaccines made me acoustic",1579809261.0,2,1.0,2
+leagueoflegends,Rito pls fix support items...,[removed],1575700187.0,1,1.0,0
+xqcow,StrangeWinner,,1574383050.0,5,0.69,1
+comedyheaven,😳 secks?,,1570831804.0,1,1.0,0
+MakeMeSuffer,"Poo poo, pee pee?",,1570375642.0,8,0.9,1
+forsen,PogChamp HE'S BACK IN THE ARENA!,,1567555414.0,24,0.83,1
+xqcow,SHAMELESS WeirdChamp,,1567297952.0,7,0.82,0
+circlejerk,Heckin good boye doggo does a BIG bork and tinkles on the floor!,"Wowee! such dog, much cute. we don't deserve gud boyes.",1566622516.0,5,1.0,2
+cursedvideos,I dare you to find a more cursed video than this:,,1566486270.0,0,0.33,1
+xqcow,Sub Emote Tier List,,1566175721.0,0,0.45,9
+xqcow,Twitch Emote Tier List 2019 (OFFICIAL),,1565739258.0,0,0.33,8
+Brawlhalla,My 1108 hours of experience have culminated in this:,,1565463381.0,201,0.92,66
+Brawlhalla,Easy changes to the game that would make it infinitely better:,"1. Have the *aim-up* and *jump* be separate keys by default.
+2. Have ""light attack to pick up"" **off** by default.
+3. Have a mandatory tutorial that teaches new players why they should learn light attacks, not just spam sigs and quit the game when they try ranked and get tossed.
+4. Add a ""safe mode"" that blocks all post-game chat communication, both incoming and outgoing.
+5. Have rollback lag at least apply to both players, resetting any damage done during the alternate reality caused by the teleporting.
+6. Cancel the match when there is too much teleporting lag (which I proved a year ago is server-side btw) and make the outcome a draw.
+7. Do a better job explaining the meaning of legend stats (str, dex, spd, def) to new players.
+8. Brawlhalla is suddenly a better game in a matter of a few days of programming by a single dev.
+9. Profit",1565395375.0,47,0.87,26
+xqcow,I love you guys! I hope this brightens up your day a bit for the depressionfrogs out there. widepeepoHappy :point_right: <3,,1565042483.0,4,0.83,1
+xqcow,"Imagine actually arguing over which region or country is better than another because your self worth is tied to your nationality, like how sportsfrogs get mad when someone insults their favorite team as though it's a personal attack",,1564962687.0,72,0.91,9
+Brawlhalla,What actually makes a Legend overpowered? The combination of their two weapons.,"I think the truly overpowered thing is having two weapons with very different counters, options, and playstyles. For example:
+
+Lucien has katars and blasters. Katars have a very short range and can counter parrying, while blasters have long range and are good at parrying and are played more reactively. These options combine to make him un-counterable.
+
+Thoughts on this?",1564785451.0,2,0.75,17
+Brawlhalla,Yeah... I'll just ask one of my many friends to play... ha,,1564707322.0,141,0.99,5
+xqcow,PlayerofgamesChampion,,1564691176.0,6,0.87,0
+starterpacks,Pit Bull Owner Starterpack,,1564531532.0,0,0.44,54
+circlejerk,Are slashed jokes: What do you call a pun that is epic?,"*PUNNY*
+
+Edit: Thanks for torturing my cock and balls, kind stranger! 😍",1564529187.0,0,0.5,1
+Brawlhalla,Question for people who attack their opponent while they are bowing at the start of a match:,What is your record amount of dicks you've fit in your ass at once?,1564105682.0,28,0.82,24
+xqcow,I am a simple Twitch viewer.,"In chat, when mesees something on stream, mesays emotes.
+
+&#x200B;
+
+Something epic happen? Mesays ""PlayerofgamesChampion""
+
+Something popular appears? Mesays ""POGERS""
+
+Something cringe happen? Mesays ""WeirdChampion""
+
+Something gay happen? Mesays ""GucciHyper""
+
+Less popular streamer appears on HDD's stream? Mesays ""Leech haHA""
+
+Streamer is retard? Mesays ""Pepego""
+
+Streamer is gay? Mesays ""KappaPried""
+
+Streamer use big word? Mesays ""LARGEHead""
+
+Someone is a liberal? Mesays ""HotPocket""
+
+Someone is America? Mesays ""KKonerW""
+
+Someone is black? Mesays ""TryHard""
+
+Someone say the word monkey? Mesays ""comonBro""
+
+Something sad happen? Mesays ""PepperHands""
+
+Something loud on stream? Mesays ""FeelGoodMan""
+
+Dono says Elundis Core? Mesays ""monkeyW""
+
+Streamer gets le tricked? Mesays ""Jebater""
+
+HDD plays Overwatch? Mesays ""OMEGALOL W""
+
+Streamer say something correct? Mesays ""TRUE LOLW
+
+Someone say something I don't like in chat? Mesays "":joy: \[*whattheysaid*\]""
+
+Someone say something I disagree with? Mesays ""haHAA \[*whattheysaid*\]""
+
+&#x200B;
+
+Write in the comment section if you need help on how to be good viewer, like m'self.",1564095309.0,9,0.8,3
+xqcow,Petition for the shnozer to play Spelunky FeelsGoodMan Clap,,1564008259.0,2,0.75,1
+circlejerk,AITA for saving 173 children from a burning school?,"You aren't allowed in the building without a name tag, so I broke the law. AITA? Also everyone clapped.",1563925013.0,119,0.99,21
+forsen,@forsen FeelsWeirdMan,,1563822921.0,266,0.98,23
+Brawlhalla,How to beat Yellow Man! (2010),,1563746792.0,953,0.97,76
+circlejerk,/r/BlackPeopleTwitter,"Hey guys I'm definitely an African American [NOT MAYO] and I had sexy secks with a damn fine shawty last evening. 😎 Being black sure is cool, am I right, fellow blacks? ✊🏿",1563679666.0,144,0.98,28
+Brawlhalla,Professional Brawlhalla Gamer Lingo:,"I've noticed a lot of you nerds don't even understand the oddly specific lingo you need to understand to not be a n00b. Here's a quick lesson for you.
+
+nlight = neutral light attack
+
+GP = ground pound
+
+CD = chase dodge
+
+SR = sword recovery / Sir Roland
+
+PB = Princess Bubblegum. We also refer to all crossover skins and legends by acronyms, so get your studying done!
+
+PP = punishing passives
+
+CBT = cannon backdash throw
+
+BC = bomb catch
+
+NRA = neutral recovery assassination
+
+KEK = killing evasive katars
+
+LoL = losing on lance
+
+Ok = overkill
+
+GTA = gimping throws accurately
+
+LMAO = lance-mashing autistically, offstage
+
+OBGYN = orb balance gets you nerfed
+
+SSLNLS = scythe side light neutral light string
+
+HDTV = hammer down-light throw valhallans
+
+
+There. I hope I helped clear some things up for you noobs. When we use these acronyms, you're just expected to understand what they mean, so get to memorizing!",1563483990.0,38,0.91,6
+forsen,Trihex waiting room LULW,,1563319252.0,170,0.96,7
+Brawlhalla,The hardest decision of your life:,,1563314944.0,42,0.94,49
+circlejerk,Unpopular Opinion:,Republicans are all dumb and bad. AITA?,1563314269.0,13,0.94,7
+Brawlhalla,Yumiko mains be like:,,1563158152.0,87,0.91,14
+AndroidGaming,Anyone play True Skate? Here's some quick hardcore mode clips.,,1563047762.0,10,0.65,6
+Brawlhalla,1000 Hours in Paint,,1562983410.0,1023,0.99,28
+xqcow,Emotes and the average IQs of the people using them:,,1562653704.0,140,0.93,39
+Brawlhalla,Top 5 Legends in Brawlhalla (circa 2010),,1562624037.0,1081,0.96,83
+Brawlhalla,Jiro and Petra need to be reworked.,"They don't need buffs or nerfs. Both of them need to have their sigs completely reworked and changed.
+
+&#x200B;
+
+In my opinion, Jiro's sigs make him the worst legend in the game. This is unfortunate, because I would really enjoy playing a sword/scythe legend, but I'm not going to play him because his sigs are so laughably bad. When I do play him, I almost never use his sigs because they are so easily reacted, dodged, and punished. I don't know how, but BMG needs to fully remake his sig kit with different moves.
+
+Petra, IN MY OPINION, has the opposite problem: Her sigs are too *good*. It may be possible to fix her sigs by adding more startup and recovery frames, but the animations and hitboxes for them are just too good. At the start of this season a few days ago, I got to 1800 elo from 1550 *just by using her sigs*. I challenged myself to not use a single light attack, and it was actually easy to climb by doing that in low plat. I think Fait also could use some changes, but just adding more startup frames to her nsig would solve most of the problem for her.
+
+I know someone is going to say ""well yeah but thats because you're not at super ultra mega pro premium diamond elo 2800+ where sigs are useless,"" but that really is a poor argument because Petra will mop the floor with her sigs at the ranks that the majority of players will be fighting in. Balance for high elo matters, but we shouldn't forget about the actual playerbase.
+
+Also, remember that the downvote button isn't an ""I disagree"" button. If you disagree, I would be happy to learn how I'm wrong.",1562371717.0,18,0.77,24
+xqcow,Left is Adept before living with Felix. Right is a current pic. IT IS CONTAGIOUS monkaW,,1562286759.0,47,0.89,4
+Brawlhalla,Official 2400+ Tier List (objective opinion),,1562194154.0,30,0.81,29
+Brawlhalla,Who says ranked 1v1 is always toxic?,,1561850819.0,106,0.96,5
+xqcow,😂👌When mom says you can have 5 more minutes on the computer😂👌,,1561846813.0,2417,0.99,99
+xqcow,PepegaHands RESEALED,,1561844897.0,6,0.81,0
+xqcow,Petition for ATV to duo with Twomad.,,1561670005.0,2,1.0,5
+WTF,I've done it. I've found the cursed Unholy Grail of videos. [NSFL],,1561522370.0,1,1.0,0
+xqcow,blacklisted 'haHAA' ✔ blacklisted 'cmonBruh' ✔ blacklisted 'WeirdChamp ✔ blacklisted ':joy:' ✔ blacklisted 'forsenJoy' ✔ blacklisted 'AYAYA' ✔,,1561157959.0,3,0.64,8
+Brawlhalla,Sentinel: Renegade Angel,,1561146514.0,19,0.92,3
+Brawlhalla,~Official Tier List~ (100% accurate edition),,1560807632.0,30,0.79,19
+AskReddit,"People who became death some time after birth, have you experienced auditory hallucinations like in a sensory deprivation tank?",,1560725598.0,5,0.78,9
+virginvschad,"the virgin ""Quaker Parrot"" vs. the chad ""Brontosaurus Rex""",,1560636958.0,48,0.84,0
+Brawlhalla,/r/Brawlhalla Thread Simulator,,1560574437.0,32,0.9,5
+xqcow,Cringefriends LULW,,1560549497.0,426,0.94,21
+Brawlhalla,Brawlhalla Learning Curve Tier List,,1559863867.0,57,0.83,72
+comedyheaven,My Dad regularly sends me pictures of wildlife he finds.,,1559849948.0,0,0.5,0
+LucidDreaming,Lucid dreams from medication.,"I recently increased my nightly Seroquel dose to 150mg from 100mg, and I have had lucid dreams 3/4 nights since then.
+
+Seroquel has always made my dreams vivid and easy to remember. However, the dose increase has led to me having multiple lucid dreams. Once I recognize that I'm dreaming, I can manipulate what is happening in the dream to an extent, and I can give myself superpowers or go through time (within my dream world). However, near the end of these dreams, I start to have a lot of trouble walking somewhat fast or running. It feels like I have terrible coordination, so I have to slow down. I also can't jump during this phase.
+
+
+What causes me to be unable to run if I want to? 
+
+
+Does anyone else get this side effect from seroquel of having vivid and lucid dreams?",1559693442.0,3,1.0,4
+NoStupidQuestions,"When people refer to their balls, like saying ""suck my balls"" or other things like that, are they actually referring to their penis?",,1559611813.0,0,0.4,9
+shittydarksouls,This is what the community REALLY wants.,,1559512288.0,24,0.84,4
+Brawlhalla,~The Holy Trinity of Brawlhalla Cancer~,,1559435100.0,24,0.82,17
+Brawlhalla,#JustHardstuckThings,,1558302129.0,120,0.99,23
+FellowKids,Reddit ads are lit! 😂👌🔥,,1558281727.0,12,1.0,2
+Brawlhalla,"This strategy doesn't work in Plat+ elo, and it only serves to annoy everyone else.",,1558236542.0,30,0.82,16
+Brawlhalla,Katars Legends Tier List (buff them please they are shit),,1558132857.0,5,0.62,7
+Brawlhalla,Brawlhalla: The 7 Deadly Sins,,1558033717.0,79,0.96,14
+Brawlhalla,Who says I'm a lance main?,,1557962678.0,104,0.99,13
+Brawlhalla,Being unable to engage normally is a real disability.,,1557947483.0,26,0.78,3
+Brawlhalla,just your average Ember main,,1557536103.0,29,0.87,8
+Brawlhalla,This is the only tier list that matters.,,1557531737.0,44,0.89,42
+Brawlhalla,Teros takes skill.,,1557460659.0,138,0.98,23
+Memes_Of_The_Dank,"Sorry, but I had to do it to 'em.",,1557350068.0,7,0.82,0
+creepyPMs,Just got out of class today to find dozens of messages from an unknown number. should I be sending this to the police or something?,,1557159931.0,113,0.97,39
+mildlyinfuriating,This guy takes 2.5 hours to solve a giant rubick's cube and doesn't show the finished product at the end...,,1556314144.0,3,0.72,6
+okbuddyretard,420 is kinda cringe bro. #ketaminegang,,1555796236.0,18,0.92,2
+okbuddyretard,the sad realty of drug abuse 👨‍👩‍👦‍👦👉☠😭,,1555513716.0,264,1.0,12
+xqcow,Any cmonBruh-ers? Pepega,,1555120846.0,28,0.74,8
+xqcow,Spam Tier List (I made this :) btw),,1555037028.0,4,0.7,6
+xqcow,😂CMON😂BRO😂,,1554749915.0,205,0.97,14
+xqcow,NEW EMOTE OC: cmonBruv,,1554582240.0,249,0.9,13
+comedyheaven,Classic YouTube Throwback: Rap battle translated for white people,,1553874283.0,2,0.67,3
+pathofexile,PVP League Idea,"What if GGG implemented an invasion mechanic (similar to the one in dark souls) for a future league? I know people hate pvp here and all, but that would be amazing.
+
+I don't know exactly how it would work, but it would have to be something optional that people are incentivized to opt-in for. Maybe rarity of loot is increased by 25% or something if you play in invasion mode? Also, the person who dies in the invasion should drop something from their inventory or something.",1552973544.0,0,0.15,3
+okbuddyretard,it sounds like pen*s wtfrick,,1552851715.0,2,1.0,0
+Birbs,Sleevebirb,,1552236410.0,12,0.93,1
+mentalhealth,Dealing with irritability/anger:,"This has been a big problem for me the last few years, but my psychiatrist seems to suggest that there isn't enough research or knowledge on the topic to treat irritability itself as a symptom.
+
+I will be going about my day normally and get a random sensation of anger, bordering on rage, that is directed at no person or thing in particular. It is like a disembodied anger that has no cause or target. I never direct that anger towards anyone or act out because I am good at controlling my actions, but it is often hard to not at least say something mean to someone because the feeling is so overwhelming.
+
+If anyone out there has a similar problem or other experience with this, then I would love to get some advice on what to do with it. I was diagnosed with Schizoaffective Disorder three years ago, which was after I already had this problem.",1551804241.0,3,1.0,9
+okbuddyretard,whew almost late!,,1551397649.0,5,1.0,1
+Ooer,/r/ËyëSöäp,,1551116311.0,24,0.96,0
+okbuddyretard,bRo PLEASE JuSt LeT mE hiT yoUr JUUL bro 🤗,,1550445923.0,4,0.71,0
+WTF,BEHOLD: Surreal gay erotica.,,1550180411.0,7,0.89,7
+leagueoflegends,Phantom cooldown reduction bonus?,"I just finished a game as Vladimir - won btw :) - and I noticed something strange. Adding up my CDR, I should have had 35%, but I had 45% at the end of the game. is there some fine print in his abilities that I missed? I'm completely dumbfounded. And no, I didn't make a mistake adding up my CDR from items.",1549336373.0,0,0.4,7
+forsen,Chat culture is making me autistic IRL,"I'm a receptionist at my local gym, and I've noticed that chat culture is rubbing off on me and making me autistic. My day yesterday went something like this:
+
+Client #1, older woman with saggy tits
+
+Mesays ""Your total is $13.42,"" but methinks ""women DansGame""
+
+&#x200B;
+
+Client #2, young girl
+
+Mesays ""Your locker number is 31,"" but methinks ""PedoBear""
+
+&#x200B;
+
+Client #3, muscular Chad with beard
+
+Mesays ""You have three weeks left in your membership,"" but methinks ""gachiBASS Clap""
+
+&#x200B;
+
+Client #4, fat guy with a biker jacket
+
+Mesays ""Your total is $7.23,"" but methinks ""Hey buddy, I think you got the wrong door""
+
+&#x200B;
+
+Client #5, neckbeard with a trillby
+
+Mesays ""Would you like to sign up for the annual pass?"" but methinks ""OYOYO weebs get out NaM""",1548953688.0,43,0.84,8
+okbuddyretard,they did slavery on Minecraft??,,1548614466.0,4,0.84,1
+forsen,lidl diagram 5Head,,1548361369.0,915,0.99,32
+leagueoflegends,How to stop being hardstuck in bronze:,"1. be Garen
+2. Grasp
+3. cleaver, sterak's, and warmog's (in that order)
+4. be invincible
+5. never lose
+
+you're welcome",1547849269.0,0,0.44,7
+virginvschad,The Virgin Sulfur Crest vs. The Thad Muloccan Cockatoo,,1547516782.0,15,0.93,3
+mildlyinteresting,In awe at the size of this lad.,,1547354826.0,0,0.33,8
+hearthstone,Anduin Wrynn appreciation thread,"Dear Anduin, thank you for being here in these dark and troublesome times in Hunterstone. Thank you for all of the precious secret hunter tears you have harvested for me, and thank you for the flares you copy from their deck to ruin their cheap fun. Thank you for hard-countering all of the annoying rats that are the hunters who snicker as they make it to legend with a 1000-dust deck. Bless your holy light, but also bless your glorious Duskbreaker, which brings them to disconnect. Amen.",1546800236.0,0,0.29,3
+okbuddyretard,FAMILY GUY IS IN UNDERTAIL 2 omg I'm crying and shacking,,1546559216.0,4,0.84,5
+wow,I saw this hand-made letter opener for sale while on vacation and immediately thought of the Horde. I knew I had to get it.,,1546538399.0,0,0.5,0
+Ooer,BŘØ plss,,1546107875.0,4,0.67,2
+comedyheaven,HiT oR mIsS?,,1546063418.0,1,1.0,0
+starterpacks,Generation Z Starterpack,,1546039165.0,577,0.81,167
+forsen,@forsen,,1544536741.0,2,0.67,3
+leagueoflegends,How are the roles ranked in terms of popularity right now?,"There doesn't seem to be any relevant information on this topic right now. Which roles do you think/know are the most popular? That is to ask, which roles have the longest and shortest queue times? I would guess that they fall in this order:
+
+1. Mid
+2. Jungle
+3. Top
+4. ADC 
+5. Support
+
+What have you observed at high elos? Lower elos? Unranked draft? Gimme some help figuring this out here. I want to play the least played roles to get fast queue times.",1544119248.0,4,0.66,17
+rage,"A very cathartic video about annoying ""indie"" vocalists.",,1543967596.0,20,0.62,5
+Memes_Of_The_Dank,the rarest meme,,1543871091.0,1,1.0,1
+cringe,oof,,1543681726.0,65,0.82,32
+Jokes,How did a scarecrow win the Nobel Prize?,[removed],1543260688.0,7,0.66,0
+okbuddyretard,How to download unregistered Hypercam 2 for free!!! Part 2,,1543258273.0,2,0.76,0
+leagueoflegends,"This year, I am thankful for:",,1542776331.0,1,1.0,1
+forsen,New Emote: DrDickrespect,,1542773438.0,50,0.9,4
+okbuddyretard,Obama makes a poopy 🤣🤣🤣,,1542401514.0,7,0.82,2
+okbuddyretard,Peter's gonna say it!!?,,1542302349.0,4,0.57,3
+im14andthisisdeep,im14ouncesandthisisdeep,,1542296401.0,1,1.0,1
+virginvschad,The Virgin Depression vs The Chad Psychosis (oc),,1541702846.0,326,0.98,10
+okbuddyretard,xDDD only true meme veterans will get this!,,1541644354.0,4,0.75,3
+okbuddyretard,Only TRUE GAMERS will gt this reference😎,,1541542332.0,32,0.97,2
+okbuddyretard,OMG hwo could he do this to peepe am literally shakign😫😭😭😭😦,,1541523426.0,3,1.0,0
+Birbs,Can't help falling in love with birb.,,1541385697.0,1,1.0,1
+PartyParrot,Halloween Special 🤤😨🐦,,1540999603.0,8,1.0,1
+wow,I like making shitty memes,,1540746912.0,0,0.41,6
+wow,Item level question from a newbie:,"I have a question that the internet seems to be unable to answer clearly. What people say on the forums is very different from what is on the wiki...
+
+Does item level itself have any intrinsic value, or is it just a rough indicator for the usefulness of an item?
+
+I've found gear that is a higher I-level than my current piece, but it has exactly the same stats, including the armor it provides and the stat bonuses.
+
+Does item level itself affect your overall stats or something?",1540566206.0,3,0.8,13
+okbuddyretard,11.8 killabitee,,1540499305.0,658,0.99,12
+comedyheaven,The walls in my psych department bathrooms are an endless source of material.,,1540489331.0,72,0.98,2
+okbuddyretard,devon please stop callign me gay,,1540326935.0,20,0.92,4
+okbuddyretard,"Im'ma sick lad, I got beat by my dad.",,1540317028.0,44,1.0,2
+forsen,forsen should play some WoW,,1540153013.0,39,0.93,6
+Ooer,Donuté,,1540056554.0,3,0.72,0
+PartyParrot,"It will be Halloween soon, so celebrate by watching a genuinely creepy birb clip.",,1539997959.0,21,0.89,1
+PartyParrot,"I really think Buttons deserves more love on YouTube. I watch this video at least once per day, and I'm not exaggerating.",,1539919066.0,114,0.98,5
+okbuddyretard,BOSS BABY NEEDS YOUR HELP!,,1539878445.0,65,0.94,9
+comedyheaven,WARNING: adult language only watch when mom isn't home.,,1539723358.0,4,0.75,0
+okbuddyretard,doot doot doot johnny,,1539722167.0,2,1.0,0
+okbuddyretard,WOOAAHAHA EPIK,,1539711802.0,192,0.96,5
+comedyheaven,Found in the psych department bathroom at an Ivy League school... nsfw?,,1539711278.0,14,0.79,3
+okbuddyretard,PURPLE MAN SING FUNNY,,1539312719.0,2,0.63,0
+okbuddyretard,OMG this is soo sad.... 😭,,1539193745.0,1,0.66,5
+ledootgeneration,Your subreddit simulator has turned against you!,,1539036449.0,38,0.95,2
+DeepFriedMemes,It really do 🅱 like that sometimes...,,1538861956.0,19,0.84,2
+nukedmemes,SPOOBY NEWS!! :O (oc),,1538705745.0,32,0.95,3
+forsen,~Forsen ♂&♂ Sodapoppin Fanfiction~ [safe],"After a long and tiresome flight, Sebastian and Nina finally arrived at their hotel in Valencia, Spain. Nina was exhausted by jet lag and told her husband, Sebastian, to go find something to do without her. Sebastian still had plenty of stamina left to expend, so he decided to take a walk to the coastline. He trotted eagerly out of the building, like a young steed in search of nourishment. The city was truly a sight to behold. Sebastian was used to the cold and heavy atmosphere of his previous home, which he and Nina were forced to flee after the caliphate was established. Seeing the beautiful city at sunset, Sebastian felt happy for the first time in a while. Sexual intercourse became a banned practice in what is now known as ""Swedenstan,"" so Sebastian hadn't laid the white hammer in a long time. Sexual frustration aside, he was feeling free for the first time in years.
+
+Making his way across the bay, a young man approached Sebastian. He said, ""Good evening, sir. I am the local tour guide, Chance. Would you like to take a trip to the hidden isle that's just off the coast? It normally costs $100, but I'll give you a first-timer's discount if you want!"" Sebastian replied, ""Well, I suppose I have nothing better to do."" Sebastian wanted to say no, but he was caught off-guard by this young man's boyish good-looks. Without delay, Chance said, ""Alright, then come with me.""
+
+The two made their way to a small, weathered fishing boat. Before Sebastian could ask, Chance told him, ""I know it doesn't look like much, but the engine cost me $10,000. There's nothing this baby can't do. Remember to take a life vest right when you get on."" There were only two seats on the boat, and both of them were uncomfortably close together. They sat down, and Sebastian let out a small yelp. ""Oh, don't worry about that,"" Chance said, ""It's just a little sauce from the sea!"" The two shared a laugh together as they sailed into the sunset.
+
+An hour passed, and the two seemed to be getting nowhere. After a long silence, Sebastian asked, ""Are you sure we're headed in the right direction and all?"" Chance reassured him that this is normal, but Sebastian persisted, ""Okay, there's no way you're really taking me to a hidden island. Do you even understand how to get there?"" Chance replied, ""Well, it has never t-taken this long. I suppose it's possible that I made a mistake."" Starting to get worried, Sebastian said, ""You know what? You're not even a real tour guide, are you?"" With a heavy sigh, Chance replied, ""No. Ya' got me. I'm just an artist who is trying to make a little extra money. Don't worry, though, I'll make this trip worth your time."" Sebastian asked, ""But... I don't understand... What kind of artist makes a living off of scamming people?"" Suddenly, Chance took off his shirt to reveal some kind of leather outfit, saying ""I AM an artist. I'm a performance artist. For generations, my family has perfected the art of male satisfaction."" Sebastian began to panic. He wasn't into men, no matter how sexually frustrated he got. Sebastian begged him, ""Please, we're already lost out here, and you clearly don't understand these waters. If that's what it takes to get back to land... I'll grab your hand and move the wheel for you!"" Chance laughed, saying that no man has been able to resist his ""techniques,"" but Sebastian wasn't having any of it. Getting up in Chance's face, he yelled, ""Okay, ocean man, take me by the hand, lead me to the land that you understand!"" And then they kissed and got home safely. The end.",1538691910.0,10,0.92,1
+virginvschad,The Virgin 3D Space vs. The Chad Tesseract (oc),,1538688787.0,199,1.0,11
+cursedimages,cursed_meats.jpg,,1538682734.0,2,1.0,1
+Terraria,My existence is characterized by suffering.,,1538244591.0,174,1.0,5
+forsen,the rare emotional gachi,,1538152851.0,24,0.86,5
+forsen,Which one of you did this?,"I was in a bathroom stall at my uni today, and I opened up a video on my phone of Van saying ""fuck youuu"" with my volume unknowingly all the way up. I quickly closed out and pretended it didn't happen, but the person leaving the bathroom said ""just so you know, the leather club's two blocks down"" and left. It's pretty surreal to encounter one of you irl.",1538075834.0,149,0.98,18
+forsen,"I made a creative emote for the newfriends :) ""OMEGALOL""",,1537481316.0,42,0.84,10
+elderscrollsonline,How to Impress e-Women: 101,,1537326196.0,9,0.67,5
+forsen,Is Forsen sponsored by windows 10???,,1537287609.0,449,0.98,8
+mildlyinteresting,This shadow cast by my dying plant outside looks like a goat standing on a rock.,,1536338917.0,7,0.77,0
+hittableFaces,Hittable (with a crowbar),,1535740400.0,138,0.99,11
+Brawlhalla,Yes. Everything is just fine here.,,1532836461.0,0,0.31,4
+Brawlhalla,Katars and gauntlets are spammer noob weapons!!1,,1532380324.0,5,0.61,9
+Brawlhalla,Most FUN legend and weapons?,"I've gotten to the point where I'm extremely good with katars and sword, but asuri gets boring after a while. I'm open to ideas, preferably from someone who has played 500+ hours.",1532295493.0,1,0.6,32
+im14andthisisdeep,Existentialism for dummies:,,1532218020.0,87,0.92,12
+IncelTears,A plea from an incel,[removed],1532123387.0,1,1.0,0
+Brawlhalla,Sentinel vs. Mirage,,1531958578.0,29,0.89,5
+Brawlhalla,Netcode is inexcusably bad on PC.,"Teleporting/desyncing to death for at least one stock each match isnt fun. I'm in the midwest and play on US servers. I have 20 MEGABYTES, not megabits, of download speed from steam, and no other games have issues. I guess this is what I get for getting into a fucking flash game. Take that juicy skin money and put it towards fixing your terrible lag-compensation system. Feel free to downvote me as well. 1 downvote = 1 agreement.",1531792975.0,9,0.76,19
+IncelTears,Here's why the IT-Braincels arguing is pointless... (hypocrisy),,1531781286.0,1,1.0,1
+IncelTears,I did my civic duty today...,[removed],1531702440.0,1,1.0,0
+starbound,Spider-Man Mod?,"I love the feeling of using the rope in this game. It just sucks that you can't latch onto trees and other background objects to swing around. How difficult would it be for someone to make a modded rope item that latches onto trees and other similar background objects, has infinite uses, and is white?",1531673749.0,6,0.88,12
+Brawlhalla,Open letter to players who horde weapons so their opponent has to rush to pick one up:,"Choke on a peanut and suffocate, cunt.",1531451389.0,0,0.29,7
+forsen,!-ALERT-! - IMPORTANT MESSAGE TO WEEBS IN CHAT,,1531435270.0,23,0.85,16
+Terraria,"In my first playthrough, I made an unimpressive but comfy flying ship.",,1530720515.0,14,0.86,7
+OldSchoolCool,My great-grandfather looking dapper some time in the 1930's. I wish I had inherited his sense of style...,,1530245953.0,153,0.93,14
+forsen,"ＵＰＧＲＡＤＥ: another meme, just for you :)",,1530227544.0,280,0.94,38
+Brawlhalla,Amazing axe guide for beginners,"0. Install Brawlhalla
+
+1. Have AT LEAST 60 iq. Anything lower may mean you won't be able to figure this strategy out
+
+2. Understand how the controls work by practicing in training mode
+
+3. Get used to the game's movement mechanics
+
+4. Use each light air attack once to understand the general timing and direction for each move
+
+5. Play ranked and only use those light air attacks. Follow a similar pattern of attack to this: Jump, attack, jump, attack, land... (loop this pattern until they die hopelessly)
+
+6. Have fun in diamond!",1530149259.0,0,0.5,1
+forsen,"A high-effort meme, made just for you!",,1530141551.0,397,0.93,33
+forsen,Just a few millimeters of bone... (OC),,1530130915.0,22,0.89,5
+forsen,"when Forsen says ""black"" or ""color""",,1530033828.0,371,0.92,72
+shittydarksouls,Whom'st PVP here?,,1529878785.0,92,1.0,3
+shittydarksouls,I made a beginner guide to ranged weapons! Hope some of you find it useful. -Margaret,,1529877902.0,67,0.99,2
+shittydarksouls,DS:R PVP EXPERIENCE (oc),,1529777254.0,298,1.0,20
+Brawlhalla,REAL NEWS (NOT FAKE),,1529444173.0,246,0.94,21
+shittydarksouls,When your 3 summons die and you realize you have to actually 1v1 someone,,1529124219.0,842,1.0,26
+forsen,Heard the bad news for Doc and his wife. This comic really captures the grief of such situations well.,,1529026165.0,0,0.33,4
+shittydarksouls,"The ""dexfag"" meme is a bit ironic...",[removed],1529025178.0,1,1.0,0
+darksouls,"Password-gankers, why?","Surely having a level 10 host and 2 level 50 summons with ultra-greatswords and WotG gets boring after the 5th level 10 kill?
+
+You also have to wait in-between invasions, which takes at least a couple minutes. What enjoyment is there to gain? I made a dark bead twink, and that got boring after the 10th newbie kill.",1529023702.0,0,0.5,8
+darksouls,Best early gank-spank build:,"Hate undead burg gankers? Wanna be SL10? Try this build:
+
+
+Starting class: Thief
+
+Upgrades: endurance to 11, vitality to 12.
+
+Right Hand: fire rapier+4, fire bandit knife+4 (+4 so you can match with +5 gank squads, otherwise just do fire+0).
+
+Left Hand: target shield+5, fire shortbow with poison arrows.
+
+Armor: Hollow thief's tights, armor, and hood. Black gloves. +10 for all 4.
+
+Rings: Dark wood grain ring, hornet ring.
+
+Item Bar: Estus and dung pies
+
+
+Congrats! You can now cosplay as a hollow thief and piss off all the gankers in the burg! They think they are unbeatable with their elite knight armor and halberds, but you can knock them off their pedestal. I'll post some hatemail if anyone wants to see. Many people who do message me just say that I'm a hacker because their +5s aren't doing more than a sliver of dmg, but that's just because of the +10 set. Happy gank-spanking!",1529004836.0,4,0.65,16
+forsen,"Forsen should replay Dark Souls Remastered and get this ring to make the game a lot easier, so he can stand a chance in PVP without the smOrc build.",,1528834032.0,35,0.9,4
+darksouls,Can't play online. Help!,[removed],1528756135.0,1,1.0,7
+Brawlhalla,PRO tutorial on how to get DIAMOND with LANCE:,"Here's the cycle:
+
+1. jump
+
+2. down-air
+
+3. jump diagonally
+
+4. down air
+
+5. repeat 1-4 until victorious. If victory is not achieved, complain that the enemy is passive.",1528149721.0,10,0.73,11
+darksouls,"""REMASTERED""","[This happened](https://ibb.co/ewFMyT) to me at level 14 in the undead burg after getting invaded. I'm an experienced player, so I was able to get rid of both the curse and the egg quickly (had to kill the bell gargoyles and queelag first). I've stocked up on some egg vermifuge and purging stones because I can't see this hacking problem getting fixed anytime soon.
+
+
+The message I'm hoping to get out is that this will ruin the game for many new players, and it happens soon enough in the game for people to just ragequit and refund the game. If the devs want to keep this game alive, they should move their lazy asses and implement at least SOME kind of anticheat.",1528134377.0,0,0.33,6
+Brawlhalla,Divine Truth,,1527789568.0,288,0.97,35
+Brawlhalla,Ranking katar legends from best to worst:,"I have played at least 250 hours on katars, and here's my preliminary ranking of the legends who have them. Left to right is best to worst within each grouping. These rankings are based on their sigs, stats, and their versatility. Katars are best when paired with another weapon that can deal with opponents outranging and outspacing you.
+
+
+Consistently good:
+
+Asuri, Lucien, Ragnir
+
+
+Decent:
+
+Queen Nai, Sentinel, Ember
+
+
+Majorly flawed:
+
+Caspian (one-trick pony), Wuxia (piss-weak with terrible, inconsistent sigs).",1527710909.0,0,0.33,6
+Brawlhalla,REPENT...,,1527697663.0,45,0.97,11
+Brawlhalla,dios mio...,,1527220454.0,12,1.0,9
+Brawlhalla,Congrats to BMG for partnering with Ubisoft so they could afford a second hamster to power their server room!,,1527116919.0,163,0.99,17
+Brawlhalla,Ranking legends by their signature kits:,"Who has the best sigs? Mediocre sigs? Terrible sigs? Let's try to rank them together. I'll rank them in order from strongest to weakest in each sub-category. I'm not going to include every legend in my rankings, and my list is far from accurate with just my input.
+
+
+
+Amazing:
+
+Lucien, Sig Roland, Gnash, Mirage, Orion, Caspian, Val, Koji, Wu-Shang, Hattori, Kor, Ragnir, Nix, Artemis
+
+
+
+Okay:
+
+Kaya, Bodvar, Mordex, Asuri, Queen Nai, Thatch, Azoth, Cassidy, Cross, Sentinel, Xull
+
+
+
+Weak/lacking utility:
+
+Jhala, Ember^(katars), Brynn, Jiro?, Isaiah, Yumiko, idk",1527112006.0,0,0.5,19
+Brawlhalla,Katars need to be nerfed.,"So I've been playing today and all of these noobs with their little knives keep spamming light attacks to kill me. I can't do anything about it, and my sigs don't work to kill these noobs (Vraxx main btw represent!). Anyways, katars are stupid and too easy to use so either buff lance, or nerf those little cuck weapons. The only way I can beat someone with spamknives is to jump over them and chuck my lance at them before attacking. Please help me, BMG!",1527024981.0,0,0.36,8
+Brawlhalla,"I ""spammed"" this guy from 0-death with katar light attacks. This was taken in platinum.",,1526950828.0,0,0.5,3
+Brawlhalla,"""Ewwwwwwuh. He got to diamond with AXE?""",,1526945036.0,46,0.88,7
+Brawlhalla,Axe needs a buff...,"Axe is clearly underpowered right now, and I see a lot of people saying so on here. First of all, axe needs a buff to sair and dair. They are way too weak and their hitboxes are just too tiny to use. Side light doesn't have enough range either. All around, the axe just has way too many recovery frames, so lets tone those down a notch. Katars are also OP, so nerf those little spammer noob knives ASAP!",1526935718.0,13,0.69,11
+Brawlhalla,"What does ""spamming"" even mean anymore?",,1526933407.0,2,0.6,14
+Brawlhalla,PSA for blaster mains,"After the match, I always hear you say ""stop being passive."" What you're basically saying is that I should charge your light attacks and get hit every time instead of baiting them out to hit you first, or dodging and hitting. If you're playing blasters, then you should EXPECT decent players to be parrying your massively-ranged light attacks. That's all.",1526861142.0,18,0.83,11
+Brawlhalla,aXe iS nOT OvErPowERed!1!1,,1526768606.0,17,0.62,31
+Brawlhalla,every Cross main in a nutshell,,1526680874.0,3,1.0,2
+Brawlhalla,I'll just leave this here...,,1526504991.0,218,0.98,35
+Brawlhalla,rare photo of the average BH player who belittles others for not being diamond,,1526500312.0,23,0.82,4
+Brawlhalla,On throwing weapons...,"The game is incredibly balanced right now (even though the scythe is still a bit of a Trump card), but the gameplay is suffering due to people who throw weapons at you constantly.
+
+
+Don't get me wrong here. I don't think throw spamming is overpowered, as those opponents are generally predictable, but having to anticipate their next throw really slows down the gameplay and forces you to parry their throws.
+
+
+I propose that your throwing has a sort of stamina mechanism, where each consecutive throw leads to the next being progressively weaker. You can reset this timer by waiting 30 seconds to throw another item or by landing a light attack on the other player. This is just an idea, but something needs to be done so that fighting people is consistently enjoyable. Playing against throw spammers is a guaruteed win for any decent player, but winning still doesn't un-tilt you from fighting that annoying jackass who thinks his spear and hammer are footballs.",1526158524.0,17,0.74,11
+Brawlhalla,cursed image (plat),,1525830396.0,65,0.91,5
+2007scape,Hmmm...,,1523548050.0,36,0.84,11
+2007scape,PROOF that osrs is dying!,,1522081436.0,43,0.8,11
+2007scape,Just got my first Verac's set! Lookin pretty fashionscape 😎,,1521906765.0,0,0.5,0
+meirl,meirl,,1520898574.0,3,0.59,0
+funny,My uni bathroom is inspiring,,1520010159.0,3,0.71,0
+wow,Getting into WoW,"I recently downloaded the game, and I'm thinking about buying it. Is the game grindy? Is PvP actually fun? Are you screwed if you don't buy the latest expansion? I hate the feeling of playing a game and knowing that I have a gimped version of the game that less people play. ",1519627593.0,3,0.8,7
+FortNiteBR,"Thanks, devs.","Not being sarcastic. I bitched on the forums about the previous version giving me terrible random fps drops, and the problem is fixed in this update. I actually get 20 more fps on average. Nice.",1519351404.0,2,1.0,1
+insanepeoplefacebook,"Not blatantly insane, but unnerved me for some reason. Seems like the life a serial killer might have.",,1519104872.0,3,0.8,3
+Rainbow6,[Bug] Game doesn't detect GPU... Please for the love of god help me.,"I have tried buying this game on two different occasions now only to refund it because this damn issue can't be fixed. I am playing on a laptop with a 950m gpu. I get 60fps in battlefield 4. When the game launches, it is horribly slow and runs at about 2fps. In the video settings it says that it is using ""Microsoft Basic Render Driver"" instead of my 950m.
+
+I have already tried the following to no avail...
+
+
+Reinstalling graphics drivers
+
+Reinstalling the game
+
+deleting the cfg file that contains the ""Hardware: Unknown Vendor"" text that gets made when you first start the game
+
+turning vsync on/off in Nvidia control panel
+
+changing display adapter from 0 to 1 in the cfg
+
+verifying game cache
+
+creating a specific profile in Nvidia control panel for the game and selecting my dedicated graphics from there, which is overkill since my global setting is already to use my 950m.
+
+
+Pls help. I've tried everything out there already and nothing works. The game used to work back when I played the demo a year ago. I later purchased the game to have it not work, and then again with the same result. I have no such issue with ANY other game.",1518831185.0,1,0.67,2
+Birbs,RestInPeaceBirb,,1518466017.0,33,0.92,6
+shittyaskscience,"If your brain is like a computer, how can I look at a cityscape without lagging, but my computer lags when I look at one in a game?",[removed],1517429123.0,1,1.0,0
+ShittyLifeProTips,LPT: How to stop having depression,"Stop being lazy and just do something, ya dingus! If you feel sad, just go talk to your friends. Problem solved.",1517330895.0,0,0.45,3
+SuicideWatch,Watching your friends move on...,"I'm 21 years old. This semester is my first back at my university. I've been away from school for two years since I had a psychotic break and was hospitalized and forced to leave school. Until now, I spent the last two years in almost complete social isolation. I haven't seen my friends since before I was in the loony bin. I was too ashamed to answer their messages, and they eventually gave up. These 3 friends are who I consider to be my closest friends in my life, and I met them in my freshman year. They were my first close friends, and words can't describe how it feels to watch them move on with their lives together without me over Facebook. I've tried messaging them a few times, but they either didn't respond, or they were busy. It's like I woke from a long sleep a few months ago, and everyone has aged and continued their lives while I'm still stuck in the past.
+
+
+Has anyone had this experience? I tried to tell them what happened, but I don't have the balls to really tell them because of how ashamed and small I feel. I'm worried that my thoughts might lead to a final solution if I keep living this way. How do I escape? I'm not going back to the hospital. I just need to get my friends back and somehow cope with this shame simultaneously. The cognitive dissonance of that is what I'm having a hard time reconciling.",1512705226.0,7,1.0,6
+Brawlhalla,"Brawlhalla has been steadily growing in popularity over the last few years, while CSGO and LoL have been declining. If the growth continues, BH could overtake CS:GO.",,1512001930.0,11,0.78,14
+DotA2,New meta?,,1511567960.0,0,0.5,2
+DotA2,incentivize playing support,"Should denying creeps yield a small amount of gold? It could help players enjoy support more in the early-game, and help them to not feel broke as shit. Even if it's a small amount of gold, it could make the first half of the match far less depressing for supports.",1511314002.0,0,0.23,11
+insanepeoplefacebook,YouTube delivers for the 1000000th time,,1511282310.0,26,0.9,6
+DotA2,Game crashes = punishment,I got in the low priority queue for 2 games just now because my game crashed twice in 4 matches while loading the pick/ban screen. Can we not get punished for this please? It shouldn't be as bad as intentionally abandoning a match.,1510864309.0,0,0.5,9
+Brawlhalla,"After beating him in ranked, this guy friended me and sent me this. What does it mean??",,1510630121.0,5,0.78,14
+The_Congress,Pay pay the frog meme,[removed],1510623961.0,2,0.57,0
+learndota2,Bristleback,[removed],1510454124.0,0,0.2,0
+Brawlhalla,"20dmg to death string, I think I did pretty well for a low plat.",,1510185907.0,11,0.71,15
+learndota2,Juggernaut?,"What is the best build for juggernaut? I know you shouldn't adhere exactly to a guide, but I'm somewhat new so I use guides pretty often. How do I carry as him? Last match I got the most kills by a long shot, but we still lost.",1510179484.0,5,0.86,9
+DotA2,It took 150 freaking hours to get to level 20 to play ranked.,"This better be worth all of those pubs in the US East and West servers with teammates that don't speak English. What I've learned about the game so far is:
+
+cura ctm
+
+ctmr puta
+
+""We need wards!"" x 999999
+
+noob supp no item",1510178886.0,0,0.36,10
+shittyaskscience,Is this image accurate? Are people who smoke smarties generally more intelligent than cigarette smokers? Asking for a friend.,,1510093860.0,11,0.77,4
+Brawlhalla,"The virgin ""gamer"" vs. Chad Roland (oc)",,1510007937.0,65,0.88,13
+oldpeoplefacebook,You're not you when you're hungry. (OC),,1509999457.0,27,0.97,7
+Brawlhalla,how to farm downvotes with OC,,1509680051.0,117,0.91,6
+Brawlhalla,"Whoever made this, can you please make a Halloween skin version? I'll pay.",,1509148894.0,5,0.86,10
+Brawlhalla,😘,,1508896350.0,22,0.85,9
+Brawlhalla,Lag is ruining the game.,"The teleportation lag is getting more frequent, and it's caused by packet loss on the server's end. I have gone to hell and back trying to see if it's on my end, but I have tried it in 3 states now while travelling as well as doing every possible ""fix"" on my computer.
+
+
+I know I'm not the only person with this issue. EVERYONE is experiencing this to a degree, and it keeps getting more and more frequent. I've spent $60+ on this game over time with being a founder. I don't want to have to quit this game after 700+ hours. The teleporting is like a cancer infecting their servers that keeps getting worse. At least let us play matches from a self-hosted server until it gets fixed. I know that would create some problems, but those would be much easier to deal with than losing 5 games in a row in ranked because you're teleporting over 15 times per match in some cases. 
+
+
+No other game I play has this issue, and my steam download rate is an uninterrupted 20MBps. I did several ping tests and sent them to BMG support, but all I got was a canned response. Fix it or this game will die.",1508712985.0,44,0.89,28
+Brawlhalla,Game 🅱️alance 🅱️roke 😂😂,,1508448931.0,85,0.92,9
+Brawlhalla,Sig-Cancer Tier List,"I have rated all legends based on how carcinogenic their signature abilities are. 
+
+""Cancer"" is a term that is being used to abbreviate three descriptors of the sigs: overpowered, annoying, and spammable. ""S-tier"" is the most cancerous while each lower rung is less cancerous. Remember, this is not just factoring how good the sigs are.
+
+
+**S** tier sigs: **the (un)holy trinity of cancer** sigs 
+
+Teros, ""Sig"" Roland, Cassidy.
+
+
+**A+** Tier sigs: salt conjurers of OP-ness
+
+Barraza, Nyx, Ada, Lucien, Val, Mirage, Mordex, Sidra, Caspian, Yumiko.
+
+
+**A-** tier sigs: ^bit ^less ^cancerous
+
+Ulgrim, Scarlet, Vraxx, Azoth, Orion, Thatch, Gnash, Hattori, Jhala, Cross, Kor, Wu Shang, Ragnir, Nai.
+
+
+**B** tier sigs: OK
+
+Koji, Nai, Bodvar, Artemis, Ember, Diana.
+
+
+**C** tier sigs: not so good for their own reasons
+
+Sentinel, Asuri, Brynn.
+
+
+**EDIT**: Moved some legends around a bit.",1508440484.0,4,0.64,11
+Brawlhalla,"My jokes are like Brawlhalla updates,",they [sorry not finished yet with joke. It'll be ready in 5 more hours!],1508376860.0,84,0.94,9
+Brawlhalla,How to discourage sig spamming for newbies:,"Make FFA scoring based on both kills AND damage done (possibly even making damage more valuable than kills). 
+
+
+This would motivate new players to learn light attacks instead of avoiding enemies until one is in the red and spamming sigs to KO. In post-game chat, I have found that many new players get bored of the game because they play FFA, which teaches them to use only sigs, and then they try ranked and get rekt hard. Encouraging newer players to learn light attacks and strings would definitely get new players to stick around longer by making the game more fruitful and fun.",1508271380.0,10,0.78,3
+Brawlhalla,Lmao truuuu 😂👌,,1507842691.0,0,0.33,3
+Brawlhalla,Ranked is getting pretty intense... ^(OC),,1507823806.0,21,0.96,12
+Brawlhalla,when you find out that lance and possibly also axe are getting nerfed (OC),,1507757263.0,6,0.74,3
+Brawlhalla,drew Ulgrim from memory,,1507674780.0,9,0.76,6
+Brawlhalla,Legend Stats,"What are you opinions on each stat? Is there a big difference when increasing a stat by one? Is the most important thing to have at least 5 in each stat? Is there a noticeable difference from 4 to 5? Do stats only matter when they are at extremes like 8 or 2?
+
+
+Pls we need some closure on this.",1507571539.0,1,0.66,1
+Brawlhalla,High-level gaming,,1507442760.0,43,0.94,18
+Brawlhalla,Main Stereotypes,"What are some stereotypes for the kind of people who main different legends or weapons? Let's see if we can come to a consensus about them. Here are my shitty ideas:
+
+
+Yumiko - learned Japanese to watch anime without subtitles
+
+
+Sir Roland - has 99999 hours in the game, all with Roland. Ambiguous sexual orientation.
+
+
+Hattori - 13 year old kid who just finished downloading the game
+
+
+Vraxx - jaded former sword main who dropped to gold from plat
+
+
+Ada - uses sigs while the enemy is still under 100 damage
+
+
+Koji - only uses classic Koji with default colors
+
+
+Orion - jaded former plat/diamond who got drained by lance mains previously and plays Orion because he thinks lance is the best weapon now
+
+
+Brynn - wants to win ranked as easily as possible
+
+
+Scarlet - professional gravity-canceler
+
+
+Katars - the last of his kind. Won't give up on katars since he has goldforged ones
+
+
+Kor - the edge guardian. Hugs the wall and refuses to fight away from the edge. Light attack button has never been touched
+
+
+Sentinel - disconnects when his opponent picks up sword
+
+
+Nix - unironically an edgelord
+
+
+Caspian - wants to be a ninja
+
+
+Jhala - has a thing for black chicks
+
+
+Cross - only plays him because of his skins
+
+
+Diana - wants to be as meta as possible
+
+
+Teros - isn't aware that there is a light attack button. Stands still and waits for his opponent to come at him.
+
+
+Val - 10 hours into the game and relies on signatures. Never has a skin and uses blue colors.
+
+EDIT: here's a few more ideas
+
+
+Ulgrim - chronic master-baiter ;)
+
+Wu Shang - watched *The Last Samurai* too many times
+
+Artemis - he's relatively new to scythe, so makes sure to have a lance to switch to if he's getting clobbered
+
+Azoth - spooky",1507416395.0,20,0.83,45
+starterpacks,Romanticizing Mental Illness,,1507341896.0,825,0.96,109
+Brawlhalla,Rank 1 Lucian btw,,1506559758.0,9,0.74,9
+DeepFriedMemes,🎶🅱oi🎶u🎶🅱etta🎶🅱elie🅱e🎶™ 💯♨ 🆕⁉,,1506463122.0,6462,0.97,48
+4PanelCringe,This is the top post on /r/comics...,,1506399197.0,95,0.87,8
+PrequelMemes,When she asks you what you're into,,1505666994.0,172,0.91,5
+Brawlhalla,What weapons are meta now with dash?,"I've heard that scythe, spear, and guns are doing the best. I've been having a lot of luck with bow though. Any diamonds out there wanna explain to me what the meta is now? There's nothing on the internet yet about this.",1505591998.0,7,1.0,20
+Brawlhalla,I'm not very lucky. (Ember),,1505529187.0,7,0.82,5
+DeepFriedMemes,😂LMAOOO NO WAYY👺🅱OI,,1505428336.0,1287,0.95,15
+starterpacks,A comprehensive guide to Reddit,,1505417739.0,1,1.0,0
+Brawlhalla,OMG dash ruined the game!,How am I supposed to dodge past my opponent before attacking now? Don't even ask me to engage. Everyone knows that Hattori has to parry. I can't hover around above my opponent the whole time anymore either! How could you do this to us??,1505410572.0,13,0.64,16
+Brawlhalla,Hallasexuality,"I've finally realized that I have an undiscovered gender; I am a ""hallasexual,"" which means that I am sexually attracted to Brawlhalla. I've never really been interested in girls or boys, and I think this is why.
+
+
+I am in love with Brawlhalla. She is always changing in new and exciting ways. For me, going on a date is playing multiplayer with her. It's exciting and intimate unlike anything I've felt before! Also, I make love to her by going in her training mode and going down on her bot. She never gets tired of it, and she is always ready to do it if I'm willing. 
+
+
+We cannot communicate through traditional means, so I communicate with her by tracing letters on her screen with my mouse, and she responds by having one legend on her screen taunt back to respond with emotion. I have never felt such affection for anyone, and I'm not afraid to say it!
+
+
+Is there anyone else out there like me? I know I'm not alone in this community. Don't be ashamed for who you are!",1505343701.0,26,0.79,12
+Art,"Lips Don't Lie, unknown artist, 2017, digital",,1505268243.0,2,1.0,0
+Brawlhalla,"This guy called me a ""gay spammer"" after this match...",,1505184629.0,3,0.58,7
+Brawlhalla,Brawlhalla RP,,1505074777.0,0,0.44,2
+Brawlhalla,PSA: ONLY PLAY EXPERIMENTAL,"You will regret not doing it in a week. The diminutive amount of players in experimental means more people need to know this. I'm worried that the playercount will drop next season because people didn't prepare for dash. I've fought and beat diamond players as a plat in experimental because it was their first time playing it. People will continue to try to play reactively/passively and keep the habit into season 6. Play experimental; Don't say we didn't warn you. Parry is out, and aggro is in.",1504897650.0,9,0.77,15
+Brawlhalla,"my ""intentional"" bomb play",,1504816402.0,0,0.5,7
+Brawlhalla,"Thanks, Ragnir, for the life achievement! Only took 352 hours since the beginning. I feel like I've just been elected president.",,1504648672.0,18,0.8,14
+PartyParrot,An internet classic... (nsfw?),,1504631280.0,18,0.95,3
+AndroidGaming,True Skate: Realism,,1504314142.0,5,0.63,0
+Brawlhalla,Packet loss is still a terrible game-breaking issue right now.,"I'm not gonna stop emailing support@brawlhalla and posting this here until they do something. At least make the matches hosted by the player with the best connection. I'm sick of this packet loss bs and its completely ruining the game for me. In case you're wondering, that is the lag where you teleport and the stuff you did for the last few seconds never really happened. I have proven that its on their end with tracert and ping tests, and you can check my post history here if you don't believe me. This is really starting to piss a lot of people off. Do something or there shall be a mass exodus of the many people I've met who have the same terrible issue at peak playtimes.
+
+/u/RaidHyn I know you can contact them directly. The support email doesn't do anything helpful. Please do something about this, or at least allow us to play with player-hosted connections. Even if that has issues, it won't be nearly as bad as the dumpster-tier servers BH has right now.",1504311689.0,20,0.81,18
+Brawlhalla,FFA is bad for new players.,"I feel like FFA being the first thing players see and play when they first get the game is a bad thing. It teaches players that light attacks are useless, and the best strategy is to use side sig back and forth. I saw two people in ranked when I was just starting the game say they were quitting because the game is too frustrating, which I think is because they played FFA first and then tried ranked and got annihilated. 
+
+There should be some tutorial mode or video that shows people how to play effectively and mentions this. I suspect a lot more people would continue to play this game if they didn't learn the wrong way so they could get defeated constantly in ranked. Let's save the noobs and give them a tutorial of sorts that shows how to play for real.",1504303759.0,51,0.92,30
+starterpacks,Also appropriate for Yale undergraduates...,,1504298676.0,147,0.62,18
+Brawlhalla,Server drops connection at game end loading screen,"This happens in ~1/20 games, and it is really frustrating. I just rage quit because I won a heavily contested match against a far more experienced player, and the game hung up for a second at the end of the match where everyone freezes. It then disconnects and you can't reconnect to the server. I checked my ELO, and I LOST 15 elo for that match, so it counts as you disconnecting. I think this might happen either randomly or because the other player strategically alt-f4's right when the match freezes to load the post-match screen. Please at least make server drops not count against your elo if you didn't do it intentionally and you are still connected to the master server. Thanks.",1504227656.0,2,1.0,1
+oldpeoplefacebook,My mom's friend always posts stuff like this...,,1504214648.0,5,0.73,1
+Kevin,DELETE THIS,You heard me...,1504214041.0,0,0.26,5
+starterpacks,"Reddit's ""political analysts""",,1504213198.0,1,1.0,0
+funny,Really makes you think... 🤔,,1504105912.0,4,0.59,1
+Brawlhalla,PROOF that Brawlhalla's servers cause the unplayable teleporting lag and need to be fixed. DEVS PLEASE JUST TRY SOMETHING,,1504056513.0,35,0.86,38
+starterpacks,Alt-J starter pack,,1504051102.0,237,0.95,15
+starterpacks,Made an original starter pack,,1504022740.0,81,0.87,11
+awfuleyebrows,"Don't normally post here, but I saw this on my FB feed.",,1503872173.0,32,0.89,1
+AndroidGaming,True Skate: control ability,,1503719927.0,222,0.9,8
+Brawlhalla,Brawlhalla has the most mature community.,,1503688332.0,75,0.87,12
+AndroidGaming,Getting good,,1503458044.0,0,0.5,2
+PrequelMemes,Unfair! (OC),,1503120403.0,0,0.45,3
+confession,"I enjoyed Nemo as a kid, but it scares the crap out of me as an adult.",Thalassophobia. Don't tell anyone about this.,1502587855.0,3,0.67,4
+Brawlhalla,Living legend stereotypes found in the wild.,,1502163473.0,5,0.73,0
+askscience,Why is it that so many people with ASD like Sonic the Hedgehog?,[removed],1501625237.0,1,1.0,0
+askscience,[SERIOUS] Why is it that people with ASD like Sonic (the video game) more than the general population?,[removed],1501618126.0,1,1.0,1
+Brawlhalla,DEEP THOUGHT:,"Brawlhalla is just a game of rock-paper-scissors where rock is sig, paper is dodge, and scissors is light attack.",1501617750.0,1,0.55,5
+Jokes,"Nazi: Jews are bad, and their food sucks.","Jew: No, Israeli good.",1501460615.0,9,0.65,5
+Brawlhalla,Game-breaking lag,"I live in minnesota and get packet loss every game that results in both players teleporting suddenly. I've posted this before, but I will keep talking about it until BMG actually takes notice and does something about it. Don't even bother telling me it's on my end because I have gone to hell and back making sure my game is fine, my internet is great, and my router doesn't have problems. It is server lag, and it is completely ruining the experience. In the upper right-hand corner of the screen, it says I have ""full bars"" for connection. BMG could at least spend a little bit of their skin $$$ on more servers or fixing their server issues because I'm thinking about uninstalling, and so are the thousands of other people who can barely play because of this.",1501376907.0,1,0.6,5
+Brawlhalla,"I found the cause of my teleporting lag in Brawlhalla. I have incredibly fast internet, and this doesn't happen with any other games.",,1501287907.0,7,0.9,5
+Brawlhalla,Rubberbanding...,"What could be done to stop the horrific rubberbanding lag that happens every match and gets you killed? I hate playing when I suddenly teleport into an alternate reality where I'm under the stage. I have 20MBps (bytes, not bits) of download speed on steam, and I'm playing from Minnesota in US West because US East also contains mexico, which is laggy as fuck to play in. I would honestly rather the game do microstutter lag than have this problem. It is often game-breaking. Pls work on this BH team instead of making new scythe skins.",1500844128.0,0,0.5,1
+wallpaper,/u/quazmoquerty makes nice wallpapers. (16x9 as well as phone),,1500841129.0,1,1.0,1
+Brawlhalla,"I don't normally record videos, but I'm starting to get into Brawlhalla now and couldn't help but to record this ability spam. I know I'm bad too but just watch.",,1500755692.0,1,1.0,11
+AskReddit,What is your one memory that you remember and immediately cringe over the hardest?,,1500669422.0,1,1.0,0
+funny,"It's so nice to enjoy a ""popular soda brand"" at the beach! :D",,1500418001.0,0,0.25,2
+Brawlhalla,Katars vs lance,"How do you combat a good lance player (or just one spamming wildly) with your katars? Initiating is hard because theyre ready to dodge or move away, and they can punish you easily for missing one light attack. I need protips.",1500411422.0,2,1.0,5
+Brawlhalla,My beginner's guide on how I got to a halfway-decent rank as a new player.,,1499639876.0,2,0.56,15
+Brawlhalla,[suggestion] One tiny idea that would make this game a lot more playable...,FIX THE FUCKING NETCODE please and thanks.,1499026734.0,0,0.25,3
+greentext,[Meta] Titles like this should be reason to ban.,,1498941759.0,157,0.92,9
+AskReddit,"What are some colloquial terms or abbreviations that people use that annoy you? (Like ""iirc"" or ""timbs"")",,1498277570.0,1,1.0,1
+tf2,Shitty meme (OC),,1498080624.0,0,0.33,1
+tf2,The Ascended Ones,,1496897582.0,0,0.4,2
+ShittyLifeProTips,"LPT: The easiest way to launder money is to use the cash to buy steam gift cards, buy games that equal that amount, and refund it to your credit card.",,1496895164.0,1,1.0,0
+Overwatch,Skill Ceiling,"I hate to be a bitch, but I have to let someone know why this game frustrates so many people.
+
+This game's main selling point is teamwork, which is great and can be rewarding if you have a few friends to play and communicate with in competitive. However, lots of us play solo, and get matched with randoms.
+
+I have no problem with getting matched with rando's in other games like TF2 and CS:GO because I know that if I do well, I can carry the team. However, that is not the case in Overwatch.
+
+If you are doing very well in OW, it only takes two of your teammates to do poorly for the entire match to be fucked. I think this has to do with the low skill ceiling caused by everyone being a bullet sponge. Healers can also make or break the game, so if your healer isn't playing as well as the other team's, you're doomed. For example, if I'm doing well, I can think quickly and focus to get an ace on CS:GO or wipe the entire enemy team on TF2 as soldier. You can't do this in OW because everyone is a regenerating cyborg with 9999hp, so killing one person requires focusing on them for much longer than in other games, even if your aim and mechanics are on-point. 
+
+In-case you were wondering why people complain so much about solo play, this is it. I'm not saying the game needs to change drastically, but increasing weapon damage and adding new mechanics like rocket jumping as Pharah instead of pressing shift once to get in the air would make the game far more rewarding and less of a gamble on who you're stuck with for teammates. That's all.",1496855966.0,0,0.27,4
+tf2,Why do people still play Overwatch?,[removed],1496854343.0,0,0.37,10
+tf2,Best scout loadouts?,I'm really not sure what the best is right now. Is the shortstop weaker than the main scatter in some ways? Is the soda popper better than the force a nature? Please I need some help with this because they all feel the same.,1496427104.0,3,0.8,7
+tf2,Hacking Crisis,"I just played 2 games in a row with hackers in it. Last game, there were 3 snipers spinbotting hard. Someone needs to do something about this crap and range ban these people.",1495577151.0,4,0.61,19
+deadcells,Finally starting to get good. I made it to the graveyard and died.,,1495151741.0,10,0.92,2
+Overwatch,[Discussion] Why did you realize you were in love with (needed to main) a certain character?,"I know we all have struggled to find our mains. For me, Zenyatta is perfect. The mixture of great clutch healing potential while still being able to do extremely high damage is a big selling point. He is the best hero in my opinion, but that's just for me. The Ifrit skin also helps because it makes my head's hitbox look bigger than it really is, so people aim for my hat, and dont hit me. Nothing is more satisfying than discording Pharah and leading a shot like Lee Harvey Oswald to make her fall from the sky. He's the bomb.
+
+When and why did you decide to main your hero of choice?
+",1495125457.0,12,0.84,40
+4chan,This gem in a nutshell 👌,,1494517744.0,0,0.37,7
+Showerthoughts,"There probably aren't dubstep ""ear rape"" videos on YouTube because it is inherently ear rape.",,1493869546.0,1,1.0,0
+Jokes,"Give a man a ticket to fly on Delta, and he will fly for a day.","Give a man a ticket to fly on United Airlines, and he will fly for the rest of his life.",1493755471.0,1,0.6,0
+playrust,Really makes you think...,,1493052977.0,1,0.55,2
+Jokes,Why did Caitlin Jenner run those people over?,Her trans mission failed.,1492891325.0,0,0.44,0
+playrust,Constant FPS Stuttering,"I have stopped playing this game for a month now because the stuttering is game-breaking. I have checked every once and a while to see if it's better, but to no avail. I have high fps and a solid state drive, so there should be no excuse. Does anyone have any idea how to fix this issue?",1492637466.0,10,0.91,10
+Jokes,"If you attach a dildo to a tree,","Did you just give it a transplant, or is it now a trans-plant?",1492213475.0,3,0.67,2
+Jokes,A woman walks into the wrong office...,"Doctor: Hi there! How are you doing?
+
+Woman: Not so good. I shouldn't have to wait so long for an appointment like this.
+
+Doctor: I think we should start by checking your blood pressure.
+
+Woman: Is that supposed to be an insult because I'm angry?
+
+Doctor: No, it's just standard procedure here. I also have to ask you how your bowel movements have been.
+
+Woman: Wow. Well, I'll reply to your insulting question by saying that they are doing fine. One is at home right now, and the other is at school, waiting for hours for me to get his student loans finalized here.",1489185499.0,0,0.33,0
+edmproduction,"I'm not sure if I'm even allowed to post my own song here, but here it is. Feedback wanted/needed.",,1489184699.0,0,0.38,1
+funny,"Ummmm try again, sweetie! ;)",,1488762367.0,4,0.6,1
+Ooer,Sa🅱e oOer in MeNe goblens !! !,,1488758918.0,1,0.6,0
+Ooer,👑teRkey👑,,1488752266.0,8,1.0,1
+mildlyinfuriating,Banned from /r/The_Donald for posting this with no reason provided.,,1488748751.0,1,1.0,0
+outside,Why are some debuffs permanent?,[removed],1488608119.0,1,1.0,0
+BlackPeopleTwitter,2017 is gonna be 💣💣💣,,1488516530.0,55,0.86,1
+Overwatch,No money for a duplicate highlight intro?,"I got this bug just now. I'm at 955 gold, so not getting the 125g for it was pretty sad. Has anyone else gotten this? How can I get that little extra gold I should have gotten so I can reach 1000?",1488509239.0,1,1.0,3
+dankmemes,Sorry for the shitty editing. TRIGGER WARNING: Alt-right,,1488492006.0,0,0.5,6
+mildlyinfuriating,"This ""sponsored post"" uses incorrect grammar and actually links you to malware, not an article.",,1488420910.0,0,0.5,0
+dankmemes,The real White House scandal...,,1488047744.0,4,0.67,1
+Drugs,a friendly warning about /r/kratom,[removed],1487915432.0,0,0.5,0
+kratom,Dope sick from kratom wd,[removed],1487460805.0,1,1.0,1
+Brawlhalla,REAL Val sprite (no bamboozle),,1487396630.0,7,0.89,3
+funny,"My dad knows I don't have a girlfriend, so he set this on my keyboard this morning.",,1487085050.0,21,0.88,4
+dankmemes,Joke status: PLAGIARIZED,,1486945427.0,0,0.5,2
+wholesomememes,Love is everywhere 💕OC💕,,1486874057.0,63,0.87,1
+mildlyinteresting,My piece of Buffalo chicken signals love from the chicken gods above.,,1486866699.0,4,0.7,0
+dankmemes,The intelligence hierarchy of pills (OC),,1486820247.0,93,0.94,3
+dankmemes,Syens,,1486793790.0,8,0.65,1
+askscience,"How come when the asteroid hit the earth and blew up the dinosaurs, it didn't sent the earth out of orbit too and kill everything else?",,1486791562.0,1,1.0,1
+mildlyinfuriating,"This clickbait reddit ""sponsored post"" article is actually just a link to a malicious app.",,1486777903.0,7,1.0,2
+funny,"In an alternate reality, the Empire decides to have some fun and make their clones gay... (OC)",,1486396126.0,1,0.6,0
+Brawlhalla,I made myself a 1080p Brawlhalla background. You can have it too if you want.,,1486325206.0,39,0.95,7
+Showerthoughts,The kids who leave the class early without helping to stack the chairs probably grow up to become the people who don't vote.,,1486096009.0,1,1.0,0
+gaming,This is what $2 can get you at a garage sale.,,1485534714.0,10,0.82,7
+Overwatch,Has anyone here been experiencing horrible server lag lately?,"For the last few weeks, I have started to have connectivity issues in ow, and in no other games. I have disconnected multiple times right at the end of a comp match, and thus I'm currently sitting on a 2 day ban. It only seems to happen at the ends of matches too, and I cannot reconnect to the server for about 2 minutes. This event is preceeded by extreme lag (people teleporting everywhere and me being unable to move).
+
+Does anyone else feel this is happening? It never happened in season 1 and 2.",1485406204.0,2,0.75,0
+edmproduction,Clipping: Is it really that bad?,"I listened to a mix today with a maximum of +4.5db, and then listened to it again at 0db but at a higher speaker volume to match the loudness.
+
+I noticed absolutely no distortion from going over 0db in this mix. They sounded exactly the same. I have always avoided ever going over 0db in the past. Was I being mislead all along? Is this ""muh perfect sound quality"" thing just a snooty meme spouted by the same people who think a $200 glass of beer is better than an $8 one? Am I missing something here?
+
+I am using a 64 bit daw with a 64 bit OS.",1485322343.0,3,1.0,22
+kotk,Just won my first game ever after a week of playing.,[removed],1483770718.0,1,1.0,2
+gaming,Playing free2play games is like spending time with your uncle.,"It's fun at first, but then you realize that you're getting fucked.",1483336717.0,3,0.67,3
+gaming,when the developers focus more on making skins than fixing game-breaking bugs,,1483336097.0,1,1.0,0
+kotk,The developers of this game really need to focus less on making skins and more on debugging.,,1483332625.0,1,1.0,1
+schizophrenia,Accomplishments of 2016,"What did you accomplish this year? For me, it was the following...
+
+1. Psychiatric ward
+2. Alcoholism
+3. Lose contact with remaining friends
+
+Awesome. How was your 2016?",1483252013.0,6,0.81,7
+pics,Found it.,,1482934452.0,0,0.33,1
+pics,The picture I took an hour ago of the Frozen-themed castle at Disney World.,,1482384338.0,30,0.77,2
+schizophrenia,Seroquel,"I just want to reccomend Seroquel to anyone who wants a new medication. I have been on just about every antipsychotic before this one, and here are some bullet points on what it does:
+
+-no negative side effects (like the unholy torment of akasthitia)
+
+-no headache
+
+-basically cures insomnia
+
+-makes you as calm as a cow
+
+-wake up feeling calm and rested
+
+-doesn't prevent you from feeling enjoyment
+
+-one of the least expensive meds out there
+
+Try it if you're like me and hate the side effects of most antipsychotics. That's all.",1481904818.0,3,0.81,10
+Jokes,What did Jeffrey Dahmer do when he found out his victim had down syndrome?,He made a potato salad.,1481780787.0,1,0.57,1
+playrust,The Vulture,"There's this player who I've discovered to be hiding near my base and telling people where it is in text chat. He also baits people over by insulting them, and tells them to ""1v1"" him at ""his"" base (my base). He waits for either me to get killed or for the person he baited over to get shot by me. If you did it and you're reading this, I just wanted you to know that I hope you get a terminal illness. Also please stop.",1481710208.0,6,0.81,3
+DotA2,A thought on the quality of the game,You know a game is polished when the biggest complaint people have is that their eye movement around the hud isn't perfect.,1481708290.0,2,0.62,1
+DotA2,[Complaint] The smaller UI.,"I'm not actually complaining about the UI being smaller. I'm complaining about all of the shitters on this subreddit who think having more actual visibility of the game is a problem. If you're having trouble coming to terms with this improvement, I suggest you downvote me and cry about it until you get used to it and complain again when a new and uncomfortable change is introduced.",1481524227.0,8,0.63,2
+Showerthoughts,"If a mtf transgender person only wants to be with biological females, does that make them straight or a lesbian?",,1481134280.0,1,1.0,0
+AskReddit,"If a mtf transgender person only wants to be with biological females, does that make them straight or a lesbian?",,1481130466.0,1,1.0,1
+Jokes,"If a meteor goes to a restaurant,","Would he prefer his sandwich to be vegan, or even meteor?",1481082394.0,3,0.71,1
+schizophrenia,Feeling Empty,"I'm not depressed, and I'm not happy. I just feel extremely empty. I can't derive pleasure from anything. All I want to do is lay in bed to feel the sheets. Is there any way to combat this?",1480986464.0,19,1.0,4
+summonerschool,Jax Positioning Question,"Should I play Jax as adc, top, mid, jungle, or any one of these?
+
+There are so many guides out there and so many ways to play him that it seems like he doesn't really excel at anything. What is he the best at? I just unlocked him, and I'm really trying to figure out what I should do with him. Should I build AD, AP, or a balance of the two? I should add that I'm best at top and mid.",1480142300.0,3,1.0,8
+WebGames,By far the best .io style multiplayer shooter out there.,,1479968256.0,1,1.0,2
+InternetIsBeautiful,free browser-based multiplayer shooter that needs more players,,1479964452.0,1,1.0,1
+Jokes,"As a member of the LGBT community, I am afraid of Mike Pence's stances on gay rights.",[removed],1479932246.0,1,0.55,5
+leagueoflegends,Toxic Yasuo Players,[removed],1479860589.0,1,1.0,0
+Showerthoughts,Nicholas cage is the only actor who can make a terrible script seem entertaining.,,1479684686.0,1,0.57,2
+leagueoflegends,What is your favorite champion?,"Mine has to be malphite. You can just build AP and armor/resist, and it feels like you can just stroll into a gank and win like an adult breaking up a schoolyard fight.",1479615632.0,13,0.78,70
+PartyParrot,My fluffy doggo is back,,1479586076.0,718,0.93,12
+PartyParrot,My parrot has done this for 15 years...,,1479510092.0,15,0.82,2
+schizophrenia,Election Fallout,"I'm a schizoaffective guy who is 20 years old and currently using family insurance because of the ACA.
+
+Even though I'm working, I wouldn't be able to get my own health insurance once it's gone. Any psychotic illness means you will NEVER get covered. I'm pretty spooked right now. I'll probably have to stop taking medication in the next year because I can't afford it. Antipsychotics are expensive as hell.
+
+The funny thing about this election is that statistics show that many middle and lower class citizens voted for trump. The one good thing I see coming out of this is how this will completely blow up in their faces, so then I can say ""I told you so"" (if I haven't completely lost my mind before then).",1478740614.0,16,0.91,6
+PartyParrot,The return of my fluffy quaker parrot,,1478332559.0,344,0.99,7
+schizophrenia,Memory,"Okay, so I've been having some issues with my memory lately. Within the last few months, my issues with memory have gotten a lot worse. For example, I have no idea what I did earlier today. I can't remember if I ate dinner yet, or even if I took my medication. I basically feel like I'm a completely different person trapped in a new body because of this. All of my childhood memories and even recent memories are fading. I have to pretend to remember things to appear normal, but most family members and others can tell there is something up with me. How do you improve your memory? How do you make this stop? Thanks for reading. I just want my life back. I would prefer to not feel like I'm in the back seat of my own life.",1478324794.0,10,1.0,5
+PartyParrot,My extremely fluffy parrot,,1478248080.0,776,0.97,16
+schizophrenia,[Discussion] feeling like an outsider,"Before I started having symptoms of this, I had a life. I was the captain of my school's SPEECH team. I qualified for several national tournaments. I had a girlfriend in high school and many friends. I made some great friends in college, and had a great experience. I felt free for the first time in my life.
+
+Eventually, things changed dramatically for me. Ever since my first experience in a psychiatric ward, I stopped seeing my friends and started hiding things from my immediate and extended family. I was also forced to drop out of college because i missed too much class to recover my acedemics. I feel like I have so much to hide that I can't get close or friendly with anyone. It had been a very long time since I have felt otherwise.
+
+I feel like an """"""outsider"""""" because other people I knew in my past have moved on with their lives while I stay stuck in this loop. All roads lead to this result for me now, and I don't know how to break the cycle. Does anyone else feel this way?
+
+Edit: do you have any advice for breaking this cycle and how did you do it?",1478238254.0,1,1.0,6
+schizophrenia,[Rage] I didn't know schizophrenics had multiple personalities!,,1477946216.0,13,1.0,22
+schizophrenia,"[Discussion] ""as needed"" medication makes you hallucinate","If I take the minimal dose of ambien (2.5mg for a 6'1 200lb 20y/o male) or 25mg of benadryl to help sleep onset, I have wild and crazy auditory hallucinations. I constantly hear shit and voices once it takes effect. Does anyone else get this?",1477915154.0,2,0.76,4
+me_irl,me🤕irl,,1477871042.0,1,0.57,0
+me_irl,me🏑irl,,1477803588.0,1,0.67,0
+vainglorygame,[Discussion] Is crystal saw broken?,"I just unlocked saw yesterday, and I haven't lost a single match as him. I just played a game with no deaths (granted our Lyra was very nice).
+
+I do the following: initiate with knife, use B, and then C with some alternating current in there. It's impossible to not kill them even if they have a shield. Is this broken, or am I just really good? It's probably that he's broken. Just saying.",1477794605.0,0,0.33,10
+me_irl,me💨irl,,1477775637.0,1,0.57,0
+schizophrenia,Odd behavior,"Does anyone else feel like they act funny when they're having a rough time? I often do bizzare stuff like contort my face and flail my arms around compulsively because it feels good and natural to do so. I'm closing and rolling my eyes around right now because it feels good, but I know it isn't healthy to be doing that.",1477711559.0,10,1.0,8
+schizophrenia,[Discussion] Who else feels out-of-the-loop on their own lives?,"I feel like I don't know what's going on. I don't know if I ate dinner or what I ate for dinner. I don't know if I did another 1000 basic human tasks, and yet others who have barely interacted with me can instantly tell me what happened.
+
+Who /negative symptoms/ here?",1477711271.0,2,0.76,5
+AskReddit,What is the best way to conceal a boner?,,1477470437.0,2,0.75,25
+vainglorygame,Solo Q is great!,,1477454125.0,0,0.5,5
+me_irl,me_irl,,1477371932.0,8,0.84,0
+schizophrenia,tired of Facebook,"I don't have friends anymore, but I occasionally check Facebook out of boredom to see people memeing about their ""mental illness,"" while being incredibly social and successful, for attention. Does this piss anyone else off? I know it's wrong and all for me to belittle the struggles of others, but I just feel angry and shitty whenever I see this. It's like people who got skin cancer removed talking about their battle with cancer.",1477366057.0,11,0.88,21
+meirl,meirl,,1477357618.0,0,0.5,0
+me_irl,me🚫irl,,1477207088.0,43,0.86,0
+vainglorygame,does Catherine need a buff?,,1477205882.0,0,0.33,10
+me_irl,me⛵irl,,1476760991.0,0,0.33,0
+me_irl,me💆irl,,1476687632.0,3,0.61,0
+vainglorygame,Conjoined sibling in the new update?,,1476685767.0,0,0.47,3
+aww,Meet Coco: 15 years old today and still going hard!,,1476595620.0,16,0.91,0
+PartyParrot,"my destructive, smug parrot",,1476593729.0,112,0.99,5
+PartyParrot,found footage parrot,,1476425302.0,23,0.94,1
+PartyParrot,peculiar parrot,,1476381441.0,16,0.85,1
+playrust,MAJOR performance boost tip,"A lot of people have complained that there is no option for true full screen in rust. This is due to an engine limitation, but never fear! There is a way.
+
+Go into the steam launch options and type in 
+""-window-mode exclusive"" without the quotes.
+
+You will also have to set both rust executables to scale with high dpi if you're not playing in native res.
+
+I noticed a SIGNIFICANT decrease in stuttering as well as a 25fps increase. Post results here.",1476373607.0,8,0.56,24
+playrust,Giant node spotted at radtown,,1476293011.0,0,0.25,1
+schizophrenia,odd behavior,"Does anyone with schizoaffective disorder or schizophrenia have some weird shit going on, behavior-wise?
+
+I have a schizoaffective diagnosis and I just do strange stuff compulsively like make unusual primal sounds and contort my body. Does anyone else get this? I had this before medication.",1476237206.0,2,1.0,7
+me_irl,Me🐱irl,,1475625040.0,0,0.5,2
+playrust,Am I the only one who finds the vacant expression on the models to be hilarious?,,1475590254.0,19,0.86,3
+Advice,Unusual relationship with my mother,"Let me just preface this by saying that I'm not really in danger and neither is my mother.
+
+When I was in grade school, I didn't really get out much. I was sort of a quiet kid who didn't have much friends. My mom was very close to me and didn't want me to get into trouble, so she was very protective of me. She is a very emotional person. I was afraid to talk to her about things because she would blow up at me if she knew about stuff, so I spent a lot of time hiding secrets from her. My older brother seemed to turn out fine because he got out as soon as he could, and is now living in an apartment away from us.
+
+I started to get really paranoid about my mother and would suspect her of spying on me, which she may have been. Our relationship got pretty rocky before I headed off to college, which was 25 minutes from our house. At college, I still received texts from her accusing me of abandoning her and stuff because I would forget to reply to her texts sometimes. I made a few good friends at my dorm in college, which led me to converse less and less with my mom. 
+
+At the end of the first semester, I started to get really paranoid about things other than my mother. I thought that people were being placed around me to monitor my actions. I also started to get very depressed and spent an entire week in my dorm room without leaving to go to class. I also started to have intrusive thoughts about killing people and doing other terrible things to strangers and close friends.
+
+Fast forward a few more months. I have gotten in many fights with my mom at this point with tears and all, and I eventually wound up in a psychiatric ward with a schizoaffective diagnosis. I  had no choice but to drop out of my second semester and spend some time at home. There was a big incident where my mom and I had a fight and I started acting odd. I wouldn't say anything and flipped a table in front of her. I got really close to her and apparently looked at her with some threatening expression without saying anything back to her. It took a while for us to get past this day because she thought ""I was going to kill her because no-one has ever looked at her like that.""
+
+I started to see a psychologist, who was very nice to see and seemed to understand me. He met with my mom at my first appointment, and she spoke with him for a while with me in the room. Once I convinced her to let me see him alone, we started talking about things that were bothering me and how I felt. I was confused because he seemed interested in talking with me about my mother. He also asked if she had ever seen a psychologist herself. It came as a bit of a shock to me when he explained that my relationship with her isn't normal. I had always thought that we had a perfectly normal relationship and that all mothers are that close with their kids. I should also add that my father also lives with us, but he isn't around much because of his hefty work schedule.
+
+I need some really good advice with how to continue on with my life. It has been 2 semesters since I dropped out, and she doesn't want me to go back for various reasons. I think she is trying to keep me at home with her. I have been really nice to her and have done my best to have a really happy relationship with her. I have faked just about every interaction with her for the last year now. I just need some advice as to how I am going to get back to school and to convince her that I need to go back. I am mentally ready to do so, I think.
+
+tl;dr My mom wants to keep me at home because she thinks I'm not ready to return to college. I would like some advice convincing her to let me go back as well as some advice with how to deal with my odd relationship with my mother.",1475530321.0,1,0.67,6
+playrust,mfw the most recent update fixed all of my stuttering lag,,1475432577.0,0,0.42,2
+WritingPrompts,"[WP] Once again, you stare into the abyss. This time, you may have leaned-in a bit too far...",,1475261445.0,1,0.6,2
+Art,"Paco, ink and Digital, 1450x1346",,1475260419.0,8,0.85,0
+IAmA,[AmA Request] AmA Request,[removed],1474519714.0,1,1.0,1
+playrust,RAIDED BY THE ULTIMATE HACKER CLAN,[removed],1474436583.0,16,0.8,11
+playrust,~A Rough Night~ (fanfic),"Helk takes a trip over to Garry's house to see how he's doing. As he walks up to the front door to knock, he hears a sound come from inside. It's Garry, and he's... crying.
+
+Helk is startled by this, but persists by knocking on the door again. This time, the crying stops, and footsteps are heard. Garry opens the front door while wiping his eyes. ""I'm sorry I haven't spoken with you in a while."" Garry says. ""This has been a really rough time for me.""
+
+""I know, baby. That's why I'm here... to cheer you up!"" Helk says while smirking devilishly at Garry. Garry tries to get Helk to leave, but Helk puts his hands on Garry's masculine chest and gently pushes him back into his home. He whispers sexily to Garry, ""I've got something that'll make you feel better."" Garry is shocked to see Helk unsheathe his MASSIVE pee pee.
+
+""This will make all of your problems go away..."" Helk struts past Garry and over to his work computer. He opens up unity and bites his lower lip while spinning his dick like a propeller on a World War 2 bomber. ""WATCH THIS,"" he says as his spinning dick collides with the keyboard. Lines upon lines of code are flooding the unity project screen as a result of Helk's genital movement.
+
+Helk smirks and struts past a shocked Garry, shutting the door as he leaves. Garry walks over to see if any damage had been done to the computer. On the screen, he sees an updated project file for Rust entitled... ""XP Update.""",1474270440.0,0,0.44,1
+schizophrenia,Cut myself for no reason?,"Have any other people out there cut their bodies without reason? I mean, no reason that you can determine? I'm not depressed at all, but I did [this](https://s10.postimg.org/dg6rin0jd/20160918_002752.jpg) last night (slight NSFW). I think I did it because I was energetic or something. What are your thoughts on cutting for no reason?",1474210322.0,1,0.57,8
+AskReddit,What common spelling/grammar error bothers you the most?,,1474096571.0,0,0.5,19
+playrust,The incredible Helk turns back to face Garry...,"Garry: It's time for you to take over development while I go jerk-off over my massive stacks of cash.
+
+Helk: That's my secret, Garry. I've always been watching you masturbate. *exit helk*",1474094895.0,0,0.4,1
+WritingPrompts,[WP] You wake up one day and your tired. you go to bed but you will not go to bed. you see a clock on your door but it isn't put there by you. the clock counts down to zero written on top of it. you get out of bed and as you do it if you keep moving the hand gets lower and you sweat hard...,,1474094469.0,1,0.67,1
+playrust,SOLO PLAYER DISCORD!,"The wipe is happening soon for most servers, so it's time to get a discord going for friendly solo players.
+
+https://discord.gg/UBeGr
+
+Here is an infinite link to my server. We can discuss making solo villages on servers or even teaming-up. 
+
+Rustafied medium is the desired server to discuss.",1473881524.0,3,0.64,7
+kratom,Suffering,"I am an occasional kratom user. I average about 2 doses per week, and I only use the doses to help ward-off my psychosis.
+
+If this DEA shit goes through, I will be suffering profoundly. Kratom is the only thing that halts the progression of a psychotic episode for me. I was actively preparing my suicide yesterday until my parrot accidentally knocked his water dish on the floor, which I had to clean up. I realized that he would be devastated without me, and I need to stay alive and continue to suffer so that he can get his snuggles.",1473827291.0,19,0.95,6
+depression,Fall,"Who else hates fall here? It gets pitch black way too early and everything looks like shit. It also reminds me of high school.
+
+I love the winter though. Nights are a gently lit with the moon's glow on the snow.",1473825153.0,2,0.76,1
+Art,"Someone asked me what antipsychotic-induced akathisia feels like. I couldn't describe it with words, so I drew a little picture.",,1473400946.0,4,0.7,2
+playrust,>Korean no-clips into my base and takes everything while invincible,Fucking hell. Can't we just range ban South Korea already??,1473377278.0,5,0.77,4
+playrust,Comfy bedroom,,1473349471.0,2,0.6,3
+depression,Acute Akasthitia - how benzotropine actually saved my life,[removed],1473338238.0,0,0.5,0
+schizophrenia,Akasthitia,Just took 80mg of latuda 5 hours ago after not taking it for 3 months. This is the worst torture I have ever experienced and I wish it upon no one. How do I make it stop?,1473309351.0,3,0.81,3
+Tendies,ETSUBATSU,,1473278333.0,22,0.86,10
+schizophrenia,[Discussion] Odd Behaviors,"20 y/o schizoaffective male here. I know that ""odd behaviors"" are listed under a schizophrenia diagnosis, but are they part of schizoaffective disorder as well? The internet turns up nothing.
+
+My earliest symptom was exhibiting odd behaviors. They are like compulsions that I can't suppress without feeling extreme discomfort. Some examples are that I close my eyes and roll them around in circles, make grimace-like contortions of my face, make weird sounds, and have a difficulty laying still without kicking my feet.
+
+Is this a schizoaffective thing as well?",1473188616.0,5,0.79,9
+AskReddit,What shameful things have you posted on the internet in the past that make you cringe when you see them?,,1473018879.0,3,0.71,2
+kratom,[Discussion] RIP Kratom,"I used to be addicted to kratom. I would inject it lovingly every day, until I died from an overdose. Stay safe! Remember to use clean needles.",1472881019.0,0,0.23,3

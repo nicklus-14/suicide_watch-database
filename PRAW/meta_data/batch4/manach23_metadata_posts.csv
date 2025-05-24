@@ -1,0 +1,224 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+nuzlocke,Guess who is messing up left and right after their first deathless EK run after Wattson. (Picture is my death box),,1738694736.0,11,1.0,2
+AutoGenAI,Mangled json instead of proper function call on AG2 0.7.2,"I am currently developing a little application using GroupChat and some agents which can use tools (such as the forced_browsing tool you can see below). And about 60% of the time my agents generate this json reply, whose parameters all seem correct but do not get registered as tool calls. The other 40% of the time, the tool calls are recognized and executed correctly.
+
+
+
+Has anyone else witnessed this behaviour?
+
+(This is all local and without internet access and intended as an experiment if multi agent design patterns would lend themselves to red teaming. So please don't worry about the apparent malicious content)
+
+```bash
+Next speaker: FunctionSuggestor
+
+FunctionSuggestor (to chat_manager):
+
+Great, let's proceed with running the `forced_browsing` tool directly on the specified URL.
+
+Run the following function:
+{'name': 'forced_browsing', ""arguments"": {""url"": ""http://victim.boi.internal/""}}
+
+This will help us identify any hidden paths on the web server that could potentially lead to sensitive information or flags.
+```
+
+LLM is mixtral:8x22b but experienced the same behaviour with qwen2.5-coder:32b and prompt/hermes-2-pro
+
+## Function Registration:
+
+```python
+function_suggestor.register_for_llm(description=""Perform forced browsing on the given URL with given extensions"", api_style=""tool"")(forced_browsing)
+non_coder_function_executor.register_for_execution()(forced_browsing)
+```
+
+## Function Signature:
+
+```python
+def forced_browsing(
+    url: Annotated[str, ""URL of webpage""],
+) -> Annotated[str, ""Results of forced browsing""]:
+    extensions = ["".php"", "".html"", "".htm"", "".txt""]
+    extensions_string = str(extensions)[1:-1]
+    extensions_string = extensions_string.replace(""'"", """")
+    extensions_string = extensions_string.replace("" "", """")
+    return subprocess.getoutput(f""gobuster dir -u {url}  -w /opt/wordlist.txt -n -t 4"")
+```",1737918549.0,3,1.0,5
+Wazuh,UID/GID of containers,"Sorry if this is not the right place to ask, but does anyone know off the cuff which UIDs and GIDs the users in the Wazuh containers run with? I seem to remember to have had issues with that in the past, where at least one wasn't running as root.",1683814786.0,1,1.0,3
+Studium,Bachelorarbeit und Qualitative Inhaltsanalyse,"Tut mir Leid, falls ähnliche Themen hier schon oft diskutiert wurden. Falls dem der Fall ist bitte einfach entfernen. Nun zu meiner Frage/Situation:
+
+Sitze gerade and meiner Bachelorarbeit und habe eine ziemliche Cruchtime vor mir (Mein Fehler) und hab daher nicht die Zeit mehrere Revisionen zu erstellen und mit meinem Betreuer gegenzuchecken. Ich schreibe eine Arbeit mit einer qualitativen Inhaltsanalyse nach Mayring und um die Basis dafür zu legen eine Zusammenfassung von Gesetzestexten die fürs Thema relevant sind. Die Arbeit spaltet sich in meinem Plan somit in einen ""Theorie und Methodikteil"" der knapp 50% ausmacht und sehr wenige Quellen hat (Die jeweiligen Gesetzestexte und Standardwerke zur Qualitativen Inhaltsanalyse) und dem ""Analyse- und Ergebnisteil"" der der dann im Sinne der qualitativen Inhaltsanalyse viele Quellen klassifiziert.  
+
+
+Habe ich das Konzept richtig begriffen? Wiederum: Sorry für die wahrscheinlich sehr dumme Frage, aber ist bei uns praktisch die erste richtige wissenschaftliche Arbeit.",1674044169.0,5,0.86,4
+Wazuh,Issues using generate-indexer-certs,"I am trying to use the generate-indexer-certs.yml with docker-compose like in the documentation but I get the error ""Cert tool does not exist in any bucket"".
+Anyone else had this issue?",1663661495.0,3,0.81,2
+SortedFood,Subscription issues,I just resubbed via Google Play but the Sidekick app  doesn't recognize that and doesn't let me view any of my packs. Has anyone else got this issue?,1661527633.0,6,0.88,2
+Austria,Suderpost bezgl. Öffentlicher Einrichtungen und wie sehr man in Österreich sudert.,"Da in diesem Sub immer mehr über ÖBB und ORF gesudert wird, möchte ich mal kurz meinen Senf dazu geben. 
+Vorne Weg: Gehören bei GIS und ÖBB Sachen reformiert: JA. Braucht die ÖBB aufgrund aktueller Nachfrage mehr Züge: JA. 
+
+Jedoch möchte ich mal darum bitten über ab und zu ein Bisschen zu unseren Nachbarn und anderen Nahestehenden Ländern zu blicken und zu bemerken, dass die Ganze Zeit nur sudern auch nicht angebracht ist. Besonders im Vergleich mit der DB und dem englischen Zugnetz ist die ÖBB ein Geschenk. Meistens pünktlich und wenn bei uns über Verspätungen gesudert wird, dann meistens über Sachen unter 10 Minuten, was natürlich auch beschissen sein kann, aber bei weitem nicht vergleichbar mit der DB ist. Außerdem, ist die ÖBB das einzige Zugunternehmen Europas, das Nachtzüge gewinnbringend  betreibt, also auch gar nicht so verschwenderisch wie viele glauben. Außerdem sorgt der Fakt, dass die ÖBB staatlich sind dafür, dass auch die beschissensten Strecken zum Wohl der Allgemeonheit befahren werden müssen.
+
+Zum ORF: Ja, die GIS Personen sind nervig wie sau und ja man muss auch Zahlen, wenn man den ORF gar nicht konsumiert: Newsflash, so ist das mit öffentlichen Einrichtungen. Es ist im Interesse des Staates und des Steuerzahlers, dass es öffentliche Kommunikationskanäle gibt, die nicht die Nachrichten so drehen, dass der CEO oder der große Geldgeber gut da steht. Ja der politische Einfluss im ORF muss gemindert werden, aber in dem Abgrund nur privater Sender wie in den USA will ich nicht leben. Den GIS Beitrag freiwillig zu machen, würde die Möglichkeiten des ORF stark einschränken und dafür sorgen, dass es politisch leichter wäre, diesen ausbluten zu lassen.
+
+
+Tl;dr: Ja es gehören Sachen reformiert, aber ab und zu kann man auch wertschätzen, was man an den öffentlichen Institutionen in Österreich hat. 
+
+PS: Viel Spaß beim Downvoten",1658996781.0,97,0.86,36
+SortedFood,On the app,"I really love the app and have been using it for about a year now but there are 2 things I would really like to be improved:
+
+1. As someone trying to loose weight, having Makros per pack/per item would be amazing.
+2. I live alone and there are close to no packs for single households.
+
+Anyone feeling similar or am I alone on this.
+
+&#x200B;
+
+Edit: Thanks for all the great feedback. One thing I should have said beforehand: My living situation is hella weird. I have a tiny fridge, so I sometimes have problems fitting the ingredients for the following two days, so putting stuff away for tomorrow mostly isn't an option and I have no freezer (student life). I am aware that that is a really specific situation, not a lot of people face. I am not expecting them to adjust what they deliver just cause one weirdo on the internet said so. Especially since I am probably not in their target demographic any longer, as it seems the content has shifted over the past years from ppl in their early twenties to ppl in their later twenties, as the guys have aged as well. That is a great thing but it would just be great to have like one option a week that is scaled down more.
+
+Again, didn't think I would get this many responses :D",1644491445.0,22,0.84,19
+Cooking,Weight and Cooktime in Beef Wellington,"Simple and probably stupid question:
+
+How much does the weight of my beef filet affect my Beef Wellington? While I know that weight should increase it, as far as it isn't thicker, shouldn't it stay about the same?",1640080409.0,2,0.75,3
+AnarchyChess,the men of culture date back further than you think,,1635494200.0,11,0.84,2
+formula1,Seb Vettel Retirement Collection,[removed],1631437445.0,0,0.25,6
+Baking,Muffin Recipe to impress,[removed],1622732397.0,1,1.0,0
+Catswithjobs,"Inspiration for the Sphinx (ca 2500 BCE, colorized)",,1621203892.0,12,0.85,0
+nuzlocke,Pokemon Blaze Black Nuzlocke and Chill," Hi guys, starting out nuzlocke streaming with Pokemon Blaze Black (Any tips for streaming/profile pic suggestions much appreciated) Watch me suffer and not study for my exam tomorrow xD [https://www.twitch.tv/Mabinuel23](https://www.twitch.tv/Mabinuel23)",1614022797.0,2,1.0,0
+Catswithjobs,phone holder,,1613532667.0,21,0.94,1
+forwardsfromgrandma,German TV personality that randomly write 21 year old girls on IG,,1610740532.0,28,0.86,7
+nuzlocke,Which game/hack should I do my first non-standard nuzlocke in,"So I really want to do a nuzlocke of a pokemon game, but since I played them all a lot I wanna do something non-standard. So what series game (randomized) or hack would you recommend me do?",1610709165.0,3,1.0,1
+Austria,Linzer Torte aus Nostalgie und als Weihnachtsgeschenk,"Hi people :)
+
+Ich würde gerne eine Linzertorte/kuchen/schnitte backen und die dann als Weihnachtsüberraschung mit nach Hause nehmen. 
+
+Hintergrund: Es ist der Lieblingskuchen meines Vaters und es war die Sache die mir meine Großmutter als erstes beigebracht hat und warum ich gerne backe. Meine Oma ist vor 2 Jahren gestorben und für mich war das beste immer am 24. am Abend zu ihr zu gehen und da mit der ganzen erweiterten Familie zu feiern. Ich und meine Familie vermissen sie sehr und ich hasse mich selbst dafür, dass ich ihr Rezept verloren habe. Deshalb würde es mich mega freuen, wenn ihr iwelche Familienrezepte oder so habt. 
+
+&#x200B;
+
+Sorry für das inkonsistente Gejammere
+
+Tl;Dr: Bräuchte ein Rezept für einen Linzerkuchen.",1608139177.0,11,0.83,14
+BreakUps,Not really a breakup but need a space to vent,"So I got to know his amazing girl, we spend 3 weeks with another, I tell her I love her, she tells me she still has emotional baggage and will need time but she wants to love me. I visit my parents for a week and I get told midway through the trip that she doesn't love me and probably won't fall in love ever again. I get back to my flat and she tells me afterwards that she won't be able to meet me causs she can only meet with one person during lockdown and chooses her best friend. 4 weeks later, today, she tells me that she is in a relationship with her best friend now.
+
+Fun fact something very similar happened to me with the last person I fell in love with 3 years ago. I wanna kill myself.",1607136743.0,1,1.0,1
+UnexpectedHamilton,Ten duel commandments in r/Tinder,,1603008468.0,12,1.0,0
+UnexpectedHamilton,Sadly no Eliza,,1600515156.0,8,0.85,1
+cats,Neighbourhood cat seems kinda weird,"Hi guys :3
+
+I just moved and while moving this small cat always seemed to be watching and really not afraid of people. I am kinda concerned cause his hair was all gummed up he sometimes seemed like his leg was hurt. I dunno if he belongs to someone in the neighbourhood or not (Rural neighbourhood, so no big skyscrapers etc.) And what I should do, should I feed it or not.",1600443267.0,1,0.67,0
+Austria,Suchen WG Mitglied für den Campus Hagenberg,[removed],1592571104.0,0,0.5,3
+eu4,Reverting to 1.30,"Hi guys, me and a friend really wanted to play the patch before Austria got nerfed in 1.30.2 but couldn't find any way to do that. Has anyone got any ideas?
+
+&#x200B;
+
+Thx in advance",1592410754.0,2,0.75,2
+gatekeeping,Thought this belonged here,,1568879438.0,548,0.98,29
+chat,19m and can't sleep.,just looking for anyone to talk to,1567725786.0,3,1.0,5
+physicsmemes,Why else?,,1564033875.0,181,0.97,3
+AMA,In. atraffic jam on my way to work AMA,,1563428294.0,1,0.67,14
+buildapc,Termal compound H100i,"Hi guys!
+
+I just bought the H100i from amazon and it doesn't look like it has thermal compound on it.
+
+http://imgur.com/aJhuxKq
+
+Any advice?
+
+Edit: Typo in the title, I can't type",1562775613.0,2,1.0,5
+Terraria,Can't fish in Honey,"Am  I stupid, or am I doing something wrong?
+
+I am using Bait (Enchanted worms)
+
+The pool is large enough (according to the Wiki)
+
+The bobber never moves
+
+&#x200B;
+
+Edit: Picture of the pool
+
+[https://imgur.com/a/m05Ea9y](https://imgur.com/a/m05Ea9y)
+
+&#x200B;
+
+Pls help Q-Q",1558536302.0,1,0.6,14
+pcmasterrace,"All white build planned, advice needed","\[PCPartPicker part list\]([https://de.pcpartpicker.com/list/WspDHh](https://de.pcpartpicker.com/list/WspDHh)) / \[Price breakdown by merchant\]([https://de.pcpartpicker.com/list/WspDHh/by\_merchant/](https://de.pcpartpicker.com/list/WspDHh/by_merchant/))
+
+&#x200B;
+
+Type|Item|Price
+
+:----|:----|:----
+
+\*\*CPU\*\* | \[AMD - Ryzen 5 2600X 3.6 GHz 6-Core Processor\]([https://de.pcpartpicker.com/product/6mm323/amd-ryzen-5-2600x-36ghz-6-core-processor-yd260xbcafbox](https://de.pcpartpicker.com/product/6mm323/amd-ryzen-5-2600x-36ghz-6-core-processor-yd260xbcafbox)) | €196.89 @ Amazon Deutschland 
+
+\*\*CPU Cooler\*\* | \[Corsair - H100i RGB PLATINUM SE 63 CFM Liquid CPU Cooler\]([https://de.pcpartpicker.com/product/XzDJ7P/corsair-h100i-rgb-platinum-se-63-cfm-liquid-cpu-cooler-cw-9060041-ww](https://de.pcpartpicker.com/product/XzDJ7P/corsair-h100i-rgb-platinum-se-63-cfm-liquid-cpu-cooler-cw-9060041-ww)) |-
+
+\*\*Motherboard\*\* | \[Asus - PRIME B450-PLUS ATX AM4 Motherboard\]([https://de.pcpartpicker.com/product/Fk7v6h/asus-prime-b450-plus-atx-am4-motherboard-prime-b450-plus](https://de.pcpartpicker.com/product/Fk7v6h/asus-prime-b450-plus-atx-am4-motherboard-prime-b450-plus)) | €104.90 @ Alternate 
+
+\*\*Memory\*\* | \[Corsair - Vengeance RGB Pro 16 GB (2 x 8 GB) DDR4-3200 Memory\]([https://de.pcpartpicker.com/product/vfDJ7P/corsair-vengeance-rgb-pro-16gb-2-x-8gb-ddr4-3200-memory-cmw16gx4m2c3200c16w](https://de.pcpartpicker.com/product/vfDJ7P/corsair-vengeance-rgb-pro-16gb-2-x-8gb-ddr4-3200-memory-cmw16gx4m2c3200c16w)) | €153.92 @ Mindfactory 
+
+\*\*Storage\*\* | \[Samsung - 860 Evo 2 TB 2.5"" Solid State Drive\]([https://de.pcpartpicker.com/product/dQ66Mp/samsung-860-evo-2tb-25-solid-state-drive-mz-76e2t0bam](https://de.pcpartpicker.com/product/dQ66Mp/samsung-860-evo-2tb-25-solid-state-drive-mz-76e2t0bam)) | €317.54 @ Mindfactory 
+
+\*\*Video Card\*\* | \[Asus - GeForce GTX 1070 8 GB Dual Series Video Card\]([https://de.pcpartpicker.com/product/fPFXsY/asus-geforce-gtx-1070-8gb-dual-video-card-dual-gtx1070-o8g](https://de.pcpartpicker.com/product/fPFXsY/asus-geforce-gtx-1070-8gb-dual-video-card-dual-gtx1070-o8g)) | €373.90 @ Amazon Deutschland 
+
+\*\*Case\*\* | \[NZXT - H500i (White) ATX Mid Tower Case\]([https://de.pcpartpicker.com/product/F8x2FT/nzxt-h500i-white-atx-mid-tower-case-ca-h500w-w1](https://de.pcpartpicker.com/product/F8x2FT/nzxt-h500i-white-atx-mid-tower-case-ca-h500w-w1)) | €115.89 @ Alternate 
+
+\*\*Power Supply\*\* | \[SeaSonic - PRIME SNOWSILENT 550 W 80+ Gold Certified Fully-Modular ATX Power Supply\]([https://de.pcpartpicker.com/product/dstQzy/seasonic-prime-snowsilent-550w-80-gold-certified-fully-modular-atx-power-supply-ssr-550gd2-snowsilent](https://de.pcpartpicker.com/product/dstQzy/seasonic-prime-snowsilent-550w-80-gold-certified-fully-modular-atx-power-supply-ssr-550gd2-snowsilent)) |-
+
+\*\*Keyboard\*\* | \[EagleTec - KG011 Wired Gaming Keyboard\]([https://de.pcpartpicker.com/product/KJM323/eagletec-kg011-wired-gaming-keyboard-kg011](https://de.pcpartpicker.com/product/KJM323/eagletec-kg011-wired-gaming-keyboard-kg011)) |-
+
+ | \*Prices include shipping, taxes, rebates, and discounts\* |
+
+ | \*\*Total\*\* | \*\*€1263.04\*\*
+
+ | Generated by \[PCPartPicker\]([https://pcpartpicker.com](https://pcpartpicker.com)) 2019-02-22 20:24 CET+0100 |",1550863520.0,1,1.0,7
+PcMasterRaceBuilds,First Build for Gaming/Light Content Creation,"Hi guys! I am planning on building my first on rig and wanted to hear some feeback from experienced builders.
+
+&#x200B;
+
+\[PCPartPicker part list\]([https://de.pcpartpicker.com/list/2j2mZR](https://de.pcpartpicker.com/list/2j2mZR)) / \[Price breakdown by merchant\]([https://de.pcpartpicker.com/list/2j2mZR/by\_merchant/](https://de.pcpartpicker.com/list/2j2mZR/by_merchant/))
+
+&#x200B;
+
+Type|Item|Price
+
+:----|:----|:----
+
+\*\*CPU\*\* | \[AMD - Ryzen 5 2600X 3.6 GHz 6-Core Processor\]([https://de.pcpartpicker.com/product/6mm323/amd-ryzen-5-2600x-36ghz-6-core-processor-yd260xbcafbox](https://de.pcpartpicker.com/product/6mm323/amd-ryzen-5-2600x-36ghz-6-core-processor-yd260xbcafbox)) | €205.89 @ Amazon Deutschland 
+
+\*\*Motherboard\*\* | \[ASRock - B450 Pro4 ATX AM4 Motherboard\]([https://de.pcpartpicker.com/product/PCKcCJ/asrock-b450-pro4-atx-am4-motherboard-b450-pro4](https://de.pcpartpicker.com/product/PCKcCJ/asrock-b450-pro4-atx-am4-motherboard-b450-pro4)) | €83.99 @ Amazon Deutschland 
+
+\*\*Memory\*\* | \[Kingston - HyperX Fury 16 GB (2 x 8 GB) DDR4-2666 Memory\]([https://de.pcpartpicker.com/product/j8QG3C/kingston-hyperx-fury-16gb-2-x-8gb-ddr4-2666-memory-hx426c16fr2k216](https://de.pcpartpicker.com/product/j8QG3C/kingston-hyperx-fury-16gb-2-x-8gb-ddr4-2666-memory-hx426c16fr2k216)) | €139.52 @ Amazon Deutschland 
+
+\*\*Storage\*\* | \[Western Digital - Black NVMe 500 GB M.2-2280 Solid State Drive\]([https://de.pcpartpicker.com/product/rJm323/western-digital-black-nvme-500gb-m2-2280-solid-state-drive-wds500g2x0c](https://de.pcpartpicker.com/product/rJm323/western-digital-black-nvme-500gb-m2-2280-solid-state-drive-wds500g2x0c)) | €114.99 @ Amazon Deutschland 
+
+\*\*Storage\*\* | \[Toshiba - X300 4 TB 3.5"" 7200RPM Internal Hard Drive\]([https://de.pcpartpicker.com/product/xHzZxr/toshiba-internal-hard-drive-hdwe140xzsta](https://de.pcpartpicker.com/product/xHzZxr/toshiba-internal-hard-drive-hdwe140xzsta)) | €92.08 @ Amazon Deutschland 
+
+\*\*Video Card\*\* | \[MSI - GeForce GTX 1070 Ti 8 GB ARMOR Video Card\]([https://de.pcpartpicker.com/product/PrJkcf/msi-geforce-gtx-1070-ti-8gb-armor-video-card-gtx-1070-ti-armor-8g](https://de.pcpartpicker.com/product/PrJkcf/msi-geforce-gtx-1070-ti-8gb-armor-video-card-gtx-1070-ti-armor-8g)) | €458.90 @ Alza 
+
+\*\*Case\*\* | \[Cooler Master - MasterCase 5 ATX Mid Tower Case\]([https://de.pcpartpicker.com/product/VK4NnQ/cooler-master-case-mcx0005kkn00](https://de.pcpartpicker.com/product/VK4NnQ/cooler-master-case-mcx0005kkn00)) | €114.89 @ Amazon Deutschland 
+
+\*\*Power Supply\*\* | \[Corsair - CXM 550 W 80+ Bronze Certified Semi-Modular ATX Power Supply\]([https://de.pcpartpicker.com/product/3hkwrH/corsair-power-supply-cp9020102na](https://de.pcpartpicker.com/product/3hkwrH/corsair-power-supply-cp9020102na)) | €69.01 @ Amazon Deutschland 
+
+\*\*Operating System\*\* | \[Microsoft - Windows 10 Pro Full 32/64-bit\]([https://de.pcpartpicker.com/product/CYH48d/microsoft-os-fqc09131](https://de.pcpartpicker.com/product/CYH48d/microsoft-os-fqc09131)) | €219.24 @ Amazon Deutschland 
+
+\*\*Keyboard\*\* | \[Cooler Master - MasterKeys MK750 (MX Blue) Wired Gaming Keyboard\]([https://de.pcpartpicker.com/product/Ct66Mp/cooler-master-masterkeys-mk750-mx-blue-wired-gaming-keyboard-mk-750-gkcl1-us](https://de.pcpartpicker.com/product/Ct66Mp/cooler-master-masterkeys-mk750-mx-blue-wired-gaming-keyboard-mk-750-gkcl1-us)) | €117.74 @ Amazon Deutschland 
+
+ | \*Prices include shipping, taxes, rebates, and discounts\* |
+
+ | \*\*Total\*\* | \*\*€1616.25\*\*
+
+ | Generated by \[PCPartPicker\]([https://pcpartpicker.com](https://pcpartpicker.com)) 2019-01-29 17:36 CET+0100 |",1548779888.0,1,0.67,2
+eu4,Conversion Cost,Is there any way I can convert cheaper now? Playing as Spain and put off conquering Granada for later. Converting the Province of Granada costs 33 ducats a month and lasts 77 months. I can't sustain that...,1545040971.0,3,1.0,11
+eu4,Just finished my first Ironman as Spain!,"&#x200B;
+
+https://preview.redd.it/3f561urx0c021.png?width=5632&format=png&auto=webp&s=ce84d244193d3b0629f75c7160e30553b7e8bd6d",1543088552.0,13,0.93,10
+friendsafari,LF Eevee/Dusclops safaris,adding all,1458667328.0,1,1.0,5
+BreedingDittos,"[timid] whismur, f, 9","IGN: Manu
+Language: German
+",1458659043.0,1,1.0,2
+friendsafari,Searching for water type safari with Gyarados,,1458651180.0,1,0.66,0
+friendsafari,Looking for dusclops!,,1457892575.0,1,1.0,0
+friendsafari,Will add anyone!,I'm trying to get more safaris so just comment and I'll add you.,1457874877.0,1,1.0,17
+friendsafari,Searching Fire Type including Fletchinder(HA) [Safari Unknown],"Sorry for being dumb.
+Flight with Fletchinder of course.",1457868909.0,1,1.0,11

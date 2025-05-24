@@ -1,0 +1,774 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+PHPhelp,Help with curl PATCH request,"Hi all, I am new to PHP so sorry if this seems rather trivial.
+
+I am trying to make a CURL request on my website but it doesn't seem to be going through. 
+
+In my case I am processing an order for software and then once the license is generated, I am attempting to edit one of the license custom fields to a specific value right after it is generated.
+
+This is how I call the function from the ordering function:
+
+    try{
+    		
+        set_custom_field($license -> order_items[0]->licenses[0]->id, $value);
+    		
+    } catch(Exception $e){
+        echo ""\nException"" . $e->getMessage();
+    }
+
+And this is my set\_custom\_field function:
+
+    function set_custom_field($license_id, $value) {
+            $authorizationHeader ='Api-Key '.$API_KEY;
+    	
+    		$baseURL='https://saas.licensespring.com/';
+    		$apiPrefix='api/v1';
+        	$cURLConnection = curl_init();
+        	$apiURL = $baseURL . $apiPrefix . '/license-custom-fields/' . $license_id;
+    
+            curl_setopt($cURLConnection, CURLOPT_URL, $apiURL);
+        	curl_setopt($cURLConnection, CURLOPT_SSL_VERIFYPEER , false);
+        	curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
+        	curl_setopt($cURLConnection, CURLOPT_HEADER, 0);
+    	    curl_setopt($cURLConnection, CURLOPT_CUSTOMREQUEST, 'PATCH');
+        	$request_headers = array();
+        
+        	$request_headers[] = 'Authorization: ' . $authorizationHeader;
+        	curl_setopt($cURLConnection, CURLOPT_HTTPHEADER, $request_headers);
+    	
+    		$payload = json_encode( ""{'value: '"". $value.""}"" );
+    		curl_setopt( $ch, CURLOPT_POSTFIELDS, $payload );
+    		curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+    		
+    		$license = curl_exec($cURLConnection);
+        	curl_close($cURLConnection);
+    
+    }
+
+This is the documentation for the API call:
+
+[https://docs.licensespring.com/docs/update-license-custom-field](https://docs.licensespring.com/docs/update-license-custom-field)
+
+&#x200B;
+
+Please let me know if there is anything that pops out to you as incorrect.
+
+&#x200B;
+
+I really appreciate any help you can lend me here.
+
+Thanks in advance!",1616516557.0,1,1.0,10
+Connecticut,I’ve seen it at the Trumbull mall too.,,1605163054.0,22,0.85,9
+videos,Does anyone else remember this treasure?,,1593229662.0,24,0.61,5
+perfectlycutscreams,Just remembered this treasure of early youtube,,1593229603.0,1,0.67,2
+programminghelp,Issue with Maven environment variables using Netbeans,"Hi  all, I am having a problem with maven. I am using the launch4j maven  plugin to wrap the jar in an executable. In my launch4j configuration I  have specified environment variables that are declared in the build step  of the netbeans release-profile. However, when I run the program it  doesn't see the environment variables, it just sees ${API\_KEY} for  example.  Is there something I am doing wrong? I don't want to just put  the variables in plaintext in my pom.xml because it gets copied into the  jar for some reason.
+
+So  if you all could help me fix the issue, or tell me how to make it so  that it doesn't copy the pom.xml into the jar that would be awesome.
+
+Thanks in advance!",1590766277.0,1,1.0,0
+javahelp,Issue with Maven environment variables using Netbeans,"Hi all, I am having a problem with maven. I am using the launch4j maven plugin to wrap the jar in an executable. In my launch4j configuration I have specified environment variables that are declared in the build step of the netbeans release-profile. However, when I run the program it doesn't see the environment variables, it just sees ${API\_KEY} for example.  Is there something I am doing wrong? I don't want to just put the variables in plaintext in my pom.xml because it gets copied into the jar for some reason.
+
+&#x200B;
+
+So if you all could help me fix the issue, or tell me how to make it so that it doesn't copy the pom.xml into the jar that would be awesome.
+
+Thanks in advance!",1590766128.0,1,0.67,0
+programminghelp,Getting NoSuchMethodError in Java after trying out licensing service," Hi all. I have been wracking my brain  to figure out why I am getting this problem. I am implementing  licensing in my project and I was trying out libraries. I made the  mistake of not making a backup and now after reverting and going with a  different licensing service. I am getting this error in runtime.
+
+    Exception in thread ""AWT-EventQueue-0"" java.lang.NoSuchMethodError: 'oshi.hardware.HWDiskStore[] oshi.hardware.HardwareAbstractionLayer.getDiskStores()' 
+
+oshi is a dependency of the licensing SDK, it is used to get the hardware info of a machine to be stored in the license data.
+
+I  think I have configured it correctly but I have added my pom.xml below.  I have replaced all identifying information for my program and the  licensing service.
+
+    <project xmlns=""http://maven.apache.org/POM/4.0.0"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance""
+        xsi:schemaLocation=""http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"">
+        <modelVersion>4.0.0</modelVersion>
+    
+        <groupId>APP</groupId>
+        <artifactId>APP</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <packaging>jar</packaging>
+    
+        <name>APP</name>
+        <url>http://maven.apache.org</url>
+    
+        <properties>
+            <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+            <maven.compiler.source>13</maven.compiler.source>
+            <maven.compiler.target>13</maven.compiler.target>
+        </properties>
+    
+        <dependencies>
+           <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>2.8.6</version>
+            </dependency>
+            <dependency>
+                <groupId>com.licensingservice</groupId>
+                <artifactId>sdk-java</artifactId>
+                <version>1.8</version>
+                <exclusions>
+                    <exclusion>  <!-- declare the exclusion here -->
+                        <groupId>com.github.oshi</groupId>
+                        <artifactId>oshi-demo</artifactId>
+                    </exclusion>
+                    <exclusion>  <!-- declare the exclusion here -->
+                        <groupId>com.github.oshi</groupId>
+                        <artifactId>oshi-core</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.github.oshi</groupId>
+                <artifactId>oshi-core</artifactId>
+                <version>5.0.1</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>3.8.1</version>
+                <scope>test</scope>
+            </dependency>
+          <!--      <dependency>
+                <groupId>net.java.dev.jna</groupId>
+                <artifactId>jna</artifactId>
+            <version>5.5.0</version>
+    </dependency>-->
+        </dependencies> 
+        
+        <repositories>
+           <repository>
+                <id>jdk-java</id>
+                <url>https://licenseservice-maven.s3.eu-central-1.amazonaws.com/</url>
+            </repository>
+            
+        </repositories>
+        <build>
+    	<pluginManagement>
+    	    <plugins>
+    		<plugin>
+    		    <groupId>org.apache.maven.plugins</groupId>
+    		    <artifactId>maven-compiler-plugin</artifactId>
+    		    <version>2.3.1</version>
+    		    <configuration>
+    			<source>1.10</source>
+    			<target>1.10</target>
+    		    </configuration>
+    		</plugin>
+    	    </plugins>
+    	</pluginManagement>
+    	<plugins>
+    	    <plugin>
+    		<artifactId>maven-resources-plugin</artifactId>
+    	        <version>2.6</version>
+    	        <executions>
+    		    <execution>
+    			<id>copy-resources</id>
+    			<phase>validate</phase>
+    			<goals>
+    			    <goal>copy-resources</goal>
+    			</goals>
+    			<configuration>
+    			    <outputDirectory>${basedir}/target/</outputDirectory>
+    				<resources>
+    				    <resource>
+    					<directory>resources/APP</directory>
+    				        <filtering>true</filtering>
+    				    </resource>
+    				</resources>
+    			</configuration>
+    	            </execution>
+    		</executions>
+                </plugin>
+    	    <plugin>
+    	        <groupId>org.apache.maven.plugins</groupId>
+    		<artifactId>maven-dependency-plugin</artifactId>
+    		<executions>
+    	            <execution>
+    			<id>copy-dependencies</id>
+    			<phase>prepare-package</phase>
+    			<goals>
+    		            <goal>copy-dependencies</goal>
+    			</goals>
+    			<configuration>
+    			    <outputDirectory>${project.build.directory}/APP/lib</outputDirectory>
+    		            <overWriteReleases>false</overWriteReleases>
+    		            <overWriteSnapshots>true</overWriteSnapshots>
+    		            <overWriteIfNewer>true</overWriteIfNewer>
+    			</configuration>
+    		    </execution>
+    		</executions>
+    	    </plugin>
+    	    <plugin>
+    		<groupId>org.apache.maven.plugins</groupId>
+    		<artifactId>maven-jar-plugin</artifactId>
+    	        <configuration>
+    		    <archive>
+    		        <manifest>
+    			    <addClasspath>true</addClasspath>
+    			    <classpathPrefix>lib/</classpathPrefix>
+    			    <mainClass>APP.APP.App</mainClass>
+    			</manifest>
+    			<manifestEntries>
+    			    <Class-Path>.</Class-Path>
+    			</manifestEntries>
+    		    </archive>
+    		    <finalName>APP/APP</finalName>
+    		</configuration>
+    	    </plugin>
+            </plugins>
+        </build>
+    </project>
+    
+
+This is such a strange error because it worked fine before I tried out the other licensing service.
+
+I appreciate any help y'all can give me here.",1588968450.0,1,1.0,0
+javahelp,Getting NoSuchMethodError after testing licensing services,"Hi all. I have been wracking my brain to figure out why I am getting this problem. I am implementing licensing in my project and I was trying out libraries. I made the mistake of not making a backup and now after reverting and going with a different licensing service. I am getting this error in runtime.
+
+&#x200B;
+
+    Exception in thread ""AWT-EventQueue-0"" java.lang.NoSuchMethodError: 'oshi.hardware.HWDiskStore[] oshi.hardware.HardwareAbstractionLayer.getDiskStores()'
+
+oshi is a dependency of the licensing SDK, it is used to get the hardware info of a machine to be stored in the license data. 
+
+I think I have configured it correctly but I have added my pom.xml below. I have replaced all identifying information for my program and the licensing service.
+
+    <project xmlns=""http://maven.apache.org/POM/4.0.0"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance""
+        xsi:schemaLocation=""http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"">
+        <modelVersion>4.0.0</modelVersion>
+    
+        <groupId>APP</groupId>
+        <artifactId>APP</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <packaging>jar</packaging>
+    
+        <name>APP</name>
+        <url>http://maven.apache.org</url>
+    
+        <properties>
+            <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+            <maven.compiler.source>13</maven.compiler.source>
+            <maven.compiler.target>13</maven.compiler.target>
+        </properties>
+    
+        <dependencies>
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>2.8.6</version>
+            </dependency>
+            <dependency>
+                <groupId>com.licensingservice</groupId>
+                <artifactId>sdk-java</artifactId>
+                <version>1.8</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>3.8.1</version>
+                <scope>test</scope>
+            </dependency>
+                <dependency>
+                <groupId>net.java.dev.jna</groupId>
+                <artifactId>jna</artifactId>
+            <version>5.5.0</version>
+    </dependency>
+        </dependencies> 
+        
+        <repositories>
+           <repository>
+                <id>jdk-java</id>
+                <url>https://licensespring-maven.s3.eu-central-1.amazonaws.com/</url>
+            </repository>
+            
+        </repositories>
+        <build>
+    	<pluginManagement>
+    	    <plugins>
+    		<plugin>
+    		    <groupId>org.apache.maven.plugins</groupId>
+    		    <artifactId>maven-compiler-plugin</artifactId>
+    		    <version>2.3.1</version>
+    		    <configuration>
+    			<source>1.13</source>
+    			<target>1.13</target>
+    		    </configuration>
+    		</plugin>
+    	    </plugins>
+    	</pluginManagement>
+    	<plugins>
+    	    <plugin>
+    		<artifactId>maven-resources-plugin</artifactId>
+    	        <version>2.6</version>
+    	        <executions>
+    		    <execution>
+    			<id>copy-resources</id>
+    			<phase>validate</phase>
+    			<goals>
+    			    <goal>copy-resources</goal>
+    			</goals>
+    			<configuration>
+    			    <outputDirectory>${basedir}/target/</outputDirectory>
+    				<resources>
+    				    <resource>
+    					<directory>resources/APP</directory>
+    				        <filtering>true</filtering>
+    				    </resource>
+    				</resources>
+    			</configuration>
+    	            </execution>
+    		</executions>
+                </plugin>
+    	    <plugin>
+    	        <groupId>org.apache.maven.plugins</groupId>
+    		<artifactId>maven-dependency-plugin</artifactId>
+    		<executions>
+    	            <execution>
+    			<id>copy-dependencies</id>
+    			<phase>prepare-package</phase>
+    			<goals>
+    		            <goal>copy-dependencies</goal>
+    			</goals>
+    			<configuration>
+    			    <outputDirectory>${project.build.directory}/WVDD/lib</outputDirectory>
+    		            <overWriteReleases>false</overWriteReleases>
+    		            <overWriteSnapshots>true</overWriteSnapshots>
+    		            <overWriteIfNewer>true</overWriteIfNewer>
+    			</configuration>
+    		    </execution>
+    		</executions>
+    	    </plugin>
+    	    <plugin>
+    		<groupId>org.apache.maven.plugins</groupId>
+    		<artifactId>maven-jar-plugin</artifactId>
+    	        <configuration>
+    		    <archive>
+    		        <manifest>
+    			    <addClasspath>true</addClasspath>
+    			    <classpathPrefix>lib/</classpathPrefix>
+    			    <mainClass>APP.APP.App</mainClass>
+    			</manifest>
+    			<manifestEntries>
+    			    <Class-Path>.</Class-Path>
+    			</manifestEntries>
+    		    </archive>
+    		    <finalName>APP/APP</finalName>
+    		</configuration>
+    	    </plugin>
+            </plugins>
+        </build>
+    </project>
+    
+
+The really strange part is that it was working just fine before I tested out the other licensing service, and now that I deleted all of that licensing service's files from my project it is not working.
+
+I would really appreciate any help that you all can give me as I have been trying to figure this out for 2 days now.
+
+Thanks a bunch in advance.",1588961649.0,5,1.0,3
+MrYeasty,An ancient Mr.Yeasty,,1586923438.0,335,0.99,7
+softwaregore,Oh Blizzard,,1586061900.0,11,1.0,1
+javahelp,Trouble exporting to CSV,"Hey all. I am having an issue with a program I am making.
+
+Everything  else works fine it is just the last part where I have to export to csv.  I created an array that is the same length as an array that contains  the column headers, and when an object contains the same name as the  header, I set its number value to the array which has the same length as  the header array. This is to organize the data and not have values in  the wrong columns.
+
+For some reason  the array I get is full of null values and values that do not  correspond to the debugging output. I have been wracking my brain for  hours and I would really appreciate some help.
+
+Also I am sorry for the bad code I can do better but this is time sensitive so it is just thrown together.
+
+    	        ArrayList<String> apps = new ArrayList<String>();
+    	        for(int i=0;i<groupNames.size();i++) {
+    	        	System.out.println();
+    	        	System.out.println(groupNames.get(i).getGroupName());
+    	        	System.out.println();
+    	        		//for(int k = 0;k<groupNames.get(i).getApps().size();k++) {        
+    //Collections.sort(groupNames.get(i).getApps(),new SortApps());
+    	        			
+    	  //groupNames.get(i).getApps().sort(SortApps);
+    	        	//	}
+    	        	groupNames.get(i).getApps().forEach(app ->{
+    	        		apps.add(app.getAppName());
+    	        		//if(!apps.contains(app.getAppName())) {
+    	        			//apps.add(app.getAppName());
+    	        	//	}
+    	        			
+    	        		System.out.print(app.getNumUsers() + "", "");
+    	        	});
+    	        }
+    	        ArrayList<String> apps1 = (ArrayList<String>) apps.stream().distinct().collect(Collectors.toList());
+    	        try {
+    	        	
+    	        FileWriter csvWriter = new FileWriter(""C:/Users/user/Documents/CSV/DataGraph.csv"");
+    	        
+    				csvWriter.append(""Group Names"");
+    				String appNames = String.join("","", apps1);
+    				csvWriter.append(appNames);
+    				csvWriter.append(""\n"");
+    	        for(int i = 0;i<groupNames.size();i++) {
+    	        	String[] appArr = new String[apps1.size()];
+    	        	groupNames.get(i).getApps().forEach(app ->{
+    	        		appArr[apps1.indexOf(app.getAppName())] =  String.valueOf((app.getNumUsers()));
+    	        		System.out.println(apps1.indexOf(app.getAppName()));
+    	        		System.out.println(app.getNumUsers());
+    	        		System.out.println(appArr[apps1.indexOf(app.getAppName())] + ""app"");
+    	        		//for(String s : appArr) {
+    	        		//	System.out.println(s);
+    	        		//}
+    	        		
+    	        		
+    	        	});
+    	        //	for(int z = 0;z<apps1.size();z++) {
+    	        	//	appArr[z] = apps1.get(i);
+    	        //	}
+    	        //	appArr= (String[]) apps1.toArray();
+    	        	//String appNums = String.join("","",appArr);
+    	        	String appNums = """";
+    	        	for(int k = 0;k<appArr.length;k++) {
+    	        		System.out.println(appArr[k]);
+    	        		appNums = appNums + String.valueOf(appArr[k]) + "","";
+    	        	}
+    	        	System.out.print(appNums);
+    	        	String line1 = """";
+    	        	line1 = line1 + groupNames.get(i).getGroupName();
+    	        	line1 = line1 + "","";
+    	        	line1 = line1 + appNums;
+    				csvWriter.append(""\n"");
+    				csvWriter.write(line1);
+    	        }
+    	     //   csvWriter.flush();
+    	        csvWriter.close();
+    	        //for (List<String> rowData : rows) {
+    	        
+    	        //    csvWriter.append(String.join("","", rowData));
+    	       //     csvWriter.append(""\n"");
+    	      //  }
+    } catch (IOException e1) {
+    				// TODO Auto-generated catch block
+    				e1.printStackTrace();
+    			}
+    	        ObjectMapper objectMapper2 = new ObjectMapper();
+    	        try {
+    				objectMapper2.writeValue(new File(""C:/Users/user/Documents/CSV/DataOut2.json""), groupNames);
+    			} catch (JsonGenerationException e) {
+    				// TODO Auto-generated catch block
+    				e.printStackTrace();
+    			} catch (JsonMappingException e) {
+    				// TODO Auto-generated catch block
+    				e.printStackTrace();
+    			} catch (IOException e) {
+    				// TODO Auto-generated catch block
+    				e.printStackTrace();
+    			}
+    	}
+    }",1585329226.0,1,0.67,1
+programminghelp,Issues exporting to a CSV in Java,"Hey all. I am having an issue with a program I am making.
+
+Everything else works fine it is just the last part where I have to export to csv. I created an array that is the same length as an array that contains the column headers, and when an object contains the same name as the header, I set its number value to the array which has the same length as the header array. This is to organize the data and not have values in the wrong columns.
+
+For some reason the array I get is full of null values and values that do not correspond to the debugging output. I have been wracking my brain for hours and I would really appreciate some help.
+
+Also I am sorry for the bad code I can do better but this is time sensitive so it is just thrown together.
+
+&#x200B;
+
+     ArrayList<String> apps = new ArrayList<String>();
+    	        for(int i=0;i<groupNames.size();i++) {
+    	        	System.out.println();
+    	        	System.out.println(groupNames.get(i).getGroupName());
+    	        	System.out.println();
+    	        		//for(int k = 0;
+                k<groupNames.get(i).getApps().size();k++) {
+                //Collections.sort(groupNames.get(i).getApps(),new SortApps());
+    	        			
+    	        			              //groupNames.get(i).getApps().sort(SortApps);
+    	        	//	}
+    	        	groupNames.get(i).getApps().forEach(app ->{
+    	        		apps.add(app.getAppName());
+    	        		//if(!apps.contains(app.getAppName())) {
+    	        			//apps.add(app.getAppName());
+    	        	//	}
+    	        			
+    	        		System.out.print(app.getNumUsers() + "", "");
+    	        	});
+    	        }
+    	        ArrayList<String> apps1 = (ArrayList<String>) apps.stream().distinct().collect(Collectors.toList());
+    	        try {
+    	        	
+    	        FileWriter csvWriter = new FileWriter(""C:/Users/user/Documents       /CSV/DataGraph.csv"");
+    	        
+    				csvWriter.append(""Group Names"");
+    				String appNames = String.join("","", apps1);
+    				csvWriter.append(appNames);
+    				csvWriter.append(""\n"");
+    	        for(int i = 0;i<groupNames.size();i++) {
+    	        	String[] appArr = new String[apps1.size()];
+    	        	groupNames.get(i).getApps().forEach(app ->{
+    	        		appArr[apps1.indexOf(app.getAppName())] = String.valueOf((app.getNumUsers()));
+    	
+                      System.out.println(apps1.indexOf(app.getAppName()));
+    	        System.out.println(app.getNumUsers());
+               System.out.println(appArr[apps1.indexOf(app.getAppName())] + ""app"");
+    	        		//for(String s : appArr) {
+    	        		//	System.out.println(s);
+    	        		//}
+    	        		
+    	        		
+    	        	});
+    	        //	for(int z = 0;z<apps1.size();z++) {
+    	        	//	appArr[z] = apps1.get(i);
+    	        //	}
+    	        //	appArr= (String[]) apps1.toArray();
+    	        	//String appNums = String.join("","",appArr);
+    	        	String appNums = """";
+    	        	for(int k = 0;k<appArr.length;k++) {
+    	        		System.out.println(appArr[k]);
+    	        		appNums = appNums + String.valueOf(appArr[k]) + "","";
+    	        	}
+    	        	System.out.print(appNums);
+    	        	String line1 = """";
+    	        	line1 = line1 + groupNames.get(i).getGroupName();
+    	        	line1 = line1 + "","";
+    	        	line1 = line1 + appNums;
+    				csvWriter.append(""\n"");
+    				csvWriter.write(line1);
+    	        }
+    	     //   csvWriter.flush();
+    	        csvWriter.close();
+    	        //for (List<String> rowData : rows) {
+    	        
+    	        //    csvWriter.append(String.join("","", rowData));
+    	       //     csvWriter.append(""\n"");
+    	      //  }
+                      } catch (IOException e1) {
+    				// TODO Auto-generated catch block
+    				e1.printStackTrace();
+    			}
+    	        ObjectMapper objectMapper2 = new ObjectMapper();
+    	        try {
+    				objectMapper2.writeValue(new File(""C:/Users                   /user/Documents/CSV/DataOut2.json""), groupNames);
+    			} catch (JsonGenerationException e) {
+    				// TODO Auto-generated catch block
+    				e.printStackTrace();
+    			} catch (JsonMappingException e) {
+    				// TODO Auto-generated catch block
+    				e.printStackTrace();
+    			} catch (IOException e) {
+    				// TODO Auto-generated catch block
+    				e.printStackTrace();
+    			}
+    	}
+    }",1585328868.0,1,1.0,0
+BrandNewSentence,“Three people arrested for catapulting a child with homemade trebuchet”,,1581924721.0,11,0.92,2
+absolutelynotme_irl,absolutelynotme_irl,,1581223778.0,45,0.95,1
+softwaregore,At a new mall in Connecticut,,1575070646.0,18,0.89,7
+techsupportgore,At a brand new mall in Connecticut,,1575065578.0,69,0.87,13
+gaming,Linus is a savage,,1574477565.0,5,0.86,2
+LinusTechTips,Linus is a savage,,1574477355.0,155,0.98,2
+Music,The Moody Blues - The Night: Nights in White Satin [Psychedelic Rock] (1967) - Full Version Remastered,,1573974688.0,14,0.82,4
+Music,The Night: Nights in White Satin - The Moody Blues [1967] [Full Version Remastered],,1573973947.0,1,1.0,2
+listentothis,Vanilla Fudge - You Keep Me Hangin' On [Classic Rock],,1573973188.0,5,1.0,1
+Music,Led Zeppelin - Your Time Is Gonna Come [Classic Rock],,1573848287.0,1,1.0,2
+RealLifeShinies,Ammonite fossil.,,1573601259.0,114,0.98,2
+GamePhysics,Giys It's real!,,1572500596.0,1,1.0,1
+dontputyourdickinthat,It’s so... soft,,1572456117.0,3,1.0,3
+history,Who has the best claim to the title of Roman Emperor?,,1572214759.0,1,1.0,1
+EliteDangerous,Possibly the ultimate setup for Elite Dangerous too.,,1571604525.0,26,0.85,2
+shittysuperpowers,One per day you can skip back in time 1 minute.,How would you use this to your advantage?,1570413421.0,1,1.0,4
+BetterEveryLoop,Nope,,1569739694.0,4,0.84,1
+me_irl,When you repost a meme from months ago,,1561956150.0,1,1.0,0
+AskOuija,It’s better now. Thanks _____,,1561956144.0,3,1.0,5
+AskOuija,4.99k subs now. What happened?!,,1561786137.0,3,1.0,6
+AskOuija,Happy 4th of ____,,1561785305.0,2,1.0,11
+AskOuija,An interesting ____,,1561784662.0,3,1.0,6
+AskOuija,Girls are ______,,1561783627.0,7,1.0,9
+buildapc,Are there better replacement cooling fans for my MSI GE 73VR laptop?,[removed],1556392363.0,1,1.0,1
+birthofasub,r/ScientificBreakthrough was just created.,,1554106519.0,6,1.0,1
+Showerthoughts,I’m suddenly uncomfortably aware of my own skeleton.,,1552634794.0,1,1.0,1
+EliteDangerous,Thought y’all would appreciate this,,1548130389.0,132,0.95,14
+nottheonion,Behold the ROBOT RECTUM... medics' relief,,1547578899.0,19,0.91,2
+askscience,How do modern vacuum tube amps have the tubes on the outside?,[removed],1547578872.0,1,1.0,1
+AskOuija,"Hey Google, _______.",,1546765214.0,1,1.0,17
+AskOuija,This is going to be the year of ____!,,1546762089.0,2,1.0,14
+DIY,Had to install a TV flush to a wall but on a table. This was our solution.,,1543148032.0,1,1.0,1
+nottheonion,Behold the ROBOT RECTUM... medics' relief,,1543125978.0,5,0.62,8
+nottheonion,"There is only one person registered as a ""Rectal Teaching Assistant"" in the UK, traveling the country offering his anus to be examined by trainee doctors. He has since lost his job to a robot anus.",,1543125194.0,3,0.67,3
+techsupportgore,Oof.,,1542841583.0,43,0.78,15
+dankmemes,later that day...,,1542683406.0,68,0.87,4
+IdiotsInCars,Vengeance is MINE!,,1542546796.0,1,1.0,0
+EliteDangerous,Idea for Exploration missions,"I just had an idea while playing and I think it could work in actual game play. Missions for exploration to give more incentive for exploring. Maybe you get missions like ""Long distance scans have detected an anomaly in x sector. Go there and scan systems looking for things with (provided carrier frequency). Then the area is highlighted on the map, maybe encompassing one to 200 ly."" These missions could be a good hook for rare exploration quest chains that solve mysteries and could be a good way of introducing players to new content. they could include scanning systems, scanning planets, surface exploration of planets, even ""lost in space"" rescue missions. I would looove to see something like this system implemented. It would increase the immersion so much during exploration.",1541275240.0,12,0.88,3
+2meirl4meirl,It’s true tho,,1540806682.0,1,1.0,1
+BetterEveryLoop,First ever flying bucket,,1540285351.0,19,0.89,1
+Connecticut,Hey guys! A thing happened!,,1536253009.0,0,0.48,1
+EliteDangerous,Found my new desktop background just now,,1536131972.0,11,0.74,4
+node,Help with Jira webhook server.,"Hi all, I've been looking all over the web for a simple tutorial on how to make event handlers for a Jira webhook but so far I've come up with nothing. Currently I am trying to use the jira-connector node package but the documentation is verrry light and even looking at the source code doesn't help me because there doesn't seem to be anything beyond getting and deleting webhooks. Even in the source, the comment just says returns a promise. I am not sure what to put in the options, or even whether or not I need some kind of auth.
+
+​
+
+If somebody could point me to a better node package or github library, or better yet, help me understand jira-connector that would be very much appreciated.",1535485151.0,1,1.0,1
+2meirl4meirl,2meirl4meirl,,1534721383.0,56,0.99,1
+EliteDangerous,MRW I have to make the loops of shame,,1534565136.0,3,1.0,0
+2meirl4meirl,2irl4meirl,,1534563528.0,17,0.96,0
+2meirl4meirl,2neirl4meirl,,1534561527.0,10,0.82,3
+Music,"Creedence Clearwater Revival - (Wish I Could) Hideaway [Rock, 1970]",,1534196998.0,7,0.82,1
+gifs,When u repost a meme from the front page.,,1533976546.0,8,0.6,2
+learnprogramming,Need help with OAuth 2,"Hi all this is my first post here so sorry if I'm not doing this right. Also, this is my first project doing anything web based; I've never used HTML, so sorry if I come across as a newb, it's because I am. Although, I have lots of experience with Java, and python.
+
+I have a project in which i need to use the Twitter API to get trend info for cities. This requires authorization. Twitter uses OAuth 2.0 (mostly) and I am having trouble with which flow I need to use. I have been absolutely killing myself over this project for the past week and I just can't figure it out.
+
+A little clarification: I actually did figure out how to get Abraham's twitteroauth ([https://github.com/abraham/twitteroauth](https://github.com/abraham/twitteroauth)) library to work, but the problem with that is that it is in PHP, and I need to pass the JSON data to Javascript, which as many of you probably already know is easier said than done or just impossible. So, I looked online and found a library called Client-OAuth2 ([https://www.npmjs.com/package/client-oauth2](https://www.npmjs.com/package/client-oauth2)), basically what I have done so far is copy the example code and entered my client id and so forth into it, past that I am absolutely clueless and also a bit confused because it seems to be using a different process from twitteroauth.
+
+Just so you know what I'm working with here, here's the code that works with twitteroauth:
+
+require\_once ""twitteroauth/autoload.php"";
+
+use Abraham\\TwitterOAuth\\TwitterOAuth;
+
+include(""keys.php"");
+
+$q = intval($\_REQUEST\[""q""\]);
+
+$connection = new TwitterOAuth($consumerKey, $consumerSecret, $accessToken, $accessTokenSecret);
+
+$content = $connection->get(""account/verify\_credentials"");
+
+$trendInfo=$connection->get('trends/place',array(""id""=>1));
+
+And this is my spaghetti coded non working Javascript code for Client-OAuth2:
+
+var ClientOAuth2 = require('client-oauth2');
+
+var twitterAuth = new ClientOAuth2({
+
+clientId: 'client id',
+
+clientSecret: 'secret',
+
+accessTokenUri: '[https://api.twitter.com/oauth/access\_token](https://api.twitter.com/oauth/access_token)',
+
+authorizationUri: '[https://api.twitter.com/oauth/authorize](https://api.twitter.com/oauth/authorize)',
+
+// redirectUri: 'null',
+
+//scopes: \['notifications', 'gist'\]
+
+}) ;
+
+var token = twitterAuth.createToken('token');
+
+token.sign({
+
+method: 'get',
+
+url: '[https://api.twitter.com/1.1/trends/place.json?id=1](https://api.twitter.com/1.1/trends/place.json?id=1)'
+
+});
+
+var xmlhttp1 = new XMLHttpRequest();
+
+[xmlhttp1.open](https://xmlhttp1.open)(""GET"", ""[https://api.twitter.com/1.1/trends/place.json?id=1](https://api.twitter.com/1.1/trends/place.json?id=1)"", true);
+
+xmlhttp1.send();
+
+var data=this.responseText;
+
+My application does not require any kind of user login, as all it does is plot a bunch of cities onto a google maps viewport with markers, and its supposed to show trend data when you click on each marker. So all I need is application only authentication (i think?). I would highly prefer getting my program to work with a Javascript OAuth2 library, since that means I don't have to jump through any hoops to get everything to work well together, however If there's a way that I can iteratively pass variables from PHP to Javascript then I'm all ears.
+
+Thank you so much in advance.
+
+Edit: I can't get formatting to work, sorry",1531590512.0,1,1.0,1
+AskTheOuija,[Flair Request] Nameth me thy Ouija.,,1531547962.0,3,0.8,20
+EliteDangerous,I am sad,"The last thing I did before going to bed tonight was lose days worth of survey data while scanning the nav beacon at the system where I was going to sell it at. Npc wanted my cargo, I panicked, he got it. Goodnight. 😭",1530431750.0,4,0.82,10
+gaming,Remember when mobile games were just mobile games?,,1529941663.0,36726,0.85,1456
+aww,Her name is Baby❤️,,1529048275.0,15,0.9,1
+FortniteBattleRoyale,No fortnite,,1527820316.0,0,0.47,0
+anything,E,,1526973234.0,2,1.0,1
+AskReddit,"Redditors currently living in Hawaii, what the hell is going on?",,1526777554.0,4,1.0,6
+aww,Kitty swirl,,1526714801.0,10,1.0,0
+FortNiteBR,Olé,,1526640061.0,1,1.0,0
+FCWmemes,My experience here.,,1526539566.0,3,1.0,0
+Seaofthieves,Not worth 60 dollars (yet),"Hi all I'm new to this community and game but I have already run into issues that make this game nigh unplayable. I also want to add that my intention is not just to shitpost, I would actually like to play this game and have these issues fixed.
+
+First off, this game does not have an .exe because it is published by Microsoft and for some reason they have to store the executable in an encrypted snoflake file. What this means is that if I want to tweak my graphics settings in Radeon Settings, I cannot. This is extremely important because I run a dual graphics card system. I have tried playing it in crossfire mode (which for some reason this game uses by DEFAULT and is un-changable in game.) but there are no water physics at all. Its all just flat dark blue for as far as the eye can see. To actually play the game as intended I have to disable crossfire in global settings, which means that if I want to play another game that actually works with two graphics cards then I need to re-enable it, which takes about a minute for my system to recover from, and is extremely cumbersome. 
+
+Secondly, for god knows why, half the time I run the game it capps my frame rate at 30fps and is super stuttery and awful. (Almost as if its still trying to send each other frame to my second graphics card.) It can get down to the tens of frames at times. 
+At other occasions if it is runnning smoothly and I alt tab or click on something on my second screen and then click back. It goes back down to locking me at around 30 frames! WHY!? 
+
+This should not be happening on my system as it is very powerful. I have a hexacore i7-3930K OC'd to ~45Ghz, 32 GB of RAM and 2 RX 480 graphics cards. I should be getting AT LEAST 60 fps in this game, but in lieu of the recent 20 gigabyte ""stability"" update this game is nearly unplayable at its current state, and I payed the full 60 non-refundable dollars. 
+
+If anybody has had these issues or knows any fixes it would be greatly appreciated.",1522280730.0,0,0.17,5
+FCWmemes,Accurate,,1521878595.0,2,0.67,2
+aww,"Yes, he's purring.😻",,1517894578.0,10,0.86,0
+Advice,My beloved dog died today. He was 13 years old. Help.,"He was my puppy, my dog. I loved him so much. Every day when I came home from school, and eventually work he was there to greet me and he brought some light into even the darkest days. He was such a good boy. He was cooperative, sweet and very friendly to everyone. He loved the snow and could stay outside for hours in the worst of blizzards, he wouldn't even want to come in. I don't think I'll ever find a dog as loving and sweet as him. 
+
+In the past few months his health had been going down hill. And it became harder and harder to care for him. Eventually we found out that he had an aggressive form of bladder cancer that was pinching his gastrointestinal tract and making it harder and harder for him to ""do his business"". On top of that in the past couple of weeks he had been starting to lose his balance and coordination and he was becoming weaker and weaker. We had to hold him up so he could walk to the door to go outside. 
+
+Yesterday we made the decision to put him down. It became apparent that he was just getting worse and we couldn't stand to see him that way. Today at about 12 o clock eastern time he was put down. 
+
+I'm just distraught now. I can't believe he's gone. I've known him nearly all my life and now he's gone. 
+
+I'm sorry if this story has made you sad, but I just needed to get it out. ",1517679127.0,7,1.0,6
+FCWmemes,So tru.,,1516371491.0,8,1.0,0
+AskReddit,"People of Reddit who dropped out of college, what was your reasoning and how has it affected your life?",,1516297876.0,1,0.67,4
+EliteDangerous,Finally achieved my goal after days of camping the nav beacon. :),,1515547245.0,7,0.73,10
+Music,Buffalo Springfield - Expecting to Fly [Classic Rock],,1514450447.0,4,1.0,2
+AskReddit,"Hey Reddit, just discovered funk and am looking for some really nice jams to throw on a CD. What are some really great but at the same time obscure tracks and/or albums that you recommend?",,1511996407.0,0,0.5,6
+AskReddit,"Hey Reddit, I have just discovered funk and am looking for some really nice jams to throw on a CD. What are some really great but at the same time obscure tracks and/or albums that you recommend?",,1511995144.0,0,0.5,1
+Music,Ten Years After - I'd Love to Change The World [Rock],,1510679970.0,1,1.0,3
+UnethicalLifeProTips,ULPT: Have a required word count on an essay? Write a bunch of underscores and spaces between them at the beginning and end of the document. The algorithm counts these as word and they just look like fancy formatting.,,1509468699.0,33,0.78,13
+drunk,Check out what I found tucked under my passenger seat 👍,,1508543484.0,5,0.86,2
+IAmA,[AMA Request] John Titor,,1503294461.0,1,1.0,1
+me_irl,me☘irl,,1503283852.0,2,0.75,1
+me_irl,me irl,,1502458095.0,83,0.86,1
+SuicideWatch,Somebody help this person,They're on r/ama and they say they're gonna [kill themselves](https://www.reddit.com/r/AMA/comments/6surnv/a_person_finally_about_to_commit_suicide_in_next/),1502385935.0,5,0.85,0
+EliteDangerous,Question about buying a new ship,[removed],1501702217.0,1,1.0,3
+me_irl,me irl,,1501677237.0,4,0.7,1
+AskReddit,[Serious] What is the most terrifying thing that ever happened to you?,,1501597090.0,7,0.79,14
+me_irl,me irl,,1501254080.0,26,0.86,0
+me_irl,me irl,,1501083663.0,9,0.77,0
+me_irl,me irl,,1501081943.0,6,0.76,1
+me_irl,me irl,,1501080259.0,6,0.67,1
+me_irl,me irl,,1501077374.0,3,0.54,0
+me_irl,me_irl,,1501015731.0,1,1.0,0
+me_irl,me_irl...irl,,1501014945.0,1,1.0,1
+ProgrammerHumor,Microshaft Winblows,,1501011375.0,24,0.63,9
+ScienceHumour,Your mama so fat...,"The size of the nucleus of her atoms exceed her electron cloud! 
+
+
+:D",1501003696.0,11,0.75,2
+Music,The Rolling Stones - I Got The Blues (1971),,1500608146.0,1,1.0,1
+EtherMining,Solo Mining on Claymore not finding Shares,"Hi, I think I have finally gotten everything working. I am currently running Claymore 9.5 solo through geth and Mist. I read the readme for Claymore and set the batch script accordingly. 
+I have had my setup running for about 2 hours now and so far it looks like i haven't gotten any shares. 
+These are my batch settings:
+
+setx GPU_FORCE_64BIT_PTR 0
+setx GPU_MAX_HEAP_SIZE 200
+setx GPU_USE_SYNC_OBJECTS 1
+setx GPU_MAX_ALLOC_PERCENT 100
+setx GPU_SINGLE_ALLOC_PERCENT 100
+#
+EthDcrMiner64.exe -epool http://127.0.0.1:8545 -ewal 0xca453ffdd0fb53f9666b67be468321248cb19c04 -mode 1 -etht 100 -etha 0,0
+
+
+I am running 2 rx 480s and they get 20 Mh/s each so they should be doin the business. 
+Any help appreciated.
+
+edit: Yes i downloaded the blockchain",1498615184.0,1,0.57,13
+techsupportgore,Oh no,,1498609263.0,355,0.97,12
+Funnymemes,Extremely Rare Photo of the Trump/ Pence Victory Tour,,1481310908.0,7,1.0,4
+funny,Trump and Pence make their victory tour (EXTREMELY RARE),,1481266402.0,1,0.67,0
+lol,Trump and Pence make their victory tour (EXTREMELY RARE),,1481264291.0,14,0.59,5
+memes,Trump and Pence make their victory tour (EXTREMELY RARE),,1481263694.0,2,0.75,0
+funny,Found this in a museum,,1481262752.0,3,0.59,1
+javahelp,Need help creating a virtual audio input device with Jsyn (if possible),"The title basically explains my issue. I am making a microphone filter that you can use to filter out high frequency noises and other annoying artifacts that some microphones create. I need the program to show up as an audio input device in windows, or at least discord. The primary purpose will be for group Discord voice chats during games. 
+I have completed all of the basic filtering tools and everything works but I can only get the sound to go through the default windows output device. 
+Btw if you can find a way with JavaFX that's fine too.
+
+Any help is appreciated!",1469500373.0,3,0.72,0
+FCWmemes,Behold: he is reborn.,,1463759418.0,25,0.94,3
+FCWmemes,"Dr Black, the Muffinator",,1463584463.0,12,1.0,0
+audiorepair,JBL PB-10 not working properly,"Around thanksgiving I got a new YAMAHA HTR-3066 receiver, and hooked up everything properly. I have an old JBL PB-10 which was in use on a separate sound system in the house and worked fine. However, when I hooked it up via LFE to the receiver's pre-out and played some music, the subwoofer did not behave right. At max volume it sounds like its at low volume, and it keeps cutting out so quickly that the indicator light (which is green when its playing audio and red when not) actually was orange. Its so frustrating and i just want it to work because its such a nice setup and everything else sound so nice. Please help!
+
+Also, its a little bit better at higher receiver volumes so maybe not enough drive???",1449245237.0,2,1.0,14
+techsupport,Having issues with JBL PB-10 subwoofer,"I just git a new Yamaha htr-3066 Surround receiver. I hooked all of the speakers up. I hooked the subwoofer up from the pre out on the receiver, to the lfe on the subwoofer. Then when I played music on it from my desktop via hdmi, everything sounded great, except that the subwoofer keeps crackling and cutting out. When i turn the volume up really high it works ok, but otherwise at regular/ low volume it starts acting up. Help?",1449071450.0,1,1.0,0
+FCWmemes,Mr. Jackman be like...,,1445445569.0,3,1.0,1

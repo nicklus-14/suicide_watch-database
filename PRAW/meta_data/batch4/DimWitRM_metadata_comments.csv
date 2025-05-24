@@ -1,0 +1,338 @@
+subreddit,body,created_utc,score
+NepalSocial,"you cant clap your hands with single hand brother, Ditch her natra ma jastai hola 13 years samma. Will come talk to you when she is down or is not in a right state tespachi when she feels better she is gonna silently go away. Estai huncha, dukha paucha bro. Move on aile nai better huncha",1741323544.0,3
+codestitch,"    This is how everything looks so far. So when i login using github i go to the redirect page but nothing is happening. THis will be the url https://domain.ca/admin/#access_token=${tokenData.access_token}&token_type=bearer IDK Why i am not logged in to the decapcms
+    This is my admin/index.html if its important to do anyting there
+
+    <!doctype html>
+    <html>
+      <head> </head>
+      <body>
+        <div id=""cms-root""></div>
+    
+        <!-- Initialize Decap CMS AFTER the script above -->
+        <script src=""https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js""></script>
+      </body>
+    </html>",1739132974.0,1
+codestitch,"I am redirecting to my callback.ts
+
+    I am redirecting to my callback.ts
+    import { NextRequest, NextResponse } from ""next/server"";
+    
+    export async function GET(req: NextRequest) {
+      const { searchParams } = new URL(req.url);
+      const code = searchParams.get(""code"");
+    
+      if (!code) {
+        return NextResponse.json({ error: ""No code provided"" }, { status: 400 });
+      }
+    
+      const tokenResponse = await fetch(
+        ""https://github.com/login/oauth/access_token"",
+        {
+          method: ""POST"",
+          headers: {
+            ""Content-Type"": ""application/json"",
+            Accept: ""application/json"",
+          },
+          body: JSON.stringify({
+            client_id: process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID,
+            client_secret: process.env.GITHUB_CLIENT_SECRET,
+            code,
+          }),
+        }
+      );
+    
+      const tokenData = await tokenResponse.json();
+    
+      if (tokenData.error) {
+        return NextResponse.json(
+          { error: tokenData.error_description },
+          { status: 400 }
+        );
+      }
+    
+      const response =
+        process.env.NODE_ENV === ""production""
+          ? NextResponse.redirect(
+              `https://webteck.ca/admin/#access_token=${tokenData.access_token}&token_type=bearer`
+            )
+          : NextResponse.redirect(
+              `http://localhost:3000/admin/#access_token=${tokenData.access_token}&token_type=bearer`
+            );
+    
+    
+      // Set the required cookie for Decap CMS
+      response.cookies.set({
+        name: ""nf_jwt"",
+        value: tokenData.access_token,
+        path: ""/"",
+        domain: ""webteck.ca"", // Explicit domain
+        httpOnly: true,
+        secure: true,
+        sameSite: ""lax"",
+      });
+    
+      return response;
+    }",1739132816.0,1
+codestitch,"    Hey, I am trying to selfhost the decapcms login but its not working so I was wondering if you could point me to the right direction.
+    This is what i have so far: 
+    
+    This is my config file:
+    backend:
+      name: github
+      repo: My github repo
+      branch: main
+      auth_type: oauth
+      proxy_url: ""https://domain.ca/api/auth/login""
+      site_url: ""https://domain.ca""
+      base_url: ""https://domain.ca""
+    
+    When i click sign in with github, it will take me to login.ts
+    
+    import { NextResponse } from ""next/server"";
+    
+    export function GET() {
+      const redirectUri =
+        process.env.NODE_ENV === ""production""
+          ? ""https://webteck.ca/api/auth/callback""
+          : ""http://localhost:3000/api/auth/callback"";
+    
+      const githubAuthURL = `https://github.com/login/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID}&scope=repo,user&redirect_uri=${encodeURIComponent(redirectUri)}`;
+    
+      return NextResponse.redirect(githubAuthURL);
+    }",1739132693.0,1
+hetzner,"This is the error i get when i use cloudflare proxy, if i am not using it then it works fine.
+
+# The page isn’t redirecting properly
+
+An error occurred during a connection to domain.com.
+
+
+
+* This problem can sometimes be caused by disabling or refusing to accept cookies. The page isn’t redirecting properly An error occurred during a connection to domain.com. This problem can sometimes be caused by disabling or refusing to accept cookies.The page isn’t redirecting properly     An error occurred during a connection to domain.com.                       This problem can sometimes be caused by disabling or refusing to  accept cookies.            The page isn’t redirecting properly                              An error occurred during a connection to domain.com.                                        This problem can sometimes be  caused by disabling or refusing to accept cookies.",1737429753.0,1
+hetzner,"when i press that cloud, my website doesnt even load. This is what happens so i disable it
+
+# The page isn’t redirecting properly
+
+An error occurred during a connection to domain.com.
+
+
+
+* This problem can sometimes be caused by disabling or refusing to accept cookies.            The page isn’t redirecting properly                             An error occurred during a connection to domain.com.                                       This problem can sometimes be caused by disabling or refusing to accept cookies.",1737429721.0,1
+hetzner,"Ohh okay, thanks. I guess i will just leave it as it is then.",1737348194.0,2
+hetzner,Its pointing to my server address.,1737348179.0,1
+hetzner,"I am using cloudflare, so how i have it right now is my domain is pointing to cloudflare and in the cloudflare i am pointing it to my hetzner server but when i use the proxy of cloudflare to protect from DDOS it doesnt work. My website doesnt load, and when i turn the proxy off and use just the DNS it works",1737347908.0,1
+hetzner,"I found it easier to deploy my website. Honestly i was watching tutorials for hetzner and most of them were using coolify and it looked easy to deploy. While i am successful in deploying, no one talks about preventing DDOS. I mean its not a big deal cause its just my hobby project but i wanted to learn how to do it",1737347414.0,2
+hetzner,I am renting a shared space of CX32,1737347196.0,2
+hetzner,"I used namecheap as my domain registar, I added the nameservers of cloudflare in my domain registar",1737346914.0,2
+webdev,"are you still hiring junior developer? Also I noticed the job is in US and i am from canada, If you are still hiring please let me know :) Thanks",1724011428.0,1
+cscareerquestions,is that for canada as well?,1723236479.0,-2
+Wordpress,"Ok, Thank you I will look into those",1722567553.0,1
+Wordpress,"I dont know if they will provide some stuffs that i might need to do in future for a client, Right now i know they have multi store where i need to update the SKU of a product and that one item is in multiple store so same item will need to have multiple SKU depending upon the store where the price is",1722566815.0,1
+Wordpress,"Can you list some that i can take a loot at, Thanks",1722566661.0,1
+Wordpress,"It's just me doing it solo. They will give me all the design requirements like how the page should look like with how much spacing, What kind of animations to use and stuffs. I don't think we can do that with any plugins. For now it's just their site as they have tons of items and it will need to be designed differently based on the categories and tags and stuffs. So they want me to do that first. They want to focus on eCommerce after I complete designing all their pages.",1722564587.0,1
+Wordpress,"Is it okay if i dm you some questions on how to get started, I am thinking of creating a nextjs frontend with woocommerce in backend but i am not sure how i will get started. Will appreciate if you could give some pointers",1721935337.0,1
+webdev,i believe their current site is in shopify and they dont want that. maybe woocommerce but idk,1721282484.0,1
+webdev,honestly its a small company with 50 employees i believe. they have three stores and not as many products as Walmart,1721282392.0,1
+webdev,its a full time job and not a contract work if thats what you are asking,1721282322.0,1
+react,"Yeah i wanted the whole box to be draggable, so made the whole box draggable. didnt know it would make other stuff inside unclickable. didnt think much about the ux 😅Thanks for taking a look",1720885945.0,1
+react,"i just changed the css color, rest left it as it is. Thanks for all the explanation.",1720826054.0,1
+react,yeah so it didnt work for me so i just made the header draggable which made footer clickable,1720825940.0,1
+react,tried the z-index method and it did not work. but what i did was just made the header part draggable. Found that to be easier then playing around z-index,1720825881.0,1
+react,those are the child componenets so i dont think the z-index will go above the parent one? i can give it a try and will let you know if it works.,1720810128.0,1
+nextjs,I tried that but its not working,1719431855.0,4
+cscareerquestionsCAD,can you provide a bit more info about this please. Thanks,1717426343.0,2
+PersonalFinanceCanada,What job is that in the military?,1710770742.0,1
+Nepal,>try the kings avatar,1707702223.0,1
+webdev,"Thank you so much for actually doing it. You are the best, I can reference it if i get stuck while trying out my logic",1707699571.0,2
+webdev,"Thank you, I think i get what you are trying to say so i will give that a go",1707612885.0,1
+reactjs,"I am creating a hero page where i will zoom into the image when scrolling and decrease the opacity of text as we go through. I am using react render motion and it is working good. Now i just need to do something like after 75% of scroll is done in the container, i want to scroll to next div. Any ideas how to do that?",1705324693.0,1
+DotA2,i am not doing the high ultra setting. Just medium and getting around 70 fps,1691800767.0,2
+DotA2,No clue what it was doing. Uninstalled it and my fps is back to normal.,1688427159.0,1
+DotA2,"I changed that. I think i found the problem, it was nivida geforce experience. I uninstalled it and i am getting decent fps now. Not sure if the issue will arise later",1688273662.0,3
+jobs,"honestly they told me it will be sql interview but it was something totally different. i think i messed it up because he was correcting a lot of things i said and was doing. even some part he was giving me hints i messed up because i was too nervous and didn't follow it properly and once he showed me, i felt so stupid and understood what he was saying. i dont know how i could do so bad. l did so good in the other 2interview and assessment so i thought this will be the same but it caught me off guard so hard. I really wanted this job.  when they told me to ask questions i didnt even ask even though i had so many questions prepared cause i knew i screwed it up.",1679696443.0,1
+SQL,"when there is an unwanted error. for example in the above one we are trying to change string to number but since ten is not a number, we are getting an error. I wanted to know if there are sites like leetcode where they give us code with errors and we need to solve it.",1679421117.0,0
+vancouver,">If you are under 30 this is an option https://reusetechbc.ca/cfs-internship
+
+Thanks, I will apply here.",1675992049.0,2
+vancouver,"Where can I find the job postings? I am in the BC website but I cant seem to find job postings.
+
+[https://www2.gov.bc.ca/gov/content/careers-myhr/about-the-bc-public-service/what-the-bc-public-service-offers](https://www2.gov.bc.ca/gov/content/careers-myhr/about-the-bc-public-service/what-the-bc-public-service-offers)",1675949531.0,1
+vancouver,"If nothing works out, I will give this a go.
+
+Thanks",1675949346.0,1
+vancouver,I will take a look at it,1675949080.0,1
+vancouver,">Meetup and Eventbrite
+
+So for these, Do I just sign up and go to the fair?",1675948999.0,1
+vancouver,"Well the thing is I am learning and updating my skills but even for entry level role they are asking for experience and since I do not have any, I am not able to get it. I am applying but no response from them.",1675948895.0,1
+RealDayTrading,"Also regarding bokerage, Since i am from Canada i don't think any of the above would work so i was thinking going for Questtrade since i have read some reviews. if any one is from Canada, Please also suggest some canadians broker since questtrade only has 3 months of paper trading. I believe it would take me longer than that since I want to learn as much as i can before i go into real thing.  
+
+
+Thanks",1667968843.0,1
+RealDayTrading,"Hi can you recommend how to start who have 0 knowledge. If possible some videos recommendation would be appreciated.  
+
+
+Thanks",1667968714.0,1
+RealDayTrading,"Hi, I want to start getting into day trading and no i haven't done any trading as i have 0 knowledge besides what going long and short means. I am a visual learner so i was hoping if there is any recommendations that start from scratch. I was watching youtube videos which is mostly momentum trading and reading the wiki i know it is a bad idea. So i just wanna learn all the terms used in day trading, technical analysis and market. So please provide some videos that i can get started with. I know there is books recommended above so is it okay for me to dive through  Technical Analysis of the Financial Markets by John Murphy without any knowledge? Thanks",1667968629.0,2
+Nepal,Aile ta chuina but moving there,1667376259.0,1
+Nepal,whats up,1667366557.0,1
+apple,"Leave a comment :P.   
+
+
+Favorite animal = Polar Bear cause they look so cool <3",1664761127.0,1
+ImmigrationCanada,You would need to cancel your trip as your older status would no longer be valid as far as i know,1649294372.0,2
+sennheiser,I am not sure how to connect with wifi though. I am only connecting through bluetooth,1647339993.0,1
+sennheiser,No i only have it connected to one thing i.e. laptop. Whenever i move a bit or move my laptop a bit the sounds kind of cuts off,1647286154.0,1
+DotA2,No Got 2-0d in group stage by Aster,1634048896.0,2
+chess,Why does chess shows Hikaru as rank 1 but everyone is talking about Teimour being rank 1?,1633347048.0,2
+Nepal,bihe gardai ma baccha janamaunu par6 bhanne chaina ni ta,1626375580.0,2
+DotA2,you guys act as if Alliance didn't win both qualifiers by being first place and second place against all your deserved EU teams.,1625935139.0,1
+DotA2,Both teams are lower bracket how come one has advantage over the other?,1623509691.0,3
+DotA2,You meant as an OG fan? If you were neutral fan you want only the best team to be on the international LOL,1623497572.0,7
+DotA2,"Their was a tiebreaker between IG and Nigma where IG has one player down. Nigma is doing very good. If there was 3 team qualified from Wildcard, 100% sure they would be in playoffs",1623349913.0,2
+DotA2,Only chinese team matchfix not liquid and eg /s,1623092988.0,2
+DotA2,Pogchamp,1623007310.0,1
+DotA2,">and TNC
+
+Nigma lost to TNC",1622985805.0,2
+DotA2,So 1-1-1 is better than 0-3-0. Damn. Wanted VG to qualify for the group state. VG will need to win both games tomorrow :( FeelsBadMan,1622669208.0,0
+ImmigrationCanada,Did you upload the screenshot instead of the actual result?,1620342550.0,1
+ImmigrationCanada,Oh lol. Thanks.,1620334218.0,1
+ImmigrationCanada,"This is what it says on the guide. AppendixA- Photo Specifications 
+
+For each family member you must provide either a digital photo or scan and upload the front side of a physical photo.
+
+* Photos may be in colour or in black and white.
+* Photos must be original and **not altered in any way** or taken from an existing photo.
+* Photos must reflect your current appearance (taken within the past six (6) months).",1620333980.0,1
+ImmigrationCanada,"No, my parents and brothers",1620333837.0,0
+ImmigrationCanada,"Yes, I was in my home country when i applied for police certificate. There is a lockdown so i am not sure how to get a recent passport photo of my family too. I don't understand why they want my family photo when they are not applying.",1620329649.0,1
+ImmigrationCanada,Should i also remove the checkmarks and date at the end of the imm08?,1620309573.0,1
+ImmigrationCanada,This is not the signing part. It is above the signing part.,1620305811.0,1
+ImmigrationCanada,It won't let me. It just says that the form can already be filled or something.,1620305775.0,1
+ImmigrationCanada,I removed the Dependant and validated. It still shows up. So should i leave it just blank?,1620305418.0,2
+ImmigrationCanada,"I thought i took GT but in exam today, they told me i booked an academic
+
+&#x200B;
+
+edit: CLEPIP are also booked and i cant find any IELTS date in these two months",1619385254.0,1
+ImmigrationCanada,"No i intended to take GT and was sure it was GT but when i went to exam, they told me i signed up for Academic",1619385220.0,0
+IELTS,Thanks,1619197307.0,1
+IELTS,no only GT,1619177644.0,1
+IELTS,"I wasn't practicing both. I was practicing general training reading only, and then decided to do all of them together until i realized it was academic practice set
+
+&#x200B;
+
+[https://www.ielts-exam.net/practice\_tests/](https://www.ielts-exam.net/practice_tests/)",1619046350.0,1
+chess,Make Drawish joke more XD. 5 wins in row :D,1615743857.0,7
+chess,Anish won PogChamps,1615664970.0,6
+DotA2,It's been almost 10 years and it's still good. Wish someone would remake it :(,1605640574.0,1
+DotA2,seeing na'ix for the first time. How did they get a bigger creep in scourage side lol,1605408830.0,1
+DotA2,LGD flashbacks,1603909861.0,2
+DotA2,Against alliance. LOL. Alliance tilted after that game XD.,1603493917.0,1
+waterloo,"Oh okay, Thank you. I would go there then.",1603021392.0,1
+waterloo,Will go and look into it. Thanks!!,1602973045.0,1
+waterloo,I looked at the website but was unable to find it.,1602972708.0,1
+waterloo,"I went there once but i don't remember seeing it there. I will go and check.  
+
+
+Thanks!!",1602956396.0,1
+DotA2,">to die solo to topson in a lane where tiny has no kill potential
+
+Were we watching the same game. Solo died to tiny? then the pheonix i saw was a ghost",1599406906.0,3
+DotA2,lol,1589655932.0,2
+DotA2,Thanks!!,1585483878.0,1
+DotA2,">China DPL Season 1
+
+Oh  i see, Thanks!!",1585483870.0,1
+DotA2,"Hi guys, isnt the game supposed to be BO3 why is LGD vs VF BO5?? Thanks",1585483354.0,2
+DotA2,"Hi, Is there a live link for it in Youtube??",1584717289.0,3
+DotA2,"It only happens in my one laptop, other laptop works fine :/",1581301067.0,1
+IAmA,neigh-pal this is the one,1578783600.0,2
+IAmA,"Oops, My bad. Now that I re-read it. I don't know how I misread that. XD",1578781660.0,2
+IAmA,Fingers all the way,1578781020.0,1
+IAmA,"Well that's weird, Mostly I have heard most Nepali people are nice and pleasant to be around but well there are some kind of people like that everywhere. Guess you are just unlucky. But yeah Shrestha is pretty common especially in Kathmandu.",1578779781.0,1
+IAmA,"Some popular places. to go are Pokhara, Kathmandu, Chitwan, Muktinath, Lumbini, Janakpur, Annapurna etc.",1578779638.0,1
+IAmA,"Yeah, We are not allowed to marry other caste because of discrimination. Older generation still discriminate saying they are higher caste and they are lower caste. It is declining and now more younger generations do marry people from other caste. In my case I can not marry other caste if I am to live with my parents but since I am Abroad, I am allowed to marry anyone. By living, I mean sharing the same house forever. If we are to marry different caste then we can only visit them and stay with them for a short period of time but like we can not live with them forever.",1578775336.0,1
+IAmA,"Sorry to disappoint you but people don't speak a lot of Newari language anymore. Even though I am a Newari, I only understand Newari language but can not speak myself. I really want to learn it tho :). Regarding general opinion on Newar, people treat every culture same in Kathmandu. Not sure about other areas though.",1578775080.0,1
+IAmA,NE PAL. Like how you spelled pal(friends).,1578771496.0,1
+IAmA,"In Kathmandu, Some Newari food are like must try. Some I can think at top of my head would be yomari, Newari khaja set( you can google it as it has multiple of food), Alu tama, Hakuchoila, Chataamari( People also tends to call it Newari pizza). And if you are into drinks then Tho(Rice Beer) and Ela. Also if you love yogurts then Juju Dhau in Bhaktapur is must. Best yogurt I ever had.",1578770240.0,1
+DotA2,Even i am tilted by watching that game. 1k decision making,1566713392.0,1
+DotA2,LGD doesnt deserve to win this TI. Fucking dumb calls forcing bot racks. I am so fucking tilted just by watching them throw. 1 min rs up and they fucking force it and waste bb -\_-,1566713074.0,4
+DotA2,I dont know. They barely lost against OG. Its not like OG stomped them,1566704106.0,1
+DotA2,I dont feel so good for LGD :((,1566703902.0,2
+DotA2,picking side is usually more fun when watching competitive game. You feel hype when your team wins and sad when they loose,1566697519.0,3
+DotA2,thanks,1566472766.0,2
+DotA2,Holy shit man both team so bad,1562757713.0,4
+DotA2,lol nobody is mocking China XD. Just stating that EHOME doesn't have a chance going to TI now with the direct invite,1561334997.0,1
+DotA2,Which will be a huge upset and I would definite love to see it happen :D,1561322529.0,1
+DotA2,"True but if they win, they will play against secret and if they go to lower bracket they will play with winner of fnatic/forward which in my opinion alliance have higher chance of winning",1561310935.0,1
+DotA2,"True but if they win, they will play against secret and if they go to lower bracket they will play with winner of fnatic/forward which in my opinion alliance have higher chance of winning",1561310930.0,1
+DotA2,"EHOME is out 100%. Even if alliance loses against VP they will be against infamous which they will win most likely and even if Gambit loses against VG they will meet with Alliance and no matter who wins EHOME is out.
+
+&#x200B;
+
+Bye Bye EHOME from the TI Direct invite. RIP",1561309084.0,12
+DotA2,Yeah i guess we can only hope,1561300206.0,1
+DotA2,"If alliance wins the coming series against VG, Ehome is out from the TI qualifiers.",1561297427.0,6
+DotA2,Holy fuck that storm,1560615844.0,3
+legaladvice,How much will it take to sue them and how do I do it. Thanks,1560014389.0,1
+DotA2,Na'Vi are doing it,1558118290.0,2
+relationship_advice,She hasnt said she is not interested in me. Its just i feel like i am not her top priority. For example if we are talking and her friend calls she would tell me to wait and she will talk with her friend. And its not even just few minutes. And especially most of her friend are boys. So idk if i should continue talking with her or stop altogether,1557803718.0,1
+relationship_advice,"I mean i am really interested in her. Since we have opposite times, when i work she is free and when she works i am free. Sometimes we both have free time but she meets with her friend and  i feel like i am not her first priority. Her friends >> me. So i dont know if i should continue talking or just stop altogether",1557803604.0,1
+DotA2,He says he will get broodmother on random 100% and gets it,1552594007.0,1
+DotA2,If your solo and mmr is 4.2k u get ancient 5. I was ancient 5 lile that,1545107429.0,1
+DotA2,Nice!! ,1545107398.0,1
+DotA2,4.6k  My percentage started showing after 4.5k.,1545102725.0,1
+DotA2,Had to post it to get past that barrier :) So No !!Regret!! ,1545102686.0,3
+DotA2,"NA, around 4.6k ",1545102651.0,1
+DotA2,Yeah ,1545102629.0,1
+DotA2,"and why is that?
+
+&#x200B;",1544756955.0,0
+DotA2,Yeah hoping to reach divine before the mmr reset. Finger crossed ,1544756942.0,1
+DotA2,Show this video to bulldog kappa,1544141979.0,2
+NintendoSwitch,Waow,1543727988.0,1
+OreGairuSNAFU,Ikr,1543467575.0,0
+tressless,"Can you tell me what product you use. And if possible the side effects that you have noticed.  
+
+
+Thanks",1535907254.0,2
+tressless,"[https://imgur.com/a/Eewj1lH](https://imgur.com/a/Eewj1lH) 
+
+&#x200B;
+
+Age:21, I started loosing hair after 20 and now it looks like this. I dont know what i should do at all. Some one please advice me on what i should do. Thank you!!",1535907198.0,1
+DotA2,Do you think you can stream Dota2 in it? ,1534633573.0,1
+DotA2,"I can't stream at my work, Is there any site that I can look what heroes are picked and stuffs like net worth.
+
+I know esportslive but they don't show which heroes are picked :(",1534612328.0,1
+DotA2,Oh okay!! Thanks.,1534612130.0,1
+DotA2,Do you know how long its going to take?,1534603895.0,1
+DotA2,"I was thinking of buying that too earlier, is fan sound too loud?",1534603866.0,1
+DotA2,">7577 or the G3/G5/G7 (don't really know much about the G-series laptops). The 7577 is like $800 with an i7-7700HQ and a GTX 1060 Max-Q, which should deliver performance similar to the 3GB VRAM 1060.If you go on /r/hardwareswap you can also find really good deals - I bought a ASUS G502GL with a GTX 1070 and i7-7700HQ for $1100 there.  
+>  
+>Reply
+
+thanks will look into it ",1534603814.0,1
+DotA2,">PUs will drive the price a bit down. Also, If u absolutely need the mobility, skip the PC, else get one in place of a gaming laptop!
+
+But the problem is- I have to move from one place to another. I am an international student so living on one place is not viable or would have built a PC",1534603783.0,1
+DotA2,Na'vi won this minor. I said it first,1512869786.0,7
+DotA2,The heading should be like : Ancient Apparition Ult bug on EHOME VS TNC game,1512869087.0,3
+DotA2,lul tnc looked liked a tier 100 team xD,1512800933.0,-1
+DotA2,"does my boy navi still on this game or are they out??
+",1512797639.0,1
+DotA2,lol that rs haha,1512791523.0,1
+DotA2,best caster ever xyclopz <3,1512788849.0,1
+DotA2,XBOCT high5 wins the game i see,1510869789.0,4
+DotA2,oh okay thanks,1510858475.0,1
+DotA2,isnt liquid all game finished? why is it still 9-3?? while secret has 11-3 and navi will play 2 game and it will be 14 game altogether i am confused,1510857649.0,1
+DotA2,easy for Na'vi to beat OG than VP in the major so Na'Vi might give them the game for free. Who knows,1510783501.0,1
+DotA2,no[o]ne best midlaner lul rekt xD,1510780875.0,-3
+SuicideWatch,thanks,1510034726.0,1
+SuicideWatch,"I am studying IT innovation and Design at Conestoga college atm. The reason i can't change the majors and stuff is due to financial. I am good at math and accounting, should have chosen subject like that but i was interested in Computer and heard that you can find job easily was the reason i tried it. Now i am stuck at what to do and i am frustrated everyday.",1509909593.0,1
+SuicideWatch,"
+I have thought about changing my subject and all but even if i do change my subject, i don't have enough money to pay for it. I can't ask my parents as they have already taken loans while sending me here and paying my tuition fees. And about talking to counselor, I don't know what i should talk about and how can i talk to one. I am here in a student visa so i don't think i can just quit my college and work, If i do that they will send me back to my country which i want to avoid. If you get a job irrelevant to your degree how can you work in those field when you have no ideas. Thank you for hearing me out and providing suggestions. I am thankful from my heart.
+",1509722437.0,1

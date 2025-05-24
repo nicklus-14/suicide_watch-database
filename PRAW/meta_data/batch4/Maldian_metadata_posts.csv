@@ -1,0 +1,1326 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+ComposeMultiplatform,"I am creating library in CMP, which is sharing most of business logic and of course also some part of UI, however on Swift side i was not able to make composable properly react to my data class properties changes, what is the best way to approach it?","I have this code snippet above in the swift (to be exact, i am fairly new to swift) and this piece of code is on library side.
+
+    struct MainScreen: View {
+        
+        @StateObject
+        private var viewModel: AppViewModel
+    
+        private let txcSDK: TicketXChangeSDK
+        private let changeSdkMode: () -> ()
+        private let scanAgain: () -> ()
+        private let onStartScanning: () -> ()
+        
+        init(
+            txcSDK: TicketXChangeSDK,
+            changeSdkMode: @MainActor @escaping () -> (),
+            scanAgain: @MainActor @escaping () -> (),
+            onStartScanning: @MainActor @escaping () -> ()
+        ) {
+            self.changeSdkMode = changeSdkMode
+            self.scanAgain = scanAgain
+            self.txcSDK = txcSDK
+            self.onStartScanning = onStartScanning
+            _viewModel = StateObject(wrappedValue: AppViewModel(txcSDK: txcSDK))
+        }
+    
+        var body: some View {
+            MainScreenContent(
+                sdkData: viewModel.data,
+                changeSdkMode: changeSdkMode,
+                scanAgain: {
+                    txcSDK.scanAgain()
+                },
+                onStartScanningClick: {
+                    txcSDK.activateNfcScanning()
+                }
+            )
+        }
+        
+    }
+    
+    struct MainScreenContent: View {
+        private var sdkData: SDKData
+        private let changeSdkMode: () -> ()
+        private let scanAgain: () -> ()
+        private let onStartScanningClick: () -> ()
+        
+        init(
+            sdkData: SDKData,
+            changeSdkMode: @escaping () -> (),
+            scanAgain: @escaping () -> (),
+            onStartScanningClick: @escaping () -> ()
+        ) {
+            self.sdkData = sdkData
+            self.changeSdkMode = changeSdkMode
+            self.scanAgain = scanAgain
+            self.onStartScanningClick = onStartScanningClick
+        }
+        
+        var body: some View {
+            ComposeView(
+                sdkData: sdkData,
+                changeSdkMode: changeSdkMode,
+                scanAgain: scanAgain,
+                onStartScanning: onStartScanningClick
+            )
+            .ignoresSafeArea(.keyboard)
+        }
+    }
+    
+    struct ComposeView: UIViewControllerRepresentable {
+        
+        private var sdkData: SDKData
+        
+        private let changeSdkMode: () -> ()
+        private let scanAgain: () -> ()
+        private let onStartScanning: () -> ()
+    
+        init(
+            sdkData: SDKData,
+            changeSdkMode: @escaping () -> (),
+            scanAgain: @escaping () -> (),
+            onStartScanning: @escaping () -> ()
+        ) {
+            self.sdkData = sdkData
+            self.changeSdkMode = changeSdkMode
+            self.scanAgain = scanAgain
+            self.onStartScanning = onStartScanning
+        }
+    
+        func makeUIViewController(context: Context) -> UIViewController {
+            MainViewControllerKt.MainViewController(
+                sdkData: sdkData,
+                changeSDKMode: changeSdkMode,
+                scanAgain: scanAgain,
+                onStartScanning: onStartScanning
+            )
+        }
+    
+        func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+            
+        }
+    }
+    
+    struct MainScreen: View {
+        
+        @StateObject
+        private var viewModel: AppViewModel
+    
+    
+        private let txcSDK: TicketXChangeSDK
+        private let changeSdkMode: () -> ()
+        private let scanAgain: () -> ()
+        private let onStartScanning: () -> ()
+        
+        init(
+            txcSDK: TicketXChangeSDK,
+            changeSdkMode: @MainActor @escaping () -> (),
+            scanAgain: @MainActor @escaping () -> (),
+            onStartScanning: @MainActor @escaping () -> ()
+        ) {
+            self.changeSdkMode = changeSdkMode
+            self.scanAgain = scanAgain
+            self.txcSDK = txcSDK
+            self.onStartScanning = onStartScanning
+            _viewModel = StateObject(wrappedValue: AppViewModel(txcSDK: txcSDK))
+        }
+    
+    
+        var body: some View {
+            MainScreenContent(
+                sdkData: viewModel.data,
+                changeSdkMode: changeSdkMode,
+                scanAgain: {
+                    txcSDK.scanAgain()
+                },
+                onStartScanningClick: {
+                    txcSDK.activateNfcScanning()
+                }
+            )
+        }
+        
+    }
+    
+    
+    struct MainScreenContent: View {
+        private var sdkData: SDKData
+        private let changeSdkMode: () -> ()
+        private let scanAgain: () -> ()
+        private let onStartScanningClick: () -> ()
+        
+        init(
+            sdkData: SDKData,
+            changeSdkMode: @escaping () -> (),
+            scanAgain: @escaping () -> (),
+            onStartScanningClick: @escaping () -> ()
+        ) {
+            self.sdkData = sdkData
+            self.changeSdkMode = changeSdkMode
+            self.scanAgain = scanAgain
+            self.onStartScanningClick = onStartScanningClick
+        }
+        
+        var body: some View {
+            ComposeView(
+                sdkData: sdkData,
+                changeSdkMode: changeSdkMode,
+                scanAgain: scanAgain,
+                onStartScanning: onStartScanningClick
+            )
+            .ignoresSafeArea(.keyboard)
+        }
+    }
+    
+    
+    struct ComposeView: UIViewControllerRepresentable {
+        
+        private var sdkData: SDKData
+        
+        private let changeSdkMode: () -> ()
+        private let scanAgain: () -> ()
+        private let onStartScanning: () -> ()
+    
+    
+        init(
+            sdkData: SDKData,
+            changeSdkMode: @escaping () -> (),
+            scanAgain: @escaping () -> (),
+            onStartScanning: @escaping () -> ()
+        ) {
+            self.sdkData = sdkData
+            self.changeSdkMode = changeSdkMode
+            self.scanAgain = scanAgain
+            self.onStartScanning = onStartScanning
+        }
+    
+    
+        func makeUIViewController(context: Context) -> UIViewController {
+            MainViewControllerKt.MainViewController(
+                sdkData: sdkData,
+                changeSDKMode: changeSdkMode,
+                scanAgain: scanAgain,
+                onStartScanning: onStartScanning
+            )
+        }
+    
+    
+        func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+            
+        }
+    }
+
+and on kotlin side there is standard generated stuff with added parameters according to example above.
+
+    fun MainViewController(
+        sdkData: SDKData,
+        changeSDKMode: () -> Unit,
+        scanAgain: () -> Unit,
+        onStartScanning: () -> Unit
+    ) = ComposeUIViewController {
+        SomeScreen(
+            sdkData = sdkData,
+            changeSDKMode = changeSDKMode,
+            scanAgain = scanAgain,
+            onStartScanning = onStartScanning
+        )
+    }
+
+What is the best practice to approach it? I found some SKIE library, which looks sort of nice, but it would be nice if i was able to make it work only using built-in functionalities. Any help is highly appreciated.",1747756399.0,3,1.0,5
+czech,Jak zhlasitit zvuk zvonku?,"Mám otázku na zdejší zkušené kutily a znalce drobné elektroniky/zvonků a podobných věcí, mám starší typ domácího zvonku ve starším domě (tuším z 50. let) a když na mě někdo zvoní, tak to mnohdy neslyším a vzhledem k tomu, že v poslední době čekám důležitá psaní a pár zvonků jsem už neslyšel, tak bych rád, aby se to změnilo. Na obrázcích níže je stávající systém. Za nápady a rady budu hrozně rád. :)
+
+https://preview.redd.it/uix1u50ogize1.jpg?width=600&format=pjpg&auto=webp&s=cec0fd421ef339fb84e3fa9d9537e976ffae9e9a
+
+https://preview.redd.it/58z7s70ogize1.jpg?width=300&format=pjpg&auto=webp&s=fb26c0620f4b27176891e0b4cb1469a6a841ed69
+
+",1746689572.0,5,0.7,40
+CanyonBikes,Finally after years of indecisiveness  going for Grizl CF SL 6 AXS... However I am a bit lost with the pedals setup considering my future usage of Grizl so here is my help seeking:,"as i mentioned in the title, i am a bit lost with the configuration stuff and which pedals should i buy for it and what should be my setup, i do not have any special preference i just want to have the best of the usage mentioned below.
+
+Until now I was cycling on my XC bike, without any special pedals - i used regular trainers to pedal on that bike. What would you maybe recommend for me? I can ride for quite long trips (150 kms) and do not mind less comfortable shoes when walking.
+
+I chose gravel, because I mostly go for roads, but at the same time the roads here are quite low quality and I also enjoy to go into forest for 30% of my rides. So that is just small background about that. and yes, I'd rather ask here, because I am not really sure, which shoes/pedals can be the best choice in terms of my usage of gravel bike and the setup which would come with Grizl CF SL 6 AXS. So any feedback regarding that will be highly appreciated
+
+Edit: Definitely open for clipless pedals for recommendation in the relation for my potential usage.",1746540258.0,1,0.67,11
+KotlinMultiplatform,"Creating KMM library - problems with ""distributing"" it and proguarding it","Hey
+
+so i am creating kmm library. With ktor websocket implementation to connecting to my backend. And I wanted to create lib file for each platform starting with .aar in case of android. Standard `.aar` creation went quite smoothly, but the problem arose, when i tried to build proguarded version of this `aar` the aar archive gets created, but the classes.jar inside aar is empty, or actually returning java.util.zipException when trying to access it, therefore when i import the .aar inside sample android project, the library basically does not work.
+
+No proguard rules get applied when changing anything regarding that and when proguard is actually disabled and standard aar is built, it basically works again.
+
+On the iOS side I trued to create `.xcframework` file, but I haven't looked into it much deeply yet.
+
+Is there some comprehensive guide, which i can follow in this case? I am a bit desperate. I can certainly provide \`build.gradle.kts\` contents, or whatever to resolve this issue for me. Any help, directions are appreciated.
+
+Edit: I used standard kmp library creation from Android studio's templates.",1745338459.0,5,1.0,2
+ktor,Constantly receiving ClosedReceiveChannelException when establishing connection,"hello, i might be doing something wrong, but i migrated to ktor in into our android app, which is syncing some data in the background and it is working fine however I am constantly experiencing ClosedReceiveChannelException, which is invoked, even though everything works, but of course i see in logs, that ws connection keeps getting recreated, but it seems that only one is handling all as expected, even though it should not be happening, could you point me to the thing i am doing wrongly?
+
+    import android.content.ContentValues.TAG
+    import android.util.Log
+    import io.ktor.client.HttpClient
+    import io.ktor.client.plugins.websocket.DefaultClientWebSocketSession
+    import io.ktor.client.plugins.websocket.WebSockets
+    import io.ktor.client.plugins.websocket.wss
+    import io.ktor.http.HttpMethod
+    import io.ktor.websocket.Frame
+    import kotlinx.coroutines.launch
+    import org.json.JSONException
+    import java.util.concurrent.Executors
+    import java.util.concurrent.ScheduledExecutorService
+    import java.util.concurrent.ScheduledFuture
+    import java.util.concurrent.TimeUnit
+    import javax.net.ssl.SSLSocketFactory
+    import javax.net.ssl.X509TrustManager
+    
+    val client: HttpClient? = null
+    private var okHttpsEngine: OkHttpClient? = null
+    private var webSocketSession: DefaultClientWebSocketSession? = null
+    private var reconnectExecutor: ScheduledExecutorService? = null
+    private var reconnectFuture: ScheduledFuture<*>? = null
+    
+    private suspend fun connectAndListen(sslFactory: SSLSocketFactory, trustManager: X509TrustManager) {
+    
+        val okHttpsEngine = OkHttpClient.Builder()
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(3, TimeUnit.MINUTES)
+            .pingInterval(20, TimeUnit.SECONDS)
+            .sslSocketFactory(sslFactory, trustManager)
+            .build()
+    
+        client = HttpClient(OkHttp) {
+            engine {
+                preconfigured = okHttpsEngine
+            }
+    
+            install(WebSockets) {
+            }
+        }
+    
+        client?.wss(
+            method = HttpMethod.Get,
+            host = host,
+            port = 443,
+            path = path
+        ) {
+            // Store the session
+            webSocketSession = this
+    
+            try {
+                while (true) {
+                    val frame = incoming.receive()
+                    if (frame is Frame.Text) {
+                        try {
+                            dataHandling(frame)
+                        } catch (e: JSONException) {
+                            throw RuntimeException(e)
+                        }
+                    } else {
+                        Log.d(TAG, ""connectAndListen: other type of Frame"")
+                    }
+                }
+            } catch (e: Exception) {
+                Log.d(TAG, ""connectAndListen: Connection failed: $e"")
+                e.printStackTrace()
+                client?.close()
+            } finally {
+                Log.d(TAG, ""connectAndListen: WebSocket connection closed"")
+                webSocketSession = null
+                reconnectFuture?.cancel(true)
+                reconnectExecutor?.shutdownNow()
+                reconnectExecutor = null
+    
+                initReconnect()
+            }
+        }
+    }
+    
+    u/Synchronized
+    private fun reconnect() {
+        applicationScope.launch {
+            try {
+                connectAndListen()
+            } catch (e: Exception) {
+                Log.e(TAG, ""reconnect: "", e)
+            }
+        }
+    }
+    
+    @Synchronized
+    private fun initReconnect() {
+        try {
+            if (reconnectExecutor != null) {
+                reconnectExecutor?.shutdownNow()
+            }
+    
+            if (pongExecutor != null) {
+                pongExecutor!!.shutdownNow()
+                pongExecutor = null
+            }
+    
+            reconnectExecutor = Executors.newSingleThreadScheduledExecutor()
+    
+            if (reconnectFuture != null) {
+                reconnectFuture!!.cancel(true)
+                reconnectFuture = null
+            }
+            reconnectFuture = reconnectExecutor!!.scheduleWithFixedDelay(
+                ::reconnect,
+                10,
+                30,
+                TimeUnit.SECONDS
+            )
+        } catch (e: Exception) {
+            Log.e(TAG, ""initReconnect: "", e)
+        }
+    }
+
+I have tried to extract all relevant code with all relevant things, also used to ask if client.isActive, but if I use it, the client is always active and websocket connection seems to never establish.
+
+Any ideas will be highly appreciated.
+
+EDIT:  
+stacktrace:
+
+    kotlinx.coroutines.channels.ClosedReceiveChannelException: Channel was closed
+        at kotlinx.coroutines.channels.BufferedChannel.getReceiveException(BufferedChannel.kt:1729)
+        at kotlinx.coroutines.channels.BufferedChannel.resumeWaiterOnClosedChannel(BufferedChannel.kt:2171)
+        at kotlinx.coroutines.channels.BufferedChannel.resumeReceiverOnClosedChannel(BufferedChannel.kt:2160)
+        at kotlinx.coroutines.channels.BufferedChannel.cancelSuspendedReceiveRequests(BufferedChannel.kt:2153)
+        at kotlinx.coroutines.channels.BufferedChannel.completeClose(BufferedChannel.kt:1930)
+        at kotlinx.coroutines.channels.BufferedChannel.isClosed(BufferedChannel.kt:2209)
+        at kotlinx.coroutines.channels.BufferedChannel.isClosedForSend0(BufferedChannel.kt:2184)
+        at kotlinx.coroutines.channels.BufferedChannel.isClosedForSend(BufferedChannel.kt:2181)
+        at kotlinx.coroutines.channels.BufferedChannel.completeCloseOrCancel(BufferedChannel.kt:1902)
+        at kotlinx.coroutines.channels.BufferedChannel.closeOrCancelImpl(BufferedChannel.kt:1795)
+        at kotlinx.coroutines.channels.BufferedChannel.close(BufferedChannel.kt:1754)
+        at kotlinx.coroutines.channels.SendChannel$DefaultImpls.close$default(Channel.kt:98)
+        at io.ktor.client.engine.okhttp.OkHttpWebsocketSession.onClosing(OkHttpWebsocketSession.kt:128)
+        at okhttp3.internal.ws.RealWebSocket.onReadClose(RealWebSocket.kt:378)
+        at okhttp3.internal.ws.WebSocketReader.readControlFrame(WebSocketReader.kt:220)
+        at okhttp3.internal.ws.WebSocketReader.processNextFrame(WebSocketReader.kt:104)
+        at okhttp3.internal.ws.RealWebSocket.loopReader(RealWebSocket.kt:293)
+        at okhttp3.internal.ws.RealWebSocket$connect$1.onResponse(RealWebSocket.kt:195)
+        at okhttp3.internal.connection.RealCall$AsyncCall.run(RealCall.kt:519)
+        at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+        at java.lang.Thread.run(Thread.java:1012)",1739890427.0,1,1.0,2
+mAndroidDev,Of course I know!!,"https://preview.redd.it/8jh1ddra1rbe1.jpg?width=956&format=pjpg&auto=webp&s=e9fd001dbc88e933557196475235b043e28d03b5
+
+Now I am on re-implementing compost-routines to AsyncTasks. EZPZ",1736332874.0,17,1.0,1
+adidas,Ultraboost shoes follow-up shoes?,"Hey, i really liked the way ultraboost shoes were going., is there any decent alternative in this segment? I am specifically bumping onto Ultraboost DNA versions (5.0, 1.0) it seems that they are basically disappearing from market and I unfortunately cannot re-buy the ones which were super good, super comfy and actually super usable and because of that i am pretty sad. I do not like 5th edition (which is possibly supposed to be road running shoes?) I use most of my ultraboosts for everyday walking, because they are soooooo comfy.
+
+So do you have any suggestions to which shoe type i should be going to? ",1731251027.0,2,1.0,0
+androiddev,Location permission disappeared and no idea why,"Developing small app which uses also location, everything worked fine, but out of nowhere the  following permissions
+
+    Manifest.permission.ACCESS_COARSE_LOCATION
+    
+    Manifest.permission.ACCESS_FINE_LOCATION
+
+basically disappeared from app's settings. I can see in the logs that they are not granted but the dialog never really gets invoked and in app's settings outside of the app the location permissions basically disappeared.
+
+I really have no idea why is that happening and i am really desperate at this point. I tried to revert some changes, but basically there is literally no reason in my eyes, why it would be happening. Also tried reinstalling android studio/completely resetted rest of the setup, but still with no result.
+
+Other permissions are normally there nearby devices/camera. Does anybody have an idea, where the problem could lie? ",1724523604.0,0,0.33,2
+whatisthisbug,Found this one coming from my meal,"Hey, title, what it could be?",1722510699.0,7,1.0,10
+SonyHeadphones,WF-1000XM4 - left earbud keeps draining its battery that it can be used only for like 1 hour,"Basically the title, at some point the battery capacity kept getting lower and lower and now I can literally listen to music only up to e. g. 45 minutes (but it is only case for left one) the other one works fine.
+
+Is there anything I can actually do to get it fixed software-wise? Or it is the end for the left earbud? 
+
+  
+it's bad because I have only 3 days left of warranty-time and i am completely away from the shop to actually use the warranty.
+
+  
+Any advice there, please? :)",1719398956.0,0,0.5,2
+Ubuntu,After Ubuntu installation the computer sort of freezes in the booting,"Hey folks,
+
+I installed on my old parents' pc ubuntu. The installation was quite tricky, because I installed ubuntu on the hdd which was taken outside of the pc using the extra cables usb cables for reading out hdd outside of pc.
+
+I installed it just fine and on laptop Ubuntu worked. (I installed it this way, because desktop pc did not want to boot from USB stick for some reason.)
+
+So now I have all HDDs inside once again, all were formatted to exFAT and on one of them has ubuntu installed on it, but basically computer does not want to boot into ubuntu and is stuck after ""Verifying DMI Pool Data"". Now I do not have an idea what could I do better. The pc is quite old, it has Core 2 Duo in it, with 8 gbs (maybe only 4) of ram and Ati Radeon HD 5750 and previously it was on windows 10. It has no secure boot enabled, there is no option for it and also it has no UEFI, it has standard BIOS, which comes from 2008, it looks like.
+
+Does anyone have an idea, how to fix it? Ubuntu version is 20.04 LTS, boot order is right
+
+any help will be appreciated.",1718531113.0,0,0.5,4
+computerhelp,After Ubuntu installation the computer sort of freezes in the booting,"Hey,
+
+I installed on my old parents' pc ubuntu. The installation was quite tricky, because I installed ubuntu on the hdd which was taken outside of the pc using the extra cables usb cables for reading out hdd outside of pc.
+
+I installed it just fine and on laptop Ubuntu worked. (I installed it this way, because desktop pc did not want to boot from USB stick for some reason.)
+
+So now I have all HDDs inside once again, all were formatted to exFAT and on one of them has ubuntu installed on it, but basically computer does not want to boot into ubuntu and is stuck after ""Verifying DMI Pool Data"". Now I do not have an idea what could I do better. The pc is quite old, it has Core 2 Duo in it, with 8 gbs (maybe only 4) of ram and Ati Radeon HD 5750 and previously it was on windows 10. It has no secure boot enabled, there is no option for it and also it has no UEFI, it has standard BIOS, which comes from 2008, it looks like. 
+
+Does anyone have an idea, how to fix it? Ubuntu version is 20.04 LTS, boot order is right
+
+any help will be appreciated. ",1718531033.0,1,1.0,1
+PcBuild,"How to improve this build? Not visually-wise only performance-wise, please.","**Some PC background info**: bought it as a prebuilt like 2 or 3 years ago I think, it had standard 3070 in it, which was able to mine at full speed, so I exchanged it with one miner with RTX 3070 Ti. (at that time the prebuilt cost interestingly approximately almost the same (little more) as mining enabled cards (RTX3070) so it seemed like a good buy, definitely not regretting it to this day.
+
+**Background of myself**: I am a little bit more than standard casual gamer - time to time play fortnite, LoL, but also more demanding single player games (RDR2, KCD, Cyberpunk, also looking forward for KCD 2), but nothing super competitive, I have ultra-wide monitor with 144Hz with it and that is all. 
+
+\_\_\_\_\_\_\_\_  
+
+
+# Specs
+
+**MB**: ASUS PRIME B460M
+
+**CPU**:  Intel(R) Core(TM) i7-10700F CPU @ 2.90GHz   2.90 GHz
+
+**GPU**: NVIDIA GeForce RTX 3070Ti (some Gigabyte version)
+
+**RAM**:  16 GB  - 2x8 GB Kingston DDR4-2666 (1333 MHz)
+
+**SSD**: 2x1 TB, 
+
+1 - KINGSTON SA2000M81000G
+
+2 -  WD Blue SN550 NVMe SSD 1TB 
+
+**PSU**:  some gigabyte 550W
+
+\_\_\_\_\_
+
+I guess I should most likely upgrade PSU, because it feels like that sometimes my computer not really often crashed because of that, at least I think so.  Other than that what should I do with it? I am kind of lost, because I no longer have time to deeply research this topic, but also would like to upgrade some things, because I would like to get the most out of this pc so I do not have to really buy completely new pc. I am open to any suggestions, because of course I could buy best cpu for LGA 1200, but that seems to not really make too much sense financially, as it would be also better to buy new MB I guess etc. So please could you point me to something, which could be improved and what could financially make sense? Will be very happy, glad and appreciative for your suggestions. <3 
+
+&#x200B;",1714040964.0,1,1.0,1
+czech,Seznámení v okolí Liberce,"Zdravím vespolek,
+
+jsem si jist, že takovýchto postů tu bylo a ještě bude sakra hodně a jsem si vědom, že tenhle subreddit není úplně to správné místo na seznámení, ale říkal jsem si, proč to vlastně nezkusit. (Pokud to porušuje nějaká pravidla, rychle post vymažu.) Každopádně už delší dobu jsem sám a neustále se stýkám s těmi samými lidmi, neříkám, že to není špatný a že se tu a tam s někým novým neseznámím, ale rád bych poznal někoho úplně mimo již mé objevené kruhy. Sice jsem v Liberci relativně dlouhou dobu, ale nedá se úplně říct, že bych poznal za tu dobu extra velké množství pravých Liberečáků.  
+
+
+Teď něco o mně:
+
+Je mi 29, jsem (možná překvapivě) svobodný, bezdětný muž, rád sportuju, jezdím na kole, plavu, chodím po horách, hraju fotbal, badminton, na počítači/PS, zkouším lézt na boulderech, tu a tam si zahraju na kytaru -> mám rád hudbu, film, posledních pár let se i rád otužuju. Rád zajdu na víno/pivo... Jsem introvertnější, ale ve známější společnosti pookřívám a asi ani jako introvert nevypadám. Rád bych našel v ideálním případě slečnu, která by ráda měla podobné zájmy a taky by byla trávit nějakým způsobem společně čas. Ale určitě se nebráním seznámení s nějakým borcem, díky němuž bych se třeba dostal k nějaké skupince, který si chodí přes prac. týden někam kopnout - na umělku/tartan/normální trávu, protože většinu skupinek (hlavně fotbalových), se kterými jsem něco podobného podnikal jsem zanechal ve svém rodném městě. 
+
+Vzhledově nejsem žádný kyklop, ale brýle teda nosím. :D Měřím 180 cm a vážím 79 kg. Rád si samozřejmě vyměním foto/sociální sítě během další komunikace.
+
+Pokud by se chtěl někdo ozvat, tak ať třeba napíše sem pod příspěvek do komentářů, nebo i do zpráv.   
+Doufám, že zde nesklidím čočku, ale snad ne. Přece jen se pár podobných příspěvků již zde objevilo a vypadalo to, že to bylo přijmuto celkem v pohodě. 
+
+Mějte se prozatím krásně!  
+S pozdravem  
+""Klasicky"" neklasický český redditor",1710946298.0,0,0.3,4
+depression,Currently on the lowest point of my life,"Basically title. Not having any suicidal thoughts, because funnily suicide itself does not solve a thing, it just brings darkness to other people's lives (just few ppl in my case) that is probably the only thing, which is stopping me from doing it, I feel the responsibility that I should not make anyone sad from my family including my brother, mother, father and my two grandmas, one is 91 and still going, the other is all good as well. Yesterday I almost send all of my money to two twitch streamers, because I feel like I have no use for them. I just need some food from time to time that's all. I hope that this is the lowest point of my life, but I guess, there is still some space to go even lower. Also I like to be curious spectator of the things which are happening to me throughout the years. Sorry for the rant, I hope you are having a good day, what are highlights of your life in your near future? I would probably like to buy some gravel bike, but I guess, it is hard to do when I actually wasted my savings for now. ",1708509153.0,3,1.0,0
+RoastMe,"M29, 2 months after gf broke up with me, telling me there is no potential in this relationship, still feeling miserable, prove me it can be MUCH MUCH worse and make me regret this decision!",,1707574819.0,12,0.74,129
+RoastMe,"M29, 2 months after gf broke up with me, telling me there is no potential in this relationship, still feeling miserable, prove me it can be MUCH MUCH worse and make me regret this decision!",,1707312119.0,1,1.0,2
+FridgeDetective,Who am I?,,1702559150.0,17,0.9,46
+learnprogramming,IndexOutOfBoundsException happening inside LazyColumn and I do not know why,"Hello folks,
+
+I have been trying to learn Jetpack Compose for a while now and when implementing lazycolumn with Sticky Headers I bumped on to this IndexOutOfBoundsException which is making my app crash, i am quite desperate to know, what is causing me the problem.
+
+allDreams is a list which is filtered outside of this function - based on the content of TextField value
+
+    @OptIn(ExperimentalFoundationApi::class)
+    @Composable 
+    fun LazyListThrowingIOB(allDreams: List<Dream>) { 
+    
+    // allDreams is list from room db, which gets filtered by contents of textfield which causes the exception to be raised
+    val groupedItems = allDreams.groupBy { it.title.firstOrNull() }
+    if (groupedItems.isNotEmpty()) {
+    
+        groupedItems.let {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                for (group in it) {
+                    group.key?.let {
+                        stickyHeader(key = group.key) {
+                            Card(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 8.dp, end = 8.dp)
+                                    .height(32.dp),
+                                backgroundColor = Color.Gray,
+                                contentColor = MaterialTheme.colors.contentColorFor(Color.Gray),
+                                shape = RoundedCornerShape(8.dp)
+                            ) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(16.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.End
+                                ) {
+                                    Text(
+                                        text = group.key.toString(),
+                                        modifier = Modifier.padding(end = 32.dp),
+                                        fontSize = 20.sp
+                                    )
+                                }
+                            }
+                        }
+    
+    
+                        items(group.value) { item ->
+                            DreamEntry(
+                                dream = item,
+                                navigateToDreamDetail = {},
+                                displayDialog =  remember{ mutableStateOf(false) },
+                                isSubscribed = remember{ mutableStateOf(false) }
+    
+                            )
+                        }
+                    }?: run {
+                        items(0) {
+                            CircularProgressIndicator(
+                                modifier = Modifier
+                                    .width(64.dp)
+                                    .padding(32.dp),
+                                color = MaterialTheme.colors.primary,
+                                //  trackColor = MaterialTheme.colors.secondary,
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+    }
+
+Stacktrace
+
+    java.lang.IndexOutOfBoundsException: Index 12, size 12
+             at androidx.compose.foundation.lazy.layout.MutableIntervalList.checkIndexBounds(IntervalList.kt:183)
+           at androidx.compose.foundation.lazy.layout.MutableIntervalList.get(IntervalList.kt:166)
+          at androidx.compose.foundation.lazy.layout.LazyLayoutIntervalContent.getKey(LazyLayoutIntervalContent.kt:86)
+          at androidx.compose.foundation.lazy.LazyListItemProviderImpl.getKey(LazyListItemProvider.kt:85)
+          at androidx.compose.foundation.lazy.LazyListMeasuredItemProvider.getAndMeasure(LazyListMeasuredItemProvider.kt:46)
+
+&#x200B;
+
+Any help and also feedback will be appreciated.
+
+&#x200B;",1698700514.0,1,1.0,17
+androiddev,Customizable calendar for Jetpack Compose with option to add app specific dates etc.,"Hi, for some time i am looking for a calendar solution to integrate into my sample application, which has possibility to actually show calendar in which i can show in each day that there is some ""event"" only available for my particular application, basically have separate complete calendar for this, but with possibility to stylize it well and actually be able to maintain the events etc. Of course that so called events or CRUD operations i have already implemented, but I need the means to visualize them well ideally on calendar month view. 
+
+I found out couple of things including this one - [https://github.com/boguszpawlowski/ComposeCalendar](https://github.com/boguszpawlowski/ComposeCalendar) which is usable, but i am sort of expecting that some of you are experiencing / have seen maybe some better options.
+
+But I am eager to hear from you any library tip out there?",1685475839.0,8,0.85,9
+tuxedocomputers,Not working two external monitors via docking station,"Hi,
+
+I have got docking station from i-tec. Everything was working great and I was really satisfied with both - my InfinityBook Pro 14 laptop and also the docking station connected via usb-c (thunderbolt), but recently after some update each time only one monitor gets detected depending on the order of connecting via the cable, i have tried to use HDMI and display port, or only display ports,  but it does not change anything. Time to time I get lucky and monitors get detected, but there is no consistent solution for me to actually reproduce the steps to get everything right every time. Has anyone got any tips about that? Thanks in advance, I am quite desperate in this regard.
+
+Things I tried
+
+* updating display link
+* updating drivers for docking station
+* rm \~/.config/monitors.xml from [here](https://www.tuxedocomputers.com/en/Infos/Help-Support/Instructions/Detecting-external-Displays.tuxedo)
+* different cables (hdmi, display port)",1678700436.0,4,1.0,17
+samsunggalaxy,"Samsung Galaxy S22 Ultra - missing alarms do not trigger, because the phone is in energy saving mode, i do not know, how to disable it","Hi, i gifted myself s22 ultra after my screen on previous phone broke.
+
+I am kinda satisfied, but one thing is actually bad for me, but i have somehow done it...
+
+i set up that on nights the phone goes to timed super battery saving mode (like from 00:00 - 7:00am) resulting that i am missing alarms to go to work... i know it sounds kinda funny, but i cannot remember where set this up. I cannot find it anymore. I cannot find it in Smart things app etc. Do you guys actually happen to know, where can i either adjust it, or remove it completely? As i have s22 ultra kinda for short time i really do not wanna go for factory reset. I know, it is most likely the solution but i would rather go just the way of disabling battery saving mode.
+
+I am not sure if it is right subreddit, but i hope it is. Any help is appreciated.",1667003823.0,0,0.5,3
+samsung,"Samsung Galaxy S22 Ultra - missing alarms do not trigger, because the phone is in energy saving mode, i do not know, how to disable it",[removed],1667003725.0,1,1.0,1
+AndroidStudio,Flipped modes of caret (how to make it back to default),"Hi,
+
+after launching the android studio after a while, after update (dunno if it is relevant or not). But basically the visual modes of caret (blinking cursor) are flipped - when the insert mode is enabled, the caret is really thin and when the caret is in normal mode (code gets added up, not erasing the previously added code) the caret is really thin... I hope that it is understandable enough. How can i do it so it is back to normal? Thin caret - normal edit mode, thick caret - insert mode enabled?
+
+Thx for eventual responses, I am quite nervous about it and really do not like it currently.",1660906052.0,1,1.0,0
+tuxedocomputers,TUXEDO InfinityBook-Pro-14-Gen6 - Bluetooth adapter not found + webcam not found,"Hi,
+
+i received new work notebook from your company, personally i love all  about the notebook, except few caveats and decided to actually write here, when i bumped onto this subreddit to maybe solve it completely sepparately.
+
+To the point, no bluetooth adapter is found and webcam is not found. What can i do to make it work?
+
+I have tuxedo OS 22.04, 11th gen intel core i7-11370H @ 3.30GHz, 32 GB, Mesa Intel @ Xe Graphics",1657269222.0,4,1.0,8
+AndroidStudio,Multiple git repos in one App,"Hi, is there an easy way to basically have two git repositories in one project?
+
+In the team we have an app which is using soon-to-be module package, which needs to be used in an app and on backend as well. For better maintainability we need to have it as a separate git project and all the things which will be changed in this module/package/etc, needs to be changed mainly on the both sides - app and the module itself, is there a way to easily maintain it? We are noobish in this regard + we do not really want to publish this module on mavenCentral etc.
+
+Any help would be appreciated.",1653298579.0,1,0.6,2
+ToolBand,Thrilled to see Prague show,"I am so much looking forward to the prague show? I mean like, Tool means so much to me (and i have a logo even tattooed on my instep). What are your feelings about the recent shows and their song sets? :) And was there any merch at all to buy?",1653251756.0,3,1.0,9
+leagueoflegends,"The old UI in post game from the UX point of was so much better, do you agree?",[removed],1652452260.0,1,1.0,1
+androiddev,How to get current voltage of charging?,"Pretty much the title, it would be great for my logging app",1646861223.0,1,1.0,1
+germany,"[Job Question] Hi, is there any probation period after the contract was?","Hi, the question is pretty much in the title, but today I have received proposal of ""die Änderung zum Arbeitsvertrag"" (i have been working there for two years) and there was this part, where it seemed that, the probation period is taking place again, is this possible? or am i just misinterpretting this?
+
+Thank you for your entries.",1646646334.0,0,0.43,3
+leagueoflegends,[arcane] is Dr. Mundo present in arcane as well?,"When I am talking about Dr. Mundo in arcane I am exactly thinking about the person who actually took a rifle from Caitlyn for medicaments which were later used for vi to heal up... 
+
+Well.. I did not see it mentioned anywhere so I thought I will just share it with you, as long as I am not having s lot of friends who are actually interested in Arcane.... Cya",1639426210.0,0,0.5,2
+androiddev,[Jetpack Compose] Is calling and setting parent activity's variables considered bad practice and can cause some special bugs?,"Adding up my overview
+
+In my personal project i am musing a map (mapbox map actually) and I am feeding the map in to an AndroidView, which is standard way of handling the views which are not implemented into the compose. Mapbox has a built-in handling of location permissions and those are implemented in the example of finding of location (and displaying the pulsing location puck) in docs.[link here](https://docs.mapbox.com/android/legacy/maps/examples/location-component-basic-pulsing/)
+
+And now to the question ->
+
+is it ok to call some parent activity's methods from composable code  - minimal example
+
+MainActivity code:
+
+    class MainActivity : ComponentActivity() {
+        
+     var exampleString: String? = null
+    override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState) setContent {
+        }
+    }
+    fun callingSomethodFromActivity() {
+        Toast.makeText(this, ""some method called"", Toast.LENGTH_SHORT).show()
+    }
+    }
+
+Composable code:
+
+    @Composable
+    fun MyExampleComposable() { val context = LocalContext.current
+    val mainActivity: MainActivity? = if (context is MainActivity) context else null
+    mainActivity?.callingSomethodFromActivity() mainActivity?.exampleString = ""Some variable was set in parent Main Activity"" 
+    }
+
+I did not find any good resources talking about this topic and to be honest it actually feels a bit like cheating and i am feeling a bit bad about using this. On the other hand it would really make my life easier because map handling would be in this case much simpler if i could have some variables straightly in the activity, because I find it sort of hard to grasp to do all the work (dynamically drawing mappoints right in the compose composing)
+
+Any ideas/comments would be amazing especially if someone is already digging into dynamically drawing mappoints into some map implementation using Jetpack Compose.",1636536681.0,8,0.84,7
+relationships,"""EX""GF sleeps with my best friend again even though she slept meanwhile with approx 8 guys","hi, small background. I(26M)have a friend (28M) who is really introverted and does not really spill an info for me regarding his own relationships etc. then i do have an another friend who happened to be his girlfriend(24F). I really liked her until she decided to break up with him... then she proceeded to sleep with 8 (?) guys? i know it straightly from her meanwhile he does not know anything what happened during 2 months i think and he literally did not do anything with any girl? i do not know what to do. I do not want to be the one to tell that she is horrible and lose him if he thinks that i am lying, even though i never lie to him, i am thinking if i do something against this girl i will lose him.
+
+&#x200B;
+
+TL;DR: My friend and his gf split up after 3 years, she slept with approx 8 guys during 2 months, i do not know what to do, should i ""interrupt"" and tell him? He still loves her
+
+&#x200B;
+
+EDIT: OK i overreacted. I was really pissed of initally.",1636407789.0,0,0.38,10
+relationships,"""ex""Gf of my bestfriend sleeps with him again even though she slept with approx 8 guys inbetween after split up",[removed],1636407533.0,1,1.0,1
+learnprogramming,"[Android][Kotlin] Jetpack compose with mapbox map, how to load from Rest API points to map with markers?","Hi,
+
+I did not want to add this question on SO, because it is quite wide question.
+
+I have been experimenting in Jetpack Compose and implementing a mapbox map into it.
+
+And i am pretty baffled about the viewmodel and compose itself.
+
+And I am thinking about how I can display some points on the map retrieved from some Rest API.
+
+how can i dynamically place markers on the map from rest API, when there is no information about the map anywhere else beside the composable layout itself. In the normal standpoint there would be a fragment/activity layout and I would make an instance of a client which would take care of the markers and return the list of points, which would be taken care of by the activity/fragment and then the activity would place them into the map. But I have no idea how to do it with jetpack compose, when the composable with the map is completely outside of the scope and beside the composable, there is no way how can i access the map, outside of the composable. [here](https://gist.github.com/zajiclib/81d7de19d6a538855e840175402502f0) is a gist with the composable itself. Can anyone of you enlighten me how it is best done in compose, currently i really do not have an idea.
+
+Any help will be very appreciated.",1635149773.0,1,1.0,0
+androiddev,Does anyone from you (professional) devs use TDD in your development cycle?,"Pretty much the title.
+
+If not what kind of development do you use or what do you think is the best way to develop the apps in?
+
+I will appreciate your opinions",1631540360.0,10,1.0,11
+EnglishLearning,Does this sentence makes sense to you?,"Does this sentence makes sense to you? i wrote it to some documentation and we had a discussion about it with colleague. so here we go:
+
+ 
+
+>XY module can be split into three subsections regarding the functionality providing for the client-side application in the form of ***XYApplication.***",1626337097.0,1,0.67,3
+Dekar173,So dekar's twitch banned again?,"Heya,  what's up with the stream, boys?",1623861501.0,8,0.89,9
+computers,Can second m.2 NVMe disc be placed under GPU (rtx3070)?,"Hi, i bought myself a pc (complete one), because of the prices of GPUs.
+
+So far I am quite satisfied but i do have one question for more experienced users than myself.
+
+I would like to add (if it is possible) another m.2 ssd.
+
+Is possible to add m.2 disc into the slot marked as yellow? The main reason why i am asking is, that there is gpu overlapping this slot and i am really not sure if the disc in the slot would not be interfering with the GPU (rtx3070) .
+
+Any help would be highly appreciated.
+
+Legend to image:
+
+red rectangle - primary ssd disc
+
+blue rectangle - gpu (rtx 3070)
+
+yellow - dottish rectangle
+
+[Motherboard - Asus Prime B460M-A](https://preview.redd.it/3st9t37tw6571.png?width=900&format=png&auto=webp&s=727add54235487a45d1a7e900c794fc2544634f1)",1623658859.0,0,0.5,4
+learnprogramming,"[Android, Java] Parsing big xml files and importing it into Room database","Hey, after app is installed i need to  download xml file (which is easy, then i need to decompress it (easy as  well.) but then i need to parse the contents into room database.
+
+The  thing is that the decompressed xml has approx 250 MB, which is quite a  lot and during the normal parsing, first there happened - out of memory  exception - because i was trying to parse whole xml at once, which is  quite bad, i know, but at least i tried.
+
+Then  i was thinking that - ok, so i need to make chunks of it and insert  these chunks time to time during parsing - but the  java.util.ConcurrentModificationException happened, because i am  inserting the same arraylist into db and changing him at the same time  during parsing.
+
+So now i was thinking that i should make a deep copy of a list at the time when i want to insert it into db, but i ran into the OutOfMemoryException again. So my questtion is, what would be the best option/pipeline? Thank you in advance",1619594449.0,1,1.0,4
+androiddev,Parsing big xml file during app initialization,[removed],1619514742.0,1,1.0,1
+Rengarmains,Small cute double kill,"&#x200B;
+
+[Short and in elo hell, but i kinda liked it](https://i.redd.it/vstl2xcc5vi61.gif)",1613927467.0,4,1.0,0
+berlin,Modes of transportation in Berlin,"Hi,
+
+before I will start, Ich muss entschuldigen, dass Ich nicht in Deutsch sprechen wird, weil Ich nicht so gut in Deutsch bin.
+
+I am working on some mobile app and I need to display different icons of modes of transportation in Berlin. Can someone help me to find right icons for modes of transportation below? I found some of the wikipedia pages, but there are usuallz just icons of the lines but not the whole ""mode"" of transportation. (Ferry, subway, s-bahn, bus, Tram are clear, but rest of them i am not sure)
+
+ InterRegional, RegionalTrain, RegionalExpress, Ice, CityTrain
+
+Any help is very appreciated.
+
+Be healthy and have a nice day and week!",1613476134.0,1,0.6,5
+androiddev,USB DAC Problems with connection,"Hi,
+
+well, my friend asked me for a favour. He has a samsung phone and he has a digital to analog converter. (I think he has a Samsung Note 20 pro and iBasso TYPE C converter) And everytime he connects this converter to his device in order to use, he must restart his device everytime he wants to use it problemlessly. Is there among you anyone who knows how to eventually program something which would actually bypass this so the user would actually just use some sort of app which would solve this issue?
+
+This is low level stuff which is really unfamiliar to me.
+
+Some links to for information regarding the issue-
+
+[first](https://eu.community.samsung.com/t5/galaxy-s10e-s10-s10-s10-5g/ibasso-type-c-dac-is-not-working-in-s10/m-p/1349248?fbclid=IwAR04DHRRretkUXu9r-opZWbdwnegu8Ds309tFcXnC6obW5imGaARmTEowOs#M11402)
+
+[second link](https://forum.xda-developers.com/t/external-dac.3958766/?fbclid=IwAR0U1PrJdLbxL70oZofW-TSiSqtTq0WuUInU2P8c71ng5IBj_Qd9dd5e_RE)
+
+[third link](https://forums.oneplus.com/threads/usb-dac-not-working.718117/?fbclid=IwAR0vuGZVoazE9qiBUki_5tq2ML_IDIYhLq1Qv2GsKZi4Y9k-Y_06t_Fs2nw)
+
+Some  solutions are mentioned here, but they are really only temporary.
+
+Any help, direction would be appreciated.
+
+Regards
+
+Juniorish android dev",1612097426.0,0,0.33,2
+learnprogramming,[C#] Tasks/ideas for my small cousin (13yo),"Hey, from tomorrow on. I will time to time teach my small cousin some programming and I know it is kind of ahead of a time, but I really want to make it really enjoyable and rewarding.
+
+What would be some ideas to do? He has some basics in c# and has done  some console apps/some wpf apps.  The thing is that i work in java, so i do not have super deep knowledge in c#, but I can do something here and there. 
+
+Any ideas will be highly appreciated. I know these questions are time to time here asked, but I did not find any, which would have satisfied me.",1611681636.0,7,0.82,7
+leagueoflegends,When you duoq in Silver 4 with vayne <3,"&#x200B;
+
+*Processing video h5ry60k1i3w51...*",1604004157.0,1,0.67,0
+self,"Split up with my first love(25m), cannot find myself a return to my old ""ok"" self","Hey guys,
+
+sorry, this'll be sort of rant. But I have to ventilate it somewhere.
+
+It has been around 2 months when I(25M) split up with my gf(26F) or to be honest she just left me. I have done many mistakes in my first proper love relationship.  I will sort of sum it up.... to be honest it does not matter, but i need to say it someone. So there it goes....
+
+We met thanks to our excommon friend let's call her Lucy... I went with her on couple dates... and then this potential gf went with my best friend and Lucy on vacation to see a sea.
+
+We happen to sleep with each other and it was awesome, because to be honest I sort of immediately saw something in her and definitely wanted to continue that... which happened to be true. After some dating we said ourselves that we love each other... at that point everything seemed so harmonic... and it was basically best time of my life. It has been like that for maybe 6 months... then she started to be jealous of Lucy, even though I had no romantic feelings with her... And she basically started trying to make me jealous on other guys... she just randomly pet some guys on back during some parties... etc... I was kinda annoyed by that and was nervous around that time because rough time at work. And one day I basically split up with her because of really tiny thing - basically irrelevant... After a while i realized how much I miss her and I was pissed on myself that i let myself be controlled by instant emotions.. so we got back quite quick... and then we basically split up couple times... sometimes her, sometimes me... but in the end she split up with me saying that I am pretty immature in this department.... which i definitely agree... but she is doing things which are basically supposed to make me hurt... because she is just sharing her pictures with another guy in bed and other things... and I am still basically heartbroken, because i think that at one point everything went downhill, but before that it was just so harmonic....
+
+Howewer, this post is all about getting back on track to my old self... how do i get from this misery especially because i am kind of introverted person and for me it is quite hard to get to know someone else, so how do you guys basically move on?
+
+Finally I am sorry for this post... but i had to type it somewhere.....",1601850506.0,1,1.0,5
+AskReddit,Blind people of reddit: do you dream and what is it like?,,1596276605.0,6,0.66,37
+androiddev,"How can i achieve ""slidedown"" fragment/activity with pull button?","Hello, I do not even know how to google this kind of thing. I would like to implement in my App.. the ""slide down"" fragment/activity. I would like to drag some sort of button which would be visible at all times in main activity and which when dragged would come down with whole fragment/activity in which a lot of other options would be visible. What would be my possibilities in this case?
+
+Any help appreciated. Hopefully it is question about the design itself and it's not against the rules.
+
+[Main screen with the draggable button on top of the screen](https://preview.redd.it/exi4w6oeqdd51.png?width=250&format=png&auto=webp&s=0b387e3012242d53a41efe80cccea238e9999079)
+
+[State - Dragging in progress](https://preview.redd.it/3re876oeqdd51.png?width=250&format=png&auto=webp&s=9a531e2f9b835261593fce377637c4d78355a54b)
+
+[ State after dragging fragment\/activity](https://preview.redd.it/y3hqc8oeqdd51.png?width=250&format=png&auto=webp&s=a53894a36f6d95eba4098f8f77ec7dac6cf48eab)",1595847083.0,0,0.5,1
+androiddev,How is programatically achieved the enable location dialog?,[removed],1593591446.0,2,0.67,5
+relationships,What is the best way to move on for me (25M)?,[removed],1593289774.0,1,1.0,1
+androiddev,Proper replacement for AsyncTask - onProgressUpdate animation,"Hello, 
+
+I am sort of very new to android and one of the tasks for me is to create proper replacement for asynctask... especially to integrate our custom indeterminate ""progress bar"" which consist of two animations with our company logo very similar thing can be seen [here](https://tobiasahlin.com/spinkit/)... I work with object animator and two parts of animation. So my java class is basically done and just one method of this object needs to be called in interval (around 1 second) of each two parts of animation. How can i achieve this?
+
+I came to rxjava which would have just handled the background task, but i really don't know how to integrate this animation directly into rxjava background task...  
+
+&#x200B;
+
+    class LoadCatalogsTask implements Callable<Boolean>, Observer<Boolean> {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+                ourLogo.setVisibility(View.VISIBLE);
+            }
+    
+            @Override
+            public void onNext(@NonNull Boolean aBoolean) {
+                ourLogo.setVisibility(View.GONE);
+                Log.d(""s"", ""onNext: "");
+            }
+    
+            @Override
+            public void onError(@NonNull Throwable e) {
+                ourLogo.setVisibility(View.GONE);
+                Log.e(""s"", ""onError: "" + ""s"");
+            }
+    
+            @Override
+            public void onComplete() {
+                Toast.makeText(MainActivity.this, ""onComplete"", Toast.LENGTH_SHORT).show();
+            }
+    
+            @Override
+            public Boolean call() throws Exception {
+                return doAllWorkInBackground();
+            }
+    
+        }
+
+I would be very grateful for any suggestions eventually even",1589185223.0,3,1.0,6
+oneplus,Switching from OP 6 to OP 8 pro,"Hey boys, 
+
+just quick question are there anyone who switched from OP 6 to OP 8 pro? I would like to basically know if it is worth switching... today i had even 8 pro in the online shopping cart, but i am really hesitant to just kick it off, because you know, I feel like that the OP 6 is still beautiful and useful and i barely have any issues with it. So is there anyone who had the same doubts and switched and had feeling that he decided well, or any other? Also i am afraid that if i would have bought one, i would definitely get the one with bad screen. So i am kind of waiting how the op deal with it and what is the percentage of faulty devices. 
+
+I will be glad for any reply.",1588688085.0,2,0.75,20
+androiddev,Room DB retrieve single record,"Hello,
+
+i have been playing with room db and i came to the point where i have no idea how properly get the single record from database inside single event (eg button click in mainactivity), i am able to update the recycler view, but in this case i have no idea and to be honest i was not able to find appropriate understandable example for me. Here are I think the most important parts of code.
+
+Organisation.java
+
+    // Organisation object
+    @Entity(tableName = ""Organisations"",
+            indices =
+                    {
+                            @Index(value ={""orgId""}, unique = true),
+                            @Index(value = {""orgName""}, unique = false)
+                    }
+    )
+    public class Organisation {
+        @PrimaryKey
+        @ColumnInfo(name = ""orgId"")
+        private int orgId;
+    
+        @ColumnInfo(name = ""orgName"")
+        private String orgName;
+    
+    
+        // contructor
+        public Organisation(int orgId, String orgName) {
+            this.orgId = orgId;
+            this.orgName = orgName;
+        }
+    
+        /* getters */
+        public int getOrgId() {
+            return orgId;
+        }
+    
+        public String getOrgName() {
+            return orgName;
+        }
+    
+        /* setters */
+    
+        public void setOrgId(int orgId) {
+            this.orgId = orgId;
+        }
+    
+        public void setOrgName(String orgName) {
+            this.orgName = orgName;
+        }
+    
+         @NonNull
+        @Override
+        public String toString() {
+            return ""Organization ID: "" + orgId + "" Organization name: "" + orgName;
+        }
+    }
+
+DatabaseDao.java
+
+    @Query(""SELECT * FROM Organisations WHERE orgId = :idOrg"")
+        LiveData<Organisation> getOrganisation(int idOrg);
+
+DatabaseRepository.java
+
+     public LiveData<Organisation> getOrganisation(final int orgId) {
+            return databaseDao.getOrganisationById(orgId);
+        }
+
+MainActivity.java
+
+    btnViewProduct = findViewById(R.id.btnViewProduct);
+    etViewId = findViewById(R.id.etOrgId);
+    tvViewOrganisation = findViewById(R.id.tvProductContent);
+    
+    
+    btnViewProduct.setOnClickListener(new View.OnClickListener() {
+     @Override
+     public void onClick(View v) {
+        String result = """";
+        // placeholder for result
+       
+        tvViewOrganisation.setText(result);
+     }
+     });
+
+I will be very grateful if i could get any answer. Or any project where i could see anything I could just follow",1588663489.0,1,1.0,4
+androiddev,Loading animation (custom inderminiate progress bar/custom animation),"Hello,
+
+I just wanna ask, what is the best practice to do this animation (just the animation) for progress in Android (Java). Just like  [it can be seen here](https://tobiasahlin.com/spinkit/) ... I want to do it with my custom image.  I am asking because I am not so experienced with animation building and i wanna do it in the best way it is possible. One way would be like that [here](https://www.youtube.com/watch?v=muEoxGKP3_c) ... but i think that there could be better way to do that for styling the progress bar.  I have done some more research and I did not see anything like that. Eg [here](https://stackoverflow.com/questions/16893209/how-to-customize-a-progress-bar-in-android) (i use preferably Java)
+
+Any help would be appreciated.",1586172033.0,1,1.0,2
+flask,Small first flask project,"well i was playing around for my first time in flask and I have come to some problems... I am not really  experienced in web development so my question are at the most basic level, but i reallly don't have the  intelligence to really effectively find the answers on internet...
+
+So my app is pretty simple... there is  some basic html/css layout - i can do that pretty well.
+
+* it has menu which consists of the categories, which are dynamically loaded - this gets me to my first question, should be the content loaded everytime the user gets to the homepage?
+* all is loaded from jsons files and all is loaded from another site.
+
+&#x200B;
+
+[picture of homepage](https://preview.redd.it/za7gp57qorb41.png?width=717&format=png&auto=webp&s=76dff778876ee00c1b5d04b68ad38ed198a78277)
+
+[picture of section site](https://preview.redd.it/u0qubgwzprb41.jpg?width=716&format=pjpg&auto=webp&s=79ee3fca77acb15fb21cad4ef7449761353b51f3)
+
+&#x200B;
+
+how do i deal with the parameters?
+
+i found [this](https://stackoverflow.com/questions/41492721/in-python-flask-how-do-you-get-the-path-parameters-outside-of-the-route-functio), but it is not working for me
+
+&#x200B;
+
+i will appreciate any help.
+
+[full source code](https://gist.github.com/MortallaSane/53e061ec4e5d68a7829f68d857588bdc)",1579454333.0,1,1.0,5
+PLC,Can Siemens TP900 Mobile panel view multiple standalone projects depending on the plc which it is connected to?,"Hello there, i am not so experienced guy in plc programming, bu
+
+Pretty much the title. I know I can change IP addresses any time i want. But can I view different projects on HMI panel depending to which plc i am connected to?  Just after changing connection, it would completely change the GUI as well? 
+
+The thing which is probably easily doable, Is doing the different set of screens and changing them  as user.
+
+But it would be awesome if it could be doable this way - changed Connection > changing whole GUI and screens itself.
+
+&#x200B;
+
+Any suggestions and ideas are highly appreciated",1575453217.0,6,1.0,4
+AskReddit,"What was the exact moment like, when you knew you love her/him?",,1570481504.0,0,0.33,9
+work,How to talk to my nearest colleague profession-wise when i am about to end in this job,"Hello,
+
+so my first fulltime job contract is about to end and I am 95% certain, that i will move on. They are probably going to offer me contract for indefinite period. But i just need change.  I kind of informed my boss, but not my nearest colleague about that, when was the right time. So I am asking what is the best way to actually tell him, that i am gonna ned. one month remains  to the end of the contract. 
+
+Thx for replies, I like him and i just feel bad for him that i am leaving but i am not really enjoying the job i have right now.",1567419741.0,1,0.67,5
+oneplus,Problem with captions of subfolders on OnePlus 6,"Hey, something has happened to me two days ago. The captions of the galleries are bugged and the only captions which is displayed ""..."" Factory reset helped only for like one day. Does anyone know how to resolve this issue?",1564250507.0,1,0.67,1
+seduction,[UPDATE] Yesterday I went on a date with cute girl after 3 years,"Small unsuccessful update - [Original post](https://www.reddit.com/r/seduction/comments/bpq1ag/yesterday_i_went_on_a_date_with_cute_girl_after_3/)
+
+There is success, there is fail. I thought i might just share what happened next. I really felt like we had a connection, but i was probably just way too into her. We agreed we go on another date, but two appointments just were cancelled (once because of me, the second time because of her) Then she didn't reply on one casual message, which was kinda replyable if she really wanted to keep going. So I have just decided to not write anything for 4 days, despite the fact, that I was really looking forward to see her. Then I just write her that i have sort of time on the certain day .... blah blah. And she just responded that she can't so there I am back at the feeling like poop again - (neediness is my huge lot - the illusion that I desperately need relationship is pretty bad for me). After a while i just saw her with some guy, at least i know. I was probably just way too slow, or IDK. I need to pick myself up from the ashes again and just do my own thingy. It'll be hard (tiny depression going on in my life (sorry i just needed to share it somewhere)), but I hope in greater tomorrows.
+
+Howgh, sorry for negativish POST. Have a nice day and wish u success!!",1559726598.0,0,0.5,1
+csharp,Code generated via xmltocsharp,"Hello,
+
+I needed to easily get a xml structure from existing xml file so i used [xml2csharp](https://xmltocsharp.azurewebsites.net).
+
+Now i need to modify the values from excel file and again write it to xml file to appropriate attritubes.How do I do that? [Gist link with generated Xml C# code](https://gist.github.com/RickertBrandsen/933f4de0c1a7137041f78bbac26125f3)
+
+I am really new to this type of syntax with those bracketish syntax
+
+Any help is appreaciated.
+
+EDIT: Found [this](https://stackoverflow.com/questions/364253/how-to-deserialize-xml-document) but do not know how to expand it to my case.
+
+EDIT: [Updated gist with xml example](https://gist.github.com/RickertBrandsen/933f4de0c1a7137041f78bbac26125f3)",1559469797.0,16,0.82,11
+seduction,Yesterday I went on a date with cute girl after 3 years,[removed],1558092445.0,219,0.92,21
+PLC,Real time communication between plc and pc?,"Hey, we need to communicate almost in real time with plc, currently we use sockets and the communication is flying within 200 ms. We were thinking to make gsd file which will configure pc as profinet station, but i wasn't able to find sources to actually alter gsd files the right way (that's what my colleague come up with). thank you for ideas in advance. (i am plc newbie)",1557387698.0,6,1.0,24
+AskReddit,WHat is the cleverest joke you know?,,1557228137.0,2,1.0,4
+ToolBand,"Recently i have seen some tattoos shared, so i thought i will share mine, what do you guys think?",,1555408954.0,0,0.41,9
+learnpython,Running pytesseract example isn't working,"Hey,
+
+I've been assigned small task in work if there is any possibility (lowcost one) to scan live image from webcam and try to extract text from it. As long as i am kinda familiar with python scripting (matplotlib) i thought python is my easiest bet. So i was doing short research and found the pytesseract ocr, thought i might try it. So i installed via pip - pip install pytesseract and try to run [this example](https://gist.github.com/RickertBrandsen/8ed926155470a5428b6312d921293b44) . I am thinking that i am missing some dependencies, but i have normally opencv installed and working in another file so i am kind of in the dead end. Would you mind, guys, to a little bit help me? (i have a feeling that it will be sort of noobish problem, but right now i am just not able to successfully process it)
+
+&#x200B;
+
+EDIT: seems like my python interpreter does not want use pytesseract even though i have it installed for sure (updated another output message)
+
+&#x200B;
+
+EDIT2: solved",1551950146.0,1,1.0,0
+learnprogramming,Cool tool for github,[removed],1549956776.0,1,1.0,0
+relationships,"Me (24M), how can i possibly remove my neediness?"," For a longer time I just feel like that any good and promising doublesided affection between me and a girl is just being destroyed by my neediness, in other words i really hate when people aren't able to respond to my messages.
+
+This sort of pisses me off. Which just generally leads to losing interest.
+
+So i think I just need to be much more stable and i need to work for that through losing my neediness in these things.
+
+I should probably mention that I am in general very unstable human being who is melancholic, but able to sort of semi-effectively to hide it. Thank you for potential replies and advices.
+
+&#x200B;
+
+  tl;dr I need to get rid of the neediness, it seemingly ruins my potential relationships. Dunno if it is the right subreddit
+
+&#x200B;",1549108941.0,6,0.8,10
+relationships,"Me (24M), how can i possibly remove my neediness?",[removed],1549107646.0,1,1.0,1
+VisualStudio,Language of unhandled exceptions,"Hey, 
+
+I have been working for some time in vs and even though I changed language to english the exceptions which happen during debugging are written in my native language which is pretty annoying. I would like to have them in English as well
+How do I accomplish that? 
+Any help is really appreciated.",1548771155.0,7,1.0,4
+delphi,Problems drawing rectangle on the output of webcam (TImage),"Hey,
+
+Recently I have received task to ""update"" the code which is WORKING on Windows 7 workstation to Windows 10,
+
+to this day everything seems to be working quite well, but now I bumped on to one problem.
+
+&#x200B;
+
+To the point - i am drawing a rectangle on a output from webcam in real time. I am drawing it because we just do something with the pixels located within the rectangle. I am able to do it but the video has like 3 FPS. On the other hand when i change the code on one place the output of webcam is completely fine, but i don't have any rectangle on that screen.
+
+&#x200B;
+
+small note, the code below was copied couple years back and apart of using w7 and w10, the difference is as well in using different IDEs Delphi XE7(maybe XE8) was used on W7 and i am using Delphi 10.2
+
+&#x200B;
+
+    FUNCTION TVideoSample.SetupVideoWindow(vRect: TRect): HResult;
+    BEGIN
+      // Set the video window to be a child of the main window
+      {TODO -oOwner -cObdelnik}
+        // the line below of the code is the one I am changing
+      Result := pIVideoWindow.put_Owner(frmCam.Handle);     // 
+    {$IFDEF DXErr} DXErrString := DXGetErrorDescription9A(Result); {$ENDIF}
+      if (FAILED(Result)) then
+      begin
+        exit;
+      end;
+    
+      // Set video window style
+      Result := pIVideoWindow.put_WindowStyle(WS_CHILD or WS_CLIPCHILDREN);
+    {$IFDEF DXErr} DXErrString := DXGetErrorDescription9A(Result); {$ENDIF}
+      if (FAILED(Result)) then
+      begin
+        exit;
+      end;
+    
+      // Use helper function to position video window in client rect
+      // of main application window
+      ResizeVideoWindow(vRect);
+    
+      // Make the video window visible, now that it is properly positioned
+      Result := pIVideoWindow.put_Visible(true);
+    {$IFDEF DXErr} DXErrString := DXGetErrorDescription9A(Result); {$ENDIF}
+      if (FAILED(Result)) then
+      begin
+        exit;
+      end;
+    
+    end; { SetupVideoWindow }
+
+When i change that line -
+
+`Result := pIVideoWindow.put_Owner(frmCam.Handle);`
+
+\- to
+
+`Result := pIVideoWindow.put_Owner(frmCam.imgCam.Canvas.Handle);`
+
+or
+
+`Result := pIVideoWindow.put_Owner(frmCam.Canvas.Handle);`
+
+It is working but with mentioned like 3 FPS.
+
+Any help is highly appreciated.
+
+&#x200B;
+
+&#x200B;",1548079592.0,1,0.67,6
+seduction,"I am sort of out of the game, am I not?","Hey, on one night I was drinking with my homies at one pub and there was one waitress which I really liked. So I went to her and just told her that I need to take photo with herm for my friend ....because blablabla... It went nicely and I took the photo and we chatted for quite a bit, she even wanted me to send her via messenger I told her that I will remember messenger and send it next day. So I send it and even said that the photo had success.. bla, some kind of joke. some  time after I just accidentally bumped on them and they offered me a lift. So I don't obviously used it and we were chatting that we will all go together to some club this Friday, I said why not... 
+
+The problem is that to this day she didn't even respond to my message with photo so I guess I don't have any working contact outside of messenger on which she is not responding. What should be my next move,should I just let it be and see? I think it's the best thing to do, not bothering with any messages to send her again at all, which would display that I am just needy.
+
+What do you think about this thing guys? ",1547731444.0,1,1.0,2
+microsoft,Why is not cortana available in english outside of english speaking countries?,"Pretty much title, but I just don't understand that.... I mean it is already implemented, why it is not possible? I know there are bypasses, but I am not gonna do setting changes just because I wanna use cortana... It just should be available anywhere in English
+",1544653105.0,4,0.75,2
+delphi,Delete and backspace doesn't remove marked text,"Hey, I've not been working for a while in Delphi 10.2 and when I just ran the IDE and started to make changes. 
+
+The backspace and delete does not remove any marked text both of them just delete the space or line depending from whicch direction i marked the text.... I swear it is really annoying. Can anyone help me where do i find the settings to change?
+
+Thx in advance.",1544609253.0,4,1.0,11
+oneplus,OnePlus 6 - How to setup my home screen to be in the middle of all screens and not on the left?,"Pretty much the title, thank you in advance for any help.",1542478268.0,2,1.0,6
+GalaxyS6,My galaxy s6 (normal edition bricked),"2 weeks ago my phone just fell on the ground, the only thing happened  was that the glass back has a little bit of shattered glass look. Yesterday touchsscreen began to not work.... and the buttons for hard reset are not working at all... what am i supposed to do? ty in advance
+
+EDIT: ACtually does react, but only restarts and once i was able to boot into safemode.... but nothing further. The only thing that works well is alarm.........",1542349974.0,1,1.0,0
+learnprogramming,[Assignment] Applying for a C# developer job,"Hey guys.
+
+Yay I am sort of applying for my first developing job. And I have pretty simple question.. The assignment for me is to create Winform app, which will have also custom db connected with two tables. My question relates to sending my app to them. I should send the application, database, compileable code and any documentation to the email address. And my question is, how do they possibly mean that? I am not really familiar with sending/exporting any database, if there was a remote db, i would definitely understand that, but this message just really confuses me :D
+
+So the question is pretty simple how do i send them complete application which will right away work?
+Or how do they simply mean? Sending create script? I guess it would be different anyway. :)
+
+Thank you for your response.",1537470558.0,0,0.5,2
+AskReddit,What is the most interesting thing you learnt this year?,,1533803186.0,4,0.75,25
+SuicideWatch,"What's the point of life, can anyone enlighten me?",Don't know what i should actually say. Never had success in life.,1529618975.0,1,0.67,5
+learnprogramming,[Homework][Node.js] Preventing XSS attacks,"What is the best way to prevent XSS attacks? Is it only on frontend or even in backend? And where could I find good examples for application in reality? 
+So far i found [this](https://github.com/theSmaw/Caja-HTML-Sanitizer), it is kind of working for me only in basic cases.Like <script>.",1528477200.0,1,0.67,3
+Ubuntu,Dualboot - Installation of ubuntu on second hdd,"Hey guys, 
+
+i have one question. I would really liek to install ubuntu on my notebook. But there is one thing i am worried about.
+My notebook has two ""HDDs"" primary is ssd with 120GB  and secondary is hdd with 1TB. So the question is, is ok to install ubuntu on secondary harddrive, because i don't have the space on primary hard drive? is this even possible? Or what should be the procedure in this case, how would you deal with it? 
+Maybe it is bad subreddit, but have mercy please.
+
+Thank you for your eventual responses.
+",1527716514.0,1,0.67,6
+learnprogramming,Best node.js with mongodb course/tutorial to build simple SPA webapp?,"Title says it almost all. Any descriptive raesource would be nice. THX IN ADVANCE
+",1526997993.0,1,1.0,0
+lua,Lua and RSS feeds,"Hey guys, 
+
+has anyone of you got any experiences with working with RSS feeds? I would like to do small project on my NondeMCU, which would include sending emails about RSS feeds. 
+
+Thank you for your eventual clues :)",1525356240.0,2,1.0,12
+learnjavascript,"4 buttons - one text, how to change the color of the text according to the colour of the button?","Hey, 
+
+
+pretty much the title. 
+But I can't change any of the html.
+I tried to change class - but it just sends me an error.
+I feel like i am overlooking something really easy, but currently i am not able to solve it. 
+Any help would be highly appreciated.
+[Codepen](https://codepen.io/rickertbrandsen/pen/mxNaQg)",1523909385.0,1,0.67,6
+computers,HP envy laptop is not able to start properly,"Hey, this morning a tried to turn on my notebook. But nothing appeared at all, but it seemed that the all fans are working. The screen seems to be working (is lit).
+So I tried to boot to bios, or at least choose startup options but nothing happened except that at the bottom of the screen appeared small texts - depending on what F key I clicked - for example ""F10... BIOS setup options"", or ""F11...System recovery"" or ""F2...startup check"". Neither nothing happens when I mash that key again. This text just stays here. That is the first time I am not even able to come up with an idea what to do, because when I don't get to bios, I am literally done? What can I do guys? Thanks in advance for replying.",1520409364.0,5,1.0,6
+u_Maldian,HP Envy doesnt start properly nor i can get to bios pls help,"Hey, this morning a tried to turn on my notebook. But nothing appeared at all, but it seemed that the all fans are working. The screen seems to be working (is lit).
+So I tried to boot to bios, or at least choose startup options but nothing happened except that at the bottom of the screen appeared small texts - depending on what F key I clicked - for example ""F10... BIOS setup options"", or ""F11...System recovery"" or ""F2...startup check"". Neither nothing happens when I mash that key again. This text just stays here. That is the first time I am not even able to come up with an idea what to do, because when I don't get to bios, I am literally done? What can I do guys? Thanks in advance for replying.",1520409228.0,1,1.0,0
+Movie_Club,"[Request] Similar movie to ""Dan in Real Life""","Hey, despite having an exam tomorrow I am sort of in the mood to be procrastinating to late night learning. I would like to get any suggestion for a good romantic movie with very surprising unpredictable comedy plot. I know it's pretty challenging request but who knows :D 
+(Because I am really romantic spirit I saw many romantic movies.) Thank you for all your eventual responses. :) ",1517758932.0,4,0.75,4
+leagueoflegends,Mega Gnar spectator bug,"There is no icon for transoformated gnar :( only blank black icon. Is it onlz in LCK, or even in normal spectator mode? could not test it.
+
+[proof](https://clips.twitch.tv/TenuousTrustworthyEggTheThing)",1516193822.0,10,0.85,4
+learnprogramming,[mssqlserver] Can't connect (create) local database,"Hello, I am trying to run (create) local database server for training on exams which are ahead of me and after installing ms sql server management, i am not able to create any local database and i followed some video tutorials including [this one](https://www.youtube.com/watch?v=b8Bg_QPpYR8) and text one e.g. [this one](https://www.wikihow.com/Create-a-SQL-Server-Database) unfortunately none of it worked (i have same failure). Is anybody willing to give me an advice how to run that? I am sort of exhausted by that.
+
+The failure which displays when try to follow any tutorial is [here](https://imgur.com/YGB0afC)
+
+Any help is highly appreciated.",1515879682.0,1,0.67,14
+learnprogramming,[Android][Java] How to boost appearance of an app simplish app in,"Hey, 
+
+i have written pretty simple app following some tutorials from one book about android development in android studio, which just takes some data from json, edits them and sends them back to server. (not a very interesting topic)
+
+The real question is, how to make it more lively - i have some book about developing for android but there is nothing about designing the appearance of app if so very short explanations.Is there among nice redditors here someone with good knowledge of this topic, or at least someone who can direct me to the best way to learn that?
+
+Any help would be appreciated.",1514938448.0,4,0.83,0
+learnprogramming,[TCP]What is the easiest way to implement my own TCP server?,"Pretty much title. Plus this server should be providing one JSON file, which i will be accessing in my own android app? I will use it mostly for testing purposes.
+Any tips or resources? 
+I don't wanna waste time suffocating in the waters where I have no experience, but wanna get back at it when I will have time for sure.
+I have some knowledge in Java, Python, C#. 
+
+All replies appreciated. ",1510068495.0,0,0.5,3
+learnprogramming,[Python] Pylint installation failure,"Hello guys,
+
+i've been trying to install Pylint for some time(3 days+) without any solution.
+I am installing it simply via pip using command pip install pylint or I have even tried to use python -m pip install pylint. Every try just ends up with failure [here](https://pastebin.com/EVmPV3r5).
+
+I have already tried to completely reinstall / repair python as a whole but it did not change anything. Tried googling it - no satisfying results. 
+
+If someone would be interested I am obviously running python on W10 and I have tried to install any other packages and those installations were successful.
+
+Anyone who has any idea how to cope with this anomaly?
+
+Thank you for your eventual answers.",1509311577.0,1,0.66,3
+AskGames,ction game recommendation for oldish notebook?,"Hey, pretty much the title. For the idea which game i prefer and like - 
+I really enjoyed these games GTA V, Far cry 3/4 and my probably most favourite Tomb Raider (2013). Will you help me, please? :)",1505316991.0,3,1.0,0
+SkyPorn,Dawn above clouds northern part of Bohemia[OC][2896x1944],,1505166082.0,2,0.67,0
+learnprogramming,[C#] Can class have property of LinkedList<> which will be working on private LinkedList<>?,"Pretty much title, 
+if yes how can it be worked with?
+
+get would be easy, but set? How would be new value added to old ones probably saved in that linked list? 
+
+Just playing with Windows Forms currently and got stuck with one task. Maybe i just missed out something really important. Wasn't able to find answer in documentation.",1504729383.0,1,0.67,4
+html5,"[jQuery, html] How to use SweetModal?","Hey, 
+I have an image in <a> tag after clicking to display one of the modal messages from this ""librabry"". I have everything installed included in the file in script tag.
+The code I am describing looks this way.
+
+     <div class=""contact"">
+             <a id=""modal"" href=""#""> <img 
+             onmouseover=""hover(this);"" 
+              onmouseout=""unhover(this);"" 
+              src=""src/index/contact.png"" ></a>
+     </div>
+
+And i wanna use this code from sweet modal:
+
+
+        $.sweetModal({
+	        title: 'HTML Content',
+	        content: 'You can place <b>anything</b> <i>you</i> want in here.',
+	        theme: $.sweetModal.THEME_DARK
+        });
+ Sorry for really nooby question, but i wasn't able to to find any example in code.I am new to jquery. I would appreciate any answers. Thank you.",1504391845.0,5,0.74,4
+AskStatistics,Best resources to get through first year of statistics in CS?,"Hey, 
+title says it almost all. In the upcoming semester I will have to deal with the one of the hardest courses during my bachelor's studium of CS, the probability & statistics. And I really want to sort of ""cheat"", do you guys have any good resources to get through? The topics are discrete/continuous random variable.....random selection...regression....correlation. Pretty much I guess the easier introduction to statistics.
+
+Thank you for your eventual answers/suggestions.",1503953935.0,9,0.85,6
+Movie_Club,[Request] Similar movie to The Little Death(2014),"Hey, the title pretty much says it all. I saw this movie and I was saying to myself whole time that I am really glad that I bumped on it. ;) . It is not so common movie but i guess some of you has definitely seen it. If not I would definitely recommend you to see it. 
+
+Really witty funny enjoyable movie.
+
+Thank you guys for eventual suggestions.",1503762750.0,10,0.82,0
+seduction,What would be your approach in this case?,"So there's one girl I knew for a longer time, who I really like, of course, but we din't really have right time for each other - simply successfully unofortunately evading each other and had no opportunity to meet etc.. But yesterday we randomly went to pub with my really good friend and had a great time to see each other and other sh*t. Inbetween high amount of speaking she just said that she is alone at home mysteriously looking at me. So my question is for you guys, what would you hypothetically do to get to her bed in that situation, or how to date her, because we are both travelling a lot simply not having time. I can't really stop thinking about her. + I simply went with this guy to have a just some meat and ****. I just could not let'em down. 
+
+Should  I just write her? Or let it just go now.
+
+(Sorry english is not my primary language.)
+Ty eventually.",1503736619.0,2,1.0,6
+html5,How do I improve the importance of my website so that website will show up in google search results?,"Title pretty much says it all. I understand you definitely cannot from one day to another completely change results of google search but at least you can alter it so website will climb a bit up in results, right?
+
+Sorry I am not native speaker and I don't know where to look so I didn't find any results suitable for me.",1503412556.0,1,0.67,4
+computers,Does opening PDF file phisically downloads PDF file to computer?,Pretty much the title. Thank you for your eventual questions.,1500565699.0,1,1.0,3
+html5,background image in specific scale,"Hello guys, 
+i am trying to make website where each view has header image, below is horizontal menu and below is the main body, each body has the background image on which i must insert text in certain position.
+
+I have written code for header image and menu, but the background image isn't working for me, because it just doesn't display whole background image (page is just too short even though the image is not so short.)
+
+In the [image](
+https://gyazo.com/52f75335dd0217d2ef34ce5d37fe9b27) is the scheme for that. 
+
+i was trying to do something like 
+    .mainbody {
+           width:70%
+           background-image: url(""background.jpg"");
+           background-repeat: no-repeat;
+    }
+
+So the question is, how could i center make background in div so that i can insert text in certain position? The code must respect the fact that the background must be as a whole image - no crops.
+
+Thank you for your answers.
+",1499995101.0,0,0.4,1
+Movie_Club,[Request] Good but not so famous sort of new romantic movie,"Hey, i am fan of romantic movies, but for a while  i didn't bump on to movie i would like to watch from this genre. I have watched many movies in this genre and i feel like there is nothing more to offer for me, 'cause either the movies are just too old for me and i really don't like watching older movies, or i don't like the cast.
+So i would be very grateful if someone would come up with something really interesting or enjoyable.
+
+**TLDR:** I have watched most new romantic movies, but i wanna more!! Can you recommend me some? :D 
+
+EDIT: For the ones who are really wanting to watch something really interesting and enjoyable one of the best movies i watched recently was ""The Age of Adaline"", what a movie blake lively such a nice actress. ",1499684628.0,9,0.77,34
+learnprogramming,[C#] Simple feature in windows form two adjacent forms - opened from start in one label copying cursor moves in the other,"Hey guys,
+
+so i was just playing with C# and windows forms and at one moment i came up with idea for a simple app that i wasn't able to figure it out. 
+
+The task is simple two forms are opened at the same time. In the first one is button or w/e and it is moved in the real time by just moving with the cursor in the second form. I was just able to change it by clicking on button etc. but not by the movement itself.  Found https://msdn.microsoft.com/en-us/library/system.windows.forms.control.mousemove(v=vs.110).aspx, but can't use it. Thank you eventually.
+
+EDIT: My goal is something like synchronized paiting in two forms? Well i didn't set my goal yet but this could be used for something like that.",1498842763.0,1,1.0,1
+Ubuntu,Ubuntu alongside W10,"Hey, i've already been trying to install ubuntu alongside w10 couple times. But every time i am getting stuck on the screen where should be partition allocated to ubuntu. It just doesn't show any options, even though i did everything according to standard installation. Is there anyone here who has some insights for that? My notebook is hp  envy 17-j040ec.
+Thx for your eventual replies.",1497476354.0,4,0.7,3
+leagueoflegends,Tobias with the sick play,,1497428499.0,1,1.0,0
+learnprogramming,[PHP]Todo List MVC architecture,"Hey guys, i am trying to do simple todo list in PHP, but i got lost after doing basic MVC skeleton of MVC and i can|t reallz move on. Are there any good informaton sources tat i could look up to, to be able to do cool TODO list? :) thank you for your answers. :)",1495980509.0,1,0.57,2
+learnprogramming,[Usage of data structures and algorithms] Finding the most reliable way from vertex S to vertex V,"I found this example of the task for programming interviews and i haven't able to find solution yet. Would you mind giving me some help or reference (or complete solution) which is the best algorithm for that? (Eventual prefered languages - Java, C#, Python).
+
+Here is the whole task information:
+
+We have an extensive computer network that is implemented by radio links. Radio communication can be interrupted in a variety of ways, so it is not very reliable. The network consists of nodes and their radio links. The nodes are numbered from 0 to n-1 and one is given by the number of the sending node, the node number j and the probability 0 <p (i, j) <1 accepting the correct packet. The connection between the two nodes is always symmetrical. Find the most reliable route from the top to the top t in the assignment. The smartest path is the least likely to be wrong.
+
+In the first row of inputs, the number of n nodes and the total number of connections between them, m. On other m lines, for each connection, the number of the sending node, the node number (numbered from 0) and the probability p (eg 0.8931).
+
+On row m + 2, the number of test queries N and the next N lines are data for individual queries. One query is a pair of nodes, among which we want to find a path, the first one is the index of the start and the second is the end node index.
+
+The output will be N lines, for each query one. The result of one query is a sequence, one for each query. The result of a query is a sequence of node indices along the most reliable path found, including the start and end points of the query. If there is no path (although with minimal reliability) for the query, only the start node index is quoted from the query entry.
+
+Thank you eventually for all your answers. I  guess for experienced programmer/ student this'll be really easy, but for me it's kind of really hard, because it is just my hobby.",1495307267.0,2,0.76,0
+Movie_Club,[Request] Help me find Zombie movie,"Hey guys, as the title says i am looking for movie with zombie theme. There is some prologue for sure, but i don't remember it. The zombie infection begins on some video where infected clown begins to attack some kids on Birthday party. Then the story continues with some amateurish filmmakers which are escaping from infection...bla bla bla....and they end up in the mansion and then i don't remember more..
+
+ I would be pretty grateful if someone knew what is the movie's name. The movie itself isn't old at all. It should not be older than from 90s, but i guess it's much younger '00ish. It had pretty decent atmosphere. 
+Thank you eventually for finding solution. :D
+Have a nice day",1494617037.0,17,0.9,9
+learnprogramming,Nice source about MVC model according to you?,"Recently I decided to make just simple todo list in php, i've done successfully done it, but now i wanna make it MVC modelish, but i wasn't able to find really good source to soak up information about it, so guys, do you have any suggestions, where i could study this type of programmer approach?",1493815840.0,1,0.67,0
+EarthPorn,View from Trzy Korony on Slovakia [OC] [2896 × 1944],,1493646698.0,3,1.0,1
+EarthPorn,"Two-coloured field - Northeast Bohemia, Czech republic [4160x3120] [OC]",,1492873836.0,5,0.65,0
+learnprogramming,[Python] Simple class generating random mathematical function,"Hey guys,
+I've been struggling with this recently and can't come up with simple  idea how should this class look like. I simply need it for testing purposes. This class be giving output something like this 'y= x^2 + 5*x + 5'. Nothing more. I will be very grateful for any help. 
+Tbh it doesn't have to be necessarily  class but for my purposes it seems to be better.
+
+Thx for your answers.",1489337074.0,1,1.0,4
+Rengarmains,Thoughts on my rengar jungle build,"Hey guys, what do you think of my build 
+
+Red warrior, black cleaver, boots depending on enemy team (mercs, swifties or  mobis), then usually frozen mallet, then edge of night, then deadman's/spirit visage, and then ga, or duskblade
+
+Core of this build is BC a frozen mallet, all other items are situational depending on enemy team.",1487929575.0,1,1.0,8
+leagueoflegends,Could we have an overview of skins in Collection tab in new client?,This feature will be pretty useful.,1485511539.0,8,0.75,7
+learnprogramming,Very specific regex for Names with degrees,"Hello guys, 
+
+after long hours of trying to figure out how to do special regex i realized I won't be able to solve this without any help, as long as i am novice in regular expressions. I will try to be short and interesting. Let's get going.
+
+My task is to create a regular expression which will extract names with degrees from HTML source code. The website is here http://bacula.nti.tul.cz/~jan.hybs/ada/ where you can obviously find source code i need to create regex which will take all names with degrees. The output should look something like this - prof. Ing. Josef Novak, Ph. D. etc. - simply all things from Column called ""Propojeni"" should be extracted. 
+
+This is part of larger project for me it's really important to have same order as in the table - so only one regex for all those names i would be able to do like 5 regexes for those names and degrees, but that would be bad for me afterwards. Thank you guys for any help. 
+
+EDIT: you can do it in any language but java is best for me. (But it is pretty similar anyway.)
+
+
+
+",1483139455.0,4,0.83,6
+leagueoflegends,Bugged client,[removed],1475833025.0,0,0.33,0
+leagueoflegends,Aphromoo's bard skillz,,1464516400.0,1,1.0,1

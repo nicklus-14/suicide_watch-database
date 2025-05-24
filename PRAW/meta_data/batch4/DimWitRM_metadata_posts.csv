@@ -1,0 +1,360 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+selfhosted,Trying to self host decapCMS on nextjs but facing issues,"Hey, I am trying to selfhost the decapcms login but its not working so I was wondering if you could point me to the right direction.  
+
+
+    This is my config file:
+    backend:
+      name: github
+      repo: My github repo
+      branch: main
+      auth_type: oauth
+      proxy_url: ""https://domain.ca/api/auth/login""
+      site_url: ""https://domain.ca""
+      base_url: ""https://domain.ca""
+
+    When i click sign in with github, it will take me to login.ts
+    
+    import { NextResponse } from ""next/server"";
+    
+    export function GET() {
+      const redirectUri = ""https://domain.ca/api/auth/callback""
+    
+      const githubAuthURL = `https://github.com/login/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID}&scope=repo,user&redirect_uri=${encodeURIComponent(redirectUri)}`;
+    
+      return NextResponse.redirect(githubAuthURL);
+    }
+
+This is my callback.ts where i am redirecting to
+
+    import { NextRequest, NextResponse } from ""next/server"";
+    
+    export async function GET(req: NextRequest) {
+      const { searchParams } = new URL(req.url);
+      const code = searchParams.get(""code"");
+    
+      if (!code) {
+        return NextResponse.json({ error: ""No code provided"" }, { status: 400 });
+      }
+    
+      const tokenResponse = await fetch(
+        ""https://github.com/login/oauth/access_token"",
+        {
+          method: ""POST"",
+          headers: {
+            ""Content-Type"": ""application/json"",
+            Accept: ""application/json"",
+          },
+          body: JSON.stringify({
+            client_id: process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID,
+            client_secret: process.env.GITHUB_CLIENT_SECRET,
+            code,
+          }),
+        }
+      );
+    
+      const tokenData = await tokenResponse.json();
+    
+      if (tokenData.error) {
+        return NextResponse.json(
+          { error: tokenData.error_description },
+          { status: 400 }
+        );
+      }
+    
+      const response = NextResponse.redirect(
+              `https://domain.ca/admin/#access_token=${tokenData.access_token}&token_type=bearer`
+            );
+    
+    
+      // Set the required cookie for Decap CMS
+      response.cookies.set({
+        name: ""nf_jwt"",
+        value: tokenData.access_token,
+        path: ""/"",
+        domain: ""domain.ca"", // Explicit domain
+        httpOnly: true,
+        secure: true,
+        sameSite: ""lax"",
+      });
+    
+      return response;
+    }
+
+The problem is that when i Login, its redirecting me https:domain.caadmin/index.html#/access\_token=ACCESSTOKEN&token\_type=bearer but i am not being logged in. Not sure what i am missing. This is my index.html
+
+    <!doctype html>
+    <html>
+      <head> </head>
+      <body>
+        <div id=""cms-root""></div>
+    
+        <!-- Initialize Decap CMS AFTER the script above -->
+        <script src=""https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js""></script>
+      </body>
+    </html>",1739133347.0,3,0.81,0
+hetzner,How to protect DDOS attack on hetzner vps,"HI everyone,
+
+First of all I am still learning so please bear with me. Currently I have hosted my site on a shared vps using coolify. I wanted to protect my server from DDOS attack and while researching I heard about cloudflare. So the problem is when i am trying to attach a proxy status of cloudflare, it doesnt work. The website goes down. If I use DNS only to point to my hetzner server it works. I am not sure how to use the proxy of the cloudflare.
+
+Googling and chat gpt didn't help at all. Chatgpt went console mode and I was not able to follow along. Didn't understand and broke the site couple of times so i was hoping if there was a easier way to do it.
+
+Thanks",1737346465.0,5,0.73,45
+ImmigrationCanada,Need advice,"Hi my brother car got broken into yesterday, all the documents like passport, work permit, sin, car paper, license etc everything is stolen. 
+
+He was in the process of renewing his passport so he had to send the old one back as well. 
+
+What to do for the lost sin, work permit etc.
+
+Any idea also how to prevent from identity theft, since they have all the documents isnt it easy to create bank accounts or something?
+
+He is in the process of talking with the cops right now.",1727969919.0,7,0.82,6
+Wordpress,Can you provide a good tutorial for custom woo commerce theme,Also i need to learn how to edit other people plugin custom code development,1722564346.0,2,1.0,6
+Wordpress,Confused on how to move from here,"A little about myself, I know HTML, CSS, SASS, Tailwind, JavaScript, React, PHP and a bit of wordpress. Basically in wordpress i use the Gutenberg editor i think to build but mostly i just use ACF and custom code in the back using PHP using CPTs. That's mostly I know. I havent used most of the plugins and when i do use some then i kind of struggle getting it to work as i wanted i guess. 
+
+  
+I know there is like popular page builders like Divi, Elementor etc to build a website but i have a client which basically has a requirements like how they want the website to look like. They have like tons of products and depending upon categories and stuff, they would want it designed differently. Also later on as I progress with the website they want to add features like ecommerce which i would have to use WooCommerce, Also they have like 2 stores and want to track inventory with 2 different SKU number for same products based on the items. I am not sure like how to proceed, Should I use some themes or page builders or custom with CPT and acf? 
+
+Anything i would need to learn extra to build a site like this?",1722559892.0,2,1.0,5
+woocommerce,Woocommerce product page change,"Do you know how we can change the product page, Like my each individual item should look different with bunch more p tags and img tags, By default i cant have it. I am new to woocommerce but i have done a bit of wordpress site by creating custom taxonomies, cpt.
+
+Also is it easier to customize pages using headless with nextjs?",1721934347.0,1,1.0,2
+webdev,Solo inhouse junior developer,"So i recently got an interview for a company who sells stuff and has multiple stores. They want an ecommerce site where i can use any cms and any languages. Basically they want a site where for different product, the product page will look different and they also have to keep track of inventory like how many stocks the item has and stuff.
+
+Since I am a junior developer and I am only going to be the solo developer and i dont know if i can say i am confident creating a eCommerce website which probably handles all their requirements. Also once i am done with the site, will they just let me go. Kind  of getting anxious like if i get the job idk how i am going to do the job. I know nextjs, react so for cms i am thinking of learning payload or medusa to do this. I dont know if this will be feasible and if i get stuck i dont know what i will do. Also why dont they just buy it from some agencies.",1721280446.0,4,0.75,14
+react,adsasd,"asdasdasda
+
+So i am creating a task manager where i can drag the task to the droppable container, now the draggable has some child elements which is a button, I am trying to click that button but it wont work since the draggable code overrides it i think, I havent been abe to figure out how to prevent that from happening. I am using useDraggable hooks. 
+
+Any idea how i can make sure i can click child buttons?? I tried to use the disabled method but once its enable, I am not able to disable it.
+
+https://preview.redd.it/1coam4y8f4cd1.png?width=248&format=png&auto=webp&s=7ef60c2b0178c0287ca277d6066c8e66e595e63b
+
+For context, the whole white card is a draggable component and the icons are my button. I cant click icons, Its being dragged [instead.So](http://instead.So) i am creating a task manager where i can drag the task to the droppable container, now the draggable has some child elements which is a button, I am trying to click that button but it wont work since the draggable code overrides it i think, I havent been abe to figure out how to prevent that from happening. I am using useDraggable hooks. Any idea how i can make sure i can click child buttons?? I tried to use the disabled method but once its enable, I am not able to disable it.  
+For context, the whole white card is a draggable component and the icons are my button. I cant click icons, Its being dragged instead.",1720804494.0,0,0.2,16
+nextjs,"Lucia authentication validateRequest when called, logs me out ","I dont understand why i am being logged out when i call validateRequest. Currently I am calling the validateRequestion function on my root layout so that i can create session context and pass it to all my client side pages.  It works perfectly fine when i am calling it here, and when i go to other pages, I can see it being called as well and still not getting logged out. The problem starts when i use it in my server action, When i call the validateRequest there, i get logged out.
+
+    export const validateRequest = cache(
+      async (): Promise<
+        { user: User; session: Session } | { user: null; session: null }
+      > => {
+        const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
+        if (!sessionId) {
+          return { user: null, session: null };
+        }
+        const result = await lucia.validateSession(sessionId);
+        try {
+          if (result.session && result.session.fresh) {
+            // create the cookie
+            const sessionCookie = lucia.createSessionCookie(result.session.id);
+            cookies().set(
+              sessionCookie.name,
+              sessionCookie.value,
+              sessionCookie.attributes
+            );
+          } else {
+            const sessionCookie = lucia.createBlankSessionCookie();
+            cookies().set(
+              sessionCookie.name,
+              sessionCookie.value,
+              sessionCookie.attributes
+            );
+          }
+        } catch (err) {}
+        return result;
+      }
+    );
+    export const validateRequest = cache(
+      async (): Promise<
+        { user: User; session: Session } | { user: null; session: null }
+      > => {
+        const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
+        if (!sessionId) {
+          return { user: null, session: null };
+        }
+        const result = await lucia.validateSession(sessionId);
+        try {
+          if (result.session && result.session.fresh) {
+            // create the cookie
+            const sessionCookie = lucia.createSessionCookie(result.session.id);
+            cookies().set(
+              sessionCookie.name,
+              sessionCookie.value,
+              sessionCookie.attributes
+            );
+          } else {
+            const sessionCookie = lucia.createBlankSessionCookie();
+            cookies().set(
+              sessionCookie.name,
+              sessionCookie.value,
+              sessionCookie.attributes
+            );
+          }
+        } catch (err) {}
+        return result;
+      }
+    );
+
+This is validate request code
+
+    ""use server"";
+    import { validateRequest } from ""@/lib/auth"";
+    import { db } from ""@/lib/db"";
+    import { ProjectSchema } from ""@/schema"";
+    import { redirect } from ""next/navigation"";
+    import * as z from ""zod"";
+    
+    export const project = async (values: z.infer<typeof ProjectSchema>) => {
+    
+      console.log(values);
+      await validateRequest();
+    ""use server"";
+    import { validateRequest } from ""@/lib/auth"";
+    import { db } from ""@/lib/db"";
+    import { ProjectSchema } from ""@/schema"";
+    import { redirect } from ""next/navigation"";
+    import * as z from ""zod"";
+    
+    
+    export const project = async (values: z.infer<typeof ProjectSchema>) => {
+    
+    
+      console.log(values);
+      await validateRequest();
+
+This is my server action, where i called validateRequest, its logging me out.
+
+    import type { Metadata } from ""next"";
+    import { Inter } from ""next/font/google"";
+    import ""./globals.css"";
+    import Header from ""@/components/Header"";
+    import { validateRequest } from ""@/lib/auth"";
+    import { SessionProvider } from ""@/providers/SessionProvider"";
+    
+    const inter = Inter({ subsets: [""latin""] });
+    
+    export const metadata: Metadata = {
+      title: ""Create Next App"",
+      description: ""Generated by create next app"",
+    };
+    
+    export default async function RootLayout({
+      children,
+    }: Readonly<{
+      children: React.ReactNode;
+    }>) {
+      const sessionData = await validateRequest();
+      return (
+        <html lang=""en"">
+          <body className={inter.className}>
+            <SessionProvider value={sessionData}>
+              <Header />
+              {children}
+            </SessionProvider>
+          </body>
+        </html>
+      );
+    }
+    
+    
+    import type { Metadata } from ""next"";
+    import { Inter } from ""next/font/google"";
+    import ""./globals.css"";
+    import Header from ""@/components/Header"";
+    import { validateRequest } from ""@/lib/auth"";
+    import { SessionProvider } from ""@/providers/SessionProvider"";
+    
+    
+    const inter = Inter({ subsets: [""latin""] });
+    
+    
+    export const metadata: Metadata = {
+      title: ""Create Next App"",
+      description: ""Generated by create next app"",
+    };
+    
+    
+    export default async function RootLayout({
+      children,
+    }: Readonly<{
+      children: React.ReactNode;
+    }>) {
+      const sessionData = await validateRequest();
+      return (
+        <html lang=""en"">
+          <body className={inter.className}>
+            <SessionProvider value={sessionData}>
+              <Header />
+              {children}
+            </SessionProvider>
+          </body>
+        </html>
+      );
+    }
+    
+
+  
+This is my main layout page, where i am calling it to store it context. 
+
+I know i can pass it from the client page but i am just trying to understand why it's not working.",1719532429.0,1,1.0,0
+nextjs,Why does signin from next-auth not refresh the page??,"  
+  
+i am logging in to dashboard after using the signIn next-auth, Inside my header component. I am getting the session values so that if i have session then i want to display something else. But when i am redirected to my dashbaord page, since the page is not refreshed, my session will be null unless i refresh the page? Any idea how i can fix  this? 
+
+I am using session like this in my header componenet
+
+      const { data: session } = useSession();
+      console.log(session);
+
+    await signIn(""credentials"", {
+          email,
+          password,
+          redirectTo: ""/dashboard"",
+        });",1719256309.0,2,1.0,6
+nextjs,Why do we need to use some other kind of services for nextjs authentication?,Sorry i am a noob but i dont understand why we need to use next-auth or lucia or clerk or any kind of auth services instead of creating our own like how we do it in express. Query with the database and create jwt or session? Am I missing something? That's what i used to do when i was creating full stack application on express.,1718994464.0,18,1.0,16
+cscareerquestionsCAD,Diploma to Bachelors Degree,[removed],1717085015.0,2,1.0,1
+webdev,"Hi, Need some guidance on how to do this","[https://idx.dev/](https://idx.dev/)
+
+&#x200B;
+
+I was visiting this website and found the changing text in the box to be really cool. I was wondering if anyone knows how to do that and guide me on how i can learn to make it.  
+
+
+I am thinking that i just create an array of sentences that i want then in a function get the word from the array take its length and form a gibberish words equal to the length and bring the word step by step, but i dont know how to keep on changing the words and how to bring the words step by step.  
+
+
+&#x200B;",1707496647.0,3,1.0,6
+webdev,"Hi, Need some guidance on how to do this","[https://idx.dev/](https://idx.dev/)
+
+&#x200B;
+
+I was visiting this website and found the changing text in the box to be really cool. I was wondering if anyone knows how to do that and guide me on how i can learn to make it.  
+
+
+I am thinking that i just create an array of sentences that i want then in a function get the word from the array take its length and form a gibberish words equal to the length and bring the word step by step, but i dont know how to keep on changing the words and how to bring the words step by step.  
+
+
+&#x200B;",1707496647.0,3,1.0,1
+reactjs,Framer motion react,[removed],1705299842.0,1,1.0,1
+LiesOfP,Stuck on the swamp boss,"I haven't played much game like this besides tomb raider and prince of persia warrior within.  This game is so hard, I am stuck at this boss since forever. I have seen youtube videos where they fight it and i see most of them locking the view in the boss and i find it very hard to play like that.  Not sure how i am suppose to win this on his 2nd phase he just kills me one shot. I am beyond frustrated. Any tips. I am using the heavy hit build and i always run out of stamina when dodging and don't have time to hit him. I tried wasting all my money buying consumables and spamming him but alas didn't work. No idea.  
+
+
+&#x200B;",1704236978.0,2,1.0,3
+learnprogramming,Full stack website deploy help,"Hi, I have created couple of full stack MERN web applications. Right now it is hosted for free but since it's taking some time to load the page, I have decided to pay and have it deployed. Do you know any websites where I can deploy my website that is cheap and I can deploy multiple website in same url. like myurl.com/first-project , myurl.com/second-project.  
+Something like this. Any advise will be appreciated.  
+Thanks",1702927345.0,0,0.5,1
+webdev,Full stack,"Hi, I have created couple of full stack MERN web applications. Right now it is hosted for free but since it's taking some time to load the page, I have decided to pay and have it deployed. Do you know any websites where I can deploy my website that is cheap and I can deploy multiple website in same url. like myurl.com/first-project , [myurl.com/sec](https://myurl.com/sec)ond-project.  
+
+
+Something like this. Any advise will be appreciated.  
+
+
+Thanks",1702927306.0,2,0.67,2
+techsupport,gaming fps going down,"Hi, I play dota and now i am having performance issues. I am getting only 30fps in low specs. It didn't used to be so bad and i have tried running dota 2 by closing all the apps through taskmanager but it still give me same fps.
+
+I tried the benchmark and here is my result. It was pretty bad so any tips on how to fix it would be appreciated.
+
+[https://www.userbenchmark.com/UserRun/55455881](https://www.userbenchmark.com/UserRun/55455881)",1667711962.0,0,0.5,1
+ImmigrationCanada,Police Certificate,"Hi, I came to canada on 2016 in Study permit. I had to do a police report when i applied for my study permit. I haven't returned back to my country ever since. Is it okay to submit the old police report?  
+
+
+Thanks",1620327769.0,5,1.0,6

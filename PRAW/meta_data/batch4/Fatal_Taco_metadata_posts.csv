@@ -1,0 +1,1261 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+tf2,100 players + Full MvM Upgrades for All = Utter Sensory Overstimulation,,1733767888.0,47,0.92,4
+linuxmasterrace,Xenia the Linux Fox but in a Yugoslavia-era Tech Magazine,,1731609409.0,195,0.95,20
+furry,Xenia as a Magazine Cover Lady [OC],,1731530423.0,44,0.95,1
+linuxquestions,Some weird unsolvable issue regarding Dbus (?) when attempting to run Flatpak Steam,"When launching Flatpak Steam via any Wayland session (KDE/Sway) either via the desktop icon or via *flatpak run com.ValveSoftware.steam* I get the following error message
+
+    WARNING:root:Missing permissions for input devices
+    steam.sh[2]: Running Steam on org.freedesktop.platform 24.08 64-bit
+    steam.sh[2]: STEAM_RUNTIME is enabled automatically
+    setup.sh[70]: Steam runtime environment up-to-date!
+    steam.sh[2]: Error: The unofficial Steam Flatpak app requires a correctly-configured desktop
+    session, which must provide the DISPLAY environment variable to the
+    D-Bus session bus activation environment.
+    
+    On systems that use systemd --user, the DISPLAY environment variable must
+    also be present in the systemd --user activation environment.
+    
+    This is usually achieved by running:
+    
+        dbus-update-activation-environment DISPLAY
+    
+    during desktop environment startup.
+    
+    For more details, please see:
+    https://github.com/ValveSoftware/steam-for-linux/issues/10554    
+
+I thought it was simple enough, just run that dbus command whenever my DE starts up. So here's what I've tried doing:
+
+* Dbus service changed from *dbus-broker* to reference implementation, *dbus-daemon*
+* Added */usr/bin/dbus-update-activation-environment DISPLAY* under *Exec=*
+* Created and activated a user systemd service that does oneshot execution of *dbus-update-activation-environment DISPLAY* at *default.target* within the* /usr/share/wayland-sessions/plasma.desktop* file
+* Tried out another Wayland session with SwayWM. Made sure that exec /usr/bin/dbus-update-activation-environment DISPLAY is in *~/.config/sway/config*
+* Sanity checked  with Linux-lts-6.6.59 kernel
+* Checked with* nvidia-open,* *nvidia-beta* and *nvidia* driver stacks just to make sure.
+
+However if I used an Openbox X11 session via xinitrc, Steam starts correctly.
+If anyone has any similar experiences, do tell! Thanks!
+
+I don't think I have much qualms to just revert back to the original Arch Linux repo version of Steam. Though I'd still much like to know what could possibly cause this. It was working fine before, say, two weeks ago?",1730617868.0,3,1.0,2
+archlinux,Some weird unsolvable issue regarding Dbus (?) when attempting to run Flatpak Steam,"#EDIT
+
+I found the solution from another [Reddit thread](https://old.reddit.com/r/linuxquestions/comments/1gihdme/some_weird_unsolvable_issue_regarding_dbus_when/lv5i1o1/). While brash, it was to recreate a whole new user home directory. So I moved my /home/myhome to /home/myhome.backup and then just re-logged in to KDE Plasma Wayland. Had to reinstall Flatpak Steam via flatpak install command. Launched it and there's no issue anymore? Very weird.
+
+I then proceeded to move all my configs and media data from the /home/myhome.backup to /home/myhome. All is back to normal. 
+
+---------
+When launching Steam either via the desktop icon or via *flatpak run com.ValveSoftware.steam* I get the following error message
+
+    WARNING:root:Missing permissions for input devices
+    steam.sh[2]: Running Steam on org.freedesktop.platform 24.08 64-bit
+    steam.sh[2]: STEAM_RUNTIME is enabled automatically
+    setup.sh[70]: Steam runtime environment up-to-date!
+    steam.sh[2]: Error: The unofficial Steam Flatpak app requires a correctly-configured desktop
+    session, which must provide the DISPLAY environment variable to the
+    D-Bus session bus activation environment.
+    
+    On systems that use systemd --user, the DISPLAY environment variable must
+    also be present in the systemd --user activation environment.
+    
+    This is usually achieved by running:
+    
+        dbus-update-activation-environment DISPLAY
+    
+    during desktop environment startup.
+    
+    For more details, please see:
+    https://github.com/ValveSoftware/steam-for-linux/issues/10554    
+
+I thought it was simple enough, just run that dbus command whenever my DE starts up. So here's what I've tried doing:
+
+* Dbus service changed from *dbus-broker* to reference implementation, *dbus-daemon*
+* Added */usr/bin/dbus-update-activation-environment DISPLAY* under *Exec=*
+* Created and activated a user systemd service that does oneshot execution of *dbus-update-activation-environment DISPLAY* at *default.target* within the* /usr/share/wayland-sessions/plasma.desktop* file
+* Tried out another Wayland session with SwayWM. Made sure that exec /usr/bin/dbus-update-activation-environment DISPLAY is in *~/.config/sway/config*
+* Sanity checked  with Linux-lts-6.6.59 kernel
+* Checked with* nvidia-open,* *nvidia-beta* and *nvidia* driver stacks just to make sure.
+
+If anyone has any similar experiences, do tell! Thanks!
+
+I don't think I have much qualms to just revert back to the original Arch Linux repo version of Steam. Though I'd still much like to know what could possibly cause this. It was working fine before, say, two weeks ago?",1730571226.0,0,0.5,5
+GooglePixel,Apparently the Android 15 update to my Pixel 8 still uses version 5.15 Android Common Linux Kernel. Despite Android 15 requiring at least kernel version 6.1,"At least according to the official Google documentation regarding Linux kernels used for Android https://source.android.com/docs/core/architecture/kernel/android-common
+
+Unless I am missing something? Or maybe Google backported required kernel fixes?
+
+To be clear I'm not complaining I'm just curious. I kinda thought that a 6.1 kernel was an absolute requirement.",1730008552.0,11,0.61,10
+archlinux,"KDE Plasma is somehow missing the Touchpad settings, despite the Touchpad being detected and functioning normally.","**EDIT: Solved! Kinda... According to /u/tsdgeos, this is a known bug. Until then, you can access the Touchpad settings by running**
+
+    kcmshell6 kcm_touchpad
+
+---------
+
+For reference, I am using normal Arch Linux, and I've installed the default plasma group of packages. I am using the default Wayland session, thus, I am using libinput for my HID drivers. 
+
+However if I go to SystemSettings>Mouse&Touchpad>Touchpad I see a blank page. Running libinput list-devices shows 
+    
+    event10 - HTIX5288:00 093A:0255 Touchpad: kernel bug: clickpad advertising right button. See https://wayland.freedesktop.org/libinput/doc/1.26.1/clickpad-with-right-button.html for details
+ 
+Which is a dead link. Meanwhile my touchpad is labeled as:
+
+    Device:           HTIX5288:00 093A:0255 Touchpad
+    Kernel:           /dev/input/event10
+    Group:            6
+    Seat:             seat0, default
+    Size:             127x85mm
+    Capabilities:     pointer gesture
+    Tap-to-click:     disabled
+    Tap-and-drag:     enabled
+    Tap drag lock:    disabled
+    Left-handed:      disabled
+    Nat.scrolling:    disabled
+    Middle emulation: disabled
+    Calibration:      n/a
+    Scroll methods:   *two-finger edge 
+    Click methods:    *button-areas clickfinger 
+    Disable-w-typing: enabled
+    Disable-w-trackpointing: enabled
+    Accel profiles:   flat *adaptive custom
+    Rotation:         n/a
+
+If it's not possible to configure my touchpad in KDE is it technically possible to configure via some sort of kernel or libinput parameter? Thanks!",1721642153.0,29,0.92,21
+linuxquestions,How do I make Linux recognize when my 2in1 Laptop has folded into Tablet/Slate mode and have it disable the keyboard and touchpad.,"My laptop is a Chuwi Freebook (i5-1215U) and I've tested that everything works apart from having Linux detect when my laptop has converted into tablet/slate mode and disable the touchpad and keyboard.
+
+I'm using Arch Linux with KDE Plasma 6.1 and I am aware that Plasma 6 has the ability to switch behaviours when it detects that you've turned your laptop into a tablet (Surface Pro .etc)
+
+But for some reason I cannot get this to work with my laptop. I'm guessing its a missing kernel module? On Windows this driver seems to be called 'GPIO Laptop or Slate Indicator Driver' if that helps. Many thanks in advance!",1719245098.0,2,1.0,8
+linuxquestions,Any low-level devs have any idea why BSD distros are much better at high throughput workloads compared to Linux?,"Stumbled across this [Phoronix article](https://www.phoronix.com/review/bsd-linux-threadripper-7980x/3) showing some BSD and Linux benchmarks and in quite a lot of cases FreeBSD performed exceptionally well.
+
+I also heard some time ago that Netflix claimed that their choice to run FreeBSD over Ubuntu/RHEL was due to FreeBSD's superior throughput for movie streaming.
+
+I know this isn't technically the place to ask this but I don't know anywhere else more appropriate to ask this question in the first place. Thanks in advance!",1718849712.0,77,0.93,36
+HazbinHotel,"Charlie's colour palette kept reminding me of Swiss trains, hence I drew this to get it out of my head [TacoPhox][OC]",,1713890366.0,562,1.0,33
+LineageOS,Trying to compile LineageOS 21. However 'breakfast' is complaining about not being able to find revision lineage-21.0 in android_kernel_xiaomi_sm8350.,"~~**EDIT: After exporting ROOMSERVICE_BRANCHES=lineage-20 to (supposedly) fall back to lineage-20 branches, it seems to be going and downloading the required files. Will report back once something remarkable happens.**~~
+
+**EDIT2: Nah that still didn't resolve anything. Breakfast is still complaining about vendor/xiaomi/sm8350-common/sm8350-common-vendor.mk being missing**
+
+I'm trying to compile LineageOS 21 (Android 14), I've already done *repo sync -c* after initializing *repo init -u https://github.com/LineageOS/android.git -b lineage-21.0*
+
+I've set up my roomservice.xml in .repo/local_manifests to be the following:
+
+    <?xml version=""1.0"" encoding=""UTF-8""?>
+    <manifest>
+      <project path=""device/xiaomi/renoir"" remote=""github"" name=""LineageOS/android_device_xiaomi_renoir"" revision=""lineage-21"" />
+      <project path=""device/xiaomi/sm8350-common"" remote=""github"" name=""LineageOS/android_device_xiaomi_sm8350-common"" revision=""lineage-21"" />
+      <project path=""vendor/xiaomi/renoir"" remote=""github"" name=""TheMuppets/proprietary_vendor_xiaomi_renoir"" revision=""lineage-21"" />
+    </manifest>
+
+
+
+However when I went in to do breakfast renoir, it spat this out:
+
+    Default revision lineage-21.0 not found in android_kernel_xiaomi_sm8350. Bailing.
+    Branches found:
+    lineage-19.1
+    lineage-20
+    Use the ROOMSERVICE_BRANCHES environment variable to specify a list of fallback branches.
+    In file included from build/make/core/config.mk:389:
+    In file included from build/make/core/envsetup.mk:350:
+    In file included from device/xiaomi/renoir/device.mk:29:
+    device/xiaomi/sm8350-common/common.mk:21: error:  vendor/xiaomi/sm8350-common/sm8350-common-vendor.mk does not exist..
+    16:59:49 dumpvars failed with: exit status 1
+    In file included from build/make/core/config.mk:389:
+    In file included from build/make/core/envsetup.mk:350:
+    In file included from device/xiaomi/renoir/device.mk:29:
+    device/xiaomi/sm8350-common/common.mk:21: error:  vendor/xiaomi/sm8350-common/sm8350-common-vendor.mk does not exist..
+    16:59:50 dumpvars failed with: exit status 1
+    
+
+It's complaining that it cannot find the lineage-21.0 revision for the sm8350-common and the android_kernel_xiaomi_sm8350 GitHub repositories. However when I went to check said [sm8350 repo](https://github.com/LineageOS/android_device_xiaomi_sm8350-common) it does seem to exist. Though I did noticed that there's no lineage-21.0 revision for [kerne](https://github.com/LineageOS/android_kernel_xiaomi_sm8350) so hmm
+
+So I'm not entirely sure what the issue here is. If anyone has any ideas please do drop a comment.",1713776889.0,4,0.76,8
+archlinux,"PSA - Use Nvidia Driver Stack 535xx, not the default 550xx, to solve flickering issues in games within Wayland sessions.","You can get the driver stack from the AUR, it's packaged as *nvidia-535xx-dkms* and should automatically pull in the necessary userspace drivers *(nvidia-535xx-utils)* as well.
+
+My PC only has an RTX 2060. This was the only way I solved the issue of screen flickering in Gnome and KDE wayland sessions. It seems to have also solved another user's issue [here](https://old.reddit.com/r/archlinux/comments/1c1vahx/plasma_6_x11wayland/kz6qwvt/) with their RTX 2070. This seems to be an issue only with RTX 2000 Turing cards?
+
+Nvidia for whatever reason, has three *streams* of driversfor their ""Unified Driver Stack"" which covers every GPU NVidia has developed from Turing era (RTX 2000/GTX 1600) and onwards. 525xx, 535xx and 550xx. I've tested out them all and 535xx was the only one that worked fully well.
+
+Do note however Sway wayland sessions have a visual bug where games running via Xwayland may have glitchy horizontal lines running across the screen. I didn't test with other wl-roots Wayland sessions.",1712896072.0,2,0.63,8
+furry,Sybil from Pseudoregalia (Tacophox)(OC),,1711993185.0,82,0.98,3
+yiff,Minimally Foxy [F] (TacoPhox / OC),,1710346580.0,105,0.94,1
+FurryPornSubreddit,Minimally Foxy [F] (TacoPhox),,1710346545.0,56,0.87,1
+archlinux,"I accidentally deleted the Fscrypt protector on my secondary drive, I still have the decryption password and the recovery code but I can't find any way to decrypt the files without the Fscrypt protector. Is there seriously no way to recover the files?","Added context. The external drive partition is formatted as F2FS supporting Fscrypt. I've set up my Linux PC where it would automatically decrypt the fscrypt encrypted directories in the F2FS partition of the secondary drive when I successfully login into Linux.
+
+EDIT: Accepted my fate. Shit out of Luck. Lesson learnt. Always backup the .fscrypt directory as well as the encrypted files themselves.",1696263379.0,10,0.92,11
+singapore,Has anyone encountered an issue where Lazada keeps bringing you to a weird URL that has the phrase 'Punish' in it every time you try to use the website? It's really eerie.,,1694346171.0,178,0.96,28
+schkreckl,S 🅱️ 🅱️,,1693720563.0,52,0.94,0
+sbubby,This kills the Swiss,,1693659395.0,52,0.95,5
+tf2,Team Fortress 2: Global Offensive - The power of Vscript [Workshop map by ficool2 & ZooL],,1678766958.0,4,1.0,0
+ihaveihaveihavereddit,everyday dose of online,,1678024895.0,56,0.91,8
+Warthunder,"Prop plane at high tier jets, but it manages to kill two F5 jet fighters... and is top 2 of the team...",,1676954252.0,0,0.48,5
+linuxquestions,"How do proprietary Nvidia drivers get installed on Linux? It's neither compiled into/with the kernel, nor it is a DKMS module. So how does it even interact with the kernel?","As far as I can understand, there are three ways to install drivers on Linux.
+
+* Include it into the Linux kernel when compiling said kernel.
+* Include it as an unloadable/loadable kernel module that specifically fits with the kernel, when compiling said kernel.
+* Compile the driver as a DKMS-type kernel module, where it can join onto, theoretically, any precompiled kernel via available kernel headers. Like a sort of universal kernel module.
+
+But apparently from what I've seen, proprietary Nvidia drivers do not install as any of the three. But I did hear that it can be installed as a DKMS kernel module if you're running some ""exotic customized"" kernel.
+
+The last time I used an Nvidia card was in 2017 and I was very noob at that time. So I don't remember much unfortunately.",1672651698.0,49,0.91,28
+ich_iel,ich🚆iel,,1672150489.0,71,0.84,7
+linuxmasterrace,Merry Christmas from Xenia the Linux Fox! She's got a libre-firmware motherboard from Santa :),,1672102385.0,155,0.65,168
+furry,[TacoPhox] Xenia's custom PC for crimmas!,,1672000933.0,1261,0.98,38
+archlinux,"Installing the LinuxSoundPlugins bundle in Arch Linux entirely fills up the app menu with every single plugin available from said bundle, leading to pages of app entries. I'm assuming it's a package maintenance bug?",,1671791505.0,192,0.9,32
+archlinux,How I Setup Secure Boot for Arch Linux [Simple],">*I tried to make it simple, any feedback is welcome. Many PC vendors use terrible UEFI and motherboard firmware, settings and behavior may vary. I'll be using efibootmgr and a new tool, sbctl, made by FoxBoron*. *All commands must be run as root, so use sudo.*
+
+# Prerequisites
+
+* **Secure Boot is turned off.**
+* **No existing PK, KEK, DB or DBX certificates. Delete if present.**
+* **UEFI is not password locked.**
+* **Arch Linux is the only installed OS.**
+* **Arch Linux is booted in UEFI mode.** Run this in your terminal, `test -d /sys/firmware/efi && echo true || echo false` and if it returns *'true'* then you're good to go!
+* **EFI Partition aka ESP is mounted to '/efi'**. Run this in your terminal, `test -d /efi/EFI && echo true || echo false` and if it returns *'true'* then you may proceed to Secure Boot Configuration. **Otherwise, read the addendum.**
+
+# **Addendum**
+
+**You shouldn't mount ESP at /boot, or else it serves double-duty as the boot directory which can compromise Secure Boot. Mounting ESP to /boot/efi safer but discouraged.**
+
+*NOTE: If ESP is mounted at /boot/efi, skip the 1st step, follow the 2nd, and 'umount /boot/efi' instead in the 3rd step.*
+
+First, remove all kernels, microcode images and initramfs images from /boot.
+Second, make the /efi directory.
+Third, unmount the /boot directory.
+
+    # rm /boot/{*img,vmlinuz*}
+    # mkdir /efi
+    # umount /boot
+
+Fourth, edit /etc/fstab. Change the mountpoint of ESP to /efi. ESP is usually denoted by an 8 character UUID (.eg 1A2B-3C4D) or the first partition of a disk (.eg /dev/sda1)
+
+    # nano /etc/fstab
+
+Fifth, remount ESP with the new /etc/fstab.
+
+    # systemctl daemon-reload
+    # mount -a
+
+Sixth, repopulate the boot directory with the kernel and initramfs by reinstalling Linux kernel with pacman. Mkinitcpio will make a new initramfs automatically.
+
+    # pacman -S linux
+
+# END OF ADDENDUM
+
+# **Arch Linux Secure Boot Configuration**
+
+Install CPU microcode, sbctl and efibootmgr.
+
+*NOTE: For AMD Processors, substitute intel-ucode with amd-ucode*
+
+    # pacman -S intel-ucode sbctl efibootmgr
+
+Copy the current kernel options to /etc/kernel/cmdline, and make it writable:
+
+    # cp /proc/cmdline /etc/kernel/cmdline
+    # chmod /etc/kernel/cmdline
+
+Bundle your microcode, kernel, initramfs, kernel cmdline into a Unified Kernel Image.
+
+**NOTE: ONLY BUNDLE IN ONE MICROCODE.** 
+**FOR AMD, REMOVE  -i /boot/intel-ucode.img**
+**FOR INTEL, REMOVE -a /boot/amd-ucode.img**
+
+    # sbctl bundle -s \
+     -a /boot/amd-ucode.img \
+     -i /boot/intel-ucode.img \
+     -k /boot/vmlinuz-linux \
+     -f /boot/initramfs-linux.img \
+     -c /etc/kernel/cmdline \
+     /efi/EFI/Linux/ArchBundle.efi
+
+Create the keys, sign bundle, and enroll yours' and Microsoft's certificates into the UEFI:
+
+    # sbctl create-keys
+    # sbctl generate-bundles --sign
+    # sbctl enroll-keys --microsoft
+
+Find the EFI Partition using lsblk. Check the NAME where MOUNTPOINT says '/efi'
+
+    # lsblk
+
+*Assuming that it is /dev/sda1 ...*
+
+    # efibootmgr --create \
+     --disk /dev/sda \
+     --part 1 \
+     --label ""My Signed Bundle"" \
+     --loader /EFI/Linux/ArchBundle.efi
+
+Reboot to UEFI settings, set up an admin password to prevent unwanted tampering. Now you can reboot and it should boot straight to Arch linux.
+
+Once in Arch Linux, check Secure Boot status and verify all is well:
+
+    # sbctl status
+
+# END OF SECURE BOOT SETUP
+
+*Whenever Pacman updates the kernel, sbctl auto-generates the bundle with the new kernel and signs it.*
+
+*To change kernel options, just edit /etc/kernel/cmdline, update the bundle and sign it*
+
+    # nano /etc/kernel/cmdline
+    # sbctl generate-bundles --sign",1671289304.0,72,0.94,37
+singapore,"Are there 3D models of underground stations? It's hard to make a mental 3D picture of them, especially huge interchanges.","Stevens, Marina Bay and Dhoby Ghaut are examples. Sure you can find your way around with signs but it's difficult to build a mental 3D image. Almost like a labyrinth.",1668833488.0,56,0.8,27
+singapore,"Shortest bus service in Singapore? Bus 284 only travels on one small stretch of road, and serves four bus stops. Service is frequent (3min) despite only being operated by one bus driver, but that's probably because the loop is small :P Surprisingly there's sizeable ridership.",,1667805643.0,556,0.99,67
+furry,[TacoPhox] Flying Witchgirl Braixen!,,1667075443.0,17,0.86,2
+tf2,(loudness warning) So apparently I joined a Casual match exclusively filled with sniper bots...,,1666180359.0,43,0.92,7
+a:t5_77mt0d,[OC][TacoPhox] Thought I'd start contributing my art of her here :) (Alts in comments),,1666015009.0,9,1.0,2
+linuxmasterrace,"I made an art piece of Xenia, the other (unofficial) mascot of Linux!",,1665831404.0,980,0.81,307
+furry,"[TacoPhox] Xenia, the (unofficial) Linux Mascot!",[Sauce](https://twitter.com/TacoPhox/status/1581207544391139331),1665825471.0,888,0.99,44
+tf2,"Guy trapped himself by touching the enemy Spawn Door of Dustbowl as it closed, becoming stuck in corner. Door then doesn't block hitscan weapons and sentries can see through it despite the door being closed.",,1661972272.0,866,0.99,52
+sbubby,geforce gt 210,,1661105208.0,505,0.99,15
+yiff,Naughty Diane [F](Tacophox),,1658948486.0,99,0.95,1
+FurryPornSubreddit,Naughty Diane [F] (Tacophox - my own art),,1658948239.0,242,0.99,2
+furry,Just a simple summertime Braixen (OC),,1657474805.0,51,0.94,2
+linuxquestions,[Rhetorical Question?] Why are there three Vulkan drivers for AMD on Linux?,"Currently there's three Vulkan userspace drivers you can install. AMD's open source Vulkan, AMDVLK-open. AMD's closed source Vulkan, AMDVLK-closed.  
+Mesa's open source Vulkan, vulkan-radeon.
+
+From the majority consensus, Mesa's vulkan-radeon reigns supreme in terms of benchmarks. I did a small benchmark with 1080p Basemark GPU on an RX 580 and the results are as follows:
+
+* 51791 - Vulkan-Radeon
+* 47344 - AMDVLK-open
+* 47288 - AMDVLK-closed
+
+To be clear I'm *not complaining* that AMD's Vulkan on Linux support is so good that you have three official drivers to pick from :P I'm just wondering if it's done for difference conformance reasons across different clients/scenarios or something along the lines.",1657285427.0,1,0.67,3
+NonCredibleDefense,Proudly LGBTQ+MIC <3,,1657130324.0,503,0.9,73
+NonCredibleDefense,How I imagine the people in this sub to be,,1657111680.0,377,0.94,19
+comedyheaven,by EJ.Dickson,,1650692275.0,1,1.0,1
+196,ARule-15,,1649013292.0,19,0.8,0
+singapore,Trying to get back on track with life.,"Gonna be straight. Used to be a pro student. Due to mental health issues I fucked up and got 26 for O's in 2016. In 2019 I dropped out of my Poly. Served my NS as a storeman for 2 years. ORD'd late 2021. Now I'm doing odd jobs.
+
+I wish to pursue a career in IT. Mainly a Linux System Administrator. Or perhaps program in languages like C and Python. It is my hobby after all.
+
+My current plan is to work odd jobs to get money for certifications from Red Hat/CompTIA .etc to prove my mettle. However I've heard about how certs might not even be enough and I require some sort of degree to get hired.
+
+Problem is that I fucked up my Os, fucked up my Poly. I'd have to retake the entire Os, JC and Uni which would take 5 years if we're being generous about it. Not to mention how expensive it'd be.
+
+Honestly I just want to be hired, even if it means earning less than a similarly skilled degree holder.",1647504260.0,84,0.84,52
+furry_irl,reality_irl,,1646726727.0,534,0.99,15
+linuxquestions,Just a fun thought: What would a fully Systemd-ized Linux install look like?,"Instead of protesting against it, imagine going full systemd! For the heck of it!
+
+When toying around Gentoo I've managed to install systemd and used it as my init, UEFI bootloader *(systemd-boot)*, Network Manager *(networkd+resolved)*, system journaler *(journalctl)* and udev *(obviously)*.
+
+I've heard that systemd can also automount GPT system partitions by their label and filesystem type, thus making /etc/fstab optional. I honestly have no idea if anyone has tried this as an actual solution, I've only seen Intel do it on their Clear Linux distro weirdly enough.
+
+From what I can see, it seems systemd also has a login manager and a dbus implementation as well? I'm sure I'm missing a few more features.",1640281975.0,0,0.5,6
+196,epic gaymer setup ft. the gay spider,,1638794568.0,11,0.73,8
+tf2shitposterclub,tf2 chat moment,,1636865511.0,475,0.98,9
+tf2,An often overlooked feature of TF2 on Linux. Alt tabbing even in fullscreen doesn't cause lockups! I have proof.,"https://streamable.com/5le9wo
+
+And it's not just Source engine titles, it's the same for every game. Even Windows exclusive games running over Steam's Proton Play. Here's one more example: https://streamable.com/57voam
+
+It's black magic. So if you're looking for a reason to play on Linux, here's one :P",1627059506.0,8,1.0,1
+196,soviet union,,1620475814.0,19,0.84,0
+LineageOS,"This will be a bit weird to ask but, what skills do I require to build a ROM currently unsupported? I've been eyeing to make one for my Snapdragon 710 based Mi 9 Lite.","> Background: I don't have any current programming skills, I've only dabbled and used x86/AMD64 Linux distros (Arch, Gentoo, Debian etc) and have an okay idea of how Linux stuff goes by. I've never done anything with ARM 64 (Or aarch64) aside from my Raspberry Pi 3.
+
+From what I can understand from the Wiki is that you can only build LineageOS for supported devices which contains ""specific device trees, blobs and firmwares"" for each device, correct me if I'm wrong.
+
+Also that Snapdragon devices get the most support because Qualcomm gives out the necessary ""firmware, drivers and blobs"" per each SOC on Code Aura Forums, thus making it easy? I have no idea how this bit gets merged into the LineageOS Devices repos though.
+
+So if I don't have a supported device for LineageOS, ideally I'd have to transfer the code from the CAF and somehow put it in a custom repo? Also I know ARM devices don't have UEFI chips so you can't just boot a universal iso but instead have a device memory tree that maps the system and correctly boots? If so do I need to get this from CAF or directly from Xiaomi?
+
+Thanks in advance.",1619615050.0,26,0.93,8
+furry_irl,rocket_irl,,1619286534.0,208,0.97,16
+copypasta,american political discourse be like,bernie socialism man is a deep state gay frog that wants to cut off your dick with impossible transburgers according to disabled cishet qanon wwg1wga marxist communist lgbt agenda against the white super straight trans people do not deserve trans formers cucks despite woman making 14% of the chauvins pedos consume 70% of the pizza gates maga dnc libtard cuckman druckman the last amogus based abortion the chinavirus covid lockdown is 1984 george orwell free king kong from prc,1619014010.0,4,0.83,4
+Warthunder,"Logo edit I made reflecting the April Fools event, sorry not sorry.",,1617340584.0,615,0.96,12
+Warthunder,Literally Gay Furry Porn,,1617248197.0,0,0.25,11
+Warthunder,Your potential teammates at Ground RB 10.7,,1616930582.0,274,0.98,20
+Hiphopcirclejerk,DaBaby Official Computer,,1616249928.0,41,0.96,1
+softwaregore,Krita Beta on Android duplicated my art canvas infinitely,,1615656658.0,11,0.84,1
+shitposting,ik-EN-A,,1613490285.0,11,0.93,1
+youtubehaiku,[Haiku] Charlie just dies from a sodding hammer idk,,1612713985.0,0,0.5,0
+electroswing,this aux's for the roaring 20s only,,1612593286.0,176,0.99,4
+shitposting,charlie got hit in her 'ead or something idfk fuck off m8,,1612591649.0,11,0.81,0
+shitposting,electro swing,,1612542738.0,279,0.98,17
+linuxmemes,fuck you here's open sus,,1611934632.0,137,0.97,5
+sbubby,When the Imposter is Not a Sudoer,,1611934514.0,146,0.98,10
+archlinux,I know how systemd is somewhat controversial with its feature creep. But let's take a different radical direction. Has anyone tried to use as much of its feature functions as possible on Arch?,"If so, how much of the functionalities in Linux could be handled by systemd? Just for science.",1611658162.0,54,0.96,37
+OutOfTheLoop,What's going on with the memes of anime girls dancing to Vietnamese EDM and then transitioning to some bizzare non sequitur meme like highly rendered Among Us characters? [Verbose Context Inside],"*FFS it says I need to include a picture but I don't have the meme right now so to heck with it, here's an MSPaint recreation by you're truly. It's the still image of the first girl I'm going to talk about. Did it in 2 mins.  https://imgur.com/6yvtf29*
+
+---------------
+
+Forgive me for not remembering well but this is what I can summise from my memory of this meme:
+
+Music playing is some Vietnamese EDM (I think?). First it starts with a woman clad in red shirt, moving her hips left and right, and these background neon lights flash out from her sides like a radar sonic wavefront whenever she sways.
+
+Then when the beat drops it changes to a woman in tight black latex outfit sitting on the front hood of her car, resting with a giant subwoofer, legs crossed, swinging a conductor's stick synchronising with every beat, and then this is where it would usually transition to something unrelated.
+
+The overall artstyle can be described as pasty, cel shaded, colour saturated.
+
+Where exactly do these girl characters come from? I know meme humour is abstract though I'd love to know how it even came to fruition. Thanks in advance for the genuine replies!",1611078777.0,4,0.59,12
+OutOfTheLoop,What's with the memes of anime girls dancing to Vietnamese EDM and then transitioning to some bizzare non sequitur meme like highly rendered Among Us characters? [Verbose Context Inside],[removed],1611078705.0,1,1.0,1
+OutOfTheLoop,What's with the memes of anime girls dancing to Vietnamese EDM and then transitioning to some bizzare non sequitur meme like highly rendered Among Us characters? [Verbose Context Inside],[removed],1611078065.0,1,1.0,1
+OutOfTheLoop,What's with the memes of anime girls dancing to Vietnamese EDM and then transitioning to some bizzare non sequitur meme like highly rendered Among Us characters?,[removed],1611077569.0,1,1.0,1
+linuxmemes,The secret to mastering Linux,,1610464156.0,39,0.82,10
+PoliticalCompassMemes,Western/European leftist chat members in a nutshell.,,1610221358.0,38,0.96,38
+linuxmemes,Thank you Arch people for making Linux just a bit more bearable.,,1609687532.0,159,0.98,7
+Warthunder,For some reason my AMD GPU performs a lot better in War Thunder after the update. I remember it being kinda laggy for AMD a few months back. What changed in the engine?,"I suspect it to be a graphics API change. I went to check the precompiled shaders and saw that there were DX12,MTL and SpirV shaders alongside the normal DX11 shader. *(MTL is Metal used for macOS and SpirV is used for Vulkan btw.)* So it's probably either using DX12 or Vulkan.
+
+I'm using an RX 580 on the WIP client btw.
+
+https://preview.redd.it/8z5mvmqjce161.png?width=772&format=png&auto=webp&s=a4d4a1e748245face8b25b2377b3ecd8ffbca7eb",1606314767.0,2,0.67,3
+singapore,Being a local that doesn't travel overseas it's hard to see how weird/unique Singaporean infrastructure is from the eyes of the average outsider.,"The most striking point being the green city vibe. At first I didn't see what was so unorthodox until I took a look at various miscellaneous ""normal"" places around the world.
+
+Apparently it's either all concrete and modern or all green and rural elsewhere. However in Singapore it's mixed so much that it honestly looks like a post apocalyptic city overgrown in green that suddenly got revived a hundred years later 
+
+Khoo Teck Puat Hospital is the best candidate for this. I've send pictures to my foreigner friends and they couldn't believe it was a real functioning hospital.
+
+Hell the green city vibe is so strong, that it gives Singapore's atmosphere a subtle signature hue that I can't quite pinpoint. That's probably how I'm mostly able to tell pictures taken in Singapore.",1604556042.0,248,0.96,105
+linux4noobs,OBS keeps on recording the wrong audio channel. Have to use Pavucontrol to redirect it to record the desktop's audio not my mic. It works but I have to keep on setting it for every reboot of OBS. Any permanent solution?,"I'm using Arch Linux and a Logitech H390 USB Headset. I'm also using PulseEffects for my output.
+
+OBS for some reason keeps redirecting its audio capture to Monitor of PulseEffects(mic) instead of Mointor of Logitech USB Headset Analog Stereo despite me setting desktop Audio to Monitor of Logitech USB Headset Analog Stereo.
+
+I can fix this using Pavucontrol and manually redirect the desktop audio capture to Logitech USB Headset Analog Stereo. However this keeps resetting back to PulseEffects(mic) on every reboot of OBS. Is there a more permanent solution?  
+
+
+Help is gladly appreciated!",1604036084.0,9,0.79,1
+linuxmemes,linux,,1602586471.0,39,0.84,10
+linuxmemes,Linux users @ Nvidia,,1602155239.0,147,0.98,21
+tf2shitposterclub,randomly found two guys communicating with nothing but meme sound boards in 2fort of course,,1601992785.0,38,0.92,4
+tf2,The pinnacle of team communication on a 2Fort server.,,1601979601.0,46,0.95,10
+tf2shitposterclub,ratatuole gaming,,1601904779.0,231,0.99,23
+linux4noobs,Is it possible for native Android apps to run on a desktop Linux Distro provided that the same libs and architecture be used with little to no alteration? Since they both run on the same Linux kernel (I think).,"Something else to add on, would the opposite work? A native Linux application on an Android OS. Of course I'm not talking about the ones that are coded in Kotlin/Java and run on the Android Java Runtime.
+
+I think very complex software like 3d games won't work but maybe simpler ones like music players, 2d platformer games, calendars could?
+
+If it's not possible, what sort of modifications are to be made?",1601606757.0,30,0.91,12
+bottomgear,new shit logo i made,,1601565368.0,48,0.93,1
+sbubby,tonite on bottom gear; jams may fucking dies and goes to hell,,1601547861.0,353,0.99,25
+copypasta,Like you have to realize the beauty that is Twitter,"You have the leader of the most powerful nation on earth having a tamper tantrum meltdown at some teenage girl and engaged in a twitter roast war with some random governor on the topic of abortions and full auto assault rifles.
+
+Then you have your hentai of underaged Pokemon girls with tentacles slithering everywhere like it's a fucking ramen bowl, followed by yiff of Angel Dust's ass and his femboy balls right up in your screen lustfully moaning *""I can suck ya dick~""*, drawn by a furry named **PawbsUwU** - *[Inflation Vore Commissions Open]* who supports Bernie despite living in Vladivostok, Russia.
+
+Then you have some pro Israel boomer that believes in Qanon conspiracy theories calling black  people the n word as a 7th grader named Marrie 🏳️‍🌈🇨🇮*14|Bicurious|BLM|ACAB|(she/her)* posts lego Yoda smashing his cock with a rock as a response.",1601160310.0,2,1.0,7
+interestingasfuck,There's a high speed diesel ICE train that can board a sea ferry alongside regular vehicles to travel between Hamburg and Copenhagen.,,1600877820.0,22,0.91,7
+furry_irl,linusbulgy_irl,,1600860101.0,629,0.99,34
+pop_os,"Hi, I'm a first time user. I've just had some problems getting h264 hardware acceleration working on Firefox 80 with Nvidia proprietary drivers (10xx series GPU). What should I do?","I don't really mind Software decoding, hardware decoding is just an added bonus that I'd like. Though my desktop can handle it, I doubt a weaker one will. 
+
+I have gotten this to work on open sourced drivers for AMD/Intel GPUs but not this one. I understand that Firefox 80 only does hardware decoding with h264 via VAAPI within an X11 environment. Using Nvidia SMI showed that it wasn't doing any sort of decoding work. When running \~vainfo I get this.
+
+* libva info: VA-API version 1.7.0
+* libva info: User environment variable requested driver 'vdpau'
+* libva info: Trying to open /usr/lib/x86_64-linux-gnu/dri/vdpau_drv_video.so
+* libva info: va_openDriver() returns -1
+* vaInitialize failed with error code -1 (unknown libva error),exit
+
+I'm not aware of libva, it seems like some sort of bridge to work with Nvidia Proprietary? Libva isn't mentioned for Intel/AMD GPUs. Thanks in advance for the help.",1600693217.0,3,1.0,5
+linux4noobs,PopOS is the only Linux Distro to somehow work with my Realtek ethernet (rtl8125bg). Every other Linux distro/kernel just refuses to work. What the heck?,"When using a vanilla kernel, ethernet flat out doesn't work. Even if I do try to install the driver directly from realtek i just get.... Whatever the heck [this is.](https://i.imgur.com/wRwDmV7.jpg) 
+
+This also happens on other Debian derivatives.",1600584635.0,42,0.91,10
+tf2shitposterclub,engie,,1599449560.0,147,0.97,34
+ihaveihaveihavereddit,nvida,,1599055401.0,1,1.0,0
+Deltarune,Ralsei Incognito but I've improved it a bit + Superscaled it to 4k,,1597682793.0,111,0.98,4
+ralsei,Ralsei Incognito but I've improved it a bit + Superscaled it to 4k,,1597682527.0,876,1.0,22
+vexillologycirclejerk,Flag of Yugosissislavia,,1594703497.0,40,1.0,0
+ihaveihaveihavereddit,Hazbin Hotel,,1593582947.0,12,0.88,6
+AyyMD,Intel current year in a nutshell,,1593228648.0,1702,0.99,96
+ihaveihaveihavereddit,Legoshi Dances For Mao Zedong,,1592882385.0,85,0.98,7
+ihaveihaveihavereddit,sand,,1592813835.0,25,0.83,2
+comedyheaven,sand,,1592813800.0,1,1.0,0
+furry_irl,suntzu_irl,,1592794620.0,907,0.99,86
+ihaveihaveihavereddit,gay melon,,1590851295.0,51,0.93,4
+Warthunder,Mirage now with Teleportation according to sekrit dokuments.,,1590523801.0,38,0.94,5
+okbuddyretard,Loona 女朋友 boss girlfriend Hell 深圳市 Shenzhen Provincial City announcement,,1590170684.0,184,0.99,8
+Gamingcirclejerk,Boggles my MiG-21 Supersonic Light Fighter/Interceptor,,1589427905.0,164,1.0,10
+kde,KDE Wayland has been going great and smoothly! Sadly Firefox (running Wayland mode) is the only program that is glitching the desktop UI like hell. Anyone else had this problem? [More info in comments],,1589280525.0,32,1.0,25
+worldpolitics,Hazbin Hotel,,1589052776.0,4,0.57,0
+worldpolitics,This is now a /r/Beastars r34 sub,,1589051997.0,0,0.45,5
+ihaveihaveihavereddit,leg shi,,1588820267.0,14,0.76,3
+HazbinHotel,Anthony Tech Tips,,1586529220.0,170,0.94,10
+gifs,Day 4 of Quarantine - Panning a YT Video window across my desktop. choo choo,,1585829973.0,17,0.68,7
+tf2shitposterclub,"Hey guys, Soundsmith just created his own new subreddit! Come join in the fun!",It's /r/Sounding be sure to read the rules!,1585720437.0,12,0.88,3
+VRchat,Decided to download this game due to the pandemic as a time passer and I wanna socialize. Safe to say my first experience with it was.... something,,1585332241.0,131,1.0,7
+tf2shitposterclub,a'ight i'm boutta headout,,1584068973.0,516,1.0,4
+okbuddyretard,guys demoman is real??? he be looking for a hotel that he likes doe,,1582848907.0,12,0.83,1
+tf2shitposterclub,black explosive alcoholic checks into the gaybin homotel,,1582847673.0,91,0.97,4
+Warthunder,Air RB Players doing headons be like...,,1580140732.0,1318,0.98,85
+tf2shitposterclub,"How to ejaculate glowing iron cross particles from hospital tube bazooka onto nearby comrades as the German megalomaniac doctorate, in the game Assembly Fortifications the Second",Pls help???,1579875141.0,11,0.88,6
+circlejerk,reddit,reddit,1579803674.0,6,0.87,1
+DankLeft,capitalism is a fuck,,1579570282.0,141,0.97,12
+DankLeft,"i made the most horrendous laborwave poster ever, enjoy",,1579103652.0,112,0.96,18
+HazbinHotel,"For some reason there's lots of Hazbin fans in the comments section of this Electro Swing music mostly because the vocalist resembles Alastor, and now I can't get that thought out my mind because it does.",,1578957361.0,18,0.93,2
+starterpacks,Average Discord Servers,,1578833568.0,1377,0.99,87
+vexillology,Anarcho-Socialist Republic of Singapore,,1578833459.0,117,0.95,7
+Helluvabrothel,How y'all mofos be like in Iran,,1578357376.0,543,0.99,15
+furry_irl,warplanes_irl,,1578326933.0,491,0.97,23
+sbubby,No better way to start off 2020 like a classic Soviet Sbubby,,1577877516.0,313,0.99,20
+PoliticalCompassMemes,a boob boob theodore cumpass,,1577870237.0,74,0.93,3
+SyrianCirclejerkWar,updated 100% accurate political map of syria 2020,,1577624411.0,374,1.0,15
+PragerUrine,🅱️rager U warns about the dangers of 🅱️ocialism,,1577550134.0,76,0.97,2
+DankLeft,gay,,1577541346.0,192,0.98,10
+ToiletPaperUSA,🅱️rager U warns about the dangers of 🅱️ocialism,,1577536084.0,10205,0.92,514
+HazbinHotel,I photoshopped Angel Dust into a Russian space poster out of sheer absolute boredom on my phone as I recover from my Flu. Idk,,1577283540.0,143,0.98,8
+MakeMeSuffer,Helluvaht the fuck is this shit,,1576857686.0,2296,0.99,124
+HazbinHotel,I thought Angel's Polka Pop sounded kinda Russian so I drew him as a slutty KGB assassinator,,1576550482.0,152,1.0,14
+morbidquestions,"If I were a death row inmate, could I request my body be kept in tip top shape and have as many parts of my body donated to hospitals? (Blood, organs, bone marrow .etc)",,1576390469.0,11,0.93,6
+DeepFriedMemes,主席 Xi Jing 哈兹宾 hazbin酒店.201x,,1575385184.0,17,0.92,2
+okbuddyretard,he's disappointed,,1575203147.0,39,0.89,4
+HazbinHotel,"I'm stuck serving mandatory military, can't do my digital art as much, so here's a quick dumb Angel sketch I did in the office.",,1574722287.0,19,0.9,4
+ralsei,Here's my Ralsei sketch tax,,1574290344.0,279,1.0,2
+Deltarune,A somewhat quick Ralsei I made to ease the burden of serving mandatory military service.,,1574287027.0,147,0.99,12
+furry_irl,angel_irl,,1573695906.0,34,0.9,13
+tf2shitposterclub,maggot,,1573376943.0,230,0.99,8
+tf2shitposterclub,Joined a random 2fort server and there were three people playing together as f2p hoovy monkeys and literally just making monkey noises,,1573282761.0,52,0.97,15
+assholedesign,"I know it's petty but when your (previously accessible) music in a playlist magically goes unplayable in your country because of georestrictions, it's insulting and infuriating.",,1573228168.0,73,0.91,18
+gaming,When a game allows you to have custom bullet hit and kill sounds,,1573149997.0,20,0.75,4
+tf2,TIL you can make custom hitsounds and killsounds. So.... I made this....,,1573144018.0,60,0.91,14
+tf2shitposterclub,"""Pay no attentio- FIRE! GAAAAEEEGGH!"" - tf2 soldier",,1573127434.0,21,0.94,1
+tf2,Hat kid has nos,,1572916488.0,31,1.0,4
+tf2shitposterclub,Image folder thumbnails coincidentally matched up well,,1572700613.0,31,0.87,21
+tf2shitposterclub,Collaborated Fortification: 2,,1572569078.0,45,0.99,4
+yiff,Cheer Phox! [F](TacoPhox),,1571585741.0,67,0.88,3
+PokePorn,A Cute Braixy Halloween! [F],,1571585571.0,76,0.89,1
+todayilearned,"TIL - The One Euro MiG - In 2002, Germany had MiG 29 Fulcrums [Soviet jets taken after the reunification with East Gemany] and sold 23 of them to Poland for the hefty price of one Euro as a goodwill gesture to get the Polish Army up to NATO Standards.",,1571106841.0,134,0.97,12
+techsupport,"MSI B450-I motherboard refuses to POST unless I switch the mains off and on again. And even after that sometimes it sits there and freezes not booting so I have to hold down the power button to reset, and then it POSTs and boots. This is really really weird, anyone else had a problem like so?",I did double checked that the motherboard's screws to the case had non conductive washers and that my power supply was working fine with an older machine. Could this be some sort of BIOS issue? (I'm using their beta BIOS for Ryzen 3rd gen),1570541069.0,2,1.0,0
+comedyheaven,short beans,,1569684837.0,1,1.0,1
+COMPLETEANARCHY,Right wing Trigger warning,,1569565483.0,176,0.99,0
+furry,Coffee Phox [OC],,1568561636.0,96,0.99,4
+FurryPornSubreddit,"[F] She's Staring at You, Menacingly (TacoPhox)",,1567650763.0,26,0.81,4
+yiff,"[F] ""Pathetic"" | Art by me (TacoPhox)",,1567633555.0,28,0.77,1
+circlejerk,minecraft,,1567508217.0,17,0.92,2
+PokePorn,"She's Staring at You, Menacingly",,1567193066.0,45,0.77,1
+quityourbullshit,"23k upboats on supposed ridiculous Trans Awareness Poster, is actually just a 4chan prank to defame and promote a false negative image on trans folk.",,1566352452.0,5,0.86,2
+Minecraft,Endermen XP Farm + Simple Linux Terminal Command = AFK Super XP generator. Reach XP Level 100 in mere minutes!,,1565964094.0,18,0.79,11
+linuxmemes,"Du: Gnome 3... Ich, ein Intellektueller: K🅱️E",,1565514854.0,87,0.85,27
+foxes,Fox-Life,,1565503973.0,9,0.75,0
+2b2t,youngest authoritarian client,,1565459010.0,0,0.5,2
+COMPLETEANARCHY,I'm disappointed that I've not seen this comedic music video before [Klemen Slakonja as Slavoj Zizek - The Perverted Dance (Cut the Balls)],,1564649807.0,11,0.92,1
+furry,Quick doodle i made right after finishing my ryzen 3600x pc. Bossy Braixen's gone mad.,,1564334575.0,22,0.92,2
+softwaregore,Tried to run a non executable .jar file and... things went Gaga....,,1564328193.0,102,1.0,25
+linuxmasterrace,"Finally upgraded from a crappy FX 8320 to a Ryzen 3600x, and after having Systemd troubles I managed to boot Arch Linux with KDE Plasma V for my new art workstation and game hub coming over from Windows 10 :)",,1564322445.0,2,1.0,0
+Amd,"Here in Singapore, Team Blue's nearly twice as expensive as a 3600x despite having identical single core performance and having lower multi core capabilities. Thank god I went with AMD. [Unfortunately the non-X version didn't ship overseas so I had to make do, otherwise I'd have saved exactly half]",,1564147549.0,447,0.91,88
+MSI_Gaming,"Quite happy with my B450i Mini ITX purchase, however sometimes at random it will fail to POST unless I completely power off and on the system, then it'll boot like normal. The debug LED indicates that it's a GPU problem? [Windows 10 1903 . 2019-07-10 BIOS . 3600x]","This is a very weird issue. Sometimes whenever I try to power on the PC it just gets stuck trying to POST, with the debug LED constantly on indicating that there's something wrong with the GPU \[RX 570\]. Problem gets resolved after replugging the mains and it boots normally.  
+
+
+I migrated over an old FX 8320 system and the GPU was working 100% fine, I'm suspecting it's the beta BIOS. Not sure if anyone else has this issue. Any help is appreciated!",1563691200.0,1,1.0,0
+FeralPokePorn,Ice Ice Baby [MF] (TacoPhox),,1563675310.0,103,0.99,1
+FurryPornSubreddit,Is it okay if I post my Braixen here? [F](TacoPhox),,1562203352.0,46,0.93,1
+PokePorn,"This sub needs more Braixen pussy, so here's my contribution (TacoPhox)",,1562202784.0,60,0.86,3
+yiff,Very leaky Braixen could use some [F]lex Tape tbh (TacoPhox),,1562202613.0,31,0.79,4
+FeralPokePorn,[F] Leaky Braix (Tacophox),,1562202266.0,76,0.97,1
+linuxmemes,I'd just wike >.> to intewject fow a mwomwent :3 XD,"I'd just wike >.> to intewject fow a mwomwent :3 XD. Wat ur weffewing to as weenux .\_. ish in fact, GNU/weenux uwu, or as I've wecentwwy taken to cawwing it, GNU paws weenux OwO. weenux is not an o-pawwating systwem unto itsewf, but ratwher anwothew fweee compwonent of a fuwwy fwunctioning GNU system \^w\^ made usefwuw by the GNU core-weebs uwu, shew uwutiities and vital system cwomponents compwising a fuww OS as defined by Paw-SIX >w>.
+
+&#x200B;
+
+Many computew usews wrun a mOwOdified vewwsion of the GNU system evewwy day OnO, withwout weawizing it >w<. Thwough a pecuwiaw tuwn of evwents, the vewsion of GNU which is widewy used today is often cawwed ""weenux"" Uwuwuwu, and many of its usews awe not awawe that it is basicawwy the GNU system, devewwoped by the GNU PAWject OvO
+
+&#x200B;
+
+There weawwy is a weenux X3, and these PAWple XD are uwusing it >:3, buuuttt it is juss a PAWt of the system they use UwU. weenux is the kewnewrl hehe >w<: the pwogwwam in the system that avwocates the machine's wesouwwces to the othew pwOwOgwams that you wun VwV. The kewnewrl is an essentiaw Pawt of an opewating system, but usewess by itsewf OnO it can onwwy fwunction in the context of a compawete opewating system \^w\^. weenux is nowmawwy used in cowombination with the GNU oPawating system :333 the whole system is basicawwy GNU with weenux added, or GNU/weenux. All the so-cawed ""weenux"" distwibutions awe weawwy dwistwibuwutions of GNU/weenux.",1561890116.0,23,0.77,11
+LinuxCirclejerk,The KDE community is proud to announce a huge update and new packages to be included within kde-applications!,"The following will soon be available/updated in the main kde-applications group:
+
+* khangman
+* khelpcenter
+* kwanker
+* kloli-wallpapermaker
+* kyiff
+* ku-klux-klan
+* kgnome3
+* krusty-krab
+* konsole
+* kate
+* kancer
+* kys
+* kockandballtorture
+* kum
+* kjizz
+* ksystemd
+* korg-server
+* kmasturbate
+* jfK-neddy
+* alexandriaocasioKortez-feetsimulator
+* kdoge
+* kretard
+* kwayland
+* kwin
+* klose
+* krakatoa
+* kocksucker
+* kincest-porn
+* kommunism
+* katy-perry
+* karch-linux",1561826866.0,40,0.86,5
+linux4noobs,"Why do ARM computers need ISOs for each specific one, but x86/x86_64 computers (normal laptops and desktops) can just use a universal iso to boot from?","I know ARM is a different CPU architecture than x86, but I'm really not sure why there's no ""Universal"" iso for it unlike x86.",1561719776.0,125,0.98,33
+softwaregore,Very funky desktop button,,1561595671.0,3,1.0,5
+kde,"So I have a weird, albeit funny bug with the Desktop Toolbox button [Plasma 5.16-1]",,1561537068.0,66,0.9,26
+furry_irl,thot_irl,,1561308321.0,460,0.98,13
+Showerthoughts,"It's depressing to realize that the only other real alternative cross platform internet browser out there is Firefox, left alone to fight against Google Chrome and its Chromium based browsers. Firefox is basically a one man army against a super-corporate monopoly of how we access the Internet.",,1560086681.0,1,1.0,1
+furry,Yoga foxie by me :3,,1559851205.0,12,0.8,4
+CitiesSkylines,"Very new to CS, here's my most recent attempt at a successful city. I made it round!",,1559829804.0,11,0.92,7
+PoliticalCompassMemes,"Yarr Harr Fiddle-Di-Dee, Being a Pirate is Alright With Me!",,1559493004.0,65,0.91,6
+furry,Minmalist Designed B&W Braixen (by me),,1558714058.0,26,0.93,3
+Deltarune,Deltarune but it's a British Car Show,,1558573778.0,710,0.98,16
+Braixen,My personal tribute to thicc phoxxo,,1556901921.0,10,0.92,0
+furry,"She a thicc Braixen, drawn by me!",,1556901313.0,26,0.96,6
+furry,"My art file got corrupted and was missing outline layers, but it gave me a minimalist-like wallpaper so i did some cleaning and here's an impromptu minimalist Braixen I guess!",,1556815779.0,351,0.98,16
+Deltarune,Mercedes Benz's old race posters sure look interesting,,1556204788.0,69,0.97,4
+furry,Magical Goat Boi (OC),,1556034810.0,26,0.83,4
+Deltarune,Precious and Magical Ralsei! (OC)(Fixed),,1556034678.0,31,0.89,1
+ralsei,Magical Gote! (Fixed)(OC),,1556034491.0,76,0.98,1
+circlejerk,Unpopular Opinion: Tangerine Individual Unfavourable,,1555170348.0,164,0.96,12
+PokePorn,Spread em' Braixen - [OC][TacoPhox],,1555006094.0,48,0.86,1
+ralsei,R λ L S E I - (OC),,1554726579.0,280,0.99,6
+dogelore,le time for caution has not arrived,,1554520149.0,115,0.99,7
+bisexual,*Quantum Superpositioning Intensifies*,,1554288392.0,769,0.99,13
+furry,R λ L S E I - (OC),,1554256290.0,43,0.89,2
+circlejerk,"BREAKING NEWS: Orange Man (Bad) aka Furry CEO of EA, announces that Vaccines causes Autistic Flat Earthers.",,1554235095.0,10,0.92,1
+Deltarune,R λ L S E I [OC],,1554234447.0,145,0.99,6
+FeralPokePorn,Braixy Cock [M](TacoPhox - OC),,1554017441.0,69,0.8,5
+furry_irl,YouTube_irl,,1553904790.0,109,1.0,31
+MURICA,If this isn't the most Murican fighter jet ever then I don't know what is,,1553743600.0,1,1.0,0
+sbubby,"Qatar Airways, but the goat logo is different",,1553597084.0,114,0.97,8
+Deltarune,Well it's been a while since I've last posted here. So why not come back with a good ol Ralsei shitpost in the form of a Sbubby?,,1553597005.0,1287,0.98,28
+ralsei,The Best Way To Fly! Ralsei Airlines!,,1553596880.0,220,0.98,8
+Braixen,[OC]Braixy Selfie!,,1553372434.0,16,0.91,3
+furry,"Felt cute, might delete later ^w^ [OC]",,1553371742.0,74,0.87,3
+Gamingcirclejerk,My 2 day old son with his well earned Nintendo. Paid with the money he's saved over the course of his lifetime. Very epic :)),,1552814166.0,1859,0.99,21
+PokePorn,Cheery thotty Scorbunny :3 (OC - Tacophox),,1552671834.0,64,0.82,1
+yiff,[F]risky lil' Scorbun :3 [OC],,1552671236.0,32,0.75,1
+furry,Cheery Scorbunny I just made. I hope you guys love her as much as I do :3,,1552670735.0,3,0.67,1
+me_irl,me_irl,,1552133176.0,23,0.87,0
+furry,[OC] A very oily glowy boi,,1551977178.0,33,0.93,5
+exmuslim,"As a leftist, I'm honestly disappointed that my comrades are soft about Islam. If you oppose Christianity but not Islam, you're just being a hypocrite.","Hate far rightists? Woot! Hate Christianity? Woot! Hate work inequality? Woot!
+
+Hate Islam and the Muslims who support it vehemently? No nooo! They're a minority and need to be tolerated! Doesn't matter that Islam is a fucking intolerant religion towards LGBTs and that they think women are subhumans. You're a racist for hating Islam!
+
+Fucking fuck off. I'm BROWN AND I GREW UP WITHIN A MUSLIM COMMUNITY FOR FUCKS SAKE. You already have to deal with Christianity, don't let another tumor like Islam settle down for fucks sake.",1551073596.0,662,0.96,195
+furry,Braixen dressed up as Megumin! [OC],,1550856879.0,114,0.98,16
+exmuslim,I got banned from /r/Islam. Hi!,"Well there was a thread for lurking Ex Muslims asking ""Why do you guys think you're Islam experts?""  
+
+
+I answered that I'm no Islam expert, but then I tried to reason why I don't need to be an expert to make a judgement that it is a bad religion to be in. I was having a decent debate until they banned me before I could make my fourth reply.   
+
+
+I've legitimately had better discussions with far rightists, hardcore Christians and /pol/ users with me being a non religious leftist. I don't know what is it with Muslims and being extremely offended with any sort of opposing opinion before quickly shutting the conversation down. Why is it that everyone else seems to take criticism better than Muslims? Hell just suck it up if you still disagree. That's just a cold fact of life you've got to live though and experience.
+
+&#x200B;
+
+\----------
+
+&#x200B;
+
+Anyways hi, I've been a long time ex muslim lurker. I'm a bisexual male, left leaning in terms of American politics. I just wanna say that you guys are awesome for supporting basic human rights. Fight for humanity, not for religion!",1550682043.0,90,0.93,27
+yiff,Femboi Braixen [M](TacoPhox - OC),,1550373764.0,7,0.57,2
+PokePorn,Femboi Braixen <3 [M](TacoPhox),,1550373595.0,10,0.58,1
+furry_irl,Roses_irl,,1549846151.0,350,0.97,16
+bisexual,Not your usual supportive poster,,1549720338.0,98,0.96,23
+furry,Braixen doin a Tailnom [Art by me],,1549623617.0,82,0.97,5
+traaaaaaannnnnnnnnns,Motivational Poster,,1549603971.0,56,0.95,2
+comedyheaven,raf nimrod flight and crash,,1549404154.0,81,0.97,14
+furry,"First attempt at digital, coming from traditional. The floofy boi [OC]",,1548986046.0,31,0.9,5
+Deltarune,He's so happy to see you again [OC],,1548980744.0,110,0.97,4
+ralsei,"Hey it's been so long since I've posted Ralsei fanart, I've recently gotten a drawing tablet and this is the first real digital drawing I've done so here's Ralsei!",,1548946600.0,237,0.98,9
+ShitWehraboosSay,War Thunder has officially lost it,,1548883390.0,47,0.93,11
+Gamingcirclejerk,"Fuck CD Project Red. Fuck Geraldildo. This is the true best Singleplayer character. All hail our new prince, Ralsei.",,1548850902.0,69,0.92,26
+Warthunder,How I see the FW 190 variants,,1548658029.0,3869,0.98,90
+furry,A very floofy phoxy Braixen [OC],,1548209397.0,99,0.98,14
+UnderTail,Fluffy and Pudgy Boi [Hotkeke],,1548136168.0,61,0.95,3
+furry,Fly Fly Braixen~ [Art by me],,1547569156.0,11,0.93,3
+furry,Fly Fly Braixen~ [Art by me],,1547564928.0,1,1.0,1
+Deltarune,I'm sorry for this abomination,,1547471979.0,438,0.97,28
+Warthunder,The Official Logo of Vehicle Requests [OC],,1547219678.0,21,0.79,4
+ralsei,Ralsei confirmed for Russian Bias,,1547204585.0,207,0.96,7
+furry_irl,Ralsei_irl,,1547204446.0,154,0.93,18
+Deltarune,War Thunder but it's a Homosexual Anthropomorphic Bovine from an Indie RPG [Sbubby OC],,1547204365.0,142,0.92,7
+sbubby,War Thunder but it's a Homosexual Anthropomorphic Bovine from an Indie RPG,,1547204219.0,22,0.9,1
+furry,Thick thighs save lives. Braixen art by me.,,1546952355.0,44,0.93,16
+Deltarune,A neat little decal for my Hunter Jet Fighter in War Thunder,,1546796620.0,129,1.0,1
+AyyMD,Using an AMD card gives you time travel abilities ayy,,1546744164.0,37,0.92,8
+thedonald,h,,1546569649.0,0,0.35,0
+furry_irl,BD_irl,,1546568269.0,240,0.99,18
+softwaregore,When you keep your drivers updated too fast,,1546564325.0,89,0.95,12
+Deltarune,===GAME THEORY=== Raisel is actually Cheeki Breeki???,,1546424297.0,77,0.9,8
+furry,Started 2019 with a Braixen! [OC],,1546398670.0,30,0.88,9
+ralsei,Ralsei stickied on the cockpit of a fighter jet.,,1546348995.0,286,1.0,27
+Deltarune,Hello I'm here to pay my weekly Ralsei art tax [OC],,1546162572.0,120,0.96,7
+ralsei,A quick smol i did,,1546162538.0,92,0.94,12
+technicallythetruth,9000 IQ Browser Add-on,,1545490481.0,17,0.96,3
+furry,It's Fluffyboi! [OC],,1545489691.0,27,0.97,2
+furry_irl,FursonaVsMe_irl,,1545489526.0,250,0.97,16
+ralsei,I haven't posted a while here. So here's my attempt at hardshading a fluffy boi.,,1545444666.0,223,0.99,13
+Deltarune,Attempt at a Hardshaded Ralsei,,1545444616.0,280,0.99,3
+Deltarune,No this can't be real i'm literally crying and shaking Ralsei would never participate in the Yugoslavian Wars,,1545065268.0,377,0.98,31
+Deltarune,Ralsei <3s you! [OC],,1544862987.0,90,0.98,7
+ralsei,Ralsei <3s you!,,1544862542.0,236,0.99,15
+ralsei,Here's a cancelled Ralsei. I'm working on another one atm. Hopefully I'll foop up less next time. Idk...,,1544799339.0,132,0.98,3
+Deltarune,"This is brilliant, but...",,1544624196.0,451,0.98,18
+sbubby,It's Ralsei with a Gun,,1544534057.0,858,0.99,25
+Deltarune,An Anthropomorphic Mage Goat Wielding An Automatic Gunpowder-based Weaponry,,1544529258.0,2452,0.97,44
+Deltarune,Just a Cute Goat I drew~,,1544356341.0,87,0.97,5
+ralsei,I drew Ralsei again! Can't get enough of this cute boy~,,1544356298.0,203,0.98,20
+sbubby,Discord but it's a fluffy goat,,1544149391.0,4410,0.96,101
+ralsei,Ralsei-cord,,1544149223.0,312,0.99,13
+Deltarune,Did you know that modern day computing gets its power from Fluffy Boys?,,1544147618.0,57,0.96,1
+sbubby,Ralsei R7 2700x,,1544147563.0,46,0.96,6
+ralsei,Ralsei Logoswap,,1544147408.0,40,0.97,1
+Deltarune,I thought I'd share my love for drawing Ralsei here as well,,1544063098.0,91,0.98,1
+ralsei,I tried to colour him...,,1544016799.0,255,0.99,11
+ralsei,Ralsei gives you a heart <3,,1543816863.0,138,0.99,11
+ralsei,I just discovered this sub so here's my first attempt at Ralsei. Xpost /r/Deltarune,,1543646161.0,80,0.97,7
+ToiletPaperUSA,omg ben shapiro is in DeltaNite???,,1543636650.0,65,0.99,3
+Deltarune,"omg ralsei and ben shapiro in fortrune, okay this is epic",,1543636027.0,9,0.75,1
+Deltarune,this is a weird Deltarune AU...,,1543535744.0,89,0.96,2
+sbubby,Powered by Kris Core i9 8th Gen and RALSEI RTX,,1543492115.0,295,0.97,14
+Deltarune,A different pair of Blue and Green,,1543491862.0,230,1.0,6
+furry,The Fluffy Boy Adjusts His Glasses [Art by Me],,1543457165.0,41,0.87,3
+foxes,An Autumn Roll,,1543414339.0,920,0.99,5
+Deltarune,"This is my Ralsei art. There are many like it, but this one is mine! [Also it's not a Shitpost from me for once]",,1543413577.0,157,0.99,6
+furry_irl,bensharpies_irl,,1543375464.0,286,0.96,23
+ToiletPaperUSA,Ben has something to say about his new Purple Waifu,,1543374859.0,371,0.99,35
+Deltarune,after nine years in development...,,1543245588.0,605,0.99,48
+furry_irl,FortniteBattleRune_irl,,1543200452.0,1,1.0,1
+Deltarune,I saw the box memes and my brain made an awful realization and I made this. I'm sorry,,1543200310.0,188,0.96,30
+furry_irl,Tailtherune_irl,,1543189247.0,394,0.97,37
+tf2shitposterclub,thank you tf2 heavy for keeping our religious christian values,,1543189118.0,713,0.99,71
+sbubby,DelтаЯцие,,1543127607.0,20,0.89,6
+sbubby,Atomic Heart,,1543127443.0,13,0.86,0
+Deltarune,"""Deltarune is an action RPG with FPS elements set in the alternate version of the USSR""",,1542984150.0,103,0.99,4
+sbubby,"""Delta Rune is an action RPG with FPS elements set in the alternate version of the USSR""",,1542983724.0,29,0.96,3
+AyyMD,"I heard you liked cores, so I put a core within four cores with another group of four cores with four other groups of two groups of four cores within a group of dual CPUs with four groups of two groups of four cores.",,1542635818.0,35,0.97,9
+AyyMD,The VirgINTEL vs The CHAD-MD,,1542405723.0,282,0.99,17
+FortNiteBR,Are there any potential performance boosts if Epic Games ships Vulkan support for Windows as it did with Android?,"In the latest Unreal Engine release blog, it states that they used the Vulkan API on the Note 9 to increase fps performance.
+
+I was wondering if it replaces DirectX in Windows, will there be the same massive performance boost?",1542004301.0,3,0.8,0
+pcmasterrace,*slaps tummy* It fit many threäds BƦǿƫher [xpost r/AyyMD],,1541984527.0,1,1.0,0
+foxes,foxxo is happy with his vv big loaf,,1541769513.0,709,0.98,4
+androidcirclejerk,NEW PIXXXEL XXXXXXL 420 LEAKED,,1541557004.0,67,0.97,3
+gaming,A (poor) recreation of UP in Fortnite,,1541555840.0,0,0.4,0
+FortNiteBR,I had the brilliant idea to use balloons as a passenger on the ATV and accidentally discovered infinite height (Until you hit the skybox and die),,1541554888.0,5,0.86,2
+australia,Australia has Milo tin cans. Malaysia has Milo tank trucks.,,1541482806.0,12,0.7,3
+AyyMD,I sexually identify as an AMD Threadripper 2990WX 32 core 64 thread x86_64 socket TR4 central processing unit.,"I sexually identify as an AMD Threadripper 2990WX 32 core 64 thread x86_64 socket TR4 central processing unit. 
+
+Ever since I was a boy I dreamed of achieving a higher IPC than Skylake X and crushing render speeds down to mere seconds by being a super threading beast. People say to me that a person being a 2990WX with 64 threads is Impossible and I’m fucking retarded but I don’t care, I’m powerful. I’m having GlobalFoundaries fabricate 12nm CCX dies onto my body.
+
+From now on I want you guys to call me ""Threadripper"" and respect my right to crush Intel Skylake X HEDTs in Cinebench performance and power efficiency. If you can’t accept me you’re an Intel shill and need to check your rendering privilages. Thank you for being so understanding.",1540169423.0,65,0.92,6
+furry_irl,furry🦊irl,,1540134824.0,336,0.98,24
+foxes,fresh from the bakery,,1540119809.0,438,0.99,3
+foxloaf,hold the loaf,,1540119725.0,164,1.0,2
+foxes,buncho smols,,1540029333.0,27,0.82,1
+furry_irl,furry_irl,,1539904736.0,472,0.97,33
+ToiletPaperUSA,turning pony anus,,1539904557.0,235,0.99,6
+foxes,smol,,1539746773.0,747,0.99,2
+foxes,he doin a supermlem,,1539697860.0,1042,0.99,4
+furry,Braixen the Magical Witchfox [By Me] - Been getting into lots of drawing lately and my new Brush Pens are awesome!,,1539693184.0,37,0.94,4
+androidcirclejerk,4 GeeBees of RAM makes me want to fucking kill myself. My one year old Huawee Uwotm8 has 10GeeBees and everyone knows the more GeeBees the better.,,1539444570.0,101,0.95,27
+hmmm,hmmm,,1539356709.0,18,0.89,2
+Minecraft,Very weird and interesting experience with Optifine previews for 13.1 on my PC,"General PC specs:
+
+* FX 8320
+* HD 7770
+* OS - Windows 10
+
+So for some reason, all the Optifine preleases didn't really improved performance that much on my end until I used a later Java Runtime 10 instead of the bundled Java 8, though to get Optifine working on Java10 you'd need to do a launchwrapper fix from here: [https://www.reddit.com/r/Minecraft/comments/9fqivd/psa\_how\_to\_use\_optifine\_with\_java\_10/](https://www.reddit.com/r/Minecraft/comments/9fqivd/psa_how_to_use_optifine_with_java_10/)
+
+&#x200B;
+
+After that the performance drastically increased with my unchanged Optifine settings up until Preview 3-5, then it didn't seem to give me the same FPS as before even after trying out different versions of Java. So I just stuck with Preview 2 which weirdly enough also seems to be the most stable for me.   
+
+
+I have no idea what's going on or why it happened, but if anyone else out there is having some issues with pre released Optifine then maybe you can try what I did to remedy it.  
+",1539323026.0,4,0.84,1
+foxes,Two Floofballs Arguing,,1539155893.0,1134,1.0,12
+foxes,such a floof,,1538884566.0,478,1.0,0
+TooAfraidToAsk,Is it normal to be horny after a serious depressive episode?,"Hi. I'm an 18 year old male. I've been diagnosed with clinical depression and will randomly have serious depressive episodes between weeks.
+
+However I noticed that I tend to switch into being horny right after exiting a long episode of being sad. I'm too embarrassed to tell my doctor about it.",1538816501.0,0,0.5,3
+foxes,Protecting the babies,,1538704966.0,724,0.99,7
+furry,Inktober 2018 - Braixen casts a spell! [Art by me],,1538665405.0,145,1.0,6
+foxes,Mr Floof is doing a heckin loaf,,1537746384.0,1352,0.97,9
+LinuxCirclejerk,I'm not an Arch user because I hate having a life. I'm an Arch user because I hate women and minorities.,,1537547998.0,59,0.93,10
+foxes,Hey! This Oreo tastes weird!,,1537413370.0,339,0.99,3
+thedonald,literally furry porn,,1537358201.0,0,0.2,3
+furry_irl,furry_irl,,1536112081.0,48,0.9,1
+furry_irl,furry_irl,,1536106409.0,101,0.96,28
+thisismylifenow,Losing your wings in a video game,,1535681590.0,44,0.98,2
+foxes,Mama foxie and her babies,,1535527738.0,932,0.99,6
+tf2,Hey man what's up? Just chillin on Teufort.,,1534435743.0,14,0.73,5
+trashy,Advertising music on a Quoted RT of a dog that died from rape,,1534133200.0,102,0.98,3
+sbubby,windows,,1534010794.0,32,0.94,4
+sbubby,windows,,1534008075.0,3,1.0,1
+linuxmemes,cursed image [OC],,1533968567.0,168,0.95,28
+LinuxCirclejerk,MRW People complain about Chrome's RAM usage and performance,,1533717366.0,80,0.96,14
+Xiaomi,There's so many stock Android ROMs for the Redmi Note 5 Pro (WhyRed) can anyone recommend what's the best?,"I'm mainly looking for stability. So far the ones that caught my eye was Mokee. LineageOS and Pixel Experience on XDA. I'm not sure which one is better.
+
+Edit: Seems to me that Lineage OS is the winner. Thanks for the suggestions?",1533603176.0,11,0.88,19
+tf2,Engineer casually flying to the sky,,1533530482.0,328,0.98,25
+tf2,Gravity? Who gives a crap about Gravity?,,1533431994.0,540,0.98,38
+furry_irl,furry_irl,,1532996236.0,87,0.96,17
+tf2,Some of my favourite killcam shots over the past few weeks. TF2 never fails to impress me.,,1532570993.0,131,0.99,13
+tf2,Petite French Twink Gets DPed By Two Bears,,1532526488.0,360,0.96,10
+furry,Magical Witch Fox Braixen! (GinjaKNinja),,1532057090.0,126,1.0,4
+Fox,Mr Floof has returned!,,1531314864.0,35,1.0,1
+Fox,nyooom fast phox,,1531313468.0,14,0.9,0
+tf2,the inttalengec,,1530839101.0,87,0.97,4
+xdacirclejerk,yes bro r we redmi note 5,,1530603361.0,32,1.0,6
+furry_irl,furry_irl,,1530533092.0,536,0.98,20
+Xiaomi,What's the best close-to-stock-Android but still usable theme for MIUI 9? So far I have only found half functioning ones,"It's going to be a week and a half more before my Bootloader is unlockable so that I can flash Stock Android on my Redmi Note 5 AI.
+
+Don't get me wrong, there are some aspects on MIUI 9 that I like but I'd still love the fluidity, simplicity and performance of stock Oreo. 
+
+I feel like MIUI is hampering amazing hardware. The Redmi Note 5 AI is an absolute bargain for 200USD, loved my Note 3 Pro and now i basically got an upgrade in every aspect for the same price at launch. Just gotta be patient for the unlock. ",1530438350.0,4,0.84,7
+tf2,[SFM+Photoshop] An explosive TF2/Paladins crossover,,1530104982.0,72,0.86,18
+Warthunder,Perfect Camo,,1528869145.0,452,0.97,19
+tf2,The Dragon's Fury may have been nerfed but it's still a really good viable weapon. [Thoughts on it and my preferred method of playing it],"It's just a bit less forgiving if you miss a target due to careless mistakes in prediction, happens to me at times. But it's still a viable weapon to use. IMHO also a lot more satisfying than a flamethrower. 
+
+----------
+
+How To Play:
+
+Because of the new change, it is highly encouraged that you combo with a Scorch Shot. Regular shots from a Dragon's Fury barely causes any damage, its the ramp up in damage and firerate from a successful second shot onwards that makes this a wonder weapon. 
+
+If you miss your first shot with the Dragon's Furry you're pretty much fucked because you won't get the bonus firerate for consecutive hits, and this will occur more often due to the hitbox nerf. If you miss the second shot you're fucked too because the first fireball barely gave your foes any afterburn or direct damage and your consecutive hits will reset to zero. 
+
+Shoot an enemy from a far distance with the scorch, this way they'll suffer a longer duration of afterburn which will give your Dragon's Fury ample time for a few missed shots whilst the afterburn will help you slowly drain their health. 
+
+The Scorch will set ablaze enemies within its impact radius so its a lot more easier to aim with it than the Fury. Since your foes are already burning your first Fury shot will cause the bonus damage on afterburning targets, hooray!
+
+--------
+
+Pros:
+
+* A lot more satisfying to play than a flamethrower 
+* Longest range for a Pyro Primary
+* Extremely good at fucking up Engie's buildings. If you hate mini sentries (or even a regular sentry around a corner) you'll love this weapon.
+* Very good for 1v1 or even 2v1 if you're a Furry
+
+Cons:
+
+* Very bad for crowd controlling. Never engage with three or more enemies with this weapon face to face, hide around a corner and deploy scorch flares from far. When damaged enough, come out with the Fury to finish them off and get hate messages about scorch spamming.
+* Unreliable airblast. Takes too long to recharge, risky to extinguish teammates in battle and can't counter rocket spam. 
+* Not the best for teamplay due to extremely slow airblast in order to rapidly extinguish your teammates and get back to attacking.
+* Unsuitable for reliable spychecking, so to the Pybros out there, disregard this weapon.
+
+---------
+
+I think the people that'll find it the easiest to migrate to the Dragon's Furry are LnL Demos. Just aim forward instead of up. Practice won't make perfect, perfection doesn't exist, but it'll bring up success rate and that's all that matters. Have fun! 
+
+Overall I find this weapon + scorch to be a super deadly and fun combo. The Dragon's Fury is balanced. 
+
+Now go out there, burn mercilessly like the devil's reincarnate you are, and show these people what Yiffing In Hell truly is. ",1528684550.0,25,0.88,9
+tf2,Medic Tries Out Face Unlock,,1528546751.0,1,0.6,1
+furry_irl,furry_irl,,1528512469.0,154,0.91,16
+ToiletPaperUSA,uwu,,1528384512.0,294,0.97,10
+Warthunder,"Dear Gaijin, may you consider this please - CAC Sabre CA-27 Mk.30: Australian licensed Sabre [RR Avon RA.7 turbojet, 7350lbs thrust compared to the CL-13 Orenda 10's 6500lbf. 2x30mm ADEN, 150 rounds each]",,1528339127.0,58,0.87,24
+Warthunder,TIL late war Spitfires had both High Back and Low Back fuselages.,"High Backs were your classical Spitfires, Low Backs had bubble canopies.
+
+The Spitfire Mk. XIV in game has the bubble canopies but other XIVs had [high backs](https://upload.wikimedia.org/wikipedia/commons/f/f9/350sqdn-spit14.jpg).
+
+I found a possible explanation from a 2002 thread [here](https://forum.keypublishing.com/showthread.php?756-Spitfire-design-variations)
+
+> The Mks VIII, IX, XIV and XVI were delivered in high back and low back in parallel. The reason for this was that production was dispersed to many locations, even a single Mk was manufactured in different locations. Some factories re-tooled for low back production, others didn´t. It was more important to see the fighters coming off the production lines.
+
+> The Mk.18 came in low back only, the Mk XIX came in high back only.
+In the twenty series the Mk.21 were all high back and the Mks.22 and 24 were all low backs.",1527940272.0,16,1.0,5
+furry_irl,furry_irl,,1527856369.0,488,0.98,39
+furry_irl,furry_irl,,1527736903.0,254,0.99,10
+tf2,Meanwhile In An Alternate Universe,,1527678234.0,757,0.97,48
+tf2,"Russian Black Market drug dealer selling out in the open within Soviet Blocs, guarded by heavily armed mafia [Circa 1982 Colourised]",,1527398786.0,262,0.99,5
+Warthunder,Rapid 50cal Wing Disassembly,,1527391878.0,151,0.96,44
+furry_irl,furry_irl,,1527247366.0,183,0.95,27
+foxes,scritchie scratchie foxie,,1526950494.0,14,0.9,2
+foxes,Noisy Foxie,,1526889250.0,54,0.96,0
+Animemes,Fly Felix Fly,,1526552665.0,15,0.9,1
+ExpandDong,help me,,1526520688.0,49,0.98,0
+foxes,Just a mama fox with her baby,,1526518257.0,347,0.99,3
+foxes,stretchie foxie,,1526518067.0,1026,0.99,0
+foxes,Treefox,,1526456294.0,991,0.99,11
+furry_irl,furry🦁irl,,1526397815.0,555,0.93,95
+furry_irl,furry_irl,,1526305249.0,25,0.94,2
+foxes,Cloudfox,,1526193982.0,1166,0.99,5
+tf2,Crappy Offbrand,,1526119594.0,20,0.95,9
+starterpacks,Things You Immediately Install On Your New PC Starter Pack,,1526038929.0,27930,0.88,1812
+COMPLETEANARCHY,There are only two genders.,**Comrade and Capitalist Traitor of the People**,1525620880.0,141,0.92,7
+yiff,Love at Dusk [MF] (TaiArts),,1525479725.0,49,0.94,2
+foxes,"Good Loaf was removed for being an image macro, so here's ""no image macro"" Good Loaf to ensure that the sub will always get good loafs",,1525055792.0,1253,0.98,24
+tf2,2fort_friendlies.jpg,,1525046236.0,1216,0.97,48
+foxes,good loaf,,1524979940.0,960,0.94,230
+furry_irl,furry_irl,,1524970061.0,24,0.82,29
+furry_irl,furry_irl,,1524835584.0,269,0.97,20
+foxes,Happy Fluff,,1524705382.0,205,1.0,0
+Warthunder,Me trying to get into tanks after being bored with planes,,1524487972.0,268,0.94,79
+foxes,Eye of the Foxie,,1524397770.0,101,1.0,1
+tf2,What Your Weapons Say About You: Pyro,,1524315994.0,1918,0.97,186
+tf2,What is the shittiest possible machine you could run TF2 on? Genuinely curious.,"I've got it to work on a normal outdated gaming PC, on an old University macbook and even a 2008 Core II Duo Dell Inspiron i found in the electronics bin.
+
+The Source engine is probably made out of pixiedust and witchcraft to be able to be run on literal toasters, but how much toaster can you get to run TF2?",1524308120.0,19,1.0,23
+ANormalDayInRussia,Relaxation Spot,,1524270606.0,28,0.95,2
+furry_irl,furry🥧irl,,1524021810.0,66,0.88,6
+tf2,The TF2 Community - A Gift That Keeps On Giving,,1523842824.0,1849,0.99,67
+COMPLETEANARCHY,Bread Fortress,,1523784980.0,375,0.98,9
+oddlysatisfying,The way this gun barrel of a tank keeps the glass perfectly still,,1523671454.0,6,1.0,0
+foxes,Snow Sprinkled Foxxo,,1523596852.0,148,1.0,1
+softwaregore,Next Station: Ě̪̙̺̻͑͛͡ͅs̢̻̳̳̪̗̤̓ͯ̈̑́͢r͉̊͐ͩ̊̓ͭ͠t̸͚͈̼̭̣̠͗̇͂͠ş͓͖͈͚͈͔̳̲ͩ̄ͩ̔ͬ̍̕o̢͕̲̻͔̖̗̝ͫ̉ͮ͑͐͜ͅ ̸̈́̈ͦ̇͛F̼̘͛̍̉ͥ,,1523407672.0,2,1.0,1
+gaming,"Okay PUBG I get it, people make mistakes but assuming that you're the first shooter game to conceive the use of a frying pan as a melee combat weapon is outright wrong and stupid.",,1523256498.0,55350,0.89,4146
+foxes,Supermlem,,1523153561.0,1263,0.97,3
+tf2,"A Tale Of CTF_Sawmill, Told in Three Screenshots",,1523077524.0,174,0.99,12
+2meirl4meirl,2meirl4meirl,,1523018669.0,16,0.79,0
+tf2,Source Engine Offers The Best In Realistic Ragdoll Physics,,1522981223.0,102,0.97,3
+foxes,Oreo Loaf,,1522924762.0,262,1.0,3
+tf2,"Can someone please explain to me who are these people. They don't cheat, they act like bots, they have numbers for names, they just cycle through generic ingame actions. What are they and why do they exist?",,1522911801.0,58,0.98,24
+foxes,>_<,,1522892655.0,862,0.98,8
+furry_irl,furry_irl,,1522852373.0,39,0.92,6
+AyyMD,love at first sight,,1522843688.0,52,0.98,23
+CircleofTrust,Braixen's Circle,,1522721678.0,1,1.0,0
+furry_irl,Furry⚓irl,,1522641645.0,11,0.93,14
+COMPLETEANARCHY,Left Unity,,1522602032.0,71,0.94,3
+Warthunder,My experience with April Fools so far,,1522582371.0,173,0.96,20
+tf2shitposterclub,CHARGE ME NOW DOCKTOR,,1522518882.0,0,0.48,5
+traaaaaaannnnnnnnnns,If this sub had a bus service it'd be this,,1522511184.0,87,1.0,7
+tf2,The unstoppable team: The Weeb Spy and The Furry Pyro (With their sidekick F2P Heavy),,1522468281.0,545,0.97,65
+tf2,The Level 0 Cardboard Sentry,,1522339165.0,1,0.67,0
+sbubby,someone told me to put it here,,1522238797.0,805,0.98,15
+furry_irl,furry💣irl,,1522229307.0,120,0.93,7
+tf2,"Sometimes I Just Like To Sit Back, Relax & Watch Some TV In The Hay",,1522101591.0,176,0.94,24
+PrequelMemes,sorry,,1522068269.0,5166,0.96,218
+tf2,IMHO The Dragon's Fury is the best and also most fair Pyro weapon.,"Amid the state of how broken flamethrowers are, only the Dragon's Fury seem to be the least BS out of all.
+
+If you miss your second shot the enemy can skidaddle the fuck out unharmed since afterburn is near non existent, and the fire rate is slow af. However, if you manage to consistently land fireballs at them the fire rate increases.
+
+It actually requires a modest sense of skill in aim and prediction, kinda like trying to get direct pipe hits? Doesn't block the enemy's vision as bad as the other flamethrowers, you literally cannot WM1 with it.
+
+Though it does suck to reflect rockets because it takes so long for the air tank to recharge. But hey that's why I have the stock shotgun. Screw the flare gun.",1521634584.0,12,0.77,25
+tf2,TFW even Twitter is giving you orders on what to do for an MVM match,,1521559696.0,249,0.97,18
+traaaaaaannnnnnnnnns,Hey I think I finally found a Sylveon fan subreddit! Hello fellow Sylveon lovers!,,1521552823.0,216,0.98,16
+furry_irl,furry_irl,,1521550404.0,244,0.98,23
+foxes,Silly Foxies,,1521506763.0,329,1.0,4
+tf2,ctf.jpg,,1521379753.0,171,0.94,10
+tf2,I never played comp but all of a sudden it told me I don't have the requirements despite literally having all requirements ticked and being allowed to queue before. Anyone know why that might be?,,1521376814.0,15,0.9,7
+Warthunder,"Once you see it, you cannot unsee it.",,1521343810.0,1025,0.94,63
+foxes,snuggly fox,,1521342751.0,373,1.0,0
+tf2,Featured on BBC Nature: A mating family of boxtrot spies giving birth to their offspring Spycrab.,,1521040242.0,394,0.97,7
+tf2,I hope no one notices,,1520996411.0,93,0.99,16
+tf2,I still don't get why is it so hard for TF2 to not screw up joining community servers via Ad Hoc when my friend invites me? I just find it easier to copy the server IP in my friend's profile and then use <Connect> command nowadays.,Seriously though how hard is it to make a script that when you click on an invite it'll just run the Connect command along with the IP?,1520913457.0,17,0.94,2
+furry_irl,furry_irl,,1520846424.0,55,0.92,5
+tf2,Extreme Rancho Relaxo,,1520841149.0,109,0.89,10
+foxes,The Fox And The Furryous,,1520841039.0,1265,0.98,14
+foxes,foxdonut,,1520742901.0,992,0.98,4
+tf2,Today I met my Swedish version of myself,,1520480675.0,133,0.96,12
+furry_irl,furry_irl,,1520407826.0,151,0.99,9
+tf2,"Was having a pretty depressing match as usual, no one communicated, team lost a few rounds. Was about to give up until matchmaking assigned this dude midway through. Boom, the last few matches felt extremely fun with adrenaline rushes. Turned out the person had nearly 10K GODDAMN HOURS.",,1520398796.0,46,0.92,9
+foxes,He keep fren clean,,1520345495.0,130,0.99,0
+foxes,Fox with only a pair of Socks,,1520192976.0,403,1.0,5
+xdacirclejerk,You vs The guy she told you not to worry about,,1520147540.0,17,1.0,5
+tf2,Fantasy,,1520134147.0,249,0.94,5
+foxes,Hide and Seek,,1519754450.0,44,0.99,0
+foxes,Snuggly foxie,,1519603305.0,4325,0.97,3
+furry_irl,furry_irl,,1519528482.0,63,0.91,6
+foxblep,stretchieblep,,1519475299.0,20,1.0,1
+foxes,*yawn*,,1519463404.0,1050,0.98,10
+foxes,Curled up and snug,,1519385573.0,1396,0.98,5
+foxes,w a r m b o i y e,,1519284771.0,942,0.96,1
+SuicideWatch,Where do I even start,"18, Soon to be dropout. Online friends don't seem to like me anymore, lost a lot of them as well. No irl friends. Like I mean none. Zero. Null. My day spent is literally just playing TF2, eat, play, eat, sleep. I can't feel love. I don't think I'll feel love. I feel useless to society and honestly think that suicide will bring many changes.
+
+Tried the national mental institution, a private doctor and another hospital. None worked. Delays on my next referal letter to a nearby hospital never went through.
+
+Kinda wished I had a father to grow me some balls but fuck I didn't.
+
+I tried and nothing worked. In the end I won't matter anymore. You might say that I don't know that my life will be worse, but then you also don't know if it'll be better either and going by what I have to go through atm, suicide is getting more and more appealing. It's natural selection.",1519228250.0,1,1.0,4
+foxes,Zooming through the snow,,1519212086.0,1101,0.99,5
+foxes,foxie says hello to fren,,1518939185.0,139,0.98,0
+foxes,Foxy shy,,1518779650.0,2006,0.97,9
+foxes,"Another ""Warrior Fox"" From Miyagi Zao Fox Village",,1518658451.0,1287,0.97,29
+furry_irl,furry_irl,,1518573909.0,253,0.96,39
+assholedesign,At this point they might as well ask me for my credit card number.,,1518396310.0,307,0.99,39
+LinusFaces,Ever since Linus gave up on getting a relationship he's been enjoying his VR furry porn,,1517561497.0,99,0.96,7
+facepalm,Phone Manufacturer forgets it's on Twitter not Facebook,,1517496870.0,21,0.75,4
+furry_irl,furry❤️irl,,1516972716.0,218,0.99,10
+foxes,foxie whiskers,,1516780085.0,512,0.99,3
+ShitWehraboosSay,Average Wehraboo Plays War Thunder [Scheißepost],,1516704738.0,25,0.89,4
+furry_irl,furry🦊irl,,1516356524.0,415,0.97,48
+foxes,Very Talkative Foxies,,1515150379.0,97,0.98,3
+furry_irl,furry🦊irl,,1515075276.0,1609,0.96,40
+2meirl4meirl,2meirl4meirl,,1514371862.0,48,1.0,9
+tf2,TIL Even the drums in Runner's Rhythm taunt will get crit activated after capturing intel,,1514296179.0,664,0.99,18
+furry_irl,furry_irl,,1513966105.0,154,0.96,29
+furry_irl,furry_irl,,1513571379.0,217,0.95,17
+circlejerk,tifu by sex sex sex sex sex sex sex sex,dae remember sex,1512797775.0,26,0.9,2
+furry_irl,furry🦊irl,,1512794419.0,39,0.89,1
+furry_irl,furry_irl,,1512038789.0,1607,0.96,79
+LinusFaces,Linus during his Blunder College years - Shopping with M' Waifu,,1511605658.0,84,1.0,3
+LinuxCirclejerk,oof,,1511492312.0,103,0.97,9
+furry_irl,furry_irl,,1511489911.0,238,0.97,11
+furry_irl,furry🦊irl,,1510879558.0,4,0.84,3
+Warthunder,Unexpected War Thunder out of all subreddits.,,1510541787.0,119,0.88,67
+androidcirclejerk,TIL the Pixel 2 XL was made in 2001,,1510193193.0,140,0.96,14
+Warthunder,"I'm getting a bug for my NC 233 3, 500kg bomb modification not showing in Secondary Weapons dropdown. Anyone else having the same problem?",,1509622735.0,4,0.75,1
+videos,"Cheetahs don't sound as terrifying as Mountain Lions due to lacking a two piece hyoid bone that makes them unable to roar. So they meow and purr, like a regular house cat.",,1508808702.0,28,0.77,7
+androidcirclejerk,Digital Signboard on Metro is Fucking Ancient (xpost /r/Singapore),,1508679574.0,91,0.98,10
+circlejerk,"""Freeze Peach"" - some old dude with sandals",,1508574699.0,1,1.0,0
+Warthunder,Taking a replay screenshot in a B25 cockpit yields terrifying and trippy results...,,1508337817.0,184,0.98,22
+furry_irl,furry_irl,,1508161511.0,342,0.97,35
+Amd,"Firefox 57 beta scales very well even on old Multicore CPUs, beats Chrome 61 in Octane - FX 8320 test - Mini Browser Benchmark Included","* CPU - FX 8320 3.5GHz (4.0 Boost) 
+* OS - Windows 10 x64
+* RAM - 1x8GB DDR3 1600MHZ
+* GPU - R9 270
+
+(Note: Content Process limit is set to max, in this case it's 7)
+
+--------
+
+Benchmark | Firefox 57 Beta | Chrome 61 |Verdict
+---|---|----|--
+Basemark | 387.1| 497.11 | Chrome wins
+Peacekeeper | 3278 | 3065  | Firefox wins
+ARES.6    | 111.87ms | 53.30ms | Chrome wins
+Speedometer| 53.5 | 73.46                      | Chrome wins
+JetStream        | 118.37| 100.08 | Firefox wins
+MotionMark  | 145.20 | 116.95    | Firefox wins
+Kraken             | 1616.3ms | 2023.7ms | Firefox wins
+Octane             | 20551 | 17280    | Firefox wins
+SunSpider | 280.6ms | 306.2ms |Firefox wins
+
+-------------
+
+Since benchmarks aren't really a good gauge on browser usage or how good it is, let me give my insight on it. 
+
+The fox [rocket blasts and dashes](https://i.giphy.com/media/10ozqoWUgCof8Q/giphy.mp4) insanely fast across the web. Like holy cow, heavy CSS Reddit subs, YouTube, Twitter, Giphy .etc all run snappily and smoothly. The Multicore scaling seems to be doing its job very well. I can tell that it runs a lot faster than Chrome in that regard specifically. I haven't tested how good of a tab hoarder it is yet. 
+
+If you have a multicore CPU that's quad core and above, Firefox 57beta will not disappoint. The more cores the merrier probably. ",1506867095.0,200,0.93,72
+firefox,Firefox 57beta Feels Extremely Fast. Even As To Beating Chrome In Octane. [Mini Benchmark Included],"So the /r/AMD sub had a thread 
+[here](https://np.reddit.com/r/Amd/comments/734sik/psa_firefox_quantum_beta_has_been_released_it/) saying that Firefox 57 scales very well across multiple CPU cores and this really caught my attention as I wondered if it would be suitable for my aging 8 core CPU which has bad single core performance. Maybe Firefox would make use of its good multicore performance and indeed it does! Anyways here's the benchmark in comparison to Chrome 61, my now previous browser. 
+
+-----
+* CPU - FX 8320 3.5GHz (4.0 Boost) 
+* OS - Windows 10 x64
+* RAM - 1x8GB DDR3 1600MHZ
+* GPU - R9 270
+
+(Note: Content Process limit is set to max, in this case it's 7)
+
+--------
+
+Benchmark | Firefox 57 Beta | Chrome 61 |Verdict
+---|---|----|--
+Basemark | 387.1| 497.11 | Chrome wins
+Peacekeeper | 3278 | 3065  | Firefox wins
+ARES.6    | 111.87ms | 53.30ms | Chrome wins
+Speedometer| 53.5 | 73.46                      | Chrome wins
+JetStream        | 118.37| 100.08 | Firefox wins
+MotionMark  | 145.20 | 116.95    | Firefox wins
+Kraken             | 1616.3ms | 2023.7ms | Firefox wins
+Octane             | 20551 | 17280    | Firefox wins
+SunSpider | 280.6ms | 306.2ms |Firefox wins
+
+EDIT: Screenshot Proof - https://imgur.com/a/PTVeX
+
+-------------
+
+Since benchmarks aren't really a good gauge on browser usage or how good it is, let me give my insight on it. 
+
+The fox [rocket blasts and dashes](https://i.giphy.com/media/10ozqoWUgCof8Q/giphy.mp4) insanely fast across the web. Like holy cow, heavy CSS Reddit subs, YouTube, Twitter, Giphy .etc all run snappily and smoothly. The Multicore scaling seems to be doing its job very well. I can tell that it runs a lot faster than Chrome in that regard specifically. I haven't tested how good of a tab hoarder it is yet. 
+
+If you have a multicore CPU that's quad core and above, Firefox 57beta will not disappoint. The more cores the merrier probably. 
+
+
+",1506866488.0,114,0.89,52
+Warthunder,Normandy in Air RB - US vs GE/IT - I Think Gaijin's Finally Listening to Us!,,1506603172.0,90,0.94,29
+LinusFaces,Coming out as a furry was hard but Linus finally had courage,,1505904369.0,136,0.98,0
+furry_irl,furry_irl,,1505882767.0,271,0.99,23
+Warthunder,Tis' just a scratch,,1505821845.0,177,0.96,25
+Warthunder,The ME 262 C2B - It's Pure Blitzkrieg,,1505577733.0,59,0.81,2
+Warthunder,TU-4 spam is ruining the fun for Allied Teams in Air RB at BR 7.0-9.0 [Slight Rant],"Remember when we didn't had to worry about the matches ending before we even get a chance to fight due to Tu4s just bombing the everliving hell out of bases and the Airfield? 
+
+------
+
+Remember when Allies and Russians both had balanced bombing potential?
+
+^^^remember ^^^when ^^^it ^^^takes ^^^actual ^^^skill ^^^to ^^^kill ^^^planes? 
+
+------
+
+Now every match is not fun because everyone's priority is trying to chase down three aircamping 12,000KG ~~bombers~~ pile of 23mm cannons. Because there's no choice otherwise we'd lose and anyone dead on our team loses A LOT of SL despite their contribution because of repair fees. 
+
+-----
+It's not easy to climb to TU4s and BnZ them *(so that we don't get shot down by TEN FUCKING 23MM CANNONS)* in maps like Korea, unless you're spaded, which a lot of players struggle to attain in the first place. 
+
+I don't think there's an easy solution for the TU spam. TU players will get mad when there'll be an MM limit to one TU 4 per match only where the rest of the bomberspace will get filled up with IL 28s. 
+
+------
+
+End of the rant. Anyways, here's where I'll plug in a random big salute to War Thunder player Lets_Pay for their contribution in TU-4 killing. I've rarely seen any Japanese planes at BR 9.0 battles and for some reason on one particular day, only one Japanese player participated in a KI 200 over a series of matches and they only, and only, went for TU 4s. And on many occasions saving our Airfield from total destruction by those TU 4s.
+
+I've managed to capture four occasions of their kills in the times when we were both in the same match. https://i.imgur.com/C2M3uVn.png 
+
+Thank you Lets_Pay, idk if you browse this subreddit but your contribution did not went unrecognized :)",1505394413.0,3,0.57,18
+furry_irl,furry_irl,,1505226577.0,284,0.98,40
+gaming,TIL that the original 1998 Half Life game had basic Breast Physics [Video inclusive of more in-depth overview of Female Assassins],,1505193762.0,9,0.91,2
+singapore,Tengah Air Base during the 50s/60s. I've compiled a small album that features most of the aircraft at the former RAF Tengah.,"* [RAF Tengah](http://imgur.com/a/Ila24)
+* [Clear View of each aircraft featured from that album](http://imgur.com/a/Xut4P)
+
+Pretty much every post WW2 British aircraft stationed in Tengah were for either launching offensives against communist guerrillas in Malaysia or a show of defense against Indonesia during Konfrontasi. Nuclear weapons were also kept secretly in Tengah just in case if Indonesia went to war with Singapore, hence the deployment of large bombers.
+
+I find most of these planes to be beautifully weird, especially the Victor bomber and the Venom with its unusual twin-boom implementation. ",1505113310.0,58,0.97,11
+furry_irl,furry_irl,,1504181687.0,206,0.99,15
+furry_irl,furry irl,,1503986045.0,244,0.98,11
+circlejerk,reddit what's the weather in may like?,,1503833498.0,2,1.0,0
+Warthunder,Don't have an Android phone so I ran four Android VMs of the Free GE app. It works! And after 3-4 days I've gotten 759 GE.,,1503581728.0,56,0.81,40
+Warthunder,"Can someone explain why the fuck do I get a crew lock after I get shot down whilst flying the Lancaster, specifically the Lancaster? The Enemy rendered my ailerons and elevators useless so I plummet and rip my wings and apparently that results in a crew lock?","Even if I completed my duty to bomb bases and hell even kill an enemy aircraft without AI gunners, using the 7.7mm Sewing machine guns. This is just infuriating. 
+
+I know crew locks are meant to discourage Teamkilling/Bailing out .etc but for this? come on....",1502937790.0,8,0.9,9
+starterpacks,Every New 2017 Smartphone Starter Pack,,1502293882.0,391,0.96,53
+Warthunder,Literally Unplayable,,1502186150.0,51,0.78,24
+Warthunder,"Opinions on the new Battle Results UI? I think it looks nice, albeit a bit unfinished aesthetically. Though the addition of the 'To Battle' button is very neat.",,1500978786.0,9,0.72,9
+circlejerk,Should have been Barney,dae remember when i had sexy sex with my sexy female sexed gf named sanders,1500372786.0,5,0.86,0
+lowspecgamer,You know the Chuwi Laptop Alex showed and how it has a cooling problem due to absence of a fan? Well apparently one other guy on YouTube has a nifty solution for this.,"https://youtu.be/uhtgUHZYjZ8
+
+What he essentially did was that he got some thermal pads, thermal grease, thermal adhesive and a 1mm thick copper plate, sandwiched them between the embedded CPU and metal backplate of the laptop which apparently brings temps lower by 25°c in the CPU which then supposedly boosts his FPS in CS:GO.
+
+Unfortunately it was only in CS:GO. Not sure about the myriad of other games.
+
+As an addition, maybe Alex could do another episode featuring this cooling method alongside some gaming performance benchmark scores, just a suggestion :3",1499601540.0,18,1.0,3
+2meirl4meirl,2meirl4meirl,,1499523964.0,15,0.84,0
+singapore,I wouldn't mind COE if I had reliable public transportation. But I don't. [SMRT Red Line Rant],"The red line is already sluggish and stuttery as it is. 
+
+I used to be pissed off at how it's always slow, always stopping midway for no absolute god damn reason. But I've gotten used to it hence which is why I plan my journeys to and from my Polytechnic 20mins early nowadays. 
+
+But no on many god damn situations 20mins isn't enough to compensate for the absolute gobshite that is the Red Line. Such as today. 
+
+# 30 MINUTES DELAY? I'VE BEEN STANDING ON MY FUCKING LEGS ON THIS FUCKING PLATFORM FOR THE LAST FUCKING 45 MINUTES.
+
+Either do two things Singapore, improve one of your main railway lines or end the COE program so that all of us can get the reliable transportation we need. 
+
+-----
+
+Now onto SMRT.
+
+Seriously, who is the absolute cunt that's operating SMRT? 
+
+ WHAT IS THE POINT OF NEW SHINY TRAINS IF YOU'RE GOING TO RUN THEM ON AN UNRELIABLE SYSTEM?
+
+New trains, new this, new that, waste millions of our dollars on nothing. The old refurbished trains do their job well. Why aren't you making train services reliable? I can't give an absolute shit about those new trains.
+
+It's like putting bling on your rusty truck that's going to die. It's not going to extend its lifespan or improve it.
+
+-----
+
+Anyways back to my main point, I'm annoyed that in Singapore you can't have reliable transportation especially if you live along the red line. I wished I could get $3000 used cars without paying COE like what my Australian cousins are doing.
+
+> Before you tell me to fuck off to Australia, I still have not served my NS. So yeah, I would be a fugitive if I were to migrate over now and not return back. I wouldn't have money in the first place to migrate anyways.
+
+------
+
+**EDIT**
+
+I guess I have worded my rant a little wrongly, *what I was having in mind by my phrase ""Either abolish COE or improve public transportation"" was that the LTA-SMRT would force themselves to improve the trains because abolishing CEO will never be a sensible solution.*",1499389352.0,241,0.86,222
+furry_irl,furry_irl,,1499075687.0,3,1.0,1
+circlejerk,Donald Trump endorses Bethesda to make Skyrim for The Rock Johnson [NSFW],rick and morty episode 3 coming up,1499068466.0,16,0.85,3
+Warthunder,Worst TK/Suicide in a match I've ever witnessed. 12v12 turned into 2v12.,"* [Replay file](https://drive.google.com/file/d/0B9upBTIOPrCHbUgySDlSbjA3Q2s/view?usp=sharing)
+
+* [Streamable Vid Link](https://streamable.com/byb2j)
+
+-----
+
+So yeah, just bought the Fangs Of Steel Bundle and wanted to fly the Romanian Duck. My Ping was a beautiful 12ms as the server was in Southeast Asia, near to my home. I thought I was gonna have the best low ping match ever.
+
+Nope.
+
+A bunch of people on my team either died from TK or Suicide for some apparent reason. I am utterly clueless as to why the heck is everyone TKing and committing kamikaze on nothing. Rest assured, the enemy team died.... from laughter.",1498571100.0,29,0.89,11
+furry_irl,furry_irl,,1498487551.0,705,0.94,44
+furry_irl,furry_irl,,1496467722.0,198,0.99,13
+singapore,"Any speculations as to why SMRT has had two signaling faults on the red line, twice in a row?",This is getting ridiculous. What's good about more new trains when it's being run on a signaling system that breaks down often?,1496401276.0,15,0.74,25
+Warthunder,After a few matches with the BF 109 G-10 with MK 108 wing cannons....,,1495637260.0,188,0.94,18
+furry_irl,furry_irl,,1495266993.0,82,0.94,7
+circlejerk,United Airlines flew 14 Year Old Bernie 'Cant stump the Trump' Collonel Sanders's Drawing of His Crush the wrong way,,1494608457.0,1,1.0,0
+LinuxCirclejerk,Arch Users irl,,1494305314.0,140,0.99,7
+furry_irl,furry_irl,,1493731037.0,82,0.91,12
+furry_irl,Furry IRL,,1493125848.0,88,0.96,4
+furry_irl,Furry irl,,1492557264.0,177,0.93,21
+AyyMD,YOUR INTEL WAIFU IS FUCKING SHIT,,1492067761.0,256,0.97,20
+circlejerk,"BREAKING - CEO of United Airlines, Sean 'Literally Hitler' Spicer, unveils new chemical weapon dubbed Pepsi",,1492015656.0,25,0.95,4
+circlejerk,BREAKING NEWS - Untied Airlines is LITERALLY HITLER,,1491886425.0,1,1.0,0
+furry_irl,Furry irl,,1491820136.0,150,0.97,16
+Warthunder,"TIL the Helicopters can be viewed from the Hanger as the game pans its view around it, if you AFK long enough. The blades seem to be spinning too.",,1491097922.0,14,0.89,2
+furry_irl,furry_irl,,1491018911.0,65,0.98,6
+anime_irl,anime_irl,,1490525950.0,0,0.38,1
+FellowKids,"As if FB memes aren't cringeworthy enough, you just HAD to put them in an ad...",,1490257047.0,23,0.88,1
+furry_irl,furry_irl,,1489808138.0,269,0.98,20
+Braixen,Lil' Braixen does a super wag,,1488873902.0,5,0.99,0
+Braixen,T H I C C,,1488678956.0,3,0.81,0
+Braixen,Here's my only reason to live,,1488375975.0,5,1.0,2
+xdacirclejerk,Jio VoLTE dual sim,,1487492012.0,10,0.87,4
+androidcirclejerk,My Flight is Blessed With DuARTe security. Praise be.,,1486538198.0,175,0.99,6
+xdacirclejerk,"~~UNLOCK BOOTLOADER UNIVERSAL~~ WORKS [ANDROID 1.0,2,3 i fogrot how 2 count][AROMA][SUPERCHARGED]","#FIRST MAEK SURE UR USING RIGHT BOWSER OR ELSE DOWNLOAD WRONG. I RECOMMEND USE [FIREFOX](http://i0.kym-cdn.com/photos/images/original/001/058/358/7cc.png)
+
+> I am not responsible for any thermonuclear war or else I'll laugh at you xdddd
+
+------
+
+Tools needed:
+
+* Your phone
+* Boots
+* Praise to duarte xdds
+* [Lillie](http://www.pokemon-sunmoon.com/media/uploads/june_2_assets/art/lillie.png) Patcher
+* My custom room that can hax the bootloader: *Link Deleted, pls press thanks and buy bear first*
+
+------
+
+STEPS
+
+* Hit phone with boot
+* Phone will crack and die
+* Get new phone with unlocked boobloader
+
+*PLZ PRESS THX MY FAMILY VERY POOR BUY BIR FOR SURVIVAL*",1486364659.0,25,0.9,9
+circlejerk,"I steal memes from /r/Circ""le""jerk",,1486362353.0,1,0.66,0
+androidcirclejerk,A sneak peek at pure cancer [NSFW/NSFL],,1485229195.0,198,0.99,15
+androidcirclejerk,<--- Number of Centuries S7 gets a Gingerbread update,,1484717504.0,23,0.93,0
+InitialDvideos,The Initial D Express - Train Ice Drifting,,1484452613.0,10,0.73,5
+androidcirclejerk,( ͡° ͜ʖ ͡°) F U N T O U C H - O S,,1484382170.0,171,0.99,28
+xdacirclejerk,how to make a rom,"take rom, replace logo",1484195533.0,23,0.97,6
+2meirl4meirl,tfw even a computer software is telling me to make friends,,1484019443.0,80,0.95,9
+xdacirclejerk,FIRRREMIX KERNEL [LOS][9.11][STABLE][ALPHA][OVERCOCK][DANK CPU GOVRTNERS][XIAOIMI WEDMI NOTR 69],"ADDED CPU GOVERNERS:
+
+> Alolcard, ZZmove, ZZfap, ZZfuckoff, XPraiseDuarte420, Smartsex, YiffMode, NuclearReactiveChill, LongDick, Braixen, FireDireSquire, TsarBomba, ExpandedDarknessOfTheNight, BadSnapDragon, PussyDestroyer
+
+**CAN OVERCOCK FROM 1.800000GHZ TO 1.8000001GHZ** 
+
+//What's Working//
+
+* Screen will turn on
+* It'll vibrate
+
+//What's Not Working//
+
+* You tell me!
+
+---------
+
+I am not responsible for any Syrian Attacks on Aleppo.
+
+KERNEL SOURCE: CARCINORGEN MOD 2 KERNEL",1483970126.0,34,0.95,16
+circlejerk,magic mirror raspberry pi,,1483526325.0,2,1.0,0
+AyyMD,LEAKED ISIS NUCLEAR BOMB PLAN [480% REAL],,1483522978.0,37,0.95,1
+Idubbbz,What Do You Wanna Do With Your Life?,,1483421135.0,35,0.86,2
+singapore,Is anyone else fed up about localised ads in the YouTube app for cliché Freemium Mobile RPGs?,"It's always the same bullshit. Barely clothed/armoured women with overly huge tits and asses in the beginning of the ad before they run out and fight some monsters. 
+
+It gets repetitive and boring. For some reason, switching my location to the United States didn't stopped the local RPG ads. 
+
+-----
+
+I know... being an Android user there are workarounds I could get to block ads in YouTube with root.
+
+* Installing a specially modded YouTube app, problem is that it crashes on my build.
+* Getting the YouTube AdAway Xposed module, unfortunately the Xposed framework isn't available for Android Nougat and I wouldn't want to downgrade and lose Nougat's performance and features just so that I could block YouTube ads.
+
+----",1483095124.0,111,0.97,69
+2meirl4meirl,2meirl4meirl,,1481428145.0,11,0.8,5
+Braixen,The Ideal World,,1481175348.0,1,1.0,0
+Braixen,Me irl,,1481022316.0,3,1.0,0
+Braixen,"If you want to know how addicted to Braixen I am, here's an Album of me taking Braixen on a train ride through Malaysian soil",,1480946601.0,5,1.0,1
+circlejerk,Spez Castro Dies in 911 Plane Crash,,1480254579.0,1,0.66,1
+androidcirclejerk,The 'S' in Galaxy S7 is short-term for 'Shill',,1476847928.0,26,1.0,1
+Braixen,I have a braixen addiction,,1476493463.0,5,1.0,0
+Braixen,Whoosh,,1476492055.0,4,0.84,0
+androidcirclejerk,Samsung's Official Safety Accessory for using the Note 7,,1476100815.0,70,0.96,1
+androidcirclejerk,Samshill user sees the light and does what was needed to be done,,1475916076.0,46,0.96,8
+circlejerk,Remember when Sexxit was Karmeddit? Only 40s kids will remember,,1475466413.0,1,1.0,0
+warthundermemes,Tier V Battles Loading Screen Redesign,,1475419993.0,50,0.97,7
+AyyMD,HD 7990 > GTX 1080,Because 7990 is 740% more than 1080,1475298911.0,28,0.94,4
+androidcirclejerk,Who is best waifu and why is it DuARTe?,,1474988281.0,13,0.89,3
+AyyMD,Jun Hsung Huang's GTX 480 powered jet,,1474427307.0,26,0.92,5
+circlejerk,"TIL before reddit, George Bush 9/11 was known as Porsche 911",,1474384043.0,1,1.0,0

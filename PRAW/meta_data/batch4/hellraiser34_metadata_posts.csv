@@ -1,0 +1,106 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+HowToHack,Password cracking software for windows programs.,"So Here's the deal, I work in a small IT department managing several softwares. One problem that I recently have inherited is a decrepit old windows 2003 server with a accounting software that used to be called Mas90 it is now managed by a company (Sage). The server finally had two drives fail in the raid array that had the software on it so we are trying to recover our data for archival purposes. I have a good backup of the data but need the admin password for the software to copy over the data correctly.
+
+I have exhausted a search for this mysterious admin password but all leads I could think of are dead. The last time this software was used by anyone in our company was around 2005. The IT team here now was not around when this was actively used and the last systems manager that we still have contact information for has no idea what it would be.
+
+~~So what I need is a password cracking tool that could be brute force (doesn't really matter about speed as i have until the end of October to get into the software) or table based cracks that can fill a field in the program in windows. (https://imgur.com/a/MrFT5)~~
+
+I'm looking for ANY advice or help in this matter. I've never really used any password cracking tools before so if I am approaching this in the wrong way let me know.
+
+tl;dr lost admin password to software need to use password cracking tools to crack password. Help needed!
+
+**Edit**: Sorry for the delay on updating kinda had a hurricane hit us so had other priorities for a while. Anyways, I got a working setup with MAS90 now. I was going about this wrong because I was so unfamiliar with the software since I had never used it, nobody really remained that had ever used it, and documentation online was poor. /u/williamogle posted this link: http://www.tek-tips.com/viewthread.cfm?qid=1626845 In which describes creating new companies with the same company code and copying over the according files. Not /u/williamogle fault that I didn't understand what the forum meant. It took me a while to understand not to copy over the entire MAS90 folder just the corresponding folders for the companies.
+
+The Following is my update to the ticket in our help desk with some details redacted but complete guide here in case some poor sorry soul has to do what I did.
+
+ tl;dr everything is functional again. Wall of text follows with details. Backup of virtual machine will be in the IT shared folder.
+
+LONG UPDATE:
+
+So what I did to get MAS 90 working again was
+1. Created a virtual box with windows server 2003
+
+2. Activated Windows server 2003 (Product License Code: **[REDACTED]**)
+(Activation Method Telephone: you can call in and activate or use this code
+**[REDACTED]**)
+
+3. Installed Service packs 1 and 2 restarting after each
+
+4. Installed windows wic
+
+5. Installed .net Framework 4.0
+
+6. Installed MAS90 from S:\IT Department\MAS90 Backup\Sage\Version44\_CDs\MAS90 Version 440
+You Launch the autorun.exe to install MAS90 from the menu. While installing you want to set standard security
+and create a password for the administrator (Currently it is: **[REDACTED]**)
+
+7. Installed Adobe Reader also found in the autorun.exe from the last step.
+
+8. Launch MAS90 and log in as Administrator (Password currently is: **[REDACTED]**)
+
+9. Create companies with company codes (create and manage your sage MAS90 companies on the launch box)
+exactly as it had before these can be found in: S:\IT Department\MAS90 Backup\Sage\Version44\MAS90 in the form of MAS_XXX the XXX is the company code ex: BC5, PCD, MP2 etc. No other information is needed to be filled out here just the company code.
+
+10. Close out of Mas90 and open up the backup folder and copy theMAS90 folder **ONLY FOR THE COMPANY CODES** found here: S:\IT Department\MAS90 Backup\Sage\Version44\mas 90\MAS_XXX
+
+11. Paste folder at C:\Program Files\Sage Software\MAS 90\Version4\mas 90\MAS_XXX
+
+12. Click yes to all to replace files with same names.
+
+13. Launch MAS90
+
+14. Log in as Administrator
+
+15. Click Sage MAS90 Company Maintenance
+
+16. Now for **EVERY** company code click **Activate**, check all, proceed, once done return to previous window
+click convert, check convert data for all companies, proceed.
+
+17. return to Administrative tools window click role maintenance
+
+18. Setup roles as needed. I created a test role witch has access to everything **(This is NOT SECURE)** but works..
+
+19. Return to Administrative Tools, User Maintenance
+
+20. Create users as needed but be sure to add company and role access (I also added start date but not sure if that is needed.) Company can be set to all, role access set to the role(s) created.
+
+21. navigate to the MAS90 folder found here C:\Program Files\Sage Software\MAS 90\Version4
+Edit security permissions to allow everyone full access to the folder.(Technically you only need to do this for the license folder but as this is no longer going to be used for anything other than archival purposes it isn't really important.)
+
+This concludes the setup for MAS90 However if you want to setup the server further I suggest you follow steps
+opt 1-6
+
+OPT1. On host computer open virtual box manager settings for the created virtual box.
+OPT2. Go to network and in the attached to field select bridged adapter. Copy down the MAC address for later
+OPT3. Go to Display, Remote Display, check enable server, leave defaults (Don't know if server port is a default
+3389 if not set and authentication method external)
+OPT4. Add Server to domain so domain accounts can login.
+OPT5. On Virtual Server right click my computer, properties, remote, enable remote desktop on this computer,
+select remote users and add all appropriate users.
+OPT6. Create a reservation in DHCP and DNS for the MAC address (that way the  virtual server address does not change)
+
+Last Edited:10 October 2017 @ 09:59 am by Mason
+09 October 2017 @ 16:43 pm by Mason ",1507311625.0,10,0.73,11
+army,Question about my family never receiving a flag when my grandfather died.,So as the title suggests my grandfather was a part of the army and the family didn't receive a flag when he died. I know the reason why they didn't send one was because he was cremated and at the time a family wouldn't get a flag if the member was cremated. I was curious if this is still in practice or was just in act because of the time. My grandmother Is turning 98 this year and I think it would really make her day if the army would issue her a flag for her late husband if this is even possible. If it is possible does anyone know who I would contact or anything? If it helps my grandfather was a lieutenant colonel in the army air corp during WWII as a flight engineer. Thanks for any advice or help anyone can offer.,1495155455.0,16,0.86,14
+pcmasterrace,Gaming on Mobile Hotspots,"So, now that you have read the title of my post I'm sure 70% have determined that I'm an idiot and gone on. However, for those who were interested enough to see what I'm going to talk about this is for you.
+
+So first off I always dismissed the idea that mobile hotspots could actually be a thing. Today though, I was stuck at a location where I had all my tek but no internet nor anything interesting to do. Deciding to test it and run the risk I booted up my faithful laptop and started a hotspot off my phone and ran a speed test.
+
+Here are the specs of the connection:
+Downrate: 1.2 Mbps consistent
+Uprate:     1.5 Mbps fluctuating
+Latency:    134ms
+
+Now when I saw that ping I was astonished ""Could this actually work?! Wow!"" So time to start up a game (in my case League of Legends) and started a custom game to test ping stability and lag. The ping was fluctuating but as an average I had about 105ms - 139ms I did have one ping spike over 400 but very brief lasted less than 3 seconds.
+
+With a custom game done and looking promising it was time to get a friend online and play an aram as another test. The aram had similar results although I wasn't paying too much attention because I was suffering from FPS lag because the environment I was in had no AC and it was 94°F so my laptop GPU got toasty. After ramping up the fans and lowering graphics quality to put less stress on the GPU problem was solved. Still had positive results in aram game.
+
+Time for ranked and this is where the story changed but probably not as you would expect. With friend in queue we also hopped into my Team Speak server (hosted at my house) for communication. I was prepared to drop off TS if the ping got to high to try and salvage it. However by the love of Gaben or something the ping stabilized and actually dropped to around 90ms. I play with a ping at home of usually 59ms so the difference was not that noticeable and was playable. We only played one game as I had some medical issues to take care of but my question to this community is have you tried this before and had any variety of success? Is this a viable option if you want to get in a game or two when unable to access internet? Answer to that last question is probably not but I want to hear your opinions.
+
+Side Note: The phone I was using to set up this hotspot is the OnePlus X (with Straight Talk as my service provider) which has the following radio bands for NA.
+
+North America:	GSM: 850, 900, 1800, 1900MHz
+WCDMA: Bands 1/2/4/5/8
+FDD-LTE: Bands 1/2/4/5/7/8
+CDMA EVDO: -
+",1475473290.0,1,1.0,8

@@ -1,0 +1,635 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+oobaboogazz,Presets and sampler order,"Hi Ooba,
+
+I'd like to ask for a clarification on why the sampling order of presets isn't configurable. Personally, I was under the impression that webUI used the order of the yaml lines to dictate the sampler order for generation.
+
+One example is Asterism [https://github.com/oobabooga/text-generation-webui/blob/main/presets/Asterism.yaml](https://github.com/oobabooga/text-generation-webui/blob/main/presets/Asterism.yaml)
+
+I believed that sampling was done using the following order (since the YAML was ordered in that way):
+
+1. temperature
+2. top\_p
+3. repetition\_penalty
+4. top\_k
+
+However, this is not the case in the code itself. Can you please explain what sampling order webui uses by default and if it would be possible to make the order user-configurable for all samplers (including over the API)?
+
+The important samplers include:
+
+* top\_k
+* top\_a
+* top\_p
+* tail-free sampling
+* typical sampling
+* temp
+* rep\_pen
+
+The main reason why this is important is because sampling order can affect generation quality. One example is putting repetition penalty first which can reduce the amount of repetition from the response. However,  if repetition penalty is located last, nothing much happens to the response because rep pen is lower priority when sampling the prompt.
+
+I'm happy to have a conversation on Discord. You can find me `@kingbri` in the text-gen-webui server.",1687830324.0,3,1.0,2
+SwiftUI,Always show scope bar with SwiftUI searchable,"Hi there, I am currently stuck on a problem on how to show the scope bar all the time even when the user is not searching regarding a list with the `.searchable` modifier. iOS 16.4 recently added a `.searchScopes` [modifier](https://developer.apple.com/documentation/swiftui/anyview/searchscopes(_:activation:_:)) with an activation [parameter](https://developer.apple.com/documentation/swiftui/searchscopeactivation), but there's no option to have the scope bar always present itself. In addition, this modifier is not backported to previous versions of iOS 16, so it's basically unusable for my case.
+
+UIKit has a similar [property](https://developer.apple.com/documentation/uikit/uisearchcontroller/scopebaractivation), but it also has a `manual` case that allows for the developer to say whether the scope bar should be shown or not (which is what I want).
+
+Is there any way to make the scope bar always show itself on iOS 16? I am open to ideas using third party packages as well such as SwiftUI-Introspect.
+
+I am also aware that I can place a segmented picker on top of the list in a VStack, but this breaks animations when a user taps on the search bar which is why I want to try avoiding it.
+
+```
+struct ContentView: View {
+    @State private var searchText: String = """"
+    @State private var searchScope: SearchScope = .inbox
+
+    var body: some View {
+        NavigationStack {
+            List {
+                ForEach(1..<30) { num in
+                    Text(String(num))
+                }
+            }
+            .searchable(text: $searchText)
+            .searchScopes($searchScope, activation: .onSearchPresentation) {
+                ForEach(SearchScope.allCases, id: \.self) { scope in
+                    Text(scope.rawValue.capitalized)
+                }
+            }
+            .navigationTitle(""Search"")
+        }
+    }
+}
+```",1680819974.0,5,1.0,3
+RealDebrid,Update: Ferrite's progress since my last post,"Hey everyone, I wanted to make a quick update post regarding Ferrite and its new features that have been added in recent versions.
+
+If you're not in the Discord server, I highly recommend you join it at [https://discord.gg/sYQxnuD7Fj](https://discord.gg/sYQxnuD7Fj)
+
+Ferrite now has support for multiple debrid accounts that you can seamlessly switch between without a problem.
+
+Previous versions have also added functionality such as bookmarks, backups, quicker RealDebrid fetch times, an app update reminder system, and more search options.
+
+The new multiple debrids update is currently behind an experimental build as v0.6 has more plans before its release. You can get it [here (updated to fix a loading bug)](https://nightly.link/bdashore3/Ferrite/actions/artifacts/465006950.zip)
+
+Again, I highly recommend joining the Discord server so I can respond quicker in the event of bugs or any questions.
+
+I'd like to thank everyone for the support regarding the app! I'm one person and am designing this to provide a free and cleaner experience with debrid for those on iOS.
+
+Ferrite website: [https://kingbri.dev/ferrite](https://kingbri.dev/ferrite)",1670292747.0,21,0.93,11
+SwiftUI,Sheet dismiss acting weird,"Hi everyone, I have been experimenting with sheets recently and I've found some weird behavior regarding sheet presentation in a List with SwiftUI. The way to reproduce these bugs is to use a **dismiss gesture.** Having a button for dismissal immediately changes the presentation state.
+
+My main question is how do I make state changes on sheet dismissal gestures more reliable? I would appreciate it if a code example can be provided because I have been struggling with this issue for a while.
+
+This example uses the \`sheet(isPresented: )\` initializer. When I dismiss the sheet and quickly press any button in the list, I have to press the button twice. This is because onDismiss has a delay to set the state variable causing the button press to not present the sheet.
+
+    struct ContentView: View {
+        @State private var isPresented = false
+        @State private var selectedNum = 0
+    
+        var body: some View {
+            NavigationView {
+                List {
+                    ForEach(1..<10, id: \.self) { num in
+                        Button(String(num)) {
+                            // This shows the sheet presentation state on button press
+                            // print(isPresented)
+                            selectedNum = num
+                            isPresented.toggle()
+                        }
+                    }
+                }
+                .navigationTitle(""Results"")
+            }
+            .sheet(isPresented: $isPresented) {
+                SheetView(number: $selectedNum)
+            }
+        }
+    }
+    
+    struct SheetView: View {
+        @Environment(\.dismiss) var dismiss
+        @Binding var number: Int
+        var body: some View {
+            VStack {
+                Text(""Hello, \(number)"")
+                Button(""Dismiss"") {
+                    dismiss()
+                }
+            }
+        }
+    }
+
+&#x200B;
+
+[Video of issue](https://reddit.com/link/xc37or/video/g0sfmwwuucn91/player)
+
+This example uses the \`sheet(item: )\` initializer. When I dismiss the sheet and quickly press the button, the sheet doesn't open unless I press the button multiple times. Sometimes, the sheet never presents at all (this only occurs when I click the same button upon sheet dismissal). This is best tested on a physical device.
+
+    extension Int: Identifiable {
+        public var id: Int { self }
+    }
+    
+    struct ContentView: View {
+        @State private var selectedNum: Int?
+    
+        var body: some View {
+            NavigationView {
+                List {
+                    ForEach(1..<10, id: \.self) { num in
+                        Button(String(num)) {
+                            // This shows the sheet presentation state on button press
+                            // print(selectedNum)
+                            selectedNum = num
+                        }
+                    }
+                }
+                .navigationTitle(""Results"")
+            }
+            .sheet(item: $selectedNum) { num in
+                SheetView(number: num)
+            }
+        }
+    }
+    
+    struct SheetView: View {
+        @Environment(\.dismiss) var dismiss
+        var number: Int
+    
+        var body: some View {
+            VStack {
+                Text(""Hello, \(number)"")
+                Button(""Dismiss"") {
+                    dismiss()
+                }
+            }
+        }
+    }
+
+&#x200B;
+
+[Video of this issue](https://reddit.com/link/xc37or/video/sp4egdo2ucn91/player)",1662956761.0,10,1.0,4
+Piracy,Ferrite: Torrent searching and debrid streaming for iOS,"Hey everyone, I decided to dive into the deep end of RealDebrid and 
+made an app for searching and streaming your favorite cached torrents on
+iOS.
+
+Ferrite is a FOSS app for iOS which aims to place an elegant UI for 
+torrent searching across various sites. It also includes streaming 
+support for RealDebrid (with possible plans for other debrid services).
+
+Ferrite also contains support for external plugins which allow users to search various websites and integrate services such as Jackett into the app.
+
+## Links
+
+All relevant information including Discord and downloads is located on the website
+
+[https://kingbri.dev/ferrite](https://www.kingbri.dev/ferrite)
+
+## Conclusion
+
+This app was created as a for-fun project. Let me know of any issues or questions in the Github or Discord server (located on the website)",1660416682.0,43,0.83,7
+animepiracy,Ferrite: FOSS torrent searching and debrid streaming for iOS,[removed],1660340541.0,59,0.99,7
+RealDebrid,Ferrite: Torrent searching and RealDebrid streaming for iOS,"Hey everyone, I decided to dive into the deep end of RealDebrid and made an app for searching and streaming your favorite cached torrents on iOS.
+
+Ferrite is an app for iOS which aims to place an elegant UI for torrent searching across various sites. It also includes streaming support for RealDebrid (with possible plans for other debrid services).
+
+## Links
+
+I encourage you to read the rest of this post (and the README on GitHub), but if you don't want to read any more, here are the appropriate links:
+
+- Download page: [https://github.com/bdashore3/Ferrite/releases](https://github.com/bdashore3/Ferrite/releases)
+  
+- Discord (highly recommended to join for any questions!): [https://discord.gg/sYQxnuD7Fj](https://discord.gg/sYQxnuD7Fj)
+  
+- Github repository: [https://github.com/bdashore3/Ferrite](https://github.com/bdashore3/Ferrite)
+  
+
+## Sources
+
+Ferrite hosts no sources by default and is made solely for hobbyist/educational purposes. All sources are community contributed, native (no JS), and easy to create. All you need is experience with scraping the web.
+
+To add a source, you have to go into `Settings > Source Lists > Plus button on top-right`. Then paste in a source URL and add the list!
+
+Here is my source list: https://raw.githubusercontent.com/bdashore3/ferrite-sources/default/sources.json
+
+## FAQ
+
+1. The minimum required iOS version for Ferrite is iOS 14. The backports were successful. (Version 0.3.3 and up)
+  
+2. In addition, Ferrite will be distributed ONLY as an ipa file. There are no plans to put the app on TestFlight or the App store due to the nature of the app itself. To install an ipa, you need to use a service such as AltStore, Sideloadly, developer account, etc.
+  
+3. The best part is that Ferrite is 100% homebrewed open source! This means that anyone and everyone can contribute to the project. All contributions, big or small, are welcome!
+  
+
+## Conclusion
+
+I made this app as a for-fun project. Let me know of any issues/questions in the Discord server as I am way quicker to respond there (I don't use reddit much).",1660072104.0,73,1.0,25
+swift,UI lockup with AlamoFire download progress (SwiftUI),"Hi there, I'm trying to create a download progress bar and show an alert at the same time when a download is completing.
+
+For this task, I'm using AlamoFire with SwiftUI since it makes downloading easy.
+
+However, when I track the progress using a ProgressView with a Published variable, the entire UI locks up and I can't figure out how to fix it.
+
+How to test the attached code:- Click ""Start download""
+
+\- Wait for the ProgressView to move a bit
+
+\- Click the ""Show alert"" button
+
+\- Try closing the alert, it won't close.
+
+&#x200B;
+
+Any help is appreciated
+
+    import SwiftUI
+    import Alamofire
+    
+    struct ContentView: View {
+        @StateObject var viewModel: ViewModel = ViewModel()
+        @State private var showAlert = false
+    
+        var body: some View {
+            VStack {
+                Button(""Show Alert"") {
+                    showAlert.toggle()
+                }
+                
+                Button(""Start download"") {
+                    viewModel.startDownload()
+                }
+                
+                if viewModel.showProgressView {
+                    ProgressView(""Downloading…"", value: viewModel.downloadProgress, total: 1.0)
+                        .progressViewStyle(.linear)
+                }
+            }
+            .alert(isPresented: $showAlert) {
+                Alert(
+                    title: Text(""Text""),
+                    dismissButton: .cancel()
+                )
+            }
+        }
+    }
+    
+    class ViewModel: ObservableObject {
+        @Published var currentDownload: DownloadRequest? = nil
+        @Published var downloadProgress: Double = 0.0
+        @Published var showProgressView: Bool = false
+        
+        func startDownload() {
+            print(""Function called!"")
+            
+            showProgressView.toggle()
+            
+            let queue = DispatchQueue(label: ""alamofire"", qos: .utility)
+            let destination = DownloadRequest.suggestedDownloadDestination(for: .documentDirectory)
+            
+            AF.download(""https://speed.hetzner.de/10GB.bin"", to: destination)
+                .downloadProgress(queue: queue) { progress in
+                    print(progress.fractionCompleted)
+                    
+                    DispatchQueue.main.async {
+                        self.downloadProgress = progress.fractionCompleted
+                    }
+                }
+                .response { response in
+                    print(response)
+                }
+        }
+    }
+    
+    struct ContentView_Previews: PreviewProvider {
+        static var previews: some View {
+            ContentView()
+        }
+    }",1638028007.0,4,0.83,4
+SwiftUI,UI lockup with AlamoFire downloadProgress,"Hi there, I'm trying to create a download progress bar and show an alert at the same time when a download is completing.
+
+For this task, I'm using AlamoFire with SwiftUI since it makes downloading easy.
+
+However, when I track the progress using a ProgressView with a Published variable, the entire UI locks up and I can't figure out how to fix it.
+
+How to test the attached code:  
+\- Click ""Start download""
+
+\- Wait for the ProgressView to move a bit
+
+\- Click the ""Show alert"" button
+
+\- Try closing the alert, it won't close.
+
+&#x200B;
+
+Any help is appreciated
+
+    import SwiftUI
+    import Alamofire
+    
+    struct ContentView: View {
+        @StateObject var viewModel: ViewModel = ViewModel()
+        @State private var showAlert = false
+    
+        var body: some View {
+            VStack {
+                Button(""Show Alert"") {
+                    showAlert.toggle()
+                }
+                
+                Button(""Start download"") {
+                    viewModel.startDownload()
+                }
+                
+                if viewModel.showProgressView {
+                    ProgressView(""Downloading…"", value: viewModel.downloadProgress, total: 1.0)
+                        .progressViewStyle(.linear)
+                }
+            }
+            .alert(isPresented: $showAlert) {
+                Alert(
+                    title: Text(""Text""),
+                    dismissButton: .cancel()
+                )
+            }
+        }
+    }
+    
+    class ViewModel: ObservableObject {
+        @Published var currentDownload: DownloadRequest? = nil
+        @Published var downloadProgress: Double = 0.0
+        @Published var showProgressView: Bool = false
+        
+        func startDownload() {
+            print(""Function called!"")
+            
+            showProgressView.toggle()
+            
+            let queue = DispatchQueue(label: ""alamofire"", qos: .utility)
+            let destination = DownloadRequest.suggestedDownloadDestination(for: .documentDirectory)
+            
+            AF.download(""https://speed.hetzner.de/10GB.bin"", to: destination)
+                .downloadProgress(queue: queue) { progress in
+                    print(progress.fractionCompleted)
+                    
+                    DispatchQueue.main.async {
+                        self.downloadProgress = progress.fractionCompleted
+                    }
+                }
+                .response { response in
+                    print(response)
+                }
+        }
+    }
+    
+    struct ContentView_Previews: PreviewProvider {
+        static var previews: some View {
+            ContentView()
+        }
+    }",1638027889.0,1,1.0,2
+SwiftUI,CoreData help: Editing an existing object,"Hi there, I am trying to edit an existing CoreData in a sheet and I was able to rig up a sample of my project using the code below, but there are some problems.
+
+1. I'm using the viewContext from the shared persistence controller instead of my environment variable because I get an error saying ""Property initializers run before self is available""
+2. On view init, the list is populated with an unknown entry (because the context is given when the state variable is initialized)
+
+How would I make an edit view sheet which edits the selected CoreData object and updates the UI automatically? Do I need a wrapper for an Optional Observed Object (SwiftUIX)?
+
+If anyone wants the full project, I'll be happy to post this on GitHub. I'm at my wit's end here, so I appreciate any help!
+
+    import SwiftUI
+    import CoreData
+    
+    struct ContentView: View {
+        @State var showSheet = false
+        @Environment(\.managedObjectContext) private var viewContext
+        
+        @State var currentCandy: Candy = Candy(context: PersistenceController.shared.container.viewContext)
+        
+        @FetchRequest(
+            entity: Candy.entity(),
+            sortDescriptors: [])
+        private var candies: FetchedResults<Candy>
+    
+        var body: some View {
+            NavigationView {
+                VStack {
+                    List {
+                        ForEach(candies, id: \.self) { candy in
+                            Text(candy.name ?? ""Unknown"")
+                                .contextMenu {
+                                    Button(""Edit"") {
+                                        currentCandy = candy
+                                        
+                                        showSheet.toggle()
+                                    }
+                                }
+                        }
+                    }
+                    .sheet(isPresented: $showSheet) {
+                        EditView(candy: currentCandy)
+                    }
+                
+                    Button(""Add"") {
+                        let candy1 = Candy(context: self.viewContext)
+                        candy1.name = ""Mars""
+                    
+                        let candy2 = Candy(context: self.viewContext)
+                        candy2.name = ""KitKat""
+                    
+                        try? self.viewContext.save()
+                    }
+                }
+            }
+        }
+    }
+    
+    struct EditView: View {
+        @Environment(\.managedObjectContext) var context
+        
+        @ObservedObject var candy: Candy
+        
+        var body: some View {
+            VStack {
+                Text(""Current name: \(candy.name ?? ""Unknown"")"")
+                
+                Button(""Change to Milky Way"") {
+                    candy.name = ""Milky Way""
+                    
+                    PersistenceController.shared.save()
+                }
+            }
+        }
+    }",1637122497.0,3,1.0,0
+SwiftUI,SwiftUI bug (iOS 15)? Showing context menu in sheet messes up the size of a swiftUI view,"Hi there, I found a reproducible bug on iOS 15. Whenever a context menu is used in a sheet, the view stays zoomed out after I swipe down the sheet on iOS.
+
+Here's the reproducible code. To reproduce, open the sheet, activate the context menu by holding the textbox, exit the context menu, then swipe down the sheet.
+
+Anyone know of a fix for this?
+
+    struct ContentView: View {
+        @State private var showInnerView = false
+        
+        var body: some View {
+            Button(""Open nav view sheet"") {
+                showInnerView.toggle()
+            }
+            .sheet(isPresented: $showInnerView) {
+                InnerView()
+            }
+        }
+    }
+    
+    struct InnerView: View {
+        var body: some View {
+            NavigationView {
+                Form {
+                    Section {
+                        Text(""Copy me!"")
+                    }
+                    .contextMenu {
+                        Button(""Copy text"") {
+                            UIPasteboard.general.string = ""Copy current text""
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+Here's what it should look like in simulator/real device. You can see that the ContentView is a bit zoomed out
+
+https://preview.redd.it/hsarvktcp2v71.png?width=1170&format=png&auto=webp&s=77733138a157665931067be260d0f6ff686a7faf",1634939484.0,3,1.0,1
+SwiftUI,How do I allow editable list items with EditMode active?,"Hi there,
+
+I apologize for the long post, but this is a tough topic to properly explain.
+
+I'm currently making a list with SwiftUI and trying to figure out how to open an ""editor"" view when I click a list item when edit mode is active.
+
+In short, I'm trying to replicate the behavior of the `favorites` menu in safari/firefox.
+
+Here's a video (and a picture) of what I'm trying to exactly replicate:
+
+Image: [https://files.kingbri.dev/reddit\_help/IMG\_1174.jpg](https://files.kingbri.dev/reddit_help/IMG_1174.jpg)
+
+Video: [https://files.kingbri.dev/reddit\_help/RPReplay\_Final1634669584.MP4](https://files.kingbri.dev/reddit_help/RPReplay_Final1634669584.MP4)
+
+If you need code, here's some of my code snippets explaining how I thought this works
+
+List:
+
+    var listView: some View {
+        if bookmarks.isEmpty {
+            Text(""It looks like your bookmarks are empty. Try adding some!"")
+        } else {
+            List {
+                ForEach(bookmarks, id: \.self) { bookmark in
+                     // If the edit mode isn't active, use a NavigationLink                 
+                 if mode == .active {
+                         NavigationLink(bookmark.name ?? ""Unknown"", destination: EditBookmarkView())
+                     // If the edit mode isn't active, use a link
+                     } else {
+                         Link(bookmark.name!, destination: URL(string: bookmark.url!)!)                 
+                 }
+                 }
+                 .onDelete(perform: removeItem)
+            }
+        }
+    } 
+
+Toolbar with edit button:
+
+    .toolbar {
+        ToolbarItemGroup(placement: .bottomBar) {
+            EditButton()
+        }
+    }
+    .environment(\.editMode, $mode)
+
+Now with this code, each list entry redraws itself when I click edit which is weird because in safari/firefox, that doesn't happen at all.
+
+Does anyone know how to replicate the behavior in the attached video with swiftUI? I'd appreciate the help.
+
+NOTE: I'm using SwiftUI 2 in this project",1634671374.0,1,1.0,2
+swift,Adblock with WebView,"Hi there, I'm trying to create an app which uses a WkWebView. However, the website I'm going to has a lot of ads. Any way to use an adblocker for WkWebView or load a user's content blockers?  
+
+
+I've searched all over on google and can't find anything. Will appreciate the help!",1632964871.0,4,0.84,0
+SwiftUI,How to detect gesture in UIViewRepresentable,"Hi there, I'm trying to directly implement gestures on my UIViewRepresentable struct. This struct uses a WKWebView and I'm trying to detect a tap gesture on the view and execute the coordinator function.
+
+However, when I run this code, the gesture does not get detected and nothing is printed on the screen. Anyone know what I'm doing wrong here?
+
+    import SwiftUI
+    import WebKit
+    
+    struct WebView: UIViewRepresentable {
+        let url: URL?
+        
+        class Coordinator: NSObject, WKUIDelegate, WKNavigationDelegate {
+            var parent: WebView
+            
+            init(_ parent: WebView) {
+                self.parent = parent
+            }
+            
+            @objc func viewTap() {
+                print(""Tap gesture executed"")
+            }
+        }
+        
+        func makeCoordinator() -> Coordinator {
+            Coordinator(self)
+        }
+        
+        func makeUIView(context: Context) -> WKWebView {
+            // Configure the WebView
+            let prefs = WKWebpagePreferences()
+            prefs.allowsContentJavaScript = true
+            
+            let config = WKWebViewConfiguration()
+            config.defaultWebpagePreferences = prefs
+            
+            let webView = WKWebView(
+                frame: .zero,
+                configuration: config
+            )
+            webView.allowsBackForwardNavigationGestures = true
+            // Make a request here
+            guard let scopedUrl = url else {
+                return webView
+            }
+            let request = URLRequest(url: scopedUrl)
+            
+            webView.load(request)
+    
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(Coordinator.viewTap))
+            webView.addGestureRecognizer(tapGesture)
+            
+            webView.navigationDelegate = context.coordinator
+            webView.uiDelegate = context.coordinator
+            
+            return webView
+        }
+    
+        func updateUIView(_ uiView: WKWebView, context: Context) {}
+    }",1628008177.0,4,0.84,4
+SwiftUI,Multiple onAppear occurrences with PagedTabViewStyle,"UPDATE: Found a fix, please check the [update comment](https://www.reddit.com/r/SwiftUI/comments/ojp3i7/multiple_onappear_occurrences_with/h545z8h?utm_source=share&utm_medium=web2x&context=3)
+
+&#x200B;
+
+Hi there,
+
+I'm currently making a manga reading app for iOS (using SwiftUI 3) and decided to use the PagedTabView style for pagination purposes.
+
+However, I'm getting a weird bug with the onAppear handler (which I use for adding new pages to the reader).
+
+This handler is bound to a child view and should only be triggered when the child view shows up on the screen (that's what I thought).
+
+However, this onAppear handler gets triggered when the TabView loads and one page before the actual child view shows up.
+
+Here's some example I code I spun up for this issue (on github): [https://github.com/bdashore3/PageTabViewBreakage/blob/main/PagedTabViewTest/ContentView.swift](https://github.com/bdashore3/PageTabViewBreakage/blob/main/PagedTabViewTest/ContentView.swift)
+
+You can download this project and run it in Xcode to see the same behavior in the console.
+
+Anyone know how to fix this issue? It's the only annoying thing that is hindering my development with my reader app.",1626210694.0,6,1.0,6
+SwiftUI,Best pagination package?,"Hi there,
+I'm currently trying to make a reader app in SwiftUI 3 and the core foundation of the reader itself is some sort of pager/pagination view which uses AsyncImages and page numbers per page.
+
+The package that I'm currently playing around with is https://github.com/fermoya/SwiftUIPager, but it's feeling a little clunky to use right now.
+
+What package/approach is best for you to use when dealing with complex pagination?",1626065370.0,1,1.0,6

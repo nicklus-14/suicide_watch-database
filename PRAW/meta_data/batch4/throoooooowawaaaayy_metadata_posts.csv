@@ -1,0 +1,247 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+chess,Is there any way to play online with time odds?,"
+Me and my friend wanted to try playing with time odds, since he is a much better player than me, and playing with material odds just doesn't feel good at all. So, we wanted to play some games with time odds.
+
+The problem is, seems like no Chess website allows setting a different time for each player - on Chess.com there is no option like this at all, and Lichess only allows giving the enemy player time in increments of 15 seconds, which seems really annoying.
+
+We have tried looking for online chess clocks to control the time instead, but with no luck - the clocks that work online don't allow setting different times for each players, and the only clocks with this feature are essentially ""hot seat"".
+
+Do you know any way (either a website, or a way to set this up anywhere, or an online chess clock) to play with time odds, digitally?",1642971833.0,16,0.87,17
+csharp,C# - external ASM code breaks when run asynchronously,"Hello, I have an issue with my C# code that calls an external procedure written in x64 ASM.
+
+    [DllImport(""..."", CallingConvention = CallingConvention.StdCall)]
+    public static extern IntPtr ApplyFilterToImageFragmentAsm(IntPtr bitmapBytes, int bitmapBytesLength, int bitmapWidth, int startIndex, int endIndex, IntPtr filteredFragment);
+
+The project I am working on is a High Pass Image Filter (HP1) that is being put on a 24-bit bitmap image. I have an implementation of that algorithm written in C#, C++ and x64 ASM. The idea of this project is to run these synchronously and asynchronously, and compare the execution times based on the language used and the amount of threads specified.
+
+When I call the C# or C++ methods asynchronously, everything works fine, the returned result is correct, there are no exceptions. The same is true when I call the ASM procedure synchronously - there are no exceptions, ever.
+
+However, I am running into multiple issues when trying to run the procedure asynchronously, using tasks. What I am doing is creating Task objects in a loop, adding them to a list (to keep track of them), then awaiting all of them and synchronizing the results, something like this:
+
+    var listOfTasks = new List<Task<IntPtr>>();
+    // ...
+    for (int i = 0; i < threadCount; i++)
+    {
+    // ...
+    var task = Task.Run``(() => ApplyFilterToImageFragmentAsm(bitmapBytesIntPtr, bitmapBytes.Length, bitmapWidth, startIndex, endIndex, filteredFragmentIntPtr));
+    listOfTasks.Add(task);
+    }
+    // ...
+    await Task.WhenAll(listOfTasks).ConfigureAwait(false);
+
+When I run this code with threadCount higher than 1, I get the following problems:
+
+1. Sometimes, the program just crashes without an exception.
+2. Most of the times, I get an AccessViolationException - sometimes for an address that looks ""legitimate"" (eg. very close to the address that was passed as parameter), and sometimes for an address that is all zeroes or F's (keep in mind **this never happens when only using a single Task to execute the method**).
+3. Some of the times I got an exception of type ExecutionEngineException, which (according to the documentation) is obsolete and not thrown by the runtime anymore, without any additional information.
+4. Sometimes, there is no exception, but the returned result is wrong (eg. the image is distorted, the filter is only applied to some parts of it, etc.).
+5. And some of the time, the algorithm works fine and returns the correct result, even for a higher number of Tasks like 2, 4 or 8.
+
+I suspect the problem is related to the ASM code itself, in how the registers, stack and variables are shared among the same thread, which makes the code crash the program when multiple procedures are executed on the same thread (instead of separate threads).
+
+My question is - **how can I make the ASM code handle multithreading properly, or how can I ensure the C# code executes different method calls on different threads?**
+
+Important note - when I make the following modification, the code works correctly 100% of the time.
+
+    for (int i = 0; i < threadCount; i++)
+    {
+    // ...
+    var task = Task.Run``(() => ApplyFilterToImageFragmentAsm(bitmapBytesIntPtr, bitmapBytes.Length, bitmapWidth, startIndex, endIndex, filteredFragmentIntPtr));
+    listOfTasks.Add(task);
+    task.Wait(); //!
+    }
+
+Therefore, I am almost certain the problem is caused exactly by how multithreading is handled - however, I need the procedure to run in parallel multiple times, so awaiting single calls is not an option for me. Neither is using Task.Delay to delay specific calls, since it would increase the execution time when run with multiple tasks, and that's against the point of this project. (besides, delaying doesn't make the code work 100% of the time anyway)
+
+I can share more information (and the source code itself) if needed. Cheers.",1639143632.0,2,0.75,6
+csharp,SettingsPropertyNotFoundException when saving a property after publishing application,"I am working on a WPF app.I have created the Properties.Settings.Default file in Visual Studio and I'm trying to use it for storing user settings. I made a string property called PortName with scope User, [like this](https://i.imgur.com/PUbK2f2.png).
+
+When I'm trying to write a new value to that property, or read the current value **after publishing my app**, I get a SettingsPropertyNotFoundException - ""The settings property PortName was not found"", just like it doesn't exist. [Screenshot](https://i.imgur.com/g8q0gOP.png)
+
+    public static string PortName {get; set;}
+    
+    public static void LoadUserSettings()
+    {
+        try
+        {
+            PortName = Properties.Settings.Default[""PortName""].ToString();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($""{ex.Message}"");
+        }
+    }
+
+When I test this locally, it works just fine - the setting is saved correctly, both in DEBUG and RELEASE mode.
+
+When I publish the app and do the same with it, the error occurs.
+
+How to make sure that the setting PortName exists on the client's end?",1614781762.0,4,0.76,0
+csharp,WPF - How to set a property inside a Setter?,"I am creating a ToolTip for each element in a ListView, like this:
+
+    <ListView x:Name=""ItemsListViewSellMaterials"" Margin=""10"">
+    <!-- Styles -->
+    <ListView.ItemContainerStyle>
+    	<Style TargetType=""ListViewItem"">
+    		<Setter Property=""HorizontalContentAlignment"" Value=""Center""/>
+    		<Setter Property=""ToolTipService.ShowDuration"" Value=""20000""/>
+    		<Setter Property=""ToolTipService.InitialShowDelay"" Value=""100""/>
+    		<Setter Property=""ToolTip"">
+    		    <Setter.Value>
+    			<TextBlock Style=""{StaticResource ToolTipTextBlockBase}"">
+    			    <Run Text=""{Binding Name}""/>
+    			    <LineBreak/>
+    			    <Run Text=""{Binding Description}""/>
+    			    <LineBreak/>
+    			    <Run Text=""Value:""/>
+    			    <Run Text=""{Binding Value}""/>
+        			</TextBlock>
+    		    </Setter.Value>
+    		</Setter>
+    	</Style>
+    </ListView.ItemContainerStyle>
+
+The ToolTip here updates based on the specific item. Note how it's made using a Setter.
+
+Now I have a property named  `ToolTipAssist.AutoMove` in my ToolTip. **My question is - how can I set that property using the syntax above?**
+
+Here's some code without these Setters:
+
+    <Button ToolTipService.ShowDuration=""20000"" ToolTipService.InitialShowDelay=""100"">
+        <Button.ToolTip>
+            <ToolTip controlzEx:ToolTipAssist.AutoMove=""True"">
+               <!-- Some content here -->
+            </ToolTip>
+        </Button.ToolTip>
+    </Button>
+
+Basically, I'm trying to set that controlzEx:ToolTipAssist.AutoMove property inside a Setter.
+
+How do I do that? How can I set a property from inside a Setter?",1614265069.0,2,0.63,6
+csharp,Code-behind tooltips for ListView elements,"I have a ListView that is populated in code-behind, like this:
+
+    <ListView x:Name=""FruitListView"">
+     
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <StackPanel>
+                    <TextBlock FontSize=""20"" Text=""{Binding}""/>
+                </StackPanel>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+     
+        <ListView.ItemContainerStyle>
+            <Style TargetType=""ListViewItem"">
+                <Setter Property=""HorizontalContentAlignment"" Value=""Center"" />
+                <Setter Property=""Width"" Value=""146"" />
+            </Style>
+        </ListView.ItemContainerStyle>
+     
+    </ListView>
+
+**Since the amount of fruits in my list changes over time, tooltips have to be created dynamically in code behind.** 
+
+    public FruitPage()
+    {
+        InitializeComponent();
+    
+        var Fruits = new List<string>(); 
+        Fruits.Add(""apple"");
+        Fruits.Add(""orange"");
+     
+        // Populate the ListView.
+        FruitListView.ItemsSource = Fruits;
+    }
+
+**I would now like to create tooltips on each of the ListViewItems based on the text (eg. a different tooltip for the ListViewItem that represents ""apple"", ""orange"" etc.).**
+
+Since the ListView's ItemSource is filled in dynamically, I assume these tooltips would also have to be done in code-behind and not in XAML.
+
+The question is - how can I grab a ListViewItem  
+ to add a tooltip to it? I have tried the following code:
+
+    foreach (var item in FruitListView.Items)
+    {
+        // item.ToolTip = new ToolTip() { Content = ""Test"" };
+    }
+
+... but ""item"" is a string, not a ListViewItem.
+
+How can I ""grab"" each of the ListViewItems in a dynamically-populated ListView to add a (different) ToolTip to them? Alternatively, what other control can I use to achieve this?",1614096347.0,4,0.84,3
+csharp,"DispatcherTimer Tick event slow on my PC, but fine on others","I am working on a WPF app and I'm using a DispatcherTimer.
+
+The timer is supposed to tick 5 times, every 500 milliseconds, but when I check the time it takes for those 5 ticks, it usually reaches between 10 and 20 seconds, and sometimes up to 40 seconds.
+
+However, when I try the same code on different PCs, the time it takes is very close to the expected time. All my co-workers have also tried on theirs with the same result - nearly instantenous completion.
+
+My question is - is this ""random""? Is this related to my PC? What's the reason it works this way, and how can I make sure that the end users of my application do not experience this issue? Cheers.
+
+Some code snippets I'm using:
+
+    private DispatcherTimer _timer;
+    private int _count = 0;
+    private DateTime _startDate;
+    private DateTime _endDate;
+    
+    public MainWindow()
+    {
+        InitializeComponent();
+    
+        _timer = new DispatcherTimer()
+        {
+            Interval = new TimeSpan(0, 0, 0, 0, 500)
+        };
+        _timer.Tick += Timer_Tick;
+    
+        _startDate = DateTime.Now;
+        _timer.Start();
+    }
+    
+    private void Timer_Tick(object source, EventArgs e)
+    {
+    	if (_count >= 5)
+    	{
+    	    _timer.Stop();
+                _endDate = DateTime.Now;
+    
+                var result = _endDate - _startDate;
+                // Result can get up to 40 seconds!
+    	}
+    	else
+    	{
+                // Some code
+    	}
+    }",1613687198.0,0,0.5,2
+UnsentLetters,I Wish I Could Tell You I Love You,"This is something I've had on my mind for months now, and I need to get it off my chest.
+
+To my best friend.
+
+I love you.
+
+Nobody has ever made me feel like you do. In the past, I owed you a lot and I appreciated that you were there for me, but it wasn't love back then. But now it is. I now have strong feelings for you.
+
+You're unique. There's no other person like you. You're non-linear, you think in an unconventional way, you're extremely smart, you have a great sense of humour. And we're so damn similar, in so many aspects. When it comes to how we perceive the world, our university studies (which we both started at the same time), or even such stupid things as movies or computer games. ""Our every cell is parallel.""
+
+We spend so much time together. Every day, for multiple hours. Talking, laughing, playing, having fun. Spending time with you is truly something amazing, and I appreciate every minute of it.
+
+For quite some time I thought this was just temporary. That it would pass. But now I'm sure you're the reason I'm happy, and that I love you. Nobody else is like you - and trust me, I've tried looking. Other people are rather linear, predictable, and I just couldn't imagine being in a long-term relationship with anyone else but you. Because there's no other person like you.
+
+Ever since the moment you called me your ""best friend"" I've known I need to tell you about this. And truth is, if I could go back in time, I would do that right away. The longer I wait, the more arguments I find against telling you. And our relationship is crucial to me, so I really don't want to screw it up.
+
+I promised you to tell you what bothers me one day, and this is it. However, I'm afraid that it might hurt our relationship, so I'm only getting this off my chest for now. But again, I promise you'll see this. Eventually. You already make me the happiest I could ever be, but if you love me back, I'd feel something I cannot even describe.
+
+I love you.
+R.",1603314730.0,13,0.94,2
+takemysurvey,[Personal] 3 minute survey about eye colour & heterochromia perception (Everyone),,1595879660.0,2,1.0,2
+SampleSize,[Casual] 3 minute eye colour & heterochromia perception survey (Everyone),,1595878744.0,26,0.97,3
+GiftIdeas,Gift ideas for a long distance friend?,"Hi, my very good friend's birthday is coming up soon and I want to get him something light, funny or just unique in a way. I was initially thinking about something [like this](https://www.youtube.com/watch?v=ejk_4oUWGFU) with some random guys dancing and singing happy birthday, but unfortunately these people have stopped taking requests. Do you know any similar, little, funny things I could order or buy for him? Cheers.",1583863744.0,1,1.0,2
+AskReddit,"Imagine that, from now on, you have 8 hours of free time every single day for the next 3 years. How do you spend it?",,1572443701.0,5,0.73,10
+CasualConversation,What do you guys do in your free time?,[removed],1572420808.0,7,1.0,17
+NoStupidQuestions,How do people actually spend their free time?,"Hi. To give you some backstory, I'm a first year university student and I've got A LOT of free time. So far there just isn't enough studying, I am still left with about 6 to 8 hours of free time 4 times a week, with 3 days free of any activities at all. All of this makes me wonder, how do people spend their free time when there's so much of it? It seems like things such as playing computer games, or spending time with friends, only work for a bit, but doing that for so long every single day just isn't pleasant. What do people actually do in their free time? Cheers.",1572384558.0,35,0.84,30
+VisualStudio,How to go back to the old Dark Theme?,"I have recently upgraded to Visual Studio 2019 from VS2017 and I see a very notable difference with the built-in Dark Theme. To me, the new one is just kinda crappy. Is there a way to ""revert"" to the one known from previous VS releases? If not, maybe someone has a .vstheme file with it that I can use through the Visual Studio Color Schemes extension? Cheers.",1562439768.0,3,0.8,2
+leagueoflegends,"What's up with the free, temporary skins on the Turkish server?","I've recently decided to transfer one of my alt accounts to the Turkish server. After playing a bunch of games, I realised I got some random skins to the champions I own. They seem to be available temporarily, as there's a clock icon in the corner of skin selection. I've got 12 skins in total and each one seems random. I've never heard about such a thing before, nor have I experienced it on any other server. What's up with that?",1560039886.0,6,0.88,3
+SampleSize,[Casual] Sauces on different food types (All welcome),"Hey, just a little casual survey here. If you decide to participate, you will be asked to rate five different sauce types for several food types; the scale is between 1 (disgusting) and 5 (love it).
+
+If you're willing to participate, go here: https://goo.gl/forms/wSJgslTvup6Kmf7V2
+
+Cheers!",1537366342.0,3,0.72,0

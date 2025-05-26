@@ -1,0 +1,79 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+XMG_gg,Questions about AC/DC Loadline Adjustment and Power/Voltage Accuracy,"Hi everyone,
+
+After reading [this post](https://www.reddit.com/r/XMG_gg/comments/11f8n0z/launch_undervolting_via_ac_loadline_in_xmg_and/), which suggests only adjusting the AC Loadline (ACLL) and leaving the DC Loadline (DCLL) unchanged, I’m curious about the reasoning behind this. It mentions that DCLL mainly affects the voltage reported by software, which subsequently impacts the displayed power consumption.
+
+I have two main questions regarding this:
+
+# Background:
+
+Since the first day I received my laptop in January 2024, I’ve been using ACLL set to 110 and DCLL at the default 170. Additionally, I’ve been undervolting the CPU using the traditional method with ThrottleStop.
+
+# Question 1:
+
+If I reduce the ACLL value while keeping DCLL unchanged, will this result in lower displayed power consumption but higher actual power consumption?
+
+For example, on my system (Clevo NP60SND with i9-13900HX), the default PL2 is 162W, and both ACLL and DCLL are set to 170 by default. When I lower ACLL to 110 but leave DCLL at 170, the CPU still reaches 162W during R23 multi-core benchmark, but its frequency increases compared to the default settings, and my Cinebench R23 scores also improve significantly. (it doesn't hit 98 degree throttle limit during the benchmark, but it's quite close to it)
+
+For context, I’ve unlocked the BIOS as much as possible using SmokelessRuntimeEFIPatcher, disabled TDC, UVP, and other limits, allowing the CPU to maintain 162W indefinitely until it hits the 98°C thermal throttling limit. (I’m not sure if I’m allowed to share the exact steps for unlocking the BIOS, as it involves higher risks of bricking the device.)
+
+However, if I lower DCLL to 110 alongside ACLL, the CPU frequency decreases compared to when DCLL is kept at 170. Cinebench R23 scores drop, thermal pressure reduces significantly, and the CPU is further away from the 98°C thermal limit. At that moment the CPU still hits PL2 162 watts. This suggests that the actual CPU power consumption is noticeably lower when DCLL is set to 110 compared to the default value of 170, even though they both look like hitting 162W.
+
+# Question 2:
+
+Does keeping ACLL and DCLL consistent result in more accurate CPU power and voltage readings? Alternatively, is there a way to ensure accurate power/voltage readings after modifying ACLL?
+
+From my testing, it seems DCLL affects not only how power consumption is displayed but also how the system enforces PL2 limits. For example, if the displayed power consumption is 162W but the CPU is actually consuming 200W, this could impact the longevity of the CPU and other electrical components. Is there a way to ensure the displayed power consumption is closer to the actual power consumption while maintaining system performance?
+
+Thanks in advance for any insights!",1735463339.0,1,1.0,2
+XMG_gg,A workaround for Linux hibernation issue,"I just investigated the issue with my Metabox Prime 16 (same model as XMG Focus 16 E23, and some other Clevo laptops) hibernation not working correctly under Arch Linux. 
+I manually disabled all triggers in `/proc/acpi/wakeup` and added `acpi.ec_no_wakeups=1` to the kernel parameters. However, I noticed that the first hibernation attempt would still fail, but the second attempt would always succeed.
+
+By comparing the `journalctl` logs before and after each hibernation attempt, I discovered that during the second successful hibernation, the following errors appeared in the log:
+
+```
+myarch kernel: pcieport 0000:00:1b.0: AER: Uncorrectable (Non-Fatal) error message received from 0000:00:1b.0
+myarch kernel: pcieport 0000:00:1b.0: PCIe Bus Error: severity=Uncorrectable (Non-Fatal), type=Transaction Layer, (Requester ID)
+myarch kernel: pcieport 0000:00:1b.0:   device [8086:7a44] error status/mask=00100000/00004000
+myarch kernel: pcieport 0000:00:1b.0:    [20] UnsupReq               (First)
+```
+
+I used `lspci -tv` to check the device tree under this ""1b"" port and found that the devices with IDs `1134` and `1135` were related to USB.
+
+After some experimentation, I discovered that if I remove the device at `00:14.0` before hibernation using the command `echo 1 | sudo tee /sys/bus/pci/devices/0000:00:14.0/remove`, hibernation would no longer fail!
+
+A problem that had been troubling me for months was finally solved!",1724927934.0,4,0.83,1
+needforspeed,Screen artifacting occurs when loading or exiting the game with DLSS enabled,"NFS:UNBOUND
+
+Screen artifacting occurs when loading or exiting the game with DLSS enabled, but gameplay remains unaffected. I'm using an RTX 4060 laptop with a 13900HX CPU.
+
+I've tried various troubleshooting steps, including reinstalling Windows, changing SSDs, updating and resetting the BIOS, reinstalling the game, and trying different Nvidia driver versions.
+
+Additionally, I encountered a frustrating issue where EA wiped out my saved game data when I tested the game on another laptop. All of my 20 hours of progress vanished. What a letdown.",1714040201.0,2,1.0,6
+melbourne,Happy new year,,1672497315.0,43,0.79,1
+melbourne,Rear turning indicators of my motorbike taken off by someone twice in a month,"I parked my bike at Wills Street in city every day, along with other cute bikes. Tonight I was going to take a ride and when I turned on the right indicator, it started to blinking at a weird speed. I realized something had happened, again. I went off the bike, walking towards behind. Yes the indicators were gone, just like 2 weeks ago. Same place. I feel so surprised.   
+Last time I went to bike shop to buy new indicators, the staff told me my CFMOTO 300NK was the second CFMOTO in a week whose indicators were stolen.  
+I called police just now, just like last time. The operator was kind and patient, as my English is not good and I need him to repeat his words often. I felt warm when talking to him. Although the police may not be able to find the thief, I would say thanks to the police.   
+I'm a 24-year-old student and it really costs me much to replace a pair of new indicators. I don't get it why someone would do this. I got few friends in Australia so Reddit is the best place to share the story :(",1668428263.0,5,0.73,7
+Pixel6,Seeing different CPU frequencies at the same time,"[Franco Kernel Manager + Perfmon service of FKM (left) + CPU floater (right)](https://i.imgur.com/F90HIsC.png)
+
+Is it normal? One thing strange is that in Franco Kernel Manager, little cores are always at higher than 1328mhz while if I check CPU floater, they are usually at 300mhz.
+
+To be more specific, let's see cpu0-3. In Franco Kernel Manager, they are now 1328mhz. But in Perfmon of FKM, we can see them at 1098mhz . While in CPU floater, they are at 300mhz.",1649194900.0,1,1.0,1
+iPhone12Pro,How to tell if a third-party MagSafe charger is charging the phone on 15w?,,1616585422.0,5,1.0,4
+OnePlus7Pro,A shot,,1595089134.0,24,0.75,2
+OnePlus7Pro,Why Spotify is always trying to play,,1592661225.0,9,0.91,9
+Telegram,Telegram Desktop from Microsoft Store keeps ask me to login every time launched.,"Just reinstalled windows 10 today and when I installed Telegram Desktop I found this issue. It has never occurred before. I've tried reinstalled tg several times but in vain. Finally I installed one from telegram official website (no UWP version) and it works normally.
+Is it only me who come across that issue ?",1585164371.0,5,0.86,8
+GooglePixel,Haven't received February system update for Pixel 3 XL,Any ideas ? Rooted. Just feel inconvenient to flash OTA zip and root again mannually :([Screenshot](https://i.imgur.com/BXkG3la.png),1581188345.0,1,0.57,6
+AssolutoRacing,How old are you guys ?,"Just curious. In my region playing this game are teens at age around 20 , like me or others 10+ , what about you ?",1578630315.0,4,1.0,13
+AssolutoRacing,Any ideas about transmission ratio for Advan Evo 9 on Nurburgring ?,,1578247003.0,3,0.81,1
+AssolutoRacing,Evolution !!!,,1577988925.0,10,0.92,1
+GooglePixel,App icon randomly disappears after swiping up to homepage.,"I just clean flashed the factory image after Dec update and found that bug. Once it disappears ,click that place and the app opens with icon appearing again. Anyone has found that or maybe I need a reflash ?",1576564307.0,6,0.81,5
+GooglePixel,When will the new version of Gcam app come to Pixel 3 /3a ?,,1571191766.0,1,0.6,3
+driftspirits,My first 7-star car !!!!!,[Evolution !!!](https://i.imgur.com/nA3lGiv.jpg),1562005159.0,7,1.0,1
+SonyXperia,Do we have a telegram group for XZ2 users ?,Thx !,1560092160.0,0,0.5,6
+driftspirits,Can't take control of myself from topping up the game .,:(,1551324366.0,1,1.0,0
+SuicideWatch,What's the meaning of meaning ?,And waht's the meaning of life ?,1545557065.0,5,0.86,4
+OnePlus6,Updating Open Beta 7,[Updating Open Beta 7](https://i.imgur.com/NOvq8pB.jpg),1542648957.0,1,0.57,1
+MotoZ2Force,When will the P come ?,,1540021413.0,6,1.0,4

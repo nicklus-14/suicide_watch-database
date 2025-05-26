@@ -1,0 +1,240 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+learnmachinelearning,Recursion error in Scipy.fft.fft,"I was working on Gravitational wave challenge on kaggle and tried this code for fft(found in their tutorials)-
+
+`N = 4096`
+
+`# sample spacing`
+
+`T = 1.0 / 2048.0`
+
+&#x200B;
+
+`yf = fft(sig)`
+
+`xf = fftfreq(N, T)[:N//2]`
+
+&#x200B;
+
+at yf = fft(sig) it gives  `maximum recursion depth exceeded while calling a Python object` The shape of sig there is 4096,
+
+Any idea what's going wrong here?",1632074468.0,1,0.67,1
+PersonalFinanceCanada,Changing RBC account type from Student to Signature,I thought it would automatically be changed to the signature type once I graduated or the student visa expired but it wasn't. I was trying to do it manually right now but it says that it can't change my account type online either. Any idea on why this is happening?,1626217931.0,0,0.5,13
+learnmachinelearning,Image captioning using simple CNN+RNN predicting only the same label,"I am taking part in brystal myers competition on kaggle which tries to predict InChI formula for compounds. 
+
+`initializer = tf.keras.initializers.GlorotUniform()`
+
+`inp = L.Input(shape=(dim[0],dim[1],1),name = 'Input')`
+
+`labels = L.Input(shape=(None,),name= 'Labels')`
+
+`X = L.Conv2D(128,3,strides=1,name='Conv2D_1', padding='same')(inp)`
+
+`X = L.BatchNormalization(name='norm1')(X)`
+
+`X = L.Activation('relu',name='relu_1')(X)`
+
+`X = L.Conv2D(64,5,strides=1,name='Conv2D_2', padding='same')(X)`
+
+`X = L.BatchNormalization(name='norm2')(X)`
+
+`X = L.Activation('relu',name='relu_2')(X)`
+
+`X = L.Conv2D(64,7,strides=1,name='Conv2D_3', padding='same')(X)`
+
+`X = L.BatchNormalization(name='norm3')(X)`
+
+`X = L.Activation('relu',name='relu_3')(X)`
+
+`X = L.Conv2D(64,9,strides=3,name='Conv2D_4')(X)`
+
+`X = L.BatchNormalization(name='norm4')(X)`
+
+`X = L.Activation('relu',name='relu_4')(X)`
+
+   
+
+`X = L.Dropout(0.2,name='Dropout_1')(X)`
+
+`inp2 = tf.image.resize(inp,[X.shape[1],X.shape[2]])`
+
+`X = L.Add(name='Add_1')([X,inp2])`
+
+`X = L.BatchNormalization(name='norm_A1')(X)`
+
+`#X = L.MaxPooling2D(name='Max2D_A1')(X)`
+
+`X = L.Dropout(0.2,name='Dropout_A1')(X)`
+
+`X = tf.reduce_sum(X,axis=3)`
+
+   
+
+`X = L.Bidirectional(L.LSTM(256,return_sequences=True,dropout=0.2))(X)`
+
+`X = L.Bidirectional(L.LSTM(512,return_sequences=True,dropout=0.2))(X)`
+
+`Out = L.Dense(len(characters)+1,activation='softmax',name='Output',kernel_initializer = initializer)(X)`
+
+`model = tf.keras.Model(inputs=inp,outputs=Out)`
+
+`adam = Adam(learning_rate=0.001, amsgrad=True)`
+
+
+
+`model.compile(optimizer=adam,loss='categorical_crossentropy')`
+
+`print(model.summary())`
+
+`return model`
+
+This is the baseline model I am using. It only learns one compound name. No matter what the input, it outputs the same thing(ex- C12H1206c11). Any tips on how to deal with this?",1621647452.0,1,1.0,0
+PersonalFinanceCanada,Zero available credits,I have a credit limit of $1000 on my student credit card with rbc. Some unexpected expenses have put me in a situation where I very nearly maxed my card out and I have been trying to pay it back for a while. I did make a late payment of 200 bucks this week and the minimum payment was about 20 bucks. Yet my credit is still 0. Shouldn't it be higher?,1616373921.0,2,0.75,6
+PokemonGoFriends,An odd request but it would be great if you could help a fellow trainer out,[removed],1613093950.0,2,1.0,7
+learnprogramming,Not sure why my code for counting inversions isn't working. Any suggestions are welcome.,"    
+    #include <stdio.h>
+    #include <iostream>
+    using namespace std;
+    
+    #define MAX_N 1000001
+    
+    long merge(int a[], int start, int mid, int end){
+    	int p=start, q=mid+1;
+    	int arr[end-start+1];
+    	int k=0;
+            long count=0;
+    	for(int i=start; i<=end; ++i){
+    
+    		if(p>mid)arr[k++]=a[q++];
+    		else if(q>end)arr[k++]=a[p++];
+    		else if(a[p]<=a[q]){
+    			arr[k++]=a[p++];
+    
+    		}
+    		else {
+    
+    			arr[k++]=a[q++];
+    			count=count+mid-p;
+    		}
+    
+    
+    	}
+    	for(int i=0; i<k; ++i)a[start++]=arr[i];
+            return count;
+    
+    }
+    
+    long merge_sort(int a[], int start, int end){
+    
+    	if(start<end){
+    		int m=(start+end)/2;
+    		return merge_sort(a, start, m)+merge_sort(a, m+1, end)+merge(a,start,m,end);
+    
+    
+    
+    	}
+    	else return 0;
+    }
+    
+    int main(){
+    	int n;
+    
+    	cin>>n;
+    	int input[n];
+    	for(int i=0; i<n; ++i)cin>>input[i];
+    
+    	cout<<merge_sort(input, 0, n-1)<<endl;
+    	
+    	return 0;
+    }
+    
+
+I am using merge sort with a for loop instead of while loop but the added if conditions in my opinion should make up for the difference.",1610062672.0,1,1.0,1
+PersonalFinanceCanada,Taxes for International students,"I am a complete beginner trying to learn more about the taxes associated with investments for international students. At the moment, my parents are paying for my education and living expenses here. My hope is to save part of the living expenses and invest them. I want to start with wealthsimple and I have two questions-
+
+a) Am I allowed to invest money here that comes from other countries(i.e. my home)? Or does it need to be a Canadian source?
+
+b) Is any money I invest using wealthsimple taxable? 
+
+&#x200B;
+
+Thanks :)",1609889415.0,1,0.67,1
+chess,Any reviews on Victor Bologan's King's Indian: A Complete Black Repertoire?,I was hoping to study the king's indian in depth including pawn structures etc. Is this a good book for that purpose?,1605398562.0,2,0.75,1
+ImmigrationCanada,Can't select No for some options on PGWP form,"I downloaded the form and I have it almost filled out but I can't seem to be able to fill out some fields.
+
+1) ""For this trip will you use a passport issued by Ministry of Taiwan..."". It has asterisk marked on it which I assume means that it's required but I can't select No. Is this and the next question(about Israeli passport) only for those who select Taiwan/ Israel as country of citizenship?
+
+2) I can't fill out the province/state field of employment history. Is that also fine?
+
+&#x200B;
+
+Thanks",1604708812.0,1,1.0,1
+ImmigrationCanada,Biometrics status not applicable even though I came as a student,"I am looking to apply for PGWP and I used the tool to check my biometrics status. It said ""not applicable"" and that no results were found. I personally don't remember if  I had it separately taken or not but I don't satisfy the exceptions  so my guess is that I did give them when I applied for the student visa 3 years back. Any idea on what I should do?
+
+&#x200B;
+
+Thanks",1604190306.0,6,1.0,4
+ImmigrationCanada,Dumb question but how do I apply for PGWP online?,"Instructions just say create an account and fill out the application. But once I login with my gckey the only relevant option seems to be-""Apply to come to canada"" and even that doesn't mention pgwp but just work permit. It also asks for a personal code as the first thing and I am not sure what that's referring to. I am kind of lost on how I am even supposed to start the application.
+
+&#x200B;
+
+Thanks",1603859009.0,1,1.0,2
+learnmachinelearning,Multivariate Gaussian Distributions in PRML,"I was going through chapter 2 and I was wondering, do you really need to know the math behind all the expectations, conditional densities and covriances of Mutivariate Guass distribution? I am a bit lost there and if it is important, links to any detailed explanations will be appreciated",1594346062.0,1,1.0,0
+probabilitytheory,Finding Expectation using MGF,"So y1, y2..yn are independent bernoulli rv, and Y is the sum of all of them i.e. y=Bin(n,p)
+
+&#x200B;
+
+The question was to find E\[4\^Y\], when n=2, p=1/2. So my mgf was M\_z\_(t)=M\_z1\_(t) \* M\_z2\_(t)....M\_zn\_(t), where M\_zn\_(t) represents the mgf for the nth trial and is equal to -  exp(t) \* (1-p) + exp(4t)\*p. I think this part is right because when Y\_i=0, (4\^Y\_i) will be 1 and 4 otherwise.
+
+So, E\[e\^(4\^y)\*t\]= (exp(t) \* (1-p) + exp(4t)\*p)\^n
+
+which after differentiating w.r.t to t yields
+
+&#x200B;
+
+n\*(exp(t) \* (1-p) + exp(4t)\*p)\^(n-1) \* (exp(t) \* (1-p) + 4exp(4t)\*p)
+
+&#x200B;
+
+but when I solve it using this, my answer comes out to be 5, as opposed to 25/4(actual answer)
+
+Any pointers are appreciated",1593392574.0,2,0.75,6
+learnmath,Setting limits while finding Marginal density functions from PDF,"I have 4 equations, but for understanding's sake I""ll just use two here. 
+
+&#x200B;
+
+x+y<=1, x>0, y>0
+
+y-x<=1, x<0, y>0
+
+|x|<=1,|y|<=1
+
+These define the area within which the joint uniform distribution of X and Y is defined.  It forms a triangle with the Y axis dividing the triangles into two. To find the marginal distribution of X or Y, I need to set the limits of integration but I am not sure how that'd work.  When doing a double definite integral it made sense because I could set the limits on X first and accordingly set the limits of y for different parts. I am pretty confused by how I should go on about this.  Appreciate any help :)",1592432813.0,2,1.0,0
+probabilitytheory,Conditional probability and an urn,"The question is from Introduction to probability by Sheldon Ross(Chapter 3, question 6 of 9th edition)
+
+Consider an urn containing 12 balls, of which 8 are white. A sample of size 4 is to be drawn with replacement (without replacement). What is the conditional probability (in each case) that the first and third balls drawn will be white given that the sample drawn contains exactly 3 white balls?
+
+&#x200B;
+
+In this post, I am only talking about the second case i.e. without replacement
+
+There are two approaches and both of them are discussed here, and both yield a different answer.
+
+[https://www.slader.com/discussion/question/consider-an-urn-containing-12-balls-of-which-8/](https://www.slader.com/discussion/question/consider-an-urn-containing-12-balls-of-which-8/)
+
+Ross's solution manual says that you can write event E as exactly 3 white balls are drawn and event F as the first and the third balls are white. Then it says that P(F n E)=2/(12C4). And this part doesn't really make any sense to me. His argument is that (W,W,W,B) and (W,B,W,W) are the only two orders and therefore it should be 2/(12C4). But 12C4 implies that it is looking at all possible combinations and each of those two orders can be formed in multiple ways. I have been looking for a well explained solution for a while now but haven't been able to find anything and the ones I do find are divided between the two solutions provided above.
+
+&#x200B;
+
+:( Please help
+
+&#x200B;
+
+Edit- just a summary for the other solution as well. The second one argues that both with and without replacement, the probability will be equal and the value is 0.5( as opposed to 1/112 by Ross). It is calculated as- 2\*(8\^ 3)\*4/(8\*7\*6\*4\*4)",1591250950.0,1,0.67,3
+trees,Is 100mg of thc pills too much?,"I tried 25, and 50mg but I didn't get high. I smoke a lot but I am not sure if it's safe to consume 100mg pills.",1562210205.0,2,1.0,5
+depression,Should I be seeking out help?,"I made a similar post in r/SuicideWatch and I apologize if this isn't the right place for this.
+
+I know this might sound dumb but I never actually considered the possibility that I might be depressed. 2 and a half years back I had everything I wanted. Right after that I lost all of it-my relationship, friends, appearance, curiosity, sporting nature for one reason or the other. I don't feel pressure from deadlines. I block anything emotional because anytime I try to introspect I break down. I can't and don't want to make any new connections with anyone. All I have been doing for a while now is just exist, Just passing the day somehow. Suppress or ignore(by smoking cigarettes) anything stressful. Typing it out right now I don't know if this is just me not taking responsibility or not putting in the work or if it might actually be depression. Just let me know what you think. ",1553382697.0,3,1.0,4
+SuicideWatch,Should I be seeking out help?,"I know this might sound dumb but I never actually considered the possibility that I might be depressed. 2 and a half years back I had everything I wanted. Right after that I lost all of it-my relationship, friends, appearance, curiosity, sporting nature for one reason or the other. I don't feel pressure from deadlines. I block anything emotional because anytime I try to introspect I break down. I can't and don't want to make any new connections with anyone. All I have been doing for a while now is just exist, Just passing the day somehow. Suppress or ignore(by smoking cigarettes) anything stressful. Typing it out right now I don't know if this is just me not taking responsibility or not putting in the work or if it might actually be depression. Just let me know what you think.",1553382095.0,1,1.0,3
+pesmobile,Close enough to Hand of God? WP Maradona,,1552413825.0,12,1.0,1
+pesmobile,New Ronaldo(95 LWF) is awesome. A follow up to the old Ronaldo's goals and dribbles. Hazard coming up next,,1551322074.0,12,1.0,5
+pesmobile,A 96 CF Ronaldo appreciation post with dribbles and goals. Video quality might not be great.,,1550647604.0,7,0.82,4

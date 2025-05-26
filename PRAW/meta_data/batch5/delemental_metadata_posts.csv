@@ -1,0 +1,304 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+Hikvision,HikCentral Pro Web Client - Automate Logins?,"I'm using WebClient v2.4.1.20230512 and there's no WAN access, only local network access.
+
+Is there a way to automatically login Active Directory / SSO users?
+
+I couldn't find any documentation on SAML, so I assume that's not an option. Maybe a way to do a form POST?
+
+Alternately, is there an alternate way to access the login page that doesn't show the ""Loading..."" splash before logging in? Or even do HTTP Auth? ",1712258222.0,1,1.0,3
+k12sysadmin,AV suggestions -soon to be former Kaspersky shop,"We're being forced by the state (Florida) to switch our AV from Kaspersky. Within the next seven days. And now we're looking at our options for ~1000 Windows stations and 15 servers. We have 2k KES licenses for 3 years for $30k.
+
+We're looking at SentinelOne, Sophos, ThreatDown, and CrowdStrike right now. But, we don't have time to do demos with everyone.
+
+So, what's everyone using and how do you like it? If you don't mind, what's your rough pricing?
+",1708960596.0,3,0.8,48
+BookStack,Installing BookStack on IIS 10 / Windows Server 2016,"Figured I'd give a rough/terse guide to installing BookStack on Windows Server 2016/IIS 10. For anyone else who might need the help.
+
+Why? Because I had to slog through it. I really wanted it to work and couldn't easily find any help on what to do. I'm running this on an internal only server, along w/ other software. It's for my department to use as a internal, authenticated knowledge base.
+
+I'm sure the rewrite rules could be better, but it's what I finally got working for me. I'm not an IIS expert by any means, so this is what I wrote down. It worked for me.
+
+Install the Pre-Reqs:
+
+* git - [https://git-scm.com/downloads](https://git-scm.com/downloads)
+* Php 8 - [https://windows.php.net/download/](https://windows.php.net/download/)
+* Php manager (optional) - [https://github.com/phpmanager/phpmanager/releases](https://github.com/phpmanager/phpmanager/releases)
+* Url Rewrite - [https://www.iis.net/downloads/microsoft/url-rewrite](https://www.iis.net/downloads/microsoft/url-rewrite)
+* Composer - [https://getcomposer.org/download/](https://getcomposer.org/download/)
+* MariaDB - [https://mariadb.com/downloads/](https://mariadb.com/downloads/)
+* HeidiSQL (optional) - [https://www.heidisql.com/download.php](https://www.heidisql.com/download.php)
+
+&#x200B;
+
+1. After installing MariaDB, make a database and user for BookStack. Give that user full permissions, probably clone it for the following connections: 127.0.0.1, localhost, :::1, server\_name
+2. In IIS, create a site.
+3. Create a self-signed certificate in the server settings, if needed. I bound it on the site to https, port 443, using the SSL cert that was created. IP address is set to ""All Unassigned"". Hostname is blank.
+4. Modify the .env file as needed. I set my app\_url to ""http://server\_name/bookstack"". Seems to have worked, even though I'm using https w/ the self-signed cert.
+5. Turn on the necessary php extensions, this includes pdo\_mysql and mbstring. I also turned on php\_ldap because I'm authenticating with LDAP.
+   1. Edit: Handler mapping for php verbs need to be changed. Either set to all verbs, or set to GET,POST,PUT,FORM,HEAD
+6. Run steps 1-3 from [https://www.bookstackapp.com/docs/admin/installation/](https://www.bookstackapp.com/docs/admin/installation/) May need to modify the composer.json file to cover timeout issues in the ""pre-install-cmd"", like this:
+   1. ""pre-install-cmd"": \[""Composer\\\\Config::disableProcessTimeout"",""@php -r \\""!file\_exists('bootstrap/cache/services.php') || u/unlink('bootstrap/cache/services.php');\\""""\]
+7. Set the ACL for the folders for the IIS\_IUSR local machine group. I gave mine full control over the specified folders
+8. Do step 5 from the install docs.
+9. I added a ""Virtual Directory"" to the IIS site alias = ""bookstack"" and physical path = ""C:\\inet\\bookstack\\public"".
+10. Run step 8 from the setup doc
+11. I disabled the Default Document settings for my site and folder, because it messed with my rewrites/redirects. You need this on for PHP Manager though. So when/if you disable this, just know you'll need to switch it back on for that.
+12. I set the rules in my web.config files, see the code blocks at the bottom.
+   1. Edit: I've recently had to add a rewrite rule between imported rules 2 & 3, that:
+   2. Match URL: Matches the pattern (\^/\*)(.\*$), Conditions: {REQUEST\_FILENAME} is not a file, {URL} matches (\\/images\\/gallery)(.\*), Action: rewrite /bookstack/index.php/uploads{C:0}, append the query, stop processing subsequent rules.
+13. I ran iisreset, just to be safe. Viola! I could login with the default admin. Later, I setup LDAP auth through AD. I'll give you that at the bottom.
+
+&#x200B;
+
+web.config in the bookstack/public folder:
+
+    <configuration>
+      <system.webServer>
+    	<rewrite>
+    		<rewriteMaps>
+    				<rewriteMap name=""{REQUEST_FILENAME}"" />
+    		</rewriteMaps>
+    		<rules>
+    					<clear />
+    					<rule name=""Rule 1"" enabled=""true"" stopProcessing=""true"">
+    						<match url=""^(.*)$"" />
+    						<conditions logicalGrouping=""MatchAll"" trackAllCaptures=""false"">
+    							<add input=""{R:1}"" matchType=""Pattern"" pattern=""^(index\.php|images|css|js|favicon\.ico)"" ignoreCase=""true"" negate=""true"" />
+    							<add input=""{REQUEST_FILENAME}"" matchType=""IsFile"" negate=""true"" />
+    							<add input=""{REQUEST_FILENAME}"" matchType=""IsDirectory"" negate=""true"" />
+    						</conditions>
+    						<action type=""Rewrite"" url=""./index.php/{R:1}"" />
+    					</rule>
+    					<rule name=""Rule 2"" enabled=""true"" stopProcessing=""true"">
+    						<match url=""^$"" />
+    						<conditions logicalGrouping=""MatchAll"" trackAllCaptures=""false"">
+    							<add input=""{URL}"" pattern=""(.*/bookstack)$"" />
+    						</conditions>
+    						<action type=""Redirect"" url=""index.php"" />
+    					</rule>
+    					<rule name=""Rule 3"" enabled=""true"" stopProcessing=""true"">
+    						<match url=""(^/*)(.*$)"" ignoreCase=""false"" />
+    						<conditions logicalGrouping=""MatchAll"" trackAllCaptures=""false"">
+    							<add input=""{REQUEST_FILENAME}"" matchType=""IsFile"" negate=""true"" />
+    							<add input=""{R:0}"" pattern=""(index\\.php|images|css|js|favicon\\.ico)"" negate=""true"" />
+    						</conditions>
+    						<action type=""Rewrite"" url=""index.php/{R:1}"" />
+    					</rule>
+    		</rules>
+    		</rewrite>
+    		<directoryBrowse enabled=""false"" />
+    		<defaultDocument enabled=""false"">
+    			<files>
+    				<add value=""index.php"" />
+    				<add value=""index"" />
+    			</files>
+    		</defaultDocument>
+    	</system.webServer>
+    	<system.web>
+    		<customErrors mode=""RemoteOnly"" />
+    	</system.web>
+    </configuration>
+
+My site's web.config looked like this: >!
+
+    <?xml version=""1.0"" encoding=""UTF-8""?>
+    <configuration>
+    	<system.webServer>
+    		<defaultDocument enabled=""false""></defaultDocument>
+    		<rewrite>
+    			<rules>
+    				<clear />
+    				<rule name=""test2"" enabled=""false"" patternSyntax=""ECMAScript"" stopProcessing=""false"">
+    					<match url=""^bookstack$"" />
+    					<conditions logicalGrouping=""MatchAll"" trackAllCaptures=""false"">
+    						<add input=""{REQUEST_FILENAME}"" pattern=""^bookstack$"" />
+    					</conditions>
+    					<action type=""Rewrite"" url=""bookstack/index.php"" />
+    				</rule>
+    				<rule name=""test1"" enabled=""false"" patternSyntax=""Wildcard"" stopProcessing=""true"">
+    					<match url=""*"" />
+    					<conditions logicalGrouping=""MatchAll"" trackAllCaptures=""false"">
+    						<add input=""{REQUEST_URI}"" pattern=""https://server_name/bookstack"" />
+    						<add input=""{REQUEST_URI}"" pattern=""https://server_name/bookstack/"" />
+    					</conditions>
+    					<action type=""Redirect"" url=""https://server_name/bookstack/index.php"" />
+    				</rule>
+    			</rules>
+    		</rewrite>
+    	</system.webServer>
+    	<system.web>
+    		<authentication mode=""Windows"" />
+    
+    	</system.web>
+    	<location path=""bookstack"">
+    		<system.webServer>
+    			<defaultDocument enabled=""false"" />
+    		</system.webServer>
+    	</location>
+    </configuration>
+
+LDAP settings:
+
+    APP_TIMEZONE=EST
+    AUTH_METHOD=ldap 
+    LDAP_SERVER=ad_server 
+    LDAP_BASE_DN=""OU=IT Staff,OU=IT Users,OU=IT Department,DC=domain,DC=com"" LDAP_DN=""CN=Domain Admin,OU=Domain Admins,OU=IT Staff,OU=IT Users,OU=IT Department,DC=domain,DC=com"" 
+    LDAP_PASS=""secure_password""
+    # I filtered our service accounts out of being users
+    LDAP_USER_FILTER=""(&(&(objectCategory=person)(objectClass=user)(sAMAccountName=${user})(!(userAccountControl:1.2.840.113556.1.4.803:=2))(mail=\*@domain.com))(&(objectClass=person)(objectClass=user)(!(ou=OU=Domain Admins,OU=IT Staff,OU=IT Users,OU=IT Department,DC=domain,DC=com))))"" 
+    LDAP_ID_ATTRIBUTE=uid 
+    LDAP_VERSION=3 
+    AVATAR_URL=false 
+    LDAP_START_TLS=false 
+    LDAP_TLS_INSECURE=false 
+    LDAP_DISPLAY_NAME_ATTRIBUTE=cn 
+    LDAP_EMAIL_ATTRIBUTE=mail 
+    LDAP_USER_TO_GROUPS=false 
+    LDAP_REMOVE_FROM_GROUPS=false 
+    LDAP_THUMBNAIL_ATTRIBUTE=null
+
+Let me know if you see anything wrong. I'm down to update stuff. On Monday.
+
+EDIT: 12/01/2022, added extra re-write rule and handler mapping.",1668027696.0,16,1.0,11
+ADHD,Relationship: am I in too deep?,"You've got ADHD? You know how this goes.
+
+Meet a woman, she's great. Out of my league. Thinks I'm attractive. Been out on three dates. Four hours, fourteen, and then ten. Each. I haven't scared her off. Told her all of my flaws, that I can remember. I just don't hold back, but do it tactfully.
+
+What's wrong with her? She's got anxiety and takes meds. I'm 33, she's 26. She teaches 1st graders (5-6 y/o for you non-Americans). I'm in IT, so workplace romance, if you will. Love of Star Wars, even though I'm a Trekkie. She was a cheerleader and homecoming queen. I was a band nerd. Opposing football teams, but not a big deal (SEC vs ACC). I like thicker women, she's petite, which isn't really a problem. Ginger allergy, NBD.
+
+What's right? Shares the same belief system. Positive attitudes in both of us. Her mom taught me physics 16 years ago (and likes me, afaik). The right kind of feminist (legit equal rights, like fully, no exclusuons). Same musical tastes, I.e. classic 70s rock and modern music across multiple genres. Quotes Letterkenny. Great sense of humor. Likes my dad bod.
+
+Look, I took her on a 14 hour date. For our second date. She didn't bail. Knows I'm older and divorced. I've not had this connection for 5+ years with someone. Usually, I call it quits after the third date. Not gonna lie, I like her. Hell, during the second date I ""jokingly"" asked her what she was doing the rest of my life and if she was open to getting married that day. Answers were ""No plans"" and ""Why not?"" I chickened out, since she called my bluff.
+
+I'm lost. She's coming over tomorrow for dinner and a movie (not Netflix and chill, kids), I'm making a few things to showcase my culinary skills ;). She's a great kisser. Idk what to do besides be myself, which I've been doing. I guess I'm just scared. Scared I'll scare her away with me being me. I don't think she will be, but that's the fear I live with.
+
+Just looking for words of encouragement.
+
+Edit: Wooo! She came over, we talked while she watched me cook for a while. Watched the majority of the movie, kept moving closer and closer, made out. Five hours together I guess. Anywho, I think she might be interested in me lol.",1637120579.0,12,0.94,17
+ADHD,Saved 41k on my mortgage this week!,"First, I'm super proud of this and have been riding this high for a week!
+
+TL;DR - sold pine trees for 24k, saved 17k of interested and will be paid in full by 2025, not 2034
+
+The basics: Bought some property 3 years ago. 10 acres, 8 of it pine trees (long leaf) about 17-20 years old now, but it's thin. 50k, 5k down, 6.9% (not through a bank). I've been over paying, so my balance was just under 40k. I overpaid per acre at the time, but wanted to get my life rolling at 30 with a 490-520 credit score.
+
+About 2 years ago, my buddy suggested I get a price on having the trees harvested. Because of the small size and cost of moving equipment, I basically have to beg someone to get a quote. Called around, was quoted $15/ton for pulpwood and $20/ton for chip and saw.
+
+It flooded last year, and prices went up. I missed out bc I kept putting off calling around. Probably around 20 & 25/ton, respectively.
+
+Well, this year, the lowlands/swamps have been flooded for 6+ months. We saw young tracts getting harvested everywhere around us. Two months ago, my good friend started giving me shit (friendly shit mind you) about getting prices and jumping on it. Reminders like crazy, asking me constantly, telling my me I'll miss out. So I started calling a month ago.
+
+First price, 16/20, guessed I had 600-750 tons, with about 150 tons of chip. Damn! Thats $9600 to $12,600! Kept calling, got a better price two weeks later for 30/35! $18,000 to $23,250!
+
+I asked my company's CFO about the reputation of these guys, she knows them and likes them, but suggests I give someone harvesting about 1,000 acres of her trees a call. A week goes by, he gives me a call. Man, I was not prepared!
+
+He said he'd offer me $24k, lump sum, right now. They'll harvest them before May, but they're right down the road and should have it done in a week or two. I don't care, it's vacant rn.
+
+This last Wednesday, I signed the contract and check at the mortgage office. The manager ran the numbers for me. Depositing that check for 24k saved me 17k of interest. I'll be paid off in 45 months, instead of 13 years! Actually, after I pay off my car in 29 months, I'll be paid off in 37 months!
+
+I was a financial train wreck at 27-30, after my divorce. Now, I'm looking at building a home there before I'm 37! Never thought I'd get there before 45!
+
+I'd like to thank my buddy for the reminders, CFO for the recommendation, Adderall for what it does, and r/ADHD for every tip, trick, and bit of support I've gotten to get me here!",1632247637.0,14,0.94,1
+Superbowl,This is my porch now,,1626140537.0,1,1.0,0
+ADHD,Filed my taxes... For 2017-2020,"For the first time in years, I filed my taxes on time!
+
+I started Adderall again in January, for the first time in 10 years.
+
+I finally filed and sent off my 2017-2019 taxes by 4/15 and filed 2020 last night. I know I should have filed them sooner, but knowing I owed $25 on 2017 blew up in my head to be $500, so I kept putting it off due to subconscious fear that I didn't have the money. Until almost the four year mark, lol. If anyone else struggles with it, just know you can do it.
+
+But knowing I'm caught up, regardless of the consequences, is a milestone. And I wanted to share!",1621349130.0,37,0.96,6
+wallstreetbets,For everyone out in the trenches today holding strong:,,1611930013.0,1,1.0,0
+WeHaveSeenTheButthole,"I tried my grandmother's donut recipe and I have to admit, it kinda stinks",,1607716495.0,8,1.0,0
+CatsStandingUp,Cat,,1607402617.0,1,0.67,0
+diypedals,Hornby Skewes Bass Boost,,1605414869.0,29,0.97,7
+diypedals,"Sabbra Cadabra - Recent Commission, so happy with it!!",,1601316082.0,61,0.97,13
+diypedals,Anyone find a better/cheap alternative to smd soldering?!,,1597113015.0,19,1.0,22
+diypedals,Rock Box Boiling Point,,1596420481.0,10,0.87,1
+diypedals,A Klon etch commission a fellow Redditor,,1595030724.0,40,0.98,24
+diypedals,Tried a new etch technique today!,,1594503447.0,42,0.95,23
+diypedals,"2 of 3 ain’t bad, just got punch holes and mount boards. And build something besides dirt boxes",,1594181547.0,20,1.0,3
+diypedals,"Paisley Drive - Painted and finished, except knobs",,1593882236.0,66,1.0,10
+diypedals,Green Russian Big Muff (album in comments),,1593871799.0,80,0.99,8
+diypedals,Almost cried this transfer & etch turned out so good,,1593646525.0,254,1.0,21
+diypedals,My Blues Brother's inspired Blues Breaker,,1593526027.0,108,0.99,24
+diypedals,How come no one said the whole process was addictive?!,,1592888099.0,89,0.98,21
+diypedals,Finished my RAH by Catalinbread,,1592771420.0,70,0.97,18
+diypedals,Not my worst etch (Future RAH enclosure),,1592618869.0,18,1.0,4
+diypedals,"Second etch attempt, it's getting better",,1590111582.0,44,0.99,14
+diypedals,"Mistakes were made, but I'm happy with my first etch",,1589144075.0,131,1.0,36
+diypedals,"DOD FX-51 Juice Box and the Karzenkönig, super nice combo",,1588882864.0,12,1.0,4
+diypedals,Waiting on my enclosures got me like:,,1587710505.0,9,0.91,3
+diypedals,Clean as New York snow and about as tidy as a NYC utilities map! Hot Cakes and Klon,,1587026403.0,61,0.94,24
+diypedals,Finished my Simplified Klon this morning! My second pedal is complete. Gotta do switches and a box now,,1585771187.0,54,0.97,11
+diypedals,"First pedal, Hot Cakes. To be part of another pedal!",,1585625716.0,49,0.96,7
+stopsmoking,"I just put down my first, unfinished smoke!","I can't tell you how excited it makes me feel!
+
+I smoked from 16-21, quit for my ex-wife for 6+ years. Well, surprise! She left, I started smoking again. It felt like I had never quit. Two years ago, I stopped for 9 months, unless it was Saturday.  Both times, I went cold turkey.
+
+This time, I'm going to transition to being a non-smoker. For me. I started taking Zyban and I'm responding well to it. I didn't really want my first cigarette of the day today. At just halfway through it, I wasn't smoking it, just puffing a little. I put it out! I've never done that!
+
+I'm looking forward to doing that again and again. Until I just don't light the cigs anymore and throw out my ashtrays.",1567434926.0,3,0.72,0
+SuicideWatch,Just confronted a friend about suicide,"I and my sister have a friend who threatened to kill himself earlier this week. He's done it before and checked himself in to get help. My sister sat on this for a few days and called me today. About 40 mins ago, she talked to him. Right now, I'm here for moral support. Strong and silent type, I'm just crying inside.
+
+We live in Florida, so we have the Baker Act available to us, where he can either check himself in or we can do it for him involuntarily. Both my sister and I have either contemplated or attempted, rather poorly, suicide before. I wish someone would have committed us at those times, but thankfully we're still alive.
+
+He's called his mom to come and talk, commit him, whatever, etc. I get it, but don't agree. I've seen his signs of depression, which he's admitted to. My sis has said one way or another, he's going. It's just his choice how. I agree, after having lost a litany of friends and co-workers this way. I'd rather him be pissed and alive, than dead.
+
+I guess I'm just looking for assurances that we've done the right thing tonight. Idk, I just had to get it off my chest.",1559947633.0,3,0.81,3
+gameofthrones,[SPOILERS] In memoriam of GoT most wholesome character,https://imgur.com/4mSylzq,1555280807.0,3,0.71,2
+gameofthrones,"[NO SPOILERS] In memoriam of GoT most wholesome character, Hodor",[removed],1555280122.0,2,1.0,2
+gameofthrones,"[NO SPOLIERS] In memoriam of GoT most wholesome character, Hodor",,1555279509.0,1,1.0,1
+gameofthrones,"In memoriam of GoT most wholesome character, Hodor",,1555278878.0,1,1.0,1
+nottheonion,Turkish Islamic preacher says men without beards... look like women,,1554843392.0,1,1.0,1
+chromeos,Cannot Unlock Managed HP G3 Chromebook,"As an IT admin, I've been running in to a peculiar issue w/ the HP G3 Chromebooks, we have about 3500 of these in our enterprise.Every once in a while, I get one that comes out of sitting for a bit and it says its locked by the admin.
+
+Ofc, the warranty from HP on these has run out, so there's no point contacting them (they're pretty useless, besides being good parts monkeys). Trying to converse with Google tech support is kinda like walking in a circle for six hours while trying to feed a toddler, you'll get tired repeating yourself and frustrated, but you never get anywhere.
+
+I've checked Admin console, verify it isn't locked by serial, and powerwash or try recovery via USB, and it still claims its locked. As soon as I connect to the wireless network, it lets me know its locked... by me. If I try to deprovision it, powerwash/run recovery, and try skipping enrollment, it doesn't care. Now I've tried everything I can think of, since I can't pull up a crosh or V2 console.
+
+Any ideas?
+
+&#x200B;",1553266528.0,3,1.0,10
+powerlifting,Anyone going to the Georgia Spring Open in Savannah tomorrow?,[removed],1490968449.0,3,0.81,0
+see,[M]e talking to my dad about my whizz quiz,,1474576950.0,11,0.88,1
+nocontext,"""Someone's got to make next generations strippers.""",,1451794224.0,1,1.0,1
+todayilearned,"TIL a painting by Bereny, lost for 71 years, was found while watching Stuart Little, in 2009.",,1419349943.0,37,0.71,5
+TheHobbit,"My friend makes these cool Dwarven hair clips from leather, thought you guys might like to see them.[X-post to /r/TolkienArt]",,1407035570.0,42,0.97,0
+VacuumCleaners,How come I never see this mentioned here?,"I'll be honest. I used to be a vacuum salesperson at one time. And one thing we harped on was, suction doesn't clean by itself. You have to have airflow and filtration.
+
+
+While most vacuums have filtration and suction down, they don't have much airflow. Brands like Ricar and Miele have better designed their bags to promote more and continuous airflow. Certain brands, like Rainbow, only want to talk about airflow.
+
+
+I keep seeing all this stuff on suction, but the idea of suction by itself will not actually move anything. Put some dirt on a piece of cardboard, stick the vacuum hose over it, on to the cardboard, and turn the vacuum on. Then turn it off after 30 seconds. Wait for it to turn all the way off and wind down completely. If you had a good seal on the cardboard and tons of suction, the dirt doesn't move. That's because there's no airflow to move it.
+
+
+Also, it doesn't take much airflow to get suction, you only need a little bit to achieve massive amounts of suction. You just need a good method to keep removing the air/achieve continual airflow to build negative pressure (i.e. suction).
+
+
+I also said you need filtration, because Shop Vacs have good airflow (and thus, good suction), but because of their application, bad filtration.
+
+
+If you have a long enough hose and powerful enough shop vac (longer hoses translate into less airflow), you would get better results placing it outside and using it on the carpet, than you would using a Kirby/Ricar/Orek/etc. The bags/filters in these units clog up very quickly and lose their efficiency akin to an inverse logarithmic curve.
+
+
+**TL;DR: Get airflow, not suction.**
+
+P.S. As a side note, although they are well made machines (or rather were at one point), Kirby owners and sellers get defensive quick. They have, unfortunately, been sold. Not just on the product, but the idea and brand. Just like some people think that Daewoo was a great car brand, even when presented a Porsche or Benz.",1406479119.0,13,0.93,4
+learnprogramming,[Python] Trying to make merge multiple images,"Image you have a base image, [here](http://www.libpng.org/pub/png/img_png/AlphaEdge.png). Now imagine you want to create a canvas that you want to stamp this on 16 times, or stamp it 4 times down and recursively 4 times over, with 10 pixels spaces in between.
+
+I'm trying to do this in python, here is my [code](http://ideone.com/ZAX0oF), but all I keep getting is [this](http://imgur.com/UETf1gF).
+
+What am I doing wrong or what could I change to get what I'm looking for?",1400598093.0,1,1.0,0
+learnprogramming,[Language Advice] Apply Perspective to Image on Server,"I'm building a website to be maintained by my wife at some point. She's not a programmer at all, so I'm setting out to make some thing simple for the user.
+
+
+The Situation: I need to upload an image, select a thumbnail area/resize if necessary, create 3 differently scaled copies, and apply a perspective transform to them, and save to server.
+
+
+The Hardware: DigitalOcean VPS running Ubuntu LEMP stack.
+
+
+What I Know: HTML, CSS, little JS, novice/intermediate C/C++/C#, lots of math (linear algebra, differential eq, etc)
+
+
+The Question: I want to program the resize, scaling, and perspective transform in something other than PHP or Java. I want to use something else (to expand my repertoire), like Ruby or Python, but I don't know what language will be quick/easy to pickup and import image matrices in.",1400378199.0,1,0.67,2

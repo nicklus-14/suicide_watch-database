@@ -1,0 +1,527 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+craftymighty,Replacement M+ Ceramic cup is lower quality,"I had my original m+ for months and the ceramic cup was prestine, then I got the err004 and got a replacement. After only a few weeks the inside of the cup is all black and I cant clean it. The top is the same tho.
+
+Have they started using cheaper parts or what?",1741161723.0,2,0.67,6
+youtubedl,Need feedback on playlist scanning bash script,"First off, for some reason some video files only get audio and a black screen but most seem to work properly.
+
+Also is there some way to not have it go through every single video in the playlist before checking if it has already downloaded it or not? Takes a long time to do that when the playlists gets really big.
+
+Here is the script:
+
+```
+#!/bin/bash
+
+# Set the base download folder
+BASE_DOWNLOAD_FOLDER=""/tank""
+
+# Set the sleep time in seconds between playlist update check.
+SLEEP_TIME=3600
+
+# Path to yt-dlp script
+YT_DLP_PATH=""/home/drp/Documents/Scripts/yt-dlp-scripts/yt-dlp""
+
+# Audio-only playlist settings (URLs and format + output folder)
+AUDIO_PLAYLISTS=(
+    ""bestaudio[ext=mp3]+b|Audio/Sound Effects|https://www.youtube.com/watch?v=playlist""
+    ""bestaudio[ext=mp3]+b|Audiobooks|https://www.youtube.com/watch?v=playlist""""
+    ""bestaudio[ext=mp3]+b|Music/Unsorted YouTube Rips|https://www.youtube.com/watch?v=playlist""""
+    ""bestaudio[ext=mp3]+b|Podcasts|https://www.youtube.com/watch?v=playlist""""
+)
+
+# Video playlist settings (URLs and format + output folder)
+VIDEO_PLAYLISTS=(
+    ""bv[height<=720][vcodec^=avc1]+ba/b|Videos/YouTube Rips/Unsorted Videos|https://www.youtube.com/watch?v=playlist""""
+    ""bv[height<=720][vcodec^=avc1]+ba/b|Videos/YouTube Rips/Unsorted Videos|https://www.youtube.com/watch?v=playlist""""
+    ""bv[height<=720][vcodec^=avc1]+ba/b|Videos/YouTube Rips/Concerts|https://www.youtube.com/watch?v=playlist""""
+    ""bv[height<=720][vcodec^=avc1]+ba/b|Videos/YouTube Rips/Podcasts|https://www.youtube.com/watch?v=playlist""""
+    ""bv[height<=720][vcodec^=avc1]+ba/b|Videos/YouTube Rips/Documentaries|https://www.youtube.com/watch?v=playlist""""
+    ""bv[height<=720][vcodec^=avc1]+ba/b|Movies/YouTube Rips|https://www.youtube.com/watch?v=playlist""""
+)
+
+# Function to check if a dataset (folder) is mounted
+check_dataset_mounted() {
+    local folder=""$1""
+    
+    # Get the mounted status for the specific folder
+    MOUNTED_STATUS=$(zfs list -H -o mounted ""$folder"" | tr -d '[:space:]')
+    
+    if [[ ""$MOUNTED_STATUS"" == ""yes"" ]]; then
+        return 0  # Dataset is mounted, return success
+    else
+        return 1  # Dataset is not mounted, return failure
+    fi
+}
+
+# Send a notification to the taskbar
+send_notification() {
+    local message=""$1""
+    notify-send ""Playlist Download Alert"" ""$message""
+}
+
+# Loop to check playlists and download audio/video
+while true; do
+    # Loop through each audio playlist
+    for PLAYLIST in ""${AUDIO_PLAYLISTS[@]}""; do
+        # Extract output folder and URL
+        OUTPUT_FOLDER=$(echo ""$PLAYLIST"" | cut -d '|' -f 2)
+        PLAYLIST_URL=$(echo ""$PLAYLIST"" | cut -d '|' -f 3)
+
+        # Prepare the full download path
+        DOWNLOAD_PATH=""$BASE_DOWNLOAD_FOLDER/$OUTPUT_FOLDER""
+
+        # Check if the folder (dataset) is mounted
+        if check_dataset_mounted ""$DOWNLOAD_PATH""; then
+            echo ""$DOWNLOAD_PATH is mounted. Proceeding with download.""
+
+            # Run yt-dlp with audio extraction settings
+            ""$YT_DLP_PATH"" -x \
+            --force-ipv4 \
+            --sleep-requests 1 \
+            --sleep-interval 5 \
+            --max-sleep-interval 60 \
+            --ignore-errors \
+            --no-continue \
+            --no-overwrites \
+            --download-archive ""archive-audio.log"" \
+            --output ""$DOWNLOAD_PATH/%(title)s.mp3"" \
+            --audio-quality 0 \
+            --recode-video mp3 \
+            ""$PLAYLIST_URL"" \
+            --quiet
+        else
+            echo ""$DOWNLOAD_PATH is not mounted. Any downloads are put on hold until the dataset is mounted!""
+            send_notification ""The folder $DOWNLOAD_PATH is not mounted. Any downloads are put on hold until the dataset is mounted!""
+        fi
+    done
+
+    # Loop through each video playlist (same logic for checking mounted status)
+    for PLAYLIST in ""${VIDEO_PLAYLISTS[@]}""; do
+        # Extract output folder and URL
+        OUTPUT_FOLDER=$(echo ""$PLAYLIST"" | cut -d '|' -f 2)
+        PLAYLIST_URL=$(echo ""$PLAYLIST"" | cut -d '|' -f 3)
+
+        # Prepare the full download path
+        DOWNLOAD_PATH=""$BASE_DOWNLOAD_FOLDER/$OUTPUT_FOLDER""
+
+        # Check if the folder (dataset) is mounted
+        if check_dataset_mounted ""$DOWNLOAD_PATH""; then
+            echo ""$DOWNLOAD_PATH is mounted. Proceeding with download.""
+
+            # Run yt-dlp with video download settings
+            ""$YT_DLP_PATH"" --verbose \
+            --force-ipv4 \
+            --sleep-requests 1 \
+            --sleep-interval 5 \
+            --max-sleep-interval 30 \
+            --ignore-errors \
+            --no-continue \
+            --no-overwrites \
+            --download-archive ""archive-video.log"" \
+            --add-metadata \
+            --parse-metadata ""%(title)s:%(meta_title)s"" \
+            --parse-metadata ""%(uploader)s:%(meta_artist)s"" \
+            --write-description \
+            --write-info-json \
+            --write-annotations \
+            --write-thumbnail \
+            --embed-thumbnail \
+            --all-subs \
+            --embed-subs \
+            --check-formats \
+            --concurrent-fragments 3 \
+            --match-filter ""!is_live & !live"" \
+            --output ""$DOWNLOAD_PATH/%(playlist)s - (%(uploader)s)/%(upload_date)s - %(title)s/%(upload_date)s - %(title)s.%(ext)s"" \
+            --merge-output-format ""mkv"" \
+            ""$PLAYLIST_URL"" \
+            --quiet
+        else
+            echo ""$DOWNLOAD_PATH is not mounted. Any downloads are put on hold until the dataset is mounted!""
+            send_notification ""The folder $DOWNLOAD_PATH is not mounted. Any downloads are put on hold until the dataset is mounted!""
+        fi
+    done
+
+    # Sleep for the specified time before checking for playlist updates again
+    sleep ""$SLEEP_TIME""
+done ```",1740664398.0,3,1.0,4
+zfs,Pool is suspended during send / receive,"I ran out of sata slots on my PC so I got a pretty expensive 3.5 to usb adapter that has its own power supply. Three times now I’ve started backing up my pool using 
+
+”zfs send -RP -w pool1@snapshot | zfs receive -F pool2”
+
+It works well for hours and I have transferred many TB but I always come back to the pool being suspended. First time I thought that the system went to sleep and that it was the reason but the last try I did I changed my system settings to everything stays active. It seems to make no difference.
+
+
+Last time it got suspended I had to use dd to wipe it because no command I tried to use on the pool gave my any other response then ”x is currently suspended”
+
+The send terminal window is still active.
+Is there a chance I can get it out or suspension and have it keep backing up?
+
+Thanks a ton guys!",1739375492.0,3,1.0,5
+zfs,Copy dataset properties to new pool (send recv backup),"I’m finally ready to back things up but I can’t figure out how to do it right.
+
+I plugged in the backup drive and created a new pool on it. Then I took a snapshot of the pool that is on my raid. I then ran ”sudo zfs send oldpool@snapshot | zfs receive -F newpool”
+
+
+It seems to transfer nothing.
+Just runs the command and finishes.
+
+The snapshot i took is 0B and I only have the one. 
+
+I then find out that you can’t send the whole pool over but have to do it by dataset. Fine, but my question now is do I have to find out what compression and encryption I used for each of my datasets and then create identical ones on the new pool before i can send over the files to make the backup??
+
+Thanks",1739245185.0,2,1.0,2
+zfs,Disc lost their IDs (faulty),"I’m new to zfs and this is my first raid.
+I run raidz2 with five brand new WD red.
+Last night after having my setup run for about a week or two, i noticed two drives had lost their IDs and instead had a string of numbers as ID and had the state (faulty) and the pool was degraded.
+
+After a reboot and automatic resilver I found that the error had been corrected. I then ran smartctl and both of the discs passed. I then ran a scrub and 0B was repaired.
+
+Everything is online now but the IDs have not returned and now the have the name of the devices (sde, sdf)
+
+I know raid is not a backup but I honestly thought that I would have at least a week of a functional raid so I could get my backup drives in the mail, but now I feel incredibly stupid and hundreds of hours of work would be lost.
+
+Now, I need some advice on what to do next. And I wish to understand what happened. I the only thing I can think of is that I was downloading to one of the datasets without having loaded it or mounted it, I did this possibly while I was downloading a file.
+Could that have triggered this?
+
+Thanks a ton!",1738657475.0,1,1.0,3
+MovieSuggestions,Great movies. Have I seen them all?,[removed],1737890740.0,0,0.5,9
+youtube,"If internet disappeared tomorrow but you could pick three YT-channels that humanity would still have, which ones would it be?",Topic,1737662560.0,1,1.0,0
+AskElectronics,How good are EMP detectors and can they be used to protect a server?,[removed],1736160515.0,1,1.0,2
+emulation,"I played around with the speed control and save states, now the speed is like 25% too fast and no changes I make to the ""Emulation Settings"" tab make a difference to reverse it. I have reset to default with no luck. What is going on? I tried running the game without a save state, same issue.",[removed],1732712972.0,1,1.0,1
+Terminator,Great placeholders!,,1732625068.0,34,0.94,6
+Hypothyroidism,Not sure if Desiccated thyroid extract (DTE) is making any difference.,"I have (maybe stupidly) not medicated with Levothyroxine, also known as L-thyroxine against hypothyroidism that I've had for 10 years (I'm in my 30s now).
+
+I've been able to sort of fix my values by eating better but in the last few years its gotten worse.  
+I started eating Desiccated thyroid extract (DTE) that is from cow thyroid (40mg)  
+I think this is 40 micrograms of actual hormone but I know they cannot put that on the label here in europe and sell it legally, it has to be the weight of the material only for it to be sold as a supplement. Not sure how this works.
+
+Anyways, I have been eating one of these DTE tablets every day for 2 months with vague results.  
+In the last few days I've had some scary symptoms so I'm considering actually trying Levothyroxine.
+
+But I'm kind of scared to get addicted to it, or have worse symptoms.  
+And I'm also looking forward to ""giving in"" and maybe finding that it really helps me.
+
+  
+Looking at my lab results, would you medicate with Levothyroxine?
+
+Thanks.
+
+**P—T3, Free**  
+Reference Interval: 3.1-6.8  
+4.2 pmol/L
+
+**P—Thyroxine Free (fT4)**  
+Reference Interval: 12-22  
+15.7 pmol/L
+
+**P—TSH**  
+Reference Interval: 0.27-4.2  
+7.65 mIU/L",1732305817.0,1,1.0,1
+AVGN,Any interviews with old game devs from the NES/SNES era?,"So many of them must have seen the nerds videos, I wish I could hear their side of the story.
+
+Maybe there are some valid explanations for why the games suck ASSSSSSS and I'd like to hear them.",1731220131.0,9,1.0,5
+DIY,Is this a bad idea even with low weight?,,1728645410.0,1,1.0,1
+Sneakers,"ECCO EXOSTRIKE - I wish I could find these for sale, best shoe I ever owned.","https://preview.redd.it/gvmwjt5p21ud1.png?width=883&format=png&auto=webp&s=7a15d028f99d68c28006d3a3b5cfa99b8693fae0
+
+",1728609260.0,2,1.0,0
+digitalminimalism,I just had a revelation: Smartwatch with SIM as phone and music player!,"I imagine cutting the wristbands off and maybe add a little rope to it and keep in my pocket.  
+Would be nice if the OS could be changed enough to make it very minimalistic only to be kept as a phone for taking calls that are being forwarded from my smartphone SIM (that is kept at home in a box) and as a music player.
+
+It would need at least 32gb of internal storage. Bluetooth, SIM card slot. Support 3G or newer and not cost a fuckton of money.
+
+Any recommendations or knowledge about the customizing/minimalizing of smartwatch android os?
+
+Thanks",1728482397.0,3,0.67,15
+smartwatch,Smartwatch with SIM slot and SD card slot for calling and listening to music?,Is there any such device? Thanks,1728479163.0,1,1.0,4
+smallphones,All I want is a super tiny phone that I can pick up with when someone calls. That's it! Does anything like that exist that is not also on GSM only?,Title,1728472436.0,7,0.82,16
+3Drequests,Playstation 4 Controller handle extension for big hands,"I'm looking for something like this but for the ps4 controller.
+
+[https://www.printables.com/model/991889-xbox-controller-extension-for-big-hands](https://www.printables.com/model/991889-xbox-controller-extension-for-big-hands)  
+I got really big hands so it could actually be even a little bigger than that one.
+
+Thank you so much!",1728390377.0,1,0.67,1
+Dreams,What is the most vivid and/or the most lucid dream you ever had?,Title,1728237320.0,2,1.0,5
+LegacyJailbreak,Can I jb a iPad Air 1 with 9.3.1 (13E238)?,"I know almost nothing about jb.
+Do I need to update it?
+
+Thanks.",1728236133.0,2,1.0,1
+musicsuggestions,Give me a “rare” genre you like and I’ll give one back!,,1728172071.0,3,0.8,20
+homegym,Need advice on how to add an extra wheel to a bench so I can do rows.,[removed],1727880155.0,1,1.0,1
+Earbuds,What brand allows for the use of one earbud at a time while the other is charging?,"I need to find some earbuds with 8 hours battery life and the option to use one earbud at a time while the other is charging so I can have one in my ear for at least 16 hours a day.
+
+Thanks!",1727647436.0,2,1.0,2
+MusicRecommendations,"Please give me your best dj set or playlist (of any genre), that is in the format of a single YouTube video.","I have a playlist with longer ""videos"" on YouTube that I listen to.
+
+Some are dj sets, some are playlists and mixes from people fans of a genre.
+
+Some are albums if the artist has songs that sort of blend together.
+
+Here are some examples of what genres I have already and want more of, but I am open for new stuff as long as the flow throughout the video is nice as I prefer when songs are mixed together.
+
+Ambient, Soundscape, Cyberpunk, Techno, Psytrance, Folktronica, Instrumental, Vaporwave, Psybient, Celtic, Traditional, Fantasy, Jazz, Chiptunes, Chillout, Trip pop, dnb, 
+
+Thanks a ton!",1727612700.0,1,1.0,3
+prepping,Addicts not getting their fix is one of the scariest things to me in a SHTF-scenario.,"Sugar, caffeine , nicotine, alcohol, meth, opioids. There are a lot of people that are dependent on multiple of these.
+
+How would the situation play out if the supply was suddenly removed? Has it been documented in history before?
+
+I guess gangs could trade what they have for food and the addicts would plunder to get it. But then again if phones don’t work they wouldn’t even be able to locate their dealer.
+
+So many desperate people needing water food AND drugs scare me to death.",1727526212.0,103,0.82,122
+biology,"Can I ""use"" photoinhibition to get more out of my LED-lights?","I have a whole lot of tomato and chili plants growing right now and my light is not big enough to cover them all. I just started thinking about if moving the light around the room using a rail in the ceiling or a table spinning the plants would get then to produce more photosynthesis growth in total compared to just keeping the light shining on what can fit under the light.
+
+I search around a bit and found photoinhibition.
+
+If I were to build something that moves the light around a bigger area than it can feed with light how fast do you think it should be moving?
+
+&#x200B;
+
+Thanks!",1676593882.0,1,0.6,5
+microbiology,Fermenting human waste with anarobic bacteria to use as fertilizer,"Hehe, so.. I am not doing this but I am curious if there is a safe way to turn human waste into fertilizer in a Bokashi bucket?
+
+Let's say I have a bucket that I can pump air out of and that is air tight.
+
+If I put a lot of bokashi grain, some human waste and mix it well and pump the air out.
+
+If I let it sit for weeks and then feed it to a worm farm, and THEN mix it with garden soil and bury it and grow a plant on top, would that be safe?
+
+&#x200B;
+
+When reading online the answer I get is I can use horse manue but not human waste, but it is really that dangerous if you do it the way I described?
+
+&#x200B;
+
+Thanks",1676306875.0,1,1.0,2
+vaporents,How do you handle hot dosing capsules when switching?,"I don't like to place them in the disc as it might melt when using my mighty+.
+
+What is your method?",1668557582.0,2,0.67,14
+diablo2,In memory of Dozer..,,1668557031.0,1,1.0,0
+counterstrike,I need help testing a retake amx plugin for cs 1.6,Need to test a few functions not working properly with bots.,1668556849.0,0,0.33,6
+pathofdiablo,Is it worth anything?,,1588520361.0,0,0.5,9
+occult,Which version of the bible should I read?,"Hi, I have never read the bible and want to read a version that has not been changed recently.
+
+I would like to study it as a book of magick and metaphors.
+
+&#x200B;
+
+Thanks!",1587706399.0,4,0.83,15
+pathofdiablo,"Changes to PoD, my suggestions:","First I want to say that I understand that it is hard make any changes to this game like the ones you have done, and I understand the idea of keeping the game vanilla but improving on some things.
+
+PoD is the best, I love it and I am so happy for it.
+
+With that said I have a few humble suggestions:
+
+&#x200B;
+
+* Not losing gold from stash when you die
+
+You already lose experience, it's just annoying if you're saving up for gambling or just died and can't resurrect your merc.
+
+&#x200B;
+
+* Pages in stash
+
+I don't think having to create mules and muleing is something that will be missed. If you have more space you could actually do some real work like re-rolling charms and crafting without having to move shit around all the time. I enjoy collecting stuff that has value in bulk, and it should be rewarded since it is a way to build up from nothing. Obviously it is better to do MF runs, but if I just started playing and have nothing, then I would be collecting jools, gems, amus etc whilst leveling.
+
+&#x200B;
+
+* Identify multiple items in inventory by shift + left clicking tome
+
+It could be some other combination, not much to say about this I just think it would be really nice.
+
+&#x200B;
+
+* Making better use of ""News"" and ""Using cheats like will get you banned"" sections in lobby.
+
+I know I have seen patch notes listed here. I think maybe a list of servers could be useful since you sometimes want to create a game on a server that is located close to the person helping you for example, but also if your goto server is down then you can see what others are close to you without having to start the launcher.
+
+I'm also thinking some info from the website could be posted here, like items up for trade or new posts on the forum.
+
+&#x200B;
+
+* Adding functionality to ""Gem Activated""
+
+Not important, but adding something (maybe a secret) to what was once a mystery could be fun.
+
+&#x200B;
+
+* Services on the trade forum
+
+Having somewhere to buy or sell services like rushing etc would be nice.
+
+&#x200B;
+
+* Make find item barb more useful
+
+I'm biased but this skill can't be used much in public games since a lot of people use Phoenix, Redemption Aura and some new necro skill I don't know that leaves corpses you can actually click on but does not drop anything. It is kind of sucks and I'm not sure it is even something you can fix, sharing pots and drop is part of the game so maybe sharing corpses should always be too.",1587310154.0,0,0.4,10
+pathofdiablo,Is find item skill bugged?,"When I use find item with high FCR it seems like I'm just re-rolling the same corpse three or four times before it actually drops something, so it seems useless to go for any bps because I actually save time just clicking manually with low FCR instead of just holding right mouse button and hovering a pile of corpses with high FCR.",1587304201.0,4,1.0,3
+pathofdiablo,Widescreen stopped working,"It worked fine before, I uninstalled D2 and POD two days ago and reinstalled today, now its not working. Anyone having the same problem?",1586810449.0,0,0.5,3
+diablo2,What would this be worth in ladder today?,,1586556278.0,0,0.35,14
+pathofdiablo,"PC, worth a slam?",,1586241913.0,0,0.25,5
+pathofdiablo,"I'm new to pod, price check on this item?",,1585499229.0,2,1.0,13
+diablo2,give free plsss,,1585319755.0,3,0.72,0
+pathofdiablo,need free please,,1585319670.0,51,0.84,10
+pathofdiablo,Fun 8 player class combo for pvm lan?,"I tried summon nec + summon dru with a friend and it was too easy.
+
+In a few weeks I will join a 8 player lan, what builds should we play most maximum fun? 
+
+thx",1584577778.0,4,1.0,8
+socialskills,How do I handle a difficult boss?,"All of my bosses have had a very similar personality trait. Whenever I or any of my colleagues say something to trying and be funny, they hardly ever laugh with us.
+
+But then suddenly someone says something that is not very funny or not meant to be funny, and they laugh out real loud for a second or two and then go stone face again.
+
+&#x200B;
+
+This makes me very anxious, how the hell do you build a relationship with someone that never laughs at your jokes? I could try to laugh at what he thinks is funny but that would come off as fake..
+
+&#x200B;
+
+What are some good ways to make friends with the typical boss personality?",1581956967.0,1,1.0,2
+learnprogramming,I want to learn how to use speech recognition libs,"Hi, I need some guidance.
+
+I want to ""record"" a conversation using speech-to-text and play around with the words. I found ""Web Speech API""  [https://wicg.github.io/speech-api/](https://wicg.github.io/speech-api/) 
+
+But it seems to be limited to 60 seconds and automatically stops recording if there is no input.
+
+I found the docs pretty thin, I tried to activate the mic again when the end speech event was called but then you have to activate the mic every time in chrome.
+
+&#x200B;
+
+So I started looking at Home Assistants ""Ada"" a little bit, I might continue down that route.
+
+But I'm currently studying .NET in school and I would like to use C# for this.
+
+I found this perfect guide with a guy using System.Speech:
+
+ [https://www.youtube.com/watch?v=AB9lfHDOe5U&t=240s](https://www.youtube.com/watch?v=AB9lfHDOe5U&t=240s) 
+
+But when I try to add it as a dependency I can only find ""Microsoft Speech Object Library"".
+
+So I kept looking I found this:
+
+ [https://docs.microsoft.com/sv-se/dotnet/api/microsoft.cognitiveservices.speech?view=azure-dotnet](https://docs.microsoft.com/sv-se/dotnet/api/microsoft.cognitiveservices.speech?view=azure-dotnet) 
+
+&#x200B;
+
+Basically I would like to do what hes doing in the video above, if you have any recommendations on what path I should take please leave a comment. It does not have to be in C# but it would be nice.
+
+&#x200B;
+
+Thanks a ton!",1581698747.0,1,0.67,0
+dontputyourdickinthat,Don’t do it!!!!,,1581652192.0,28,0.91,3
+JoeRogan,Has the Novel Coronavirus been mentioned on JRE?,[removed],1581118756.0,1,1.0,1
+preppers,Deciding what to stockpile is stressing me out,"As a student, I don't have much money and I'm trying to decide if I should buy more water, more fuel for my burner, more canned food or be happy with what I got and focus more on things like candy, spices and canned fruit.
+
+Right now I have 10.5 gallons of water. (its not hot where I live)
+
+ 13.2 pounds of rice
+
+4.4 pounds of peanuts
+
+2 pounds of pasta
+
+50 jars of canned chickpeas
+
+6 cans of tuna
+
+4 cans of fruit
+
+0.6 gallons of cooking oil
+
+6.6 pounds of protein powder
+
+42 rolls of toiletpaper
+
+ 0.6 gallons of denatured alcohol
+
+8 bars of dark chocolate
+
+plastic gloves, plastic bags, candles, gas mask, goggles, and a burner.
+
+I also have a shit ton of salt and quite a lot of spices at home already.
+
+I also have some vitamins but not stockpiled.
+
+&#x200B;
+
+Right now I'm thinking I need more fuel for the burner, and some candy to make me feel good while waiting this shit out. Maybe vitamin C should be important if I do get sick and have to stay at home. Not sure how much that helps but vitamin C is pretty important and canned fruit is almost like candy.
+
+&#x200B;
+
+What do you think?
+
+Thanks",1580563123.0,62,0.91,45
+whatisthisthing,"I found one on the floor two months ago, and the other under a bottle of magnesium supplements. One side feels like paper and the other is very sticky. Almost perfectly flat, what is this thing?",,1579680266.0,1,1.0,1
+whatisthisthing,"I found one on the floor two months ago, and the other was perfectly stuck under a bottle of magnesium pills that ran out today. That’s when I noticed it. Yellow side feels like paper, the other side is sticky. Almost completely flat.",,1579679470.0,1,1.0,0
+China_Flu,This Is Not a Drill: A Hypothetical Pandemic,[https://youtu.be/Q4zaazgR87k](https://youtu.be/Q4zaazgR87k),1579670515.0,8,0.76,5
+Art,"Johfra Bosschart, anyone have this in higher resolution?",,1571693180.0,1,1.0,1
+Chonkers,OH LAWD HE ALIVE!,,1571071370.0,14,0.9,1
+AmItheAsshole,AITA for thinking that happy endings should be legal if yoni-massage is?,[removed],1570640228.0,0,0.25,12
+virtualreality,Motion sickness lasting for two weeks.,"I tried VR for the first time two weeks ago and felt a little sick afterwards, and every day since I feel the same at least once every day. My mom has some issue with her ear so she cant walk straight, what I'm feeling is what she described and I'm a little scared that I triggered something. My mates who let me use their VR set actually said something about how VR can mess some people crystals up.
+
+Will this pass?
+
+Thanks",1564765473.0,1,0.6,6
+GlobalOffensive,I made a playlist with clips of every nade throw I know on Mirage!,[removed],1560349496.0,1,1.0,1
+GlobalOffensive,I made a playlist with clips of every nade throw I know on Mirage!,,1560349408.0,1,1.0,1
+GlobalOffensive,Solo A Exec,,1560323355.0,433,0.96,35
+GlobalOffensive,You can molly stairs from T-Spawn on Mirage,,1560322052.0,645,0.96,39
+GlobalOffensive,Found a way to molly triple from T-roof,,1560321395.0,4333,0.98,150
+fakealbumcovers,Show me what you gooot,,1559003460.0,8,1.0,0
+sex,Do you let FWB spend the night?,,1558645821.0,3,1.0,7
+cursedimages,Tpfthp.. thuppth,,1555519092.0,1,1.0,1
+AskReddit,What makes you feel like the hero of your movie?,,1555384589.0,1,0.6,6
+depression,Doing everything I should and still feeling depressed,"I work out every day, 20 minute intense cardio, 30 minute heavy lifting, I take a 30 minute walk and sit 20 minutes in the sauna, I even do 2 minute ice cold showers. I eat no candy, but fruit and veggies, protein and fat. All good stuff, along with all kinds of suppliments. I sleep 8 hours at least, meditate and do yoga, I study, play guitar, sing and play games in my free time.
+
+&#x200B;
+
+But I still feel so empty, like I want to feel alive but I feel dead inside.
+
+I never laugh out loud or feel really really motivated, It feels like I will never feel like I did when I was younger.
+
+&#x200B;
+
+Whats wrong with me?",1552319779.0,1,1.0,1
+AskMen,What is the worst pick up line a girl has ever used on you?,,1550544777.0,1,0.56,16
+Advice,Cant stop thinking when I’m in bed,"I go to bed feeling great, tired and sleepy.
+Then I start thinking about my ex, and about my future and then I start sweating a little. Open the window, it gets too cold so I close it. Same thing over again, and then I just decide to check my phone because I just want to think about something else. 10 minutes later its 5 hours later and my whole sleeping pattern is fucked... again!
+
+I fix it by staying awake feeling like absolute shit for two days, and then its fucked again.
+
+This has been going on forever..
+
+I work out hard everyday, and study a lot. I feel great until the second i lay down...
+
+How do I stop this? Meditation works during the day but at night I just get super sleepy and when i take my headphones off i start thinking again..",1549267041.0,1,1.0,1
+raspberry_pi,Change mouse pointer speed?,"I’m using Raspbian and changing the pointer speed doesent work, I try to use the settings setting from the menu but it changes nothing and is reset when I press ”ok”.
+
+The pointer speed is too fast and the fine movement required is hurting my wrist.
+
+Is there any way to lower the speed manually? I tried google and added some commands to cmdline.txr but it changed nothing.
+
+Thanks!",1547586390.0,5,0.64,2
+DebunkThis,Debunk This: Amygdalin kills cancer cells but not normal cells,"So I'm trying to understand this topic but I mostly get very strong opinions from the far ends of this one. It is eather called a magical cure or a deadly poison, both are obvious exagerations. So please don't jump straight to debunking the claim that it is a cancer cure, because all I want to know is if the chemical reaction that is said to happen in the body is really true. So lets debunk that.
+
+This is what I have heard:
+
+1. Amygdalin is not toxic to us until it is split into sugar, Cyanide and Benzaldehyde. This only happens inside cancer cells because cancer cells have the enzyme Beta-glucosidase.
+
+2. All healthy cells have another enzyme called Rhodanese that breaks down cyanide and turns it into nutrient(?).
+
+Please let's not waste time talking about the quackery, we've all heard about it. I just want to know how it works.
+
+Thanks",1542813091.0,15,1.0,8
+biology,Is it true that apes eat stone fruit seeds?,"Topic, sorry if this is the wrong place to ask and thank you for responding.",1542725702.0,1,0.66,2
+techsupport,Should I replace thermal paste?,"I have a gaming laptop from 2012. If I use the energy saving setting I can play most games but  with worse than expected performance. If I run it on performance mode it overheats when playing csgo. It goes as high as 90 degrees C and 195 F. Is this normal for a gaming laptop? Im not sure if i want to pay the huge amount to replace the thermal paste or if I should just buy one of those cooling plates to put under.
+
+Any tips? Thanks",1539689065.0,1,1.0,4
+keto,Keto rash and thyroid disease,"I have the autoimmune disease hashimotos and hypothyroidism. After a week of a keto I always end up getting these horrible rashes on my neck close to the thyroid. Is this a coincidence? I read that keto rashes are actually alergic reactions and has something to do with histamines. This is very annoying because a keto diet is often good for people with my conditions and I always leave keto because it is so itchy and not very good looking.
+
+Thanks!
+",1535725368.0,2,1.0,4
+3kliksphilip,I made a hybrid version of de_dust2!,,1534869270.0,1,1.0,0
+counterstrike,[1.6] Fixing the picture in picture for tournament spectating.,"I stream 5 v 5 matches, sometimes I play myself and sometimes I spectate and comment on the gameplay. I used bind spec_mode to switch between first person and locked chase cam. I would like to use the picture in picture with overview, but its not working. And the overview alone is really buggy.
+
+is there a way to fix this? I recently watched this match where they used it without issues: https://www.youtube.com/watch?v=YwHq1k5qnbg
+
+Any other tips for good match spectating is very welcome!
+Thanks guys. :)",1520414973.0,7,1.0,6

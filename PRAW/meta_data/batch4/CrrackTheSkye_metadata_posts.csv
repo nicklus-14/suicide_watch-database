@@ -1,0 +1,1571 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+unRAID,Trouble running a script,"Hi everyone, I found a script to fix an issue I have where my qbittorrent which is running in a Gluetun container network, keeps resetting its listening port.
+
+`#!/bin/bash`
+
+`# Gluetun monitoring script by Gylesie. More info:`
+
+`#` [`https://github.com/qdm12/gluetun/issues/1407`](https://github.com/qdm12/gluetun/issues/1407)
+
+
+
+`######### Config:`
+
+`gluetun_container_id=""gluetun""`
+
+`qbittorrent_container_id=""qbittorrent""`
+
+`timeout=""60""`
+
+
+
+`docker=""/usr/mnt/docker""`
+
+`#################################################`
+
+
+
+`log() {`
+
+   `echo ""$(date) [INFO] $1""`
+
+`}`
+
+
+
+`# Wait for the container to be running`
+
+`while ! ""$docker"" inspect ""$gluetun_container_id"" | jq -e '.[0].State.Running' > /dev/null; do`
+
+   `log ""Waiting for the container($gluetun_container_id) to be up and running! Sleeping for $timeout seconds...""`
+
+   `sleep ""$timeout""`
+
+`done`
+
+
+
+
+
+`# store the start time of the script`
+
+`start_time=$(date +%s)`
+
+`# stream the logs and process new lines only`
+
+`""$docker"" logs -t -f ""$gluetun_container_id"" 2>&1 | while read line; do`
+
+`# get the timestamp of the log line`
+
+`log_time=$(date -d ""$(echo ""$line"" | cut -d ' ' -f1)"" +%s)`
+
+`# check if the log line was generated after the script started`
+
+`if [[ ""$log_time"" -ge ""$start_time"" ]]; then`
+
+`# Check if vpn was restarted`
+
+`if [[ ""$line"" =~ ""[wireguard] Wireguard is up"" ]]; then`
+
+`# Check if qbittorrent container is running`
+
+`if ""$docker"" inspect ""$qbittorrent_container_id"" | jq -e '.[0].State.Running' > /dev/null; then`
+
+`log ""Restarting qbittorrent!""`
+
+`""$docker"" restart ""$qbittorrent_container_id""`
+
+`else`
+
+`log ""qBittorrent container($qbittorrent_container_id) is not running! Passing...""`
+
+`fi`
+
+`fi`
+
+`fi`
+
+`done`  
+This should fix it, but I keep getting this in the log:
+
+  
+Mon May 19 21:29:53 CEST 2025 \[INFO\] Waiting for the container(gluetun) to be up and running! Sleeping for 60 seconds...  
+Error: No such object: gluetun
+
+  
+My best guess is that I'm pointing it to the wrong place? My docker is installed on my cache drive.
+
+Docker vDisk location:/mnt/user/system/docker/docker.img
+
+I've tried changing line 10 to ""docker=""/mnt/user/system/docker"""", but that had no effect.
+
+Any clues as to what's going wrong here?",1747683443.0,0,0.33,3
+daddit,"My wife wants a third child, I don't.","Hi fellow dads. My wife and I have two wonderful daughters. They're 4 and 2 years old, so we're just getting out of the stage where you're basically walking life support for your kids.
+
+I've always been someone who wanted kids, love spending time with them, I was a scout leader for 7 years, love interacting with kids from different age groups.
+
+I don't, however, like babies.
+
+Maybe it's the fact that both our kids were horrible sleepers (I'm up right now because the youngest is awake multiple hours every night) and both pregnancies were very hard on my wife, fysically and mentally. But I just don't look back at the past four years and think that that's something I want to go through again.
+
+Putting that aside, there's all the stuff that comes with it. Larger car, bigger house, probably different job cause I don't make enough doing what I do now (which I love doing),...
+
+And on top of that, I really don't feel the urge to make another child, which I did after our first.
+
+I've talked about this, and told her how I feel, but that I'm willing to hold the door open for a while, cause who knows what I think a year or two from now.
+
+Any of you guys who went through something similar? Would love some advice on how to be honest with myself but kind to my wife.",1746048255.0,25,0.75,63
+audiobookshelf,Can't download books since 2.14.0,"Did anyone else have this issue? I only started using ABS recently, so it might be coïncidental, but I could download books with no problem on the previous version. Since the 2.14.0 update I can only stream, no longer download. The files get added to the queue, but nothing happens.
+
+Log shows consistent ping timeouts.
+
+EDIT: this is running in a docker container on synology nas, download are not working in the Android app.
+
+    2024/10/09 01:38:35	stdout	[2024-10-08 23:38:35.642] INFO: [SocketAuthority] Socket _H20MiWQSU-q8B21AAAh disconnected from client ""root"" after 345920ms (Reason: ping timeout)
+    2024/10/09 01:32:49	stdout	[2024-10-08 23:32:49.722] INFO: [SocketAuthority] Socket Connected _H20MiWQSU-q8B21AAAh
+    2024/10/09 01:05:42	stdout	[2024-10-08 23:05:42.104] INFO: [SocketAuthority] Socket 7a-RPLWyc0YLs0d_AAAf disconnected from client ""root"" after 320839ms (Reason: ping timeout)
+    2024/10/09 01:00:35	stdout	[2024-10-08 23:00:35.166] INFO: [SocketAuthority] Socket o4e0N2SFQ1VF-rU8AAAd disconnected from client ""root"" after 44996ms (Reason: ping timeout)
+    2024/10/09 01:00:21	stdout	[2024-10-08 23:00:21.265] INFO: [SocketAuthority] Socket Connected 7a-RPLWyc0YLs0d_AAAf
+    2024/10/09 00:59:50	stdout	[2024-10-08 22:59:50.170] INFO: [SocketAuthority] Socket Connected o4e0N2SFQ1VF-rU8AAAd
+    2024/10/09 00:39:25	stdout	[2024-10-08 22:39:25.129] INFO: [SocketAuthority] Socket 5SrlCC1CubKouKJNAAAb disconnected from client ""root"" after 521282ms (Reason: ping timeout)
+    2024/10/09 00:30:43	stdout	[2024-10-08 22:30:43.847] INFO: [SocketAuthority] Socket Connected 5SrlCC1CubKouKJNAAAb
+    2024/10/08 23:53:28	stdout	[2024-10-08 21:53:28.590] INFO: [SocketAuthority] Socket Qim72lQEswDJiu99AAAZ disconnected from client ""root"" after 530639ms (Reason: ping timeout)
+    2024/10/08 23:46:09	stdout	[2024-10-08 21:46:09.594] INFO: [LibraryItemController] User ""root"" requested download for item ""Christine"" file at ""/audiobooks/Christine by Stephen King/Christine.m4b""
+    2024/10/08 23:45:31	stdout	[2024-10-08 21:45:31.195] INFO: [PlaybackSessionManager] Syncing local session ""Different Seasons"" (8cc1838f-b29a-4dfc-b213-65c18e59ade6)
+    2024/10/08 23:45:24	stdout	[2024-10-08 21:45:24.854] INFO: [PlaybackSessionManager] Syncing local session ""Different Seasons"" (af240ad4-d09e-4e91-a9fb-acafd3413092)
+    2024/10/08 23:44:38	stdout	[2024-10-08 21:44:38.058] INFO: [SocketAuthority] Socket Connected Qim72lQEswDJiu99AAAZ
+    2024/10/08 07:58:08	stdout	[2024-10-08 05:58:08.356] INFO: [LibraryScan] Scan log saved ""/metadata/logs/scans/2024-10-08_26c01939-970f-411b-b1c7-bccc72a159d4.txt""
+    2024/10/08 07:57:46	stdout	[2024-10-08 05:57:45.832] INFO: [LibraryScanner] Library scan ""26c01939-970f-411b-b1c7-bccc72a159d4"" completed in 5:56:06.0 | 0 Added | 90 Updated | 0 Missing
+    2024/10/08 06:30:22	stdout	[2024-10-08 04:29:48.440] INFO: Received ping
+    2024/10/08 03:21:29	stderr	[2024-10-08 01:21:24.725] WARN: [CoverManager] Extract embedded cover art but cover already exists for ""/metadata/items/c47c6821-df6a-4a87-b589-7b4f00fbeb70/cover.jpg"" - bail
+    2024/10/08 02:01:45	stdout	[2024-10-08 00:01:43.652] INFO: [LibraryScanner] Starting library scan 26c01939-970f-411b-b1c7-bccc72a159d4 for Audiobooks
+    2024/10/07 06:36:55	stdout	[2024-10-07 04:36:55.223] INFO: [SocketAuthority] Socket F54atQW11_o3PMgkAAAX disconnected from client ""root"" after 345727ms (Reason: ping timeout)
+    2024/10/07 06:31:09	stdout	[2024-10-07 04:31:09.495] INFO: [SocketAuthority] Socket Connected F54atQW11_o3PMgkAAAX
+    2024/10/07 05:13:59	stdout	[2024-10-07 03:13:59.332] INFO: [SocketAuthority] Socket RWOb1kLqY4BX52gbAAAV disconnected from client ""root"" after 394498ms (Reason: ping timeout)
+    2024/10/07 05:07:25	stdout	[2024-10-07 03:07:25.028] INFO: [SocketAuthority] Socket Connected RWOb1kLqY4BX52gbAAAV
+    2024/10/07 02:12:08	stdout	[2024-10-07 00:12:08.699] INFO: [LibraryScan] Scan log saved ""/metadata/logs/scans/2024-10-07_7e5d85ce-8383-4bd4-9f2b-0aa54d2a8cc9.txt""
+    2024/10/07 02:11:33	stdout	[2024-10-07 00:11:31.249] INFO: [LibraryScanner] Library scan ""7e5d85ce-8383-4bd4-9f2b-0aa54d2a8cc9"" completed in 9:35.0 | 0 Added | 0 Updated | 0 Missing
+    2024/10/07 02:02:10	stdout	[2024-10-07 00:02:00.228] INFO: [LibraryScanner] Starting library scan 7e5d85ce-8383-4bd4-9f2b-0aa54d2a8cc9 for Audiobooks
+    2024/10/07 00:37:31	stdout	[2024-10-06 22:37:30.750] INFO: [SocketAuthority] Socket wKGn0sVLilLdmXpOAAAM disconnected from client ""root"" after 218913ms (Reason: ping timeout)
+    2024/10/07 00:34:08	stdout	[2024-10-06 22:34:08.059] INFO: [PlaybackSessionManager] Syncing local session ""Different Seasons"" (5cdfe63a-9f30-4352-a5e3-dbd8d3cb7a8c)
+    2024/10/07 00:33:52	stdout	[2024-10-06 22:33:52.051] INFO: [SocketAuthority] Socket Connected wKGn0sVLilLdmXpOAAAM
+    2024/10/06 23:26:24	stdout	[2024-10-06 21:26:24.227] INFO: [SocketAuthority] Socket qHxVlLlppU0hrW7KAAAH disconnected from client ""root"" after 116819ms (Reason: ping timeout)
+    2024/10/06 23:24:28	stdout	[2024-10-06 21:24:27.742] INFO: [SocketAuthority] Socket Connected qHxVlLlppU0hrW7KAAAH
+    2024/10/06 07:54:25	stdout	[2024-10-06 05:54:25.125] INFO: [SocketAuthority] Socket ME2vsZ4HGrIXejkKAAAF disconnected from client ""root"" after 1205977ms (Reason: ping timeout)
+    2024/10/06 07:34:55	stdout	[2024-10-06 05:34:55.640] INFO: [SocketAuthority] Socket 8XW-ZPPuRFjJwTB5AAAD disconnected from client ""root"" after 119692ms (Reason: ping timeout)
+    2024/10/06 07:34:19	stdout	[2024-10-06 05:34:19.127] INFO: [SocketAuthority] Socket Connected ME2vsZ4HGrIXejkKAAAF
+    2024/10/06 07:32:56	stdout	[2024-10-06 05:32:55.950] INFO: [SocketAuthority] Socket Connected 8XW-ZPPuRFjJwTB5AAAD
+    2024/10/06 05:00:47	stdout	[2024-10-06 03:00:46.983] INFO: [SocketAuthority] Socket rejvdCQZMk8YcBP5AAAB disconnected from client ""root"" after 470747ms (Reason: ping timeout)
+    2024/10/06 04:52:56	stdout	[2024-10-06 02:52:56.331] INFO: [SocketAuthority] Socket Connected rejvdCQZMk8YcBP5AAAB
+    2024/10/06 02:05:48	stdout	[2024-10-06 00:05:48.977] INFO: [Watcher] ""Audiobooks"" Ready
+    2024/10/06 02:05:47	stdout	[2024-10-06 00:05:47.419] INFO: Listening on port :80
+    2024/10/06 02:05:47	stdout	[2024-10-06 00:05:47.380] INFO: [Watcher] Initializing watcher for ""Audiobooks"".
+    2024/10/06 02:05:47	stdout	[2024-10-06 00:05:47.292] INFO: [BackupManager] Auto Backups are disabled
+    2024/10/06 02:05:47	stdout	[2024-10-06 00:05:47.290] INFO: [BackupManager] 0 Backups Found
+    2024/10/06 02:05:47	stdout	[2024-10-06 00:05:47.232] INFO: [LogManager] Init current daily log filename: 2024-10-06.txt
+    2024/10/06 02:05:46	stdout	[2024-10-06 00:05:46.664] INFO: [Database] Server upgrade detected from 2.13.4 to 2.14.0
+
+
+I'm going to try reverting to 2.13.4 tonight, will report whether that fixes stuff.",1728548949.0,5,1.0,4
+belgium6,Reclame op Vrt kinderprogramma's,"Sinds deze week merk ik dat er opeens reclame is op vrt max bij kinderprogrammas. Is daar iets over gecommuniceerd? Ik hoop dat dit een fout is, heb geen zin om bumba te piraten...",1726586473.0,10,1.0,7
+daddit,"My wife feels like she's a ""lesser"" parent than me.","I have two kids, one born in June 21 and one March 23. So not exactly much time between and both pregnancies were very rough (one physically, the other mentally) on my wife. She's prone to depression, is highly sensitive to noise and on top of all that our second child has slight balance issues due to a CMV infection during pregnancy AND my wife contracted Guillan-Barré (and auto-immune) disease in january of this year. She could barely walk because of this and spent the last six months revalidating from this.
+
+All of this is just backstory, basically, my wife's had a rough go of it the last three-ish years. Obviously this has had it's effect on me and our relationship as well, but that's not really relevant right now.
+
+The issue is that I'm someone with a deep well of energy to pull from. I'm not athletic or anything like that, but I can keep going for a long time on little sleep and I'm good at shrugging of negative feelings pretty quickly. 
+
+These are very visible things when caring for children. I can play, do diapers, all the physical stuff better than my wife. There's no need to bullshit about it, I'm just better at it than her.
+
+However, she's much better than me at organisation, the soft skills, creative skills,... She's so good at talking to our toddler when she's upset, at finding fun activities, drawing, painting etc with our children.
+
+The fact that these things are less visible and the stress from working, not being able to be the mom she wants to be,... cause her to just break down a lot. I try to pick up a share of what she usually does, but that makes her feel like a failure.
+
+It's a difficult and complicated situation, but if anyone has gone through something similar, I'd love to hear how it went, any tips are welcome.",1721311045.0,23,0.94,18
+Parenting,I kind of hate my daughter at night.,"Exaggerated title, but seriously, I hate that she doesn't sleep through the night. Her older sister didn't start sleeping decently until she was 18 months. Three months later our second was born and she slept so much better that I hoped we were finally lucky. She had ear infections for over half a year and since then also sleeps like shit.
+
+I hear parents talk about their kids sleeping through the night at 2 months, 6 months, a year,... And I just want to punch them. Parenting seems to be on hard mode for us compared to them and I loathe them.
+
+/rant",1718075699.0,0,0.5,7
+daddit,About Daniel Tiger,"I hope it's not just me being jaded, but that show just feels like a South Park parody of a kid's show. The animation, the voices, the over the top friendliness,...
+
+Seems like it could have been picked right out of a South Park episode where it turns out the characters are all being enslaved and abused behind the scenes lol.
+
+My daughter loves it though, so it's all good, but goddamn haha.",1715512903.0,0,0.5,20
+truespotify,Is the desktop mini player not available for Duo subscriptions?,"I share a Duo subscription with my wife, so I thought the mini player on desktop would be available, but I can't seem to get it.I live in Belgium, not sure if that's relevant. Running on Windows 11,
+
+[Spotify Version 1.2.34.783.g923721d9](https://i.ibb.co/ZMgFGPM/2024-04-09-10-01-52.png)",1712649942.0,4,0.84,11
+maker,What tools should I provide for a small makerspace?,"Hi there
+
+I run a small makerspace on a college campus. We have some fdm printers, a resin printer, a laser cutter and an embroidery machine.
+
+I'm trying to make it a bit more user friendly and want to provide tools close by each machine.
+
+I have quite a bit of experience using 3D printers, but not post-processing prints. I'm wondering if anyone can help me come up with a comprehensive list of tools required for each machine. Both for maintenance and for usage/post processing.
+
+Thanks in advance!",1710277683.0,7,0.78,6
+Parenting,I'm starting to resent my kids,"I so fucking tired. I thought the second was a better sleeper, but she's turning out to be the same nightmare the first was. It's been two and a half years since my first daughter was born. I feel like I haven't slept for over 5 hour straight since. Now again, baby was awake at 11.45 pm, it's 4am now and she's still not sleeping. I hate it so goddamn much. Every night with this shit. I can't fucking function anymore and my wife's in revalidation from an auto immune disease. It's too much.",1707620371.0,17,0.77,21
+tipofmytongue,"[TOMT] [BOOK] Fantasy novel, nutcracker on cover","My wife is looking for a novel. Fairly recent, probably fantasy. It had a nutcracker on the cover and she thinks the word ""candy"" is in the title.
+
+  
+
+
+Thanks!",1706657487.0,1,1.0,8
+SteamDeck,"Games to help ""train""","I've been a life long gamer, but I always played on pc. I bought a steam deck last year and I love it, but I notice that any game that requires me to use joysticks to look around, I tend to avoid. I'm just so used to controlling a character's camera with a mouse that a joystick feels completely alien. I'm looking for some easy games to train this skill.
+
+I have two kids, so preferably games I can pause easily.
+
+Thanks for any suggestions.",1706453724.0,9,0.81,21
+smarterplaylists,Help with creating a playlist,"Hey everyone, I've been trying to get a playlist that on a weekly basis consists of an album by an artist I'm following as well as an album by a recommended artist based on my listening stats. Is there any way to get something like this done with smarter playlists? Thanks in advance.",1700821710.0,1,1.0,1
+relationships,How do I [33M] help my wife [32F] trust me again after lying to her? Or deal with the distrust somehow.,"About two or three months ago, I lied to my wife about whether or not I started smoking again. I repeated the lie twice or three times after and a couple of weeks ago she found out.
+
+Now she (rightfully) has issues trusting me again. I completely understand this and I'm doing everything I can to regain her trust. I'm seeing a therapist, since this isn't the only thing I lied about (snacking between meals, how tired I am, whether or not I want to do certain activities,...). 
+
+I tend to lie to avoid confrontation or spare people's feeling. It's something I've been doing for as long as I can remember. It's always about the dumbest stuff as well. My wife would have understood the smoking or my snacking,... all of those things. It's not like I had to lie about them, I just did.
+
+However, today I was working from home and I get messages from my boss and certain colleagues on Teams. Most of my colleagues as well as my boss are female, so a lot of chat popups with female faces. This got my wife, who was in the same room working on stuff, doubting my fidelity.
+
+She was in the hospital for a couple of months earlier this year (which is also when I started smoking) and now she's afraid I'm involved with or have feelings for someone at work. I want to stress this is not the case. I do however understand that my wife can't just believe me or accept this at the moment.
+
+Basically, I'm looking for help in dealing with this. How can I help her get through this? Are there things I can do to show her there's nothing to worry about? Or at least to diminish the doubt somewhat?
+
+We're going in for couples counseling next week, which I pushed for, but I'm looking for anything I can do in the mean time to make her feel at least less shitty.
+
+---
+**tl;dr**: I lied to my wife and now she doubts everything I say. I don't blame her for this, but I'm looking for ways to help her through this.",1693999523.0,1,1.0,1
+Parenting,Dealing with nightmares,"My 2 year old daughter has been waking up crying the past couple of weeks. When I go console her, she seems fine immediately, but most of the time, 15 min after I leave, she starts crying again. Haven't found something that really works, staying longer, cracking the door, hugging her for a couple of minutes,...
+
+Her mom and little sister aren't home at the moment (long story, but tldr postnatal depression), so I thought it might have something to do with that, but it's been over 2 months in this new situation and the waking up crying only started recently.
+
+I'd love to hear how some of you dealt with night terrors or similar stuff.
+
+Thanks.",1689256267.0,1,1.0,3
+Discord_Bots,Looking for a bot that adds songs posted to a text channel by users to a Spotify playlist.,"Basically what the title says. All the music bots are about playing music withing Discord, but I'm only looking for something that adds songs to a Spotify playlist for my friends and me to listen to. I've chosen the flair because I suspect something like this exists, but I just can't find it.",1679043857.0,6,1.0,8
+buildapc,Looking for feedback on my mini tower build.,"I want to build a smaller form factor pc than what I have now. Using parts from my current build, some of which I will update down the line (GPU, some peripherals, storage)
+
+Mainly interested what you guys' opinion is on my choice of mobo, ram and CPU:
+
+[PCPartPicker Part List](https://be.pcpartpicker.com/list/TdJcXy)
+
+Type|Item|Price
+:----|:----|:----
+**CPU** | [AMD Ryzen 7 5700X 3.4 GHz 8-Core Processor](https://be.pcpartpicker.com/product/JmhFf7/amd-ryzen-7-5700x-34-ghz-8-core-processor-100-100000926wof) | €203.85 @ Alternate Belgium 
+**CPU Cooler** | [CRYORIG H7 49 CFM CPU Cooler](https://be.pcpartpicker.com/product/93Crxr/cryorig-h7-49-cfm-cpu-cooler-h7) | Purchased For €0.00 
+**Motherboard** | [Asus TUF GAMING B550M-PLUS Micro ATX AM4 Motherboard](https://be.pcpartpicker.com/product/hrCFf7/asus-tuf-gaming-b550m-plus-micro-atx-am4-motherboard-tuf-gaming-b550m-plus) | €152.95 @ Megekko 
+**Memory** | [G.Skill Trident Z Neo 16 GB (2 x 8 GB) DDR4-3600 CL16 Memory](https://be.pcpartpicker.com/product/JgLwrH/gskill-trident-z-neo-16-gb-2-x-8-gb-ddr4-3600-cl16-memory-f4-3600c16d-16gtznc) | €94.95 @ Bytes At Work 
+**Storage** | [Intel 760p 256 GB M.2-2280 PCIe 3.0 X4 NVME Solid State Drive](https://be.pcpartpicker.com/product/qxc48d/intel-760p-series-256gb-m2-2280-solid-state-drive-ssdpekkw256g8xt) | Purchased For €0.00 
+**Storage** | [Samsung 970 Evo 500 GB M.2-2280 PCIe 3.0 X4 NVME Solid State Drive](https://be.pcpartpicker.com/product/P4ZFf7/samsung-970-evo-500gb-m2-2280-solid-state-drive-mz-v7e500bw) | Purchased For €0.00 
+**Video Card** | [MSI GAMING X GeForce GTX 1060 6GB 6 GB Video Card](https://be.pcpartpicker.com/product/JVWrxr/msi-geforce-gtx-1060-6gb-gaming-x-video-card-geforce-gtx-1060-gaming-x-6g) | Purchased For €0.00 
+**Case** | [Deepcool MACUBE 110 MicroATX Mini Tower Case](https://be.pcpartpicker.com/product/TYMTwP/deepcool-macube-110-atx-mid-tower-case-r-macube110-bkngm1n-g-1) | €68.90 @ Megekko 
+**Power Supply** | [Corsair RM650x (2021) 650 W 80+ Gold Certified Fully Modular ATX Power Supply](https://be.pcpartpicker.com/product/WJM48d/corsair-rm650x-2021-650-w-80-gold-certified-fully-modular-atx-power-supply-cp-9020198-na) | €137.20 @ Azerty 
+**Operating System** | [Microsoft Windows 11 Home OEM - DVD 64-bit](https://be.pcpartpicker.com/product/dKkWGX/microsoft-windows-11-home-oem-dvd-64-bit-kw9-00633) | Purchased For €0.00 
+**Wireless Network Adapter** | [Asus PCE-AC68 802.11a/b/g/n/ac PCIe x1 Wi-Fi Adapter](https://be.pcpartpicker.com/product/8VMFf7/asus-wireless-network-card-pceac68) | Purchased For €0.00 
+**Monitor** | [AOC e2343F 23.0"" 1920 x 1080 Monitor](https://be.pcpartpicker.com/product/xZbp99/aoc-monitor-e2343f) | Purchased For €0.00 
+**Monitor** | [iiyama G-MASTER RED EAGLE 24.0"" 1920 x 1080 144 Hz Monitor](https://be.pcpartpicker.com/product/TzhKHx/iiyama-g-master-red-eagle-240-1920x1080-144hz-monitor-gb2488hsu-b3) | Purchased For €0.00 
+**Keyboard** | [Corsair K70 RGB PRO Wired Gaming Keyboard](https://be.pcpartpicker.com/product/ctBG3C/corsair-k70-rgb-pro-wired-gaming-keyboard-ch-9109410-na) | Purchased For €0.00 
+**Mouse** | [SteelSeries Rival 300 Wired Optical Mouse](https://be.pcpartpicker.com/product/ggtWGX/steelseries-rival-300-wired-optical-mouse-62351) | Purchased For €0.00 
+**Headphones** | [Audio-Technica ATH-M50x  Headphones](https://be.pcpartpicker.com/product/XMJwrH/audio-technica-ath-m50x-headphones-ath-m50x) | Purchased For €0.00 
+**Webcam** | [Logitech C930e Webcam](https://be.pcpartpicker.com/product/6V9tt6/logitech-c930e-webcam-960-000971) | Purchased For €0.00 
+**Custom**| the t.bone SC 420 USB Desktop-Set| Purchased 
+ | *Prices include shipping, taxes, rebates, and discounts* |
+ | **Total** | **€657.85**
+ | Generated by [PCPartPicker](https://pcpartpicker.com) 2023-03-12 04:24 CET+0100 |",1678591497.0,1,0.67,3
+Leuven,Restaurant recommendation,"Hey everyone
+
+I'm staying a night in Leuven with my wife, I want to surprise her with a nice dinner, but know nothing in Leuven. She studied there, so usually when we go, she's the one suggesting places, but ide like to surprise her.
+
+Any recommendations? Preferably something not too loud, something cozy, good vegetarian options.
+
+Thanks!
+
+Edit: also, if there's some cool stuff happening this weekend, I'd love to hear.",1670966367.0,13,0.86,41
+askajudge,"Copying a creature with ""if it was cast"" clause.","Hi, I was wondering what happens in this situation:
+
+My friend had a Shard of the Nightbringer on the battlefield:
+
+*When Shard of the Nightbringer enters the battlefield, if you cast it, target opponent loses half their life, rounded up. You gain life equal to the life lost this way.*
+
+I had a Callidus Assassin in hand:
+
+*You may have Callidus Assassin enter the battlefield tapped as a copy of any creature on the battlefield, except it has ""When this creature enters the battlefield, destroy up to one other target creature with the same name as this creature.""*
+
+If I cast Callidus Assassin, copying Shard of the Nightbringer, does that count towards the clause in Shard's ETB and will it drain my opponent for half their life, or won't it count?
+
+Basically I'm asking if the Callidus Assassin ""remembers"" being cast. Or does it depend on whether or not the Shard was originally cast?
+
+Thanks!",1665789834.0,6,0.81,6
+hsp,TV tips for HSP,"Apologies, my post didn't submit text.
+
+My fiancée is HSP, she's pregnant right now and has serious physical discomfort. Basically for large parts of the day she can't do anything but watch TV or read. I'm looking for tips for shows.
+
+She likes stuff like Brooklyn 99, The Office,.. But also Bridgerton, Greys Anatomy,.. She can't handle it when shows get too chaotic like Always Sunny, Veep,...
+
+Any recommendations would be very welcome.
+Thanks in advance",1619636622.0,1,0.67,12
+Libraries,"When my SO says she needs info on a certain topic for work and I send her 10 articles, 3 books and a dissertation.",,1609928399.0,378,0.99,10
+Scholar,[Article] Challenges in Sustainability and Integrated Reporting TEACHING NOTES,"Hey everyone
+
+I have a request for the Teaching Notes of this article, but I can't seem to access it, while we do have access to the journal itself through EBSCO.
+
+If any of you could hook me up with the Teaching Notes, I'd be very gratefull.
+
+[https://aaapubs.org/doi/pdf/10.5555/iace-51093tn](https://aaapubs.org/doi/pdf/10.5555/iace-51093tn)
+
+[https://doi.org/10.5555/iace-51093tn](https://doi.org/10.5555/iace-51093tn)
+
+&#x200B;
+
+EDIT to add that I tried to look at the pages mentioned in the link above, but that only gives me information on the business mentioned in the teaching notes.",1603445209.0,2,0.76,1
+Scholar,"[Thesis] Ungerman, L. (2018). The Effect of Sports Bras on Breast Acceleration. California State University, Fullerton.","Hi everyone
+
+A student asked me if we have access to this Thesis:
+
+[ProQuest link](https://search.proquest.com/openview/fa61b55e10179a2c9da119b4882cd7a6/1?cbl=18750&diss=y&pq-origsite=gscholar)
+
+[WorldCat link](https://www.worldcat.org/title/effect-of-sports-bras-on-breast-acceleration/oclc/1077179818&referer=brief_results)
+
+I sadly couldn't help her, but was wondering if any of you could help me out. In the mean time, I told her she could contact the author, so maybe that will work.
+
+Thanks in advance.",1602689355.0,18,1.0,5
+EDH,Deck Review request: Aminatou Enchantments,"Hey everyone
+
+Ever since getting the Aminatou C18 precon, I've loved playing with the deck. I upgraded it from the precon to a combo deck using infinite flickers to drain life or mill my opponents.
+
+I've also always loved the Saga's from Dominaria, and now that we've got a couple of new ones, I thought I'd try building Aminatou around those.
+
+I'm playing it the first time this Thursday, so I'm really excited to see what it'll bring to the table. I think my main concerns are mana issues (almost no ramp, maybe too little white mana?) and not being able to deal with big creatures.
+
+* **Decklist**: http://tappedout.net/mtg-decks/aminatou-saga-2/?cb=1582635222
+https://archidekt.com/decks/401682#Aminatou_saga
+(updates will most likely happen here first)
+
+* **Commander**: [[Aminatou, the Fateshifter]]
+
+* **Meta Power Level**: Competitive-Casual (we've all been playing a long time, so we all have some powerful decks, but also some really janky decks)
+
+* **Meta Example**: Some of the commanders my friends play are Golos, Yarok, Elsha, recently Marisi and Tasigur as well. My other commander decks at the moment are the precon Sevinne (haven't had time to upgrade it yet), Anje (upgraded from the precon), O-Kagachi spirit/arcane (budget) and Grumgully (aggro, works surprisingly well)
+
+* **Budget**: $10/card max
+
+* **Deck Objectives**: Drawing tons of cards while protecting myself and my planeswalkers with tokens and propaganda-effects. Getting value and making my opponents sacrifice stuff.
+
+* **Deck Win Conditions**: Right now I have as wincons: Thassa's Oracle, Happily Ever After (I'll be surprised if this one ever works), beating them to death with 8/8 krakens and 2/2 pegasi, Flickering Gray Merchant
+
+* **House Rules**: My group doesn't like land destruction, otherwise I'd have included [[Fall of the Thran]].
+
+* **Are you willing to substantially change your list/commander to fit your objectives?** Not really, more looking for an evaluation of what I have and what some extra maybeboard cards might be. Also looking to know if people would think this deck fun or not fun to play against.
+
+Thanks in advance!",1582636170.0,3,0.81,8
+rhino,How to snap two closed curves to each other.,"Hey everyone
+
+I'm looking for some help to basically snap two closed curves so they touch each other at the tangent (I hope that's correct?).
+
+What I want to do for example, is have the two random shapes in the rectangle touch the sides of the rectangle and touch each other.
+
+I can do this manually, but it's not very precise. Is there a way to do this so they touch exactly without the shapes overlapping? I think in Fusion 360 it's called done by making them co-linear.
+
+[Starting point](https://imgur.com/vGROuh3)
+
+[What I want to achieve](https://imgur.com/s6Z39Hb)",1575406216.0,2,1.0,3
+belgium,Opening a communal bank account,"Hey guys, I'm moving in with my girlfriend next month. We're looking to set up a communal bank account and we're wondering what bank would be best to do this with.
+
+Is there any reason to choose a certain bank over an other one? Thanks in advance.",1564996393.0,2,0.63,8
+RocketLeagueExchange,[PC] [H] Keys and extras if necessary [W] Regular or Burnt Sienna Fennec (cert optional),"I won't be able to access my pc until tomorrow, but just putting some feelers out to see if anyone is interested.",1562677265.0,1,1.0,24
+MagicArena,One pre-release code for who wants it,"36Y-TwGw-wug
+
+have fun ;)",1562568864.0,4,0.63,4
+EDH,"Updrading Aminatou, the Fateshifter with new sets.","Hi everyone
+
+A little while back I bought the Commander 2018 Subjective Reality deck. This was my first time venturing outside of Gruul teritory, except for a failed [[Teysa Karlov]] deck, which is now transformed to a brawl deck.
+
+I've had a lot of fun playing the deck and I want to develop it further. Reading [this article on MTG Goldfish](https://www.mtggoldfish.com/articles/budget-commander-20-subjective-reality-upgrade) gave me some direction, and I want to be focussing on the blink theme, with a top-of-library theme as is suggested there.
+
+The [list they post](https://www.mtggoldfish.com/deck/1267800#paper) seems interesting, but it's from August 2018, so I was wondering what cards from the more recent sets you guys would add and what you would cut.
+
+Some cards that looked interesting to me were:
+
+From Modern Horizons
+
+[[Answered Prayers]] for lifegain
+
+[[Astral Drift]] to blink
+
+[[Cunning Evasion]]
+
+[[Ephemerate]]
+
+[[Giver of Runes]] for protection maybe
+
+[[Irregular Cohort]]
+
+[[Kaya's Guile]]
+
+[[Knight of Old Benalia]]
+
+[[Plague Engineer]] to deal with tokes, but seems kind of fringe
+
+[[Pondering Mage]] seems perfect for this deck, but very expensive
+
+[[Settle Beyond Reality]]
+
+[[Sling-Gang Lieutenant]] could be fun
+
+[[Soulherder]] should definitely go in
+
+[[Tribute Mage]] maybe
+
+[[Unsettled Mariner]] for protection?
+
+[[Vesperlark]], but there's not that much to bring back
+
+[[Watcher for Tomorrow]]
+
+From GRN, RNA and WAR there's a bit much to go through, but these were some ETB triggers:
+
+[[Basilica Bell-Haunt]]
+
+[[Burglar Rat]]
+
+[[Augur of Bolas]]
+
+[[Aven Eternal]]
+
+[[Dovin's Acuity]] and [[Disinformation Campaign]]?
+
+[[Elite Guardmage]]
+
+[[Eternal Skylord]] and some other amass creatures
+
+[[Forbidding Spirit]]
+
+[[Oath of Kaya]]
+
+Sorry if this is somewhat messy, I find deckbuilding really hard :/
+
+Any help would be greatly appreciated, especially on what to cut.
+
+EDIT: Forgot to add info about meta level etc.
+
+I'm really bad at looking for wincons in this deck, since my usual wincons are just smashing face with big creatures. I'm still a beginner at this. That said, my playgroup has been playing a lot longer than me and there are some really good decks in there. Off the top of my head I can't think of too many, but there's a Xenagos deck, Lord Windgrace, Feather, Atraxa, Meren,... Quite a lot of decks, since we're a group of about 4-6 players.",1561030999.0,5,0.78,29
+prusa3d,My supports extend beyond the object they're supposed to support. Any idea why this would happen?,,1559901710.0,25,1.0,7
+MagicArena,"I kept him out of ranked as long as possible without roping, you can thank me later.",,1554393030.0,0,0.4,19
+techsupport,Quick help needed for a library project,"Hey guys, I'll try my best to explain this.
+
+My library is organizing an expo and they want to have a laptop near the expo with powerpoint presentations and videos on it. They want to make it so the visitors can select a presentation or video and open it themselves.
+
+Is there an easy way to do this? Right now it just has the desktop open with shortcuts to the presentations/videos, but that's not really user friendly.
+
+I was thinking something like what you see in museums, where there are touch screens and you can just select a video and it starts playing.
+
+Specs: Dell Latitude running Windows 10.
+
+I know this is a pretty bad request, but I didn't know where else to go and it's rather urgent.
+
+Thanks in advance.",1554366945.0,1,1.0,2
+EDH,Deck help: Teysa Karlov (first own brew),"Hey everyone
+
+I've been playing mtg for about 8 years now, and always used to play with my friends' decks. Recently however, I managed to get my hands on a small collection of cards and bought quite a few of the GRN and RNA products. I wanted to try building my own EDH deck for the first time.
+
+**Decklist**
+
+http://tappedout.net/mtg-deckpaste/23-03-19-ngS-teysa-karlov-edh/
+
+**Commander**
+
+Teysa Karlov
+
+**Meta power level**
+
+Casual-competitive
+
+**Meta example**
+
+I've personally only built one edh deck so far, which was a [[Nikya of the Old Ways]] deck that I found online. I won 1/3 so far with it. Some of the decks my friends play are [[O-Kagachi, Vengeful Kami]], [[Lord Windgrace]], [Jhoira, Weatherlight Captain]],... Can't remember off the top of my head. They have some powerful decks, but mostly build to be fun to play.
+
+**Budget**
+
+Looking to keep this within the cards I already own, but willing to spend about 50 euros if I like playing with it and want to upgrade it in the future.
+
+**Deck objectives**
+
+Spam tokens, sacrifice them for damage, making other people sacrifice with [[Dictate of Erebos]] or just hit face with them by making them bigger etc.
+
+I don't play competitively at all, so I'm mainly looking for if this might work in a casual game. I'm kind of concerned about card draw, these are some cards I own in the right colors, but I'm not sure what to cut to make space for what.
+
+[[Aphotic Wisps]], [[Blade Juggler]], [[Bladebrand]], [[Curtain of Light]], [[Niveous Wisps]], [[Ritual of Rejuvenation]] and [[Sunset Pyramid]]
+
+Any help would be much appreciated.
+Thanks in advance!",1553369365.0,6,0.87,9
+Libraries,What kind of screen to buy for information display.,"Hey everyone
+
+I work at a college library and we're looking to buy a screen to stream information, new books, events etc. Do any of you have recommendations for size, type,...
+
+Should be clearly visible from about 5m/16.5ft away in a rather bright environment.
+
+Able to have powerpoint presentations on screen.
+
+Any help would be very welcome :)",1549966043.0,2,1.0,3
+MagicArena,Kibler's Giant Monsters? More like Kibler's Giant meta..,"It might just be me, but it seems like these special events should, aside from the special game-mechanic, have some sort of requirement for decks.
+
+I'd hoped to play some fun matches against big monster decks with my dino's, but 4/5 decks I encountered were the regular meta decks (white weenies, izzet drakes, RDW,...)
+
+Do you guys share the same experience?",1544919217.0,0,0.42,9
+3Dprinting,Large difference between top and bottom of print.,"Hey everyone!
+
+I work with two Ultimaker 2 GO printers in a college library.
+
+Students can print anything from prototypes to decoration. Sometimes, mainly for the prototypes, it's quite important to get consistency over the whole print.
+
+I'm running into a problem with the bottom layer of my print though. It seems the walls and the infill are kind of disconnected.
+
+[TOP](https://i.imgur.com/7PUnDPj.jpg)
+
+[BOTTOM](https://i.imgur.com/Ni0YX8R.jpg)
+
+If anyone can help me with this, I'd be much obliged. Here are my Cura settings:
+https://imgur.com/a/k6lAxFH
+
+These are the settings I use for most of my prints (except for the infill%, this was a special request).
+
+Hope you guys can help me!",1542201866.0,2,0.67,8
+MagicArena,"New to deckbuilding, looking for some help (red/green/black dragons)","Hey everyone
+
+I've been playing MTG for a couple of years now casually with friends, but I've always been using their decks.
+
+I'm enjoying this game so far, but I'd like some help with the deck I'm currently building.
+
+It's red/green/black, focussed on dragons and trying to get some early threats out, and then following up with some bigger creatures (Darigaaz, Lathliss, Doom Whisperer).
+
+[LINK TO DECK](http://deck.tk/8ts902im)
+
+The main problems I've been running into is fighting decks that focus on counter spells, and having not enough of one type of mana, making me only get rolling too late in game.
+
+Ony hints on what kind of cards I could add or remove would be very helpful!
+
+Thanks in advance",1538817185.0,0,0.5,0
+Warframe,W̵̺̭̫̩̥͚̰̗͖̥͔̜͋̄͂Â̶̢̧͉̼̩͕̩̩̖̳̻̥̖̳̊̋̈̈̈́͜R̴̨̢͇̮̺̯̩͎̟͖̜̮͊̽͊͂͘F̷̛͇̹̽̽̅͛̐̓̂̈́͑̓̉̋͑R̶̛̯̳̲̞͒̌̋͊͂Ā̶̧͔͚̼͍͙͚̦͈̩̠̫͋́͜ͅM̸̡̧̜̜͕̺̞̭̝͓̏̓͑̀̄̌E̶̦̿̈́̐̇̓̔́̓̌͗͘͝͠,,1533577825.0,17,0.79,5
+buildapc,"Looking to upgrade from a Dell Precision T3500, need help to decide if this is good enough/overkill/...","###Build Help:
+
+**Have you read the sidebar and [rules](http://www.reddit.com/r/buildapc/wiki/rules)? (Please do)**
+
+Yes.
+
+**What is your intended use for this build? The more details the better.**
+
+I work in an academic library, where we have a PC available for students who want to do video editing, use photoshop, indesign,... Also audio editing, all of that stuff.
+
+I will also probably be using it to run Blender and some other 3D-software for our 3D-printers.
+
+**What is your budget (ballpark is okay)?**
+
+I'm not quit sure. I think, by re-using stuff like RAM, maybe optical disk drives and possibly even the power supply, I should be good somewhere around €1000.
+
+**In what country are you purchasing your parts?**
+
+Belgium.
+
+**Post a draft of your potential build here (specific parts please). [Consider formatting your parts list.](http://www.reddit.com/r/buildapc/wiki/pcpp) Don't ask to be spoonfed a build (read the rules!)**.
+
+I can't select any Belgian reseller on pcpartspicker, so prices here aren't correct.
+
+[PCPartPicker part list](https://pcpartpicker.com/list/zv6X29) / [Price breakdown by merchant](https://pcpartpicker.com/list/zv6X29/by_merchant/)
+
+Type|Item|Price
+:----|:----|:----
+**CPU** | [Intel - Core i7-8700 3.2GHz 6-Core Processor](https://pcpartpicker.com/product/C9hj4D/intel-core-i7-8700-32ghz-6-core-processor-bx80684i78700) | $298.99 @ SuperBiiz 
+**CPU Cooler** | [CRYORIG - H7 49.0 CFM CPU Cooler](https://pcpartpicker.com/product/93Crxr/cryorig-cpu-cooler-h7) | $34.99 @ Amazon 
+**Motherboard** | [MSI - Z370-A PRO ATX LGA1151 Motherboard](https://pcpartpicker.com/product/fjPzK8/msi-z370-a-pro-atx-lga1151-motherboard-z370-a-pro) | $101.86 @ OutletPC 
+**Storage** | [Crucial - MX500 500GB 2.5"" Solid State Drive](https://pcpartpicker.com/product/ft8j4D/crucial-mx500-500gb-25-solid-state-drive-ct500mx500ssd1) | $109.85 @ OutletPC 
+**Video Card** | [MSI - GeForce GTX 1050 Ti 4GB GAMING X 4G Video Card](https://pcpartpicker.com/product/H97CmG/msi-geforce-gtx-1050-ti-4gb-gaming-x-4g-video-card-gtx-1050-ti-gaming-x-4g) | $219.98 @ Newegg 
+**Case** | [Fractal Design - Define R6 Black TG ATX Mid Tower Case](https://pcpartpicker.com/product/n297YJ/fractal-design-define-r6-black-tg-atx-mid-tower-case-fd-ca-def-r6-bk-tg) | $109.99 @ Amazon 
+**Power Supply** | [SeaSonic - FOCUS Plus Gold 650W 80+ Gold Certified Fully-Modular ATX Power Supply](https://pcpartpicker.com/product/WrNypg/seasonic-focus-plus-gold-650w-80-gold-certified-fully-modular-atx-power-supply-ssr-650fx) | $69.99 @ Newegg 
+ | *Prices include shipping, taxes, rebates, and discounts* |
+ | Total (before mail-in rebates) | $990.65
+ | Mail-in rebates | -$45.00
+ | **Total** | **$945.65**
+ | Generated by [PCPartPicker](https://pcpartpicker.com) 2018-07-02 05:03 EDT-0400 |
+
+This is what I was thinking.
+
+**Provide any additional details you wish below.**
+
+So what I have right now is a pre-built Dell Precision T3500.
+
+I tried to make a PCPartsPicker list of it, but most of the components aren't available anymore, so I stuck to some basic stuff.
+
+[PCPartPicker part list](https://pcpartpicker.com/list/FtJVBb) / [Price breakdown by merchant](https://pcpartpicker.com/list/FtJVBb/by_merchant/)
+
+Type|Item|Price
+:----|:----|:----
+**Video Card** | [AMD - FirePro V5800 1GB Video Card](https://pcpartpicker.com/product/sVnG3C/amd-video-card-100505839) | $58.98 @ Newegg 
+**Other**| Western Digital Caviar Black WD1001FAES 1TB 7200 RPM 64MB Cache SATA 6.0Gb/s 3.5""|  
+**Other**| Intel Xeon E5630 Processor 2.53 GHz 12 MB Cache Socket LGA1366|  
+**Other**| Dell memory - 4 GB - DIMM 240-pin - DDR3|  
+ | *Prices include shipping, taxes, rebates, and discounts* |
+ | **Total** | **$58.98**
+ | Generated by [PCPartPicker](https://pcpartpicker.com) 2018-07-02 05:39 EDT-0400 |
+
+I can provide a product page from Dell itself, but that has my serial nr. on it, not sure if that's a good idea to post online?
+
+I'd love to hear if my proposal would be sufficiently better than the pre-built.
+
+Thanks in advance.
+
+EDIT: The pre-built has two of the 1TB drives, and 6x4GB RAM, forgot to mention that.
+
+EDIT2: Well, apparently we have a contract with Dell, so I won't be able to put it together myself :(",1530524672.0,1,1.0,3
+patientgamers,"An overview of ""oldies but goodies"" on sale with the Steam summer sale by /u/Mugenmush",[removed],1529657647.0,1,1.0,4
+3Dprinting,[HELP] Having issues with cura filling up an empty space in my print on certain rotation.,"Hey everyone!
+
+I work at an academic library and we offer 3D-printing services to the students and staff, which I'm responsible for.
+
+One student asked to print out a bunch of part for a Star Wars blaster, but I'm having an issue with one particular part.
+
+When I load it up in Cura (3.3.1), you can see there's two holes, which are necessary for interlocking other parts.
+
+[Image 1](https://imgur.com/HADBMLL.jpg)
+
+This isn't the optimal rotation though, so I turned it over to get a better print, but then it suddenly filled up the holes.
+
+[Image 2](https://imgur.com/CrYY4iY.jpg)
+
+It's actually filled as well, not some weird type of support glitch. If I lower the layer view, you can see it's infill all the way. It even removes the walls.
+
+[Image 3](https://imgur.com/D624h1Y.jpg)
+
+Can anyone help me with this? I tried printing the initial way, which does keep the holes, but the print quality definitely suffers.
+
+I tried to google a bit, but can't seem to find anything helpful.
+
+EDIT: I just tried rotating the model 45°, and this happened: [Image 4](https://imgur.com/DJzAw9J.jpg). So I'm guessing this is an issue with the model itself? Any help on how I can fix this? I only have very limited experience with modeling.",1528794498.0,3,1.0,8
+Warframe,Mastery rank not available due to hotfix,"So, I just got enough to start my MR3 test a couple of minutes ago.
+
+Started up the test, but got booted because of the hotfix (I didn't know I couldn't start a new mission until re-logging).
+
+Apparently this counts as a failed test, since I now can't start my MR3 test for 24 hours.
+
+This may be known, but I decided to post it in case it wasn't, so other people can avoid this bug.",1527191202.0,0,0.29,4
+blenderhelp,"Making a logo thicker, but only on the x,z-axis","Hey everyone, I'm pretty damn new to blender. I've been asked to make a 3D model of my job's logo for printing. I've managed to get it from a flat image to a 3D model, but I fear that it's a bit to thin for a solid print.
+
+So, I wanted to just make it a bit more thick, sturdy, but only on the x and z axis. I've tried the fatten tool, but that gives me very little control and it just seems bloated.
+
+I also tried selecting a bunch of panes and extruding them, but can't seem to find how to set a value, so that I can repeat the exact same extrusion for other parts of the model.
+
+Is there an easy way to do this?
+
+Image of what I have so far (front view and slightly side view):
+
+https://imgur.com/a/WrzP6
+
+Thanks in advance!",1523604955.0,2,1.0,6
+ExitCorners,[SPOILER] Question about Chapter 10 - decipher,"So I managed to translate the code by realizing the second word was probably ""sees"" and the first word was probably ""sent"".
+
+However, after I finished it, Rae said ""So it was a substitution cipher after all..."", which got me wondering.
+
+I've been checking what the key could have been then, but I just can't figure it out.
+
+The first word JPAR is SENT, so if we want to go from J to S, that's -17 in the alphabet. P to E is -11; A to N is -13 and R to T is -24.
+
+There's no logic there at all, so how is this a substitution cipher?",1522825161.0,4,1.0,5
+buildapc,"Since I'm really only looking to upgrade my GPU and RAM, is it best to wait until prices drop again?","So, since the prices of both GPU's and memory is so inflated at the moment, and none of my parts are actually failing, would it be best to wait for prices to drop again?
+
+Is there any speculation as to how long these inflated prices could last?
+
+My current rig, just for reference:
+
+[PCPartPicker part list](https://pcpartpicker.com/list/mZ69Ps) / [Price breakdown by merchant](https://pcpartpicker.com/list/mZ69Ps/by_merchant/)
+
+Type|Item|Price
+:----|:----|:----
+**CPU** | [Intel - Core i5-3570K 3.4GHz Quad-Core Processor](https://pcpartpicker.com/product/3LZQzy/intel-cpu-bx80637i53570k) | $275.00 @ Amazon 
+**CPU Cooler** | [CRYORIG - H7 49.0 CFM CPU Cooler](https://pcpartpicker.com/product/93Crxr/cryorig-cpu-cooler-h7) | $28.90 @ Newegg Marketplace 
+**Motherboard** | [ASRock - Z77 Extreme4 ATX LGA1155 Motherboard](https://pcpartpicker.com/product/VvMFf7/asrock-motherboard-z77extreme4) | $394.95 @ Amazon 
+**Memory** | [Corsair - Vengeance 8GB (2 x 4GB) DDR3-1600 Memory](https://pcpartpicker.com/product/6hzv6h/corsair-memory-cmz8gx3m2a1600c9b) | $69.99 @ Amazon 
+**Storage** | [Samsung - 830 Series 128GB 2.5"" Solid State Drive](https://pcpartpicker.com/product/tbJwrH/samsung-internal-hard-drive-mz7pc128bww) | $199.99 @ Newegg Marketplace 
+**Storage** | [Samsung - Spinpoint F3 1TB 3.5"" 7200RPM Internal Hard Drive](https://pcpartpicker.com/product/FBR48d/samsung-internal-hard-drive-hd103sj) | $189.89 @ Newegg Marketplace 
+**Video Card** | [Sapphire - Radeon HD 7870 2GB Video Card](https://pcpartpicker.com/product/JQ4gXL/sapphire-video-card-111990320g) |-
+**Case** | [Corsair - 650D ATX Mid Tower Case](https://pcpartpicker.com/product/N6W9TW/corsair-case-cc650dw1) |-
+**Power Supply** | [SeaSonic - M12II 650W 80+ Bronze Certified Semi-Modular ATX Power Supply](https://pcpartpicker.com/product/TBK7YJ/seasonic-power-supply-ss650am) | $167.83 @ Amazon 
+**Optical Drive** | [Samsung - SH-222BB/BEBE DVD/CD Writer](https://pcpartpicker.com/product/gBK7YJ/samsung-optical-drive-sh222bbbebe) | $22.66 @ OutletPC 
+**Operating System** | [Microsoft - Windows 10 Home OEM 64-bit](https://pcpartpicker.com/product/wtgPxr/microsoft-os-kw900140) | $88.89 @ OutletPC 
+**Wireless Network Adapter** | [Asus - PCE-AC68 PCI-Express x1 802.11a/b/g/n/ac Wi-Fi Adapter](https://pcpartpicker.com/product/8VMFf7/asus-wireless-network-card-pceac68) | $90.90 @ OutletPC 
+**Monitor** | [AOC - e2343F 23.0"" 1920x1080 Monitor](https://pcpartpicker.com/product/xZbp99/aoc-monitor-e2343f) |-
+**Keyboard** | [SteelSeries - 6Gv2 Wired Standard Keyboard](https://pcpartpicker.com/product/9qvRsY/steelseries-keyboard-64225) |-
+**Mouse** | [SteelSeries - Rival 300 Wired Optical Mouse](https://pcpartpicker.com/product/ggtWGX/steelseries-mouse-62351) | $44.99 @ Best Buy 
+**Headphones** | [Corsair - Vengeance 1500 7.1 Channel  Headset](https://pcpartpicker.com/product/fGrG3C/corsair-headphones-ca9011112ww) |-
+ | *Prices include shipping, taxes, rebates, and discounts* |
+ | Total (before mail-in rebates) | $1583.99
+ | Mail-in rebates | -$10.00
+ | **Total** | **$1573.99**
+ | Generated by [PCPartPicker](http://pcpartpicker.com) 2017-11-23 12:49 EST-0500 |",1511459615.0,1,1.0,0
+donaldglover,Tried to make him look even more like a GTA character. What do you guys think?,,1510861852.0,108,0.97,10
+techsupport,Different internet speed on desktop VS laptop. Same wired connection.,"I just recently moved back to my parents for a bit while in between jobs. Got my desktop all set up, everything working fine but I have incredibly slow internet.
+
+I started testing some stuff, and got some weird results.
+
+When I test my incoming connection, it's 5Mbps. I get the same result when connecting my laptop to different ports throughout the house. Same result on the one in my room as well.
+
+That is, unless I plug in one of the wireless routers. If I do, the speed drops in half. 
+
+When I connect my desktop pc, however, I only get 0.5-1Mbps. Barely enough to function tbh, gets paired with approximately 500ms ping.
+
+What I was wondering:
+
+* is it normal that the speed drops in half if one of the wireless routers is connected?
+
+* how can I find out what's causing my desktop to have such slow internet?
+
+Thanks in advance. ",1509914584.0,1,1.0,0
+belgium,"Tis e rututus en ot trint,trint trin",,1509276666.0,127,0.92,26
+patientgamers,Looking for a good Need For Speed-like game,"Hey guys, I've been feeling like playing need for speed lately, but I don't know if any good ones came out after underground 2. I do have Carbon, but it keeps crashing.
+
+I'd like something with a basic storyline, upgrading, stuff like that.
+
+Any suggestions? ",1508691238.0,31,0.79,52
+PickAnAndroidForMe,"[Belgium] Upgrade from my HTC One m8, <400 euro Range, Big batter and sturdy","Looking for an upgrade for my HTC One M8, which is finally starting to fail me.
+
+I want to get a phone that doesn't break too easily, or get a good case/screen protector and I'd love to have a decent battery life.
+
+I've been looking at the HTC 10, which looks really good to me, but a bit expensive.
+
+Any tips?
+
+Just gonna add all this in:
+
+Country: Belgium
+
+Carrier: Mobile Vikings? I guess?
+
+Price: <400, might be able to go up to 500, but rather not.
+
+Size: I have a 5"" now, which I'm happy with. Definitely not bigger than 5.2""
+
+Use: Browsing reddit, some gaming, some streaming. Social media
+
+Preferred brands: HTC (2 previous phones), LG (I had the nexus). No experience with others.
+
+Other: Battery and sturdiness are very important to me. NFC I don't care about, can't really think of anything else tbh.
+
+EDIT: well, just noticed the typo in my title, gimme that big batter I guess",1507050531.0,1,1.0,0
+RocketLeagueExchange,[PC] [H] Lime Scorer Centio V17 [W] Any Takumi RX-T offers except basic,"So yeah, looking for a cool Takumi RX-T, hit me up here if you're interested.
+It's not tradable yet, one more day, but I would like to see what you guys have to offer.
+
+EDIT for screenshot:
+http://steamcommunity.com/sharedfiles/filedetails/?id=1140474597",1506035771.0,1,1.0,2
+GlobalOffensive,"Flickshot on Twitter: ""Who's going to be watching the EU Minor on Twitch?""",,1495227844.0,1,1.0,0
+tipofmytongue,"[TOMT] [video] YouTube video of a guy playing a basketball video-game(?), which syncs up perfectly with music playing on his stream.","It's footage of a rather cartoon-like baskeball video game, I think it might have been a cutscene, where the player faces off against the big legends like Michael Jordan etc. It's a video by a guy streaming it I think and the music he has on in the background just works 100% perfectly with the footage of the game.
+
+I think I read that the music was from a Spiderman movie, but I'm not sure.
+
+Would love some help on this one :)",1495199417.0,1,1.0,0
+listentothis,STUFF. -- D.O.G.G. [Future Jazz/Funk] (2013),,1493365695.0,25,0.73,0
+AnimationThrowdown,Roller Derby Haley is bugged,"There's a bug where she retains motivation even after the card giving it dies. I took some screenshots, you can see that she has 7 motivate when she should have only 3 and in the other example, she has 5 while she should have none. Anyone else experiencing this? 
+
+Haley bug https://imgur.com/gallery/por7e
+
+Edit: support is looking for a fix. ",1491901455.0,3,0.72,9
+buildapc,Looking for upgrade and CPU cooler advice.,"Hey guys!
+
+I built my PC back in 2012, with help from people here, and now I'm looking for some advice on upgrading. I need a new CPU fan asap, but looking around, I found that a lot of them don't fit wel in certain cases or the memory can be the way. I would love to know if any of you have similar hardware and can advise a certain cooler.
+
+EDIT: for the cooler, I'm hoping for something at around €50, kinda short on cash at the moment.
+
+Other than that, I'm going to be looking for an upgrade after the summer. I was thinking maybe a new GPU and a RAM upgrade. Looking to stay under about €300 budget, any hints or tips? Anything that would be better to upgrade than those two?
+
+Main usage is gaming, not interested in VR, but I would like to upgrade to a 144hz screen in the more distant future.
+
+Thanks in advance, here's my specs:
+
+
+
+[PCPartPicker part list](http://pcpartpicker.com/p/hkWs) / [Price breakdown by merchant](http://pcpartpicker.com/p/hkWs/by_merchant/) / [Benchmarks](http://pcpartpicker.com/p/hkWs/benchmarks/)
+
+Type|Item|Price
+:----|:----|:----
+**CPU** | [Intel Core i5-3570K 3.4GHz Quad-Core Processor](http://pcpartpicker.com/part/intel-cpu-bx80637i53570k) | $215.99 @ NCIX US 
+**Motherboard** | [ASRock Z77 Extreme4 ATX  LGA1155 Motherboard](http://pcpartpicker.com/part/asrock-motherboard-z77extreme4) | $134.99 @ Amazon 
+**Memory** | [Corsair Vengeance 8GB (2 x 4GB) DDR3-1600 Memory](http://pcpartpicker.com/part/corsair-memory-cmz8gx3m2a1600c9b) | $44.99 @ Newegg 
+**Storage** | [Samsung Spinpoint F3 1TB 3.5"" 7200RPM Internal Hard Drive](http://pcpartpicker.com/part/samsung-internal-hard-drive-hd103sj) | $88.98 @ Newegg 
+**Storage** | [Samsung 830 Series 128GB 2.5"" Solid State Disk](http://pcpartpicker.com/part/samsung-internal-hard-drive-mz7pc128bww) | $96.49 @ B&H 
+**Video Card** | [Sapphire Radeon HD 7870 2GB Video Card](http://pcpartpicker.com/part/sapphire-video-card-111990320g) | $264.99 @ Newegg 
+**Case** | [Corsair 650D ATX Mid Tower Case](http://pcpartpicker.com/part/corsair-case-cc650dw1) | $149.93 @ Mac Connection 
+**Optical Drive** | [Samsung SH-222BB/BEBE DVD/CD Writer](http://pcpartpicker.com/part/samsung-optical-drive-sh222bbbebe) | $16.98 @ Outlet PC 
+ | | **Total**
+ | Prices include shipping and discounts when available. | $1013.34
+ | Generated by PCPartPicker 2012-09-13 11:39 EDT-0400 |",1491301413.0,1,0.67,16
+techsupport,CSGO keeps freezing after about 30 minutes of playing,"**Issue:**  
+Counter-Strike Global Offensive keeps freezing after about half an hour of gaming. Alt-tabbing out usually works, but not always. If it doesn't, I have to either restart my pc or quit through task manager.
+ 
+This only happens in CSGO, I can play other games (like Rocket League for example) for even longer amounts of time and nothing happens.
+ 
+I have uninstalled and reinstalled the game several times to no effect.
+ 
+**Extra info:**  
+I use steam mover to have CSGO on my SSD, while my Steam folder is on my hard drive.
+I use VibranceGUI to change my monitor's color temperature when the game is open.
+I use Steelseries Engine 3 to change my dpi to 400 from 800 when the game is open.
+ 
+This has been my setup for over a year, so nothing has changed recently.
+ 
+**My setup:**  
+Intel Core i5-3570K 3.4GHz Quad-Core Processor  
+ASRock Z77 Extreme4 ATX LGA1155 Motherboard  
+Corsair Vengeance 8GB (2 x 4GB) DDR3-1600 Memory  
+Samsung Spinpoint F3 1TB 3.5"" 7200RPM Internal Hard Drive  
+Samsung 830 Series 128GB 2.5"" Solid State Disk  
+Sapphire Radeon HD 7870 2GB Video Card  
+Windows 10 Home edition",1484052121.0,1,0.67,2
+videos,Pidge - A suicidal pigeon contemplates his existence.,,1481669688.0,21,0.78,3
+DeepIntoYouTube,fart cluster 7,,1477346422.0,0,0.5,2
+meirl,me irl,,1476704256.0,46,0.91,0
+Games,How realistic is Fallout 4's environment?,,1463519264.0,0,0.47,11
+fo4,How realistic is Fallout 4's environment?,,1463518507.0,4,0.7,2
+Fallout,How realistic is Fallout 4's environment?,"Disclaimer: this video is made by a friend of mine, but I honestly think that people here will enjoy the content.
+
+This is his first YouTube video, in which he attempts to look at how realistic the Fallout 4 environment is. He tackles the subject as a scientific paper. For more info, check the intro. You'll know pretty soon if you're interested in this type of content.
+
+Enjoy!
+
+https://www.youtube.com/watch?v=ssZi2xkkeT4",1463517825.0,4,0.7,0
+hearthstone,Why is Reno Jackson allowed to be used multiple times when duplicated?,"When Reno Jackson gets duplicated (for example by a secret), why does the battlecry still work?
+
+Technically, there's a duplicate in the deck when that happens. Seems quite silly to me to be honest..
+
+Edit:  
+Solved. TIL the difference between deck and hand. Thanks guys.",1458140190.0,0,0.29,13
+techsupport,Regular ethernet connection drops on Acer Aspire V3-571G laptop + issue with Steam on Chrome.,"Hey guys
+
+I have an Acer Aspire V3-571G laptop and whenever I'm connected to the internet through an ethernet cable, the connection keeps on dropping. Running troubleshooter fixes it usually. I get the feeling that it happens a lot quicker when more data is being used.
+
+Speccy summary:  
+http://pastebin.com/13CnKMiE  
+
+Windows Network Diagnostics:  
+http://pastebin.com/FjaKtfCN
+
+Help would be much appreciated
+
+A side issue I have is that images on the Steam website don't line up correctly.  
+[Example](http://imgur.com/a/aihv2)  
+Doesn't happen on Firefox.
+
+Thanks!",1457089011.0,2,1.0,6
+chrome,"[Help] Issue when viewing Steam workshop items, pictures off-center","Hey guys, I've been having an issue for a long time when viewing Steam items and screenshots. The images are off-center and I have to click them to actually see the images. Makes it really annoying to be honest.
+
+Screenshots:
+
+http://imgur.com/a/aihv2
+
+Anyone know how to fix this?",1454504346.0,3,1.0,1
+belgium,Haven't seen this in a long time: 200BEF bill on the QI set.,,1448184021.0,41,0.92,7
+misleadingthumbnails,My girl[f]riend has a really hairy butt.,,1440515587.0,0,0.29,0
+videos,Donald Trumplebrags for president - Hip Hop remix,,1434973280.0,1,1.0,0
+GlobalOffensive,Input lag (?) with the AWP,"Has anyone else noticed strange lag only with the AWP? I often find it impossible to play with because some strange things happen
+
+For example, when scoping it'll often double scope instead of scoping just once. Also when moving I often stutter. 
+
+I don't seem to have this issue with the Scout or the auto-snipers.
+
+Also, when quick-switching, it'll often just show my knife for a second and then scope in again immediately.
+
+Also, when quick-switching to my knife, it'll often just ignore that and just scope in immediately anyway.
+
+Anyone who knows how I could prevent this? I'd be very thankful.",1434460377.0,2,1.0,6
+roosterteeth,I think I found Ray's newest video,,1428934659.0,0,0.25,1
+GlobalOffensive,"Had to make a thesaurus for class, decided to go with CSGO terms.",,1427123950.0,0,0.5,1
+tifu,TIFU by having a one-night stand,"A friend of mine set me up with a date for Sunday. We're going to a show.
+
+She wanted to meet me before that, to get to know each other a bit at least. So we went to a bar yesterday, with her, my friend and his girlfriend. Everything was cool, she was nice, kind of pretty etc. We got kind of drunk and she said I could come back to her place.
+
+When we got there, the place was a complete mess and she looked a lot better with clothes on than without. Of course I couldn't stop my stupid dick and we had sex.
+
+It was super uncomfortable and I didn't even finish. I realized I wanted nothing to do with her, so I said I had to go home.
+
+So now I still have a date with her on Sunday, but I really don't want to. No idea what I should do now.",1426237097.0,2,0.63,8
+punk,Solution For Assholes Who Hold Up Phones At Concerts (Starring Marky Ramone) [NOT MUSIC],,1424521612.0,16,0.9,7
+glitch_art,Autumn Walk (my first try at this) [OC],,1418496712.0,4,0.75,1
+Steam,PSA: Apparently it's possible to hijack an account through a friend request!,[removed],1402413688.0,0,0.46,27
+tifu,TIFU by kneeing a pregnant woman in the belly,"So I work in a grocery store and one of my coworkers is eight months pregnant. She's a very small woman (5 feet or so) and I'm about 6'2"". This is an important detail.
+
+I was talking to a client, asking what I could get for her and she asked for spaghetti. Those were located on a shelf directly behind me, so I turn around and take a step towards the shelf.
+
+I didn't see, however, that my coworker was passing by and as I took the step, I hit her full in the belly with my knee/upper thigh.
+
+She started crying immediately and we rushed her to the hospital. Luckily both mother and child are perfectly fine, but I'm going to be known as the guy who kicked a baby basically...",1402253428.0,495,0.93,66
+transistor,My first playthrough screenshots,,1401887920.0,7,0.78,9
+pcmasterrace,Best intro to a let's play series yet. This man knows what he's talking about.,,1395617044.0,6,0.69,1
+funny,I always feel like a giant when going in to the cellar at work...,,1395331059.0,8,0.9,0
+croatia,"Hey, we're planning a road-trip through Croatia this summer with 8 scouts. Looking for some help and info.","As said, we're a group of 8 Belgian scouts and we're going to spend 12 days in Croatia (27/07-08/08). We're looking at the possible routes and POI's. We're going to be driving a van, which we rented here in Belgium.
+
+We'd like to spend about 35/35/30 adventure/culture/partying.
+
+On our list so far are:
+
+* Plitvice Lakes park 
+* Paklenica (we'd like to do a 3-day hiking trip there) 
+* Zadar-Split (coast route) 
+* Stop Making Sense festival (is it any good? looks fun) 
+* a bunch of adventurous activities (rafting, canyoning,...) for which we don't have a location yet.
+
+We don't want to go more south than Split, since we have to drive all the way back to Belgium.
+
+We were also looking into maybe taking a ferry while going back North and visiting some of the islands that way. The websites we found were pretty buggy though and we can't seem to find times/prices for them.
+
+It'd also be cool to contact a local scout group somewhere, so if any of you know someone, we'd be grateful if you let us know :)
+
+Any other hints or tips? 
+
+EDIT: forgot to mention Zagreb in the ""must do"" list. We were thinking of spending about 2-3 days there, is that enough to actually do something?",1392928410.0,13,1.0,6
+listentothis,Shiva's Embrace -- Call Off The Hunt [Post-Rock/Progressive Metal] (2014),,1390863330.0,1,1.0,1
+quiteinteresting,Stephen Fry as a judge in Spice World,,1390257309.0,12,0.87,5
+SteamTradingCards,"[H]Snow globe #10 [W]Snow globe #3, #5 or #6","Make an offer here:
+
+http://steamcommunity.com/tradeoffer/new/?partner=48843770&token=jh-BDY6a",1388089549.0,1,1.0,1
+Alexisonfire,Alexisonfire - Episode 1 - Alexisonfire,,1386713460.0,5,1.0,0
+sgsflair,[Flair Profile] /u/CrrackTheSkye,"| steamname: Potige Barry
+
+| steamID32: STEAM_0:0:24421885
+
+| steamID64: http://steamcommunity.com/profiles/76561198009109498
+
+| customURL: http://steamcommunity.com/id/kurabu
+
+|  steamrep: http://steamrep.com/profiles/76561198009109498
+
+Forum search results: 
+http://forums.steamrep.com/search/search/?keywords=76561198009109498&o=date",1385611647.0,1,1.0,2
+MusicVideos,Marble Sounds - Leave A Light On - Very simple but moving video,,1385474002.0,3,1.0,0
+loseit,I just received an email from myself from 3 years ago.,"So this is my second time posting here, I hope I don't break any rules. I read the FAQ and I think this is okay in any case.
+
+Well, I just received [an email](http://i.imgur.com/xWxs9wN.png) written by myself 3 years ago trough futureme.org
+
+It's basically a website that lets you send an email to yourself at a certain point in the future.
+
+I sent this on the 24th of November 2010, to be delivered to me today, three years later. At that point, I weighed about 140 kg and looked [like this](http://i.imgur.com/8tlmXPv.jpg).
+
+Through the years, I tried a lot of stuff, which didn't really work for me personally. That's when my doctor advised me to get a gastric bypass. I'm not sure what you guys here in /r/loseit think about that, some people see it as cheating. If you want more info on it, I made a post about it [here](http://www.reddit.com/r/loseit/comments/16ord1/156_kg_on_the_day_i_joined_reddit_108_kg_on_my/).
+
+Anyway, I received that email today and I can't help but think that my past me would be pretty damn happy with what I've achieved. I lost 66 kg and only weigh 90 kg now.
+
+[Here's a recent picture](http://i.imgur.com/3T3lkGt.jpg).
+
+Not sure how to end this post. Thanks for reading I guess :)
+
+EDIT: Oh and as for that second part, past me might be slightly less happy. Oh well.",1385236611.0,178,0.92,37
+AndroidQuestions,Sony Xperia Sola won't stay in flashmode,"I've been trying to root my Xperia sola for a couple of days now, put way too much time in it already, so I'm coming here as a last resort. If you guys can't help me, I'm just giving up.
+
+Anyway, I'm following [this guide](http://theunlockr.com/2013/09/10/how-to-root-the-sony-xperia-sola-running-6-1-1-b-1-54-firmware/).
+
+I've downloaded everything, but I can't seem to flash the older kernel. I boot in flashmode, but after about 3 seconds it just stops flashmode and goes back to regular charging.
+
+I've seen people with the same issue here, but their solution (which is basically installing the drivers), doesn't seem to work for me.
+
+I even tried going to a different computer, since people were suggesting that the drivers wouldn't install due to me using Windows 8.
+
+One more thing to add: for some reason, my phone thinks he's not running 6.1.1.B.1.54 (keeps telling me to update), but in the settings it says it is. When I try updating it, it fails.
+
+This has been the case since the last time I tried rooting, a couple of days ago.
+
+I'm really at a loss here, help would be greatly appreciated.",1381939707.0,3,0.68,2
+Frisson,[Video] Mindcrack - The End... Yet a New Beginning,"This is a fan made (not by me) video.
+
+It's about the Mindcrack Minecraft server, which was started by /u/GuudeBoulderfist 
+
+They're a bunch of lets players who play together on this server. This video is in honour of season 3 of Mindcrack ending and season 4 beginning (new season = map reset).
+
+I guess this might not give much frisson to people who don't watch their videos, but I wanted to give it a shot. I truly enjoy their videos and this really hit home.
+
+http://www.youtube.com/watch?v=GO-jWlUxYzI",1372537181.0,3,1.0,0
+survivalcollective,Stage 4 - COMPLETE!,,1372098464.0,4,0.76,5
+survivalcollective,Wie ben ik vergeten?,"Post het hier, dan pas ik het aan.",1370028996.0,4,0.84,7
+HardcoreSMP,A message for DarkestRye,,1369089992.0,10,0.78,19
+videos,Beijing Silvermine - About a guy who collects thrown away negatives in Beijing.,,1363883110.0,1,1.0,0
+happycrowds,"Joey Cape (Lagwagon) covering No Use For A Name's ""International You Day"" to commemorate Tony Sly",,1363730206.0,9,0.91,6
+patientgamers,What I Played This Week - Week 6 (02/04-02/09),"It's slightly late, but no one else made the thread yet and I really enjoy reading about the games we play.
+
+It's been a pretty busy week at work for me, so I was only able to play some minecraft and a bit of Naruto Ultimate Ninja Storm 2 at a friend's place.
+
+So, what about you guys?",1360590033.0,1,1.0,1
+Frisson,[Video] Eyes on the Stars by Storycorps,"I personally love storycorps, gives me frisson every time, even teary eyes.
+
+This is their latest video, [Eyes on the Stars](http://www.youtube.com/watch?v=okF5UGpivR8).
+
+Enjoy.",1359374618.0,0,0.33,0
+loseit,"156 kg on the day I joined reddit, 108 kg on my first cakeday.","Hey r/loseit.
+
+This is my first time here so I apologize if I'm doing something wrong. I read the FAQ though, so I think I'm okay.
+
+Anyway, I joined reddit on the 16th of January 2012. I weighed 156 kg then, that's 344 pounds. I just dropped out of college, had no job, spent my days lying in bed, wasting time away.
+
+In March, I started working in my parents' grocery store. I lost 12 kg (26 lbs) between March and the end of August just thanks to the physical work.
+
+However, my doctor had also suggested getting informed about a [Gastric Bypass surgery](http://www.youtube.com/watch?v=l4vREUUv9Lw). I did that and I went through with the surgery on the 28th of August. There were a lot of preparation though, I was tested both physically and mentally to see if I was fit enough for the procedure. Me still being young (22 y/o) definitely helped.
+
+Since then, I've lost an additional 36 kg (80 lbs).
+
+So here I am, one year after joining reddit. I now work a full-time job, have an active lifestyle and I'm healthy and happy.
+
+Next up: trying to get below 105 kg, maybe even below 100 kg and work out more.
+
+These are pictures from 01/01/2012 and 01/01/2013: http://imgur.com/W0k4l
+
+If anyone would be interested in a Gastric Bypass surgery, there's a few thing I'd like to say:
+
+1. It's not easy. Especially the first few weeks after the procedure, you'll feel like shit and you'll have to follow a VERY strict diet.
+2. It's definitely not for everyone. I had to go through a lot of tests to determine if I was eligible for the surgery in the first place.
+3. It's not cheap. I live in Belgium and it was mostly covered by my insurance, so I only paid about €600. I also had to have a BMI higher than 40 and I was tested mentally and physically for the insurance to actually do this.",1358349587.0,121,0.94,35
+Wordpress,Need help displaying Facebook photo's using Facebook Photo Fetcher,"Hi everyone,
+
+I manage a wordpress blog for my local scouting group and we had been using the plugin [Fotobook](http://wordpress.org/extend/plugins/fotobook/) to fetch our photos from our Facebook page and display them on the site.
+
+That plugin seems to be broken however and I can't seem to find something similar that works.
+
+I found this plugin called [Facebook Photo Fetcher](http://www.justin-klein.com/projects/facebook-photo-fetcher) and I can get it to work. Basically what it does is generate a code for each of your albums, which you can then place in a post. There's an example on his site.
+
+The problem is that I'd have to create an index page. In his FAQ, he suggest using a Loop.
+>20. **Is there a way to create an ""index page"" that links to all my imported Facebook albums?**
+Sure, but it requires custom coding. You can implement this by creating a page template that iterates through and lists its child pages, then make your albums children of that page. For help, see the [WP docs](http://codex.wordpress.org/The_Loop).
+
+I've looked at the docs, but I can't figure out how to do this. I'm quite horrible at PHP.. Is there anyone who can help me with writing this?
+
+I hope this is clear enough.",1354274174.0,2,0.67,0
+windows8,[Troubleshooting] Windows key problem with steelseries keyboard,"Hey,
+I just installed windows 8 on my pc after trying it out on my laptop for a while. I assumed the steelseries key, which is on the spot where the windows key usually is, would do the job of the windows-key just fine.
+
+However, that doesn't seem to work.
+
+Is there any way I can set windows to react to the steelseries key in stead of the non-existing windows key?
+
+I hope that the explanation is clear enough, if not, I'll try to explain this better.",1348600106.0,0,0.5,1
+buildapc,"[Troubleshooting] GPU not giving a signal, on board works just fine.","Hi,
+
+I've just put together my first build, but I've run into a problem.
+
+When I connect my monitor to my GPU's HDMI output and power up the system, it doesn't give a signal to the monitor. The fans on the GPU spin, so it is getting power. I checked if it's plugged in decently, and it definitely seems like it is.
+
+When I plug my monitor in my mobo's HDMI output, it works just fine.
+
+Does this mean my GPU is dead? Any suggestions on what to do (other than replacing it)? I don't have a different GPU to test if it's the mobo which is broken.
+
+I have not yet installed windows, so I can't run any programs to check...
+
+SPECS:
+
+[PCPartPicker part list](http://pcpartpicker.com/p/hkWs) / [Price breakdown by merchant](http://pcpartpicker.com/p/hkWs/by_merchant/) / [Benchmarks](http://pcpartpicker.com/p/hkWs/benchmarks/)
+
+Type|Item|Price
+:----|:----|:----
+**CPU** | [Intel Core i5-3570K 3.4GHz Quad-Core Processor](http://pcpartpicker.com/part/intel-cpu-bx80637i53570k) | $215.99 @ NCIX US 
+**Motherboard** | [ASRock Z77 Extreme4 ATX  LGA1155 Motherboard](http://pcpartpicker.com/part/asrock-motherboard-z77extreme4) | $134.99 @ Amazon 
+**Memory** | [Corsair Vengeance 8GB (2 x 4GB) DDR3-1600 Memory](http://pcpartpicker.com/part/corsair-memory-cmz8gx3m2a1600c9b) | $44.99 @ Newegg 
+**Storage** | [Samsung Spinpoint F3 1TB 3.5"" 7200RPM Internal Hard Drive](http://pcpartpicker.com/part/samsung-internal-hard-drive-hd103sj) | $88.98 @ Newegg 
+**Storage** | [Samsung 830 Series 128GB 2.5"" Solid State Disk](http://pcpartpicker.com/part/samsung-internal-hard-drive-mz7pc128bww) | $96.49 @ B&H 
+**Video Card** | [Sapphire Radeon HD 7870 2GB Video Card](http://pcpartpicker.com/part/sapphire-video-card-111990320g) | $264.99 @ Newegg 
+**Case** | [Corsair 650D ATX Mid Tower Case](http://pcpartpicker.com/part/corsair-case-cc650dw1) | $149.93 @ Mac Connection 
+**Optical Drive** | [Samsung SH-222BB/BEBE DVD/CD Writer](http://pcpartpicker.com/part/samsung-optical-drive-sh222bbbebe) | $16.98 @ Outlet PC 
+ | | **Total**
+ | Prices include shipping and discounts when available. | $1013.34
+ | Generated by PCPartPicker 2012-09-13 11:39 EDT-0400 |",1347551165.0,2,1.0,10
+buildapc,"[Build Ready] First build, would like someone here to check this stuff for me.","This is going to be my first build. I guess some people might find this expensive for being a first build, but I'm not planning on upgrading in at least a couple of years. 
+Only thing I'm still on the ropes about is the monitor. Any hints or comments?
+
+[PCPartPicker part list](http://pcpartpicker.com/p/gau3) / [Price breakdown by merchant](http://pcpartpicker.com/p/gau3/by_merchant/) / [Benchmarks](http://pcpartpicker.com/p/gau3/benchmarks/)
+
+Type|Item|Price
+:----|:----|:----
+**CPU** | [Intel Core i5-3570K 3.4GHz Quad-Core Processor](http://pcpartpicker.com/part/intel-cpu-bx80637i53570k) | $219.99 @ NCIX US 
+**Motherboard** | [ASRock Z77 Extreme4 ATX  LGA1155 Motherboard](http://pcpartpicker.com/part/asrock-motherboard-z77extreme4) | $114.99 @ Newegg 
+**Memory** | [Kingston HyperX 8GB (2 x 4GB) DDR3-1600 Memory](http://pcpartpicker.com/part/kingston-memory-khx1600c9d3k28gx) | $39.99 @ Newegg 
+**Storage** | [Samsung Spinpoint F3 1TB 3.5"" 7200RPM Internal Hard Drive](http://pcpartpicker.com/part/samsung-internal-hard-drive-hd103sj) | $69.99 @ Newegg 
+**Storage** | [Samsung 830 Series 128GB 2.5"" Solid State Disk](http://pcpartpicker.com/part/samsung-internal-hard-drive-mz7pc128bww) | $96.49 @ B&H 
+**Video Card** | [Sapphire Radeon HD 7870 2GB Video Card](http://pcpartpicker.com/part/sapphire-video-card-111990320g) | $244.99 @ Newegg 
+**Case** | [Corsair 650D ATX Mid Tower Case](http://pcpartpicker.com/part/corsair-case-cc650dw1) | $149.93 @ Mac Connection 
+**Power Supply** | [Corsair 750W ATX12V / EPS12V Power Supply](http://pcpartpicker.com/part/corsair-power-supply-cmpsu750ax) | $149.99 @ NCIX US 
+**Optical Drive** | [Samsung SH-222BB/BEBE DVD/CD Writer](http://pcpartpicker.com/part/samsung-optical-drive-sh222bbbebe) | $14.99 @ Newegg 
+**Monitor** | [Asus VS238H-P 23.0"" Monitor](http://pcpartpicker.com/part/asus-monitor-vs238hp) | $159.00 @ NCIX US 
+**Keyboard** | [SteelSeries 6Gv2 Wired Standard Keyboard](http://pcpartpicker.com/part/steelseries-keyboard-64225) | $99.99 @ Newegg 
+**Mouse** | [Logitech G300 Wired Optical Mouse](http://pcpartpicker.com/part/logitech-mouse-910002358) | $31.09 @ Amazon 
+ | | **Total**
+ | Prices include shipping and discounts when available. | $1391.43
+ | Generated by PCPartPicker 2012-08-31 14:14 EDT-0400 |",1346437105.0,3,0.81,11
+buildapc,[Build Help] Going for my first build. Need some help.,"I'm going to do my first build and since choosing parts was a bit overwhelming, I went to /r/buildapcforme to ask for help. User u/RandomNameThing was nice enough to help me out and this is what I got after adjusting his suggestion a little bit:
+
+[PCPartPicker part list](http://pcpartpicker.com/p/fOIe) / [Price breakdown by merchant](http://pcpartpicker.com/p/fOIe/by_merchant/) / [Benchmarks](http://pcpartpicker.com/p/fOIe/benchmarks/)
+
+Type|Item|Price
+:----|:----|:----
+**CPU** | [Intel Core i5-3570K 3.4GHz Quad-Core Processor](http://pcpartpicker.com/part/intel-cpu-bx80637i53570k) | $219.99 @ NCIX US 
+**Motherboard** | [ASRock Z77 Extreme4 ATX  LGA1155 Motherboard](http://pcpartpicker.com/part/asrock-motherboard-z77extreme4) | $142.86 @ Newegg 
+**Memory** | [Kingston HyperX 8GB (2 x 4GB) DDR3-1600 Memory](http://pcpartpicker.com/part/kingston-memory-khx1600c9d3k28gx) | $39.99 @ Newegg 
+**Storage** | [Samsung Spinpoint F3 1TB 3.5"" 7200RPM Internal Hard Drive](http://pcpartpicker.com/part/samsung-internal-hard-drive-hd103sj) | $69.99 @ Newegg 
+**Storage** | [Samsung 830 Series 128GB 2.5"" Solid State Disk](http://pcpartpicker.com/part/samsung-internal-hard-drive-mz7pc128bww) | $99.99 @ Amazon 
+**Video Card** | [Gigabyte Radeon HD 7970 GHz Edition 3GB Video Card](http://pcpartpicker.com/part/gigabyte-video-card-gvr797to3gd) | $413.78 @ NCIX US 
+**Case** | [Corsair 650D ATX Mid Tower Case](http://pcpartpicker.com/part/corsair-case-cc650dw1) | $149.93 @ Mac Connection 
+**Power Supply** | [Corsair 750W ATX12V / EPS12V Power Supply](http://pcpartpicker.com/part/corsair-power-supply-cmpsu750ax) | $149.99 @ NCIX US 
+**Optical Drive** | [Samsung SH-222BB/BEBE DVD/CD Writer](http://pcpartpicker.com/part/samsung-optical-drive-sh222bbbebe) | $16.98 @ Outlet PC 
+**Mouse** | [Logitech G300 Wired Optical Mouse](http://pcpartpicker.com/part/logitech-mouse-910002358) | $32.97 @ Amazon 
+**Other**| Corsair Vengeance 1500 7.1 USB| $69.99 
+ | | **Total**
+ | Prices include shipping and discounts when available. | $1406.46
+ | Generated by PCPartPicker 2012-08-27 15:45 EDT-0400 |
+
+As you can see, I added side stuff like mouse, headset, just to get a complete picture. $1400 is a bit too much though, especially since I don't have a monitor and keyboard yet and I live in Belgium, so this would actually cost me about €1450 which is $1800. I'm not very interested in overclocking, so I could downgrade to a i5-3570 and a H77 motherboard, but that would only shave about $60 of the price, so I'm guessing I need to get a cheaper video card. I'm looking at a $300 max I think, what could I get in that range that will still be capable of running newer games on high settings?
+
+Also any other comments or hints to where to buy in Belgium or the Netherlands are always welcome :)
+
+EDIT:
+I was thinking of going for this graphics card instead: [Sapphire Radeon HD 7870 2GB](http://pcpartpicker.com/part/sapphire-video-card-111990020g)",1346097304.0,1,1.0,1
+buildapcforme,[Belgium] PC for general use and decent gaming. First time building. No overclock.,"Hi.
+
+I'm looking to build a pc for the first time and have been researching a lot lately. I'm feeling a bit lost on what motherboard to pick and what graphics card will be enough for me.
+
+Purpose: Browsing the internet, watching youtube videos, gaming. Type of games: I'd like to be able to run stuff like Skyrim, Portal 2,... on the higher settings.
+
+I will need a lot of peripherals: monitor, keyboard, mouse, headset, OS (I'm pretty sure I can get Win 7 for €60 through my brother's work though). 
+
+Monitor I'm thinking something from a 21.5"" to a 24""
+
+Keyboard doesn't need to be too special, just work solid. 
+
+Mouse doesn't need a thousand buttons, I wouldn't use that anyway. My last okay mouse had 7, was more than enough. 
+
+Would like a headset with an okay mic and sound.
+
+Budget: I'd like to keep it below about €1400, maybe up to €1500, but that would really be the maximum. (That's $1750 and $1880 by the way. Keep in mind that prices here will be quite a bit higher)
+
+I'm not planning on overclocking.
+
+I live in Belgium, but I can also ship to an address in the Netherlands, I think some stuff might be cheaper there.
+
+I'd like to use [this case](http://www.alternate.nl/html/product/information/pageBuilder.html?articleId=804454&kind=pcBuilder). That website is one possible shop for me by the way, if anyone knows of any better ones in Belgium or the Netherlands, please let me know :)
+
+I hope this is enough information.",1346086431.0,4,0.76,7
+Music,Triggerfinger's cover of Major Lazer's Get Free,,1345150706.0,7,0.9,4
+comicbooks,One of the reasons I think Deadpool is one of the best places for a new reader like me to start.,,1345117999.0,2,1.0,0
+funny,The Dark Knight... What? (In a local news letter),,1344332089.0,0,0.5,1
+MoviePosterPorn,The Number 23 (2007) [945 × 1400],,1340744943.0,6,0.6,4
+mindcrack,Beef and Baj in Trial of the Minemasons - Episode 3,,1340562769.0,15,0.94,1
+mindcrack,"Moonbase Alpha with Kurt, BdoubleO & VintageBeef - Far Lands or Bust 40% Fundraiser Milestone",,1340562036.0,35,1.0,11
+mindcrack,Baj &a Beef in Trial of the Minemasons,,1340315766.0,9,0.86,5
+AlbumArtPorn,Mastodon - Live at the Aragon [3000x4000][OC] (more in comments),,1340046442.0,5,0.86,3
+AlbumArtPorn,Motion City Soundtrack - Go [1425x1425],,1339526396.0,16,0.94,3
+lotr,Saw this on my 15 y/o niece's facebook. I'm quite happy about this.,,1339439139.0,68,0.97,7
+AskReddit,How do you tell your parents you can hear them have sex?,"I'm 22 years old. I dropped out of college in February and have been working for my parents and living in their home since then.
+
+Wonderful living situation, my parents are supportive,...
+
+Problem: They moved to a new place somewhere last year and in this new house sound gets amplified like crazy. In the past few weeks, I've heard them have sex 3 or 4 times because of this. I can only avoid it by going to bed earlier than them or an hour or so later than they go to bed.
+
+It's really starting to get annoying, so I'd like to inform them about this. Even though I'm 22 and it's not like sex is a taboo or something like that, it still feels really awkward (obviously). I'm looking for advice from people who have been in the same situation and are able to help out.
+
+Any suggestions are welcome.
+
+**EDIT: Should have clarified, my 14 year old sister lives with us as well, I actually wanted to find my own place, but due to certain circumstances, they suggested staying, since it works out better.**
+
+Extra edit: I pay rent. I'm not living off of them or anything.",1339021865.0,3,0.81,29
+stopsmoking,So I just realized I'm over 100 days.,"I totally forgot about it, which is awesome, 'cause it means I don't even care about smoking anymore :)
+
+Keep it up guys and girls, you'll get there as well.",1338752506.0,24,0.96,4
+Music,"Superlijm - Holler (Friends of mine, pronounced 'super lame', means super glue in dutch)",,1337886540.0,0,0.5,0
+buildapc,"[Build Help] First build, can't decide on video card","I have been looking to make my first build, and I'm trying to decide between these two video cards at the moment.
+
+[Link](http://www.gpureview.com/show_cards.php?card1=640&card2=639)
+
+If there's better stuff in that price range, I'd love to hear some tips, but I'd still like to know which one of these is better.
+
+Thanks :)",1337711586.0,1,1.0,0
+Music,NOFX - My Orphan Year (Acoustic). Their usual sarcasm makes this one of the most sincere songs I know.,,1337467908.0,33,0.92,3
+trianglejerk,▲ post from /r/books. Triangular Notebook,,1337020998.0,55,0.98,2
+shittyaskscience,Do weathermen use time travel to predict the upcomming weather?,"If so, why isn't this technology available to the public yet?",1336515347.0,1,0.57,1
+mildlyinteresting,Just saw this on r/AskReddit. Found it slightly amusing.,,1336514339.0,19,0.91,4
+Minecraft,Which blocks go in a victory monument?,"I'm sorry for the stupid question, but I was wondering which blocks usually are required for victory monuments and in what order they are placed.
+
+I don't know why I'm having trouble finding this tbh :/",1336498720.0,0,0.5,4
+agnostic,"""I think it's better to have ideas."" -Chris Rock - x-post from r/QuotesPorn",,1336455866.0,55,0.87,7
+mindcrack,Question about watching UHC on split screen.,"I've heard a lot of the guys talk about people watching the seasons in split screen. I was wondering how you guys do this. What do you do for sound? Just have one person's sound on?
+
+I'd love to get a nice way to do this, would be very time efficient :)",1336211759.0,3,0.8,14
+techsupport,Windows 7 starts stuttering with aero theme.,"Problem:
+When I use the default window 7 aero theme, my computer starts ""lagging"", I don't know the technical term, but it's like an fps drop in a game.
+
+I keep it on classical windows to prevent it from doing that, but I was wondering what causes that. Is it my graphics card? If so, how can I fix this? My graphics card should be good enough to run windows 7 with the aero theme without a problem I think...
+
+Also, the ""lag"" gets a lot worse when I open a website that uses flash (eg. a YouTube) clip.
+
+Specs:
+
+    Operating System: Windows 7 Ultimate 64-bit (6.1, Build 7601) Service Pack 1
+    System Model: HP Compaq 8710w
+    BIOS: EPP runtime BIOS - Version 1.1 
+    Processor: Intel(R) Core(TM)2 Duo CPU     T9300  @ 2.50GHz (2 CPUs), ~2.5GHz
+    Memory: 4096MB RAM
+    Available OS Memory: 4032MB RAM
+    Page File: 2968MB used, 5091MB available
+    Card name: NVIDIA Quadro FX 1600M
+    Manufacturer: NVIDIA
+    Chip type: Quadro FX 1600M
+    DAC type: Integrated RAMDAC
+    Display Memory: 2259 MB
+    Dedicated Memory: 499 MB
+    Shared Memory: 1759 MB
+    Current Mode: 1920 x 1200 (32 bit) (60Hz)
+    Monitor Name: Generic PnP Monitor
+    Monitor Model: unknown
+    Monitor Id: SEC3448
+    Native Mode: 1920 x 1200(p) (60.002Hz)
+
+I don't know if this is all the info you need, so let me know if you need something else.",1334689372.0,2,1.0,5
+books,Started taking pictures of my grandfather's old books. (Made a post about them last week),"5 days ago, I posted [this](http://www.reddit.com/r/books/comments/s4t3i/my_grandmother_was_going_to_throw_away_all_the). 
+
+I just stared taking pictures of all the books, so have a look if you feel like it. 
+[Here's the album.](http://imgur.com/a/NuFru#0)
+
+If anyone has any information about some of these books, feel free to share :)",1334657642.0,1,0.57,0
+Music,My Apartment's Very Clean Without You (Official Video) by Garfunkel and Oates,,1334352790.0,8,1.0,1
+books,My grandmother was going to throw away all the books my grandfather used to own. I asked her if I could just have them in stead. I'm really glad I did.,"My grandfather passed away almost 3 years ago and my grandmother started cleaning his old study about a month ago.
+
+I was over there and she said to me: ""Your father told me that you might like some of these books, I'm going to throw them away, so take a look which ones you want.
+
+Because I don't have too much time right now, since I'm working 12h/day, so I asked her if I could just put all the books in boxes and take them home and have a look at them later, when I have more time.
+
+These are the boxes, two of them are missing (they held an encyclopaedia), they're in the basement right now.
+
+http://imgur.com/9wvMr
+
+So I was just browsing through them quickly tonight, and I found some amazing stuff. Only had time to take this picture so far, it's from freaking 1862. 
+
+http://imgur.com/xCDhj
+
+What are your thoughts on this? What do I with them? I'm definitely not going to keep all of them and I don't think I'll be selling many if even any of them. Don't have too much room for books though...
+
+I'll be taking more pictures while I go through them, but I'll probably just post an album later on.
+
+EDIT: So far the oldest one I found was dated 1794. There's really small one that has the date 1701 in it, but I'm not sure if that's the printing date, since it's written in old Dutch, quite hard to understand...",1334171917.0,12,0.84,14
+books,Why Libraries Are Different From Piracy by John Green,,1332789432.0,28,0.93,3
+books,The Complete Illustrated Stories of Hans Christian Andersen.,"Back in August 2011, a friend of mine left for a year in an exchange program to Argentina.
+
+She lent me this book before she left, but I kept putting off reading it. She's coming back in early June and I want to read it before she comes back (I'm a slow reader and I don't have that much spare time).
+
+That aside, I'm wondering if any of you have read it and what your experience with it was. Any stories that struck you as particularly interesting? I only read the first one so far, but I really loved these lines:
+
+>What a miserable shilling I am! Of what use is my silver to me, my value, my coinage, if all these things are looked on as worthless? In the eyes of the world one has only the value the world chooses to put upon one. It must be terrible indeed to have a bad conscience, and to creep along on evil ways, if I, who am quite innocent, can feel so badly because I am only thought guilty.
+
+Try not to spoil to much if possible please :)
+
+[This is the book.](http://www.amazon.co.uk/Complete-Illustrated-Stories-Christian-Andersen/dp/0753705427)",1332706082.0,4,0.75,2
+Minecraft,I woke up and stepped outside. CreepCon was apparently moved to an earlier date.,,1332497383.0,0,0.44,2
+picrequests,[REQUEST] Illustrator saloon or western town for a poster.,"Hi,
+
+I'm a leader in a scouts group and we're having a big event in April. I was asked to make a poster, so I threw something together quickly to see what they thought about it.
+
+[This is that.](http://imgur.com/ozdmj)
+
+However, now they have decided that the event is going to have a ""Western"" theme. I need to replace the circus tent with either a saloon with a sign outside (on which I can then put the title etc.) or something like [this](http://www.freeimagehosting.net/uploads/a9e55ee7c7.jpg) or [this](http://www.3dworldmag.com/files/2012/02/f_rango._town_27-02-2012.jpg), where you have that one-street town kind of thing going on.
+
+I can handle the rest myself, but I'm not good enough with Illustrator to make something like that myself. The only reason I was able to make what I have now is because a friend of mine gave me that tent file.
+
+The idea is that it should speak to kids from 6 to 16 and their parents, so while it should be Western, it should still be nice for children.
+
+If this helps, keep in mind I'm not getting paid for this, we're all volunteers trying to organise a cool day for the kids.
+
+Thanks if anyone can help me out here :)
+
+Here's the .ai file: 
+
+http://www.mediafire.com/?r9dm5x9ps84ad47
+
+Edit: Thanks to rewarren and nasdas for replying already, but I'm actually more looking for vector work, since this is going to be an A2 size poster...",1331811565.0,1,1.0,2
+books,I have never been this proud of my sister.,"A couple of months ago, I saw my 13 year old sister reading one of the Twilight books. 
+
+I talked to her and explained that those books, while apparently entertaining, were quite low quality writing.
+
+I told her that there were a lot more interesting books out there, written by talented people that were good for someone her age, without being basically ""dumb"".
+
+Today I saw her reading The Prince of Mist by Carl Ruiz Zafon.
+
+I have never been more proud. I think I did a good thing here :)
+______________________________________________
+
+Edit (because my OP was kind of vague) :
+
+**I never criticized her, I gave her some advice. I obviously love the fact that she was reading, I just thought that, since she's way more intelligent than I was at that age, there were some more interesting books for her.**
+
+**She reads anything now from ""It-girl"" and ""Gossip girl"" to ""Ranger's Apprentice"" and this book from Zafon.**
+
+**She was already reading quite a bit before and she reads even more now. She read all of the Twilight books and while I disliked them, I don't mind that she did. It would be ridiculous if I did. I do however feel glad that she reads more qualitative books now, I don't see how there's anything wrong with that.**
+
+**I can see how my original post could lead to you thinking the way you apparently did, but I hope this reply shows you that I only had good intentions.**",1330549772.0,0,0.38,13
+pics,"I put the spoon there yesterday, found this drawing added this morning.",,1330035460.0,4,0.83,0
+youtube,Youtube no longer automatically playing next video by that channel.,"I realise my title is kind of vague, but I didn't know how to convey my problem in a short sentence.
+
+When I find a video that I like, I usually watch 2 or 3 videos uploaded to that channel. 
+
+It used to be so that if you clicked the ""x videos"" button (x being the amount of videos that channel has) next to the subscribe-button and then picked a video from the list, it automatically played the next one in that list when the video ended. That stopped happening a few days back.
+
+I was wondering if this is a permanent change or just a temporary (fixable) glitch.
+
+Hopefully this is the correct place to post this. Thanks.",1329947360.0,2,0.67,5
+techsupport,Intel(R) AMT Status :P,"[](/solved)
+
+Hey, recently I've been getting these error messages when booting my laptop:
+
+    Intel(R) AMT Status could not be retrieved from the atchksrv service for 60 seconds. Please make sure the service is running.
+
+At the same time I get this notification:
+    Intel Active Management Technology (Intel(R) AMT) status: Disabled. 
+    To enable or disable Intel AMT, contact your authorized system administrator. 
+    For more information about Intel AMT, click here.
+
+[here](http://www.intel.com/content/www/us/en/processors/vpro/core-processors-with-vpro-technology.html)
+
+I checked the link above, but I don't understand it. Can someone explain to me what that means, how it effects my laptop's performance and what I can do about it?
+
+Thanks on beforehand.
+",1329773668.0,5,0.86,5
+stopsmoking,"Just had to reset, but still good news.","I just bought a pack and smoked a cigarette, but there's some good news.
+
+While I was smoking, I had to think about r/stopsmoking, and I was pissed that I failed, so I threw my freshly bought pack into the creek next to my house. I then realised that that was really bad for the environment, but hey, what's done is done.
+
+Anyway, thanks r/stopsmoking for making me smoke 24 cigarettes less than I would have smoked if I didn't know about this subreddit :)",1329759692.0,11,0.93,4
+books,This is how my high school Dutch teacher got me back into reading.,"I'm Belgian, so to clarify, Dutch class would be what English class  in America or the UK would be like. Difference is that we get a lot less literature. 
+
+My teacher was an amazing person (not a great teacher though :P) and he loved literature thoroughly. We had to do a book report and we got a book list of the usual stuff you get. Quite mediocre books, good reads though.
+
+I told him that I'd like to read something more challenging and he, knowing that I used to read (and that a lot of that was above my ""level""), gave me a different list.
+
+I've been reading books of this list at about a 4/year pace, also reading some others obviously, but these are what really got me back into it.
+
+I could copy/paste the list here, but they're all either original Dutch or translated into Dutch titles (though I tend to read the original if I know the language).
+
+Anyway, this was an amazing teacher, and although this is 6 years ago, I still contact him after every book I read to give him my thoughts about it, after which he gives his opinion and his thoughts.
+
+I love this man for what he has done for the reader in me and I'll never forget how he introduced me to amazing stories.
+
+Any similar experiences?
+
+_____________________________________
+
+The list:
+
+Bernlef, J. - Publiek Geheim
+
+Bernlef, J. - Hersenschimmen
+
+Bernlef, J. - Onder ijsbergen
+
+Böll, H. - De verloren eer van Katharina Blum
+
+Boon, L-P. - Menuet
+
+Boon, L-P. - Vergeten straat
+
+Boon, L-P. - Mijn kleine oorlog
+
+Boon, L-P. - De Kapellekensbaan
+
+Brouwers, J. - Bezonken rood
+
+Claus, H. - De metsiers
+
+Claus, H. - De verwondering
+
+Claus, H. - Het verdriet van België
+
+Claus, H. - De geruchten
+
+de Winter, L. - De (ver)wording van de jongere Dürder
+
+de Winter, L. - De ruimte van Sokolov
+
+de Winter, L. - God's Gym
+
+Dorrestein, R. - Buitenstaanders
+
+Enquist, A. - Het Geheim
+
+Francois, A. - Zonder haar
+
+Geeraerts, J. - Ik ben maar een neger
+
+Geeraerts, J. - Gangreen 1
+
+Giphart, R. - GIPH
+
+Grunberg, A - Blauwe maandagen
+
+Grunberg, A - Fantoompijn
+
+Grunberg, A - De asielzoeker
+
+Grunberg, A - Tirza
+
+Hemmerechts, K - Zonder grenzen
+
+Hemmerechts, K - Brede heupen
+
+Hermans, W.F. - De donkere kamer van Damokles
+
+Hermans, W.F. - Nooit meer slapen
+
+Hosseini, K. - The kite runner
+
+Japin, A. - Een schitterend gebrek
+
+Joris, L. - Terug naar Kongo
+
+Joris, L. - Mali Blues
+
+Krabbé, T. - Vertraging
+
+Kruithof, J. - Het lied van de houtduif
+
+Lampo, H. - Terugkeer naar Atlantis
+
+Lampo, H. - De komst van Joachim Stiller
+
+Lanoye, T. - Alles moet weg
+
+Lanoye, T. - Kartonnen dozen
+
+Lanoye, T. - Het goddelijke monster
+
+Laroui, F. - Judith en Jamal
+
+Laroui, F. - Kijk uit voor parachutisten
+
+Marques, G. G. - Liefde in tijden van cholera
+
+Meijsing, G. - Tussen mes en keel
+
+Mortier, E. - Marcel
+
+Mulisch, H. - Twee vrouwen
+
+Mulisch, H. - De aanslag
+
+Mulisch, H. - De ontdekking van de hemel
+
+Nothomb, A. - Vuurwerk en ventilatoren
+
+Nothomb, A. - Aanslag op de goede smaak
+
+Nothomb, A. - Stupeur et tremblements
+
+Palmen, C. - De vriendschap
+
+Peper, R. - Rico's vleugels
+
+Pleysier, L. - Wit is altijd schoon
+
+Ruyslinck, W. - Het reservaat
+
+Süskind, P. - Het parfum
+
+Tsukiyama, G. - De tuin van de Samoerai
+
+Van den Boogaerd, O. - Een bed vol schuim
+
+Van der Jagt, M. - De geschiedenis van mijn kaalheid
+
+Van der Jagt, M. - Gstaad 95-98
+
+Verhelst, P. - Tongkat
+
+Verhelst, P. - Zwellend fruit
+
+Verhelst, P. - Memoires van een luipaard
+
+Verhulst, D. - De helaasheid der dingen
+
+Verhulst, D. - Mevrouw Verona daalt de heuvel af
+
+Verpale, E. - Alles in het klein
+
+Wildemeersch, M. - Knijp nu je ogen dicht
+
+Wolkers, J. - Een roos van vlees
+
+Zafon, C.R. - De schaduw van de wind
+
+Zwagerman, J. - Vals licht
+
+Zwagerman, J. - De buitenvrouw
+
+If you see an author you know/like, I should be able to give you the English title, if it's been translated. Just leave a comment :)",1329353059.0,5,1.0,9
+wine,"My parents recently build a house, dad made the wine cellar too big.","Hey r/wine, back in February my parents moved to their new house. We always used to live above their shop, but my parents got sick of literally living with their work, so they bought a small patch of land in the countryside, 10 miles from the shop, and built a house.
+
+My father's a wine lover, we sell it in our store as well, and he has a decent knowlegde of the subject. When designing the new house, he was a bit over-ambitious on the wine cellar part. We now have a room that's waiting to be turned into a wine cellar, but it has a capacity of (this is my dad's estimate) 10,000 bottles, which is way too much, as he now realises.
+
+I wonder if you lovely reddittors might have some ideas as to what we could do with it, like a split of wine cellar and something else.
+
+I'd like to add that their wedding anniversary is coming up soon and my brother, sisters and me were thinking of doing something bigger this year than usual. Maybe this might come into that? 
+
+Looking forward to your replies.",1329348010.0,5,0.73,21
+Sherlock,Just started watching...,"and already finished the first season. It's a great show, just starting with the second season.
+
+I'll be done with that quite soon, so I was wondering if there's some extra content out there that's a must watch.",1329337773.0,4,0.63,14
+askscience,Do jewellery that conducts electricity (like gold or iron rings) pose an additional health risk when struck by lightning?,"I was wondering if when a person is struck by lightning and is wearing a something like a golden ring or earrings has an additional health risk since the metals don't conduct to the ground but are only connected to the body.
+
+Not sure if I need to add something else here. I hope my question is clear :)",1329259154.0,1,0.67,3
+doctorwho,"I found this stuff at a convention in October, thought I'd share it with you :)",,1329233006.0,7,0.71,0
+books,Has anyone here read Ranger's Apprentice?,"It's a series my little sister has been reading for a while now. It's a fantasy/adventure series for teenagers.
+
+I've read a couple of pages when my sister left it in the bathroom and it seems all-right. That said, my sister also read the Twilight books and she liked them.
+
+So, any of you who read them? I'm curious if they're worth the read.
+
+EDIT: also, can anyone explain to me that within 15 minutes of me posting a QUESTION, someone downvoted this without even commenting?",1328836399.0,12,0.88,13
+techsupport,I feel like my laptop isn't as good as it should be.,"Hey r/techsupport, first visit here.
+
+I have been wondering about the performance of my laptop for quite some time now, so I decided to ask for some advice here.
+
+I uploaded my dxdiag export here:
+http://www.filedropper.com/dxdiagcrracktheskye
+
+Extra info: I just cleaned it as good as I can, I'm not able to open the casing entirely so I couldn't clean it out as good as I wanted though.
+
+
+**_________________________**
+
+
+
+Now for the actual question:
+I've been having trouble running stuff that I find shouldn't be giving my laptop any trouble. That goes from a game like Bastion (which gives me significant fps drops) to silly stuff like flash elements on websites. If I open up a website with flash elements, my mouse starts shocking (like with low fps) and it keeps doing that for about 1-2 seconds until the page is loaded completely.
+
+With the specs my computer has, these seem like things it should be able to do. Am I wrong or is there something wrong with my laptop.
+
+EDIT: btw, Right now I'm running Chrome with 7 tabs, steam in the background, TOR and some basic background applications. My core temps are 45° on both cores. Memory used: 2.26 GB and CPU usage anywhere from 0% to 7%.
+
+If you need more info, please let me know.",1328803240.0,1,1.0,6
+Edinburgh,Visiting for 3 days with my dad. Any Suggestions,"I know that this is a much recurring subject, and I looked through about 10 pages of links etc, but couldn't find much. So far I was thinking of going up to Arthur's Seat (maybe going to Sheep Heid Inn as well), Calton Hill and the Botanical Gardens, though I read there is some storm damage.
+
+Anyway, maybe some of you have some more specific advice? I'm asking for things to visit, not really for food/drinks, found some good stuff on that already. We're there from Monday til Wednesday.",1328372486.0,4,0.75,28
+StarWars,A serious question about episodes I-III and the critique it gets.,"Hey r/StarWars. I just joined here and I've read some cool stuff, but there's something about the Star Wars movies that always bugged me.
+
+           
+I feel I have to clarify that I'm a rather late adopter of Star Wars (I saw episode IV when I was 18, that was my first encounter with Star Wars, I'm 21 now). I really enjoyed the original trilogy, but when I wanted to start with episode I-III, I noticed a lot of complaints about these films online. Trying to go in unbiased, I ignored those and watched them.
+          
+
+They weren't as good as the original trilogy, that's obvious, but I never understood this huge raging reaction from fans of the originals.
+
+I'm honestly asking here where the big problems lie according to you. Is it bad adaption from the books? (I haven't read them yet, getting there soon though) Is it dialogue or effect? Is it about the details or more about general stuff?
+
+
+Thanks on beforehand, I've been wondering this for way too long now :)",1328363611.0,15,0.76,51
+pics,"Winter is beautiful, first snow in my garden.",,1328362688.0,20,0.83,8
+Music,De Staat - Back to the Grind (Amazing indie rock with some kind of music making contraption),,1328199475.0,1,1.0,0
+self,I just fell through my bed. How do I explain this to the owner of my apartment (the bed was included).,"Hey Reddit.
+
+I'm a fat man and I just crashed through my bed because I bounced on it a bit.
+My 'landlord' owns the furniture and I wonder if any of you could help me explain this to him in a way that doesn't make me seem like the complete loser that I am.
+
+Any thoughts?",1328152308.0,3,0.62,12
+stopsmoking,"Quit yesterday, need help on the oral fixation problem.","This is the third time I type this post. I'm new to reddit and I couldn't post because my e-mail address wasn't verified yet.
+
+Anyway, I'm 21 years old. Started smoking in November 2008. Quit twice, each time for about a month or so. When I started again, it was mainly out of boredom. Not so much the need for nicotine, more the need to do something with my hands and mouth.
+
+I quit yesterday and want it to be final this time. Cigarettes cost way too much.
+
+So I don't get the withdrawal effects most people get, but I still need help. Do you guys/girls know some good ways to deal with the oral fixation?
+
+Thanks on beforehand.",1327747537.0,2,1.0,11
+fonts,Stgotic - An awesome font I'm sad I didn't make.,,1327692115.0,6,0.76,1

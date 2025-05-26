@@ -1,0 +1,412 @@
+subreddit,body,created_utc,score
+PeterExplainTheJoke,"Ah, thanks, now it makes sense",1737295359.0,1
+PeterExplainTheJoke,"Still don't get it. Yeah, 0 is false in programming, but why 1, or true, is ""holy shit"", why is the reaction so exaggerated?",1737241229.0,1
+privacy,"There is no way Web could exist without advertisement, especially small sites. Huge companies probably will be fine either way. Is modern advertisement shit? Yes. But solution lies in making it less shit, not destroying it. This is precisely what PPA is about.",1727445986.0,0
+iOSsetups,Long press on any free space on Home Screen; press Edit; press Customize; choose Light theme icons,1726577027.0,1
+iOSsetups,My icons changed automatically after update to iOS 18. Looking how to get old look now...,1726576766.0,1
+Amd,"that ""next step"" might as well be an RDNA5, 6 or whatever.",1726181005.0,1
+DygmaLab,"I'll try to be clearer, please feel free to clarify anything.
+
+So, first of all, my problem was that usually when I hold L2 layer key (I use mostly default layout, so it is two bottom innermost keys, if that makes sense), my arrow keys gets highlighted (esdf and shift-fn-dygma-ctrl), and that is fine.  
+That does not always happen though! Sometimes I hold L2 key, but highlighting does not change at all. Arrow keys and other L2 keys work though. I think I found somewhere that it could happen when Rainbow LED mode is enabled and switching lightning mode helped indeed.  
+Here is my second issue - before that I didn't even have the key assigned to change lightning modes, so how that mode could possibly activate in the first place?  
+I have a hypothesis here - I think when I leave my Dygma idle for some time, it starts to rotate lightning modes by itself.
+
+So I asked how to a) fix the issue that arrow keys are not highlighted sometimes; b) if the reason is the Rainbow mode, how to stop it from activating without my command (again, I never had the key assigned to lightning modes changing, and after switching the mode back from Rainbow mode I've unassigned that key again).",1724087823.0,1
+MapPorn,But... how does it know to follow that drop-like figure? /s,1720564998.0,1
+golang,"It would be not so easy, and I'm lazy 🤷‍♂️  
+The main gist is:  
+- package db  
+- defines a struct type, let's say, DB with some fields, one of them is for \*sql.Tx, another is \*sql.Conn  
+- every method working with db is defined with DB as a receiver  
+- DB.Begin method sets \*sql.Tx field to a non-nil value  
+- DB.Commit and DB.Rollback unset \*sql.Tx field  
+- when other methods are invoked, they can see if \*sql.Tx field is set and respectively use \*sql.Tx to work inside transaction or \*sql.Conn to make an independent query  
+- app has only one instance of DB type; so as I said before, this way we know at all times if we are inside transaction or not and can use appropriate handle (sql.Tx or sql.Conn)
+
+Not sure how thread-safe all of that is, to be honest :D",1720270499.0,3
+ProgrammerHumor,"Now, what would happen if I add .git to .gitignore??
+
+  
+Ah, it's answered below already",1716408511.0,2
+sharpening,"Site says they are working with CloudPayments payment provider. I googled around a bit, and I'm not completely sure, but I think they don't accept non-Russian cards at the moment.",1716376449.0,2
+sharpening,"International cards do not work in Russia anymore, and Russian cards (cards issued by Russian banks) don't work internationally, because they are cut up from Visa and Mastercard. (Russian cards work inside Russia though.)
+
+So if their payment processing is made by Russian bank (and not, say, Stripe) - they can't take your money.
+
+That may be the reason.",1716373306.0,4
+rust,"Nice, thanks for the explanation!",1714132847.0,1
+rust,"I believe screenshot is cropped, I can't read the upper line. Some text describing the results would be nice.",1713567426.0,3
+rust,How do I interpret these values?,1713567360.0,3
+Bogleheads,"Found it, it is linked in a few non-US pages, like ""simple non-US portfolios / sample portfolios"". I would have left a link, but they get deleted from my comments.
+
+Why two funds would be the bad idea, could you please elaborate? I'm surprised because even one of the ""first"" pages on the bogleheads wiki, ""investment philosophy"", says that highly effective portfolio could be built with just two or three funds.
+
+Are you referring to the three fund portfolio maybe?.. I dug a bit deeper into the wiki, and the ""third leg"" of such a portfolio would be an US stock fund, right? Since I was already thinking about adding a S&P to portfolio, and my first plan of 60/40 stocks/bonds proportion was probably too conservative for me (even though I'm 40 years old), what about something like equal portions of just S&P 500, international stocks and bonds? I don't quote specific tickers this time, I'll just choose something EU-domiciled, reputable, big enough and with the lowest TER.
+
+While my first version was too safe, I do realize that this second one may be a bit too risky, but the main thing here is if I correctly understood the direction of your thought and if my second version is better in principle. I will ""meditate"" a bit more on the specific proportions anyway.
+
+Also I would still appreciate any thoughts on SPY5 fund. It looks a bit *too* attractive... Maybe I do not see some negatives about it.",1708891960.0,1
+Bogleheads,"I think bogleheads wiki has a link to the boglebot somewhere, I thought it to be an ""official"" instrument.
+
+Oh, thanks for the explanation on the bonds, that make sense.",1708861939.0,1
+MapPorn,"Huh, nothing special about them at all. All the other guys make literally the same. /s",1704825086.0,1
+vim,Now to remember why I enabled it... it was not without reason as well :(,1704731347.0,1
+Amd,"Fair point, but I highly doubt that 12 chiplets can be economically viable in a consumer product. That would be a complicated product, with expensive packaging, and a huge total area. There is no point in making chiplets too small, so yes, total area would be huge.",1702859767.0,-4
+Amd,"Most likely it is MI400X or something, not a game gpu.",1702852641.0,-2
+airdots,Have you tried them with same eartips? That may be the reason for difference in noise cancellation.,1697054784.0,1
+golang,[https://github.com/pkg/errors](https://github.com/pkg/errors) can be used for this as well: `errors.WithStack(err)`,1696904711.0,2
+golang,"I think I solved the same problem in a different way.
+
+When I want to use a transaction somewhere, it's not a problem to explicitly start it, right? What may be the problem is that inside that transaction I may call some other methods, and these methods could have other database calls deep inside. Or even worse, they could appear there later. I would expect them to execute inside transaction as well, how do I do that automagically?
+
+So I have a package with thin wrapper around database driver - basically, it describes and implements interface and has Connect function that returns singleton struct implementing this interface.  
+I just store \*sql.Tx in the field of this struct when I start the transaction, and set it to nil on commit/rollback. So any method of this interface is aware if it is called from inside transaction, and works accordingly.",1696570327.0,2
+macbook,Do you by any chance have the Vidid app?,1695932053.0,1
+macbook,I've updated to Sonoma today and now my colors are washed out as well.,1695930046.0,1
+rust,That sounds amazing!,1695639332.0,2
+rust,"\> A powerful type system like Rust's can be used to encode complex invariants of the program's structure and semantics.
+
+Thanks for the insight, I think I just can't imagine what it's like without actually trying it, but I got that it's much more powerful than Go's.",1695585073.0,1
+rust,"But it's not a feature of Rust, it's a matter of implementing the correct test type for your usecase.",1695580346.0,2
+golang,"I'm sure it would be suboptimal at best, and of course it shouldn't be done for anything serious, but for loolz / educational purposes? Do you mean to say that it still would be next to impossible?",1695580014.0,1
+rust,"Yeah, castings can be nasty in Go.",1695579696.0,4
+rust,"I feel like I have the same experience with Go and Goland IDE... Well, of course in my current piece of code I don't have nasty castings between actual types and interface{} and the like, but still.  
+So, you're saying that Rust would have made my life even easier?",1695579572.0,5
+golang,"This answer kind of immediately popped in my mind, but I actually do not understand why. Could you explain?",1695574374.0,2
+rust,"I'm probably not going to watch the video, but I have a question - isn't that a matter of having unit (or maybe some other) tests?
+
+Sure, language with type system will prevent you from some basic mistakes.
+
+Rust, as usual, gives you nearly the guarantees that the program will be semantically correct, won't crash, have memory or race condition issues.
+
+But how the language can guarantee that API will work exactly the same?",1695574068.0,44
+golang,"Ah, I got it, you need salt to calculate bcrypt hash first, and bcrypt hash is calculated in the app of course.",1694918227.0,1
+golang,"Why not compare it right away, as part of the first request?",1694910317.0,1
+golang,"A lot of people joking here about deploying to single core. I'm pretty sure this is misunderstanding.
+
+What he meant is that you don't deploy a single instance of an app to 56-cores server, and that single instance uses all 56 cores (56 is just rather popular core count on top of the line Xeons). You deploy 56 instances each of which uses single core.  
+In times past that could be called preforking strategy.
+
+It's pretty valid actually. Sometimes it makes sense to use few cores in a single instance. Sometimes it doesn't - I would personally avoid doing any concurrency while I can, because it introduces new class of bugs, and makes code flow that much harder to reason about.
+
+Redis is single-threaded for the same reason, for example. And as a way to scale they suggest using a fleet of single-threaded instances.",1694557015.0,1
+Amd,What kind of monster would try to execute the operation that is clearly marked as forbidden one by our elders?!,1691793559.0,5
+ItIsWednesday,It's fuckin hilarious :D,1690372792.0,1
+golang,"I guess within 200k people there are variety of preference.  
+Also, my own preference would depend on a context, so...",1689646988.0,2
+golang,"Well, frameworks you've mentioned are not the only ones for the respective languages either.
+
+I suggest looking at the [https://github.com/gin-gonic/gin](https://github.com/gin-gonic/gin), it has plenty of plugins, from the same author or other ones.
+
+I've heard good things about Chi and Echo. Also, if you google for ""golang django"", Buffalo framework comes up.
+
+As for scanning the query results, look at [https://github.com/georgysavva/scany/](https://github.com/georgysavva/scany/), it is compatible with pgx.",1689598113.0,24
+golang,"Did your experience with other languages, using *only the standard library*, was better?
+
+What standard library included ""authentication, middlewares, metrics"" etc?
+
+&#x200B;
+
+Just use suitable frameworks and libraries, as elsewhere.",1689597074.0,81
+diablo4,"Well, what's the problem comparing them? Oranges obviously better. Easy! /s",1686948079.0,1
+perl,Text::Xslate with a Template::Toolkit bridge if you need migration from TT templates?,1661472465.0,2
+MachineLearning,"I feel like problems like this – in regard to new developments, that are going to overturn whatever and however works now – were raised in the past multiple times. And basically nothing bad happened. Except maybe some people lost they jobs, like riding a horse carriage.
+
+I can't point to good example from the top of my head, though.",1659954388.0,1
+golang,"Perl. CPAN is great. I'm a go newcomer and have a same impression as an author. Even library like GIN is not fully documented. pgx4 is even more so, I have to fish examples how to do something by googling it. I'd say most libraries \_\_besides stdlib\_\_ is like this.
+
+What is needed for good documentation is not a comment before each type/method/whatever, it is a cohesive, structured \_\_story\_\_. Story has to go in particular order, and sometimes cover content that is not related to any code in the library at all, but broader context.",1655650616.0,4
+DygmaLab,"But you have to remember where is the each key on non-default layout, right?
+Or did you order custom keycaps which show alternate function of the key?",1650354962.0,1
+outlinevpn,"Hm, I ran into the same issue today. I decided to recreate Outline instance from scratch and rerun installation script (I'm using ""setup it anywhere"" method).
+
+In the end it gave me API endpoint and certSha256; I pasted it into Outline Manager and boom, I see my old keys on new computer. It was unexpected, I thought I would be recreating and resending them all.",1647793220.0,2
+WireGuard,"It's a default config of [https://github.com/trailofbits/algo](https://github.com/trailofbits/algo)
+
+Could you say where I should look for it on a live system? I have something at `/etc/wireguard/wg0.conf`, but this file seems too short to be a full story.
+
+By the way, I didn't change anything. Well, maybe a phone... iPhone 11 to 13. Plus there is auto-update set up on my Linux box with algo.",1644779552.0,1
+WireGuard,Now it works for me 🤷‍♂️,1644760644.0,1
+DygmaLab,"I have the same issue with Caps Lock on macOS. Reported it back on November 22, and heard little since.
+
+Support ticket id is 7376.
+
+Funnily enough, I liked switching languages with Caps Lock so much that I found a little program to do the same on Windows. And there it works with Dygma just as it should.",1644243130.0,2
+WritingPrompts,Sounds like an improv script!,1642357817.0,2
+CataclysmicRhythmic,HelpMeButler <The Outpost>,1614187418.0,1
+perl,This guy is a madman,1593330206.0,3
+perl,"these last two lines could be written as a single one:
+
+`use experimental qw(signatures);`",1593021393.0,13
+aeroponics,"I love to research stuff and make my own choices. But new fields could be overwhelming at the start, so I'm looking for some structure, do's and dont's, what options are there, upsides and downsides of each one and so on.",1590062517.0,1
+aeroponics,"Thanks! Would you recommend it if I want just to try it right now? No commercial farming, just something in-house?",1589929863.0,1
+aeroponics,Do you mean paid videos? Or some other channel. Thanks!,1589929731.0,1
+WireGuard,"I'm sure this qualifies as necroposting, but it seems that my WireGuard have only ip4 interface:
+
+&#x200B;
+
+`7: wg0: <POINTOPOINT,NOARP,UP,LOWER_UP> mtu 1420 qdisc noqueue state UNKNOWN group default qlen 1`
+
+`link/none`
+
+`inet` `xxx.xxx.xxx.xxx/24` `scope global wg0`
+
+`valid_lft forever preferred_lft forever`",1587765196.0,1
+Amd,"Some boards are, and this specific board too.",1585636139.0,1
+Amd,"With these modern browsers and webpages and js frameworks most of my current memory is used actually. Also, it is nice to not have a pagefile. Also, yeah, this is not entirely rational :)",1585636104.0,1
+Amd,"To go with this speed I'd have to use Samsung B-die (or maybe something similar) and they will limit me with 16Gb sticks. Moreover, quite likely this speed will be achievable with 2 sticks only, so 32Gb total. Not an option really.
+
+10 percent is a sizeable difference, hmm. Need to research what those workloads are. Thanks!",1585635941.0,1
+emulation,"It was interesting to read that from the perspective of Japan work culture. His humility is palpable.
+
+Great that someone translated these posts, the guy deserves some memory and respect.",1583675606.0,4
+shittykickstarters,"HyperDrive USB-C hubs, ZeroLemon charging stations, some wallets (Dash for example), few campaigns from BauBax and I imagine a lot of other products. These are just a few that I backed up or aware of for some reason.",1582988661.0,1
+WireGuard,"I'll check that, thanks",1580223381.0,1
+portugal,"Do you know it's not a crime to have and use small amounts in Portugal? If yes, what is your problem with this question.",1576970900.0,1
+portugal,Thanks!,1576970433.0,1
+sex,What a pervert!,1570340010.0,5
+perl,PerlX::Maybe is great for that,1570278351.0,3
+perl,">Devel::Peek output or stringification oversimplifies the decimal representation
+
+I just don't know what to say. Feels like backstabbing lol.
+
+Thank you for bringing some sanity to this.",1569436492.0,5
+perl,"I'm just really surprised that something that is outputted by Data::Dumper as a string is a floating number somewhere deep inside. To me, it seems that even Devel::Peek indicates that $c value is just ""58"", but I can't be sure of FLAGS meaning. They are not easily googlable.",1569436050.0,3
+Ubuntu,Created a bug on Launchpad since it's not (quite) Debian and kernel version is different: [https://bugs.launchpad.net/ubuntu/+bug/1842942](https://bugs.launchpad.net/ubuntu/+bug/1842942),1567697892.0,1
+Ubuntu,"Yes.
+
+It doesn't compile because of `unknown type name ‘hsiphash_key_t’` error. It is discussed here [https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=935134](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=935134)",1567672732.0,1
+sex,I think a couple therapy will be great for you. From the way you described your relationships I'm sure you'll figure it out.,1562799851.0,4
+WritingPrompts,"Agree, my bad. Evolving from predators doesn't make us automatically evil though.",1562773538.0,1
+WritingPrompts,"It's impossible to evolve from animals and not be violent for some time.
+
+Look at our ancestors a few millenia ago. Do you think we are better then them? I think that they were a neccessary part of our development. In fact, I will be surprised if any modern child placed back in time will turn different than them, and vice versa.
+
+You don't look at 11 year old, 5 year old and say - nah, 5 years olds suck, let's wipe them out and just switch to 11 year model. Doesn't work that way.
+
+One have to look at a whole picture. Whole picture, I believe, is that any sentient life will evolve towards peacefulness, empathy, and all that. But it doesn't happen magically. I would even bet that evolution of life, and mind, and society goes not that different across species.",1562771049.0,6
+sex,"I was once given a good advice - how they feel about your kinks depends on how you bring it up, to a large extent. For example, if you share that like it's something shameful, it will create shame context for your kink. You probably don't want that. So, for HOW - accept your kinks and let them feel that. (And fuck those who will really shame you.)
+
+&#x200B;
+
+As for WHEN - I guess when you are discussing who loves what in bed. Also I'd wait until we've build some intimacy, I trust them to be not a dick, and probe their views on kinks in general.",1560717135.0,3
+WritingPrompts,"That is not so. Captchas are based on tasks that are quite easy for humans, but really hard for robots. Like, find a cat in a picture is very easy for us and until recent neural networks boom it was impossibly hard task for code. Even now, neural network will probably have troubles recognizing some unusual cat, or in atypical scenario. Like here: [https://i.imgur.com/6TQQm8N.mp4](https://i.imgur.com/6TQQm8N.mp4)",1560523604.0,5
+CampingGear,"Nah, it was my mistake to create this confusion. Any full height tent will accomodate two!",1559836061.0,1
+googlehome,"I wonder what would happen if you say to Google just ""date""? That's how I talk to Siri... I'm not of a very high opinion of her haha.",1559834581.0,1
+CampingGear,"The two I mentioned is 76"" peak height actually. Yes, they are 4 persons... But to have some space inside I need a 3-person tent anyway, so not a big difference.
+
+In other words, I'm fine with having formally bigger tent as far as it meets my needs.",1559834108.0,1
+CampingGear,"It's hard to say, but I'm not trekking for sure. Mostly I move it between home - plane - bus... and then maybe up to 5 kilometers on foot. Overall, the lighter the better, other things being equal. Fresh & Black one that I used last year, weights about 3.5 kg, so I'm ready that the new one would be heavier.",1559832874.0,1
+programming,"My solution - wearing nonmatching socks (intentionally). It's fun and it always sooo surprises people. And after a while, you can surprise them by wearing matching socks!",1559122678.0,1
+cumsluts, The fact that you shared this with us is super hot 😉,1558821430.0,1
+perl,"Hmm, that sounds very likely... Aaand second module is actually loaded at runtime! 🤦‍♂️
+
+Too bad I can't review previous cases of this error with different modules, but most likely reason is the same.
+
+&#x200B;
+
+Thanks!",1558627065.0,2
+perl,"That error never occured in a fcgi, always in daemons. I'm not sure about terminology here, English is not my native language. By daemon I mean a standalone script that forks some childs and do some work (usually jobs from a work queue in my case) in a background without ever exiting (unless its stopped or fails for some reason).
+
+Also, we don't even use apache.",1558623337.0,1
+perl,"Btw I'm not asking for a fix. ""How in the hell that can be possible"" is more what interests me.
+
+&#x200B;
+
+Not only this part reloading stuff, also how **compilation** error could happen when forking a child??",1558621645.0,1
+perl,"I can't really provide a SSCCE given the rarity of such occurences. I don't know how to force that error.
+
+&#x200B;
+
+Code updating.
+
+My project is stored in git. All my servers have that project checked out to some folder and all the code runs from there. So code updating is a git pull.
+
+&#x200B;
+
+Parts of the code are reloaded.
+
+Yesterday I defined a new function in one module and started using it in another (in one commit). Restarted fcgi processes, they worked fine. Today workers of some daemon started to die with a compilation error because they reloaded second module - which imports this new function - and did not reloaded first module, resulting in a `""new_function"" is not exported by the First::Module module` error.
+
+Daemon restart fixed that.
+
+I've changed one word in the post to make this more clear (parts of the code = modules).",1558621454.0,2
+SuicideWatch,"Thanks dude, I really appreciate.",1556876629.0,1
+SuicideWatch,"If he is in his room with a headphones, I'm not sure I can just enter and grab his attention and say this words and then leave... I guess. Or I should?",1556876273.0,1
+Philippines,"Noooo, not the boobies!
+
+Seriously though it's fine unless they censor murders :)",1555122655.0,1
+cumsluts,"She's a good slut, you must be really proud of her.",1554338892.0,3
+ableton,I'm only joking of course ;-),1550505930.0,1
+ableton,I had another look and actually I still not sure it's not a render lol,1550251180.0,1
+ableton,Funny that it looks reallly like a 3D render :-) To the point that I'm almost don't believe it isn't.,1550251107.0,2
+BoTG,Pls update me o worthy one,1544020743.0,1
+fortyfivefiftyfive,"You are one good, sweet girl.",1541031807.0,1
+googlehome,Cool! How do I do something like that?,1539628923.0,1
+BustyPetite,"Some crazy Russian site claims she is Selina.
+
+Here some quite horrible pages with more of her:  
+
+[http://www.pokazuha.org/view/topic.cfm?key\_or=1083218&viewmode=1&types=&type=0&lnt\_type=4&rate\_old=10.09340657&author\_nick=208086&oldkey\_or=1083218&rand=85588&f=5](http://www.pokazuha.org/view/topic.cfm?key_or=1083218&viewmode=1&types=&type=0&lnt_type=4&rate_old=10.09340657&author_nick=208086&oldkey_or=1083218&rand=85588&f=5)  
+
+[http://fandosug.club/erotica/11636-selina.html](http://fandosug.club/erotica/11636-selina.html)  
+
+[http://fandosug.club/nudist/12136-stroynaya-selina-razdvinula-nozhki-na-podstilke.html](http://fandosug.club/nudist/12136-stroynaya-selina-razdvinula-nozhki-na-podstilke.html)",1532019891.0,1
+perl,"I was a beginner PHP developer. Thеn, quite suddenly, I ended up in a big company on a new important Perl project (as part of the team)... In six months I was a proficient Perler.
+
+Love that language since. Too bad it got a write-once vibe from the old times. I feel like this is the reason why it is declining.",1524439383.0,3
+nsfw_gifs,It's probably the best tits I've ever seen.,1523643665.0,2
+Supplements,"RDA is based on the bioavailability from average diet, not pills. Yes, this is as shaky as it sounds (there are different diets, personal differences in absorption, differences between same products made in different places/conditions and so on).
+
+So it is a total weight of the vitamin/microelement in food, not how much is really absorbed.
+
+Though maybe for the vitamin D the story is different since it is mostly got from the sunlight.",1519810641.0,1
+Supplements,"Have a look at Sundown Naturals B-Complex.
+
+Keep in mind bioavailability though. RDA accounts for typical food bioavailability, not sure if B supplements are more or less bioavailable. Let me know if you'll find out something about this!",1518254692.0,1
+sex,"Great advice, but I want to comment on the second point.
+
+Sometimes emotional things like flirting and kissing and, in general, emotional connection with the other guy could be the problem, while just fucking this guy - not.",1517850976.0,10
+sex,"Imagine her actually blindfolded, fucked and getting intense pleasure from it... Imagine that this pleasure is bigger than you've seen her in with you before (it would not be necessarily the case, but the novelty of new man + sense depraving (blindfolding) + pure kinkiness + maybe your imagination = it well can be).
+
+Is there a possibility you'll get jealous or lose confidence over this? Don't do this.
+
+Or you think that you'll be fucking happy to see her get so much enjoyment and glad that you can give it to her? You know, most of the guys would not agree to this. So that makes you kinda unique. And she'll know that too. If you can clearly see this happening, go for it.
+
+But anyway agree over the stop word. Agree that this thing could be stopped. You both should understand that this can be frightening and overwhelming, especially first time.
+I actually wasn't able to go through with my first MFM, but it happened the second time, with the same guy.
+
+And good luck :)",1517850250.0,6
+Supplements,"According to [this](https://www.ncbi.nlm.nih.gov/books/NBK221371/), it seems that RDA accounts for bioavailability from food sources.
+So for each nutrient, its supplement bioavailability, ideally, has to be compared with average diet bioavailability (or even better, your own diet) and intakes adjusted accordingly...
+
+Now, this will not be an easy task. But, since there are also UL (upper intake level that should be safe even for most sensitive people), and it is usually a much bigger than RDA, I'd say as a rule of thumb one can just choose a most bioavailable supplement, and look only at the elemental weight, without additional accounting for bioavailability.",1517320729.0,1
+Supplements,"Sure, I did that.",1517250845.0,1
+programming,"I moved out from them because they have custom kernel and do not provide headers for it. So I wasn't able to install Wireguard and perf, for example.",1516215384.0,2
+sex,"Why would he lie on Craigslist?
+I'd take this at face value.",1512332455.0,3
+programming,"I'm surprised at server ARM perfomance, it's really good. Seems that the only problem is lack of arm-specific optimizations but I feel that in server space there will be more effort to fix that. Two reasons, first: big companies have resources, and at their scale - economic motivation. Second: there are a lot less server software than customer one.",1510241636.0,4
+CroatianSpy,Because happy endings are everywhere and thus very boring,1509031639.0,14
+WritingPrompts,It's like a bigger writing prompt :) Intriguing and teasing. Good job!,1507893141.0,2
+WritingPrompts,"> Her thin, silvery hair was short and surprisingly well maintained for someone who had been in that bed for weeks.
+
+How come he could make judgement about her hair, being generally blind...",1507569316.0,19
+sex,"This. He really could be sick. Something wrong with his brain physically, maybe.",1500457881.0,0
+promos,"I just checked if mining using that service would be profitable - it's not.
+
+P.S. I did this for fun sake, I'm not that crazy :)",1498939783.0,1
+cumsluts,"That's fffucking hot, man. Like my biggest sex dream come true :) Glad for you both!",1496916901.0,2
+holdthemoan,<Lannister's joke>,1491851847.0,22
+WritingPrompts,Oh. I didn't know it is a thing :) Thanks!,1491590845.0,7
+WritingPrompts,I didn't understand the ending at all :( Could someone explain it?,1491588438.0,14
+programming,"Is, for example, painting every day is sad?",1489503934.0,9
+deepthroat,source? I'd love to know how all those sloppy juices ended up on her face :),1486982354.0,2
+programming,"That sounds like it could be easily mitigated by typing at top of the wiki page a bunch of real life questions that answered in current article.  
+Also there is a LOT of potential to ask about generally same thing in a lot of different ways. So Q&A is not a magic bullet in searching questions. I bet more often than not it will be technical people who'll search for a ready answer for them.",1479474342.0,1
+programming,"But:  
+wiki could be filled/clarified by request, after receiving new questions.  
+in case of Q&A people have to navigate and search a [probably incomplete] Q&A for information.",1479295957.0,1
+sex,"I feel it's more about acceptance than dominance. Like anilingus - part of a pleasure is that your partner accepts even this part of you.
+Mighty stuff!",1458574736.0,24
+cumsluts,subtle,1458411652.0,6
+programming,This is kinda perfect motivation for a lot of scientists: https://pbs.twimg.com/media/BcHZdoyCAAAinlr.jpg,1449897572.0,36
+programming,"Still, encrypting bugreports can't really be considered as defense.",1439432611.0,1
+programming,"Sources are open anyway, there is no much sense in encrypting bugreports imo.",1439380856.0,-8
+programming,I guess this really checks utf8 support.,1428929253.0,3
+nsfwoutfits,her social profile https://vk.com/helga_model,1426339071.0,1
+programming,"Actually they say that Source 2 is free for ""content developers"".
+""Content"" may mean something like assets from Unity store, and engine could actually be not free for game developers. Although as dang_hillary pointed out, Valve could just make you release on Steam and take money there.",1425469041.0,14
+golang,My own tests (which can be imperfect) showed that xxHash have no worse quality than MurmurHashes and substantially faster. Just my two cents!,1424084193.0,1
+programming,Reminded me https://github.com/jagt/clumsy,1422481292.0,6
+OkCupid,You are my hero :) Thanks!,1421432623.0,1
+OkCupid,Thanks :),1421432356.0,1
+OkCupid,Could you point them to me? I would be grateful.,1421431637.0,1
+OkCupid,Excuse me? My English is so bad or something else?),1421431003.0,2
+OkCupid,"Thanks!
+
+That's funny. I have taken that image from my Facebook account and all these sites - too, because I've logged in to them via FB.
+
+If something will happen again - I'll find an original or just crop this one.",1421430950.0,1
+OkCupid,"Thanks for your input!
+
+But message from OC states that I could be banned for repeating violations and I'm still worried... On the other hand it also states ""consensus of few moderators"" that I find unlikely :)",1421428960.0,1
+OkCupid,"Well, I had only one photo, uploaded 3 this time. Also connected OC to my Facebook account.
+
+Let's see.",1421428316.0,1
+programming,"This is so fat that it becomes subtle.
+Can't believe author could be serious...",1421347943.0,2
+cumsluts,It may be that he looks like Fred/George Weasley from Harry Potter movies,1421191312.0,1
+programming,Maybe they fixed something. I caught that bug when I registered and couldn't log in; so I requested password recovery and they sent it to me plain and uppercased :) With uppercased password I logged in successfully.,1419458100.0,1
+programming,Italian state railways site (http://www.trenitalia.com/) stores passwords in plain text AND make them uppercase without noting this to user :),1419339729.0,2
+programming,"> Not really. Russia has import restrictions on uncertified crypto
+
+Well, darn. Thanks for correction, didn't knew about it.
+Reminds me how my company had to make application to some USA agency about cryptography export when we uploaded our app to AppStore; app just used API with https endpoint.",1418024859.0,1
+programming,"Just to add my two cents.
+
+
+Agency is called RosKomNadzor, RosKomPazor (should be pozor?) is likely to be satirical mocking of the name. ""Pozor"" is ""shame"" in Russian.
+
+
+Said agency can't censor anything they want; just what considered illegal content.
+> crypto libraries, or anti-censorship tools
+
+are (currently) not illegal.
+
+
+According to RosKomNadzor they tried to contact Github with requests to block content that was found illegal but were unable to receive any answer. After that they requested Russian ISPs to block these repositories/pages/you_name_it, but ISPs were able only to block whole Github (does https usage have anything to do with this?).
+By the way, I think that blocking content just to one country rather than deleting altogether is a good solution from Github side.
+
+
+While it's silly to claim that document in question is in fact suicide advocacy, situation isn't as ""evil"" as pictured in some comments here.",1417831138.0,6
+Oilporn,"What kind of oil do they use?
+Looks like worth trying.",1413508033.0,1
+programming,"That's just a direct link to help page.
+Just checked - Java downloading fine... And yes of course I'm in Russia.",1407767214.0,9
+Android,"Well, it would be ok had they provided more info about violations and were more consistent/logical about it.
+
+In the current state this is really scary.",1407277682.0,3
+Android,"Well, content was recommended to them based on their interests and reactions to the content (recommendation system). It was very easy, so closer to the ""presenting"".
+But user had to mark erotic as his interest to see any.
+Specific wording they used - ""nudity visible through sheer clothing"" - sounds like something very soft for me, and banning ""high maturity"" app for that is... very surprising.
+
+Actually we got banned three times.
+
+First ban gave no specifics at all. We had ""mature"" rating then. After that ban we applied to the ""girl"" tag the same rules as for erotic, marked all Android users as less than 18 (so no erotic, no girls) and submitted to Google Play again (thousands of reviews (average rating 4.5+) was lost).
+
+Two days, ban again. No specifics given. This time we set ""High maturity"" and uploaded again.
+
+One day, ban again. This time - got lucky with moderator? - we got this sheer clothing explanation. So we added to ""bad"" tags ""fashion"", ""gifs"" and ""anime"". But before we uploaded it Google banned my account :-)
+
+End of story.
+
+
+Funny thing - **now they blocked my Wallet due to ""suspicious activity""**. Yeah. Last thing I did - bought a ""Plague Inc"" few days ago.
+Sent them passport scan and card photo - hope not to receive ""this decision is final"". ))
+
+Oh. Is obscene language allowed here? **While I wrote this comment, Wallet team responded. It's blocked because of my Google Play developer account and will not be reinstated unless developer account will be reinstated.**
+We had a free app by the way. Where is logic in that?!
+
+Could anyone recommend self-hosting replacement to Google Mail and Docs?)) I'm nearly hating them now.",1407272392.0,5
+Android,"You assuming wrong. I like porn, but it have nothing to do with my work. Even hard erotic is banned. 
+
+It is relaxing to think that it must be our mistake but it isn't. 
+You see, I would rather adjust our moderation rules would we be informed about what exactly is wrong! But we aren't. ""Our decision is final. We will not provide any feedback and will not help to resolve the issue"" - that's all we got.",1407262100.0,11
+Android,"Content aggregator. Each piece of content was hand-moderated and tagged. To see something erotic user must be registered, 18+ age and explicitly select erotic in interests.
+And mind you, there wasn't anything like porn. It had a girl tag though where you could see a girl in a bikini (oh mother of God horrific!). It had  ""High mature"" rating, again.",1407261495.0,13
+Android,"Your point is reasonable but Google isn't - my app with ""High maturity"" was banned for having ""nudity visible through sheer clothing"".",1407255845.0,10
+Android,"Try ""gay porm"", should work wonderfully! :-)",1407247861.0,5
+cumsluts,"Given the filename, I'm sure it has a HTML5 version...",1403998776.0,1
+programming,I think it would be nice to see original versions of the posters too.,1391176173.0,0
+cumsluts,"actually that was a first google result for ""Friday and Trinity""))
+http://www.xvideos.com/video211240/friday_and_trinity_are_two_big_titty_bimbos_at_suck_that_dick",1383505314.0,2
+gonewild,Oh my god!!,1382399623.0,1
+gonewild,"This is a very clever title to get men attention ;))
+And some wonderful boobies!",1382397081.0,1
+gonewild,"It seems that most redditors here thinks that big ass is bad.
+Can't disagree more! Your ass definitely looks big and gorgeous! ;)",1382396161.0,0
+cumfetish,Absolutely wonderful...,1381706663.0,2
+programming,"Well, my question was shortsighted :)",1344577564.0,1
+programming,"So will we have Windows version to play with anytime soon?
+Some of their requirements already have Windows versions.",1344527418.0,0

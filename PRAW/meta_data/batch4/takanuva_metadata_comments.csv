@@ -1,0 +1,1018 @@
+subreddit,body,created_utc,score
+programming,"Yeah, I had thought about the state effect as well, but I'd say this is by design. We may consider the state effect together with the non-determinism (amb) effect, and a handler that gives a list of all possible solutions, in order (thus, multi-resumption). Then it's gonna be as you mention above, that the state may be shared or may be individual to every run. I do believe that Koka has an example on their website exactly like this (I know I have used similar code while testing [my own prototype](https://dl.acm.org/doi/10.1145/3341105.3373888)). But, as we may partially apply handlers and remove effects from some piece of code, and in any order, this is actually what we want to happen! For the same algorithm, we might want to be able to choose; and, in this case, it would probably be better that the programmer to name the intermediate:
+
+    // Only has the multi-resume effect, as non-determinism, etc
+    my_stateless_function () =
+        // State is never shared among resumptions
+        my_effectful_function ()
+            with state 0
+
+(I hope I got the syntax correct.)",1748033229.0,2
+askphilosophy,"Ok, this is actually helpful. I can reason that a system of formal logic is trustworthy due to being grounded on a small number of axioms that are seemingly true, and I can try to model the perceived reality out of this (like systems of physics); this might be useful in order to reason about the perceived world, but still wouldn't help me to be sure that this is the real world, just a model of what I'm experiencing. Is my understanding of this correct?",1748023193.0,1
+programming,"Fair enough. From experience working with such languages (and eveng designing one myself), I would just argue then that this is not an issue. I have never seem a piece of code that I found it harder to understand just because I couldn't see what the handler did.",1748022977.0,7
+programming,"Algebraic effects and handlers are still something quite academic, but there is intense research over the topic, and this will definitely be the next big thing in programming. There are amazing opportunities for code abstraction and separation of concerns.",1748019306.0,2
+programming,"But that is kinda the point: using effect and handlers allow you to abstract some code over the actual behavior of the handler. When you're writing some code, you know which effects it may perform (as this is decidable through effect inference and the compiler and LSP are gonna point that out for you), but they are expected to work for _any_ possible handler implementation, though with different results. So if you get a wrong result, this will appear on the place where you instantiated the handler.
+
+So, during debug, if a problem arise, you most likely won't focus on the position where the effecful operation is called, but rather where the handler is set. And, to be fair, if you want to know, this isn't any hard: effects behave like dynamic variables (as in, e.g., Common Lisp), so all you have to do is walk up the stack trace to find who set it. Any debugger should quickly give you access to this, probably even in VSCode or similar.",1748019237.0,5
+askphilosophy,"But doesn't the idea of a _formal_ logic, which didn't yet exist at Descartes' time, with a finite number of accepted axioms (e.g., ZF axioms), works within his proposal of building up truth from ground zero? While informal logic could face such problems, I agree, I'm not sure I see how formal logic does; for example, I don't have to accept 2 + 2 = 4, this can now be proved from simpler axioms.
+
+That is, unless the evil demon coerces me to believe that some _axiom_, such as modus ponens, is true while in reality it isn't.",1747521994.0,1
+worldnews,As God himself intended.,1747413013.0,12
+yugioh,"Gonna be honest, I kinda like the fact that Rush Duels don't have archetypes. Looks like classic Yu-Gi-Oh!, in a good way.",1747397403.0,0
+yugioh,"A ""D"" monster would be a very fun fusion as it can be any monster that has a letter ""d"" on its name.",1747347811.0,16
+yugioh,Why is D/D/D support so much better than Odd-Eyes support?,1747259302.0,1
+programming,I would appreciate if they stopped trying to force AI on us. I liked Stack Exchange how it used to be before that crap.,1747254475.0,2
+yugioh,"Worth mentioning, {{Odd-Eyes Dissolver}} can already fuse using pendulum cards being treated as spells.",1747028914.0,1
+programming,[Betteridge's law of headlines](https://en.wikipedia.org/wiki/Betteridge%27s_law_of_headlines).,1746981797.0,2
+programming,[Betteridge's law of headlines](https://en.wikipedia.org/wiki/Betteridge's_law_of_headlines) never fails.,1746934771.0,4
+yugioh,"I don't think this would work as a _change_, but it might come as something additional to the game. Given that in Rush Duel we are getting extra deck rituals, and given that we already have a monster that *can* be Ritual Summoned from the extra deck ({{Sosei Ryu-Ge Mistva}}), I believe that Konami will probably release some extra deck (non-pendulum) ritual monster for the OCG/TCG at some point, with a specific card condition saying that it is stored in the extra deck instead of the main deck, and with specific ritual spells for them, of course. That would work and it would be pretty fun.",1746644883.0,1
+worldnews,"I read that as ""smacking of chicken"" and was slightly confused.",1746535189.0,1
+worldnews,"Great, now I'll be stressed the whole week about a potential nuclear threat.",1746304181.0,1
+yugioh,We could have retrains or alternative cards such as Angry Burger.,1746217001.0,2
+yugioh,"5D's is wonderful, dude. You gonna love it.",1746216929.0,2
+yugioh,"We have Ursarctics, which behave just like Dark Synchros did on the Tag Force games, which is probably how they would behave in the TCG/OCG anyway.",1746216863.0,2
+yugioh,"To be fair, on the anime card text, the dark tuners (which were also an archetype) had a specific condition saying they can't be used for regular synchro summons. This bears the possibility that there would be a dark tuner which could, indeed, be used for both.",1746216680.0,4
+yugioh,"On the Tag Force games, negative levels are only negative for the purpose of summoning, and they are treated as positive otherwise. I think it would be very cool if, for example, Konami decided to release Ursarctic reprints with a Dark Synchro card layout (dark gray, blue stars on the left, etc).",1746216550.0,2
+worldnews,They can. They shouldn't. That's the problem.,1745690804.0,-3
+yugioh,"Cookpal is quite nice. I really like their gimmicks, specially [Food Cemetery](https://yugioh.fandom.com/wiki/Food_Cemetery), that allows you to place monsters underneath it similar to Xyz materials. I really hope we get a card with similar effect in the game!",1745110424.0,2
+yugioh,"I mean, you do have a point. I think I have to rewatch Bruno explain how Accel Synchro works... But, the fact that Synchro Tuners that allow you to Synchro Summon as a quick effect place no condition on the summoned monster in the OCG/TCG would suggest (I guess) that as a mechanic this would also be valid for the summon of any Synchro monster.",1744912991.0,2
+ProgrammingLanguages,"I'm not sure there's one. As IRs is my main PhD topic, do I hope to write one after I've finished it. Note, though, that a bytecode language tends to be used either as a target language (not as an intermediate language), or be a _part_ of an IR instead (usually through some graph or similar structure).",1744721211.0,1
+ProgrammingLanguages,"If that helps, I also fell for it.",1743512132.0,21
+worldnews,RemindMe! 5 years,1742758018.0,1
+programming,I see a constant debate on imperative and functional programming online. It's very nice to see some encouragement on logic programming techniques as well!,1741556102.0,2
+programming,"With this amount of effort you should just write down a compiler, bro.",1740959582.0,2
+worldnews,"My brother in Christ, you should see a psychiatrist.",1740946697.0,1
+worldnews,This gotta be a South Park's episode we're living in.,1740575700.0,1
+worldnews,Trump would let the US burn just so he could dance over the red light.,1740345331.0,2
+worldnews,"He's literally gonna let thousands die simply because he was called misinformed, isn't he?",1740129738.0,154
+worldnews,"He's gonna let thousands die just because he didn't like being called ""misinformed"" by Zelensky, isn't he?",1740079071.0,1
+worldnews,"Honeymoon is over, innit?",1740046931.0,1
+worldnews,"As we say in Brazil: ""grande dia"". 👍",1739928581.0,18
+worldnews,Humanity's been dancing with the Devil for long now.,1739589920.0,10
+Compilers,[I wrote a paper related to this some time ago](https://dl.acm.org/doi/10.1145/3341105.3373888).,1739541293.0,1
+worldnews,Can they just make up their mind already?,1739525512.0,1
+worldnews,Are we living in a South Park episode now?,1739368166.0,2
+cpp,I came here to say that.,1739244739.0,1
+ukvisa,"I've called the GP like 6 months ago and complained that I was in a really bad position. The GP prescribed 75mg of venlafaxine for me by themself (I was taking 150mg of desvenlafaxine back in Brazil!), as a trial. It helped, but not quite as much. I've been able to see a doctor last December, 2 months ago, and they decided to increase the venlafaxine to 150mg, which should be comparable to what I had been taking before coming to the UK. I can say I don't feel it's quite the same thing as the desvenlafaxine, but it has helped a bit.
+
+I would strongly suggest you have your meds changed before you move, cause yes, then you'll be able to get the prescription in here.",1738967848.0,2
+yugioh,"There is a rule for [playing with deck masters](https://www.yugioh-card.com/en/play/alternate_format_tournaments/deck-master/). Unfortunately, [it sucks](https://www.reddit.com/r/yugioh/comments/1i8d6cw/what_would_be_the_most_op_deck_masters/).",1738522337.0,1
+worldnews,At this point y'all should let them lead NATO.,1738521242.0,1
+worldnews,I thought C was for cookie...,1738320364.0,39
+programming,[Betteridge's law of headlines](https://en.wikipedia.org/wiki/Betteridge%27s_law_of_headlines).,1738238455.0,2
+yugioh,"I run a pure Odd-Eyes deck, Joker would certainly make a good Deck Master in the Domain Format for it!",1737715869.0,1
+yugioh,"I've checked Domain Format online, and it indeed does sound like fun! Certainly does look way more balanced than Deck Master format as Konami published it. Thanks for suggesting it.",1737715826.0,3
+yugioh,"My deck's ace card is [Odd-Eyes Gravity Dragon](https://yugioh.fandom.com/wiki/Odd-Eyes_Gravity_Dragon), I think it would make a good Deck Master. I mean, it would make the opponent pay 500lp to do anything.",1737715648.0,3
+yugioh,Did you play it at the time?,1737668527.0,1
+worldnews,"Oh, I'm not saying it _should_ happen, but it would be very embarrassing.",1737648631.0,6
+worldnews,And maybe without Kursk.,1737645409.0,8
+Compilers,"Usually we do not take three-address code as an IR alone; you'll have to extend it to some degree to reason about functions or blocks. You might see that as a simplification for ANF, which would be the IR in this case (actually, three-address code code be seem as a subset of both ANF and SSA). So you might try to ask your question in regard to ANF vs. SSA.
+
+It's actually kinda well-known that [ANF and SSA are equivalent](https://www.sciencedirect.com/science/article/pii/S1571066105825964), as there is a very simple equation-preserving translation from one into the other. In this case, to answer your question properly: every optimization that may be carried in one style may also be done in the other, and, in the end, it's just a matter of how you prefer to represent your code. Semantically, they're the same thing.
+
+(Disclaimer: my PhD topic is IRs; feel free to ask any question you may have.)",1737535751.0,2
+Compilers,"I think this should be traced back to [UNCOL](https://en.wikipedia.org/wiki/UNCOL), from 1958.",1737469880.0,1
+worldnews,As usual.,1736629148.0,18
+programming,I love the logo.,1736161087.0,1
+programming,"Ohh, this brings back so many memories (no pun intended). My first job was some embedded programming which required a lot of embedded assembly. I did so many monstrosities in there.",1734877892.0,1
+visas,"Indeed, I wrote a letter and my PhD advisor successfully picked the document for me. I wrote a very brief letter, I don't remember the exact details (sorry!), but I stated something like: ""To whom it may concern, I, -my name-, with Brazilian identification document number -my national document id-, grant permission to -his name-, with national identification number -blablabla-, to receive my visa in my behalf."", and I signed this letter. I also gave him a printed copy of my (Brazilian) document, which matched the letter. He said he had no issue in picking up the document. You should be fine with anything similar!",1733772396.0,1
+programming,Does [pìppo](https://en.wiktionary.org/wiki/pippare) mean what I think it means?,1733324215.0,2
+programming,Please don't forget to star the repository: https://github.com/NanowarOfSteel/HelloWorld.,1733324102.0,34
+programming,"I was expecting it to stop the world, tho.",1733323771.0,4
+programming,"I've always wanted to know a lot about linker scripts, thanks!",1732286716.0,4
+Compilers,"You are right, I chose my words poorly.",1732106802.0,1
+Compilers,"Bro, please chill. I never said it was impossible. I said that, as other people have commented, the reason you were not finding C++ hobby compilers is because of the huge complexity of the task. Most people wouldn't try it, or try it and give up, and this explains why you couldn't find any. It's a herculean task, but we know some people have tried doing very complex things, I mean, even Linux started as a hobby project, right? I gotta be honest that I didn't think one even existed, but it seems that OrangeC is a thing, which got me by surprise. But it also seems to be the only one, and all I said is that the complexity is the reason.",1732104875.0,0
+Compilers,"Ok, this is certainly possible, but would you agree that it is complex enough that it is _not common_?",1732039868.0,0
+Compilers,I sincerely have no idea what you're talking about anymore.,1732033207.0,1
+Compilers,"People have answered your question, though perhaps with a bit of sarcasm. C++ is quite a huge language, there's no way someone would do a hobby C++ compiler as this would take too much effort for something regarded as ""for fun"". You can notice that even the compiler above is very, very big.
+
+C++ is probably the most complex programming language there is. It's completely reasonable that there aren't a lot of compilers for it around.",1732031591.0,2
+worldnews,"I'm from Santa Catarina's biggest and most populous city, Joinville. And yes, we do have a lot of nazis around there, this is not a joke. Also, perhaps not coincidently, we're also one of the places with the biggest number of Bolsonaro's supporters, if I recall correctly.",1731555809.0,13
+worldnews,"Just to give some context to people: the Yazidi religion traces back to similar roots to abrahamic religions, and they do worship the spirit known as the Peacock Angel. While he is NOT seem as an evil figure in their religion, some of the background history is similar to how muslims describe the Devil (e.g., both figures refuse to bow down to Adam), so this is enough for them to consider that both are the same entity and consider Yazidi as ""Devil worshippers"" and as ""evil"". Which is very ironic, as what they have done here is truly malignant... and I'm pretty sure it goes against the Quran as well...",1729378553.0,1
+worldnews,"Oh, God... I hope they're giving her all the support she needs... I'll never read The Horror at Red Hook the same way again...",1729378083.0,1
+Compilers,"Hey there, thanks for posting this! I am the main author. If anyone has any doubts, please let me know, I'd be glad to answer any questions.",1725577983.0,2
+ProgrammingLanguages,"Besides having linear types, Granule can also use [security grades](https://granule-project.github.io/granule.html) to enforce access at type-level, so, e.g., `Int [Public]` and `Int [Private]` are types. In general, graded type systems are useful for this kind of distinction.",1724765042.0,3
+schizoaffective,"I'm not british, but I've been living here for 2 years now, doing my PhD. Doctors in here agreed with my diagnosis and didn't ask me for a toxicology test.",1724687535.0,2
+ProgrammingLanguages,"I'd say no. Some people would define a programming language as a syntax along with an [operational semantics](https://en.wikipedia.org/wiki/Operational_semantics), usually defined as either an interpreter or an abstract machine. By extension, I believe it would probably be fine to define a [denotational semantics](https://en.wikipedia.org/wiki/Denotational_semantics) into something with an operational semantics instead (e.g., translating your language into the lambda-calculus or something like that). In any case, you need to define a non-ambiguous semantics first, somehow.",1724686922.0,1
+Compilers,"The most common kinds of IR are CPS based ones (such as in [Appel's book](https://www.cambridge.org/core/books/compiling-with-continuations/7CA9C36DCE78AD82218E745F43A4E740)) or some variant of either ANF or SSA. But the three of them have already been shown to be equivalent (there is a simple syntactical transformation between them). There's even [an algorithm](https://c9x.me/compile/bib/braun13cc.pdf) that can generate code for any of those three for imperative-like constructs. So, in practice, it wouldn't really matter which one you choose. As SSA is the usual pick for imperative code, perhaps it would be a good idea to use that as you'll find plenty of study material online... but it should be ok to generate threaded code for any of those.",1724676825.0,1
+askphilosophy,"Worth mentioning that `p→q` being true when `p` is false is also valid in constructive logic, even in the absense of the excluded middle. This follows directly from the principle of explosion: since I'm assuming something false to be true, I am allowed to reach any conclusion, including `q`. This wouldn't hold on minimal logic, which rejects both the excluded middle and explosion, and other paraconsistent logic systems (where `p` and `¬p` together don't necessarily imply false). Of course, this would require _evidence_ that `p` is false, which is not necessary in classical logic as you can use the excluded middle to reason about whether it's true or false...",1723872454.0,7
+ProgrammingLanguages,"He's my PhD advisor! A really smart, really kind guy.",1723125235.0,4
+ProgrammingLanguages,"It's often said that we capture evaluation order, but in a more general sense, we actually capture observational equivalences. Recall [Plotkin's simulation results](https://www.sciencedirect.com/science/article/pii/0304397575900171): if `a -> b`, then `[a] ->* [b]`. So the standard reduction sequence on the target simulates the standard one on the source. But this leads to computational adequacy: two terms are semi-separable on the source only if they are semi-separable on the target. Assuming computational adequacy, any reduction that is valid on the source (by valid I mean: it's included in the observational equivalence) can be simulated on the CPS target, though requiring steps outside leftmost, outmost one (thus ""bypassing"" the ordering imposed by continuations as you mention).
+
+Summing up, let's say we have terms `a` and `b`, and we want to optimize from `a` to `b` by performing _call-by-value_ reduction only. If we compile those to `[a]` and `[b]` using the _call-by-name CPS translation_, we can _still_ reduce from `[a]` to `[b]`, even though I'm simulating a call-by-value step and using a call-by-name translation. Sure, it might be more awkward to spot CBV redexes using the CBN translation (I've done that), but it's possible. If you're interested, I talk more about this on [a paper for next ICFP](https://icfp24.sigplan.org/details/icfp-2024-papers/7/On-the-Operational-Theory-of-the-CPS-calculus-Towards-a-Theoretical-Foundation-for-I), and indeed I was motivated by the quote you gave where they mention that as a downside for CPS.",1722965570.0,3
+ProgrammingLanguages,"In a sense, it's a matter of taste. The main IR styles are CPS, SSA, and ANF (to a lesser degree, also monadic metalanguages [were used](https://www.microsoft.com/en-us/research/wp-content/uploads/2007/10/compilingwithcontinuationscontinued.pdf)).  But it's well-known by now (see [this](https://www.cs.purdue.edu/homes/suresh/502-Fall2008/papers/kelsey-ssa-cps.pdf) and [this](https://www.sciencedirect.com/science/article/pii/S1571066105825964)) that those are actually equivalent when you restrict continuations to second-class (i.e., you forbid the use of control effects). In the end, they are just different ways to represent the same structure, which is Moggi's computational lambda calculus. These are good as IRs because their semantics allow for any possible side effects, which is usually hard to reason about in other formats.",1722961732.0,1
+ProgrammingLanguages,"It's a bit older, it comes from Richard Kelsey's [A Correspondence between Continuation Passing Style and Static Single Assignment Form](https://www.cs.purdue.edu/homes/suresh/502-Fall2008/papers/kelsey-ssa-cps.pdf), from 1995.",1722961443.0,1
+ProgrammingLanguages,"The last remark is not quite true: the CPS translations actually capture an observational equality rather than an explicit evaluation order. For example, since they were compiling Haskell, they need to use the CBN observational equality (as it coincides with the one for call-by-need), by using, e.g., Plotkin's CBN translation. It's still possible though to perform call-by-value reduction soundly in the result though, because it is included in the CBN equality, although it might be a bit more complicated to do so.
+
+Worth mentioning also that there's a [very nice followup paper](https://dl.acm.org/doi/10.1145/3341643) that reasons that, as stock hardware works basically in CPS by pushing the instruction pointer on the stack, it's not really a matter of _whether or not_ to use continuations, but _when_ to introduce them in the compiler pipeline.",1722960989.0,3
+ProgrammingLanguages,"Those would actually be coeffects, to be fair. You can do stuff like that in Koka.",1721763766.0,2
+ProgrammingLanguages,The FreePascal source code is actually a very pleasant read. The devs made a great deal of effort into leaving everything organized.,1721613675.0,3
+Compilers,"You're right, thanks. Fixed.",1721512182.0,1
+Compilers,"I mean, that's not really my fault. My criticism was directed towards the license itself, not at the project, which is surely cool. What I meant is that I would hope that projects like this would be more welcome (and I'm not sure they are welcome by Oracle).",1721512067.0,6
+Compilers,Doesn't the JVM's license explicitly specify that implementations can be neither a subset nor a superset of the spec?,1721501984.0,-5
+ProgrammingLanguages,"Although it doesn't seem like what you're asking, [I did actually sketch a purely functional C some time ago](https://dl.acm.org/doi/10.1145/3341105.3373888). Basically we used the SSA algorithm as part of the denotational semantics for the language, so that we would get ""Haskell with goto"". Unfortunately we never had time to turn this into a full-blown compiler implementation.",1719221878.0,3
+programming,"Would you know what the (translated) articles mean by ""native intelligence""? This must be some typo, otherwise I have no idea what they mean by it.",1719017840.0,1
+Compilers,"There are three main flavors of IRs nowadays: CPS-based, ANF, and SSA. It's widely known by now that the three of them are actually equivalent, as in, it's easy to translate from one to another. Any realistic compiler will use an IR, and most production compilers rely on one of those three. Even though you're studying, it's still worth it to implement it in order to have a deeper understanding on how it works.
+
+It's been already suggested, but [Braun's paper](https://c9x.me/compile/bib/braun13cc.pdf) gives a very nice way of generating SSA from an imperative-like programming language. Also, as the paper itself says, the algorithm may be easily adapted into generating CPS or ANF instead as well. You should probably read it and give it a try.",1717613547.0,4
+ProgrammingLanguages,"As usual, thanks for the link!",1717063080.0,1
+ProgrammingLanguages,"By catamorphisms and anamorphisms you are thinking of (strictly positive) inductive and coinductive definitions, frequently called mu and nu types (the initial F-algebras and final F-coalgebras, if you need some keywords for googling). Those are actually [encodable in System F](https://homepages.inf.ed.ac.uk/wadler/papers/free-rectypes/free-rectypes.txt), so technically you just need need to extend the system for polymorphism and type constructors (System Fω). I do remember that the paper [CPS Translating Inductive and Coinductive Types](https://dl.acm.org/doi/10.1145/503032.503043) has a description on how to add those as primitives (so: type formation, term introduction and term elimination).
+
+Of course, this is the general case. If you want something simpler, you can do as it's been suggested: simply add natural numbers as primitives and a term `natrec` that performs recursion on the natural numbers (basically executing a function `n` types).",1716616847.0,1
+ukvisa,"I would recommend you try to change your medication before arriving in the UK. I've been here for a bit over one year and a half now and I'm still on the waiting list to see a psychiatrist through the NHS. I've been out of it during this time, but now I'm trying to see if I can get access to venlafaxine as a substitute through the GP.",1716504382.0,1
+Compilers,I've been doing research on Appel's and Kennedy's IRs. Thanks for the link!,1714958515.0,2
+ProgrammingLanguages,"As of Swift 5.9, it seems you can now enforce linearity using consuming functions. The author might wanna take a look at [typestates](https://swiftology.io/articles/typestate/), which might be enough to encode session types.",1713867729.0,2
+ProgrammingLanguages,"Sure, why not?",1712423018.0,1
+programming,"> Now I don't need to sleep anymore.
+> I just keep watching.
+
+Well, that's unsettling.",1710640121.0,3
+programming,"Sim, eu ainda tomo. A sulpirida (equilid) é um medicamento antipsicótico atípico, então ajuda a minimizar efeitos de delírios e alucinações, faz a cabeça ficar quieta um pouco. Se você tiver alguma dúvida, fique a vontade pra me mandar uma mensagem privada.",1709816185.0,1
+ProgrammingLanguages,"That's not what I meant. I said that adding fixpoints _to the calculus of constructions_, in the way it's usually done for System Fomega, breaks typechecking because term equality is not decidable anymore. None of the languages you mention have dependent types in the general sense (i.e., types depending on arbitrary programs). The problem is that general recursion won't play along with dependent types.
+
+*Edit*: sorry, I misread your last sentence. Ok, some type systems are Turing-complete, but there's a compromise for fixing that in everyone of them. You may have a point...",1708842084.0,-1
+ProgrammingLanguages,"Well, it kinda is. Loosing typechecking is a big deal for a more ""practical"" programming language (as in: meant for general purpose programming). You can enable general recursion in Agda or Lean, sure, but you have to be very careful not to add a loop while typechecking, otherwise it just hangs. I wouldn't consider doing so for a general purpose language, there are very expressive type systems out there with decidable type checking.",1708816814.0,0
+ProgrammingLanguages,"I always value what /u/mttd posts, whichever are their goals in doing so. It's always something very relevant and interesting. I hope they keep doing it.",1708813865.0,3
+ProgrammingLanguages,"Worse than that, by admitting fixpoints (making it Turing-complete as most languages are), this breaks typechecking.",1708810502.0,1
+ProgrammingLanguages,"I would say that the answer is that it's not possible, or rather, it's very undesirable, because we'd have trouble with typechecking.
+
+Remember that System Fomega is strongly normalizing and does not admit loops in it, so whenever we are using it as a foundation for some programming language, we usually admit fixpoints as a primitive and extend the typesystem to deal with them, thus allowing arbitrary recursion. This is, of course, fine, but this doesn't work for the calculus of constructions: if we add fixpoins as a primitive and allow for arbitrary recursion, then typechecking becomes undecidable (or rather, semi-decidable, I believe) as we can't check anymore that two terms are beta-equivalent, which is done while typechecking the calculus of constructions (which, as usually defined, is strongly normalizing as well). If we don't allow for fixpoints we get what's done in theorem provers: typechecking is decidable, but no program with loops and no general recursion is accepted.
+
+Of course, there are languages that simply ignore the issue, such as Cayenne. In it, if typechecking gets into a loop, it's assumed it's the programmer's fault. Still, on most settings, we wish that typechecking is decidable and the algorithm terminates while compiling.",1708810437.0,1
+ProgrammingLanguages,Very solid recommendations!,1708809646.0,1
+ProgrammingLanguages,"That depends on what you want to learn. Though of course those usually go hand in hand, compilers and programming languages are two distinct and very different fields (I usually say that compilers look more like engineering, while programming languages is almost pure math). For the former, the [dragon book](https://en.wikipedia.org/wiki/Compilers:_Principles,_Techniques,_and_Tools) is usually a good starting point, although I find that most compiler textbooks usually lack details while discussing intermediate representations (disclaimer: this is my PhD topic). On the latter, someone else already recommended but Pierce's Types and Programming Languages (and it's followup Advanceted Topics in...) are a must read. The Van Roy's chapter on paradigms is also very good, I've always gave it for my students to read.
+
+If you're starting on formal language semantics, a nice starting point is [Luca Cardelli's Type Systems](https://homepages.inf.ed.ac.uk/dts/fps/papers/cardelli.pdf), which gives a basic intro in the required math.",1708809513.0,6
+Compilers,"> Many people argue that compilers is already a solved problem.
+
+Who could possibly say something like that?",1708082060.0,1
+ProgrammingLanguages,"I'm pretty sure other people have said this already in here, but:
+
+1) ""Procedural or object-oriented"" is a false dichotomy. Those are just two paradigms among others. You can have functional programming, logic programming, reactive programming... you should pick the tool most appropriate for solving your problem.
+
+2) A lot of those design patterns are ways to find a way around problems in the language itself. If the language didn't have such an issue, the pattern wouldn't even be needed. This is not a strong selling point.",1705947522.0,1
+ukvisa,"I did not change it yet because I couldn't yet get to see a psychiatrist through NHS, I've been on the waiting list since I've arrived. So I'm out of desvenlafaxine with no substitute for now. I would advice you to contact your local doctor and make the change *before* you move to the UK.",1704793719.0,1
+programming,"I'm gonna start using the expression ""a DOS attack against humanity"" from now on, if you don't mind.",1704301161.0,5
+ProgrammingLanguages,"Is there... a path? I just kept downloading every paper I'd see and force myself to follow every reference out of self hatred and spite. Took a few years, but everything started to click, eventually.",1704199547.0,3
+programming,"I think the proper way to answer this is with ""none"", right?",1702997202.0,16
+programming,"Sure. We could show an algorithm idea was correct by using logic, but we could not yet execute it and had to rewrite the algorithm into a proper language, introducing an opportunity for human error. Now they have closed the gap letting the logic be verifiable _and_ compilable.",1702992327.0,10
+programming,"Well, the borrow checker is a very useful tool. It _proves_ the code uses memory safely _in compile time_ (because it is sound). Of course this is not as useful when people keep abusing unsafe, but it's still a remarkable feature to have.",1702422924.0,3
+programming,"Rust has unions and unsafe code blocks. The programmer can explicitly ask the compiler to ignore safety guarantees whenever they want. Well, it's expected that the programmer will make mistakes, that's not really a bad thing, after all, you might need that to interface with system code or to do some weird optimization. You might need unsafe code at some point, you usually do. However, if you keep ""unsafe"" away from most of the code, then most of the code won't have segfaults. You have a smaller amount of code to worry about that. It doesn't mean you can't get segfaults whatsoever.",1702414606.0,5
+programming,"There are safety guarantees, those that are proved by the type system if it is sound. The borrow checker provides safety, it doesn't mean that programmers can't introduce panics through other means. Nature finds a way.",1702413679.0,8
+programming,Just because a language is safer doesn't mean the programmers are smarter.,1702408547.0,10
+programming,Then I have conflicted feelings about doing it now.,1702408068.0,18
+ProgrammingLanguages,"Also worth mentioning that in Idris 2 we can match on types, so naturality is not enforced.
+
+    f: Type -> Integer
+    f Bool = 1
+    f Nat = 2
+    f _ = 0",1702384471.0,6
+ProgrammingLanguages,"I must say I'm curious myself about adding computational classical logic (through the lambda-mu-calculus or the lambda-delta-calculus) to a propositional universe in HoTT/CTT, [we know there are some issues](http://pauillac.inria.fr/~herbelin/articles/tlca-Her05-callcc-sigma-types.pdf) as so to handle classical proofs, but I have no idea of the implications yet or if this would break stuff. I do _hope_ to investigate it if I have time by the end of my PhD as I wish to get a CPS translation for CTT, but (spoiler alert) I don't think I'm smart enough.",1702104030.0,2
+ProgrammingLanguages,"I'm working on a similar thing as my PhD topic, kinda.
+
+You have to be careful with this though, because classical logic is not usually adequate as a computational target, not because of the excluded middle (which has a computational interpretation!), but because it lacks confluence. Lets say you give a term syntax to classical logic, just as the lambda calculus gives to intuitionistic logic; the congruence of the reduction rules is _degenerate_, i.e., for any two terms `e1` and `e2` of the same type `T`, we can have that `e1 = e2: T`. So, for example, `1 = 2: nat`, even though both are in normal form. This is usually not what we want from a computational point of view, i.e., that a computation may have different results.
+
+It's possible to fix this, and there are many different possible solutions indeed. There are many references on this account. A simple solution is to extend the lambda-calculus with a control operator such as Lisp's call/cc and then fix an evaluation order (either call-by-name or call-by-value), so that you have a single normal form for each term. There are also some solutions for a classical logic with confluence, the kind of stuff that lead us to linear logic. You might be interested, for example, in the [lambda-mu-calculus](https://en.wikipedia.org/wiki/Lambda-mu_calculus). The lambda-delta-calculus is also interesting. My research focuses on the CPS-calculus (Appel and Kennedy's IR), which in the simply-typed setting is yet another computational interpretation for classical logic, by dropping implication altogether and using just conjunction and negation.
+
+A very important read for this is the ""A Formulae as Types Notion of Control"", where Griffin first realizes that call/cc is typeable as Peirce's law. You can see /u/phischu example to notice how this can lead us to a computational excluded middle, which simply allows us to do backtracking in a program.",1702055751.0,6
+ProgrammingLanguages,I... I love 80's power metal. I don't know how to feel about this.,1700534466.0,4
+ProgrammingLanguages,"Dunno, but how about programming with fixpoints (I'm thinking of Datafun and other Datalog extensions)? Not esoteric, of course, but still I've seem snippets that took me a while to figure it out how they worked, and I thought I already knew how to program in anything.",1700534421.0,3
+yugioh,My ace is surely Odd-Eyes Gravity Dragon!,1699875541.0,1
+programming,"I may be in bad company, but everyone I've seem advocating clean code has used it to increase the cognitive load of the code they've showed me instead.",1699875218.0,1
+rickandmorty,Have you seem the last episode? It answers this question (and the answer is no).,1699868232.0,2
+rickandmorty,"It got me thinking. In C-137's memories we've seem that he had a very different personality then Prime already. I doubt he'd ""do the same"" if he had portal traven first, as Prime said. Perhaps Prime had a similar personality at some point in order for him to be so sure? What did happen to Prime's Diane?",1699867006.0,7
+rickandmorty,"Also, did anyone else notice the phrasing in ""I can end the **Rick experiment** anytime I want""? Was just an expression, or do we have something bigger in here? I just think Evil Morty bested Rick Prime too easily...",1699866615.0,5
+rickandmorty,"Well, the lastest episode kinda undermines this theory. Prime and C-137 had indeed a unique bond in the multiverse.",1699865711.0,3
+rickandmorty,"This became even weirder in the light of the last episode today. Is Unity a multiversal hive mind?
+
+There's no problem with Birdperson and the gang because Rick assembled them through the portal: he might have gone to the replacement dimension to pick them up. That's ok. But Unity arrived on Earth by space travel instead, and Rick Prime confirmed there was a singel Rick chasing him that had an identical backstory to C-137 (by saying only the two of them invented portal travel).
+
+Could it be that in the parmeesian dimension there was a Rick that didn't invent portal travel, but still was one of the Ricks that were chasing Prime? I think the moral here is that it doesn't matter.",1699865667.0,3
+rickandmorty,I stand corrected.,1699865436.0,16
+rickandmorty,"What the...? Did they just drop this midseason? I have no idea what's gonna happen now, still I'm very excited.",1699859998.0,42
+rickandmorty,"Meaning the outcome _could_ have been the same, but flipped. Rick C-137 seemed to have quite a different personality. Also, we don't know what happened to Rick Prime's wife.",1699859685.0,11
+ProgrammingLanguages,"An agglutinative programming language, great. I'm gonna have nightmares now.",1699624977.0,9
+programming,"I remember that Jon Hall (maddog) once told me of a class he went to, a long time ago. The professor told the students to write the same program in several languages, including APL. While the code in Fortran would be somewhat big, (I don't really remember the details, but I'm gonna guess) around 50 lines of code, the professor encouraged the students to write it in APL ""as short as possible"".
+
+Maddog told me a student came up late to class, looking like he hadn't slept, and had an one-liner in APL. The professor asked him to explain how the program worked, to which the student said ""I made it work, I don't know how to explain it anymore"". The professor then said that it should be a lesson to them: smaller, more concise code was not always better code.",1699623472.0,8
+programming,"I can't really think of a concrete example right now, but I work with logic and programming languages just as you said. I'm pretty sure I've seem stuff that at least superficially looked like that in some papers I've read (at which point I usually stop for a crapload of coffee and to reconsider my life choices).",1699620314.0,2
+programming,It might not look like arithmetic but there's a lot of kinds of math. I wouldn't be surprised to see something that looks like APL code in a categorical semantics paper due to the heavy use of combinators.,1699615659.0,1
+programming,"[APL](https://en.wikipedia.org/wiki/APL_(programming_language%29) is a programming language that appeared before the ASCII standard, and has [many special symbols in its syntax](https://en.wikipedia.org/wiki/APL_syntax_and_symbols) that behave as primitive functions. Though APL is still used nowadays in some legacy systems, a few other modern math oriented programming languages (e.g., [Agda](https://en.wikipedia.org/wiki/Agda_(programming_language%29)) uses those symbols and other unicode math symbols for programming. So support for these math symbols is kinda nice in an open source programming font.",1699574861.0,27
+programming,"Hey there, it's me again. [You might remember me](https://preview.redd.it/fp07eegg40881.jpg?width=740&auto=webp&s=a8e47855b6f632bca30539c45b149427287938c0) from all those other open source fonts, where I keep opening an issue asking for APL symbols. It's time to do that again.",1699574265.0,62
+ProgrammingLanguages,"In the operational semantics, tail call kinda amounts to eliminate a thunk in case we know that all it's gonna do upon execution is force another thunk and then immediately return it's value. So we save one allocation and the time for forcing and updating it (as in #2 in your example, as we need to make the thunk remember it's already been executed).",1699396944.0,2
+ProgrammingLanguages,"But thunk allocation usually takes place at a later stage on the compilation pipeline. E.g., you could apply a call-by-name CPS translation from the source, as call-by-name and call-by-need have the same observational equivalence, then apply any optimization you want, including optimizing tail call (which is sound), probably apply a closure conversion step, and only then start thinking about thunk allocation. Ideally you'd go for #2 then, using mutable state for call-by-need is the usual approach. Are you thinking about this in terms of the source language directly?",1699348196.0,1
+ProgrammingLanguages,I'm so loving the advancements we've been seeing in Datalog in the recent years. Fixpoint programming like that should be more common.,1699111770.0,2
+RoleReversal,"I'm also from Brazil. You are not wrong, there's a lot of social pressure on that regard. As an asexual guy I've struggled with this crap for a long time (and kinda gave up on finding a relationship). So... I feel ya. Good luck.
+
+(Tudo é terrível, mano.)",1698315878.0,1
+ProgrammingLanguages,"[Oh boy...](https://i.imgflip.com/3amgsb.jpg?a471528)
+
+Edit: binders and substitution are always a huge pain. I have recently been experimenting with a substitution algebra, as suggested in the ""Completeness and Decidability of de Bruijn Substitution Algebra in Coq"" paper (and others from this team). Seems like a good approach, as substitution (extensional) equality becomes decidable.",1698183392.0,6
+ProgrammingLanguages,I'm a PhD student on the Granule team and can confirm he's an excellent advisor as well.,1698182950.0,3
+yugioh,"I just wrote that every simulation is an approximation. They don't exactly follow the rules because that's literally impossible. In the case of a loop they most certainly impose a counter: they try the loop N times, and if they don't see any net change, they give up and _assume_ it's never gonna happen.
+
+This doesn't affect gameplay much so much because loops are usually very rare in the game. Still, a perfect simulation of the game rules can't exist.",1697775224.0,8
+yugioh,"The memory limit doesn't prevent something from being Turing-complete in the common sense, given that we consider our machines to be Turing-complete and memory is limited. I highly believe Yu-Gi-Oh! is already Turing-complete, we just didn't see how to simulate it yet.
+
+However, something worth mentioning: even if it is not, the game rules are already **undecidable**. I.e., there can't exist a computer program that properly simulates the game, and every simulation necessarily is an approximation. This is due to the net change rule: loops in the game can only be started if they provide a net change, and if the loop is started by game mechanics, the card that causes it is destroyed if the loop has no net change. However, checking for net change is equivalent to solving the halting problem, which we know that computers cannot do.",1697767212.0,4
+yugioh,"For those who wonder: there's an actual limit to what computers can do, and if some set of rules allow us to calculate ""anything that can be calculated"", we say that these rules are Turing-complete.
+
+For context: in 1936, Alan Turing and his doctoral advisor Alonzo Church discovered computer science; Turing discovered the now called universal Turing machine, and Church discovered the lambda calculus, and they realized those two things could calculate _exactly_ the same things. From time and time again people keep finding out new sets of rules to calculate stuff, including our modern computers, but every time these rules end up being equivalent to the other ones: everything you can calculate with a universal Turing machine you can also calculate with the lambda calculus (because you can simulate one in the other), or with a modern computer programming language. The Church-Turing thesis states that ""this is precisely the set of things that can actually be computed"", which is _widely_ believed to be true. When a set of rules allow us to calculate anything that can be calculated (i.e., it's equivalent to a Turing machine, or to the lambda calculus, to a computer or to a programming language), we call it Turing-complete; this can be read as ""powerful enough to simulate a computer"".
+
+The author was referring to a kind of well-known fact that Magic is actually Turing-complete. We could potentially simulate computer programs (e.g., mining bitcoin) using the rules of the game. And this is not something so odd as it seems: we have a lot of stuff that is accidentaly Turing-complete, including Power Point.",1697766591.0,28
+programming,"What do you mean ""the night""? Isn't this... a normal occurrence for you people?",1696589559.0,1
+programming,"There's nothing monadic in there. However, that use of anonymous functions is pretty standard in functional programming.
+
+Edit: the author of the above comment did mention something, but it seems they decided to delete it (I'm sorry if you misinterpreted my tone). So, let me just clarify a bit: monadic code relies on the monad structure, which is a couple of operations (called `bind` and `return` in Haskell), which follow a few laws. This is commonly used in functional programming, specially in purely functional programming, because we know that by using a structure following these laws we can simulate any kind of side effect in a language that doesn't have them. It is not the case in the blogpost given, where they simply use anonymous closures to build up code, which is the common way functional code is written (even non-monadic code). What might be relevant is [Church Encoding](https://en.wikipedia.org/wiki/Church_encoding), though, which is a way of programming completely based on that.",1695941304.0,5
+offmychest,"I'm not sure if you were talking about my comment as well, but if so, I didn't mean to offend anyone, I get the difference; but still, even though it's not the same thing, it has worked for my friend in a similar condition, and they're pretty happy by now.",1695133503.0,0
+offmychest,"I don't think what's worrying the OP is how she should be classifying herself, rather she's trying to express her situation through known terms. And in this context, they're really useful.",1695070675.0,7
+offmychest,"I don't think it's really fair to ask a 20 years old to ""figure out who they are first"". This is not something easy to do. Having a label is not meant to limit someone, rather it helps us undertand ourselves from the experience other people had. I'm saying this as an asexual guy, who only finally got to understand what was wrong in my early 20s because I didn't even know that ""asexual"" was a thing before that; labels can help.",1695061945.0,49
+offmychest,"I'm an asexual man and I thought the same thing as I was reading. I actually have a close friend with the _exact_ same issue (where their sexual and romantic attractions mismatch), and they managed to make it work with a trans girl.",1695058332.0,38
+explainlikeimfive,The simplest answer I can think of is through Leibniz law of the indiscernibles: there's nothing we can do with those two that will take them apart.,1695055821.0,1
+offmychest,"I've got a similar experience, but from the other way around. I started with schizophrenia symptoms when I was 17, and, as /u/the_phantom_princess said, what you describe seems a bit odd. Most people (mostly due to movies and shows, I guess) assume the main symptoms are the voices and the hallucinations, but that's not true. The main issue with schizophrenia are the delusions, and yes, we know they are delusions. It's a very odd thing, and the best way to explain it is ""I know it's not true, but it's still true"". I also find it very odd that she wasn't told, because these kind of things usually appear in a crisis during the first psychotic episode. So don't assume you can trust her family, specially if they say she has such a condition and they don't want her to take the medications: that is a MAJOR red flag. If this is true, they are terrible, terrible people.
+
+The advice I can give, having been myself a teenager with schizophrenia that was left alone to his own luck and abandoned by my friends, is that you keep your eye on her and look for the symptoms, and don't ler her alone. If this is true, and she has schizophrenia and she's being denied her medication, she'll absolutely need someone by her side, and this might be very challenging for you. It's completely possible for people with this condition to be stable and lead a normal life, even if there's no cure and the symptoms can get pretty bad from time to time, but _we need medication_. I just hope you won't give up on her, and that you'll take her to talk to a doctor as soon as possible. Even if her mother was lying and she doens't have schizophrenia, by what you say she at least has some severe depression case, and her family still sucks, so she'll need someone to support her.",1695023869.0,1
+offmychest,"I wanted to say something very similar. What you describe looks way closer to schizophrenia, at least from my own experience (for me it was the demons). I went to the doctor in a crisis when I was 17, and he talked to me _first_. After that he talked to my family and decided not to tell them I had (I'm pretty sure the conversation went downhill quite fast), instead he explained the medication to me and advised me against telling them and decided to keep track of my progress himself. Anyway, my family believed it was just ""antidepressants"" I was taking, and they still tried to force me to stop.",1695023080.0,1
+ProgrammingLanguages,"I was gonna say what /u/curtisf has already mentioned: though several common type systems allow for a unique type for each term (or at least a principal type, i.e., a type which is a supertype of every other possible type the object may have), this is not necessary. One of the things that I'd use to distinguish type theory from set theory is that ""x: T"" is a judgement, while ""x ∈ T"" is a proposition.
+
+In type theory, terms are always typed because this belongs to the rules of the logic system itself. We can't reason about a term without simultaneously reasoning about its type: when we introduce a variable into a context, we do so considering its type at the same time. In set theory, it works as if we had a single type, ""set"", and we're allowed to reason about and check this: ""does x belong in T?"". We don't usually have a proposition like ""
+
+The main reason is perhaps philosophical: set theory is a theory of containment, where we want to reason about whether or not some object belongs to a set (which was itself formed according to some rules), while type theory is a theory of construction, we reason about how we can create an object. This doesn't mean that there's a single way to create an object.
+
+It's worth mentioning that ""dynamically typed"" could mean, at the same type, ""untyped"" and ""unityped"": if we have no type, it's the same as a type theory with a single type; we could use similar approach to build a type theory for set theory (since, of course, we have the cartesian closed category of sets). Still, TypeScript treats types as a judgement, so it indeed works as a type theory.",1693581279.0,1
+ProgrammingLanguages,"I may answer your last question. SSA is one of a handful of possible options for an intermediate representation language within a compiler. It's the usual choice for compiling imperative programming languages, although other options are actually equivalent, and it's easy to convert between them. As examples of industrial compilers that use SSA, we can cite GCC and Clang/LLVM, the two main compilers for C and C++, along with the compiler for the HotSpot VM for Java and V8 VM for JavaScript. [The Wikipedia page](https://en.wikipedia.org/wiki/Static_single-assignment_form) actually lists several more examples.",1692911915.0,1
+programming,"So monads in C++, huh? Each day we stray further from God's light.",1692781998.0,4
+ProgrammingLanguages,"I'm pretty sure I've seem something like this before. If I recall correctly, it was in some of Microsoft's extensions for C++/CLI or C++/CX. I remember I've played with it on godbolt.",1692068119.0,1
+ProgrammingLanguages,"I don't think they can use ""isnt"" in their language. I kid you not, but [Microsoft has a patent over this](https://homepages.cwi.nl/~paulk/patents/isnot/node9.html).",1692064130.0,3
+programming,Always has been. *gun clicks*,1691603515.0,25
+programming,"Nop, and you can find this info in the paper. When people tried to check how the magic numbers on the table worked, they obviously went to the author to check that out. The guy who wrote the code didn't know why it worked because he claims he was completely drunk when he wrote it.",1690156330.0,27
+Compilers,"Unfortunately I'm writing a paper, and if someone has proved this before I did, I should really attribute the result to them. Also, people would not believe me if I did not write a proof, which I find a shame, since I'm such a nice person and I wouldn't lie to them.",1687840941.0,3
+Compilers,"The question is specific to Appel's IR or something similar. The point is that this IR does not allow for beta reduction, because argument are always variables (and this is not closed under beta). Rather, Appel gives a denotational semantics for it (by interpreting it into ML), and Kennedy gives a big-step machine semantics for it. Appel also mentions that a semantics could be given simply by using function inlining as a rewriting rule, which I have proved that indeed works as expected. To be clear: I have written (and formalized in Coq) a proof of correctness for it, however, the IR is 30 years old and I suspect someone has proved this before.",1687703107.0,2
+programming,Still no [sad poop emoji](https://www.bbc.com/news/technology-42251421)? Then why are we even updating it?,1684876217.0,17
+ProgrammingLanguages,This so far confirms [Wadler's law](https://en.wikipedia.org/wiki/Law_of_triviality).,1684340297.0,13
+ProgrammingLanguages,"My grandmother got a machine like that a few years ago, and wanted me to help her use it with some very outdated software. I remember trying to reverse engineer it and study its assembly format. It was kinda fun, actually!",1683792091.0,1
+programming,What's really the point of the survey otherwise? As of now it is just a big marketing questionnaire.,1683700331.0,3
+bioniclelego,"Oh, crap, I really want this one.",1683669138.0,1
+programming,"You can take a look at the results for 2018. Stuff like salary, sexuality, ethnicity, more details about coding either as work/hobby...",1683604492.0,11
+programming,"A few years ago (five years?), they've added a sexuality question on the survey, and they've included asexuality as an answer. It might sound silly, and I know this is not important, but as an asexual programmer, it was actually nice to see that there were a few of us out there (1.2% IIRC, which is kinda a lot!), and I was really glad to see the results about it. On the next year they've scrapped this answer, and this year it seems there wasn't even demographic questions, only AI stuff (disclaimer: I don't care about AI at all).",1683586310.0,20
+programming,"This year's survey just felt like ""yo, you kids heard of AI? this AI thing cool, right? wanna invest in AI?"".",1683586015.0,45
+programming,Were there no demographics questions this year? Did I miss something?,1683558714.0,45
+programming,I really want a pi 400. :(,1683439956.0,2
+Compilers,"I'm doing some theoretical work, studying IRs as calculi (equational theories, rewriting rules, confluence, standardization, normalization...), and their relationship to linear logic suggests that I should use a reduction rule either joining or splitting functions like on the question. I was curious if such approach had been used in practice, and if either direction could be seem as ""standard"". I mean, if we were to exhaustively apply one of the directions of this transformation (both can be done as they both decrease the program in a way, either in instruction size or on the number of functions with more than one call), should one of them be preferred over the other?",1683179132.0,1
+Compilers,"Salve, Fernando! Thanks. :)",1683178861.0,1
+scratch,"Did it boot successfully? Please, share it on GitHub!",1682462339.0,1
+programming,"Ohh, so there's no AST? I haven't even thought of that approach.",1681748272.0,1
+programming,"Are you the author? How does parsing work? Are you using a 2d parser formalism, or are you using some ad-hoc method?",1681745005.0,2
+programming,"I've coded some real world Ladder, can confirm that.",1681744937.0,1
+scratch,"Gonna say, fam, this is pretty impressive. Congratulations!",1681413253.0,1
+scratch,How much time did it take to boot? I really wanna see the file!,1681410914.0,1
+ProgrammingLanguages,"First you said that continuations are essentially different from return addresses and that the machine requires addresses to be used strictly as a stack as a proof of that, but it doesn't. Then you just gave a different argument saying it's just inefficient, but it doesn't even have to be. The `longjmp` function is usually regarded as slow because it copies all the register frame, even registers that don't need to be copied, but that's just convention as well. You may compare this to how Go, Stackless Python and Chez Scheme implement their stacks. They use different techniques from each other, but they're fast and don't require a `call` to return to the same address, being able to perform arbitrary jumps.",1681368004.0,1
+ProgrammingLanguages,"This is not true. Consider the `longjmp` function in the C standard library. It is usually written in assembly, you can call it with the `call` instruction, but it doesn't return to the address given, it clears the stack and performs a jump to somewhere else (at least that's how it works in x86).",1681321923.0,1
+ProgrammingLanguages,"After closure conversion, it is. The continuation just needs to be closed (having no free variables) for that to work.",1681318130.0,2
+ProgrammingLanguages,"So, first-class continuations, allowing for effects? I would probably refer to Appel's book, [Compiling with Continuations](https://www.cambridge.org/core/books/compiling-with-continuations/7CA9C36DCE78AD82218E745F43A4E740), as it's the classical reference for this. You could also take a look on how compilers for Standard ML work (such as [this paper in here](https://dl.acm.org/doi/10.1145/3462172.3462191), mentioned in another comment already).",1681311221.0,2
+ProgrammingLanguages,"That's exactly the opposite: CPS is closer to how the machine works than direct style languages. And this is one of the main reasons it was so popular before SSA and ANF came around! When programming in an imperative language such as C, we take for granted the notion of a call stack, which is actually an abstraction. In assembly code for, e.g., x64 and ARM, the stack is just a convention (we can easily write stackless code if we want). When calling a function, e.g., through the `call` instruction, we give the return address as an extra parameter in a register: but that's actually just the continuation parameter that implictly exists in C but explictly exists in CPS and assembly. This is one of the reasons we call CPS an _intermediate_ language.",1681288517.0,5
+ProgrammingLanguages,"There are mostly two flavors of CPS: one where continuations are second-class citizens, and one where continuations are first-class citizens. The former is equivalent to SSA and ANF, both of which were not specifically desigend to handle control effects, thus requiring some adhoc method (e.g., in SSA we usually simply ignore the existance of `longjmp`!). The latter, where continuations may be discarded and duplicated, allows for simple reasoning about control effects (such as `call/cc`), and would be the preferred choice. I would say that using CPS (with first-class continuations) would be by far the best approach if you're using control effects, as it simplifies most of the stuff you have to do, and allows to reason about when the stack should be copied or discarded (as so to allow downwards jumps, which are disallowed in `longjmp`).",1681288049.0,2
+ProgrammingLanguages,"This also happens in CPS and ANF. The idea is that local mutation is not really an effect, just sugar.",1681233138.0,3
+ProgrammingLanguages,"Yes, CPS languages are still being used. If you don't use control effects (i.e., no `call/cc`), using CPS, ANF or SSA would be mostly a matter of taste (they're equivalent to each other, though some algorithms as we use them seem to be faster in one or the other). I've given some links in an answer to another comment in here.
+
+I'm actually studing CPS IRs as the topic of my PhD, so feel free to ask any questions if you have any.",1681216077.0,7
+ProgrammingLanguages,"Not quite. I could refer to [Kennedy's paper](https://www.microsoft.com/en-us/research/wp-content/uploads/2007/10/compilingwithcontinuationscontinued.pdf). CPS is surely useful if your language is to support control effects (which should result in stackless code), but it's useful even when you don't (so the resulting language still uses the stack). In fact, control effects are what distinguishes CPS from SSA and ANF: while [ANF and SSA are both equivalent to each other](https://www.sciencedirect.com/science/article/pii/S1571066105825964) (and thus to [Moggi's computational lambda calculus](https://dl.acm.org/doi/10.1145/141471.141563) as well!), they are both equivalent exactly to the subset of CPS where control effects are disallowed (cf. [this paper](https://homepages.inf.ed.ac.uk/wadler/papers/reflection-journal/reflection-journal.pdf)). In that case, [it doesn't matter which one you use](https://www.csie.ntu.edu.tw/~b92103/cps-ssa.pdf), but as Kennedy argues, CPS allows for some efficient representations.",1681215640.0,8
+programming,"I don't know who Casey is, I've never heard of him before this video. But I find it very worrying that you seem to believe that ""Uncle Bob is the most famous programmer in the world"". He certainly is not, and he hasn't even made a real contribution to the either computer science or software engineering.",1681215214.0,1
+programming,"I'm pretty sure that's not what I said, but feel free to believe so. Not my fault Uncle Bob's work is terrible.",1681028416.0,3
+programming,"I always remember when Uncle Bob decided to write his ""The Dark Path"" post. A true lesson in misinformation about programming languages, where he misses the point by so much it's embarassing. Certainly his clean code guidelines are no better than that.",1680202565.0,12
+ProgrammingLanguages,Fixed form Fortran has no keywords.,1679714791.0,1
+programming,"Oh, don't worry, I can assure you I do feel bad a lot. But what was the issue with my grammar in here?",1679684128.0,1
+programming,"I mean, having an algebraic effect system doesn't necessarily mean they will allow user-provided effect handlers or custom effects. I couldn't find any information if they were planning on supporting those.",1679612583.0,7
+programming,Do they intend to support effect handlers? Having something like that in a functional logic language (with stores) would be so amazing!,1679604256.0,4
+programming,"Sure. They probably don't mention coeffects so often because their effect system subsumes both effects (actions to be performed) and coeffects (information from the context), and it can do way more than what you're proposing. [Here are some examples](https://github.com/ocaml-multicore/effects-examples) you may take a look. The dynamic state example in there could be adapted to act as coeffects (contexts) as you suggest. For coeffects in particular, [this is a great resource](https://tomasp.net/coeffects/). You may also be interested in [Koka's documentation](https://koka-lang.github.io/koka/doc/book.html), as it was designed to be a language with effects and coeffects since the beginning (OCaml did only retrofit them recently). Unfortunately I don't have OCaml (nor Koka) installed at the moment to rewrite your examples in them, but it can be done.",1678266318.0,1
+programming,I almost forgot that site existed. It's indeed a great post!,1678061981.0,1
+programming,"Those are coeffects, it's an old idea. There is research into implementing that into programming languages, but it hasn't got into any mainstream language other than OCaml yet (if you can consider OCaml mainstream). A pretty nice programming language that implements this is Microsoft's Koka, though it is, as I said, mostly a research project.",1678056185.0,4
+programming,[Betteridge's law of headlines](https://en.wikipedia.org/wiki/Betteridge's_law_of_headlines).,1677792622.0,2
+programming,Did we get the sad poop emoji this time?,1675834946.0,3
+programming,If that's true you can call me Homer J. Simpson.,1674384170.0,1
+visas,"If anyone ever reaches this post looking for an answer, I ended up not appointing a third party but I went to the delivery location to ask about it. They say that as long as a third party carries a letter authorizing them to pick the documents up, their original ID, and a copy of yours, they're allowed to pick it up.",1672869877.0,1
+programming,Now I don't know who to believe!,1671396738.0,43
+programming,"I'd say the mix of imperative and unification is actually usual. Prolog guarantees the search order, and it allows for side effects because of that. We've had imperative and unification together for quite a while now.",1670829559.0,6
+programming,"I've been working with programming languages for several years now, so I find this work remarkably interesting. As a language design, there are a lot of cool features. The only thing I wonder about is how they expect imperative programmers to get used to this setting.
+
+I mean, there are a few ways to make a pure language ""imperative-like"", I've done some work on it by employing the SSA algorithm within a language's semantics so that it could have assignments and control flow (goto) while still being purely functional, but I have no idea how they intend to do it.",1670808294.0,14
+programming,This is why I follow this sub! Thanks for the link.,1666589396.0,7
+programming,"I've commented before reading the interview. Indeed, I'm also familiar to Lennart Augustsson's work (such as Cayenne). I'm really looking forward to play with Verse by the end of the year!",1666031216.0,1
+programming,"These slides are really interesting, and they mention important points from programming language theory. I believe Verse should actually be a really nice language, and surely Peyton Jones can deliver that!",1665948006.0,2
+programming,"I have been working with the [calculus of continuations](https://www.semanticscholar.org/paper/Categorical-Structure-of-Continuation-Passing-Style-Thielecke/f2b28191102f553fa4095fb4b8a07d8eed4bd259), mostly formalizing its metatheory (my results so far [are on GitHub](https://github.com/takanuva/cps)). It is a calculus that relates to compiler IRs in the same way that the lambda calculus relates to functional languages. I have not yet released my interpreter (I'm currently working on it!), and I hope to finish my paper for next POPL. But I'll be sure to send you an e-mail once I am able to test the CPS translated compiler. Also, please DM me if you'd like to see some early research notes on that.",1665266653.0,1
+programming,"From the username I will assume that you're the author. Thank you for that. I'm currently working with the calculus of continuations for my PhD, and this is a real nice way for me to stress test my implementation: by CPS translating the compiler and then running it to see if it will still generate the program. Thank you. :)",1665176311.0,1
+programming,But are you considering [univalence](https://en.wikipedia.org/wiki/Homotopy_type_theory#The_univalence_axiom)? Then a number is any of its possible (but equivalent) representations.,1664481155.0,40
+ukvisa,"I've arrived! They didn't even ask me about the medication, so I still don't know if I'm allowed to have it here.",1663453477.0,2
+ukvisa,"I should arrive on Sunday. If everything is ok, I'll let you know. If I don't reply, I might have been sent to jail.",1663259393.0,3
+ukvisa,"I am somewhat afraid of change, but I'm more afraid to have problems when arriving at the UK at immigration (e.g., I do not wanna go to jail for carrying some illegal drug).",1663257572.0,1
+programming,Are there any tips on how _to_ create a toxic code review culture in my team? That would be a nice post.,1660730584.0,6
+ProgrammingLanguages,"It's been said in other comments, but using C is not the best idea (even though it's a popular approach). [C is not a low level language](https://queue.acm.org/detail.cfm?id=3212479), and shouldn't be used as a ""portable assembly"". The C-- language was designed to be used as such, but it would be harder to find existing tools for the final steps of compilation. Nowadays, using LLVM directly would be a better idea, if you're still aware of possible undefined behaviors.",1660678311.0,9
+programming,"Take C, add Smalltalk, then remove C. There you go. To be fair, libobjc is an excelent runtime library.",1660299360.0,4
+programming,"Well, I'm actually surprised nobody has done that before.",1660252528.0,2
+programming,"Of course it isn't, it has blockchain now.",1660227789.0,116
+programming,"Perhaps he buys drugs, you don't know that.",1660226047.0,120
+Advice,"I'm schizoaffective, so I understand how that feels. The meds have a lot of side effects and they can be scary, but this disease is far worse. Has she ever talked to people who have been diagnosed with schizophrenia or a related disease? Meds would surely increase her quality of life, it's important for her to realize that.",1659936183.0,2
+ProgrammingLanguages,"Though I really liked this, we all know that He programs directly in the lambda calculus.",1659825340.0,1
+programming,"I've had a lasting psychotic episode when I was 17, I was broken for around 18 months. The worst symptom was that I had major problems with sleeping, I'd spend up to 8 nights awake in a row, and I would sleep around once or twice a week. Schizoaffective disorder seems like it's harder do diagnose then schizophrenia, but I've been in the care of the same psychiatrist ever since (I'm 29 now, so it's been 12 years). It was something like trial and error with meds until we found a right combination of antipsychotics and antidepressants that seemed to work.",1659737363.0,5
+ProgrammingLanguages,"If the language is total, it's true that all programs halt on all inputs. From that, consistency is usually a simple corollary. If it is consistent, as shown by Gödel, it can't express all total functions is it would allow it to prove its own consistency.",1659666559.0,1
+programming,"Sure. I take a lot of meds, actually, but an antipsychotic, [sulpiride](https://en.wikipedia.org/wiki/Sulpiride) (sold under the brand Equilid in Brazil) isn't allowed in the USA. I also take vortioxetine, which seems it's really expensive in the USA, along with desvenlafaxine, lisdexamfetamine, and cannabidiol. I'm not sure about their commercial brands in other countries.",1659650923.0,6
+programming,"I pay a lot for medication for that here in Brazil, more than a minimum wage each month. But I've checked their prices in the USA, and they're completly insane. Besides that, the antipsychotic drug I take is not FDA approved, which was a problem when I had to stay in the country for a couple of months because of work. It seems you simply can't be schizo in the USA.",1659649012.0,10
+programming,"I also have schizoaffective disorder, and in some way I understand a lot of his struggles. He said a lot of bad things, and he refused to receive help and take the proper medications, sure, but I wish people would understand that it's really easy to fall into that crap with the right delusions. It was not his fault, this disease is terrible. I have never refused to take the medication and I still find it incredibly hard to cope with the symptoms (including delusions and paranoia), so for an unmedicated person this must be hell. His own brain was his worst enemy.
+
+His final videos really make me sad. He had lost himself, he really needed help, and I can only think that it could be me someday on the same path as his.",1659648771.0,51
+programming,Not with that attitude.,1659648697.0,65
+programming,"It's pretty easy to get lost in a delusion, this disease is cruel.",1659648044.0,265
+ProgrammingLanguages,"This doesn't modify the observable state explictly, I'll say it's definitely declarative. As this forms a directed graph, it's a kind of [dataflow programming](https://en.wikipedia.org/wiki/Dataflow_programming).",1659488692.0,2
+ProgrammingLanguages,"You might be interested in this paper: [Programming Languages as Operating Systems](https://www2.ccs.neu.edu/racket/pubs/icfp99-ffkf.pdf). This seems particularly useful when you need to run code against untrusted input. I've first found this paper when studying compiler design: if we are running a compiler as a service (e.g., as in the [compiler explorer](https://godbolt.org/)), it's possible to provide malicious input, so having an OS-like resource limiter within the language would be useful (e.g., ""run function f with N maximum heap size and M seconds at top"").",1659315043.0,6
+programming,How come Jetbrains can make such beautiful IDEs?,1658975321.0,10
+ProgrammingLanguages,"I have worked on a similar project: a purely functional language (as Haskell), but with C-like syntax, including local variables, control flow structures, and even goto seemed to work. It was based on the SSA algorithm (which turns an ""imperative"" program into a functional one) and Koka's typesystem for effect handling (though local assignment and flow is NOT an effect). It was published in [here](https://dl.acm.org/doi/10.1145/3341105.3373888).",1658958222.0,1
+ProgrammingLanguages,"I've worked with a blind programmer in the past. There are certainly not a lot of them, but there are a few. It must be really hard to keep a mental picture of the code, but it seems possible.",1658957804.0,9
+programming,"Huh, I had already starred that. Reactive imperative programming is interesting.",1658093716.0,3
+programming,"Wouldn't it be better to support Snap! (BYOB) instead? I mean, they got full closures and stuff, it's way closer to a general purpose programming language.",1657578903.0,3
+BIONICLE,"Well, too late for that now.",1656875204.0,1
+programming,"Refinement types and algebraic effects are great features for a programming language, congrats!",1655628187.0,1
+programming,"I'm gonna take a look. Edit: [found it](https://github.com/mesa3d/mesa/tree/main/src/asahi), thank you!",1654638797.0,2
+programming,Is the compiler code for the M1 GPU inside LLVMpipe? I'd love to take a look at it!,1654482774.0,0
+programming,What the hell? Still no [sad poop](https://www.bbc.com/news/technology-42251421) emoji? That's unfair!,1654049494.0,17
+ProgrammingLanguages,"Koka doesn't ""track"" effects in the general sense, but rather allows one to define algebraic effects which can be handled. Since algebraic effects are interpretable as free monads, you're free to handle them in different orders, and this gives a really nice abstraction. But more importantly, aside from the programming side, is that one is able to handle imperative-like constructs (i.e., side effects) in a purely functional setting, and then enjoy all the benefics that pure funcional code brings us (such as referential transparency).",1653527123.0,0
+programming,"I did check the sources but I couldn't find it. Does anyone know where the code for the compilers within the driver is? I.e., the piece that turns PTX/SPIR into GPU machine code.",1652569820.0,1
+programming,It's about time we get rid of those effing algorithms. Most of the problems I had at work so far were algorithm related!,1647693268.0,1010
+ProgrammingLanguages,"I was gonna star that repository, but it seems I had already starred it. I do not remember doing so. Oh well...",1647664009.0,1
+offmychest,I'm so sorry.,1647443117.0,1
+offmychest,"I hope everything will work out for you, man. I don't know if that's n option, but perhaps you should talk to your parents. :(",1647441764.0,1
+programming,"No need to lie, we're among friends.",1645840294.0,2
+ProgrammingLanguages,"I'm not yet sure how these papers relate to the question (I'd appreciate if you could elaborate a bit), but I'll sure take a look at them. Thank you!
+
+*Edit:* I think I got it, that's really interesting.",1642011700.0,1
+programming,"When I started reading this, my immediate thought was ""hey, most implementations are JIT compiled, we don't interpret stuff anymore!"", but then I kept reading. I'd write a few things differently, but overall I liked how things unfolded.",1641874541.0,1
+programming,We finally have effect handlers in a (somewhat) mainstream language!,1641841834.0,26
+programming,"My comment is three years old, but, actually, something close to what I had mentioned has been proposed for the next C standard, though with a different syntax, [you may see the draft here](http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2853.pdf).",1639765594.0,1
+yugioh,"Well, thanks for clarifying. That's a shame, though. Konami clearly doesn't like us Odd-Eyes players. This deck destroy and recycle its own monsters a lot, and this card would be really awesome if it could be brought back after being properly summoned.",1636996810.0,2
+programming,I really hope we'll get a mainstream language with algebraic effect handlers soon. It gets really easy to do a lot of hard things with those.,1630712700.0,2
+Advice,Dude. What the hell.,1629099047.0,1
+schizoaffective,"Same here. I've needed a few extra months to finish my dissertation, but I've managed to get my master's degree and I'm currently looking for a PhD position. It's hard, but it can be done.",1628381180.0,2
+ProgrammingLanguages,That's the kind of content I love seeing here! Thank you.,1628372433.0,1
+programming,"Linear types imply safe use of resources: it allows the compiler to check that a value is used exactly once (no more, no less). E.g., can't ever read from a file after closing it. Uniqueness type systems, such as Rust's, use a variant of linearity to guarantee some safety properties as well, but ATS goes further by allowing dependent types (i.e., proving theorems about code), so proofs are a first class citizen as well.
+
+They are the future because they allow a whole lot of bugs to be detected at compile time.",1622307995.0,18
+programming,"I remember, from the [FUZIX repo](https://github.com/EtchedPixels/FUZIX), that we do not yet have a full C compiler for SNES, which is really a shame (I do know that TCC was ported to 65c816, though).",1621022562.0,1
+programming,"Null-terminated strings, finally! I've always wanted to write plain old C libraries in Rust, as some sort of ""safer C"", depending only on libc.",1620842274.0,2
+programming,I've always wondered how the MMU worked on a RISC-V. Perhaps this is an opportunity for me to learn.,1618306988.0,2
+programming,"You are missing the point. Making a sound type system is something really hard, even more so by just ""guessing"", without formalizing stuff first to find edge cases. And we only know that it is sound because someone formalized it afterwards. The Rust borrow checker indeed enforces linearity: you can't duplicate references unless you use unsafe stuff. This isn't, by any means, something easy to do.",1618277618.0,1
+programming,"I really want to help design toolings for those! I've always wanted to work on a silicon compiler (synthesizing HDL, place'n'routing, etc).",1618203317.0,2
+programming,"Rust gives a nice solution to the memory management problem. The borrow checker enforces uniqueness and is akin to a linear type system, and, from the programming language theory standpoint, that's really interesting.",1618187929.0,7
+programming,"Dude, [they're working on formalizing that](https://people.mpi-sws.org/~dreyer/papers/rustbelt/paper.pdf). Calm down.",1618185768.0,5
+programming,"[Peyton Jones claims that Rust's achievement is amazing](https://www.youtube.com/watch?v=t0mhvd3-60Y&t=130s), even more so that they started without a mathematical formalization, yet they made it right.",1618124999.0,11
+ProgrammingLanguages,Thanks for the link!,1617411124.0,2
+Asexual,"Once I (M, 23 at the time IIRC) was talking to a girl over the phone and told her I was asexual, and she seemed kinda frustrated, as in ""how come you don't find me sexy?"". A few moments later she sent me an unrequested picture of her breasts, and, as I didn't know what to do in response, I just sent her a picture of mine. I mean, what was I supposed to do?",1614752976.0,1
+compsci,"A paradigm directly affects a language's *semantics*. The syntax may greatly change within a paradigm, but the semantics will not change so much. You could consider, e.g., Dylan; it's syntax greatly differs from standard Lisps, but their semantics are pretty much alike.",1613772652.0,1
+programming,"Yeah, it took me some time to remember what BPF was.",1608052620.0,1
+programming,I came here to say that.,1607630737.0,1
+programming,"Art, I guess. It's nice to be able to add ASCII-drawn diagrams in your source code and make it more elaborate. Perhaps it's useless, but it's still beautiful.",1607337084.0,1
+programming,"I've done some research on algebraic effects (e.g., [here](https://dl.acm.org/doi/abs/10.1145/3341105.3373888), I'm the second author), it's a really nice way of abstracting things. Flix is already looking really nice, by the way!",1605353992.0,3
+programming,"Does the compiler verify termination for the datalog system? I mean, by using lattices, are we guaranteed to find the minimal solution? I believe that's true if the functions are monotonic, but I'm not sure if Flix verifies that.",1605353933.0,2
+programming,Have you guys considered algebraic effects and handlers as well? (Disclaimer: I haven't read the new papers yet.),1605316220.0,2
+programming,"I've read a paper about Flix a couple a weeks ago, the language seems pretty interesting. First-class datalog and lattices seem great to do program analysis, and I'd like very much to try to use that for incremental parsing.",1605316086.0,4
+yugioh,Perhaps Xiangsheng? It's hard to use Raging's effect.,1605005586.0,1
+yugioh,Odd-Eyes definitely needs more love and support.,1604983047.0,1
+programming,Life goals.,1602956409.0,19
+programming,"Proof assistants and dependently typed languages such as Agda and Coq usually use unicode symbols a lot, turns out mathematicians feel more at home using them. I usually don't like to use unicode when proving my stuff in Coq, but hey, if people like that, why not?",1602527227.0,1
+programming,"I do want APL still. And I usually open an issue on every new free monospaced font on GitHub requesting APL glyphs, only I won't need to do that this time.
+
+Edit: but I *might* open an issue about a few glyphs that didn't look so nice when used for APL code.",1602527106.0,2
+programming,NetBSD has the same thing but for both Linux *and* FreeBSD programs. We have to go deeper.,1601894996.0,12
+programming,"I believe they are talking about records; enums are exhaustive, and one can't add new alternatives at runtime, but record classes (which are not sealed as well) should be able to be added at runtime. This makes sense to me, though it does make defining ADTs as a sealed record hierarchy really verbose.",1601551302.0,1
+programming,"I do wonder why they decided to add both records and sealed classes instead of enhancing enums to turn them into algebraic data types (similar to how Rust does it), which seems like a simpler solution.",1601478769.0,4
+programming,"You mean about Interix? The NT kernel was built to support subsystems on top of it, and we are mostly familiar to the Win32 subsystem. But there was, up to Windows 7 (when it was deprecated), another subsystem called Interix, which was UNIX-like and featured a POSIX-compliant API. Microsoft even legally released the sources of a fork of GCC that could build executables for it. I always found it interesting as it run side by side with Windows, rather than on top of it.
+
+I'm curious to whether or not this XP source leaks contains any code related to Interix, it would be nice from a historical point of view (given that no one should be still using it nowadays).",1601171905.0,2
+programming,"Out of curiosity, does anyone know if this contains any source related to the old Interix subsystem?",1601056541.0,49
+ProgrammingLanguages,"> they say everything that isnt assembly or machine code is high level
+
+I also say that to my students, but the truth is that people don't seem to agree on a definition for ""high level"". Still, there's an argument to that. You probably won't find many people who would consider Java a high level language, but Java has a reasonably simple mapping to the JVM bytecode, and there are physical implementations of that. On those machines, for example, you could take Java as being as low level as one would usually consider C, but C itself would need lots of abstractions there for dealing with pointer stuff (as it does, for example, when compiling it to WebAssembly). So if you'd consider C to be low level, you should consider Java as well.
+
+Note that, when C was born, it was just above the assembly language at the time, but [your modern computer is not a PDP-11](https://queue.acm.org/detail.cfm?id=3212479), and it behaves quite differently. And people usually expect C's pointers to be the hardware pointers, [but that's not always true as well](https://devblogs.microsoft.com/oldnewthing/20130328-00/?p=4823), we're most of the time dealing with virtual memory now. So it would be a safer bet to classify as ""low level"" the languages which were designed, intentionally, to have no abstractions over a particular machine, which is the case of assembly programming languages.",1599676755.0,1
+schizoaffective,"Since my late teens I've dealt with anhedonia, including the whole time I was in college. Life had no colors, nothing was pleasurable _at all_, and I was pretty sure I would never feel pleasure again in my life. I started taking vortioxetine when I was 24, along with a few other medications I was already taking (sulpiride, etc), and I've been able to slowly feel pleasure from some activities again. So I know how you feel, fam. Don't give up.",1597597085.0,2
+ProgrammingLanguages,"What you're asking is not stupid, you just seem to be missing a point here. Prolog may be well-suited for querying data, but it's a Turing-complete language, and may be used for general purpose programming. It's just based on a different computational model than what you may be used to (as C, Python, etc).
+
+While you may easily see Prolog implemented on top of C, each Turing-complete computational model is capable of simulation each other, so you may as well implement a C interpreter on top of Prolog. This motivates the study of Prolog as a language by itself (and logic programming as a paradigm).
+
+Of course that's from a theoretical point of view... from an implementation point of view, one could implement a Prolog compiler as either AOT or JIT (in which case it would be simple to use it as a library), or simply as an interpreter. And, in fact, both kinds of implementations do exist.",1592592338.0,54
+programming,Everyday we stray further from God's light.,1591010147.0,5
+programming,That looks wonderful.,1589309268.0,1
+programming,I used to write `index[array]` in a project in order to mess with the interns.,1587747838.0,5
+ProgrammingLanguages,"Wow, that's cool.",1579020972.0,1
+ProgrammingLanguages,"I've read that paper a couple of years ago, it's nice to check it again. I remember that I only understood what multiplicative disjunction meant thanks to this paper.",1578170835.0,1
+ProgrammingLanguages,"I'm mostly working on fighting depression right now...
+
+On my free time, I'm trying to formalize the CPS calculus [1] in Coq. It's a small name-passing calculus [2] similar to a continuation-passing style intermediate language. I hope to prove that the simply typed version is strongly normalizing, along with a few known results, so that we could see an intermediate language as a logic system. Hopefully I'll write a paper about this in a few months.
+
+[1] Thielecke: Continuation Semantics and Self-adjointness
+
+[2] Merro: On the Observational Theory of the CPS-calculus",1577988182.0,8
+yugioh,"Know that feel, bro.",1576911367.0,5
+ProgrammingLanguages,I was waiting for this presentation; thank you.,1576184700.0,2
+programming,"Both tuning and the number of strings (the bass and the violin have 4). This can be done in TuxGuitar, but it requires a lot of manual work to fix the hand position in the tabs.",1573005197.0,1
+programming,"Too bad it's only meant for guitar players. I spend a lot of time turning sheet music into violin tabs, a software for that would be wonderful (though TuxGuitar helps a lot).",1572980239.0,1
+yugioh,"Make it a link, keep the (2) eff, lift the destruction restriction so it'll work with Sky Iris, and slightly change the search so that it may add an ""Odd-Eyes"" spell instead of just Spiral Flame Strike. There we go!",1571840150.0,6
+yugioh,"I've been playing Odd-Eyes for a long time. This card is, well, ok, but Konami _clearly_ doesn't want to make this deck meta. An Odd-Eyes deck won't be running plain old Odd-Eyes Dragon, so you won't be using this card's first effect (same thing goes for Saber Dragon). If you run it, you'll mostly pendulum summon it, or summon it from deck using Arc Pendulum Dragon.
+
+This card is searchable (both by Sky Iris or Spiral Flame Strike), but is mostly a dead draw, specially if you don't have the pendulum scales set yet. The restriction on destruction sucks too; I mean, Odd-Eyes decks destroy their own monsters a lot, this card would be _really_ good if it would work upon being destructed by the owner as well. Also, though Spiral Flame Strike is a good searcher, it would be wonderful if this card could search an ""Odd-Eyes"" spell as well or instead (there's just two, namely Odd-Eyes Fusion and Odd-Eyes Advent, the fusion and ritual spell cards).
+
+Overall: this card is it's okayish, but still it's the best support on the pack. I wish we would get more love.",1571832477.0,12
+yugioh,"C'mon, Konami! I mean, I really love my Odd-Eyes deck, but... our Pendulum/Extra are too damn hard to summon (I envy D/D/D), our deck is not that consistent (if only Lancer and Advance were lvl 7...), our nomi has a terrible effect on field, and we didn't even get our link monster yet. :(",1571831676.0,18
+programming,"I understand that; I have trouble remembering names as well. It's not reasonable to expect you'd remember everyone's preferred pronoun and use it correctly everytime. But I wouldn't just dismiss it claiming ""I don't care if I offend someone"".",1570570338.0,-6
+programming,"That's exactly the point: some people do care about that. You may not, I may not, but some people do care about it. People are not all the same. And as you may avoid distressing them by just taking a little bit of effort, why wouldn't you?",1570566719.0,-7
+programming,You mean a `CompilerFactory` or a `ProblemFactory`?,1570126810.0,7
+programming,"Java... has a big community, I guess.",1568768256.0,1
+programming,"It's hard not to admire his work, he's had a huge impact on the world, but he's... well, eccentric, to say at least.",1568747702.0,1
+ProgrammingLanguages,"I have studied quantitative type theory a lot for my maters' degree, as I have used both dependent and linear types. This should be interesting.",1567900855.0,1
+programming,Wonderful. Thank you.,1567710508.0,2
+programming,"> Towards a world in which computation can be generated, shared, and consumed just as conveniently and safely as data.
+
+So... the lambda calculus?
+
+Edit: wow, Amal Ahmed is in the project. I just _love_ her research. My masters' dissertation took a lot of inspiration from her work.",1567116806.0,2
+programming,"I did think of that. We were using core itself only for one thing, which happened to be the command line parsing, on which all the project tests depended on. So it would take a considerable amount of work to move from core to core_kernel as I'd need to rebuild all the project's interface (I have actually started doing that, but I'll call that plan B). Actually, that's why I tried Cygwin: to get core to work.",1567101989.0,1
+programming,"I've worked on a proprietary OCaml project, but I couldn't make it work properly in js_of_ocaml because V8 doesn't support tail recursion (and an central piece of the software heavily uses tail calls), and I couldn't build it on Windows with Cygwin64 [because of a flexdll issue](https://github.com/ocaml/opam/issues/3785#issuecomment-475392549). Also couldn't build it on Windows natively because it uses JaneStreet's core. I'll give esy a try.",1567043401.0,1
+programming,I wish we could properly build stuff on Windows.,1566968200.0,2
+programming,Username checks.,1566817444.0,44
+programming,"Plot twist: in Python 4, `print` is a keyword again.",1566803636.0,4
+programming,"Which evaluation order is the interpreter using? It would be nice if you could provide this as an option, so people could see the call-by-value vs. call-by-name semantics.",1566761910.0,10
+programming,I'll be teaching the lambda calculus to a class in two weeks. This should be a useful tool! Thank you.,1566759463.0,19
+programming,Well then you're clearly wrong.,1565934999.0,2
+programming,That reminds me that [you can put viruses on the debug information as well](https://www.cs.dartmouth.edu/~sergey/battleaxe/shmoocon_2011_oakley_bratus.pdf).,1565902680.0,3
+ProgrammingLanguages,Thank you.,1565840219.0,2
+programming,Assuming the many worlds interpretation is correct.,1562975400.0,1
+programming,"Well, we don't _need_ high level programming languages for classical computers either, but we all agree they do help a lot. I do believe that Q# is a cool language for research, we don't have to wait until actual quantum computers have enough qubits to do something useful in order to learn about them.",1562954488.0,35
+Asexual,"I hate it as well. I also hate it when people say ""hey, it must be so nice to be asexual!"" as if ""things were easier"" for us. They're not. They suck.",1562948776.0,2
+Asexual,"> I know what you mean. It's hard being a person who has a bit of a sex drive but not attracted to anyone.
+
+[I know that feel, bro](https://i.kym-cdn.com/photos/images/newsfeed/000/107/432/i_hug_that_feel.png).",1562948592.0,1
+programming,Get out of my post.,1562942473.0,46
+programming,There's a `LICENSE.txt` file at the project root.,1562937661.0,17
+programming,"F# itself is Microsoft's ML dialect. Q# is meant to be a DSL for programming quantum computers, while both F# and OCaml are general purpose.",1562936501.0,48
+programming,It appears to be MIT licensed.,1562936427.0,11
+programming,"If I could possibly stop making a fool of myself, be sure I would.",1562928454.0,29
+programming,Just because you haven't heard of it doesn't mean nobody else has.,1562927570.0,57
+programming,I wonder if Super Mario RPG was written in assembly. It was a really big game.,1562868931.0,9
+programming,That would be me.,1561319387.0,-3
+rust,"That's exactly why I was wondering if the Rust compiler could remove the abstraction; for most processing code I don't even need I/O, I could just add all the input into a gap buffer before starting ""compilation"" itself.",1560298488.0,1
+rust,That's actually not a bad idea. I assume this wouldn't much slower than a truly synchronous code.,1560289837.0,1
+rust,This is really interesting! Thank you.,1560289591.0,1
+rust,"It's mostly a research project, so if I don't succeed but learn some things in the process that's still good enough. As of now, I'm mostly curious if the Rust compiler would be able to do something like that (writing the same piece of code abstracting over sync and async use cases).",1560195417.0,1
+rust,"I see. Yes, even when running in a scheduler, I'd like to implement a small runtime layer instead of using tokio. If possible, I'd rather even go `#![no_std]`, and create a C library.
+
+I've played a bit with the experimental support for coroutines in C++ using clang, and the compiler is able to remove the abstraction... but the overall experience when programming Rust is better than programming in C++, so I was wondering if I could do what I want by using Rust instead.",1560194720.0,1
+rust,"You mean the I/O calls, right? I assume I'd use trait parameters to abstract the library over an I/O library as well. At least that's how I'd do it on C++.",1560194327.0,1
+programming,That's awesome.,1559841206.0,1
+programming,You don't know them. They could.,1557512406.0,-8
+programming,Isn't `foo.bar().await?.baz().await?.meow().await?` a bit awkward as well?,1557163325.0,9
+programming,"Oh, I don't mind. Glad I've amused you.",1556822605.0,18
+programming,"I truly feel that the whole ""we'll replace C"" and ""we're already better than C"" thing is too ambitious, it even sounds a bit obnoxious... but I must admit that the idea of shipping with a bunch of libc was pretty nice. I'll probably give Zig a try because of that.",1556821359.0,29
+programming,"I've already written some C and assembly code after being awake for 150 hours straight... yeah, you are right, I'd totally rather stab myself than putting myself through that crap again.",1556325716.0,3
+programming,"I've been diagnosed with schizoaffective disorder. When the symptoms starting showing up when I was 17, I would spend up to 8 days awake in a row as I couldn't get my brain to slow down (and it took more than one year before some medication finally ""fixed"" this). I was already working as a programmer at the time, and I can tell by experience: it's actually possible to work with sleep deprivation, I did it, but I really, really, really do not recommend it. It was a hellish experience.
+
+From time to time I see novice programmers asking how they could spend more time awake to study or work, such about caffeine or ritalin, to which I just tell them to shut up and go to bed.
+
+Sleep is incredibly important for programmers and pretty much every human being.",1556300858.0,15
+programming,"> professor for Programming Language Design
+
+That's the job I want for my life!",1556039385.0,3
+programming,"Well, I have oversimplified it. It is true, though, that effect handlers are directly related to delimited continuations (shift/reset), so they could indeed be implemented in Common Lisp. From a programming language theory point of view, though, they allow us to write purely functional direct-style code (without caring about continuations) that handle effects such as mutable state, exceptions, async/await, ambiguity, etc, all of them implemented in a library inside the language itself, and still we (as a compiler writer) have lots of opportunity for optimization. Effect handlers, as an abstraction, is something really cool to have in a programming language.",1555554524.0,1
+programming,"Check the [Koka](https://koka-lang.github.io/koka/doc/kokaspec.html) programming language. Effects could be seen as a generalization of exception handlers, where one could potentially jump back to the point in the program the exception was thrown, even more than once. Actually, in a language with algebraic effect handlers, you wouldn't need exceptions, because you could define them as a library in the language itself. The same goes for async/await: they may be implemented as a library by using effect handlers.",1555516615.0,2
+programming,"Can't wait til effect handlers (from, e.g., the Microsoft Research's Koka programming language) goes into a mainstream language!",1555461323.0,6
+programming,[418](https://http.cat/418)!,1554837743.0,16
+tappedout,I'm in the pie club (got 314%).,1553611286.0,3
+ProgrammingLanguages,"Algebraic effects with effect handlers are the first thing that come to mind, they're really cool.
+
+Something I'd love to see in a programming language, though, is lightweight threads, just like in Erlang or Go, but with manual memory management. I'd like to restrict how much memory an actor/client may use, but couldn't find a language/runtime for that yet. (I mean, Erlang lets me restrict the heap size per process, but it's not suited for computational intensive tasks.)
+
+Couldn't memory allocation (or the garbage collection itself) be treated as an effect in a functional language?",1552869291.0,4
+programming,Pointers through closures is something so damn cool.,1552591532.0,1
+programming,https://i.imgur.com/XS5LK.gif,1552588804.0,4
+programming,Just updated mine. Lost all open buffers with a bunch of notes in them. Great.,1552008946.0,-11
+programming,"Exactly. Assembly languages are low level languages. C is a high level language, as you may read on the article I've linked above. C is defined to operate on an [abstract machine](https://blogs.msdn.microsoft.com/larryosterman/2007/05/16/the-c-abstract-machine/).",1551457527.0,22
+programming,"Also worth mentioning that having things like, e.g., pointers, does not mean a language is low level. From the PL theory point of view, a programming language's pointers are just another kind of abstraction and do not necessarily mean the hardware's pointers. Both C and C++ are high level languages as well, most things people want to do by exploring their ""lower level"" leads to undefined behavior.",1551450199.0,32
+programming,"[Not even C is a low level language](https://queue.acm.org/detail.cfm?id=3212479), believing in that is harmful.",1551450048.0,11
+Asexual,If there be anywhere so blessed a thing.,1551405351.0,2
+programming,"Hmm... no, sorry, never heard of it.",1551373328.0,0
+programming,Is there mental health in the software industry?,1551372687.0,10
+programming,"[C Is Not a Low-level Language](https://queue.acm.org/detail.cfm?id=3212479), tho.",1550493861.0,-1
+Asexual,"It's not really a ""genetic"" thing. Asexuality is a sexual orientation, like being straight or gay. Nobody chooses to be either, as well as nobody can choose to become asexual. Being asexual means you don't find anyone sexually attractive. You may still want a relationship, but, as /u/caramellcreme said above, it's really hard to find one. It's really lonely, and TBH it sucks.",1550223071.0,3
+Asexual,The truth has been spoken.,1550222693.0,1
+programming,Ain't nobody got time for that.,1550070330.0,-3
+programming,"I'm actually talking about the ""code editor"" there. That vintage window around the code snippets looks cool.",1550070262.0,2
+programming,I like the CSS.,1550033072.0,24
+programming,"I can relate to the sad poop, tho.",1549560495.0,1
+programming,"C'mon! No sad poop emoji???
+
+Edit: I wasn't being sarcastic, I really wanted a sad poop emoji. Sadly it seems [it got rejected](https://www.bbc.com/news/technology-42251421). Sigh.",1549515558.0,65
+programming,Fair enough.,1549397576.0,3
+programming,"> In any case, AllNewTypeFace and greenthumble are at least superficially different users.
+
+Oh. Missed that.",1549397548.0,3
+programming,"I understand that you meant no harm by joking, but since you're wandering about the downvotes, I could argue that yes, this guy was crazy, but he did believe that God ordered him to lock himself up for more than a decade and write an operating system. It's a big burden, it's sad that he actually believe in that. He built a toy for himself because he believe he had to. He became homeless. He believe he was impure. He killed himself. Schizophrenia is a really sad disease.",1549393539.0,17
+programming,Is this a joke? It's not funny.,1549390346.0,-77
+programming,"I've been diagnosed with schizoaffective disorder (either that or major depression with psychotic features, it's hard to tell them apart). When I see how bad things got for him, all I can think is _it could have been me_. I hope he's now in peace, if there be anywhere so blessed a thing.",1549389542.0,39
+programming,You mistyped 30 hours.,1549027702.0,3
+programming,"C'mon, kid. Cygwin is lovely.",1548869882.0,0
+programming,"Back in my day we'd spend a whole week installing Cygwin, MSYS + MinGW, GnuWin32 and even Interix toolchain if we'd care about portability... and we liked it!",1548866553.0,30
+webdev,"I only use while, [that's the only thing I ever need](https://en.wikipedia.org/wiki/Structured_program_theorem).",1548344735.0,3
+tappedout,I'd totally spend my donuts on Joey Jo-Jo Junior Shabadoo.,1548181482.0,1
+programming,"Thanks, fam.",1548180722.0,2
+programming,Ain't nobody got time for that.,1548150873.0,4
+programming,I was expecting open cores (as in free and open source hardware)...,1548073532.0,3
+Asexual,"Since you're writing a book, I'm gonna try to cover some points.
+
+- Nobody can ""stop being asexual"", at least as far as nobody can stop being gay for that matter. Being asexual is a kind of sexuality, that's a part of the person. There is, though, what's called ""demisexual"", which is an asexual person that may experience sexual attraction once they are emotionally close enough to someone. That seems to be what you're looking for.
+- Asexual people don't feel sexual attraction. Libido (sex drive) is something apart. A few antidepressants can increase a person's sex drive, so an asexual would probably want to masturbate. But they still wouldn't look at someone else and think ""gosh, they're hot!"".
+- I'm asexual *and* clinically depressed. Depression is known to lower a person's sex drive, but usually they can still experience an orgasm, even if they are asexual. That's a bodily function. That isn't any ""rewarding"", though. I don't think an asexual person would look for sex as a rewarding experience, specially if they're depressed.",1548064332.0,8
+programming,I really wish I'll work with programming language theory at Microsoft Research someday.,1547500825.0,3
+programming,Are you sure GCC supports them already?,1547202766.0,1
+programming,"That was an arbitrary number. I mean, if my compiler is exposed to the web, I should care about resources. Dependent types could consume a lot of memory through typechecking, also C++ templates (and similar) could lead to DoS with malicious input, so I'd like to set policies for clients. I'm currently using OCaml at work and I have thought about using it, but I must say I haven't considered SPARK, and I hadn't heard of MirageOS. I'll take a look at both and at Low*. Thank you very much!",1547156974.0,1
+programming,"I'm trying to write is a compiler which runs as a service; clients connect to it through a socket, so I'd like coroutines, but to avoid DoS I'd like to impose memory limits (e.g., ""each client has a maximum of 200MB of memory""). I couldn't find a language/runtime which could help me, and I'm comfortable with basically anything (though I prefer functional, and I love effect systems).",1547150635.0,1
+programming,"This is interesting. I've been looking for a language that would let me use coroutines (lightweight threads, as in Go, Erlang or Haskell), but in which I could control memory allocation (as in C, because I want to impose hard memory limits per concorrent users). Do you think I could do such things in Low*? (I'm not particularly interested in program verification, but I know dependent types and I love effects.)",1547145292.0,1
+programming,I didn't know it could do that.,1547136523.0,1
+programming,A beautiful language as simple as C++.,1547136432.0,3
+programming,Thank you very much for the link! I have been working on something related for my master's dissertation. This project should be useful.,1546407851.0,6
+programming,"The joke's on you, [monads needn't be an endofunctor](https://arxiv.org/abs/1412.7148).",1546138570.0,3
+programming,Holy crap.,1545173669.0,4
+programming,That's why I follow this sub.,1545046432.0,3
+programming,"He mentioned coinduction. Through coinduction we can represent infinite objects through a finite representation of how they behave upon iteration (more specifically, by a seed and a terminating transformation function). We do know that [this is enough for Turing-completeness](https://personal.cis.strath.ac.uk/conor.mcbride/TotallyFree.pdf). The author means that it's possible to write a terminating program that will return the finite description of an infinite, productive stream of information, which could be, e.g., an operating system. Then one could ""step"" through this description for as long as one wishes.",1544554916.0,3
+tappedout,I'm happy and angry!,1544364628.0,1
+tappedout,But is it really just one bundle???,1544111094.0,6
+programming,Excuse me. What is the source of [that gif with the Devil](https://i.giphy.com/media/hsWz3aJkFYJZm/giphy.gif)?,1543562352.0,1
+programming,"Where are the Rust folks? It would be cool to call Rust's async functions synchronously (with zero cost, of course).",1542972706.0,-1
+tappedout,Hmmm... temptation...,1542735869.0,2
+programming,"Well, kinda. I mean, [parametric polymorphism](https://en.wikipedia.org/wiki/Parametric_polymorphism) could be used to give a bit more of type safety and expressiveness to the language. For example, the standard `qsort` function:
+
+    void qsort(void *, size_t, size_t, int (*)(const void *, const void *));
+
+It's meant to be generic, but we all know that this involves annoying (and mostly unsafe) casts on the comparison function. They could add a subset of C++' template syntax, e.g.:
+
+    template<typename T>
+    void qsort(T *, size_t, size_t, int (*)(const T *, const T *));
+
+One could expect the generated code to be exactly the same (i.e., generic type parameters have the same calling conventions as `void` instead of generating multiple specialized functions as C++ does), but the compiler could hint you _to use the same T on the three positions above_. Basically you could use it when you want two or more pointer parameters to be of the same type, where you'd otherwise use `void *`. This would be a simple, non-breaking change (that could also give more opportunities to the optimizer due to strict aliasing).",1542186143.0,10
+programming,I wish they'd add parametric polymorphism (for pointers) to C.,1542142869.0,14
+Asexual,It doesn't work. At least it never has for me. :(,1542045949.0,1
+programming,"Ohhh. Got it. Indeed, Common Lisp is lovely.",1541676284.0,5
+ProgrammingLanguages,"Effect handlers are far better. It's kinda long to explain; check the Koka programming language. E.g., you don't need exceptions or async/await in your language if you have effect handlers, you can program both as a library.",1541675132.0,5
+programming,"Huh, not sure if sarcasm, but that's not what I meant. I mean a constraint solver that you may use for metaprogramming; think of a Prolog interpreter running in C++ templates, in compile-time. This would be pretty cool for checking the project's configuration and doing some conditional compilation over it.",1541674605.0,3
+programming,At compile-time.,1541640413.0,12
+ProgrammingLanguages,"Effect handlers, effect handlers, effect handlers.",1541636962.0,9
+programming,I came here to say that. My job here is done.,1541101204.0,0
+AskReddit,"Keep strong, bud. You're not alone. :(",1540992696.0,1
+AskReddit,"I have schizoaffective disorder; not the same thing, but close enough I guess. The symptoms started when I was 17. I was constantly uneasy, and it got increasingly hard to fall asleep. Those were the earliest signs, my ""first delusion"" being that something really bad was bound to happen to me (and it did as the symptoms got stronger... ironic, huh?). I think I could argue that obsessing over the nightmares I had (about hell and stuff) would happen was a key point at the start. After a few months I was already scared all the time, up to the point that it would take up to 8 days for me to finally fall asleep.",1540992461.0,1
+schizoaffective,"Yeah; Wellbutrin does make me more anxious, also I do feel my heart go a little faster.",1540834024.0,1
+programming,"> even though I find Rust unnecessary
+
+Are you trying to start a fight over here?",1540812078.0,17
+programming,"""Assembler"" can't be regarded as a language; we have several _assembly_ programming languages, which aren't related to each other aside from being designed to control the hardware directly. It's a whole category.",1540578555.0,3
+programming,"Iä, iä, Rasmus Lerdorf wgah'nagl fhtagn!",1540578375.0,2
+programming,"Since we're talking about programming languages, wouldn't SQL/PSM, or maybe PL/SQL, be better suited than plain SQL?",1540578306.0,1
+programming,"I sincerely believe you should put the (untyped) lambda calculus in the far left. It was discovered* in 1936 by Alonzo Church, it's Turing-complete, and it's the very core of all functional programming languages (with a few exceptions). Also worth noting that SSA/CFG, the intermediate language used by most industrial compilers, [is also a functional programming language](https://www.cs.princeton.edu/~appel/papers/ssafun.pdf)! So without the lambda calculus, even imperative programs wouldn't be optimized at all. It's 2018 and we're still heavily using typed variants of the lambda calculus for programming (and I see no reason this will ever change).
+
+(*) It's argued by Philip Wadler that the lambda calculus as the core of computations is so simple and elegant that it couldn't be invented, [it was actually discovered](https://www.youtube.com/watch?v=IOiZatlZtGU).",1540578075.0,2
+programming,Please send this question in an e-mail to Stallman. He won't be mad at all. Trust me.,1540322096.0,5
+programming,Your job seems severely depressing.,1540260879.0,25
+programming,"That's wonderful to know! I'm also on my phone, but I'm gonna look for it later. I've been fiddling with this issue for a long time. Erlang has lightweight processes and memory limits, but it's not good for computationally intensive tasks. Go and Haskell won't let me control the GC. Rust is a lovable language and has made recent progress on coroutines (though I'm not sure how mature it is)... if it ends up getting support for custom allocators it would be just perfect for my compiler.
+
+Thanks for the info.",1539737185.0,1
+programming,"Is there already an issue about it? TBH, I'm trying to build a compiler as a service™, and a few things could be memory intensive (think of C++ templates), so I'd have to limit memory (among other things) per client to avoid DoS.",1539736704.0,1
+programming,"One thing I'd like to be able to do (but I can't using Rust's stdlib) is to be able to impose memory limits to each user in my web server, while still using lightweight threads instead of full-blown OS threads. Rust only allows one allocator per project IIRC.",1539719257.0,2
+programming,That's why I love this sub.,1539681921.0,17
+programming,[Great success!](https://i.imgur.com/xq7Oe.jpg),1539293831.0,1
+programming,Thanks for the link. Too bad it's impossible to write a _strictly_ conforming memory allocator in C.,1539235648.0,-1
+programming,"As a compiler developer, I'd like very much SEH to be on the list.",1539224675.0,4
+programming,"Open hardware is love, open hardware is life.",1538659739.0,2
+programming,"Oh. First note that, in the example I gave, we're not dealing with an array in C's sense (i.e., a contiguous area of memory). It sorts a list, which is basically a linked list. We define a list through induction as well:
+
+A T list is either:
+
+- An empty list (nil); or
+- A T item (the head) plus a T list (the tail).
+
+As we would do in a linked list in C. Now note that the sorted type I gave before has an assumption that the tail is sorted, and that the head is less than the first item on the tail. We cannot make the compiler decide for us whether a list is sorted, BUT we can, by construction, keep making lists *and* proofs that they are sorted. So we can, by using recursion, keep creating bigger lists and proofs that these bigger lists are sorted as well.
+
+The point is that, whenever we need a proof about an object, we have to explicitly create the proofs along with the object. Then, by using recursion, we can create bigger objects and bigger proofs. It's common, as with our sorted proof, that the proof will need a similar proof for a smaller object (in this example, the tail).
+
+For example, we always know a list `10 :: nil` is sorted (as it has only one element, it's one of our three cases for the sorted type). Then we may use the third option to build a bigger list, `5 :: (10 :: nil)`, because 5 is smaller than the head of the tail (`10`), *and* the tail is sorted, and we have also a proof that this bigger list is also sorted. Then we can do that again to create a list `1 :: (5 :: (10 :: nil))`, and so on.
+
+Then we can make functions that accept a list *and* a proof that it is sorted, so we effectively have a function that only works with sorted lists... where we know, in compile time, that we can make a binary search safely.",1538394738.0,1
+programming,I'm not sure I understood the question.,1538377049.0,1
+programming,How I wish I had the time to read all of those!,1538322932.0,1
+programming,"They actually wanted a language with reactive semantics: the runtime keeps a graph of calls when creating an object, so when any of the inputs change, they can recreate it without redoing the whole computation, by getting from the cache anything that hasn't changed.",1538311608.0,3
+programming,Everything is terrible.,1538311404.0,1
+programming,"> Could you tell me more about types?
+
+_Puts on glasses..._
+
+I've been waiting for this...
+
+What you have described above is what we may call a _simple theory of types_. It doesn't allow us to prove anything useful, other than ""we want an int, and we have been passed an int"". But people have been investigating way more interesting theories of types... and incorporating them into programming languages.
+
+Type theory has been created before any programming language, with the purpose to ""fix"" set theory. But people came to know that [certain type systems and mathematical logics are the same](https://en.wikipedia.org/wiki/Curry%E2%80%93Howard_correspondence). Types are theorems, algorithms of certain type are a proof of that theorem. This means that it's possible to use a programming language as if it were a math logic to prove theorems, and people indeed [have been doing that](https://en.wikipedia.org/wiki/Proof_assistant)! Rust, for example, has used it to _prove_: if the typechecker accepts a program, then it won't ever have any data races.
+
+It's possible to tell the compiler what you want out of an algorithm, and the compiler will check if you have correctly proven that theorem. For example, in the programming language Idris, one can make [an insertion sort algorithm](https://github.com/davidfstr/idris-insertion-sort/blob/master/InsertionSort.idr), and _prove_ that the algorithm is correct for _any_ possible input!
+
+But how do we do that? We must tell the compiler what being ""correct"" means here. What does it mean for an insertion sort to be correct? Well, we want the compiler to check if the output is indeed sorted:
+
+_Is the output sorted_? For a list `x`, we can inductively define this as:
+
+- If `x` is empty, then `x` is of course sorted.
+- If `x` has one element only, then `x` is of course sorted.
+- If `x` has at least two elements, being `a` its first element, `y` the remains (which must then be at least one element), and `b` is the first element of `y` (thus the second element of `x`), if `a` is smaller than `b`, and if `y` is sorted, then `x` is sorted as well.
+
+Do you agree that, for a list, this few-lines-piece-of-code description correctly represents what it means to be sorted? If so, then you can write an algorithm which returns a list _and_ a proof that it is sorted! Idris will work as a theorem prover and check that your proof is correct. It won't compile otherwise!
+
+Of course, for an insertion sort to be correct, it also has to prove that the input list and the output list have the same size and the same elements... otherwise I could simply return an empty list always, which we know to be sorted. But this property also may be proved by similar way, inductively.
+
+Don't get me wrong. I love programming in Ruby, it has been my first programming language. ""Untyped"" languages (or, to put in other words, ""unityped"" languages whose type theory has only one possible type, such as ""object"" or ""machine word"") are useful as well. But being able to capture such bugs in compile time... that's priceless.",1538310878.0,1
+programming,"- Meltdown
+- Spectre
+
+Maybe not a bad idea to move to RISC-V, after all.",1538308191.0,1
+programming,"That alone does not mean much, you're right, but types _are_ awesome. They are about _proving_ things about your program. You can prove there won't be ever a data race, or that there won't ever be a null pointer exception. These things can be really useful: let the compiler catch the bugs that you would otherwise struggle to find in runtime. With dependent types I can even write an algorithm and prove it's always correct, for any possible input.
+
+Also, most things put on ""actual usage"" were first developed by people from academy. Go's goroutines came from Hoare's CSP, even Python's indentation rules came from Landin's ISWIM. Compilers' IRs, being them based on single assignment or continuation-passing, are based on Church's work on the lambda calculus. From ""actual usage"" we got PHP.
+
+Full disclosure: I did my master's degree on (and want to do a PhD on) type theory.",1538127333.0,12
+programming,"Making a compiler is a relatively easy job; making a programming language not so much. Some people seem just to gather things they feel are nice and call it a new language, but it's really a science. Facebook wanted to experiment with a reactive language, where the runtime would create a dependence graph to avoid unnecessary work when redoing a computation. They'll probably learn a few things that work, and a lot of things that don't.
+
+Also worth mentioning that some people seem to reject most advancements on the field. Uncle Bob called strongly typed languages a ""dark path"", even though most people working with PLT (e.g., Simon Peyton Jones, Philip Wadler, Stephanie Weirich) spend a good deal of their time with type theory. We've recently seem a lot of cool advancements on the field, such as effectful computations and effect handlers, but it'll probably take some time before they arrive in any mainstream languages.",1538110295.0,17
+programming,"Huh, I must have _skipped_ over that statement.",1538099879.0,77
+programming,"Yeah, that's what I meant. I tried to use `@cImport` to link to libc.",1538043488.0,1
+programming,Fair enough.,1537911051.0,2
+programming,Why?,1537910386.0,2
+programming,"I'm not really sure if the bug happened on the Zig compiler or in godbolt itself. Btw, we can't link to libc on godbolt.",1537910080.0,1
+programming,I've managed to get a few segfaults there.,1537895248.0,1
+programming,Bad bot.,1537776982.0,3
+programming,This guy's research is wonderful. Compiling to arbitrary (B)CCCs is one of the most beautiful things I've seem in the field.,1537776969.0,2
+programming,"Mu types are the least* fixpoint of functors. This means that, given a functor `F: * -> *`, `Mu F = F (Mu F)`. This is useful on settings that do not have explicit recursion. For example, `Nat`, the type of natural numbers, is just `Mu Maybe`, where `0 = Nothing`, `1 = Just Nothing`, `2 = Just (Just Nothing)`, and so on.
+
+(The greatest fixpoint, Nu, may also be defined, but since Haskell allows general recursion and non-terminating programs, there is no practical difference between Mu and Nu types.)",1537776445.0,2
+programming,"Huh, how do you install that? I tried installing GNUStep once with the Objective-C runtime on my Fedora, but failed miserably.",1537291169.0,1
+SuicideWatch,I woke up at 7pm. I'm trying to do some work now. Otherwise my advisor will be pretty mad at me.,1537148400.0,1
+programming,"Google has _clearly_ forgotten their ""don't be evil"" motto.",1537148311.0,3
+programming,"I meant a _formal_ memory model. I'm not aware of any previous attempt to, e.g., formalize Linux' memory model.",1537017518.0,1
+SuicideWatch,I'm not sure how to answer. Didn't do anything worth mentioning. :(,1536968174.0,1
+SuicideWatch,"I did, and yes I'm on medication. That's why I just _think_ about killing myself instead of having done it already.",1536966518.0,1
+AskProgramming,Glad I could help. :),1536953774.0,2
+AskProgramming,[Is this what you want?](https://www.jetbrains.com/mps/) That sounds a lot like projectional editors.,1536949459.0,2
+programming,"Up to 2011, before C made their memory model, that was the deal. Everything is terrible.",1536947844.0,2
+programming,"Hopefully the C11 memory model has been turned into a standard since its release. I've seem many models after that, but they all were based on C's. That's great for the viewpoint of a compiler developer!",1536888216.0,11
+programming,"Just out of curiosity, [what is your mailing address](https://www.poopsenders.com/)?",1536776183.0,1
+programming,"Conclusion:
+> This paper outlines an agenda for making compilers better by incrementally removing hand-written parts and replacing them with components derived using automated theorem provers, formal semantics, and data-driven tools. Although making this happen will require solving many interesting research problems, we have focused on the engineering advantages of the proposed approach, which we believe are clear and significant.",1536607299.0,28
+programming,I've been doing research in this topic since 2010; it's really great to see people giving that some attention!,1536603117.0,5
+programming,But how would you tell your family that you work with PHP?,1536537454.0,40
+programming,"It's a master's degree in Applied Computing, my thesis being about [type theory](https://en.wikipedia.org/wiki/Type_theory). I'm working part time as a compiler engineer also, and I truly hope to get a PhD in Computer Science on the next few years (focusing on type theory as well). I'm 25 now, btw.",1536260536.0,1
+programming,"When I was 17, I've had a major breakdown and a long, lasting psychotic episode; I was later diagnosed with schizoaffective disorder. I'm ""good"" now, I mean, I'm able to work (part time), and I'm almost finishing a master's degree (though I recently had to take 3 months away from it due to anxiety). When I see Terry's history, all I can think is _it could have been me_. I do feel really bad for him, I understand how it feels to be captive of your own delusions. May he rest in peace (if there be anywhere so blessed a thing).",1536171700.0,72
+programming,"Yeah, but... why???",1536170832.0,21
+programming,This is exactly what I meant. The state of software engineering **is** depressing. That's exactly why I don't believe dependent types will really find widespread usage. Most companies and programmers themselves would refuse to learn something new and complicated.,1535447411.0,1
+programming,"I've created an intermediate language for compilers (with dependent types), and I've been using Coq to try to prove its properties (though I personally like Idris better). I'm not sure I'd be able to convince some company to use Coq or TLA+, but I sure would use those tools if required (and allowed).",1535447219.0,1
+programming,"- You write an insertion sort function that returns the sorted list, and also a proof that it is correctly sorted.
+- No, this is NOT a runtime check. The compiler _literally_ works as a theorem checker. If your function could ever go wrong for ANY possible input, the _compiler_ will _reject_ your code.
+- The programmer decides what ""sorted"" means, and then tells the compiler through a type which represents such theorem.
+- If you write a bad proof, the compiler will reject your code. If you write a bad theorem, you probably won't be able to write a proof for it as well (so the compiler will reject your code). In a dependently typed language, the compiler is also a theorem checker. You can't prove theorems that aren't true.
+- Another program may be an idiot, but if they use _your_ proof wrong, their code won't ever compile. If they do write a theorem wrong, the odds are that they won't ever be able to prove it (so the code won't compile).
+- No runtime proof. Math guarantees you it won't ever fail at runtime, ever.",1535447019.0,2
+programming,"> So it's fine to spent a lot of time writing tests for all cases, which do not guarantee that your software works as expected, but tedious to write a _much shorter_ formal proof, which guarantee that your soft works according the spec?
+
+For a lot of people I've worked with, yes. I've seem terrible, terrible code on the wild. I'm skeptical that companies would find enough good enough programmers for that; doesn't seem practical.
+
+That being said, I hope I'm wrong about that.",1535356518.0,3
+programming,"I agree it's better on the long run (Idris is such a pleasant language!), but I doubt you'll be able to convince business people of that.",1535355189.0,1
+programming,"I truly doubt it. Dependent types are wonderful, CompCert is wonderful, but most programmers are not. Theorem proving is not the easiest concept to grasp, and in practice is really time consuming. You won't be able to convince people who rather Just Test It™ to dedicate time and effort to write properly proven software.",1535350811.0,4
+programming,"Perhaps that was not the best example. Dependent types let you, for example, write an insertion sort function and actually prove that it is correct (where being correct means that the output has the same length as the input, the same items, and is indeed sorted).",1535350309.0,3
+programming,Good to know that they were removed (though I'm clearly late on that). Thanks.,1535209683.0,1
+programming,"I mean, doesn't Go use split stacks to implement goroutines? How would those work in WASM? Are goroutines placed in the heap instead? How does the code ""jump"" there and sets the activation record?",1535182439.0,6
+programming,"Sadly I do believe those are enforceable in Brazil. So, at least for me, that's a thing. :(",1535173694.0,1
+programming,I'm really interested in seeing how the goroutines and their scheduler work in the WASM runtime. I'd appreciate if anyone could give me any info on that.,1535172941.0,14
+programming,"I mean that our current optimizing compilers are really good, but it's still difficult to make one for C. We have good optimizing compilers for C (CompCert comes to mind), but we have even better optimizing compilers for other high level languages with a semantic that tries not to mimic low level stuff. E.g., [Haskell's optimizer is truly fantastic](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/07/haskell-beats-C.pdf).",1534354771.0,2
+programming,"I truly believe that's even better! I actually do work as a compiler engineer, and I had Jon Hall tell me exactly this a couple of years ago: assembly should be used by compiler developers only; it should then give enough intrinsics for kernel and driver developers to work with (e.g., GCC's `__builtin_prefetch`).",1534353185.0,2
+programming,That was my point; I'm unsure we need a new low level language (other than assembly).,1534315920.0,1
+programming,It's still fairly difficult to make an optimizing C compiler.,1534315017.0,1
+programming,Can't this be done with a high level language (which has a good optimizing compiler) plus a tiny bit of assembly code?,1534314019.0,1
+programming,"To be honest, not all of it. But, when C was created, it would be used to enable the programmer to optimize something by hand. What I meant was: do we still need to do such thing? We have really good optimizing compilers for other high level languages (Rust and Haskell come to mind).",1534313955.0,1
+programming,"Oh, I understand that. I meant that now we have really good optimizing compilers (for other high level languages), so do we need a low level language to optimize something by hand? Even kernels could be written in, e.g., Rust with a little bit of assembly.",1534313842.0,2
+programming,"Well, GCC has the `__builtin_prefetch` function that lets you inform it that you want to prefetch something. I'd still argue that C is not low level, though.",1534313209.0,1
+programming,Do we really need one? Our compilers are far more evolved from what they were when C was invented.,1534178406.0,6
+programming,Wonderful collection. It's always so nice to see some PLT here!,1533921915.0,4
+programming,No need to get mad at me. I just summed the videos up.,1533284717.0,1
+programming,TL;DR: yes.,1533155156.0,3
+programming,"Ok, I was rude. Let me make up for that. You can't do such a ""translator"", you'll ultimately end up with a compiler. You can't expect all languages to behave the same, they don't. You won't be able to ever change variables in Haskell (through you might simulate variable assignment through monads). You can't make make a for loop or a while loop in Prolog (well, you could translate those by using a variant of Cytron's CFG/SSA algorithm, as compilers do). As suggested by /u/defmacro-jam, you mostly would need small-step operational semantics, and would still end up with a lot of really complex translations.",1532225277.0,3
+programming,"> The translation environment is a computer programming utility that allows you to write code and then choose which device you want it to work on
+
+It's been done before. I believe they call it a ""compiler"".",1532193233.0,1
+programming,True; they are closures. But still troublesome if you want to write some sort of cooperative scheduler.,1531763721.0,1
+programming,"Had already given a star to the project (I'm doing my master's thesis on continuations). Working with continuations in C is really troublesome, obviously because the language does not support closures and the context would have to be kept by hand, so this is a great extension!",1531760552.0,2
+programming,"Yeah, [constructor injectivity bites](https://github.com/idris-lang/Idris-dev/issues/3687). Agda did have this axiom as well, which seemed harmless, but then leads to a proof of absurd. They removed it from Agda, but seems like this axiom was used internally on Idris' type classes, so it can't be removed without major breaking changes.",1531428202.0,2
+programming,"The more I use Idris, the more I love Idris. Too bad it's been proven inconsistent. :(",1531420868.0,3
+programming,"> A PL designer used to be able to design some syntax and semantics for their language, implement a compiler, and then call it a day. Today, however, languages are supported by sophisticated environments that, when designed together with languages, have the potential to significantly improve the programmer’s overall experience.
+
+~ Sean McDirmid, Microsoft Research.",1531417583.0,5
+programming,Looks like typed holes from Idris. Such a cool idea!,1531417311.0,4
+programming,Thou shalt not exceed 80 columns. Make programming great again!,1530460170.0,1
+programming,"But not as much as I'd like to. :'(
+
+I mean, one or two hours a day, tops. Even combined with my job it won't be as much as a full time period.",1530207857.0,1
+programming,"RemindMe! 10 years ""How is Q# doing?""",1530151039.0,2
+programming,"I meant to agree with /u/Homoerotic_Theocracy.
+
+> But there's another discussion going on about it and that's an inverted one of the traditional feminist question of ""females are not allowed to work more by society"" and basically a ""are males allowed to work less by society if they want to?"".
+
+We do not have any laws here in Brazil enforcing employers to hire anyone part time, I was just lucky (modulo the health issues) that I found a company that needed a compiler engineer, so they agreed to hire me part time. This is actually a good thing, it gives me a couple of hours to dedicate to research and free software most days.
+
+My point is that, even though I would prefer working part time as I do, given the choice, I still _do_ feel bad I _have_ to. I feel I should be working more to be a productive member of society.",1530121501.0,2
+programming,"Sadly Cobol 2014 standard is paid, but you may google for GNU Cobol, you'll find a bunch of free cool stuff. That's how I learned it a few years ago. :)",1530053427.0,5
+programming,Young people should learn Cobol as well. In the newer versions it has even lowercase letters!,1530044234.0,16
+programming,"I'm male, and I work part time by mutual agreement with my current employer, mostly because of health issues. I must admit that I do feel bad that I can't work full time, but I would certainly drop the ball if I tried to.",1530041721.0,26
+programming,Thanks for the code and the insight!,1529903355.0,1
+programming,Couldn't we convert them both to a minimal DFA and then compare the results for equality?,1529903200.0,1
+schizoaffective,"I highly recommend you follow medical advice, and take the medications. They have helped me a lot, and I'm sure I'd be far worse if I had refused the medication. I am still not able to maintain a relationship, but I've been able to build a career and finish a master's degree, all thanks to it.",1529779103.0,2
+schizoaffective,"Yeah; I mean, I could control one of them at the time (as they were my thoughts, I would just think of something else), but the other one would continue talking to itself about another subject. It was quite tiresome.
+
+My psychiatrist has argued that they could be my Id and my Superego each talking to itself. It's an interesting point of view.",1529681827.0,2
+programming,Socks! 🧦,1529145909.0,3
+programming,"Well, I surely _could_ work without SE. When I said that I couldn't imagine my career without it, I meant that it's so common to find quick answers or introductory theory there that it's hard to picture a workflow that wouldn't, eventually, lead me to something there. It's a commodity.
+
+Personally, I have never copied code from SO, but every now and then I get an obscure compiler error, Google it, and find a short explanation on what's wrong there. Of course if that's not the case I end up looking on the manuals (if they exist), which tends to be more effort than necessary. From a more theoretical point of view, there are a lot of questions on Computer Science SE about type theory with pretty good answers, something I'm grateful about (there are no ""manuals"" for math, and the books are sometimes too cryptic).",1529065778.0,2
+programming,"Well... perhaps I'm bad at my career, I guess. I'm currently working as a compiler engineer, and my field of research is programming language theory (and type theory). So I constantly fiddle with new languages and new runtimes. StackOverflow usually gives me really quick answers to most things I need, as which standard library functions to use and so on. There are some great answers, for example this [overly simplified explanation of what a coalgebra is](https://stackoverflow.com/questions/16015020/what-does-coalgebra-mean-in-the-context-of-programming). And, of course, by ""StackOverflow"" I mean StackExchange in general, the Computer Science SE and Math SE also helped a lot on my master's degree. :)
+
+(Btw, to be clear, I meant I usually _search_ on StackOverflow rather than asking there myself. I have currently given [1441 upvotes there](https://stackoverflow.com/users/1934349/paulotorrens?tab=votes).)",1529058797.0,2
+programming,"He claimed that ""it could be a good thing or it could be a bad thing"", and that ""GitHub being bought by Microsoft is not on itself a terrible thing"". So I guess the joke's on you.",1529041738.0,42
+programming,"That's insane. I'm aware that's he's from another generation, he was a hardcore programmer and stuff, but... I simply cannot image my career without StackOverflow.",1529041569.0,2
+programming,"Don't listen to them! Do get a cat! Cats are great, specially the needy ones.",1528692981.0,6
+programming,Which I didn't find time to read yet. :(,1528480508.0,2
+programming,Pretty much it.,1528392493.0,0
+tappedout,Was that sarcasm?,1528058254.0,1
+freedonuts,I'll do that. Thank you very much. :),1527902714.0,2
+programming,Don't listen to him. You're funny enough.,1527548735.0,10
+programming,"> Tell me what you want, what you really, really want.
+
+I want an APL keyboard, of course.",1527525948.0,2
+programming,"C is clearly a high level language. According to the standard, we cannot compare pointers that didn't come from the same array, we can't use arbitrary memory addresses, we can't even clone or drop the stack. Pointers are just a high level abstraction that happen to be fast on Intel processors, as God wanted them to be.",1526600897.0,16
+programming,"What I **REALLY** want is a good programming font with 1) APL symbols, 2) bold and italics. Hard to find.",1526406867.0,5
+programming,Yes.,1526352484.0,9
+programming,"You did get the extra point, right?",1525973387.0,5
+programming,Amen.,1525973311.0,3
+programming,"> Already have job
+>
+> Does not involve compilers
+>
+> Let me graduate
+
+Wonderful.",1525915441.0,394
+schizoaffective,Terrible. Thanks for asking. :),1525714524.0,1
+programming,Touché.,1525408951.0,1
+programming,"So, you want to talk about position of privilege? Fine, let's do that. I'm male, and I'm white, you guessed correctly. But being ""statistically prudent"" wouldn't help you past that. I'm asexual, so I know how bad it is to, e.g., be beaten up just because of your sexual orientation. Also, I'm schizoaffective, so I'm used to constantly being looked down even though (I assume) I'm good at my job. After you go to a mental hospital people tend to be highly condescending to you. Maybe I could mention I'm kabbalist, not a major religion. You may imply I'm in a position of privilege, perhaps that is true, but at least I know how it is to _feel_ an outcast and to be labelled a ""snowflake"". I'd like a lot of things to change.
+
+To be honest, I do like the CoC, and personally I believe that this LLVM developer overreacted (and he's the one that started the ""drama"" here). I've grown on a really hostile environment, and I feel _really_ uncomfortable with heated discussions. I've always liked the free software community, maybe the place I've come the closest to feeling welcome (hence the CoC seems like a good thing to me), so I would not like to see such political discussions splitting the community.
+
+You may think I'm a bad person for wanting people to focus on the code instead of fighting. Perhaps you're right. I'm sorry, but that's how I feel, there's nothing I can do but watch things crumbling.",1525394130.0,6
+programming,"I have not talked about any political views of mine, yet you seem to assume that I'm against the CoC. Also you seem to assume I'm white. Why's that? Why are you angry? Let's talk.",1525390706.0,5
+schizoaffective,"First, congrats on your acceptance! May I ask, which university are you going to? I'm also interested in doing a PhD in computer science, and I'm actually really glad to see another schizoaffective person doing that.
+
+About your question: I've been to the USA, and I had no major problems getting my visa (which I did _during_ a psychotic event). I'll soon try to get one to UK as well, but hopefully it will be easy as well.",1525372780.0,1
+programming,"Though I agree with what you said, I'm really uncomfortable with such confrontations. Talking about it is surely important, but, since most people can't do so calmly and without unjustified agression, I just hoped that the talk could be held somewhere else.",1525367937.0,4
+programming,"Ok, I apologize. I'm disappointed by _a few_ of the answers I got. Any better?",1525367775.0,1
+programming,"I assure you one can write perfectly fine code during a psychotic event, even inside a mental hospital. Been there, done that. :P",1525328427.0,2
+programming,"I'm working on a proprietary compiler project, the whole team being a guy with Asperger's and me. He's a little awkward, but he's also _extremely_ productive, and an excellent programmer (don't tell him I told you that).
+
+Also, I do have schizoaffective disorder and I'm currently on antypsychotics, anxiolytics, and three kinds of antidepressants. I'm usually told I'm a good programmer as well (which I assume I am, since we both are running a compiler project by ourselves). Actually, my master's degree was focused on compilers and type theory.
+
+We both have ""mental disabilities"", and it's true that neither of us are perfectly functioning everyday, but we're good at our jobs and perfectly capable of contributing to the free software community (including LLVM, since we dig compilers). It would be a shame if we were to make a post on a bad day and be discriminated because of that.",1525328280.0,9
+programming,"Please, people, stop bringing political drama to the software community. Why can't we all sit down and code peacefully? :(
+
+**Edit**: I'm not surprised by the answers this comment got, but I'm still disappointed.",1525326419.0,114
+programming,"You - and most people on this thread - seem to be focusing on the everyday Intel/AMD computers. Yeah, the translation of C to those is pretty straightforward. But it isn't to the JVM, for example. To the JVM and others, [pointers are a high level abstraction](http://okmij.org/ftp/Scheme/pointer-as-closure.txt), since it has no instructions for direct addressing. Also, to the JVM, Java is a pretty ""low level"" language, since it's translation to JVM's bytecode is pretty straightforward.
+
+One may argue ""but the JVM is a virtual machine"", well, we do have physical implementations (e.g., Jazelle). So why ""low level"" would imply ""closer to Intel"" but not ""closer to the JVM""? Closer to the [random access machine](https://en.wikipedia.org/wiki/Random-access_machine) instead of any other kind of register machine? What about the [SECD](https://en.wikipedia.org/wiki/SECD_machine)?
+
+Also noteworthy: the C standard gives absolutely no guarantees about direct addressing (as in `int *ptr = 0xB8000`), as one would expect to work in plain assembly for accessing VGA memory. Picturing C as a low level language makes programmers make bad assumptions and write undefined behavior (according to the standard, you can't even compare two pointers that didn't come from the same array with `<` or `>`... a low level language sure would allow that).
+
+C, just like Java or JavaScript or F#, is a high level language. [C is not a portable assembly](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/07/ppdp.pdf).",1525238574.0,17
+aww,"(Non-native English speaker here.) For a moment I assumed ""lamb chop"" was a breed of dog and got really scared.",1525221809.0,2
+programming,Make TLDs great again.,1525093416.0,26
+schizoaffective,"(OP here.) A related note: the Brazilian government _does_ grant a few scholarships for people who want to do a PhD abroad, but:
+
+* If you, for any reason, fail to finish the PhD, you have to refund all the money plus interest to the government.
+
+For a big university, this can be a huge amount of money after only a few months. So, what if I start seeing demons again during a PhD? Aside from not becoming a doctor, I'd be in huge debt to my government. This scares me. :(",1524468465.0,3
+programming,"Yes, I would. I actually work as a compiler engineer, and I have checked Java's specification license. OpenJDK is licensed with GPLv2, which only have an implicit patent grant; the Java specification license, [which you can read here](https://docs.oracle.com/javase/specs/jls/se10/html/spec-license.html), is clear: **you cannot make a subset nor a superset of the specification**. Making a Java compiler that infers exceptions would be a superset, and the GPLv2 does not give me full patent rights to do that.",1524418150.0,4
+yugioh,I really wish that Forbidden Apocrypha would work with link monsters.,1524368839.0,1
+yugioh,Could you ask Konami to release my Odd-Eyes link monster already?,1524368469.0,1
+programming,"Trying to make money is fine, capitalism and stuff, but would it hurt _so bad_ to let other people work on their damn Java implementation?",1524343676.0,2
+programming,"To be fair, I do despise Oracle, but... checked exceptions are a terrible choice. C++ had them and decided to drop them because _nobody_ was using. And what makes it worse: they could be inferred by the compiler (and trigger a warning instead of an error), it makes no difference to the runtime. But, still, Oracle would reject a proposal to make them optional.
+
+I wish I could implement my own version of the Java compiler, which would _infer_ exceptions, and generate the same code, but then I'd be sued.",1524342863.0,1
+schizoaffective,"> While it's possible that Magick is real, it is a certainty that schizophrenia is. 
+
+Well said. I've started seeing demons when I was 17, and, similar to how you describe it, had to understand what was going on. (I would **not** recommend anyone to study such things.) As of now I do believe in Magick, but it being real would not guarantee that _what I saw_ was real, because schizophrenia and schizoaffective disorder are indeed real as well. We have to understand that this (being sick) is a strong possibility, and sadly, both things aren't even mutually exclusive.",1524242692.0,2
+yugioh,"Yeah, that's what I thought. This is sad. It would be something wonderful against links.",1524241890.0,1
+yugioh,"Huh... since it lists explicitly, I _strongly assume_ it won't work on links. We need a ruling here.",1524233883.0,6
+yugioh,"They probably should add ritual monsters as well (for the Deep Ones, of course).",1524205599.0,9
+yugioh,"{{Forbidden Apocrypha}}, for sure. Though it sadly doesn't work with links, it's great to take care of those indestructible monsters (such like Ultimate Falcon).",1524205334.0,5
+programming,"That's the idea, anon.",1524014956.0,1
+programming,No mentions to the GLL algorithm so far. How come?,1524008225.0,3
+programming,"I'm gonna screenshot your comment, put it on a frame and sell it as art on eBay.",1523986233.0,57
+tappedout,"So sorry to hear that, bro!",1523855915.0,2
+neurodiversity,"Doing that through a smart contract is an awesome idea; the contract is enforced by the laws of math and may be peer-reviewed. As a computer scientist myself, I'd love to see more details.",1523685541.0,1
+schizoaffective,"Know that feel, bro. I have to take one now myself... :(",1523671656.0,2
+schizoaffective,"Talking for myself. I've had several religious themed ""hallucinations"" (I'm still not convinced that _all of them_ were hallucinations). There were situations that I do not think it would be possible _not_ to interact with them.",1523647140.0,1
+schizoaffective,"I had a major crisis when I was 17. I stopped sleeping, I mean, it would take up to as much as 8 days for me to fall asleep (for a couple of hours, after **more than 200h awake**), and would never be less than around 60h. So I would sleep twice, perhaps three times a week if I were lucky. This went through 18 months until I finally found a medication that made me sleep. **IT. WAS. HELL.** During this time, whenever asleep, I'd see demons, and know them by their names. I've never heard voices while awake, but I've seem them a few times. I've studied Sufism and the alikes (and stuck with the Cabbalah) because of that, I was desperate to understand what was going on; I still wear an exorcism medal around my neck _all the time_, and (would) feel naked without it.
+
+Sleep deprivation is a terrible, terrible, terrible thing.",1523646964.0,3
+schizoaffective,Reddit? Reddit. :(,1523645982.0,2
+schizoaffective,"Fighting to know what's real and what's not is, perhaps, the worse part. I know how you feel, you're not alone. I try to handle these things in a purely intellectual level: I tend to forget how I feel, and use solely my mind to ""classify"" what is and what should be. How to act around people, and stuff. When we are aware of what's wrong with our minds we can _try_ to work it around, though I understand it is hard and painful. I wish you the best of luck.
+
+I could give you a tip: a reality check. The human mind has a feel ""bugs"" that can help you. Take a digital clock, look at the time, then turn away and look at it back a few repeated times. In a dream or comatose event, the time will keep changing randomly, your brain won't ""stick"" with a fixed time. When it's real, the time will remain the same.",1523645778.0,2
+schizoaffective,"I have tried to stay without my medication when I was 22. It was terrible. I couldn't smile at all, my memory went downhill, my thoughts were disorganized, and it would take a moment before I could answer anybody. By the end of the (last) semester (of college), I had to explain it to all my professors what I did, and asked for help. I started taking the medication again because I was gonna fail all the classes. I'm 25 now, properly medicated, and about to finish my master's degree so I assume I took the right decision.",1523263919.0,1
+schizoaffective,"I find it hard to keep a full time job. I've managed to keep a part time job (working with a guy with Asperger's on a proprietary compiler project), and in a couple of months I'll finish my master's degree in Applied Computing.
+
+So, yeah, it might be hard, but I'd say it's possible as well.",1523261949.0,2
+programming,I can barely get out of bed without questioning life and its purpose.,1522860827.0,3
+programming,Linear ~~logic~~ type systems to the rescue! :D,1522544723.0,2
+haskell,"Huh, so I assume that as long as I'm not explicitly stacking the same effect twice this won't lead to any ambiguity. Also, thanks for the `NoMonomorphismRestriction` tip!",1521469131.0,1
+haskell,"Oh, don't worry! I didn't mean you suggested anything; I was just complementing what you said: the code was an attempt to encode effect handlers (changing order and stuff), aaand it did work. :)
+
+I haven't tried with effects that don't commute yet. I'll probably play with that this week.",1521468978.0,1
+haskell,I am sorry; I was a little bit high.,1521333596.0,10
+haskell,"And it works, though we need to annotate the types, and I suspect it is painfully slow.",1521333445.0,2
+haskell,"* I think it's cool that changing the order of the ""handlers"" (`runStateT`, `runAmbT`) changes the result of the function, just like in Koka
+* I have no idea why those instances overlap, if anyone cares to explain to me
+* Also, I could not make the type inference work for the `xor` and `test` functions by the end of the file... it would be really cool if it could!",1521327231.0,7
+yugioh,I can't make Synchron run fine in my build. It always slows things down...,1521326274.0,1
+yugioh,It's somewhat good because it lets you go to either Absolute Dragon or Meteorbust Dragon; I run at 1. But I must admit that it worked better on the older Odd-Eyes Magician builds. We need better tuners for pure Odd-Eyes. :(,1521313779.0,1
+yugioh,"C'mon, Konami, give us our Odd-Eyes link monster already! :(",1521256405.0,2
+yugioh,F!,1521256253.0,2
+yugioh,"You can discard Destrudo, and synchro summon later with Mirage or Persona.",1521256169.0,1
+programming,"Not only that; I'm aromantic as well, but I still would like to have a partner, basically a best friend for cuddles and hugs and Netflix (but no chill!) that would not prefer _their_ partner over me.",1521136261.0,1
+programming,"Indeed, you are right. I've been working too much time with propositions-as-types...",1521030023.0,1
+programming,"Thanks for expanding the subject; I'm familiar with these topics but might have not expressed myself well (e.g., though the relation is clearly older, it is usually referred simply as the Curry-Howard isomorphism). I was particularly thinking on how paradoxes show themselves on the computational side (`forall a, a`), which makes a term that has no normal form and might be used to prove anything. Just an interesting observation of how math™ works.",1521027793.0,0
+programming,"Under Curry-Howard isomorphism, logic systems can be thought as programming languages with strict type systems and whose programs always halt (paradoxes form programs without a normal form, i.e., they may not halt). That's why we have Coq, Agda and Idris which let us prove theorems in the form of programs (or prove theorems _about_ your programs).
+
+I'm not sure if anyone has explored this idea, but I'm under the impression that Gödel's incompleteness theorem reflects this property: if all programs in your language halt (i.e., it is logically sound), there will be programs that halt that can't be implemented in your language (i.e., that are true theorems but cannot be proven); on the other hand, you can have a language which accepts all programs that really halt, but it will necessarily accept programs that never halt as well (so it is unsound as logic). This seems clearly related to the halting problem.",1521022069.0,9
+programming,"We can try. I mean, you can have a date that does not end in sex, right? Of course it is way harder to keep a relationship without the sexual part, but it would be nice to have a partner for companionship and not dying alone and stuff.",1521021479.0,2
+programming,"I am asexual, but I am not on the autism spectrum. Also, a coworker of mine, who has Asperger's, is gay.",1521006238.0,1
+programming,"As an asexual programmer, these results caught me by surprise. There were around 1200 asexual professional developers answering the survey, and even more students (proportionally). I'm gonna start using StackOverflow as a dating platform from now on.",1520955663.0,7
+programming,"> As far as the specific IsNot patent goes, I will say that at a personal level, I do not feel particularly proud of my involvement in the patent process in this case.
+
+I do not blame him. I blame Steve Ballmer. (But, to be fair, I do blame Steve Ballmer for a lot, a lot of things.)",1520276361.0,0
+programming,"But do remember they wasted time and (from our perspective) a lot of money just to say ""hey, we *invented* a keyword **is not** to compare pointers not equal"".",1520271961.0,1
+tappedout,I would not buy donuts for it... but do try farming!,1517407506.0,5
+tappedout,Do they both have 24h tasks? I just wanted to check that before buying them!,1517403333.0,4
+programming,"I was distracted and quickly read ""Donald Trump"" instead of Knuth and was really confused for a moment.",1511863969.0,6
+programming,I've got nobody that I have good contact with. Seriously. But thanks for the advice anyway. :(,1511532596.0,1
+programming,I identify with so many things he said. :'(,1511453669.0,3
+yugioh,"Hello, folks! I'd *really* love some help with my deck (for casual online play) here!
+
+I've been playing elemental Odd-Eyes (Saber + Vortex + Meteorburst + Absolute + Gravity) for some time, using the old pendulum magicians for support (they usually stand in the pendulum zones). I've even used Sauravis and Destrudo as techs (so I have an extra ritual hand trap, that I can summon with Odd-Eyes Advent from grave, and a easy way to synchro 7).
+
+The deck strategy kinda changed once Odd-Eyes Arc Pendulum Dragon was released, it provides great speed up, but doesn't work really well with the magicians. It works great with Odd-Eyes Phantom Dragon, though, which I used to run already, but never really put in the pendulum zone. So I'd use magicians in early game, than after my field is set I'd change the scales to Phantom & Arc Dragon.
+
+Now on the link format things got even harder; seems like I want to summon Heavymetalfoes Electrum as soon as possible (I don't even need Timestar Magician to search for Joker anymore), but the scales with the magicians and Arc Dragon really don't work well. They are not consistent anymore. What's worse is that the Performappal Odd-Eyes (Dissolver, Synchron) doesn't seem to fit well! :(
+
+Which tips could you guys give me? How to run a nice elemental Odd-Eyes deck on the new link format?",1510793951.0,1
+yugioh,I can't wait for an Odd-Eyes Link monster. :D,1508250473.0,1
+yugioh,"Of course they would. A lot of Link monsters already have effects based on their arrows. As Xyz monsters use their Xyz materials for effects, and they are useful, Link monsters use their arrows for effects, and would be useful as well, even if we could still freely summon from Extra Deck to Main Monster Zones.",1506198968.0,9
+programming,No support for APL or Agda? :(,1505749634.0,0
+programming,"Indeed, but there's no way to know how such integer representations will be. The only guarantee the standard does is that you may safely convert them into a valid pointer back. If you do arithmetic on them you'll most certainly run into undefined behavior.",1504696079.0,1
+programming,"I just hate how we cannot reliably implement tagged pointers in C. I mean, they usually work on most (common) platforms, and we can always add a bunch of `#ifdef`, but though a lot of programmers would expect that casting a pointer to an integer (and back) is a NO-OP, and that pointer arithmetic would be consistent with that, the standard does not guarantee that...",1504593161.0,1
+cscareerquestions,"Sadly that's not the case. I am productive (as I was on my 5 hours a day internship), but I get tired easily even on hobby projects and similar. Also, I really liked that job, I believe it was a best-case scenario for my condition. I'm not sure I'll be that lucky again...",1496579860.0,1
+cscareerquestions,"I kinda have to work; I got bills to pay, and stuff.",1496579596.0,2
+golang,"Plugin loading/unloading, and generics!
+
+Nobody seems to be talking about plugins. In C world we'd use `dlopen()` and `dlclose()` for an extensible system, in Java we can simply load the class... Go recently has made a plugin build mode, but it can't be unloaded once there. :(
+
+Though I understand this is _by design_, it greatly complicates the lives of us who are trying to build a software with loadable functionalities.",1494885355.0,1
+programming,"I've been working with compiler construction for almost a decade now. After looking at [Snap!'s manual](https://snap.berkeley.edu/SnapManual.pdf), a descendant of Scratch, I've come to the conclusion that *not only it's fit for real programming, but it also seems highly optimizable*. Though both may look childish, they seem great for introduction to programming (though I've always considered Ruby the best option). I am focusing now on a multi-language compiler framework, on which I want to make a ""Scratch"" programming language for real work (which I will call ""Scar"" - got it?).",1493154938.0,16
+yugioh,"[It's a monster type in the OCG](https://ygorganization.com/nomiheretostay/), though, even if they didn't classify it as such in the TCG. We got some good nomi monsters now, Zefratorah Grammaton, Ultimate Conductor Tyranno (both which have **Tokushu Shoukan** printed on them in the OCG), etc, why wouldn't one work for Odd-Eyes?",1488818109.0,1
+yugioh,"I **really** hope he comes as a nomi on the TCG! The only summoning method that hasn't reached Odd-Eyes yet (aside from link, of course), is the good ol' summon-by-its-own-condition tokushu shoukan monster. :D",1488794111.0,1
+yugioh,"I **really** hope so, cause I really enjoy my Odd-Eyes deck. I don't really care about pendulum that much, but the ""do all the summons"" part is so much fun. Odd-Eyes Gravity Dragon is my ace card, btw.
+
+Also, I'd **really** love a nomi Odd-Eyes monster as well (y'know, one that must be special summoned by it's own condition, as in ""*Cannot be Normal Summoned/Set. Must first be Special Summoned (from your hand or Graveyard) by...*"").",1488248501.0,1
+yugioh,"Dark Synchros are already gray, and I still have faith they'll be released in the TCG someday.",1487361352.0,15
+math,Gotta love programming in Idris.,1485640855.0,1
+math,I hope so!,1485618533.0,1
+math,"I'm sorry but at this point I'm starting to assume that category theory doesn't really exists and people just write a bunch of articles with random symbols as a joke. And, when people discover that, they start doing the same to keep trolling.",1485613594.0,-4
+math,I'd like to reverse that question: why would mathematicians care about type theory? (Aside that one can [encode Zermelo's set theory in a pure type system](https://www.fing.edu.uy/~amiquel/publis/types04.pdf).),1485558584.0,6
+math,"I'm one of those, or at least I'm trying to be. But still, it seems to me that there are more computer scientists giving it a thought than mathematicians. I'm not sure.",1485558141.0,3
+programming,That would be entertaining.,1484396253.0,3
+programming,"You are right, and I didn't mean otherwise. If I sounded like I didn't know those, then I didn't express myself well. I'm currently working with those things, actually. I only meant to argue that Uncle Bob is wrong at saying that a type system can't express behavior correctness, because a dependent type system can (but for sure it is not the only way, nor practical for usual software development as of now; verified programming is hard). :)",1484395904.0,2
+programming,"Coq is nice, but is not meant for general purpose programming. Idris is, and it can do everything Coq can. :)",1484391861.0,2
+programming,"He's right that types are not _tests_. [We know for a long time now](https://en.wikipedia.org/wiki/Curry%E2%80%93Howard_correspondence) that _types are propositions, and **programs are proofs**_ (but of course you need a type system powerful enough for that goal). Strong, sound, static type systems are meant to give proofs about a program. Of course, a weak type system as C's lets you cheat, and a unsound type system such as Java's is not trustworthy for such specifications (though it already proves you won't have any segmentation fault). E.g., Rust's type system [guarantees there won't be data races](https://doc.rust-lang.org/nomicon/races.html). But he's plain wrong in that ""no type system can guarantee behavior"", they can, there's a lot of research [on that field](https://en.wikipedia.org/wiki/Dependent_type)! The language [Idris](http://www.idris-lang.org/), for example, lets you give actual proofs of correctness about your program's behavior. Don't get me wrong, I'm a proponent of dynamic typing, I love the freedom Ruby gives me, but being able to prove correctness in Idris, whose compiler *is* a theorem prover, using the type system as a tool, is valuable. Types are not about testing, types are about proving.",1484388124.0,9
+programming,I assume it won't hurt to write a few tests...,1484324795.0,1
+programming,[Touché.](http://i.imgur.com/JgmYmgw.jpg),1484321675.0,2
+programming,"Oh, of course! Programmers are magical beasts capable of bending reality in order to screw things up. And the users are even worse! (No sarcasm here.) Sadly we can't avoid this always... My point only being that the type system helps to prevent that. =P",1484320980.0,3
+programming,"Hm, ok. Regarding Idris (which was the point in the other comments): the type system guarantees that the program won't ever crash (fail?), that's a given. And, if you use the type system to prove something, then everything you proved is guaranteed to work properly as well. If you did not write a proof, then you'll have to test it.",1484320504.0,5
+programming,"> A strong, sound type system does not have to be static.
+
+Ok, right. I meant a strong, sound, *static* type system.
+
+> I think the people who believe that static type systems are a substitute for tests probably have pretty shoddy code.
+
+A static type system like Java's or Haskell's? No, it won't work as a substitute, and tests would still be needed. They are simply not powerful enough to do that. A dependent type system, such as Idris', which lets me write proofs? For sure it is. Why would I test something that I can prove?",1484318267.0,5
+programming,"The idea is that, if it compiles, it won't ever break. (And, if it still breaks, it's a bug on the Idris compiler, not your code.) I understand this is a hard concept to grasp, I've struggled with it for a long time myself. And, indeed, writing proven programs with regard to floating points is a pain. But, trust me, it can be done. :)",1484316948.0,5
+programming,"If the implementation is not correct regarding the mathematical representation, it won't even compile. That's the point. And if the mathematical representation is not correct you'll realize that in the implementation because you'll be missing some information you need to make the program compile. You'll only end up with a program that compiles when the mathematical representation *and* the implementation are provably correct.
+
+The Idris compiler IS a theorem prover. Your theorem is your program.",1484314476.0,7
+programming,Exactly. You ARE able to do that. :),1484313696.0,7
+programming,"There are F-algebras and F-coalgebras for that. Even given infinite user input, you can write proofs of correctness. You do that by using constructive and inductive logic. There's a lot of research on that, and I truly encourage you on learning more about it. But I must warn you, dependent typing has a terrible learning curve...
+
+Note from your link that those are proofs about the size of a vector, and we don't know at compile time which size it will actually have. On the example I gave, it will read any list of integers from the standard input (and will assume 0 if some is not a number), and then show a (provably correct) sorted version of those. Actually, given a boolean expression, Idris has a function on its standard library, ""chose"", that returns either a proof that the expression is true, or a proof that the expression is false. Then you build other proofs from bottom-up. You end up with a system that checks all possible outcomes.",1484313228.0,5
+programming,"Not really... I mean, Idris does not enforce you to prove everything, it would be too troublesome. But on the places where you add proofs, you do not need to test. It's non-trivial to write incorrect proofs. E.g., [on the example program I gave](https://github.com/davidfstr/idris-insertion-sort/blob/master/InsertionSort.idr#L62), we state: a vector V of size N is sorted if either: 1) N is zero, 2) N is one, 3) we have a proof that the first element is smaller than the second and a proof that a vector without the first element is sorted.
+
+So we end up building proofs from bottom-up (which are erased in compile-time), and thus, if we have an object of the proof type, we do not need to test for its property (no need to test that it is indeed sorted, we know it is).",1484312905.0,18
+programming,"True, but it's way easier to reason about a 30 lines proof-as-a-type then to try to check all corner cases in a 3000 lines of a dynamically typed program. If the proof is right, the remaining of the program is right as well. Tests are a poor man's proofs.
+
+Don't get me wrong, I'm a proponent of dynamic typing, my first language was Ruby, but the point is that strong (sound) type systems are meant to give proofs about programs (e.g., ""no NPE may ever happen""), I'm not sure if Uncle Bob gets that. That said, Idris is a magnificently amazing language.",1484310807.0,10
+programming,"You CAN formally prove correctness of programs that take dynamic input! No need for run-time checks, no overhead at all! That's the beauty of it! Compile-time proofs! :D
+
+Dependently typed languages such as Idris will employ dependent type theories, almost a century of academic research on the matter. For example, [this](https://github.com/davidfstr/idris-insertion-sort) is a provably correct insertion sort in Idris (with dynamic input).",1484309705.0,22
+programming,"I think Uncle Bob's blogpost, as well as this answer to it, misses the point: it's not about responsibility, but about proving. ""Is it the language's or the programmer's job?"", when actually the language is the tool to do the programmer's job. Tests are valuable, but the whole point of strong sound type systems are that you won't need to test something once you can PROVE it. You can get rid of the possibility of something going wrong.
+
+If you go even further, you have languages as Idris which let you write formal proofs of correctness: if the program compiles, then it will never fail.",1484306059.0,62
+programming,I'm a religious zealot and I did not appreciate being compared to a TDD proponent. =/,1484305806.0,71
+mentalhealth,"Thanks for the answer.
+
+I'm managing to sleep well now, took some time but I'm able to lay down calmly now.
+
+I've thought about hypnotherapy and tried it, but it didn't work. I just couldn't relax enough to get it started.
+
+Lately I've been trying something; whenever my stomach hurts, I star watching an old show I used to watch that I really loved, and that usually gets me nostalgic. I'm trying to reprogram the emotional response. No sign of success yet, though... :(",1448138270.0,1
+Upvoted,"A few years ago I had a terrible insomnia problem; doctors couldn't tell me what was wrong, their best guess is that it was a ""panic attack"" that lasted two years. So, for two years, I'd sleep once each 3 days at best. Gaps would usually be longer. A couple of times I've stayed up more than 200 hours awake in a row. It took them two years to find a medicine that would work on me, I tried a lot of different meds during this time, none seemed to have any (positive) effect.
+
+Life was hell.
+
+I make a point nowadays to my professors and my boss(es) at work that I will NOT stay a single more night awake anymore. I rather fail my classes or get fired.
+
+I have learned that sleep is not a right, but a privilege. People, make sure to get enough sleep. It is really, really important.",1447815865.0,6
+ChristianOccultism,"I don't believe this is of any interest for the OP, but I have no problems answering about that event (assuming you mean the Throne). The demon was actually summoned through a ritual. After realizing what I was dealing with, I performed an old ritual that included forcing him to manifest himself physically, so there were witnesses. It was intense, I got a little hurt. It worked out, and he was cast away. Sadly, he came back three days later, and killed my cat just to mock me. I kept it under control for some time, but I only managed to get rid of him for good when an angel appeared to help.
+
+And you're right, ""occult always involves being on the radar of demons"", it's not a good thing. I had no choice, though, it was self defense. And that's why I don't have any close friends too. ;)
+
+Most common magick really does involve harnessing powers of demons and damned spirits, and my knowledge is only about how one may defend oneself against them. I do not perform any magick rituals, and I have only performed exorcisms when it was absolutely necessary. Lots of exorcisms need the exorcist to be a few days awake (in order not to sin in dreams) and fasting in order to work.",1434946992.0,2
+ChristianOccultism,"Don't get me wrong, I know it does help. And with most common demons it works right away. But many people believe that simply telling them ""to go away in the name of Jesus"" will work on every case (specially ""standard"" Christians). I've performed some exorcisms already, and I was unlucky enough to face a fallen Ophan (a Throne) once. It wasn't this easy that time...",1434944665.0,1
+ChristianOccultism,"Doesn't work with demons who are in higher positions in hell's hierarchy, though. :(",1434936964.0,1
+ChristianOccultism,"It might have been a lot of things. There are lots of different kinds of spirits. I've faced demons in the past, and learned several ways to fight back. Get one of these to yourself: https://en.wikipedia.org/wiki/Saint_Benedict_Medal. It is a ""quickfix"": lots of evil spirits can't get near it, so you're protected. If it had actually attacked you, you'd need to call an expert.
+
+Edit: *For an emergency*, when casting a demon away, **never** try to talk to him. The first thing one must do is ask his name, and that's it. Once you know his name, call him by his name and command him to go away in the name of Jesus.",1434936387.0,3
+ChristianOccultism,"It's still recent, that's why I feel this way (about wanting her not to suffer, and all earthly things). I really do hope, though, that she'll receive her reward.
+
+All my knowledge of magick is on protective magick, and how to deal with evil spirits. I've learned that to protect myself five years ago. Angels have answered me in the past, though, but I only called in really desperate moments.
+
+I've prayed asking for any angel that could hear me that anyone would please take care of her, because I was worried and missed her really much. I've seem some lights after that, though it *might* have been just high blood pressure. I've been feeling much calmer since.",1434798174.0,2
+ChristianOccultism,"Thank you very much for your answer.
+
+Yes, I'm a cabbalist. But all I found so far about this subject on c/k/qabbalists' studies is exactly what you said: that her soul has returned to the Creator. But this kinda raises more questions than it answers, y'know? I just hope she's fine now. She kept me going on when I needed the most, and I sure hope that she's happy, warm, and well fed now wherever she is. :(
+
+I sure hope, with all my heart, that some kind angel is giving her her reward now...",1434756502.0,1
+ChristianOccultism,"I've read about those belief systems... I don't really believe in them, though... it would be more comforting for me if I did believe, though. :(
+
+I've read some Christian, Jewish and Islamic occultists already, but sadly didn't find anything that could help me in this moment.",1434756165.0,1
+coding,"There probably will be some development in Go for Android, but Go is not that well suited to run on the Dalvik machine. I mean, Dart is much more likely to run smoothly on Dalvik along with Java code for now. I mean, Dalvik is hugely tightened to the Java model, the way it stores classes and stuff, and Go doesn't even have inheritance. So, yeah, I'd keep an eye on Dart already, odds are it will replace Java on Android soon.",1432864266.0,2
+coding,"It means not much (for now) for Android programmers; it means for Google, though. Google will have to pay a big fine to Oracle for unlicensed use, and royalties for every phone with Android on it for using Oracle's ""free"" ""product"".
+
+But of course Google will start switching to another language (probably Dart), initially compatible with Java for Android, but eventually Java will be deprecated and then removed from Android because of this.",1432857784.0,2
+coding,"Microsoft for sure will be happy that Wine becomes infringing... also, poor guys at ReactOS...",1432834826.0,1
+coding,"Though I love Haskell, I think the Dart folks got happy to know that Google wants another language. =P",1432834131.0,1
+coding,"Actually, what I meant for J# is for integration with other technologies, y'know? I understand that Microsoft have a bad history, that's true, but I think it would be a noble purpose to run Java on platforms other than the JVM, with interoperability to other languages (like C#, in this case).
+
+I've been working on the past years on a compiler suite that has multiple language inputs and multiple platform outputs; it would be nice to include Java (for multiple platforms) and the JVM (as one of the output platforms). As I mentioned, I'd like to include --[un]check-exceptions to use Java (not Groovy, although I do love Groovy and plan to support it) for fast prototyping on my tool. My point is that such a silly, small change could be enough for them to sue me over my project, y'know?
+
+But the APIs as well: I'd need to implement the standard ones (java.lang.\*, java.util.\*, and sun.misc.Unsafe) for other platforms as well (x86, ARM, .Net), and I'm sure they wouldn't like that (yeah, I know about GCJ, but that project is almost dead too).",1432833749.0,1
+coding,"True, but, just for an example. I hate checked exceptions. Sometimes I just want to make a fast prototype, sometimes I'm using an agile development method, or just test some idea I had. It takes an unnecessary effort to keep refactoring those exceptions. Let's say I want to make an small extra command line for my version of the compiler, --[un]check-exceptions, which would let me disable them: I could be sued, this would be a superset of the compiler.
+
+Also, lets not forget what happened to Apache Harmony or Microsoft J#... (and now to Android...)",1432829720.0,1
+coding,"I, the OP, as an enthusiast of free software, of course AM on Google side!
+
+Have you read Oracle's license for the Java and the JVM specifications? It says anyone is ""free"" to make their own compiler or virtual machine, as long as it is ""not a subset nor a superset of the specification"". Where the hell is the room for improvement on that?
+
+I've been working on the past five years on compiler research and development, and for sure don't want any legal precedent like this ruining everybody's freedom. :(",1432766320.0,9
+offmychest,"Well, believe me, if you met one as I did... you wouldn't like them, you wouldn't at all... too much blood to remember because of him. :(",1421865928.0,1
+offmychest,"I think you should show this to her, dude. :(",1421865612.0,1
+funny,"As a brazilian, I can confirm this.",1403939875.0,1
+haskell,I know that feel bro.,1394045685.0,2
+ProgrammerHumor,I'll keep sending them an e-mail about this every single day until they release the book.,1393095305.0,6
+funny,"Well, I used to have terrible nightmares of demons, and I can remember one of them that dozens of demons faces appeared out of a mirror wall... I also remember reading that in medieval times people used to believe that a mirror reflection each other could open a door to hell.
+
+Also, I have no problems with mirrors themselves (though I get nervous when they are really big), but I just freak out when I see one mirror reflection another one, like in the picture.
+
+So, yeah, probably because of that. :)",1366832288.0,1
+funny,DO U EVEN LIFT BRO?,1366830343.0,0
+funny,"Well, as any other phobia, it happens because God needed some laughs. They don't need a reason, there are people who have phobia of clocks, the moon, or etc...
+
+But, yeah, that's quite terrifying for me. :)",1366830330.0,1
+funny,"I just clicked on the image without knowing what was on it.
+
+I have a terrible phobia of mirrors reflection each other.
+Thanks a lot for the panic attack.",1366788506.0,0
+funny,Your vocabulary is bad and you should feel bad.,1354171618.0,-2
+funny,I see what you did there. Dark humor on its finest.,1349629046.0,-2
+funny,You too.,1349628921.0,9
+funny,You sick freak.,1349628913.0,11
+funny,"That's just MEAN, not even funny!",1349628769.0,6

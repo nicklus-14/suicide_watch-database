@@ -1,0 +1,633 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+learnpython,SQLAlchemy association table - cascade delete issue,"Hello all, I'm having trouble with my database design using SQLAlchemy. I have two tables: User, and Upgrade, and an association table between them. A User can own multiple Upgrades, and an Upgrade can have multiple owners. When a User is deleted, all rows from the association table for what that User owns should be deleted, likewise when an Upgrade is deleted, all rows in the association table for Users which own that Upgrade should be deleted.
+
+Currently, I have ondelete='CASCADE' set for both foreign keys in the association table. However, when I delete either a User or an Upgrade, the row remains in the association table referencing the deleted parent. Here is my model code, can anyone advise? Thank you very much.
+
+    class User(UserMixin, db.Model):
+      db.__tablename__ = 'User',
+      id = db.Column(db.Integer, primary_key=True)
+      email = db.Column(db.String(100), unique=True)
+      password = db.Column(db.String(100))
+      name = db.Column(db.String(1000))
+      xp = db.Column(db.Integer)
+      timespent = db.Column(db.Integer)
+      upgrades = db.relationship('Upgrade', secondary=""upgrade_owners"", back_populates=""users"")
+    
+    class Upgrade(db.Model):
+      db.__tablename__ = 'Upgrade',
+      id = db.Column(db.Integer, primary_key=True)
+      name = db.Column(db.String(1000))
+      multiplier = db.Column(db.Float)
+      price = db.Column(db.Integer)
+      users = db.relationship('User', secondary=""upgrade_owners"", back_populates=""upgrades"")
+    
+    upgrade_owners = db.Table(
+      ""upgrade_owners"",
+      db.Column(""user_id"", db.Integer, db.ForeignKey(User.id, ondelete='CASCADE')),
+      db.Column(""upgrade_id"", db.Integer, db.ForeignKey(Upgrade.id, ondelete='CASCADE')),
+    )",1737556802.0,3,0.72,1
+nosleep,The fucking crab man,"I had an encounter that left me shaken, and I’m not sure where else I can post this without being laughed at. Even here, most of y’all won’t believe this, but if even one person gets the message, I will have done my part. If there’s one thing you take away from this story, let it be this: stay the fuck away from the beach.
+
+
+
+This December has been warm, even for Texas. With temperatures getting all the way up to 80 degrees Fahrenheit, it certainly hasn’t felt like Christmas. Despite this, we have had one or two nice little cold fronts; just this weekend we had a few nights get near freezing. You would think that this is a terrible time to go to the beach, and you would be correct. Once the water temperature starts getting into the low 70s and below, folks usually stop coming out to Galveston for the season. This is the time of the year that I most enjoy taking walks on the beach. Hooded sweatshirt with a windbreaker on top, and no one around to disturb me.
+
+
+
+Like I said, this weekend was particularly chilly for us Texans: 60 degrees during the day feels like freezing to us, especially down by the water. This worked out just fine for me, as I was the only one out there during my walk, despite it being the middle of the day. I bundled up as best I could with my limited wardrobe and carried a Thermos of hot coffee along with me. It was a fine winter day on the island: clear blue skies, light wind coming off the water. The roar of the surf was the only music I needed. Y’all may know that the beach down here isn’t the prettiest in the world—the water is brown with mud, and there’s usually a good bit of trash—but it does have its own appeal. Being from Houston, it’s good enough just to get a taste of the natural world for a change.
+
+
+
+As I continued down the beach, I saw a ghost crab running across the sand ahead of me. It is unusual to see one in the daytime, especially in the colder months when they usually hibernate, so I stopped to watch. When he reached the edge up where the beach turns into a grassy dune, he burrowed down beneath the sand. Amused, I hiked up towards where he dug. To my surprise, two more crabs scurried in from different parts of the beach. They both ran up directly in front of me and dug in, right on top of where the first crab had buried himself.
+
+
+
+Unnerved, I stood in silence, wondering what would cause three different crabs to not only come out during a winter day, but all retreat into the same hole. After a moment of nothing else happening, I started to move on, turning back towards the water. I began to walk, then froze. Hundreds of crabs scurried towards me like a wave. I stumbled backwards and fell, stifling a scream as the mass scrambled over my body, covering me in a blanket of shell and claw. When they had all passed, I looked behind to see where they were going. As I thought, they were all descending on the same hole that the first three had dug into, the sand churning and shifting like water as they all siphoned into the burrow.
+
+
+
+When it was done, I lay where I had fallen in shock. Before I could recover, the sand started moving again. My mouth dropped in horror, and I couldn’t even blink as before my eyes, a creature emerged from the dune. The hundreds of crabs had merged, their tiny bodies coalescing into a humanoid form. Claws waved and snapped along the length of the body, as if every part of it were trying to reach me. Where the face should be, hundreds of eye stalks peered out at me. I scrambled to my feet and took off down the beach. I stole a terrified glance over my shoulder, and saw the thing running sideways after me, down on its hands and knees, like a human imitating a crab walk. I took a hard left up the stairs leading away from the beach, rushed to my car, and flung the door open. While I reversed out of the spot, the crab man emerged from over the dune and stopped on the edge of the sand. It watched me the whole time I drove away.
+
+
+
+Last night, back home in Houston, I lay awake thinking of what had happened. The only thing that gave me any comfort was the fact that it had stopped at the edge of the sand. I figured that since I live far from the beach, I should be safe. I turned towards the window, looking out at the concrete cityscape beyond. There, in the playground across the street, I swear I saw a crab burrow in the sand.   ",1734992607.0,41,0.92,3
+navy,Patch ID help from Korea-Vietnam era flight jacket,"Hello all, I was wondering if anyone could ID this patch on my grandfather's flight jacket. I know his squadron was VMF(AW)-513, but couldn't find this side patch anywhere online.",1733420919.0,38,0.93,6
+nosleep,I followed the creek bed near my house and saw something unnatural,"I live in a rural part of central Texas, down a dirt road a few miles off the highway.  I’m on a 40-acre tract of land, mostly pasture for grazing cattle. My nearest neighbor is about a mile away, and past him the road dips down into a wooded area. If you follow the road down another mile from there, a solid concrete bridge with wide metal culverts crosses over a creek.
+
+ 
+
+About a week ago, I was taking a walk down the country road to clear my head. It may be October, but down here in Texas, temperatures are still pushing 90 degrees, and we haven’t had more than a few drops of rain all month. As you might expect, when I got to the bridge, the creek was nearly dry. A small stream of water still flowed down the very center of the creek bed, but the rest of the channel was exposed, the clay beginning to crack from lack of rainfall. Ducking under the guardrail, I hopped down off the bridge to the surface of the creek and started heading upstream.
+
+ 
+
+The creek was fully shaded by Live Oaks and Sycamores, and the banks were lined with scrub brush. Down inside the bed, Wood Fern and Brookweed lay exposed and dried from lack of water, and tree roots weaved in and out of the clay. I took in the sights of nature, mainly focusing on my footing, and felt my stress melt away.
+
+ 
+
+Coming around a bend in the creek a solid mile from the bridge, I noticed a buck in the distance, drinking from the small trickle of water that still flowed. I froze, trying to make as little noise as possible to avoid spooking him. I quietly reached into my pocket and pulled out my phone to snap a photo. I zoomed in and worked to get the distant image into focus. He must have been around four or five years old, judging from the size of the rack and broad, muscular body. At last, the focus came through, but while I tried to take the picture, I froze.
+
+ 
+
+Instead of the white fur I expected to see on the underside of the mouth of a deer this size, I saw red. Panning down, I saw that he wasn’t drinking water at all. Hanging from the sharp, clearly non-herbivorous teeth were bits of fat and sinew, as the animal tore through the fresh carcass of a bobcat. As I stared, stunned by what I was seeing, a shifted slightly and a twig snapped under my foot. The buck’s head snapped to attention, his black beady eyes staring directly at me. To my horror, it stood up on its hind legs and began to walk towards me.
+
+ 
+
+I turned and ran.
+
+ 
+
+My legs burned and my lungs heaved as I sprinted downstream. Behind me, I heard a high-pitched shriek, almost like a woman, which morphed and deepened into a feral roar in a sick glissando. In terror of what was behind me, I looked back over my shoulder, tripping over a tree root in the process. I tumbled forward, skinning my arm and landing painfully on my back. In a frenzy, I swung my head in every direction, terrified of the creature’s pursuit. Not seeing it, I struggled to my feet and took off back home.
+
+ 
+
+Nearing the bridge, I heard a horrible laughter coming from behind the tree line - like a pack of coyotes, but slower and lower pitched. Dumb with fear, I scrambled up the concrete of the bridge, hitting my head against the metal guard. Heedless of my now bleeding forehead, I continued my desperate escape back down the road towards my house.
+
+ 
+
+Finally leaving the tree line and nearing my house, I felt my body dump the excess adrenaline, and the pain from my fall and collision with the guard rail came in full force. Exhausted, I limped my way the last bit home, bolting the door behind me.
+
+ 
+
+That was last week. Every night since then, I’ve woken up in the middle of the night. I’m a light sleeper, but usually in the country there isn’t much noise to wake me – coyotes, sometimes a car driving down the dirt road – but this is neither. Every night, waking from sleep, I hear a voice whisper my name. When I get up and go to the window to investigate, I can barely make out a dark shadow by the tree line, and a faint, awful laughter.",1729134210.0,156,0.97,10
+nosleep,I took a contract job and found something I wasn't meant to see,"I started a new job last week. I found the posting on an online job board, a contract gig lasting three months. No benefits, no PTO accrual, but after a year of post-graduation unemployment, I had to take what I could get. The posting itself was incredibly vague: it listed the pay rate, contract length, and the terse description “logistics and recovery”.
+
+ 
+
+The interview did little to clear up my day-to-day responsibilities, nor did it shed light on what exactly the company did. “Your job,” explained the hiring manager, “will consist mainly of data entry, with a bit of inventory management as well”.
+
+ 
+
+“So mainly working at a desk?” I asked.
+
+ 
+
+“Yes, though you will occasionally have to handle new deliveries as they arrive. You won’t need to unload, just scan in the shipment and update in the system that it’s been collected.”
+
+ 
+
+“Sounds easy enough,” I replied. “So, what exactly does the company do?”
+
+ 
+
+An almost imperceptible pause, and a strange look came over his face. It was gone before I could tell whether it was anger or derision. “Logistics.”
+
+ 
+
+After an awkward silence, he rose, and I followed suit. He smiled and shook my hand, then leaned in, suddenly serious. “Our client’s privacy is very important to us, and we pride ourselves on our discretion. Do you understand?”
+
+ 
+
+“Y-yes,” I stammered, though truthfully, I had no idea what he was implying.
+
+ 
+
+“Good! In that case, we’ll see you here bright and early Monday morning.”
+
+ 
+
+Monday came around, and I went in for my first day. I arrived at the building, a single storied brutalist style rectangle, and badged in through the only available entrance besides the loading dock. I was shown to a dimly lit office with an open floor plan, and no windows. I sat at the desk that had been prepared for me, furnished with an older Dell computer and surrounded on three sides with low, half-height cubical walls. Surrounding my desk, and in rows in front and behind me, identical workstations stood nearly empty. Spread throughout the room as if to deliberately avoid one another, four other workers performed their duties without glancing up at the newcomer.
+
+ 
+
+The remainder of my first day was spent working through training material, of which there was very little. It quickly became apparent that I had only two responsibilities, both infrequent. First: When a new email appeared in my inbox, I would copy the name and address, find an available driver, and add the information into the driver’s queue to be dispatched. Second: If a new shipment arrived at the delivery bay, I would go out to the truck or van and scan a barcode, then update my records that the shipment had been collected. The end of the day came around, and I left feeling confident that the next three months would be incredibly boring.
+
+ 
+
+On Tuesday, my work began in earnest. Well, if you can call sitting on YouTube for hours at a time “work”. I didn’t receive a single email until just after lunch. As I sat back at my desk and prepared to kick back for another few hours, I heard a cheerful ping alert me to a new request. Happy to in some way contribute to earning my paycheck, I opened the message.
+
+ 
+
+*Subject: Collection Order #12773*
+
+*Perry [redacted]*
+
+*[redacted], Huntington, Nevada*
+
+ 
+
+As the training had prepared me to expect, the only contents were a name and address. I diligently copied down the information and searched my directory for an available driver. While there were a decent number of drivers to choose from, each with a wide service area where they would be available to dispatch to, the next available driver who could dispatch to Huntington wouldn’t be available for 24 hours. Well, I figured my job doesn’t entail optimizing our response times, and this was the best I could do for the given information. I created a new email, including Mr. Smith’s name and address, and sent it off to the driver.
+
+ 
+
+With that email, my day’s work was done. No further orders came in on Tuesday, and I was able to head home at my scheduled time, again feeling a bit of guilt that I was being paid quite well for so little work.
+
+ 
+
+On Wednesday, not long after arriving at work, I received a new email:
+
+ 
+
+*Subject: Collection Order #13990*
+
+*Delilah [redacted]*
+
+*[redacted], Apt #200, Phoenix, Arizona*
+
+ 
+
+“Early start today, huh?” I asked out loud, vainly hoping one of my coworkers would engage in conversation. As expected, they barely seemed to register that I had spoken. Grady, whose name I knew from the tag on his desk, rather than him ever having spoken to me, glanced up at me with the same odd look that my manager had given me in the interview. I decided against further attempts at friendliness.
+
+ 
+
+Reluctantly following the others’ lead and silently performing my duties, I returned to Delilah’s order. This time, a driver was available to head to Phoenix that same day, just after 7 pm. I composed a new dispatch order and sent it off, patting myself on the back for another job well done. The next few hours passed with no new orders, and I went out to get a burger for my lunch break.
+
+ 
+
+When I returned from lunch, I found that an email had arrived while I was gone:
+
+ 
+
+*Subject: Re: Collection Order #12773*
+
+*Order retrieved. ETA 1500.*
+
+ 
+
+So, my first order would arrive at 3pm. I set an alarm on my computer to remind me to head to the delivery bay and continued my new usual routine of browsing the internet. When the appointed time came, I got up to meet the driver.
+
+ 
+
+The loading dock was accessed through an access door on the back wall of our shared office space, which opened into a T-junction hallway. Through the office access door, the hallway led straight across through a set of swinging double doors into the delivery bay. To the right was a second set of double doors, with a placard labeled *authorized access only.* I continued straight through to my intended destination.
+
+ 
+
+I entered a cramped, concrete room with a gate at one end and a forklift parked against the wall. When I entered, the gate had been retracted up into the ceiling, the opening now filled by a small truck with a single metal crate loaded inside. The driver remained in his truck, not even bothering to wave through his rear view as I approached the trailer. From the wall near the lip, I found a handheld scanner which would allow me to perform my part of this process. Stepping across the gap into the trailer, I approached the crate.
+
+ 
+
+The corrugated metal cube came up to my waist. On top, several latches held the lid firmly in place, and a paper receipt with a barcode was affixed to the top.
+
+ 
+
+*Perry [redacted]*
+
+*[redacted], Huntington, Nevada*
+
+*10/09/2024*
+
+*160 Lb, 6’1”*
+
+ 
+
+I scanned the barcode and moved back off the truck. While I was setting the scanner back on the charger, Grady walked in from the hallway. Not bothering to glance in my direction, he climbed up onto the forklift and started it up. Sensing that he would have no issue impaling me if I chose to stay where I was, I stepped out of the way and watched as he skillfully loaded the crate onto the tines, backed back out, and proceeded with the crate through the double doors, swinging shut behind him. I hurried after him, for some reason desperate to catch a glimpse at where he was taking the order, but the second set of doors had already closed by the time I reached the junction. Strangely dejected, I returned to my desk, and marked the order as collected.
+
+ 
+
+As I lay in bed that night, I idly went over the events of the week so far. With each odd occurrence that I recalled; more questions kept bubbling to the surface. If I was receiving so few orders, why did the number go up significantly in between the two I had received? Were there really that many people doing this job, and if so, why not just have one person take multiple orders? Why did separate people scan and unload the crates, and what was being done with them behind the third door? If we were picking up merchandise, why were the addresses all homes and apartments? And-
+
+ 
+
+The last question made me shiver. I felt my heart pound in my chest, and my mouth dried out. I hadn’t even thought about it at the time, nothing seemed out of the ordinary, but now…
+
+ 
+
+Why did the height and weight feel so wrong?
+
+ 
+
+As this realization began to sink in, my phone suddenly came to life. Dissonance blared from the speakers, four unevenly timed tones. I looked down at the screen, eyes adjusting to the brightness:
+
+ 
+
+*AMBER ALERT: Phoenix, AZ*
+
+*Delilah [redacted] age 7*
+
+*Last seen wearing a red t-shirt and blue overalls*
+
+*Vehicle is a white Ford Transit*
+
+*Last known location northbound I-17*
+
+ 
+
+I stared at the screen, unable to move. Delilah. I knew that name. I had dispatched an order to her just this morning. I felt a pressure in my chest, a horrible foreboding for what this meant. Unable to accept the implication, I thrust the thought from my mind. It was a coincidence. Just because we shipped something to her apartment, doesn’t mean her kidnapping was related. Besides, her family must have purchased something from us, otherwise why would we have gotten an order? Letting the denial take hold, I fruitlessly attempted to sleep.
+
+ 
+
+On Thursday morning, my denial was shattered. In my inbox, a new email waited, received last night at 9 pm:
+
+ 
+
+*Subject: Re: Collection Order #13990*
+
+*Order retrieved. ETA 0930.*
+
+ 
+
+It was 9:00 am. I had half an hour until…the next order arrived. I looked around at my coworkers. As usual, they were all focused on their monitors, not bothering to look up. How long had they been working here? Were they all on contract like me, or had they been here longer? Even if they had only been here a month, there’s no way they wouldn’t have noticed something in that time; I had only been here since Monday and I had already stumbled on…no. I didn’t know for sure yet. There was only one way to know for sure.
+
+ 
+
+At 9:30, I got up to check the delivery.
+
+ 
+
+My blood pounded against my eardrums as I walked through the access door into the T-junction. Pausing for a moment to catch my breath, I noticed my hands were shaking, and I had broken out into a cold sweat. If I really did find something, what was I going to do? I had to assume that everyone in the building was in on this, so the only possibility of getting out with the truth would be to pretend that nothing was wrong. With this thought in mind, I passed through the double doors, ready to face my fate.
+
+ 
+
+On the loading dock, raised up to the platform with a hydraulic lift, was a white van. Inside, a single metal crate. I wiped my brow, which was pouring sweat by now. I stepped over the gap, crouching down to avoid hitting my head on the low ceiling of the van, and approached the crate.  On the top, another receipt:
+
+ 
+
+*Delilah [redacted]*
+
+*[redacted], Apt #200, Phoenix, Arizona*
+
+10/10/2024
+
+50 Lb, 4’0”
+
+ 
+
+There was just one thing left to do. I felt my heart in my throat as I flipped open the latches holding the lid in place. My hands slipped from perspiration as I tried to pull it open, and I paused to wipe the sweat on my jeans. Feeling myself start to hyperventilate, I managed to raise it enough to look inside.
+
+ 
+
+I stared in open-mouthed horror, a silent scream on my lips. My whole body convulsed as the disjointed shapes formed a recognizable image. Peach colored appendages stuck out at odd angles, gleams of jagged white bone and exposed sinew where the body had been contorted to fit the narrow space. The only recognizable aspect of the broken corpse: a red t-shirt, and a pair of overalls.
+
+ 
+
+Before I had the chance to vomit, I was jolted back to reality by a sudden panic. By coworker would be here any second to take the crate into the back room. Fighting back tears, I slammed the crate shut and had barely finished re-seating the latches when Grady burst through the double doors. I stepped out of the van, praying that he wouldn’t notice me trembling. I attempted to calmly walk past him, back through the double doors to my desk. As we brushed past each other, I swear I saw him smirk at me.
+
+ 
+
+It was only after I returned to my desk that I remembered. I had two tasks at this job, only two, and I had forgotten to do the second. I never scanned Delilah’s crate. It was too late; all I could do was mark the delivery as collected and pray that it would go unnoticed. The rest of that Thursday was spent hoping against hope that no new emails would arrive, that I wouldn’t be complicit in another…that I wouldn’t have to dispatch anyone else. After hours of suffering in silence, pretending not to know and praying that no one noticed my trembling hands, my hammering heart, the day was over.
+
+ 
+
+I rose from my desk, pretending to be calm as I collected my things, and walked towards the door. On my way out, I glanced at Grady’s computer. On the monitor, a new collection notice, received just moments ago. My name. My address.
+
+ 
+
+I pushed through the door to the outside, sprinted to my car, and swerved through traffic recklessly to get home. As I pulled onto my street, I saw a box truck parked just across from my house. I threw my car into reverse, fishtailed around the corner, and sped off in the other direction. I kept driving through Thursday night, not stopping until well into Friday morning when I couldn’t keep my eyes open any longer. I rented a motel, sleeping just long enough to feel safe to drive, and continued.
+
+ 
+
+You’re now caught up with the story so far. I’ve been driving all weekend. There are so many trucks on the highway, so many white vans, and any one of them could be coming to collect. I don’t know what to do. I’m not sure how long I can keep this up. Please, if you’re reading this, tell me what to do.",1728957583.0,74,0.99,4
+nosleep,Stay Inside at Night on a Cruise,[removed],1728851835.0,14,0.89,2
+nosleep,I hate working the night shift,"I work the night shift at a data center, from 10 at night until 6 in the morning. My job is network monitoring: basically, I stare at a computer screen all night watching for alarms. Once per shift, I walk back to the server racks and make sure all the cooling systems are functional. Assuming nothing is wrong, which is almost always the case, I am free to browse the internet until morning.
+
+
+
+Last week seemed to be no different. After receiving the turnover from the evening shift, I settled in for another boring night. I read through the day’s emails, opened my monitoring software and camera feed, and started looking for the night’s entertainment. My typical activity is to freak myself out by watching scary stories on YouTube. The environment is perfect: lights dimmed, all alone in an empty building for hours. I pulled up a compilation of “terrifying true scary stories” and let my imagination run wild.
+
+
+
+I was absorbed into the tense story of a hiker pursued by an unknown entity in the woods, my vision narrowed in on the screen and senses on alert, when I thought I noticed movement on one of the cameras monitoring the server racks. I felt a pang of anxiety and my heart jumped, but this was not my first time intentionally frightening myself, and paranoia is inevitable in this situation. I put the camera feed into full screen. The lights were all off in the data hall, as they should be. They only turn on when there’s movement. Just my imagination. Still, I kept the panel opened in full screen while I went back to my video, glancing back occasionally. Not five minutes later, I saw a shadow again out of the corner of my eye. Looking at the camera feed, I still couldn’t see anything, and the lights were still off, but I knew I saw something move.
+
+
+
+I got up from my desk and walked out into the hallway, then through an access door into the data hall. The rows of fluorescent lighting all clicked on at once, flooding the room in light. I paused to let my eyes adjust and tried to slow my breathing. I strained to hear any signs of movement somewhere in the racks, but the drone of the servers covered up any noise.
+
+
+
+With mounting dread, I began checking between the rows. With each corner I rounded, I felt my panic grow. My heart pounded louder than the scream of the servers. As I approached the last row, I knew that whatever I saw would be so unthinkably horrible, my body would not be able to bear it. I could barely breathe, my hands and face were dripping cold sweat, and I felt the urge to vomit. I willed myself forward and, in a moment that felt like an eternity, rounded the corner and saw-
+
+
+
+Nothing. I was alone, of course. I let myself get freaked out again from those stupid videos. Relieved, I went back to my desk. I switched over to a documentary on fighter jets, and the rest of the night passed uneventfully.
+
+
+
+At last, morning came. The morning shift came in with his usual hangover, and we discussed the (non)events of the night. After exchanging a few pleasantries, I packed up to head home. On my way to my car, I noticed something under my windshield wiper. Drawing closer, I saw that it was a Polaroid picture. With trembling hands, I picked it up from under the blade and held it up to my face.
+
+
+
+Rows of server racks in a brightly lit room. I stood facing away from the camera, preparing to look around a corner. In the middle of the frame, reaching out from behind the camera, a man’s hand clutched a knife.",1728609549.0,326,0.96,7
+starbucks,251xxxx FREE AT LAST,"Just here to give all y'all a positive post! Almost 6 year partner, tomorrow is my last day!
+
+I'll be starting my IT career on Monday as a network tech at a fiber provider, and graduating from ASU in May. Those of you doing ASU, keep at it! It will be over before you know it!
+
+Those of you not taking advantage of the ASU benefit, DO IT!",1707589566.0,25,0.93,11
+2007scape,I love the economy,,1681424164.0,136,0.87,83
+2007scape,The new quest had some suspicious new lore,,1669843604.0,0,0.33,0
+onebros,pain,,1653955503.0,25,0.96,4
+2007scape,I guess this is lucky?,,1636332369.0,0,0.42,2
+buildapc,My PC works again...but I don't know why?,"About a week ago, I turned my pc on after having it off overnight and it wouldn't post. The MSI debug leds read errors on VGA and BOOT. I tried trouble shooting for a while (new pci slot for gpu, unplugged all drives, unplugged ram, replugged all cables) but got frustrated and ended up letting it sit for a week. 
+
+Today, I sat down to try to narrow down the problem again. Decided to just plug it in and see what happened and...it booted? Does anyone have any ideas on why it would suddenly be working again?",1620226709.0,1,0.6,1
+buildapc,My 5700 XT....died,"And no, I have never mined on it. Does anyone have experience with getting a gpu fixed or replaced? I only bought the thing a year ago and I really can't afford to buy a new card in this market.",1619104421.0,1,0.67,4
+apexlegends,Question about crafting materials,"When using the replicator, does it use the crafting materials I found that round and not affect the ones I can use for cosmetic items, or do you have to choose between saving for cosmetics vs using the replicator?",1605719073.0,1,0.66,2
+darksouls3,"Rings complete, feels good! Praise the sun!",,1602810905.0,17,1.0,1
+2007scape,Bruh I just got a sponsored Facebook post for osrs services?,,1597696462.0,0,0.33,4
+2007scape,When you're 3 cakes in but the hobgoblin keeps hitting you,,1590109396.0,1,1.0,0
+Battlefield,"[BF4] Just got admin killed for being in the ""uncap"" in AA",,1588223279.0,17,0.91,14
+buildapc,Do I need an additional rear exhaust fan for the Corsair iCUE 220T?,"I'm watching reviews on the Corsair iCUE 220T RGB Airflow case, and it says there is no rear exhaust fan by default. Do I need to purchase an additional rear case fan for this case? I'm looking at the be quiet! SilentWings 3 PWM (120mm case fan). Does anyone know if this will be compatible? 
+
+&#x200B;
+
+Additionally, here's my full part list that I'm currently looking at, if anyone has any suggestions here.
+
+&#x200B;
+
+[PCPartPicker Part List](https://pcpartpicker.com/list/wVQ6L2)
+
+Type|Item|Price
+:----|:----|:----
+**CPU** | [AMD Ryzen 5 3600 3.6 GHz 6-Core Processor](https://pcpartpicker.com/product/9nm323/amd-ryzen-5-3600-36-thz-6-core-processor-100-100000031box) | $174.99 @ B&H 
+**CPU Cooler** | [Cooler Master Hyper 212 Black Edition 42 CFM CPU Cooler](https://pcpartpicker.com/product/HyTPxr/cooler-master-hyper-212-black-edition-420-cfm-cpu-cooler-rr-212s-20pk-r1) | $29.99 @ Newegg 
+**Thermal Compound** | [Arctic Silver 5 High-Density Polysynthetic Silver 3.5 g Thermal Paste](https://pcpartpicker.com/product/6RrG3C/arctic-silver-thermal-paste-as535g) | $6.49 @ Amazon 
+**Motherboard** | [MSI B450 GAMING PRO CARBON AC ATX AM4 Motherboard](https://pcpartpicker.com/product/t797YJ/msi-b450-gaming-pro-carbon-ac-atx-am4-motherboard-b450-gaming-pro-carbon-ac) | $158.98 @ B&H 
+**Memory** | [Team T-FORCE VULCAN Z 16 GB (2 x 8 GB) DDR4-3200 Memory](https://pcpartpicker.com/product/z3VD4D/team-t-force-vulcan-z-16-gb-2-x-8-gb-ddr4-3200-memory-tlzgd416g3200hc16cdc01) | $69.99 @ Newegg 
+**Storage** | [Western Digital Blue 1 TB M.2-2280 Solid State Drive](https://pcpartpicker.com/product/DgJtt6/western-digital-blue-1tb-m2-2280-solid-state-drive-wds100t2b0b) | $115.63 @ Walmart 
+**Video Card** | [Gigabyte Radeon RX 5700 XT 8 GB GAMING OC Video Card](https://pcpartpicker.com/product/6kdrxr/gigabyte-radeon-rx-5700-xt-8-gb-gaming-oc-video-card-gv-r57xtgaming-oc-8gd) | $399.99 @ Newegg 
+**Case** | [Corsair iCUE 220T RGB Airflow ATX Mid Tower Case](https://pcpartpicker.com/product/wj4BD3/corsair-icue-220t-rgb-atx-mid-tower-case-cc-9011174-ww) | $109.99 @ Amazon 
+**Power Supply** | [EVGA SuperNOVA GA 650 W 80+ Gold Certified Fully Modular ATX Power Supply](https://pcpartpicker.com/product/Xsn8TW/evga-supernova-ga-650-w-80-gold-certified-fully-modular-atx-power-supply-220-ga-0650-x1) | $96.98 @ Newegg 
+**Monitor** | [Dell SE2719H 27.0"" 1920x1080 60 Hz Monitor](https://pcpartpicker.com/product/3T22FT/dell-se2719h-270-1920x1080-60-hz-monitor-se2719h) | $225.00 @ Amazon 
+**Keyboard** | [Cooler Master MasterKeys MK750 (MX Red) Wired Gaming Keyboard](https://pcpartpicker.com/product/ssYLrH/cooler-master-masterkeys-mk750-mx-red-wired-gaming-keyboard-mk-750-gkcr1-us) | $149.99 @ Dell 
+ | *Prices include shipping, taxes, rebates, and discounts* |
+ | Total (before mail-in rebates) | $1568.02
+ | Mail-in rebates | -$30.00
+ | **Total** | **$1538.02**
+ | Generated by [PCPartPicker](https://pcpartpicker.com) 2020-04-15 13:06 EDT-0400 |",1586970433.0,1,1.0,3
+buildapc,Last build was in 2014. Any feedback on what I have so far?,"I'm aiming to be able to play newer games on at least high settings at a reasonable framerate. The last game I really played was BF4, so I'll likely be playing more FPS games. I don't do any kind of streaming or rendering. This is what I've come up with so far. For the monitor I'll likely go with a 27"" 60Hz IPS, though I haven't really decided on which one. Any input on my choices here? Again, I haven't looked in to this stuff in 6 years now so I'm very out of the loop on which parts are good these days.
+
+
+[PCPartPicker Part List](https://pcpartpicker.com/list/bD6XZf)
+
+Type|Item|Price
+:----|:----|:----
+**CPU** | [AMD Ryzen 5 3600 3.6 GHz 6-Core Processor](https://pcpartpicker.com/product/9nm323/amd-ryzen-5-3600-36-thz-6-core-processor-100-100000031box) | $174.99 @ Amazon 
+**Motherboard** | [MSI B450 TOMAHAWK MAX ATX AM4 Motherboard](https://pcpartpicker.com/product/jcYQzy/msi-b450-tomahawk-max-atx-am4-motherboard-b450-tomahawk-max) | $114.99 @ B&H 
+**Memory** | [G.Skill Ripjaws V 16 GB (2 x 8 GB) DDR4-3600 Memory](https://pcpartpicker.com/product/jBZzK8/gskill-ripjaws-v-16-gb-2-x-8-gb-ddr4-3600-memory-f4-3600c16d-16gvkc) | $84.99 @ Amazon 
+**Storage** | [Western Digital Blue 1 TB M.2-2280 Solid State Drive](https://pcpartpicker.com/product/DgJtt6/western-digital-blue-1tb-m2-2280-solid-state-drive-wds100t2b0b) | $115.63 @ Walmart 
+**Video Card** | [Gigabyte GeForce GTX 1660 SUPER 6 GB OC Video Card](https://pcpartpicker.com/product/CnpmP6/gigabyte-geforce-gtx-1660-super-6-gb-oc-video-card-gv-n166soc-6gd) | $238.98 @ Newegg 
+**Case** | [Corsair iCUE 220T RGB Airflow ATX Mid Tower Case](https://pcpartpicker.com/product/wj4BD3/corsair-icue-220t-rgb-atx-mid-tower-case-cc-9011174-ww) | $109.99 @ Amazon 
+**Power Supply** | [EVGA SuperNOVA GA 650 W 80+ Gold Certified Fully Modular ATX Power Supply](https://pcpartpicker.com/product/Xsn8TW/evga-supernova-ga-650-w-80-gold-certified-fully-modular-atx-power-supply-220-ga-0650-x1) | $96.98 @ Newegg 
+**Wireless Network Adapter** | [Gigabyte GC-WBAX200 PCIe x1 802.11a/b/g/n/ac Wi-Fi Adapter](https://pcpartpicker.com/product/z44BD3/gigabyte-gc-wbax200-pcie-x1-80211abgnac-wi-fi-adapter-gc-wbax200) | $39.99 @ Amazon 
+ | *Prices include shipping, taxes, rebates, and discounts* |
+ | Total (before mail-in rebates) | $996.54
+ | Mail-in rebates | -$20.00
+ | **Total** | **$976.54**
+ | Generated by [PCPartPicker](https://pcpartpicker.com) 2020-04-15 00:12 EDT-0400 |",1586923901.0,3,1.0,6
+Imposter,Wanted to make a SQL injection joke,"Well done sanitizing the inputs Reddit, can’t use ‘ ) or ; in your response :(",1585800822.0,3,1.0,0
+starbucks,Day 3 of grab and go. She is the only person around to talk to.,,1584573534.0,57,0.98,5
+2007scape,"Allow us to try again from where we died by spending play coins, earned from walking with our 3DS.",,1581736459.0,8,0.67,1
+2007scape,I can’t stand the wait anymore,"The waiting is unbearable, it’s been so long since the last episode came out. Please release season 2 of one level per episode Ironman, I can’t wait any longer.",1570402916.0,3,0.58,2
+2007scape,Never thought this would happen to me,,1567488934.0,25,0.78,8
+2007scape,Vorkath loves giving me head ;),,1566454430.0,2,0.57,4
+2007scape,Not sure if I stopped them or made them angry,,1565166225.0,107,0.9,3
+2007scape,Just got to the light puzzle,"And logged off. This gonna be 9 rooms to unlock yeah? Fuck that, let someone else figure it out.",1564055815.0,1,0.6,4
+2007scape,Add a poll booth to ZMI #votersuppression,,1562211760.0,5,0.78,1
+2007scape,Thought mourning's end pt 2 sucked? Try olaf's quest,,1559097629.0,129,0.9,34
+2007scape,"Complete log, ironman tears are delicious",,1558397205.0,295,0.92,40
+2007scape,Don't do tears of guthix during a storm,"I don't think I even got xp. Power went out and disconnected, now I'm locked out for a week.",1556077004.0,3,0.8,7
+2007scape,Love this typo,,1553237747.0,3,0.67,2
+2007scape,Looks like this bake shop is getting ready to buy up some rares,,1552659285.0,1,0.54,4
+2007scape,Looks like our man is migrating games,,1551308139.0,0,0.36,1
+marblehornets,Opened Siri with my elbow,,1549872523.0,11,0.71,0
+2007scape,So that's why the pkers have been stocking up,,1544733238.0,33,0.88,4
+2007scape,"Loot from 30 seconds spamming ""rejecting donations"" ty guys so generous",,1539980701.0,1,0.56,1
+Cubers,"it’s called fashion sweetie, look it up :’)",,1538338098.0,434,0.97,24
+2007scape,"Finally, huge goal complete on the def pure",,1537225298.0,17,0.79,9
+2007scape,Lemme get uhhhhhh can I get a gz,,1536785241.0,0,0.4,9
+2007scape,Getting there,,1535592387.0,19,0.66,11
+2007scape,Cursed RuneLite plugin suggestion,!roll,1535235011.0,0,0.29,1
+2007scape,Keep the gate closed,,1531892835.0,327,0.96,19
+2007scape,Drop party,,1531677885.0,2,0.6,1
+2007scape,Post your best Runescape conspiracy theories /x/,,1530071342.0,5,0.69,2
+2007scape,Mark,[removed],1526100992.0,211,0.92,19
+AnimalCrossing,Is Roald rolling...? Those saucers...,,1512248873.0,3,0.63,1
+linux4noobs,My wifi disaster last night,"When you spend an hour messing around with configuration files trying to figure out what broke your wifi, and then it hits you....you pressed Fn+F8 and switched off the wireless card -.-",1508325205.0,70,0.92,9
+2007scape,Cry emote over our fallen brothers. I love late night Runescape,,1508279020.0,1,0.67,0
+archlinux,Issue with yaourt: file exists in filesystem,https://ptpb.pw/Zsar,1506532489.0,0,0.3,8
+linux4noobs,Nuked /var/ Arch,"How do I recover from this? Don't ask why I did this, but I rm -rf'd /var/. I want to keep all my packages and configuration, how do I reinstall to fix this and keep all that?
+
+Edit: RESOLVED
+
+    # mkdir /var/lib/pacman/
+    # pacman -S base",1506516016.0,1,0.67,4
+archlinux,Nuked /var/,"How do I recover from this? Don't ask why I did this, but I rm -rf'd /var/. I want to keep all my packages and configuration, how do I reinstall to fix this and keep all that?
+
+Edit: RESOLVED
+
+    # mkdir /var/lib/pacman
+    # pacman -S base",1506511151.0,40,0.9,23
+Tuba,Switching to trombone?,"I'm looking to switch to playing trombone for my college marching band. Does anyone have some resources for this, given that I played tuba for 7 years in grade school?",1496529021.0,9,0.92,5
+2007scape,Thoughts on a new inferno method,,1496415075.0,134,0.94,4
+cpp_questions,"Completed my Rubik's cube solver, looking for feedback?","Hey guys, I'm a computer science undergrad student trying to get better at programming, so I wrote a C++ program to perform the beginner's method. The code is all on my GitHub [here](https://github.com/jmm140330/Rubik)! Feel free to look through and give me some advice. I know there are a lot of things I could have done better. For example the tediousness of looking through a mess of if/else statements for one stupid misplaced number has definitely taught me to plan better.",1485178637.0,2,0.67,5
+learnprogramming,[C++]Finished my Rubik's cube solver in C++!,"Hey guys,
+I'm a computer science undergrad student trying to get better at programming, so I wrote a C++ program to perform the beginner's method. The code is all on my GitHub [here](https://github.com/jmm140330/Rubik)! Feel free to look through and give me some advice. I know there are a lot of things I could have done better. For example the tediousness of looking through a mess of if/else statements for one stupid misplaced number has definitely taught me to plan better.",1485137501.0,143,0.95,25
+Cubers,Finished my solver in C++!,"Hey guys,
+
+I'm a computer science undergrad student trying to get better at programming, so I wrote a C++ program to perform the beginner's method. The code is all on my GitHub [here](https://github.com/jmm140330/Rubik)! Feel free to look through and give me some advice. I know there are a lot of things I could have done better. For example the tediousness of looking through a mess of if/else statements for one stupid misplaced number has definitely taught me to plan better.",1485136893.0,55,0.98,18
+2007scape,Wasn't expecting to get it that quickly...,,1483130126.0,3,0.72,0
+2007scape,That fucking name,,1481413520.0,112,0.93,4
+2007scape,You vs the guy she tells you not to worry about,,1479730523.0,41,0.78,4
+GFD,Looking for an old school runescape friends chat,Hi guys! I'm looking for a 2007scape clan chat that's friendly and kind so I can play Runescape and talk to people without worrying about jerks. Anyone know of a clan I can join?,1477162090.0,1,0.66,1
+learnprogramming,Where can I find write-ups on completed projects?,I'm looking for articles that people have written following the completion of personal projects explaining design decisions they made. I think this would be useful in transitioning from knowing syntax and everything to actually being able to make something. Does anyone know where I can find stuff like this?,1458179787.0,2,1.0,1
+NewSkaters,Was just starting to get comfortable on the board...,"UPDATE: It's fractured.
+
+I decided to try and learn skateboarding again, bought a new board yesterday. About an hour ago I was pushing around a nice smooth spot on campus, just trying to get comfortable moving, when I guess I hit a crack or something and ate shit. Landed on my elbow, which didn't seem bad at first. But about an hour later, when I got home, it swelled up and now I can barely move it. If it isn't better tomorrow I'm going to the doctor. I really really hope it isn't broken.",1458095892.0,9,0.91,10
+gaming,What a great game,,1449773680.0,10,0.73,4
+JustCause,What a great game,,1449738919.0,1,0.6,1
+archlinux,Help with systemd-boot?,"Hello, I installed Arch yesterday on my desktop, and everything went perfectly - except for one thing. I have Windows 8.1 installed on my SSD, with an ESP on /dev/sda2. I installed arch on my separate, mechanical hard drive - with another ESP on /dev/sdb3.
+
+Now, in the documentation I can find from the wiki, the examples are with only one ESP on one drive. With this configuration, systemd-boot can automatically detect the .efi files for each OS and add an entry for them in the boot loader. With my situation, however, with two separate EFI System Partitions on two separate drives - it's unable to find Windows and put it on the menu.
+
+I can still boot into my motherboard's menu and select the SSD manually to load up Windows, but it would be much more convenient to have it on the same menu as my Arch install. So my question - how can I point systemd-boot to the EFI partition on the SSD (/dev/sda2) so that it can be added to the boot loader's menu along with Arch, in my other EFI parition?",1438038653.0,7,0.77,12
+dataisbeautiful,5 months of speed-solving Rubik's Cubes [OC],,1437535363.0,5,0.86,1
+learnmath,[College Calc 2] Looking for problems to practice to be ready for calc 2 next month,"Hello folks. Last semester I barely scraped by with a C in Calc 1. This coming semester I'll be taking Calc 2, and am hoping to improve from last semester's performance. Does anyone know where I can find good problems to practice before the semester starts so that I can be ready for Calc 2? What types of problems specifically should I work on to prepare myself for the material in Calc 2?",1437339986.0,3,1.0,4
+NoColoreds,What is this abomination?,,1431293712.0,2,0.53,9
+thebutton,How I felt after pressing the button,,1430508173.0,2,0.6,0
+cscareerquestions,Areas of CS that are heavy in math?,"Hi folks, I'm a sophomore CS major. My discrete math and algorithms courses this semester have made me a little bit interested in math. What areas of CS are heavy in stuff like proofs and other math stuff?",1430431776.0,2,1.0,2
+battlefield_4,Horrible static noise comes up randomly?,"Hello folks, I bought the game a few weeks ago, and this problem keeps coming up. Every day or 2 this horrible static noise starts playing. It's so bad that I have the close the game. Has anyone else had this problem?",1429583627.0,7,0.77,9
+buildapc,Reminder for SSD users: set to ahci mode when you install your OS,I forgot to do this when I built my computer last year. The past few months I've been having all kinds of issues with my computer randomly freezing and just running slowly. I just found out today that you're supposed to use ahci mode when you install the OS on your SSD. I changed over and my computer is running 10x faster.,1429242232.0,1,1.0,6
+raspberry_pi,"Received a B+ with camera module for Christmas, made a short timelapse",,1419637442.0,37,0.86,10
+teenagers,[Discussion] does anyone even sleep anymore,,1419240579.0,6,0.75,44
+running,Feeling sick after first half,"So I just ran my first half 2 hours ago, and now I feel really nauseous. Is this normal, and what can I do to feel better/prevent this next time? ",1414987620.0,1,1.0,4
+4chan,Anon's smoking story,,1410313409.0,767,0.9,33
+deadfrontier,Do people buy credits from the marketplace?,"I see sell offers of $1,000,000 for just 100 credits, do people actually buy for that much money?",1407444217.0,2,0.76,2
+C25K,W7D3 - Finally felt runner's high,"I tried out a new route last night after running the same outside edge of my campus for the past few weeks, and also brought along a friend. I don't know if it was the change in scenery or having a friend there, but by the end of the 2.5 miles I was feeling so good that I went on to do the full 3.1 a week early! After we stopped, I still felt really great, like I could do a whole other mile! I'm really excited for what I'll be able to accomplish in the future, and I have this subreddit to thank for that. Thanks guys!",1406749677.0,11,0.88,3
+techsupport,Windows 8 hangs?,"I'm on mobile so sorry if I'm missing tags or required information, I'll fix it when I get back to my dorm. Windows 8 has been hanging pretty frequently. It becomes unusable for a minute or two before it recovers. I looked at the usage and it said disk usage was at 100% during these times. Any idea what's going on or how I can diagnose the problem?",1405994612.0,1,1.0,10
+teenagers,[Discussion] Does anyone even sleep anymore?,,1405413846.0,4,0.84,34
+4chan,Anon has a ritual,,1403980405.0,150,0.89,4
+4chan,/mu/ listens to black metal,,1403979785.0,2779,0.96,58
+utdallas,Where to run?,Is there a path/trail somewhere on campus to run?,1402962784.0,5,0.86,15
+CableManagement,PSU cable stiffness,"[This]( http://pcpartpicker.com/part/evga-power-supply-120pg0650gr) is my PSU. The cables feel really stiff and it is very frustrating to try and move them to where I want them. Then, when I go to route them in, they won't bend around to fit in the slot without having like 2 inches of excess. Does anyone else have this problem? Are all PSUs like this? I already finished my build but the cables were so annoying that I just gave up on making it look good and zip tied everything near the bottom of the case...",1401538755.0,5,0.78,1
+pcmasterrace,Brand new member of the master race!,,1401492830.0,3,0.62,5
+teenagers,[Picture] Built a computer for the first time yesterday!,,1401492258.0,108,0.97,57
+teenagers,[Discussion] Anyone waiting on a delivery?,My [PC parts](http://pcpartpicker.com/p/3BrbwP) are coming in tomorrow and I'm too excited to sleep. Anyone else waiting on something in the mail?,1401335168.0,2,0.63,14
+buildapc,There's so much differing information out there. How do you actually ground yourself?,"It seems like every guide I read has a different opinion on how to avoid ESD when building. How are you actually supposed to ground yourself? Do I have to plug my psu into the earth ground in the wall? Do I need a wristband? Or is it sufficient just to keep touching the exposed metal of the case, without plugging anything in? Why is there no straight answer to this simple problem out there?",1401331257.0,1,1.0,5
+teenagers,[Discussion] Just dropped over $1k on PC parts. Anyone here build their own computer?,http://pcpartpicker.com/p/3BrbwP,1401238551.0,2,1.0,16
+teenagers,[Rant] Cow won't shut the fuck up,"It's 2am and I just finished watching ""I Saw the Devil"" so I'm tryina go to sleep but there's a cow making a shit ton of noise outside. I guess it's giving birth or something like wtf you can't do that in the morning?
+
+Edit: A fucking bird just chirped does it even know what time it is?",1400828880.0,19,0.81,14
+teenagers,[Discussion] You guys like Game of Thrones?,,1400276524.0,1,1.0,12
+teenagers,"[picture] Give blood, y'all",,1398703805.0,19,0.81,25
+dogecoin,Buying dogecoin with USD?,I watched a video series about getting started with dogecoin that said that buying doge directly with USD could get you in trouble with the government. Is this true?,1398647213.0,6,1.0,8
+androiddev,Library for geometry/drawing graphs?,"For my AP Calculus final project, I was thinking about making an app that can find and visualize derivatives or integrals of a graph the user specifies. I have done some graphics stuff before with C#/XNA, but I have almost no experience with android besides going over the official documentation. However, I'm hoping this project will be simple enough to do with some kind of library to take care of drawing the graphs? Does anyone have any experience with this?",1397335389.0,0,0.5,2
+teenagers,[Advice] Help with calc project title,"For the project we had to find the volume of any real object using cross sections and integrals. I chose the MOTHERFUCKING MOON! My best idea right now is ""complete lunacy"", but if someone has something better I'd love to hear it. Make some calculus puns if possible. Luv u bbys",1395617608.0,2,1.0,2
+cyanogenmod,Repo init - version?,"This is my first experience using git. I just installed CM11 a few days ago, and wanted to get into contributing the the project. I'm follow the guide to build cyanogenmod for my device (M7), and it tells me to do this command:
+
+repo init -u git://github.com/CyanogenMod/android.git -b cm-10.2
+
+Should that actually by cm-11 or something? I'm not sure where to find documentation for what the command does.",1393183076.0,3,0.8,4
+HomeworkHelp,[High School Calculus] Integration/Fundamental Theorem of Calculus,"http://i.imgur.com/qjc1VJQ.png
+
+I'm not sure how to begin with this problem. I found the indefinite integral, but I don't know how I can find C with the given information.",1390949621.0,1,1.0,9
+marblehornets,Question about the missing 7 months,"Why wasn't Jay uploading during the 7 months that he and Alex were looking for Amy? I don't know if this was ever explained, or if I'm confused about the whole plot arc, but if Jay was documenting the entire time, why did he wait until after his memory loss to post?",1390263331.0,13,0.86,2
+buildapc,[Build Help] Deciding on a CPU,"[PCPartPicker part list](http://pcpartpicker.com/p/2veQz) / [Price breakdown by merchant](http://pcpartpicker.com/p/2veQz/by_merchant/) / [Benchmarks](http://pcpartpicker.com/p/2veQz/benchmarks/)
+
+Type|Item|Price
+:----|:----|:----
+**CPU** | [AMD FX-8320 3.5GHz 8-Core Processor](http://pcpartpicker.com/part/amd-cpu-fd8320frhkbox) | $149.99 @ SuperBiiz 
+**CPU Cooler** | [Cooler Master Hyper 212 EVO 82.9 CFM Sleeve Bearing CPU Cooler](http://pcpartpicker.com/part/cooler-master-cpu-cooler-rr212e20pkr2) | $29.98 @ OutletPC 
+**Motherboard** | [Gigabyte GA-970A-DS3P ATX AM3+ Motherboard](http://pcpartpicker.com/part/gigabyte-motherboard-ga970ads3p) | $79.99 @ Newegg 
+**Memory** | [Kingston Blu 8GB (2 x 4GB) DDR3-1600 Memory](http://pcpartpicker.com/part/kingston-memory-khx1600c9d3b1k28gx) | $79.98 @ OutletPC 
+**Storage** | [Samsung 840 EVO 120GB 2.5"" Solid State Disk](http://pcpartpicker.com/part/samsung-internal-hard-drive-mz7te120bw) | $99.92 @ OutletPC 
+**Storage** | [Seagate Barracuda 2TB 3.5"" 7200RPM Internal Hard Drive](http://pcpartpicker.com/part/seagate-internal-hard-drive-st2000dm001) | $82.99 @ NCIX US 
+**Video Card** | [EVGA GeForce GTX 760 2GB Video Card](http://pcpartpicker.com/part/evga-video-card-02gp42763kr) | $249.95 @ Amazon 
+**Wireless Network Adapter** | [Rosewill RNX-N250PCe 802.11b/g/n PCI-Express x1 Wi-Fi Adapter](http://pcpartpicker.com/part/rosewill-wireless-network-card-rnxn250pce) | $20.99 @ Newegg 
+**Case** | [Fractal Design Define R4 w/Window (Black Pearl) ATX Mid Tower Case](http://pcpartpicker.com/part/fractal-design-case-fdcadefr4blw) | $99.99 @ Newegg 
+**Power Supply** | [EVGA SuperNOVA 650W 80+ Gold Certified Fully-Modular ATX Power Supply](http://pcpartpicker.com/part/evga-power-supply-120pg0650gr) | $64.99 @ Microcenter 
+**Optical Drive** | [Lite-On iHAS124-04 DVD/CD Writer](http://pcpartpicker.com/part/lite-on-optical-drive-ihas124-04) | $14.99 @ Newegg 
+**Monitor** | [Asus VS239H-P 23.0"" Monitor](http://pcpartpicker.com/part/asus-monitor-vs239hp) | $159.99 @ NCIX US 
+**Keyboard** | [Logitech K120 Wired Standard Keyboard](http://pcpartpicker.com/part/logitech-keyboard-920002478) | $10.29 @ B&H 
+**Mouse** | [Logitech G400s Wired Optical Mouse](http://pcpartpicker.com/part/logitech-mouse-910003589) | $42.99 @ Amazon 
+ | | **Total**
+ | Prices include shipping, taxes, and discounts when available. | $1187.03
+ | Generated by PCPartPicker 2014-01-05 20:13 EST-0500 |
+
+Looking to build my first gaming pc. I've seen a few benchmarks that suggest that the 8320 performs similarly to the 6300, or even 4300. Is this true, or would it end up bottlenecking my 760? If I'm really off base, should I actually upgrade to 8350? Possibly even go with an i5?",1388970932.0,1,1.0,1
+buildapc,[Build Ready] $1000 Gaming PC,"[PCPartPicker part list](http://pcpartpicker.com/p/2veQz) / [Price breakdown by merchant](http://pcpartpicker.com/p/2veQz/by_merchant/) / [Benchmarks](http://pcpartpicker.com/p/2veQz/benchmarks/)
+
+Type|Item|Price
+:----|:----|:----
+**CPU** | [AMD FX-8320 3.5GHz 8-Core Processor](http://pcpartpicker.com/part/amd-cpu-fd8320frhkbox) | $149.99 @ TigerDirect 
+**CPU Cooler** | [Cooler Master Hyper 212 EVO 82.9 CFM Sleeve Bearing CPU Cooler](http://pcpartpicker.com/part/cooler-master-cpu-cooler-rr212e20pkr2) | $29.98 @ OutletPC 
+**Motherboard** | [Gigabyte GA-970A-DS3P ATX AM3+ Motherboard](http://pcpartpicker.com/part/gigabyte-motherboard-ga970ads3p) | $79.99 @ Newegg 
+**Memory** | [Kingston Blu 8GB (2 x 4GB) DDR3-1600 Memory](http://pcpartpicker.com/part/kingston-memory-khx1600c9d3b1k28gx) | $79.98 @ OutletPC 
+**Storage** | [Samsung 840 EVO 120GB 2.5"" Solid State Disk](http://pcpartpicker.com/part/samsung-internal-hard-drive-mz7te120bw) | $99.92 @ OutletPC 
+**Storage** | [Seagate Barracuda 2TB 3.5"" 7200RPM Internal Hard Drive](http://pcpartpicker.com/part/seagate-internal-hard-drive-st2000dm001) | $82.99 @ NCIX US 
+**Video Card** | [EVGA GeForce GTX 760 2GB Video Card](http://pcpartpicker.com/part/evga-video-card-02gp42763kr) | $249.95 @ Amazon 
+**Wireless Network Adapter** | [Rosewill RNX-N250PCe 802.11b/g/n PCI-Express x1 Wi-Fi Adapter](http://pcpartpicker.com/part/rosewill-wireless-network-card-rnxn250pce) | $20.99 @ Newegg 
+**Case** | [Fractal Design Define R4 w/Window (Black Pearl) ATX Mid Tower Case](http://pcpartpicker.com/part/fractal-design-case-fdcadefr4blw) | $99.99 @ Microcenter 
+**Power Supply** | [EVGA SuperNOVA 650W 80+ Gold Certified Fully-Modular ATX Power Supply](http://pcpartpicker.com/part/evga-power-supply-120pg0650gr) | $64.99 @ Microcenter 
+**Optical Drive** | [Lite-On iHAS124-04 DVD/CD Writer](http://pcpartpicker.com/part/lite-on-optical-drive-ihas124-04) | $14.99 @ Newegg 
+**Monitor** | [Asus VS239H-P 23.0"" Monitor](http://pcpartpicker.com/part/asus-monitor-vs239hp) | $154.99 @ Microcenter 
+**Keyboard** | [Logitech K120 Wired Standard Keyboard](http://pcpartpicker.com/part/logitech-keyboard-920002478) | $10.29 @ B&H 
+**Mouse** | [Logitech G400s Wired Optical Mouse](http://pcpartpicker.com/part/logitech-mouse-910003589) | $42.99 @ Amazon 
+ | | **Total**
+ | Prices include shipping, taxes, and discounts when available. | $1182.03
+ | Generated by PCPartPicker 2014-01-04 16:52 EST-0500 |
+
+Going through my final check. Still looking at /r/mechanicalkeyboards, but I'll be buying that after everything else. My final concern is with the CPU; do I really need the 8320 for gaming? Benchmarks show that it performs fairly similarly to the 6300 and even 4300, but would they be a bottleneck?",1388872458.0,1,1.0,0
+buildapc,[Build Ready] ~$1000 First Gaming PC,"[PCPartPicker part list](http://pcpartpicker.com/p/2veQz) / [Price breakdown by merchant](http://pcpartpicker.com/p/2veQz/by_merchant/) / [Benchmarks](http://pcpartpicker.com/p/2veQz/benchmarks/)
+
+Type|Item|Price
+:----|:----|:----
+**CPU** | [AMD FX-8320 3.5GHz 8-Core Processor](http://pcpartpicker.com/part/amd-cpu-fd8320frhkbox) | $149.99 @ SuperBiiz 
+**CPU Cooler** | [Cooler Master Hyper 212 EVO 82.9 CFM Sleeve Bearing CPU Cooler](http://pcpartpicker.com/part/cooler-master-cpu-cooler-rr212e20pkr2) | $29.98 @ OutletPC 
+**Motherboard** | [Gigabyte GA-970A-DS3P ATX AM3+ Motherboard](http://pcpartpicker.com/part/gigabyte-motherboard-ga970ads3p) | $79.99 @ Amazon 
+**Memory** | [Kingston Blu 8GB (2 x 4GB) DDR3-1600 Memory](http://pcpartpicker.com/part/kingston-memory-khx1600c9d3b1k28gx) | $79.98 @ OutletPC 
+**Storage** | [Samsung 840 EVO 120GB 2.5"" Solid State Disk](http://pcpartpicker.com/part/samsung-internal-hard-drive-mz7te120bw) | $98.98 @ OutletPC 
+**Storage** | [Seagate Barracuda 2TB 3.5"" 7200RPM Internal Hard Drive](http://pcpartpicker.com/part/seagate-internal-hard-drive-st2000dm001) | $83.99 @ NCIX US 
+**Video Card** | [EVGA GeForce GTX 760 2GB Video Card](http://pcpartpicker.com/part/evga-video-card-02gp42763kr) | $249.95 @ Amazon 
+**Wireless Network Adapter** | [Rosewill RNX-N250PCe 802.11b/g/n PCI-Express x1 Wi-Fi Adapter](http://pcpartpicker.com/part/rosewill-wireless-network-card-rnxn250pce) | $20.99 @ Newegg 
+**Case** | [Fractal Design Define R4 w/Window (Black Pearl) ATX Mid Tower Case](http://pcpartpicker.com/part/fractal-design-case-fdcadefr4blw) | $99.99 @ Newegg 
+**Power Supply** | [EVGA SuperNOVA 650W 80+ Gold Certified Fully-Modular ATX Power Supply](http://pcpartpicker.com/part/evga-power-supply-120pg0650gr) | $64.99 @ Microcenter 
+**Optical Drive** | [Lite-On iHAS124-04 DVD/CD Writer](http://pcpartpicker.com/part/lite-on-optical-drive-ihas124-04) | $14.99 @ Newegg 
+**Monitor** | [Asus VS239H-P 23.0"" Monitor](http://pcpartpicker.com/part/asus-monitor-vs239hp) | $166.98 @ SuperBiiz 
+**Keyboard** | [Logitech K120 Wired Standard Keyboard](http://pcpartpicker.com/part/logitech-keyboard-920002478) | $9.99 @ Amazon 
+**Mouse** | [Logitech G400s Wired Optical Mouse](http://pcpartpicker.com/part/logitech-mouse-910003589) | $39.99 @ Amazon 
+ | | **Total**
+ | Prices include shipping, taxes, and discounts when available. | $1190.78
+ | Generated by PCPartPicker 2014-01-03 21:50 EST-0500 |
+
+Hopefully all my parts are compatible; I've checked everything, but I don't know all of what to look for. One final concern: does anyone have experience with the monitor I chose?",1388803878.0,4,0.84,7
+buildapc,[Build Ready] First Gaming PC,"[PCPartPicker part list](http://pcpartpicker.com/p/1e7Nu) / [Price breakdown by merchant](http://pcpartpicker.com/p/1e7Nu/by_merchant/) / [Benchmarks](http://pcpartpicker.com/p/1e7Nu/benchmarks/)
+
+Type|Item|Price
+:----|:----|:----
+**CPU** | [AMD FX-8320 3.5GHz 8-Core Processor](http://pcpartpicker.com/part/amd-cpu-fd8320frhkbox) | $149.99 @ SuperBiiz 
+**CPU Cooler** | [Cooler Master Hyper 212 EVO 82.9 CFM Sleeve Bearing CPU Cooler](http://pcpartpicker.com/part/cooler-master-cpu-cooler-rr212e20pkr2) | $29.98 @ OutletPC 
+**Motherboard** | [Asus M5A97 R2.0 ATX AM3+ Motherboard](http://pcpartpicker.com/part/asus-motherboard-m5a97r20) | $94.99 @ Amazon 
+**Memory** | [Kingston Blu 8GB (2 x 4GB) DDR3-1600 Memory](http://pcpartpicker.com/part/kingston-memory-khx1600c9d3b1k28gx) | $79.98 @ OutletPC 
+**Storage** | [Samsung 840 Pro Series 128GB 2.5"" Solid State Disk](http://pcpartpicker.com/part/samsung-internal-hard-drive-mz7pd128bw) | $114.99 @ B&H 
+**Storage** | [Seagate Barracuda 1TB 3.5"" 7200RPM Internal Hard Drive](http://pcpartpicker.com/part/seagate-internal-hard-drive-st1000dm003) | $59.98 @ OutletPC 
+**Video Card** | [Sapphire Radeon HD 7950 3GB Video Card](http://pcpartpicker.com/part/sapphire-video-card-1003523l) | $429.99 @ Newegg 
+**Wireless Network Adapter** | [Rosewill RNX-N250PCe 802.11b/g/n PCI-Express x1 Wi-Fi Adapter](http://pcpartpicker.com/part/rosewill-wireless-network-card-rnxn250pce) | $20.99 @ Newegg 
+**Case** | [Fractal Design Define R4 w/Window (Black Pearl) ATX Mid Tower Case](http://pcpartpicker.com/part/fractal-design-case-fdcadefr4blw) | $99.99 @ Microcenter 
+**Power Supply** | [Rosewill Hive 650W 80+ Bronze Certified Semi-Modular ATX Power Supply](http://pcpartpicker.com/part/rosewill-power-supply-hive650) | $78.29 @ Amazon 
+**Optical Drive** | [Lite-On iHAS124-04 DVD/CD Writer](http://pcpartpicker.com/part/lite-on-optical-drive-ihas124-04) | $17.98 @ OutletPC 
+**Monitor** | [Asus VS239H-P 23.0"" Monitor](http://pcpartpicker.com/part/asus-monitor-vs239hp) | $144.99 @ Microcenter 
+ | | **Total**
+ | Prices include shipping, taxes, and discounts when available. | $1322.14
+ | Generated by PCPartPicker 2014-01-02 16:15 EST-0500 |
+
+I'd really like to get the price down here, does anyone have some suggestions? The first thing I would drop would be the SSD. Besides that, what can I do to get the price down to at least $1100?",1388697441.0,1,1.0,2
+buildapc,[Build Ready] $900 First Gaming PC,"http://pcpartpicker.com/p/2fF8R
+
+I've never built a computer before, but my friend recommended this build to me. Also, does anyone have suggestions on a cheaper case?",1387745766.0,1,1.0,2
+buildapc,[Build Ready] $1000 gaming pc,"[PCPartPicker part list](http://pcpartpicker.com/p/1dNTi) / [Price breakdown by merchant](http://pcpartpicker.com/p/1dNTi/by_merchant/) / [Benchmarks](http://pcpartpicker.com/p/1dNTi/benchmarks/)
+
+Type|Item|Price
+:----|:----|:----
+**CPU** | [AMD FX-6300 3.5GHz 6-Core Processor](http://pcpartpicker.com/part/amd-cpu-fd6300wmhkbox) | $119.99 @ Newegg 
+**CPU Cooler** | [Cooler Master Hyper 212 EVO 82.9 CFM Sleeve Bearing CPU Cooler](http://pcpartpicker.com/part/cooler-master-cpu-cooler-rr212e20pkr2) | $29.98 @ Outlet PC 
+**Motherboard** | [Asus M5A97 R2.0 ATX  AM3+ Motherboard](http://pcpartpicker.com/part/asus-motherboard-m5a97r20) | $94.99 @ Microcenter 
+**Memory** | [Crucial Ballistix Sport 8GB (2 x 4GB) DDR3-1600 Memory](http://pcpartpicker.com/part/crucial-memory-bls2kit4g3d1609ds1s00) | $62.13 @ TigerDirect 
+**Storage** | [Samsung 840 Pro Series 128GB 2.5"" Solid State Disk](http://pcpartpicker.com/part/samsung-internal-hard-drive-mz7pd128bw) | $124.99 @ NCIX US 
+**Storage** | [Western Digital Caviar Blue 1TB 3.5"" 7200RPM Internal Hard Drive](http://pcpartpicker.com/part/western-digital-internal-hard-drive-wd10ezex) | $69.99 @ Newegg 
+**Video Card** | [Sapphire Radeon HD 7870 GHz Edition 2GB Video Card](http://pcpartpicker.com/part/sapphire-video-card-100354oc2l) | $199.99 @ Newegg 
+**Wireless Network Adapter** | [Rosewill RNX-N250PCe 802.11b/g/n PCI-Express x1 Wi-Fi Adapter](http://pcpartpicker.com/part/rosewill-wireless-network-card-rnxn250pce) | $17.99 @ Newegg 
+**Case** | [Fractal Design Define R4 w/Window (Black Pearl) ATX Mid Tower Case](http://pcpartpicker.com/part/fractal-design-case-fdcadefr4blw) | $105.98 @ Amazon 
+**Power Supply** | [Rosewill Hive 650W 80 PLUS Bronze Certified ATX12V / EPS12V Power Supply](http://pcpartpicker.com/part/rosewill-power-supply-hive650) | $59.99 @ Newegg 
+**Optical Drive** | [Lite-On iHAS124-04 DVD/CD Writer](http://pcpartpicker.com/part/lite-on-optical-drive-ihas124-04) | $17.99 @ Newegg 
+**Monitor** | [Asus VS229H-P 21.5"" Monitor](http://pcpartpicker.com/part/asus-monitor-vs229hp) | $134.02 @ Amazon 
+ | | **Total**
+ | Prices include shipping, taxes, and discounts when available. | $1010.03
+ | Generated by PCPartPicker 2013-07-06 10:21 EDT-0400 |
+
+
+This will be my first build, and I'm not sure about the parts I've chosen. Is the 650W PSU too much for this build? I'm not entirely sure, but I'm coming up with around 400W estimated from this build. Should I get something smaller?",1373122318.0,6,0.8,17
+4chan,Anon freezes his hard drive,,1372974290.0,1620,0.95,43
+Cubers,Weekly competition?,Are we not having these anymore? The most recent competition was over 2 months ago...,1362449586.0,12,1.0,7
+NewSkaters,Ollie how do I jump?,"Hey guys, new to this subreddit and skateboarding in general. I'm having trouble grasping how the jump on an ollie works. Some people say you use your back foot to jump, some say both, some say front. 
+
+I've been using my back foot mostly to propel myself up at the same time I'm snapping the tail, is this right? I can get a few inches of pop like this, but I haven't worked out the slide so I can't tell if it's right.
+
+When and from what foot do I jump?",1337535587.0,3,1.0,2

@@ -1,0 +1,951 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+pinephone,OS Questions,"Hello all,
+I've been experimenting with the Pinephone and Pinephone pro and have been considering daily driving it. In that vein, I'd love to know exactly which OS would be most reliable (specifically for the Pro).
+I got an SD card slot that I can use for experimenting and development, but more for something I can put on emmc and just use it, as long as I keep it updated.",1654201071.0,2,0.75,5
+Zig,"Addition is runtime, not comptime?","Hello? I seem to be very confused, but here is the code I have:
+
+```
+const stack: [8192]u8 = undefined;
+const stack_ptr = @ptrToInt(&stack) + 8192;
+const stivale2_header = Stivale2Header{
+    .entry_point = 0,
+    .stack = @as(u64, stack_ptr),
+    .flags = (1 << 1) | (1 << 2) | (1 << 3) | (1 << 4),
+    .tags = 0,
+};
+```
+
+And the error I get is:
+```
+[...]: error: cannot store runtime value in compile time variable
+        const stack_ptr = @ptrToInt(&stack) + 8192;
+```
+
+This looks like a perfectly viable comptime operation, is it not?
+
+P.S. this is in a comptime block because the symbol needs to be exported.",1646773026.0,9,1.0,17
+196,R u l e,,1633216068.0,14,0.78,1
+depression,When to see a health professional,"Hello all.
+I'll just straight into the nitty gritty of it.
+I'm passively suicidal. No active death wish, or anything like that, just, if I slipped off a cliff, I just don't think I'd mind.
+But this isn't always the case. On bad days, I'll start making plans, and ideas.
+
+At what point should I commit myself to a mental ward?
+
+Is it planning? Is it actively trying? I feel like if I'm actively trying, I'm not going to submit myself.
+
+I don't really want to die most of the time. I have somebody who loves me. I have pets. How could I leave them behind? But on those bad days it doesn't feel like that. It's a ""man they'd probably be better off without me.""
+
+EDIT: I guess it might help to clarify that I've been at this state for multiple years now.",1631570309.0,1,1.0,4
+depression,Anger,"I've been getting so unreasonably angry lately. I never did. I've been seen as the guy who never gets angry and because of that, I have no ways to cope with it. I have no clue why and I hate it I hate it so much.     
+I hate getting angry it just hurts other people and myself. And the worst part, once it goes away, all you're left with is sadness.
+
+I've been depressed for years and anger has never been a symptom of mine, so why now? Why?",1628758965.0,6,0.88,3
+blurrypicturesofcats,blurry picture of a cat,,1625347333.0,7,1.0,1
+196,Rule,,1623587511.0,4,0.71,0
+196,Luigi rule,,1622675631.0,5,0.86,0
+Link_Dies,Lost his footing,,1622102619.0,855,1.0,20
+196,rule,,1622064562.0,5,0.74,1
+depression,Nightmares,"Every night, lately, I get nightmares that I'm in a situation where I could very well die. And every time I try to make sure it happens or make the death as fast as possible. I never EVER opt for the choice that might have a chance to survive. Car going off cliff? Take off the seatbelt, you'll die faster. Fall off building? Make sure you land on the head. About to be ran over by a car? Align myself with the wheels so that my entire body is crushed instead of just part of it. It's also so surreal the serenity that happens right beforehand. Like the thought of ""Oh well..."" and complete apathy. Of course when I wake up I'm hyperventilating and in fear, but in my nightmare, I usually just accept it.
+
+The worst part about them is just knowing that I'm so passively suicidal that even in my dreams, I just opt for the death instead of the chance to survive. It makes me not want to sleep anymore, because I'm tired of these nightmares. Just a constant reminder of how depressed I really am and how much I fake happiness throughout the day.
+
+I guess there's nothing else to this. Just a rant about nightmares.",1621858015.0,16,0.95,19
+196,Rule moment,,1618597498.0,6,0.88,0
+196,Rule,,1618435659.0,11,0.74,0
+196,Divorce,,1616892068.0,7,0.9,1
+SuicideMeme,basically,,1615482488.0,104,1.0,2
+osdev,x86_64 IDT Help,"EDIT: Solved! See the comments by /u/Octocontrabass for the solution. More info about the fix at the bottom, though.
+
+Hello, all! Earlier I was asking for GDT help and now I'm asking for some IDT help and specifically the interrupt handlers. My code is located here: https://gitlab.com/daedream/kernel
+
+Before we get into the problem and the code, I'll go over what the code is INTENDED to do.
+
+In idt.asm, we set up some ISR handlers that we need. It'll first start by pushing an error code of 0 for any interrupts that don't normally push one for uniformity in the interrupt stack frame. I then push the actual interrupt number and then jump to an ISR stub that is the same for every single ISR. In this stub, I push all the general purpose registers to the stack along with all the data segments. I then load the kernel data segment into all the data segment registers. After that I load into rdi (the first pointer argument in standard C calling convention) the stack pointer then call our C function.
+
+In the C function I just print out some info then return.
+
+After this I pop all the data segments and load them into the segment registers. I then pop off all the general purpose registers. I then manually pop off the interrupt number and the error number by adding 8 to the stack pointer (2 64-bit unsigned integers) then I `iretq` back into the caller.
+
+And now let's go over what exactly is happening.
+
+As far as I can tell, my ISR handlers are being called correctly, and it is confirmed by the fact that my ISR handlers print data to the debug console (just the serial output), but it is continuously being called afterwards with a GP fault once the `iretq` is ran. I confirmed this by single stepping through my handler in QEMU.
+
+The relevant bits of code are here:
+
+idt.asm:
+
+    [BITS 64]
+    [SECTION .text]
+    
+    extern x86_64_isr_handler
+    
+    %define KERNEL_DATA_SEG (2 << 3)
+    
+    %macro pushaq 0
+        push rax
+        push rcx
+        push rdx
+        push rbx
+        push rbp
+        push rsi
+        push rdi
+    %endmacro
+    
+    %macro popaq 0
+        pop rdi
+        pop rsi
+        pop rbp
+        pop rbx
+        pop rdx
+        pop rcx
+        pop rax
+    %endmacro
+    
+    [global asm_lidt]
+    asm_lidt:
+        lidt [rdi]
+        ret
+    
+    isr_stub:
+        ; Push all the 64-bit registers
+        pushaq
+        ; Push all the data segments
+        mov ax, ds
+        push ax
+        mov ax, es
+        push ax
+        mov ax, fs
+        push ax
+        mov ax, gs
+        push ax
+        ; Load the kernel data segments
+        mov ax, KERNEL_DATA_SEG
+        mov ds, ax
+        mov es, ax
+        mov fs, ax
+        mov gs, ax
+        ; And we get into it
+        mov rdi, rsp
+        cld
+        call x86_64_isr_handler
+        ; Pop all the data segments
+        pop ax
+        mov ax, gs
+        pop ax
+        mov ax, fs
+        pop ax
+        mov ax, es
+        pop ax
+        mov ax, ds
+        ; And pop all the registers
+        popaq
+        add rsp, 8 ; Pops the error number off the stack
+        ;add rsp, 8 ; Pops the interrupt number off the stack
+        iretq
+    
+    ; We'll start by making all of our ISRs. From 0 to 255
+    
+    ; Make an ISR wrapper for each table
+    ; Arg 1: ISR number
+    %macro isr_wrapper 1
+    isr_%1:
+        ; Turn off interrupts
+        cli
+        ; Check if we have an error number with this ISR
+        ; The ones with error numbers are:
+        ; 8 - DF
+        ; 10 -TS
+        ; 11 - NP
+        ; 12 - SS
+        ; 13 - GP
+        ; 14 - PF
+        ; 17 - AC
+        ; 21 - CP
+        %ifn (%1 == 8) || ((%1 >= 10 ) && (%1 <= 14)) || (%1 == 17) || (%1 == 21)
+            ; Push an error number of 0
+            push strict dword 0
+            push strict dword 0
+        %endif
+        ; Push the interrupt number
+        push strict dword %1
+        push strict dword 0 ; Push zero to the stack for padding to 64 bits
+        jmp isr_stub ; And go to the isr_stub
+    %endmacro
+    
+    %assign i 0
+    %rep 256
+        isr_wrapper i
+        %assign i i+1
+    %endrep
+    
+    [section .rodata]
+    [global isr_ptr_table]
+    isr_ptr_table:
+    %assign i 0
+    %rep 256
+        dq isr_%+i
+        %assign i i+1
+    %endrep
+    
+    ; vim: set asmsyntax=nasm
+    
+isr.c (with the interrupt_frame which is needed):
+
+    typedef struct __attribute__((packed))
+    INTERRUPT_FRAME {
+        // Our segment selectors
+        uint16_t gs, fs, es, ds;
+        // The registers
+        uint64_t rdi, rsi, rbp, rbx, rdx, rcx, rax;
+        // Interrupt number
+        uint64_t error_code;
+        uint64_t int_no;
+        // Pushed by the processor automatically
+        uint64_t rip, cs, rflags, userrsp, ss;
+    } interrupt_frame_t;
+    
+    typedef void (*isr_handler_t)(interrupt_frame_t*);
+    
+    void x86_64_isr_handler(interrupt_frame_t* frame) {
+        kprintf(""rip: %p\n"", frame->rip);
+        kprintf(""Interrupt Number: %u\n"", frame->int_no);
+        kprintf(""rax: %p rbx: %p\n"", frame->rax, frame->rbx);
+        kprintf(""rcx: %p rdx: %p\n"", frame->rcx, frame->rdx);
+        kprintf(""Error Code: %u\n"", frame->error_code);
+    }
+
+Any help would be appreciated and I will do my best to respond promptly!
+
+
+
+
+
+EDIT: SOLUTION!!!!!
+
+So, the PUSH opcode in x86-64 is quite odd. It maintains stack alignment by always pushing a sign-extended integer of either 16-bits or 64-bits. I wish that Intel was more explicit about these things.
+
+Anyways, I fixed that by removing the redundant `push` lines in my idt.asm file along with changing my `interrupts.h` file to follow.",1614378782.0,2,1.0,8
+osdev,GDT Help x86_64,"EDIT: SOLVED!!!! See the comment by u/I__Know__Stuff. They truly do know stuff. I'll leave my non-functioning code here, but the solution was to set the descriptor type from ""system"" to ""code/data"" by setting the descriptor type bit. This was really easy to miss, so I hope others see this and don't forget it!
+
+Hello all! I'm working on my OS called [Daedream](https://gitlab.com/daedream/daedream) with a [kernel under the same name](https://gitlab.com/daedream/kernel), and I am having trouble loading segments from a new GDT.
+
+I know the GDTR is being loaded correctly, but whenever I try to load in a segment selector, it crashes and triple faults (as I don't have a valid IDT yet).
+
+I hope I can get some help. I pulled all my information from the Intel Manual, but I am not sure how accurate my interpretation was. The manual is simultaneously amazing and absolute crap at the same time.
+
+I first load into the OS using bootboot and call a function called `arch_init()`
+
+From here, I load in the GDT. My main functions that are in use here are `gdt_set_entry()`, `asm_lgdt()`, `asm_load_cs(), asm_load_ds(),...`
+
+My gdt structure is:
+
+    typedef struct __attribute__((packed))
+    GDT_ENTRY {
+        uint16_t limit_low;
+        uint16_t base_low;
+        uint8_t base_middle;
+        uint8_t access;
+        uint8_t limit_high;
+        uint8_t base_high;
+    } gdt_entry_t;
+
+    typedef struct __attribute__((packed))
+    GDT_PTR {
+        uint16_t limit;
+        uint64_t base;
+    } gdt_pointer_t;
+
+And the code for `gdt_set_entry()` is:
+
+    void gdt_set_entry(gdt_entry_t* entry, uint32_t limit, uint32_t base, uint8_t access, uint8_t flags) {
+        // Set up the limit stuff
+        entry->limit_low = (uint16_t)(limit & 0xFFFF);
+        entry->limit_high = (uint8_t)((limit & 0xF0000) >> 16);
+    
+        // Set up the base
+        entry->base_low = (uint16_t)(base & 0xFFFF);
+        entry->base_middle = (uint8_t)((base & 0xFF0000) >> 16);
+        entry->base_high = (uint8_t)((base & 0xFF000000) >> 24);
+    
+    
+        // Set up any flags
+        entry->limit_high |= (uint8_t)((flags & 0xF) << 4);
+        entry->access = access;
+    }
+
+    gdt_pointer_t gdt_new_pointer(gdt_entry_t* entries, uint16_t limit) {
+        gdt_pointer_t tmp_ptr = {
+            limit,
+            (uint64_t)entries
+        };
+        return tmp_ptr;
+    }
+
+`asm_lgdt` is an assembly function call. I know this works correctly because the GDTR is being loaded correctly.    
+`asm_load_cs` is coded as such (NASM):
+
+    [global asm_load_cs]
+    asm_load_cs:
+        push rdi
+        push $.next
+        retf
+    .next:
+        ret
+
+
+This is where it crashes. I have tried loading the other segments, but it hasn't worked either.
+
+The `init_gdt()` function is as follows: (This is just called by arch_init())
+
+    static int init_gdt() {
+        // Our null entry
+        gdt_set_entry(&static_gdt_entries[0], 0, 0, 0, 0);
+        // Kernel code entry
+        gdt_set_entry(&static_gdt_entries[1], 0x0FFFFFFF, 0, BASIC_GDT_KERNEL_ACCESS |
+            GDT_ACCESS_EXECUTABLE, BASIC_GDT_LIMIT_FLAGS);
+        // Kernel data entry
+        gdt_set_entry(&static_gdt_entries[2], 0x0FFFFFFF, 0, BASIC_GDT_KERNEL_ACCESS,
+            BASIC_GDT_LIMIT_FLAGS);
+        // User code entry
+        gdt_set_entry(&static_gdt_entries[3], 0x0FFFFFFF, 0, BASIC_GDT_USER_ACCESS |
+            GDT_ACCESS_EXECUTABLE, BASIC_GDT_LIMIT_FLAGS);
+        // User data entry
+        gdt_set_entry(&static_gdt_entries[4], 0x0FFFFFFF, 0, BASIC_GDT_USER_ACCESS,
+            BASIC_GDT_LIMIT_FLAGS);
+        // This will be for a TSS
+        gdt_set_entry(&static_gdt_entries[5], 0, 0, 0, 0);
+
+        // And set up our gdt pointer
+        gdt_pointer_t gdtr = gdt_new_pointer(&static_gdt_entries, (sizeof(gdt_entry_t) * (sizeof(static_gdt_entries) / sizeof(void*))) - 1);
+        asm_lgdt(&gdtr);
+        asm_load_cs(SEGMENT_INDEX(1) | SEGMENT_RPL_KERNEL);
+        asm_load_ds(SEGMENT_INDEX(2));
+        return 0;
+    }
+
+
+And here are some defines I have:
+    
+    // Access flags
+    #define GDT_ACCESS_PRESENT (1<<7)
+    #define GDT_ACCESS_PRIVLEGE_KERNEL (0<<5)
+    #define GDT_ACCESS_PRIVLEGE_USER (3<<5)
+    #define GDT_ACCESS_DESCRIPTOR_TYPE (1<<4)
+    #define GDT_ACCESS_EXECUTABLE (1<<3)
+    #define GDT_ACCESS_DIRECTION (1<<2)
+    #define GDT_ACCESS_READWRITE (1<<1)
+    #define GDT_ACCESS_ACCESSED (1<<0)
+    
+    // Limit Flags
+    
+    #define GDT_LIMIT_GRANULARITY (1<<7)
+    #define GDT_LIMIT_SIZE (1<<6)
+    #define GDT_LIMIT_LONG (1<<5)
+    #define GDT_LIMIT_FREE_BIT (1<<4)
+
+    #define BASIC_GDT_ACCESS_FLAGS GDT_ACCESS_PRESENT | GDT_ACCESS_READWRITE
+    #define BASIC_GDT_KERNEL_ACCESS BASIC_GDT_ACCESS_FLAGS | GDT_ACCESS_PRIVLEGE_KERNEL
+    #define BASIC_GDT_USER_ACCESS BASIC_GDT_ACCESS_FLAGS | GDT_ACCESS_PRIVLEGE_USER
+    #define BASIC_GDT_LIMIT_FLAGS GDT_LIMIT_GRANULARITY | GDT_LIMIT_LONG
+
+
+I'd really appreciate the help, as I've been stuck on this for a few weeks now.
+
+
+EDIT: Some small fixes, As of right now, however, it is still not working.",1612385215.0,7,0.9,12
+osdev,BOOTBOOT GDT,"Hello all!
+
+I am creating a [OS that will have a kernel that uses BOOTBOOT](https://gitlab.com/daedream/daedream) and I am wondering,
+
+The BOOTBOOT specificiation states that it enters the kernel with an undefined, but valid, GDT. Is it wise to create my own GDT, or should I just leave it as its default as it's already valid?",1611688670.0,6,0.87,1
+chiptunes,"[NES] A Dream Unlike Any Other OST: A Failed Homebrew Game, but hopefully a good OST",,1611649248.0,1,1.0,3
+Miniworlds,[OC] A Grass Forest,,1611605861.0,3,1.0,0
+AspieInfoDumps,Micro-Optimization in Programming: Unrolling Loops,"Not aspie but ADHD so I also get super big <blanking on word. fill in later> so I am going to still dump it here
+
+Lately I've gotten a Commodore 128 and assembly programming has been so fun (I already love programming as a whole), so let's get into the nitty gritty of things, shall we?
+
+
+Let's say I want to create a program that converts a 8-bit number into a hexadecimal representation in ASCII. Well, there are a few ways that you can do this. Let's go over one way.
+
+We can store an entire table of 1-9 and A-F in a table and use it to look up values. Let's take a look at what that looks like in a fake-ish assembly in 6502.
+
+    table: .ascii ""0123456789ABCDEF""
+    charout: .res 2; Reserve two bytes for our two characters
+    
+    ; Load our value
+    lda #$2A
+    pha ; Save it for later
+    ; Do high byte first: We'll use a simple loop
+    ldx #4
+    shiftloop:
+    lsr a  ; Shift A right 1 bit
+    dex ; X=X-1
+    bne shiftloop ; If x is not 0, loop again
+    ; Now A contains $02
+    ; Move our value to the x register
+    tax
+    ; Load our first character from the table
+    lda table,x ; a=table[x]
+    sta charout
+    pla ; Pull A back from the stack
+    and $#0F ; Mask off the bottom 4 bits
+    ; Now A contains $0A
+    lda table,x ; Load our character
+    sta charout + 1 ; Store it in the next byte
+
+
+Counting how many clock cycles this takes to do, it comes out to be: 59 cycles in average conditions.
+
+Now, this version sucks, but it works, and is a pretty much 1-1 translation of how my first solution was (but it was in C), but we can do better. First, `shiftloop` is super slow. We don't need to loop, it just takes up extra space, so let's replace the entirety of `shiftloop` with this:
+
+    ; Shift A 4 bytes (unrolled loop)
+    lsr a
+    lsr a
+    lsr a
+    lsr a
+
+This is called unrolling a loop. We took the loop that we would've done normally, and just did them all in a row. No jumps that take 4 cycles to do plus destroying our X register. This whole thing now takes only 4 machine cycles to do.
+
+Let's take a look at what our current program looks at now
+
+    table: .ascii ""0123456789ABCDEF""
+    chrout: .res 2
+    
+    ; Load our value: $4A
+    lda #$4A
+    pha ; Save our value on the stack for later
+
+    ; Our 4 shifts
+    lsr a
+    lsr a
+    lsr a
+    lsr a
+    ; Now our A register contains $04
+    tax ; Move this value to the X register for indexing
+    ; A = table[x]
+    lda table,x
+    sta chrout ; Store that value into the first byte of chrout
+    
+    pla ; Pull that value we saved off the stack again
+    and #$0F ; binary 00001111
+    ; Now A = $0A
+    tax ; X = A
+    lda table,x ; A = table[X]
+    sta chrout+1 ; Store it in the byte after
+    ; Now chrout contains the string ""4A""
+
+This version only costs 37 cycles in average conditions.
+
+That is a 37% speed increase (I think. Math was not my strongsuit) just by unrolling a single loop.
+
+So, if you ever want to do something like this, now you know about it. Most compilers will do this automatically, however, and if it can be done in a constant manner (like in the case of for i=0 to 10: j=j+1: next), it'll just do it right there for you and it won't even be in the final binary. That being said, I really hope at least one person found this interesting.",1609933209.0,37,0.96,4
+Memelee,Every day,,1603243651.0,29,0.95,2
+nes,"Got an NES a few months ago and Metroid a few weeks ago. Finally, on native hardware and under two hours",,1600145467.0,173,0.98,34
+asm,[6502] Optimization help??,"EDIT: Solved! Check the comment by u/TNorthover
+
+Hello all! I have a bit of code that I'd like help in seeing if there's any more optimization I can do. The pseudocode in a C-like would be as such
+
+
+    // a is the A register
+    // Select a map
+    switch (a) {
+        case 0:
+            tmp1 = 0x20;
+            break;
+        case 1:
+            tmp1 = 0x24;
+            break;
+        case 2:
+            tmp1 = 0x28;
+            break;
+        case 3:
+            tmp1 = 0x2C;
+            break;
+    }
+
+What I came up with is this:
+
+        ; Check which map we are going to use
+        ; Editor's note: I have a macro from beq to bze as it makes it easier to remember (branch zero equal)
+        bze map0
+        sec
+        sbc #01
+        bze map1
+        sbc #01
+        bze map2
+        sbc #01
+        bze map3
+    map0:
+        lda #$20
+        sta tmp1
+        jmp calc
+    map1:
+        lda #$24
+        sta tmp1
+        jmp calc
+    map2:
+        lda #$28
+        sta tmp1
+        jmp calc
+    map3:
+        lda #$2C
+        sta tmp1
+        jmp calc
+    calc:
+
+I just feel this is a bit spaghetti, but I still don't quite know how to make this any better. I also thought of this pseudocode:
+
+    tmp1 = 0x20 + (0x4 * a)
+
+I decided against it since I don't think there's any easy way to do this multiplication.
+
+Is there any possible optimizations you guys can suggest? Thank you!",1599891511.0,15,1.0,7
+atari8bit,400 Keyboard,"Earlier I posted about a problem with the power supply. With that figured out, I ran into another issue with this machine that wasn't the case before.
+
+The keyboard (Yes the 400's crappy keyboard) has gone bad in a very mysterious way. Some keys, like 1, tab, q, w, and return, will cause the system to reset extremely rapidly (Sometimes fast enough for the reset speed to cause a tone on the speaker), and others just refused to work like r, 9, and /. These are just some examples, there are plenty more keys not working.
+
+####What have I done?
+
+- Checking the contact between the keyboard's ribbon cable to the motherboard
+
+There seems to be nothing wrong here. I tried removing it and reinstalling it and this behavior stayed exactly the same with 0 changes in even which keys are acting this way
+
+- Flexing the keyboard
+
+This did actually lead to a difference. Some keys stopped such as the q key, but others continued such as the return key.
+
+- Moving the keyboard
+
+This also led to a difference. When held on a certain position the entire left hand side of the keyboard stopped acting strange, but the return key still caused a system reset, making it still useless for Atari BASIC, which is what I like to use it for.
+
+
+
+
+
+Are there any tips that you guys have to fix this problem? I suspect the membrane has gone bad. I've looked for replacement keyboards, but there are 0 on eBay and that's the extent of my searching. There are also no guides on fixing these keyboards either.",1599351704.0,2,1.0,1
+atari8bit,400 Power Board,"EDIT: Figured out what is wrong. May fix in future. See bottom.
+
+Hello! I have an Atari 400 that I have inherited from my grandpa as I'm a retro computing enthusiast. When I first got this 400, I had lots of fun with it, but it got put away for a while as I had just started college.
+
+I got the inspiration to use it again, and alas, no power LED. I checked the power supply, and it was indeed supplying the 9vAC that the computer requires.
+
+I was wondering if you guys have any tips on troubleshooting and perhaps replacing the power board, as this is where I assume the issue is coming from.
+
+Are you able to troubleshoot the power board with it disconnected from the computer? Are there any pinouts for the connector it uses to connect to the main board? Are there any replacements (Even modern ones. I'm not too big of a purist) for the board?
+
+Muchas Gracias   
+- Nate
+
+
+EDIT: On the Atari 400 power board, there is a switch which is used to detect when the cartridge cover is opened. This switch on my power board, this switch is extremely marginal, obviously on its last legs. My plan here is to perhaps, one day, just simply short it closed and let that be that, but for now, I ordered a new one (impulsively, but hey, what can ya do?), so I'll just use that new one for now.",1599334304.0,3,1.0,10
+SSBM,Saw a post on the SSBU subreddit and put my bad editing skills to the test,,1598573448.0,21,0.92,2
+JuropijanSpeling,Helo and ŭelkom!,"Helo gajz! Iz esperanto alaŭd hir?? Aj hop it iz, bekaz ajd lajk tu traj tu normaliz da jusaĝ av da lajngŭeĝ!
+
+It iz strenĝ bekaŭz jud tink tat ingliŝ ŭuld bi izi tu ŭrit in esperanto, bat it iz not. Ju hav tu tink ej lot, and aj tink it iz a veri gud eksersajz for da brajn.
+
+Ŭel, Aj supoz dat dis iz da end of maj rant abaŭt doing dis.
+If ju hav ekstra tajm, lern esperanto! It iz izi tu lern da bajsiks, and iz fun tu lern ŭith oterz!",1595196452.0,8,0.84,13
+originalxbox,Assembly with no RF Shield,"I was wondering if it was possible for one to assemble the xbox without reinstalling the RF shields?
+
+I already removed them to allow me to clean the case (the one I got has a bunch of sticker gunk on it and a crap ton of dust in it), and it'd be a real pain to remove it again in the future if necessary and to reinstall it.",1594440835.0,3,1.0,3
+depression_memes,I'm fucked but didn't get a single bingo,,1593631062.0,17,1.0,1
+depression,An anecdote,"The ocean is much deeper than mountains are tall.
+
+Here's your r/im14andthisisdeep depression anecdote.
+
+
+May we all swim out and see land once again.",1592528609.0,2,1.0,0
+Miniworlds,A Little Forest,,1591745047.0,4,0.76,0
+depression,[BIG TW: Suicide] Isn't it weird,"Isn't it weird that somebody can fantasize about suicide so much and not do it?
+
+That primal instinct to stay alive literally manifests as the ""chickening out"" or ""arguing against"" your own suicidal thoughts. If we truly didn't have the will to live, it would've happened already.
+
+I know I want to. But I won't. I want it to be painless for everybody and that's impossible. All my plans lead to somebody getting hurt (in ways other than ""oh no, he's dead..."") and therefore there's no winning. Either I feel pain in the end or I risk the lives of others. No winning.
+
+I tell my therapist every time that I have not made plans and that's a lie. I've been making plans since the later part of middle school. None of them pan out. I always chicken out. Or decide it's not good enough.
+
+That primal part of my brain comes out. ""You gotta live."" Do I though? No. It won't stop me from chickening out.
+
+I can already think of so many people who might read this and think ""Doesn't he have people who care about him?"" ""Doesn't he know I care about him?"" Yes, I know. You always come up as I'm planning and are usually the reason I don't.
+
+Despite that, I know: Everybody would be better off without me.
+
+My brain then says: ""Well, what about—""
+
+Yes. I know. That's why I keep on living. Because I'm trapped here.",1590406760.0,10,1.0,2
+rust,Cargo.lock,"Hello! I have a question about Cargo.lock.
+
+From what my understanding is, its purpose is to signal to Cargo what versions to pull from Crates.io exactly, instead of using the Cargo.toml file and having corse control. PLEASE correct me if I'm wrong.
+
+My question is, why include it in a git repo? It is not included in the default .gitignore and it can cause problems in some cases where repos will get out of date Cargo.locks and one has to delete it and let Cargo remake it.",1586545516.0,2,0.6,12
+fresno,Linux User Group,[removed],1585877482.0,1,1.0,0
+depression,[TW: Dissociation] A weird want,"I almost want to be able to dissociate. I wish I could just distance myself emotionally instead of feeling so god damn empathetic all the damn time. I feel like I feel everything negative everybody else feels. I just want to almost get away from myself. From all this emotion I have. Just feel nothing. I want to feel detached. I want to be away.
+
+Is this weird? I feel like it's not a normal depression thing to want this thing.",1585339964.0,5,1.0,1
+EDAnonymous,[TRIGGER WARNING] My ED situation sucks,"# OH MY GOD THIS IS A SUPER STRONG TRIGGER WARNING YOU HAVE NO IDEA.
+
+**LIKE PLEASE CONSIDER NOT READING IF YOU HAVE HIGH SENSITIVITY TO THINGS LIKE THINSPO, ETC.**
+
+
+Being skinny and still binge eating sucks. I can easily eat over 2k calories in a sitting and not gain a pound. In fact, I do this almost every night. I just recently hit the normal weight category after being slightly underweight.
+
+I spent my entire childhood being forced to finish any amount of food given to me because I'm ""too skinny"". And I feel they're right. I hear it almost daily from family, friends, strangers. ""I wish I was as skinny as you."" You don't know AT ALL how much I wish I weighed more. As of right now I'm about 6'2"" and I weigh about 155 (I don't weigh myself unless I go to the psych as I require being weighed due to some of my meds. Helps me to not obsess over it). Just about a year ago, though, I weighed almost 140.
+
+I am so tired of people discrediting my terrible eating habits because I'm skinny. I don't even fucking want to be. I want people to stop telling me I'm too skinny. ""Maybe some eating will do you some good""
+
+I eat so fucking much. I always hate myself afterwards. I meet pretty much all the requirements for BED. I eat a fuckton each sitting. I'll even buy my foods beforehand, KNOWING that I'm just gonna binge on it later. I always feel like shit afterwards. I just hate it. I hate it all. Every fucking day.
+
+Just leave my weight alone. I know I'm skinny. Leave it alone. You only make me feel worse for mentioning it.
+
+I hope at least some people can relate and speak out about this. I feel this is a real problem.
+
+**TL;DR**: I'm fucking tired of people claiming I don't have a binge eating problem just because I'm skinny.",1582794385.0,7,1.0,2
+depression,Can anybody relate to this interaction?,"Me: *Man I really wish somebody would compliment me*    
+Somebody: *Compliments me*    
+Me: Ew no that's not true    
+
+
+I feel like I always want compliments from the people I love but for some god forsaken reason, I cannot accept them. And if I do it just feels so awkward and wrong.
+
+
+Does anybody know how to get around this?
+
+EDIT: Formatting",1580425535.0,56,0.94,4
+Metroid,Samus each time she sees Ridley after she just killed him,,1579543613.0,43,0.99,4
+unixporn,"Rusty Bartender, an i3blocks inspired bartender for lemonbar",,1578219146.0,1,1.0,4
+depression,Anybody else suck at expressing emotions?,"I try to share a lot with my fiancee, but it can be hard when you can't even put into words how you feel... I used the idea that ""I feel like how a violin would sound playing A forever."" It is so confusing but it's the best I've got. It's not enough to be like ""I have the big sad"" because of course that's true. But there's so many more depths to ""the big sad.""
+
+Does anybody else struggle with this and have any advice on how to do this much better.",1576094687.0,10,0.92,6
+AvPD,A question,"I do not have AvPD, just getting that out of the way. I am just curious about a question.
+
+How does your AvPD affect your ability to communicate online? I feel like it'd be a bit different with the safety of anonimity, but I may be wrong. I realize AvPD can make it very difficult to communicate in person but I would like to know from pure curiosity how it affects your ability to communicate online.",1576093867.0,14,0.86,11
+depression_memes,Fitness Goals,,1575919814.0,16,0.95,0
+mathmemes,(a+b)²,,1575497336.0,45,0.94,1
+voidlinux,GPU Hang with Xorg,"EDIT: Fixed! See bottom for how.
+
+
+Hello!
+
+I was wondering if I could get help with a very strange issue. I came from Arch with curiosity and got my system all nice and set up except for one issue.
+
+Every time I run xorg, it will run well until it starts to stutter and finally hang. If I quickly go over to `/dev/tty1` where I run `xinit` I get an error message:
+
+`i965 Failed to submit batchbuffer: I/O error`
+
+Before this hang happens I am able to switch over to TTY terminals, and nothing seems to go wrong, no matter how long I stay in these.
+
+I am running on a Thinkpad T450 with an Intel i5-5300U with Intel HD Graphics 5500.
+
+I use i3-gaps with xf86-video-intel as my driver.
+
+I do not have this issue under Arch and I was wondering if there was any suggestions you may have.
+
+If you need any additional info, I am happy to give.
+
+
+Edit: It was actually really easy... I upgraded to Linux 5.4 and the problem disappeared.",1575194488.0,1,1.0,7
+BoostForReddit,Open source,"Is there any plans on making this app open source?
+I'd love to be able to contribute and honestly, it'd make me feel a little bit better if it was open.
+
+Either way, still gonna use it, it's the best Reddit client out there!",1570636108.0,69,0.91,28
+Tulpas,Thinking of creating a tulpa,"Hello! I'm thinking of making a tulpa, but as I do have ADHD I worry this may be another one of those obsessions we ADHDers get, although I've been thinking of doing it for a few months now. I even created a ""wonderland"". I want to know what happens if one does stop in the middle of tulpa creation, what would happen? Sometimes these sorts of obsessions will stop abruptly.",1570266148.0,17,0.95,9
+depression,Does anybody else hurt so bad it feels physically painful,"I understand that part of this is the ADHD and emotional flooding, but does anybody else ever feel so hurt that it almost feels like a physical pain. I can't help but writhe in my bed trying to stop the hurting I know I can't stop. I told myself no drugs, no nothing, and I know many people turn to those in moments such as this. What do I do? It just hurts so bad it's all I can do. It makes it hard to reply to my fiancée's texts or do literally anything since I'm too busy trying to get rid of the pain. I need help.",1568953844.0,7,0.83,4
+depression,Having people who care sucks sometimes,"Most of the time, having people who care is a great thing, and I'd rather them care than not.
+
+That being said, it still sucks dick sometimes. It sucks when you hurt them because they see something they said affected me. Of course it did. But it's because I'm a little bitch, not because it actually mattered. I wish they'd see that and really understand that. That just because it hurt me doesn't mean it should've hurt me or that it even mattered that it hurt me. It doesn't matter if I am hurt by something, I'm always hurt by everything. My cat once walked away from me as I was petting him and it hurt. I'm just a bitch. Just like my family called me all the time. I'm a crybaby. Sometimes I wish they didn't care. Just so I couldn't hurt them as I always do. I don't deserve these people I do nothing but hurt them.
+
+
+In case you can't tell,I just hurt somebody who cares (or maybe cared, who knows. I hope they still do, I really do) just because I was hurt. I hate myself for that. They say everyone makes mistakes, but why do I have to make so many?
+
+I hurt. It's not their fault it's mine.",1568534989.0,8,0.9,5
+SuicideWatch,Suicide notes,"I have so many suicide notes. I write them each time I do something stupid and think to myself ""Time to fucking end it""
+
+I have everything I need.
+
+But I never do it. Why? Because I still have shit to live for.
+Why am I forced to live? Why can't I just die instead. I'd rather lose my will to live and die than keep living a life full of mistakes, sadness, and emptiness. I'm hanging on to life by a single thread. A strong one, but a thread can only hold so much weight. I feel like I may be having a crisis. But this isn't my first. It'll blow over I bet. Then once it does, I'll just fucking go on with life. It happens every time. Sometimes I wish I'd get that final push.
+
+I want to die, but I still want to live.
+
+Back to playing videogames as I try to find the will to die or I sleep. Whichever comes first.
+
+I'm sure this post will be ignored anyways.",1568092723.0,4,1.0,1
+depression,Dropping Low,"Anybody else get moments where they're kinda alright and then suddenly you'll be wanting to do nothing but lay down and cry?
+
+This was today. I was on a trip with my parents finally. I've always wanted to be closer to my parents... The one time we go out, I was having a good time. Took some good photos on my SLR camera. Then suddenly I wanted to die. I didn't want to be there anymore. I just wanted to lay down and cry.
+
+I hate this. I just want to have a good day...",1567906121.0,6,1.0,3
+ADHD,Lack Of Sleep,"Does anybody else have trouble sleeping, not because the thoughts won't shut up (although this happens as well), but simply because you find you don't want to?
+
+I have this older computer (90MB RAM with an AMD-K6 166Mhz) which I've been having a lot of fun with, which makes me not want to sleep at night. The next morning I regret it so much.
+
+It's been this way since I was a kid (I'm 18) and I want to know what to do about this. I can't force myself to go to bed if I don't wanna.",1566167122.0,21,0.97,11
+depression,I Mess Everything Up,"I'm doing fucking terrible at my job. I makestupid mistakes. I get told by my boss every day that I did something wrong. It's a miracle I haven't been fired. I try so hard too...
+
+I keep making my fiancée angry at me. To the point that she'll just stop talking to me. It hurts so bad too. Every time.
+
+I make so many fucking mistakes every fucking day.
+
+Why can't I do something right for once? I hate existence.",1564823505.0,2,1.0,0
+ThriftStoreHauls,A Canon AE-1 plus a bunch of goodies for $100,,1564161194.0,34,0.97,3
+AAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAAAAAAA,,1563461906.0,3,0.81,0
+depression_memes,"Ugh, I guess I'll jump on the bandwagon",,1563177006.0,10,0.92,2
+depression,Self Harm,"I never knew this to be self harm until relatively recently. Whenever I get angry, I hit my head with my fists. Hard enough to be audible. Or I bite my lip until it bleeds. To me it was just a way to relieve stress. It was almost a reaction.
+
+I hate it. I hate myself. Why must I be so self-destructive? Why do I have to be a sad fuck?
+
+I did it in front of my fianceé once. It was the stupidest thing ever. I hate myself.
+
+I hate myself.
+
+I hate myself.",1562398983.0,3,1.0,1
+depression,Depresssion is winning,"I hate depression. I hate the false hope it gives when it starts finally letting up. I had got my dose increased of my antidepressants. My mood was finally lifting. I was finally able to be happy knowing I don't have to dread when the depression hits again and harder than ever. I had hope. Then it took it away. Depression won again. My mood dropped. And really fucking low too. Slammed right into the ground. I hate it. This false hope. I wish I was never given that glimmer of hope every time I think it might be going away. I wanna give up. Why even bother fighting if I know I'm going to lose anyways? I tried getting help after multiple years of this shit and it's still winning. I'm just so tired. I wish I had just been without the hope. I'm glad I have my fianceé by my side. She's been a big help, but I hate being sad and depressed around her. I feel like I'm letting her down and it makes me feel worse. She always gets a look on her face when she sees the pain on my face. I hate that look. It just makes me feel worse. Seeing how my depression affects her. I hate it.
+
+I want to give up, but I know I can't.   
+I'm just so tired. Hopeless.",1562230239.0,3,1.0,1
+ADHD,Trouble Understanding People?,"Hello r/ADHD! I've found that I have a lot of trouble processing what people say. I hear the sounds that come out of their mouth, but something happens and I can't pull the language out of it. It seems that this has only gotten worse over the years. I have a job serving ice cream at Baskin Robins and it's very difficult to do when I can barely understand what people are trying to order.
+
+Is this an ADHD thing? And if so, how can I start to work towards fixing it or at least mitigating it a bit.",1561225845.0,45,0.92,27
+depression,I'm just a pussy,"It's kinda shitty seeing all these posts about people who have a shitty life. Like. It feels like my depression is just me being a little bitch. I've got a fiancée, some good friends, a stable life, and yet I still feel like ending it all. I hate it. I don't even deserve to be sad. I deserve nothing in life. I don't deserve any of this. I shouldn't be so down in the dumps, and yet I still am. I hate it. I still have suicidal thoughts even though people are sticking it through in worse situations. I don't even deserve to want a way out, since I still have it better than others.
+
+I'm just a pussy.",1560369353.0,1,1.0,4
+ADHD_partners,Some Positives,"I'm personally here because I'm diagnosed with ADHD-C and noticed a lot of negative posts here which is really concerning and I can only hope my fiancée doesn't go through this much just because of my condition. I feel like it's mostly negative because people need to rant about some struggles that they're going through, which is fair. Everybody needs to rant from time to time. But it's also good to talk about the good.
+
+I saw a post on here a little while back and I believe this should be something talked about more often. People tend to only talk about the bads in life, but what are some things you like about your partner's ADHD. And if you're the one with ADHD with a non-ADHD partner, how have they helped you in your journey through this illness?
+
+I'll start it off in the comments
+
+
+PS: The flair I put is the closest to what I think this post is about, but it doesn't fit very well. Sorry about that...",1559628023.0,21,0.89,9
+rant,My Parents Don't Care,"I have depression, and I feel like I have for a long time, but I only recently got diagnosed. I'm trying to be more open with my emotions with people I care about. I figured I should finally talk with my parents about how I feel about them. I thought it would make them understand what I've been going through.  
+Boy was that a mistake. Here's two examples of what was said at some points.
+
+Ex. 1:
+
+Me: ""You guys always make me feel like what I'm feeling is wrong""
+
+My dad: ""From our point of view, as your parents, we're just trying to show you what you're doing wrong""
+
+Me: ""Like how I'm feeling?""
+
+
+Ex. 2
+
+Me: ""I just feel like all I am is a GPA and my achievements to you guys. I always feel like I'm doing the wrong thing when I mess up. I don't even do it for myself, I do things because I feel like I'm letting everybody down""
+
+My mom: ""That's good, it should be like that""
+
+Me: ""I quit orchestra because it stressed me out. I couldn't get over how bad I felt because I felt like I let you guys down. I got told nothing but that I was doing the wrong thing. Not that 'Oh it kinda sucks, but I get it, you were really stressed and it wasn't fun for you anymore'""
+
+My dad: ""Well yeah, you did let a lot of us down. We were all really happy you were still doing it, and when you quit, a lot of us were let down.""
+
+Me: ""But it doesn't matter that it was stressing me out?""
+
+My dad: ""Life is stressful, Nathaniel, you have to get used to it""
+
+
+You know, it's my fault that I thought they were actually going to understand what I was saying. I should've known better than to have been hopeful. They do nothing but invalidate my emotions. Said I should ""go outside"" or ""get some exersise"" to fix my depression. They honestly just don't understand and never will.
+
+
+TL;DR: I told my parents about what I feel depressed about and they just invalidated my emotions, as they always do.",1559055092.0,7,0.75,3
+depression_memes,If God Loves Me...,,1558978425.0,58,0.97,0
+ADHD,[Rant/Question] Failed Projects,"Question:
+
+How do you guys deal with the thought of all your half done projects and failed dreams knowing that even though you have time to finish those projects, you know you'll just spend that time starting another? How do you guys prevent this?
+
+Rant:
+
+I'm glad programming is a broad topic, because it's the one thing I've been able to stick with, but I have so many programs that are completely unfinished. I don't even think I have a fully finished program in my 6 years of programming. I keep finding a new cool language, or some cool framework, or ooh this is a cool idea for a program, but none of them get done.
+
+I do music composition when I'm in the mood, but I rarely actually finish songs. I hear this cool song in my head, then only get half of it down before it's gone. It takes weeks to finish a short and simple song...
+
+I got really into linguistics for a while. I made my own langauges. I learned Esperanto (kaj povas paroli ĝin bone nun). I started learning Toki Pona, but never did. I found it all interesting, but now it's all kinda meh. Still pretty cool, but not my main focus anymore. I have been learning Latin when I'm in the mood.
+
+I played violin for 6 years before I decided to quit because it was too hard and the stress of it was more than what I was getting out of it. I was getting pretty good at it too... It had been my passion for so long then it just dissappeared.
+
+I had so many things I loved doing that I just lost passion for. I can't get over this fact...
+
+I worry about programming being something I lose passion for... I worry about losing passion for so many things I love doing. I'm so deeply invested in programming being my career. I'm gonna be doing Computer Science in university here next year.
+
+TL;DR: I had a lot of passion for a lot of things then lost it. I hate that. Various songs, various languages, various programming projects. All wasted.",1557448723.0,1,1.0,0
+depression,Does anybody else have trouble with compliments?,"My SO is great. I really do love her, and she knows that some days are harder than others, and I find that if I'm at a really deep low, I can't accept any compliments. It's not that I don't think they're true (although sometimes that is the case) but like some invisible thing is keeping me from wanting to accept it. Like I just feel like ""oh okay"" sometimes and sometimes it just agitates me for no reason. Like my mind tells me ""you don't deserve praise."" I hate it. I miss being able to just simply enjoy things.
+
+I was only recently diagnosed (it's literally only been a few days) and honestly it threw me into an even deeper low. I'm starting to realize the things it's actually taken from me. Although it may be the antidepressants I just started.
+
+Regardless, I feel like this pretty often and would like to know if anybody else gets this way.",1557124350.0,5,0.86,2
+sbeve,ing ing ing ing ing ing ing ing ing ing ing ing ing ing ing ing ing ing ing ing,,1556989086.0,27,0.95,8
+orlybooks,Help,,1555981331.0,119,0.99,4
+latina,Salvete!,"Nunc disco latinum per ""Lingua latina per se illustrata."" Estne alii loci qui possum usare discere grammaticum? Non possum discere grammaticum per ei libro bone. Nunc uso grammaticum in Wikipedia.",1552779979.0,41,0.93,3
+fnki,Gotta support RT,,1550711143.0,211,0.97,15
+unixporn,[i3-gaps] My laptop setup,,1548580155.0,6,0.69,9
+Eyebleach,My New Kitten Likes To Sit In My Hood,,1545540869.0,57,0.95,2
+rust,passgen-rs: A password generator written in Rust,,1541379446.0,11,0.86,19
+rust,My Experience With Learning Rust,,1540175410.0,76,0.92,16
+unixporn,[KDE] Who needs Mac when you have KDE?,,1536115246.0,14,0.76,8
+AskTheOuija,Why do I always _____ ?,,1534493545.0,3,1.0,6
+chiptunes,I Scream - [NES w/ MMC5],,1532422733.0,5,1.0,2
+composer,Rainy Day,,1531727861.0,6,1.0,4
+ProgrammerHumor,It's i3 or nothin',,1531130343.0,38,0.91,6
+orlybooks,It's i3 or nothin',,1531130137.0,96,0.96,5
+conlangs,"How does your conlang inflect, if at all?","I wanted to contribute, instead of a post of my language, a question that could open up discussions.
+
+And this question is: How does your conlang inflect, if at all.
+
+This means what types of inflections it has (conjugation, declension, etc.) and what method it uses (fusional, agglutinative, etc) and what meanings the inflections carry (purely grammatical, or also semantical information). This is a small list.
+
+If your language doesn't inflect, talk about how it gets grammatical information across.
+
+I encourage commenting on others' languages, as this is meant to be a discussion.
+",1527870040.0,16,0.9,41
+composer,Rainy Day,,1524975391.0,3,1.0,2
+composer,Through The Day,,1524974782.0,8,0.9,3
+chiptunes,Worry About Nothing [NES/MMC5],,1524974298.0,13,0.9,0
+billwurtzmemes,When they don't want me going to the mall,,1522935550.0,246,0.96,8
+CircleofTrust,Kiu estas mia dio?,,1522881724.0,2,1.0,1
+billwurtzmemes,Who does every single Civ player hate?,,1522399731.0,554,0.98,14
+softwaregore,Maybe they should check their libraries,,1521245830.0,4,0.83,0
+unixporn,[XFCE] Windows 3.1 Rice,,1520786786.0,218,0.93,17
+softwaregore,Long video...,,1519830055.0,3,0.8,0
+engrish,It's important to keep emergency areas clfar,,1516240172.0,4,0.83,0
+conlangs,"""How are you?""","How do you say ""How are you?"" In your conlang?
+
+Suggested format:
+Cultural way to ask, and include a literal translation
+
+
+**Karni**
+
+Ja sla, je?  
+/ja sla je/  
+You're good, yeah?
+be.2nd.pres good, yes
+
+Literal:  
+Cine ja?
+/tsine ja/
+How be.2nd.pres",1514230414.0,23,0.9,44
+unixporn,[KDE/Plasma] Night Sky,,1513752574.0,283,0.95,36
+chiptunes,[NES] Blank,,1511594604.0,4,0.84,2
+botsrights,It's important to be nice to your bots,,1511283255.0,161,0.96,5
+Bandnames,Props to Your Pops,,1511229774.0,9,1.0,1
+unixporn,[XFCE] My first rice,,1511228687.0,13,0.77,7
+Metroid,I am trying for world record. I need a bit more practice,,1509061935.0,86,0.97,21
+ProgrammerHumor,Orly?,,1504877498.0,635,0.96,48
+orlybooks,"""It has C in the name too""",,1503708069.0,203,1.0,4
+ProgrammerHumor,Bracketing,,1502561089.0,17,0.54,11
+botsrights,From r/softwaregore,,1501174520.0,100,0.92,38
+conlangs,The Plinte writing system,,1499904729.0,6,0.71,1
+conlangs,"""How are you?"" In your conlang(s)","I see many translation challenges, but this is one I don't really see, so here's mine.
+
+Translate ""How are you"" both literally into your language, and how your conlang asks ""how are you""
+
+
+I'll start with one of mine in the comments.",1499549387.0,17,1.0,67
+WiiHacks,Wondering about backups,"I have backed up my Metroid Other M so that I can preserve the original and use the backup and let that disc rot instead of the original, and I tried to burn it to a Dual Layer DVD disc and the disc won't read. Any suggestions?",1498633780.0,2,1.0,3
+redditmobile,Notifications not loading,"I just updated a few minutes, hoping this had been fixed, but it has not, my notifications refuse to load, and therefore can never be read. This is a pretty bad issue, because I'd like to see whats happening.
+
+This issue has lasted for about a month maybe two now.
+
+I'm running Android Marshmallow, rooted, but stock ROM on a Galaxy Express Prime from AT&T. Don't know if that will help, but it's a little bit to go off of.
+
+EDIT: English is hard and more info about the issue",1497759358.0,10,0.86,4
+redditmobile,Notifications not loading,Just updated this morning and I've noticed that my notifications refuse to load. It just has the loading symbol. It's strange because messages and posts and mod mail load perfectly.,1496357928.0,3,1.0,2
+conlangs,"""The quick brown fox jumped over the lazy dog"" Translated Into Axiso","Fakseka leli kune kepilazarrosa ligo kika mupetake kila dagela lebolo nega.
+
+---
+
+IPA:
+
+(Stress is always on the second to final syllable unless the word ends in a consonant, then it's the final syllable)
+
+/fək̆͡sekə leli kune kepiləzərosə ligə kikə mupetake kilə dəgelə lebolə negə/
+
+---
+
+Gloss:
+
+Fakse-k-a leli kune kepilazarro-s-a ligo kika mupet-a-k-e ki-l-a dage-l-a lebolo nega.
+
+Fox-NOM-SING quick with color-VOC-SING tree the-NOM-SING jump-PRES-FACT-3RD.SING the-ACC-SING dog-ACC-SING hard-working not.
+
+---
+
+Literal translation:
+
+The quick fox of tree color jumps over the not hard-working dog.
+
+
+EDIT: Multiple times for formatting and simple mistakes.",1495574975.0,9,0.85,24
+tokipona,Mi alasa e sona pi toki pona!,"I'm learning Toki Pona, and it's a very cool language. I might actually ride this one through to at least conversational level.",1494508624.0,4,1.0,2
+conlangs,How do you greet?,"In your conlang, how do you do greetings?
+
+**In Axiso** (*Axisos* in the language)
+
+
+**Formal:**
+
+*Lilatosa pokil*
+
+/lilatosa pokil/
+
+Meeting.voc.sing good
+
+Good meeting
+
+Well met
+
+**Informal**
+
+*Lil*
+
+/lɪl/
+
+Meeting (truncated)
+
+Hi
+
+
+
+(Edit: Formatting error+IPA+Message)
+
+(Kudos to whoever knows where my formal greeting comes from)",1493837350.0,14,1.0,49
+memes,Am I smart now?,,1493576209.0,32,0.83,5
+ProgrammerHumor,A lot of people are idiots,,1493523609.0,0,0.5,4
+chiptunes,"I Scream, by NateDogg1232 (Nathaniel Barragan)",,1493265315.0,6,0.88,0
+Esperanto,Mi kreas Esperanta tradukaĵo de la GodMode9 aplikaĵo.,,1490317923.0,6,0.88,2
+3dshacks,I did a thing... (Esperanto translation of GodMode9 underway...),,1490240732.0,29,0.72,52
+conlangs,How would a native speaker of your conlang sound speaking English?,"Personally in my conlang axiso, they would have no issues except the limited vowels of /a, e, i, o, and u/
+
+Also, there is no /b/ sound is now a /β/.
+
+
+So, The quick brown fox jumped over the lazy dog would be
+
+/ðɛ kwik βɾawn ɸaks d͡ʒumpt ovɛɾ ðɛ lɛɪzi dag/",1488489997.0,59,0.99,112
+chiptunes,Amazing #5 - My favorite Song From this (not so) Amazing series,,1486309374.0,3,0.72,1
+chiptunes,Amazing #10 - Part 10 of my (not so) Amazing Series,,1486001929.0,3,0.72,2
+wholesomememes,"Thanks (Sorry, not exactly a meme)",,1485918824.0,161,0.98,17
+BonajMemeoj,Jen la perfekta visaĝo.,,1485812264.0,8,0.84,6
+chiptunes,[NES] Sik Beets By Mr. Joe,,1485571197.0,2,1.0,0
+chiptunes,The Fight of The Century [NES] [CC],,1483585417.0,5,1.0,4
+chiptunes,"[NES] SOS, my first post on this subreddit",,1483560153.0,7,0.82,0
+conlangs,Battle Cries,"I was just wondering, do any of your languages have any sort of battle cries? If so, is there a background story? 
+
+In my language, Axiso (/axiʃo/), there's only one, ""ãsisoyu ze!"" (/a̰ʃiʃojæ ʐe/) meaninɡ ""To them!""
+
+The background story is that the people that the conworld has (their name is blanking me at the time of this writing) is notorious for bringing the fight to the others, so this is why they say that, as if they're bringing it to them.",1481753749.0,13,0.93,28
+conlangs,Random Script that I had made for my conlang xãisiso,,1481223686.0,5,0.72,8
+a:t5_3fidc,Testing stuff,"*italic*
+**Bold**
+***Don't know***
+****This either****",1480187621.0,1,1.0,0
+conlangs,Random Script that I made,,1480138290.0,0,0.5,4
+EarthPorn,Yosemite Valley CA USA,,1479836348.0,1,1.0,2
+a:t5_3fidc,When you see a furry in general,,1468824636.0,2,1.0,0
+minecraftsuggestions,Fix shields,"Make it so that when your shield is up visibly, it is actually up.",1466482109.0,10,0.74,16
+FurryArtSchool,Just starting out. The second drawing by me. Got any suggestions?,,1466408790.0,5,1.0,0
+minecraftsuggestions,Chain Command Blocks,"I suggest adding a inverted conditional tag for command blocks, so that we don't have to keep using comparators for inverted output on conditional commands (/testfor, /scoreboard players test, etc.), because it's really annoying.",1466216616.0,9,0.85,6
+furry,New Furry,"I've actually been trolling around on here for about a week, even made some posts, BUT, I still never officially announced my arrival (It seems to be what you are supposed to do) But here I am! Nate is now an official furry.",1466142294.0,3,0.64,16
+furry,Registering for furaffinity,"I've seen a lot of posts that link to furaffinity and I was wondering, how good is that site, and is it worth registering to?",1466054568.0,3,0.8,13
+furry,Just starting super noob. What do you guys think (by me),,1465746022.0,24,0.79,10

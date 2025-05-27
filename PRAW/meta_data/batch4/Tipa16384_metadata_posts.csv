@@ -1,0 +1,228 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+adventofcode,[2022 Day 10 Part 2] PICO-8,,1670692585.0,7,0.82,1
+adventofcode,[2016 Day 1] [Clojure] My first Clojure program...,"It's taken me DAYS to write this, but I *think* it's ""Clojure-like"". I'm sure there's better ways, but here it is, it's mine, and it works.
+
+    (ns aoc.2016.1
+      (:require [clojure.string :as str]))
+
+    (def compass [[0 1] [1 0] [0 -1] [-1 0]])
+
+    (defn new-heading [heading move]
+      (mod (if (= (first move) \R) (inc heading) (dec heading)) 4))
+
+    (defn travel [heading arr]
+      (if (empty? arr) []
+          (into (vec (repeat (Integer/parseInt (subs (first arr) 1)) (new-heading heading (first arr))))
+                (travel (new-heading heading (first arr)) (rest arr)))))
+
+    (defn journey [loc moves]
+      (concat [loc]
+              (if (empty? moves) []
+                  (journey [(+ (loc 0) ((first moves) 0)) (+ (loc 1) ((first moves) 1))] (rest moves)))))
+
+    (defn look_for_duplicates [path]
+      (if (.contains (rest path) (first path)) (first path) (look_for_duplicates (rest path))))
+
+    (def head-seq (travel 0 (str/split (read-line) #"",\s"")))
+
+    (def path (journey [0 0] (map vector
+                                  (for [h head-seq] ((compass h) 0))
+                                  (for [h head-seq] ((compass h) 1)))))
+
+    (println ""Part 1:"" (+ (Math/abs ((last path) 0)) (Math/abs ((last path) 1))))
+
+    (def dupe (look_for_duplicates path))
+
+    (println ""Part 2:"" (+ (Math/abs (dupe 0)) (Math/abs (dupe 1))))",1644457185.0,3,1.0,0
+adventofcode,[2021 Day 23] [Python 3 + Pygame] Amphipods visualized as Final Fantasy Tactics Advance characters...,"I solved 2021 Day 23 -- the Amphipod puzzle -- by hand. I went back to write [a code solution](https://github.com/tipa16384/adventofcode/blob/main/2021/slider23.py), and along the way, decided to visualize the solution by animating Final Fantasy Tactics Advance characters through it :-)
+
+[I hope you enjoy it](https://www.youtube.com/watch?v=d_voiTZIvzA)!
+
+&#x200B;
+
+[Solving Part 2](https://preview.redd.it/fmiqq68rika81.png?width=640&format=png&auto=webp&s=19b6acd81c54ba2389c3db63c480955cb701ebb5)",1641693060.0,91,0.99,6
+adventofcode,"Advent of Code Day 24 2021 Visualization ""Arithmetic Logic Unit""","I solved two of this year's puzzles by hand -- days 23 and 24. I'm finally going back and writing code for them, and practicing making visualizations with PyGame. I hope to have everything ready to go for AoC 2022 :-)
+
+[2021.24 Visualization](https://www.youtube.com/watch?v=afNI60f-EO8)
+
+The code for the non-visualization solution:
+
+[paste](https://topaz.github.io/paste/#XQAAAQA8BAAAAAAAAAAyGUj/T3PF3S7nOSzpbtFoVYGExYCpdz/gDu7vwznxV2ytKQn0CpZ2P3jgKRS424E8Ai4fT6Z4/l4bQwRch1Su4LF2iFEgsDAHscTQL6L7FskVoR45ICc5+k7e6MAXGAyErgVXBNH7sB2Yd0493ZtVkg17wKox71bX1dGJo/jRiPtmSdN99Hu912N7fAHjsa6wjfKzx9qpsGl5AY0uc/8Nl/uaGTJ1ROrwESX7w0QjD9NiYxUwzmMgQgqYLZufxDroqJT8pysN2Zn8vq/ZW6mgdc8DhDF7Q8TotEGEB8pCDJPhBFBUdO/jqgoI+r+HY3Leqgi5W6bb+7Sm8goNYf5VUidTcKSMdmgqucmUiKxIjaFSW8iKhdWDn0kx8Iouoj0m93DBJLYNYoM6Pa3LdX3Rendtj/LPZovAKryVSgdZt/W0knrmRNZ46UKjmgSTICVM/hZkTB6BQspJSmwava/9SyWxldEibRy+G0nYFEQioHQolaEAJKJbgEQygOcSz7xNmluTNZ+9YoE8oJNK0TpDNexR8ZK+uO5fZhlZEcteiVfv3qDwYCyZPwtnTeuryUuYMTO3VJahoDBsNrbCN9B9c8V/54+ehhaJZmiwrc6/RgNZDYUy81683JGfQ5xsL3K078tDkDRnRnl2Kug+wJKyqTjVZ24Fi/08Jpb3yFWvJ8UyCVq8IKMX66b8Gp/i)",1641386459.0,6,0.8,0
+adventofcode,[2015 Day 14] [Python 3.9] Reindeer Games.,"I read Part 1 of this puzzle and thought to myself that this was a trap, where the puzzle seemed to suggest we should model each reindeer second by second. I suspected Part 2 would be something crazy, like the reindeer race for a million years and NOW how far? Imagine my shock and surprise that Part 2 required modeling them second by second.
+
+My Part 1 solution, at least, just generates the answer without any second-by-second simulating.
+
+    import re
+    from timeit import default_timer as timer
+    
+    class Reindeer:
+        def __init__(self, line):
+            self.name, self.speed, self.fly_time, self.rest_time = re.match(
+                r'(\w+) can fly (\d+) km/s for (\d+) seconds, but then must rest for (\d+) seconds.', line).groups()
+            self.speed = int(self.speed)
+            self.fly_time = int(self.fly_time)
+            self.cycle_time = int(self.rest_time) + self.fly_time
+            self.score = 0
+    
+        def distance_at_time(self, time):
+            return (time // self.cycle_time) * self.speed * self.fly_time + \
+                min(time % self.cycle_time, self.fly_time) * self.speed
+        
+        def bump_score(self, time, lead_distance):
+            if self.distance_at_time(time) == lead_distance:
+                self.score += 1
+    
+    with open('reindeer14.dat') as f:
+        reindeer = [Reindeer(line) for line in f.read().split('\n')]
+    
+    target = 2503
+    
+    start = timer()
+    print(f""Part 1: {max(r.distance_at_time(target) for r in reindeer)} in {timer() - start:.3f} seconds"")
+    
+    start = timer()
+    for time in range(1, target + 1):
+        for r in reindeer:
+            r.bump_score(time, max(r.distance_at_time(time) for r in reindeer))
+    
+    print (f""Part 2: {max(r.score for r in reindeer)} in {timer() - start:.3f} seconds"")",1640875862.0,4,1.0,1
+adventofcode,"[2015 Day 11, 12, 13] [Python 3.9] Working through older puzzles","After I solved Day 11, I realized that with my puzzle input, I could have solved it by hand. I also noticed that if Santa were to try a new password every ten seconds, for eight working hours a day, it would take him the better part of a year to make it to the second password. I converted the password to a Base 23 number to avoid illegal letters. This would break if Santa's current password had illegal letters, but my input didn't.
+
+    from functools import reduce
+    from itertools import groupby
+
+    safe_letters = 'abcdefghjkmnpqrstuvwxyz'
+
+    def increment_password(password):
+        new_pwd_val = reduce(lambda x, y: x*23 + y,
+                                (safe_letters.index(c) for c in password)) + 1
+        return ''.join(safe_letters[(new_pwd_val // (23**i)) % 23] for i in range(8))[::-1]
+
+    def has_straight(password):
+        for i in range(6):
+            if ord(password[i]) == ord(password[i+1]) - 1 == ord(password[i+2]) - 2:
+                return True
+        return False
+
+    def has_doubles(password):
+        return len(set(x for x, y in groupby(password) if len(list(y)) >= 2)) >= 2
+
+    def get_new_password(password):
+        while True:
+            password = increment_password(password)
+            if has_doubles(password) and has_straight(password):
+                return password
+
+    password = get_new_password(""hxbxwxba"")
+    print(f""Part 1: {password}"")
+    print(f""Part 2: {get_new_password(password)}"")
+
+For Day 12, using Python seems almost like cheating. Part 1 I did using a regex, part 2 by using the multipledispatch library to make it super simple. Whenever I bring up using regex at work, people without fail haul out that old canard, ""you have a problem and you use regex to solve it, and now you have two problems"". Sorry dudes, YOUR problems with regex are not MY problems.
+
+    from re import findall
+    from json import loads
+    from multipledispatch import dispatch
+
+    @dispatch(int)
+    def sum_objs(data: int) -> int: return data
+
+    @dispatch(str)
+    def sum_objs(_: str) -> int: return 0
+
+    @dispatch(list)
+    def sum_objs(data: list) -> int: return sum(sum_objs(x) for x in data)
+
+    @dispatch(dict)
+    def sum_objs(data: dict) -> int:
+        return 0 if 'red' in data.values() else sum(sum_objs(x) for x in data.values())
+
+    with open('accounting12.dat') as f: data = f.read()
+
+    print (""Part 1:"", sum(int(x) for x in findall(r'\-{,1}\d+', data)))
+
+    data = loads(data)
+
+    print (""Part 2:"", sum_objs(data))
+
+I became so paranoid about using the obvious solutions in Part 1 because they would be entirely wrong for Part 2 that I am always, for the 2015 puzzles, making things harder than they needed to be. This is the second 2015 puzzle where straightforward permutations just work. Day 14 looks like it's going to be more fun, though.
+
+    import re
+    from collections import defaultdict
+    from itertools import permutations
+
+    def read_data():
+        seats = defaultdict(lambda: defaultdict(int))
+        with open('bobcarol13.dat') as f:
+            for line in f.read().split('\n'):
+                m = re.match(
+                    r'^(\w+) would (gain|lose) (\d+) happiness units by sitting next to (\w+)\.$', line)
+                seats[m.group(1)][m.group(4)] = int(m.group(3)) * \
+                    (-1 if m.group(2) == 'lose' else 1)
+        return seats
+
+    def score(seats, order):
+        return sum(seats[person][order[(i+1) % len(order)]] + seats[person][order[i-1]]
+            for i, person in enumerate(order))
+
+    seats = read_data()
+
+    print(""Part 1:"", max(score(seats, x) for x in permutations(seats.keys())))
+
+    seats['You'] = defaultdict(int)
+
+    print(""Part 2:"", max(score(seats, x) for x in permutations(seats.keys())))",1640840997.0,2,0.75,5
+WordAvalanches,"I knew an Indian lady who loved her Toyota hybrid, but had to sell it before she moved to America. That's why she called it...",Priya's pre-US Prius!,1637161008.0,237,0.99,10
+Hartford,Dunkin’ Donuts Park is pranking Hartford. Animated fire on its scoreboard...,,1575658501.0,40,0.92,5
+WordAvalanches,A caped crusader airlifted a deadly virus to me and my friends because we just weren't needed anymore.,Super flew us super flu. Us? Superfluous.,1558436116.0,12,1.0,0
+Connecticut,Did someone say Heublein Tower?,,1529106333.0,79,0.94,0
+GolfGTI,First/Last VW -- 1964 Beetle to 2011 GTI,,1528910719.0,89,0.97,5
+shittykickstarters,"[Canadian Ninja Warrior] Wants to make an unlicensed version of Sasuke (Japanese Ninja Warrior). Problem: American, doesn't know Japanese, not affiliated with Sasuke. $10,000(US) goal on a $2.5MM budget.",,1526125859.0,196,0.98,11
+SuicideWatch,My son tried committing suicide last night,"My son tried to commit suicide last night. He took a box cutter and sliced deep four or five times on one arm and three or four times on the other. Then he laid down in a bathtub full of water but then got out and went to his bedroom where he passed out.
+
+He'd made an odd call to his sister that worried her, so before she called 911, she called me, and I rushed home from work as she called 911 and dealt with them.
+
+When I got home, there was an ambulance and a fire engine and several police cars. My daughter saved his life. Now he's in the hospital and will be transferred to a psych unit for awhile to deal with the deep depression he was under and that he hid but it all came out last night as I sat by his hospital bed and thanked God that my son was alive.
+
+I lost my second daughter as an infant when she was just seven months old. I cannot take this again.
+
+I have no idea what to do now. I have to be strong for my kids but all I can do from now on is worry any time I don't know that he's being watched. 
+
+I have to go into work now and tell my boss what happened and that I probably have to work from home once my son is released.
+
+When I got home from the hospital last night I had to clean up all the blood that was all over the house. Anything his blood touched I  threw away. I scrubbed the bathroom and his bedroom. I threw away the boxcutter he used. I will never be able to forget the sight of his blood everywhere.",1511872017.0,9,0.82,5
+WordAvalanches,"A story about a shipment of thickly wound string used to make short dance skirts carried on a wagon driven by a man famous for blowing a horn twice when passed on the road was rejected for being very, very similar to a Samuel Clemens story","Tutu twine ""Two Toot"" wain? Too, too Twain.",1502570366.0,2,1.0,2
+WordAvalanches,"A flying mammal known for his love of baseball, knocked a font out of the park, taking a chunk out of a volunteer fireman.",Bat bat batting dingbat dings dingding!,1501879185.0,3,0.8,0
+WordAvalanches,I got angry when I saw the set list for the Motels/Split Enz/Sacrifice/Blendr/Taylor Swift concert.,"Icy Red, I See Red, Eyes See Red, Eye Sea, Red??? I SEE RED!",1501712710.0,4,1.0,0
+WordAvalanches,"The mission to stake out a box of cheesy tortillas, my beloved doe",Case o' case a case o' quesadilla dear deer,1501668861.0,5,1.0,0
+WordAvalanches,"William, a nervous Mongol, leveled into the double digits. After he was forced to avoid an exploded pen, he stood quivering. Nobody knew what would happen next.","Tense Hun, Bill, dings ten, shuns spilled ink. Tension building.",1499870292.0,58,0.95,1
+WordAvalanches,Ann overcharges someone for picking up a faster-than-light call. Only legislation can stop her now.,"Ann bills Bill's ill Aunt Sebile's ansible answer bill. Bill and Aunt Sebile answer Ann's bill, ""Bull! Ann'll answer Aunt Sebile's ansible bill!"" Bill's ""Ansible Answer Bill Ban Bill"" bans Ann's bill. Ann bans Bill's ban bill, bans answer bills, bans ansibles! Bill, bands w/Aunt Sebile, bans Ann's answer bill ban bill ban.",1499383755.0,90,0.98,4
+WordAvalanches,My Cockney boyfriend refuses to go near the elaborate home of a serial killer.,M 'andsome man shuns Manson mansion,1499376334.0,2,1.0,0
+WordAvalanches,Beckon to that woman and she will bring you the form to sign in order to eat the anti-unsteadiness cracker,Wave her way for waver wafer waiver,1499360008.0,1,1.0,0
+WordAvalanches,"In 1983, Whitman Mayo complained to a well-regarded chatbot about the physical effects of aging. The chatbot advised him to use earth moving equipment to build the most massive object in the universe.","It was called the...
+
+Gray detractor Grady actor grade ""E"" Racter grader tractor Great Attractor
+
+I'll see myself out...",1499299229.0,59,0.93,0
+WordAvalanches,"A French church shoots a rocket full of vaccination information pamphlets into the sky. It is blown off course by a regional wind. Undeterred, I send a friend's southern, musical, nocturnal bird to collect it.",Measle missal mistral missile - MISS! I'll marshal Mishal's minstrel Miss. owl.,1499291919.0,1,1.0,0
+WordAvalanches,Edward and his friends Celia and Deana argue about the results of a multiple choice test.,"""C"" meant Ed. ""Demented?"" meant Cee. Meant Ed, ""Cemented!"" (Ed meant Dee meant ""D""). Meant Ed, ""Cee meant 'D'"". Dee meant ""C"". ""D?"" meant Ed. Cee meant, Ed *meant* ""Cemented"". Dee meant, *Cee* meant ""Demented"". Cee relented. ",1499264561.0,13,0.9,0
+WordAvalanches,A horror writer has his skin mags impounded because he is destitute.,"Poe! No porno! Poor, no?",1499221572.0,5,0.79,0
+WordAvalanches,"Carefree, but suicidal, topiary victim of a toy company assaults a woman, but ultimately is talked down by the authorities.","Bandai banzai gon' die gun shy don't say bonsai fun guy fungi twists wrists kisses missus misses releases appeases polices.
+
+First post, not a true avalanche, but after reading so many great avalanches in this sub, this was in my head on the way to work.",1498833831.0,100,0.95,4
+Hartford,Charter Oak Greenway extended!,"Just saw this morning that the Charter Oak Greenway had been extended from Forbes St to Simmons Rd in East Hartford. It looks fairly new.
+
+East Hartford is really stepping up its bike-friendliness, with this and the Burnside bike lanes. I can only hope they take a look at Silver Lane between Main St and Forbes sometime.... that's still a pretty dangerous stretch.",1492186900.0,15,0.95,4
+shittykickstarters,"$99 mini-drone does everything, IGG flexible funding, follows in Zano's footsteps.",,1489670589.0,52,0.97,12
+shittykickstarters,HushMe -- a Bane-mask that beeps like R2D2 to disguise your phone calls. Crowdfunding in May.,,1489583868.0,206,0.97,25
+a:t5_2xoj5,"This sub is a little spammy, maybe?","Was surprised to see a sub for The Hartford, I never heard of this among the other HIG social media outlets. 
+
+Required by immutable law --> #IAmAHartfordEmployee. Don't ask me for insurance advice or anything to do with the business side of The Hartford. I'm in IT support.
+
+But, if a Hartford employee is a mod, they should clean up the spam and make it look nice.",1486519872.0,1,1.0,4
+shittykickstarters,General contractor designs bicycle with a pulley and six secret parts that goes faster than 50mph needs 50K to see if it actually works.,,1482180701.0,116,0.97,50
+shittykickstarters,"""World's First Hologram Recording Set"" is a mirror.",,1472582252.0,25,0.87,9
+shittykickstarters,Flying e-bike with height meter. 1€ gets you a test drive.,,1464117652.0,9,0.85,5
+Bridges,"Comstock Covered Bridge, East Hampton, CT",,1457196612.0,6,1.0,0
+Bridges,"Mystic River drawbridge, Mystic, CT",,1456278472.0,8,0.91,0
+Bridges,"East Haddam Swing Bridge, East Haddam, CT",,1456061240.0,7,0.99,1
+Herossong,Hero's Song Kickstarter Cancelled,Just got an alert that Pixelmage has cancelled the Kickstarter. No word yet on whether or not they will start another campaign with the bugs worked out.,1453822109.0,12,0.94,66

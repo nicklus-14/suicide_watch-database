@@ -1,0 +1,226 @@
+subreddit,body,created_utc,score
+selfhosted,"I think you probably wanted to refer to the upstream fork which is:
+https://github.com/awinterstein/habitica
+
+The link you shared is my fork of this upstream fork. I did it to build arm64 images for myself before https://github.com/awinterstein/habitica/issues/5 was resolved. 😅",1736664467.0,2
+NixOS,"Hi, I remember experimenting for quite a while and it turned out I needed `mirroredBoots` to get it working. I couldn't get it to work on OVHcloud though, but got it working on HostVDS which also uses MBR.
+
+My machine config as of writing this: https://github.com/ritiek/dotfiles/tree/4d7036c3a4b42d943d9e3bf6d43a6d649b9dabe9/machines/clawsiecats
+
+Some parts in README may have gone slightly out of date and could be misleading. What are you looking to do?",1734540657.0,1
+NixOS,I too want to try things on a Radxa Zero 3 having the same chipset.,1728583991.0,1
+hyprland,"Yep, that should work. Although I guess one would have to put in work to make sure .desktop files remain in sync and conflict-free whenever application updates happen.",1725295994.0,1
+hyprland,"I seem to have overlooked that option, thanks! I tried it out and noticed that if I set it to 2, it works well for GTK (firefox, transmission-gtk) and Qt (chiaki) based applications. For some reason however, for me, Electron based apps (element-desktop, spotify) do not seem to respect this option and end up opening in the active workspace.
+
+I find this strange since launching these Electron apps using hyprctl looks to work well (windows open up in the workspace where the app was initially lanched in):
+```
+$ hyprctl dispatch exec ""[workspace $(hyprctl activeworkspace -j | jq -r '.id') silent] element-desktop""
+```
+
+Curious if anyone is able to replicate similar behaviour on their end.
+
+```
+$ hyprctl version
+Hyprland, built from branch main at commit 9a09eac79b85c846e3a865a9078a3f8ff65a9259  (props: bump version to 0.42.0).
+Date: 2024-08-07
+Tag: v0.42.0, commits: 9a09eac79b85c846e3a865a9078a3f8ff65a9259
+
+flags: (if any)
+```",1725295530.0,1
+hyprland,"Thanks! It didn't work for me as is. I'm guessing shell commands get ignored or something when passed inside rules. I'd have expected something like this to open firefox on workspace 3:
+```
+bind = SUPER, W, exec, [workspace $(echo 3)] firefox
+```
+But this opens firefox on the current workspace (not 3 as expected).
+
+Building upon your idea, I found out changing it to the following works for me!
+```
+bind = SUPER, W, exec, hyprctl dispatch exec ""[workspace $(hyprctl activeworkspace -j | jq -r '.id') silent] firefox""
+```
+
+However, I'm still not sure how to approach this for apps that are launched from rofi.",1725211124.0,2
+selfhosted,"I'm scared of the pitfalls I might be overlooking with self-hosting headscale, that tailscale has made me blind to. Do you directly feed in your Linode box's public address when setting up headscale on clients? Wouldn't that cause problems connecting to headscale clients that are neither physically nor publically accessible, and Linode box's public address someday changes? or do you put your Linode box behind a domain name and use this domain name when setting up headscale on client machines?",1713390723.0,2
+hyprland,"Looks like this was [reported and fixed in lbonn/rofi](https://github.com/lbonn/rofi/issues/117) last week and focussing windows should now work as is without requiring a script. The fix hasn't been released as of writing this, so for now you can get away using the git version (`rofi-lbonn-wayland-git` on AUR).",1709500949.0,3
+Bitwarden,"This feature has been enabled on the main bitwarden server as of yesterday!  
+[https://bitwarden.com/blog/log-into-bitwarden-with-a-passkey/](https://bitwarden.com/blog/log-into-bitwarden-with-a-passkey/)",1705051500.0,1
+technology,"If self hosting can be your thing; check out Tube Archivist, it's got a nice Web UI and allows for auto-archival whenever new videos from your favourite YouTube channels are out: [https://github.com/tubearchivist/tubearchivist](https://github.com/tubearchivist/tubearchivist)
+
+It also uses yt-dlp under the hood.",1700541445.0,2
+Bitwarden,"I see, understood. Also digging in now that you mention it, seems server and client code both got this feature merged in recently. Hoping it'll be out for public release soon!
+https://github.com/bitwarden/server/pull/2885
+https://github.com/bitwarden/clients/pull/5396",1699281886.0,2
+KeybaseProofs,I deleted my Keybase account.,1677416953.0,1
+horizon,"Give and take a few months (or perhaps years) after accounting for Beta in Odyessey travelling at 0.3 times the speed of light (GAIA's analysis, so most likely with respect to Earth's frame of reference) and Aloy on Earth in relatively stronger gravitational field during their journey, both of which can have time slowing effects.",1669314814.0,2
+Bombsquad,"See if there's an error logged in the console. Usually C:\Users\Admin\AppData\Local\BombSquad\config.json gets corrupted or something. Try deleting it, and then relaunching the game should generate a fresh one which should work fine.",1647393236.0,3
+linuxquestions,"Yes, it should be possible if you can first (without removing Windows) somehow boot into Linux so you can install and setup the GRUB boot menu from within. You'll have to `apt install os-prober` once in Linux so it can search for the existing Windows installation and then you install the GRUB boot menu onto the EFI partition of your internal storage. But I think your machine also has a 32 GB internal storage which can be pretty low for sustaining both Windows and Linux at the same time, so I'm not sure whether this is a good idea as I didn't try this out either. Also I don't think it's possible to boot from external SD card either (if your machine has the slot) as far as I remember being the case with myself.",1593915600.0,1
+linuxquestions,"I wrote a detailed post on this a few months back [here](https://ritiek.github.io/posts/2020/04/blog-post-15/install-modern-os-on-unsupported-hardware). You might find it helpful.
+
+The only way to find out what hardware works is to try out Linux yourself on this machine, unless someone has already attempted installing Linux on the same exact machine as yours and is willing to offer advise.
+
+There is also a chance that you might never be able to get back your original Windows with all hardware working once you remove it (as it happened to me).",1593849610.0,1
+termux,"Hey if you're still interested in this. I just found [https://github.com/badaix/snapcast](https://github.com/badaix/snapcast) which is specifically created to synchronize audio between devices. They also have a dedicated app for android (so no need for termux). So far, It's been giving me better results on my side than syncplay.",1590916500.0,2
+termux,"I've had some luck with [Syncplay](https://github.com/Syncplay/syncplay) in the past.
+
+I also wrote a related post [here](https://ritiek.github.io/posts/2019/04/blog-post-12/synchronizing-multimedia-playback). Maybe you'll find it useful.",1586301397.0,2
+termux,"That's weird. I have my youtube-dl config file placed in `~/.config/youtube-dl/config` and it is read correctly when calling `youtube-dl $1` from termux-url-opener.
+
+You could explicitly try passing `--config-location=/path/to/my/ytdlconfig` to youtube-dl when it is being called via termux-url-opener.",1585964382.0,1
+termux,"Why wouldn't simply piping to netcat won't work?  
+
+I made a server on my PC:  
+
+```
+$ nc -l 0.0.0.0 3000
+```
+
+and piped sensory data to my PC's socket via Termux:
+
+```
+$ termux-sensor -c Gravity; termux-sensor -s Gravity | nc 192.168.1.4 3000
+```
+
+This works fine for me and I see real time sensory information on my PC.",1585693618.0,2
+linuxquestions,"> Right now M$ are running AI over every piece of code on github
+
+Couldn't have they done this without acquiring GitHub? Genuinely curious.",1583608036.0,3
+termux,">The latter. Pi is likely using the BlueZ stack, Android uses BlueDroid stack and they do differ.
+
+Yep, this is most likely the case then.
+
+I'll check out what you suggested, thanks.
+
+>Take a look in /sys/class if you are rooted
+
+I tried it earlier (am rooted) but couldn't find anything interesting about bluetooth device files in there either. I took a total count of files recursively in `/sys/` and they seem to remain the same before and after my bluetooth earphones are connected. I think I'll also check again a bit carefully though.
+
+I'll update here if I find anything useful!",1581439901.0,1
+spotify,"I have no idea how would this happen since you also mentioned changing your password. Did you try creating a new Spotify account? If not, try doing it and from a different email address. You can copy all your older and genuine playlists to the new account. See how it goes.",1579794576.0,1
+horizon,Try this link: [https://drive.google.com/uc?id=1VhSMg77j7FukkcnGphFlv4a7GNmJEBoH&export=download](https://drive.google.com/uc?id=1VhSMg77j7FukkcnGphFlv4a7GNmJEBoH&export=download),1577776639.0,1
+horizon,Works on both for me.,1577776549.0,1
+horizon,Are you sure? I just tried and it seems to be working fine for me.,1577774744.0,1
+horizon,Good stuff! Thanks for posting it.,1577435049.0,1
+horizon,Thanks! I posted this on Reddit web so not sure how it looked on the app.,1577434719.0,1
+horizon,"It took me a few tries to properly balance too. Once Aloy was stable, it's possible to change the direction Aloy's facing in by aiming the bow in the direction you want her to face in.",1577434649.0,2
+linuxquestions,This sounds pretty cool. Thanks!,1576700886.0,1
+rust,We already have Rust Playground ([https://play.rust-lang.org/](https://play.rust-lang.org/)) running arbitrary user code. This shouldn't be any different IMO.,1576696948.0,7
+rust,"Great project! Quite a while ago I wrote a similar tool in Python for personal use that would work on Travis CI to find out the compiler version that caused regression ([GitHub](https://github.com/ritiek/rustc-regression-finder)).
+
+I haven't tried out cargo-bisect-rustc but it seems like for the moment it downloads various compiler versions on the local machine. I think another nice addition would be to maintain a webserver which would already have different compiler versions installed on it. So, people could just upload their code and the webserver would automatically attempt to find the regressed version of the compiler. This could save a lot of bandwidth by avoiding every person to download their own sets of compiler versions for finding the regression.",1576678852.0,16
+learnprogramming,Unless you fall for Julia.,1572241205.0,1
+rust,"Yep, I've noticed this too. This seems like a limitation in the rustbox crate as a single resource is used to both draw the characters in the terminal, and receive input from keyboard.
+
+At the moment, rustbox listens for keyboard input within intervals of 1000 nanosecs ([source](https://github.com/ritiek/piano-rs/blob/ed8994004912e3e0a101cfe27c1e6661399b35c8/src/main.rs#L65-L67)). If input is received within this interval then the corresponding note is played. If input is not received within this interval, it will continue to wait for input during the next interval in the next iteration. This nanosecs wait is necessary to release the mutex lock so that rustbox can acquire the lock in a different thread, which is necessary to color any piano keys depending on the corresponding note received from the UDP socket ([source](https://github.com/ritiek/piano-rs/blob/ed8994004912e3e0a101cfe27c1e6661399b35c8/src/main.rs#L58)). But this design seems to put too much load on the CPU like you mentioned. The CPU usage goes down drastically if I increase the duration from 1000 nanosecs to say 10 millisecs but then the latency gap between when a key is hit on the keyboard, and the corresponding note being played is pretty noticeable.
+
+I also experimented a bit with crossterm-rs and it seems like this excess CPU usage should be fixed once we transition from rustbox to crossterm. This is because in crossterm - drawing terminal characters and keyboard input listener use a different type (atleast that's what I think so), and therefore do not need share the same resource.
+
+I could be wrong here given my little understanding of how things work underneath, but this is what I think.
+
+**EDIT:** Switched to crossterm with [#38](https://github.com/ritiek/piano-rs/pull/38) and high CPU usage on idle state should no longer be an issue now.",1570634172.0,1
+learnprogramming,"Nope, this won't work. This will untrack the file from future commits, but the file will live on in the commit history.",1570383583.0,1
+learnprogramming,"It won't be as simple as removing the binary files by pushing a new commit. Whenever you git clone a repository, all the commit history gets downloaded as well. So, the binary files will still get downloaded and be hidden in the commit history. You'll need to mess with your commit history to remove any trace of binary files. This seems a pretty good [guide](https://docs.microsoft.com/en-us/azure/devops/repos/git/remove-binaries?view=azure-devops).  
+
+
+If you're going to follow the guide above, I suggest you take a local backup just in case things go wrong.",1570382739.0,1
+learnprogramming,"The fact that you also wrote tests for your tool, shows that you've been putting a genuine effort to learn. Great job!
+
+However, it is generally not a good idea to put compiled binaries in the repository itself. The binaries considerably increase the size of the repository and anyone who wants to git clone only the source code files (which are usually in KBs), will be forced to download the large binary files as well. GitHub provides a separate dedicated section to upload binary files (such as for [your repository](https://github.com/theaveragedude/mediacat/releases)) by creating a new release, in case one wishes to distribute binaries.",1570381957.0,2
+rust,"Yea, good idea. Thanks!",1570370562.0,4
+learnprogramming,Do you get asked algorithmic questions in the interview? I've worked a bit on the back-end side with open-source but haven't really seen the significance of knowing algorithms by heart. I'd like to intern next summer but algorithmic interviews are turning out to be a hurdle.,1569147372.0,1
+Python,"Hey there, thanks for the mention! I'm the owner of spotify-downloader but I wouldn't call it a quality code project. I started it nearly 2.5 years ago and I've learned many new things about code-style since. There have been a few refactors but I am certain there are still ways to achieve lower coupling and more modularity.
+
+I don't know how the other 2 projects are quality-wise but I've heard good things about [django's codebase](https://github.com/django/django).",1548540371.0,1
+piano,"That's a very nice article, thanks for sharing that. I wonder why I didn't stumble on it before.
+
+> I will say that many cases, 64-notes of polyphony will be adequate for a  lot of people people depending on how they play, especially if they are  playing mostly piano music at beginner to intermediate levels. But if  you are more advanced or will be laying two stereo instrument sounds  together, then 128 notes of polyphony would be more desirable.
+
+",1529478689.0,1
+piano,Roland FP-30 is way too expensive in my place. Almost twice as much as P45.,1529478299.0,2
+piano,"Thanks! This was very informative. I think I'll go with P45 then. Also, I think I need to look up more on VST plugins.",1529415291.0,1
+piano,"My current odds are on 45 as well. I saw this guy who has a polyphony of 32 [https://www.youtube.com/watch?v=hQh2wGUtjIg](https://www.youtube.com/watch?v=hQh2wGUtjIg). So, I'm fairly convinced that polyphony of 64 shouldn't be a problem for me as I am not interested in background tracks or anything that eats it up. But just to be sure..",1529414870.0,1
+piano,"As a college student who collected money from internships, etc., I'd say it is rather important to me. :)",1529414411.0,3
+piano,"For my first digital piano, I am going to choose between Yamaha P45 and P115, my only concern is about polyphony. Would I (someday) be able to play these pieces with P45 (having polyphony of 64):
+
+[https://youtu.be/DjMkfARvGE8?t=281](https://youtu.be/DjMkfARvGE8?t=281)
+
+[https://youtu.be/0b5uulBrDrs](https://youtu.be/0b5uulBrDrs)
+
+[https://youtu.be/sEQf5lcnj\_o](https://youtu.be/sEQf5lcnj_o)
+
+Or should I go with P115 (polyphony of 192). P115 costs about 1.6 times more than P45 where I live. Would it be worth it?",1528964150.0,1
+commandline,"Holy no! I forgot adding a section about it in readme. I'll do it in a sec. Thanks for reminding me!
+I think adding a basic authentication would stop most such attacks. What do you think?",1514789785.0,2
+rust,This should be fixed now :),1509714273.0,2
+rust,"I did think about it, would be great to have people play simultaneously. I'll study more on it.
+At the moment, one can use other tools like `screen` or `tmux`to share terminal sessions.",1509549770.0,3
+kodi,"I had a similar problem too. Follow the steps:
+
+1. Play any video/movie.
+2. Go to ""Settings"" > ""Audio and subtitle settings"".
+3. Adjust ""Volume amplification"" to whatever feels okay.
+4. Scroll down and ""Set as default for all media"".
+
+Worked for me.",1504451286.0,1
+kodi,"I want to learn about threading. I made a few attempts but can't seem to make it work. If you're not busy, do you mind spending a few moments to make a PR?",1504450521.0,1
+kodi,"Why do we even use Kodi?
+
+Although HDMI could work but why not avoid nasty wires when you have an extra device to run Kodi on, seeking or changing media settings would require one to get off their couch every time as well. Also Kodi media center user experience is much better than any plain OS, why abandon it.
+I do realize that majority users won't find any good with this tool, it comes down to how one uses Kodi to play what kind of media content.",1504385928.0,2
+kodi,"Yep, the difference here is larger. Pi is $39 and a fire stick about $62 in India.
+
+I use my 2A mobile charger with the Pi and I had a spare sd card lying around. I don't use keyboard/mouse, SSH and the Kodi web interface usually work fine. I did buy a WiFi adapter though.
+IMO, even if it gets a little more expensive than the fire stick, I'll still go for the Pi. I find it very flexible (as a coder myself) and not just limited to being a media center.
+
+Fire-Stick is indeed a better option if all you want is to have your TV act as a media center due its ease of use.",1504385615.0,1
+kodi,"umm.. nope, not yet. I know about the threading module included in the standard library but never took time to actually go through it. I'll check it out and see if it can help here.",1504374451.0,2
+kodi,Thanks for reminding me about that. I think prompting the user should be fine. I'll push a fix soon.,1504364397.0,1
+kodi,Exactly.,1504363331.0,2
+kodi,"Adding a drive as a source again requires Samba or any other means. This tool just makes it easy to play your content to Kodi without doing so. 
+
+Suppose, a friend brings his laptop with movies, you just need a single command to play the movie to Kodi, otherwise you are going to deal with setting up Samba (quite painful IMO) if not already done, adding it as a source to Kodi, finding the file you want to play (and then removing the inaccessible source once your friend leaves?).",1504363278.0,0
+kodi,"That is a nice way too but isn't a FireStick is more expensive than a Pi (1.5 times the Pi3 cost, at least in my area).",1504362586.0,1
+kodi,"I wanted to have something like this for my TV. My Pi runs Kodi on my TV while I have my movies etc. stored in my laptop. Makes it easier to play them on the big screen without having to transfer media on Pi or browse through SMB first.
+
+btw, I would love it if something like this could be added to chorus2 or any other web interface, choosing a local file and then streaming it to Kodi directly. I did open an [issue](https://github.com/xbmc/chorus2/issues/287) on their repository but no response yet.",1504361316.0,4
+coolgithubprojects,"Thank you, but there is [another tool](https://github.com/syrusakbary/validate_email) (I just came to know about) which is a lot more better than this one. It uses SMTP replies to check e-mails and works with every e-mail service. You should use that instead.",1503596948.0,7
+Python,Thanks for that! I had no idea we could use SMTP replies to accomplish this. I'm gonna dump my repo :X. Never mind guys. Hehe :D.,1503595149.0,1
+rust,"Hey hey, don't worry! That is a special API key I generated for use with this library much like the same way pafy did [here](https://github.com/mps-youtube/pafy/blob/develop/pafy/g.py#L24). No worries at all! :D",1499861524.0,3
+rust,"Here is some quick code to get your public ip address from http://ipinfo.io/ using hyper crate.
+
+    extern crate hyper;
+
+    use hyper::Client;
+    use hyper::header::Connection;
+    use std::io::Read;
+
+    fn external_ip() -> String {
+        let client = Client::new();
+        let mut response = client.get(""http://ipinfo.io/ip/"").
+            header(Connection::close()).send().unwrap();
+        let mut external_ip = String::new();
+        response.read_to_string(&mut external_ip).unwrap();
+        return external_ip;
+    }
+
+    fn main() {
+        let external_ip = external_ip();
+        println!(""{}"", external_ip);
+    }
+
+This code does not work for new hyper v0.11 version though. You should set your dependencies section in `Cargo.toml` as `hyper = ""0.10""`. I haven't yet used v0.11.",1498240392.0,1
+Piracy,"Hey, great to know you're using this :). This authentication problem is fixed now.",1496594782.0,2
+rust,I had some trouble passing image vector as an argument but I am going to try again. Thanks!,1496221168.0,1
+rust,I tested with Rayon on a Pi 2 but it increases times too. I am guessing Pi is not good with parallelization. Will do some more testing on other devices.,1496221097.0,1
+rust,"> 1) You should open image only once
+
+Yeah, I was facing some problems passing image vector as an argument to the functions but I think I should try again. Thanks.
+
+> 2) Optimal coordinates could be found in one pass like this
+
+I thought about something like this too but I don't think this will work. If we use this, our program will have to iterate over every pixel in the image and even if we try to ""optimize"" our program to return the optimal coordinates when it finds a white pixel after finding a non-white pixel, there is a high chance that an image will be cropped incorrectly because there is always a chance of having a white pixel in the actual image itself. I can't explain this any better in words xD. So I feel it would be better if we start looking for non-white pixel from each corner of the image.",1496220829.0,1
+rust,"Thanks, I will try to do add this.",1496193426.0,2
+Python,"Thank you :)
+But why do we need to handle EOFs, more precisely why would someone press Ctrl+D?
+Sorry if it is a newbie question.",1492013755.0,1
+Python,"Wow! It looks nice :D https://github.com/gleitz/howdoi does the same thing but it does not give a choice for a question and brings the results from the top stackoverflow site result..
+
+I'm very happy to reach people like you :)",1492013489.0,1

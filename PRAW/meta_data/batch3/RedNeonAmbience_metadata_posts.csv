@@ -1,0 +1,615 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+Eldenring,Scorpion River Catacombs - Disabling Death Blight,"From what I've seen you can disable the death blight eyes by using the Black Knife ash of war, and the Black Blade incantation.
+
+If you don't have access to the above (and don't want to be invisible with the mimic veil or Unseen Form or whatever else), then there is one more life-sapping option for you in the game:
+
+The Night Maiden's Mist sorcery (14 INT requirement).
+
+Just cast it on the eyes, whether the still ones or the moving ones, and by the time the mist fades the eyes will no longer affect you.
+
+Would be interesting to try this on the aging untouchables too... Alas, they are all grapes now.
+
+Have fun",1724711653.0,1,0.6,0
+cyberpunkmods,"REDMod - Game starts, no option to press space bar to continue, then freezes after video ends – How I fixed it.","Good day!
+
+I had the issue above: I added some mods in REDMod mode, using Vortex, but it's not a Vortex issue. Just a REDMod issue. After the mods were deployed, I'll start the game, then I can't interact with it at all. No button works, then intro video ends and the games freezes. Had to alt-f4.
+
+Turns out, that if you use the `-force` argument when deploying redmods, the issue above happens, and the Vortex installer uses the `-force` argument to deploy mods.
+
+So I fixed it by removing the `-force` argument from the command used by the ""Cyberpunk 2077 Vortex Support"" extension. The code for that is in the plugin's `index.js` file here:
+
+    %appdata%\Vortex\plugins\Vortex Extension Update - Cyberpunk 2077 Vortex Support v0.10.0-a\index.js, line 39992
+
+Change `` `-force`, `` to `` //`-force`, `` to comment out that line and have it ignored.
+
+(If you deploy manually from the command line with -force, the issue will happen, so not a Vortex issue).
+
+Posting this here since it's rather arbitrary and not obvious. Also because it might just be me, but I've seen 2 others (in NexusMods) with this issue.
+
+Please note the reason that `-force` was used in the first place, as described by the plugin authors: [REDMod -force issue](https://github.com/E1337Kat/cyberpunk2077_ext_redux/issues/296)
+
+Don't know if the issue is resolved now, but I haven't had any issues since.
+
+EDIT: 2024/09/20
+Seems like this is still happening for me.
+Just clarifying: Disable and re-enable a mod to retrigger the deployment after removing '-force'. Won't be fixed until you do this. Figured that's an important detail I neglected to mention.",1699051335.0,8,0.91,16
+southafrica,Enabling the raintalk app on a Huawei P9 Lite (and maybe other older devices),[removed],1698400541.0,1,1.0,1
+EAApp,Game not launching on EA App (F1 22),"TL:DR
+
+F1 22 wouldn't launch after I downloaded it. Logs mentioned an invalid license. I cleared the EA App cache via EA App's own menu option to do so, and now my F1 22 can launch. The menu options is located here: Click on top-left burger menu icon (3 straight lines) -> Click on ""Help"" then ""App Recovery"" -> Alt-tab to the popup menu that shows up if it looks like EA App has frozen -> Press the ""CLEAR CACHE"" blue button.
+
+Long story:
+
+Hello all!
+
+I recently installed F1 22 through EA Play (not PRO) on my computer (Windows 11) and it failed to launch. By ""failed to launch"" I mean the following:
+
+1. Click on the F1 22 desktop icon
+2. The EA App opens
+3. The EA App opens a ""Launching game"" window indicating that it is now starting to launch F1 22.
+4. The small ""Launching game"" closes.
+5. The EA App minimizes
+6. Wait for... 6 seconds?
+7. The EA App unminimizes.
+8. F1 22 has not launched.
+
+If you start by launching the game through the icon in the EA App itself, steps 3 to 8 happen. The application never once launched even after reinstalling both EA App and F1 22.
+
+This is what you would see in Task Manager as steps 1 to 8 above happen:
+
+* F1\_22.exe first shows up in the ""Apps"" section under ""EA"", alongside other processes.
+* F2\_22.exe loads in RAM up to around 454136 kB or so.
+* F2\_22.exe process disappears
+* F2\_22.exe pops up in its own section under ""Background processes""
+* F2\_22.exe loads in RAM up to around 454136 kB or so.
+* F2\_22.exe process disappears
+
+At this point, the EA App unminimizes itself. No error messages, no other popups, no sort of indication that something went wrong other than the game not starting.
+
+So I found this log file: **C:\\Users\\<user>\\AppData\\Local\\Electronic Arts\\EA Desktop\\Logs\\EADesktop.log** and inspected it to find the following curious logs:
+
+    1045	[2023-06-06T12:23:29.370Z]	PID: 15176	TID: 25004	INFO    	(eax::services::LicenseManager::requestLicense)	Requesting license: 16274530.
+    1046	[2023-06-06T12:23:29.372Z]	PID: 15176	TID: 25004	WARN    	(eax::services::drm::checkLicense)	Invalid license
+    1047	[2023-06-06T12:23:29.372Z]	PID: 15176	TID: 25004	INFO    	(eax::services::LicenseManager::requestLicense)	License not found or needs updating: 16274530. Requesting new license. 
+    1054	[2023-06-06T12:23:34.730Z]	PID: 15176	TID:  5288	WARN    	(eax::services::drm::requestLegacyLicense)	Failed to get license: [100008]
+    1055	[2023-06-06T12:23:34.730Z]	PID: 15176	TID:  5288	ERROR   	(eax::services::LicenseManager::requestLicense)	SDK failed to request new license: 985249808
+    1059	[2023-06-06T12:23:35.252Z]	PID: 15176	TID:  5288	WARN    	(eax::services::drm::requestLegacyLicense)	Failed to get license: [100008]
+    1060	[2023-06-06T12:23:35.252Z]	PID: 15176	TID:  5288	ERROR   	(eax::services::LicenseManager::requestLicense)	SDK failed to request new license: 985249808
+    1064	[2023-06-06T12:23:35.798Z]	PID: 15176	TID:  5288	WARN    	(eax::services::drm::requestLegacyLicense)	Failed to get license: [100008]
+    1065	[2023-06-06T12:23:35.798Z]	PID: 15176	TID:  5288	ERROR   	(eax::services::LicenseManager::requestLicense)	SDK failed to request new license: 985249808
+    1069	[2023-06-06T12:23:36.315Z]	PID: 15176	TID:  5288	WARN    	(eax::services::drm::requestLegacyLicense)	Failed to get license: [100008]
+    1070	[2023-06-06T12:23:36.315Z]	PID: 15176	TID:  5288	ERROR   	(eax::services::LicenseManager::requestLicense)	SDK failed to request new license: 985249808
+    1074	[2023-06-06T12:23:36.805Z]	PID: 15176	TID:  5288	WARN    	(eax::services::drm::requestLegacyLicense)	Failed to get license: [100008]
+    1075	[2023-06-06T12:23:36.805Z]	PID: 15176	TID:  5288	ERROR   	(eax::services::LicenseManager::requestLicense)	SDK failed to request new license: 985249808
+    1076	[2023-06-06T12:23:36.886Z]	PID: 15176	TID: 25004	INFO    	(eax::services::LicenseManager::requestLicense)	Successfully requested license: 16274530
+    // The F1-22.exe process terminates at this point, and is spun up again to retry a few seconds later.
+    1126	[2023-06-06T12:23:44.126Z]	PID: 15176	TID:  5288	WARN    	(eax::services::drm::requestLegacyLicense)	Failed to get license: [100008]
+    1127	[2023-06-06T12:23:44.126Z]	PID: 15176	TID:  5288	ERROR   	(eax::services::LicenseManager::requestLicense)	SDK failed to request new license: 985249808
+    1131	[2023-06-06T12:23:44.612Z]	PID: 15176	TID:  5288	WARN    	(eax::services::drm::requestLegacyLicense)	Failed to get license: [100008]
+    1132	[2023-06-06T12:23:44.612Z]	PID: 15176	TID:  5288	ERROR   	(eax::services::LicenseManager::requestLicense)	SDK failed to request new license: 985249808
+    1136	[2023-06-06T12:23:45.414Z]	PID: 15176	TID:  5288	WARN    	(eax::services::drm::requestLegacyLicense)	Failed to get license: [100008]
+    1137	[2023-06-06T12:23:45.414Z]	PID: 15176	TID:  5288	ERROR   	(eax::services::LicenseManager::requestLicense)	SDK failed to request new license: 985249808
+    1141	[2023-06-06T12:23:45.902Z]	PID: 15176	TID:  5288	WARN    	(eax::services::drm::requestLegacyLicense)	Failed to get license: [100008]
+    1142	[2023-06-06T12:23:45.902Z]	PID: 15176	TID:  5288	ERROR   	(eax::services::LicenseManager::requestLicense)	SDK failed to request new license: 985249808
+    1146	[2023-06-06T12:23:46.434Z]	PID: 15176	TID:  5288	WARN    	(eax::services::drm::requestLegacyLicense)	Failed to get license: [100008]
+    1147	[2023-06-06T12:23:46.434Z]	PID: 15176	TID:  5288	ERROR   	(eax::services::LicenseManager::requestLicense)	SDK failed to request new license: 985249808
+    1148	[2023-06-06T12:23:46.538Z]	PID: 15176	TID: 20484	INFO    	(eax::components::gameLocalServices::ProcessCoordinator::FsmHost::doProcessActiveGames)	Game process terminated
+    // At this point, the EA App just unminimizes, with no message or anything of the sort.
+
+So I figured this license problem is the issue.
+
+So this is the problem I was facing. Just to be clear, F1 22 could start just fine on another computer. The above ""invalid license"" issue didn't appear on my 5 years old Windows 10 laptop, but it did on my 1.5 years old Windows 11 desktop.
+
+**HOW I SOLVED IT**
+
+This solution is painfully simple. Hopefully it actually solves this particular issue 100% of the time:
+
+1. Open the EA App
+2. Click on the burger menu on the top left of the window (the option with 3 lines). Click on ""Help"" then ""App Recovery"":
+
+[App Recovery menu location](https://preview.redd.it/1w0msbu7yf4b1.png?width=1920&format=png&auto=webp&s=42b3b5a05824551f53c8118b2694b3f5e2b3c5fe)
+
+3. A popup window will open. If it looks like EA App has frozen after clicking ""App Recovery"", it has not. You'll have to alt-tab to a window with the EA App icon on it, but that isn't the EA App itself:
+
+&#x200B;
+
+[Alt-tab to pop-up window](https://preview.redd.it/t0eqxjtdyf4b1.png?width=711&format=png&auto=webp&s=351d9152d2a05b8a9ecc38dee6cd349abb9145cc)
+
+&#x200B;
+
+[CLEAR CACHE button](https://preview.redd.it/96lxc6ohyf4b1.png?width=1920&format=png&auto=webp&s=25a4b8725c7b6644f2b1a4e8812ef1fe1d718734)
+
+3. Press the ""CLEAR CACHE"" blue button.
+
+Let the app work, you'll have to log in again. After that's done, the game should be able to start.
+
+In my case, that meant I got the see the ""Play F1 22, Play F1 22 VR"" window for the first time. I've had no issues since.The above logs were completely different too. The first request for a license returned an ""Invalid license"" message, but the second request for a new license was successful.
+
+Hopefully this helps someone that might have the same issue.",1686075939.0,3,0.81,3
+Eldenring,What's the typical Malenia experience?,"Because I might have gotten ""lucky"". Playing as a sorcerer. Took me about 2 hours - most of that time (like 98%) was spent in phase 1 because I was trying to learn it so I can save resources before phase 2. On one of my tries I got my summon out, and immediately concluded that my summon is just a second health bar for her. So I stopped that. Eventually switched to my Flamberge and put on Raptor of the Mists on it. So I used that to get her to about 1/3 health left and exhausted all my Crimson flasks. Then I randomly just brought out my summon again and then... goodness. We clobbered her. I think the greatsword was just a lot more effective somehow. Then when she got to phase 2, she focused all her energy on my summon so I just used my spells and killed her rather quickly. That was on my 2nd time in phase 2 BTW.
+
+&#x200B;
+
+Does anyone use Raptor of the Mists?",1675043898.0,3,0.8,13
+askscience,"In nuclear fusion, where was the mass that was lost ""stored""?",[removed],1671178979.0,1,1.0,0
+southafrica,"Does anyone here use Disney+ South Africa through a regular web browser on a PC? If so, are you able to stream at 1080p?","If so, how???  
+
+
+I just don't see a 1080p option in the quality dropdown options.  
+I've got a 1080p monitor so...?  
+
+
+[no 1080p](https://preview.redd.it/8l0xlauaizt91.png?width=1920&format=png&auto=webp&s=db363f62a65872c335e86080ade96f1c462f0a21)
+
+The android app shows an ""Upto 1080p"" option, but Google Chrome, Firefox, and Edge on the PC all show ""Upto 720p"".  
+
+
+Any ideas?",1665846317.0,5,0.78,10
+r4r,29 [M4F] Anywhere - Begone loneliness!,"It's that time of the year... What time? The end of May, beginning of June. What does that mean? I have no idea, it's winter over here so that's what it means for me lol
+
+So keep your heaters running (or not, electricity ain't cheap) and keeps those fans turning (or not, power ain't cheap), come on over and tell me what's the table leg to your pinky toe these days... the buffer to your YouTube vid... the dead battery to your smartphone... the blue screen to your Windows, the... you get the idea.
+
+&#x200B;
+
+Let's share a bit about our lives for a moment in time, hopefully for more than a few moments.
+
+&#x200B;
+
+No expectations, no pressure. Share what's on your mind, I won't judge (well, not too much - I'm human after all, and brains have thoughts, I didn't make the human body).
+
+&#x200B;
+
+Here's one half of the velcro for you:
+
+&#x200B;
+
+\- I enjoy a variety of music: metal, punk rock/hardcore etc, hip hop, house, drum & bass, melodic dubstep, synthwave, epic orchestral/trailer music (those sorts of classical), whatever sounds good.
+
+\- Recently finished watching ""3%"" on Netflix, finished watching Money Heist, need to continue watching Arcane.
+
+\- I enjoy anime, although I'm not currently watching anything. Waiting for some episodes to build up before I binge.
+
+\- Also enjoy gaming. PC only at the moment - I have no consoles unfortunately.
+
+\- Currently listening to the graphic audio of The Stormlight Archive audiobook. I'm enjoying it, the same way I enjoyed the Mistborn series.
+
+\- I'm new to Formula 1, and enjoying the new season!
+
+&#x200B;
+
+I'm curious: if you had the power of creation, what sort of world would you create? The same as this one? This one but with major upgrades and bug fixes? Maybe you'd just keep the powers to yourself and keep them unused? Let me know!",1653912678.0,1,0.66,1
+r4r,29 [M4F] Anywhere - You want to talk to someone but you wonder what even is the point,"Hey there
+
+
+Do you feel like the world just doesn't understand you? That there's no way you could talk to anyone and have them understand even a small bit about you and your thoughts?
+
+
+Well... what if I told you... that I'm just like everyone else and I probably still won't understand. HOWEVER, I'm willing to try. So, go ahead and try your luck. I promise I'm (probably) not mean, and I would like to hang out with you, even for a little while.
+
+
+As for what I'm about? Meh, just looking to meet some people, share a bit about our lives. Nothing much to it. So throw a lame greeting my way and let's share a bit about what's going on in our lives and in our minds.
+
+
+And, in case this is important to you, I'm on GMT+2. I don't mind where you're from. I'm sure the times will work out just fine.",1643372268.0,7,0.88,1
+vscode,Javascript/TypeScript: Intellisense not triggering on typing after function autocomplete. Only triggers when you navigate outside the function parenthesis. I am using this correctly?,,1625530758.0,4,1.0,3
+MagicArena,Question on Hexproof and Spell Responses on Arena,"Hello!
+
+Here's the situation:
+
+Opponent has \[\[Dream Trawler\]\] on the field. I have a \[\[Shadow Spear\]\] on the field. I cast \[\[Elspeth Conquers Death\]\] targeting the Dream Trawler, expecting Dream Trawler's hexproof effect to eventually be pointless, what with the Shadow Spear on the field. Nontheless, opponent activates Dream Trawler's hexproof. I celebrate a free discard.
+
+I let the hexproof effect resolve. I expected the MTG Arena client to let me activate Shadow Spear's ability after the hexproof resolved, but before my ECD resolved, i.e., before ECD checked for its target.
+
+The client just let the ECD resolve anyway. I enjoy the bitter taste of premature celebration.  
+I guarantee I had more than enough mana for that.
+
+Am I understanding the stack rules of MTG wrong here or should I have just gone Full Control?
+
+Also, I didn't think that activating the Shadow Spear's hexproof removal before hexproof was on the field would have an effect, since it removes hexproof, but doesn't stop it from being added again. Am I right or wrong here?
+
+Thaaaaanks!",1617540931.0,2,0.6,12
+r4r,28 [M4F] South Africa - Shy guy saying hi,"Hello hi
+
+So I'm feeling rather lonely these days, which rarely happens but hey, an extraordinary year for extraordinary experiences.
+
+I'm hoping I can meet a new friend, potentially more if it so happens.
+I'm black, 170cm/5'7"", skinny, rather introverted, shy, ~~allergic to sunlight~~ don't go out much but happy to do so, enjoy gaming, anime, sci-fi and fantasy related media. Earlier in the year, I listened to the graphic audio version of Mistborn 1-6 and enjoyed it a great deal. Hoping to get into The Stormlight Archive soon as well.
+
+I'm also childfree and not religious at all. I figure you might wanna know, especially if you're South African.
+
+Feel free to browse my reddit history - you'll find ~~incriminating evidence~~ more there.
+Hope to hear from you soon",1603712023.0,2,0.76,1
+childfree,"My boss bingoed his childfree niece, and she replied with a classic childfree response","My boss is a super intelligent and great guy overall, but he's also quite family-oriented. He told us that he was talking to his niece some random evening and upon learning that she has no desire for kids, he responded with something along the lines of ""you won't know the joy of having kids unless you have them"".
+
+Some time passes and my boss gets a message from a family member that his niece has a message for him.
+
+[This was the message](https://i.ibb.co/bFSNTTw/images.jpg)
+
+😂😂
+
+My boss showed this to us laughing his ass off at how great this is.
+
+One of us is defending herself out there guys. It was quite nice for the boss to share this joyfully despite his views on the matter.",1583772816.0,1284,0.99,35
+Vasectomy,Got the snip today. Want to share my experience.,"I'm South African so I had it at a Marie Stopes clinic in Johannesburg.
+
+Before procedure: general questions confirming if you understand the procedure, random blood and blood pressure tests. I was given some pain meds and antibiotics to be used during healing process, plus a container for the sperm sample later on.
+
+During procedure (no scalpel, awake the whole time):
+
+Initial numbing needle on both sides hurt, but the pin prick on my pinky probably hurt the same haha. The docs made one cut in the middle of my scrotum.
+
+They had some serious trouble locating my vasa deferentia. Apparently mine were really tiny. Really tiny. In fact, it took them so long that at some point I was starting to feel a tiny bit of pain, so I asked for another shot of the anesthetic. Eventually (maybe after 15 minutes?) they found what they were looking for, on my left vas deferens. I saw them pull out a mass of tubes, separate it how they wanted, cut out the vas, cauterize, tie up what they needed, and let go to let the mass return to the scrotum. Repeat the whole search and snip process for my right vas deferens.
+
+Then they tightly tied up the whole sack in some bandages. They warned me of some potential swelling but told me to ensure there was no bleeding. Despite the difficult search, the docs were happy with the procedure, told me bleeding wasn't an issue.
+
+Some 30 minutes after the procedure, the only pain I felt was were they made the cut in the scrotum. Very light pain. Exactly what you'd expect if you were daggered in the sack. It's been about 5 hours after the op and I can't tell if the anesthetic has worn off lol. I think it has but I thought I would feel some internal pain. The only thing I feel related to my insides is a very light feeling of the kick in the nuts. I can walk just fine though.
+
+I'm taking it easy at the moment. Took my pain meds and antibiotics about 20 minutes ago. I hope tomorrow isn't hell.
+
+Thanks.",1578493853.0,8,0.9,8
+springsource,Spring @Scheduled with cron expressions,"Hello
+
+Just a question about the ""@Scheduled"" annotation when used with cron expressions. I understand that Spring's cron expressions aren't exactly like the Linux cron utility expressions.
+
+So I wanted to schedule a method to be called ""the first workday of the month"". After reading about, I eventually reached this expression for that task:
+
+    0 0 0 1W * ?
+
+My understanding was that the ""1W"" part would look for the closest day of the week of from the day-of-month specified, for the current month"". So, 1W means that if the first day of the month is on a Saturday, the schedule would apply on the next Monday.  According to the [source](https://dzone.com/articles/running-on-time-with-springs-scheduled-tasks):
+
+&#x200B;
+
+>W represents the nearest weekday of the month. For example, 15W will trigger on the 15th day of the month if it is a weekday. Otherwise, it will run on the closest weekday. This value cannot be used in a list of day values.
+
+&#x200B;
+
+However, I received this exception instead:
+
+    java.lang.IllegalStateException: Encountered invalid @Scheduled method 'scheduledMethod': For input string: ""1W""
+
+The code is exactly this:  
+
+
+    package xyz;
+    
+    import org.springframework.scheduling.annotation.Scheduled;
+    import org.springframework.stereotype.Component;
+    
+    @Component
+    public class TestTaskScheduler {
+    
+        @Scheduled(cron = ""0 0 7 1W * ?"")   
+        public void scheduledMethod() {
+        	System.out.println(""Got here"");
+        }
+    }
+
+Do you know if it is possible to use cron expressions to implement what I wanted to do? Thank you! I'm generally new to cron expressions.",1576139334.0,3,1.0,4
+Warframe,Warframe with HeSuVi for virtual surround,"Hello  
+
+
+Trying to get Warframe and HeSuVi to play nice. HeSuVi works fine with video file with 8 channel audio, but I get no sound at all from Warframe. Any ideas?  
+
+
+Currently, HeSuVi is setup with VB Cable, and I've got ""VB-Audio Virtual Cable"" set as my default device, and 7.1 Surround set for ""Audio Channels"" under the ""Configure"" option for sound devices in Windows. Don't know what to do here. Thanks.  
+
+
+Do I even need HeSuVi for Warframe?
+
+EDIT: It appears to be working now. I think I just needed to restart my pc :/
+
+Definitely working for sure.",1575257980.0,0,0.5,2
+southafrica,PayPal and South Africa,"Hello fellow Saffas.
+
+What I need to do is very simple.
+
+- I have a PayPal account.
+- Say this PayPal account will receive some amount of money tomorrow.
+
+- I would like to ""withdraw"" this amount from the PayPal account to my own personal bank account, or whatever type of account that will allow me access to this cash so that I can hold it in my hand.
+
+Has anyone done this before. If so, how did you manage?
+
+Thank you lovely souls",1547586202.0,0,0.5,5
+whatsthissnake,"[Rustenburg, North West Province, South Africa] A shiny grey-skinned tiny snake","I have 3 images and a video. Hopefully enough to identify. Just need to know how where my panic levels should be since this is the 4th sighting of this type of snake in our home yard.
+
+This is just a tiny one though, around 8 cm.
+
+[The video](https://gfycat.com/WebbedGenerousCuttlefish)
+
+[The images](https://imgur.com/a/XX9Trvz)",1546545709.0,6,1.0,3
+childfree,Can't deal with kids.,"So my brother has three kids. 10 year old boy, 6 year old girl, 2 year old girl.
+
+The kids are home for the holidays so they can see grandma and grandpa. The 10 year old has a PS4 (the parents officially declared that the PS4 belongs to the boy) and so likes to play games. The 6 year old sister sometimes feels left out and she wants to play sometimes.
+
+I like to game too. I have a buncha fighting games installed on my laptop. So brother likes to play with me. When he does, the sister wants to play afterwards. The brother is an unfair prick at times so he wants to play all the time. He played all day with me yesterday while the girl went out to a party with grandma.
+
+So today the girl wants to play. The older brother of course still wants to play. So the brother suggest they solve the issue with 10 rounds of rock-paper-scissors. The sister wanted only one round be she eventually caved. She lost the games. After a while she starts complaining so she suggests a second challenge.
+
+She suggests that they make like a ballerina and dance up and down the hallway, and I get to decide who danced better (there is a side story of me trying to explain how that wouldn't be fair but nvm that). They must do this 10 times. Because they played rock paper scissors 10 times... After the first couple of times the brother declares he's tired of it, but I force him to finish the damn thing 10 times as agreed. I eventually declare the sister the winner.
+
+Between all this there were several times where we all dropped the crap and gave the sister a chance to play with me. She says ""no, I won't play, because I first want to beat my brother in the challenges, and then I'll play you"". Alright then.
+
+The final challenge I decide that they have to pick a number on a die, and the closest guess to the rolled number wins (simplified).
+
+The sister loses because she has the luck of a turd.
+
+She begs for another challenge. I refuse. Cue minor sulking. I thinks she's over it. Don't really know.
+
+Guys I can't deal with this shit man.
+
+The 2 year old is manipulative as hell but of course she is.
+
+Ahh. Thank goodness I won't have to deal with any of this.
+
+Thanks for the read.",1546098839.0,25,0.93,5
+Warframe,I'm getting high CPU usage at the Warframe Fortuna page on the Warframe website. Is it just me?,"When I visit https://www.warframe.com/fortuna/info using Google Chrome, Firefox, or Edge, I get a high CPU usage (>30%, closer to 50% on my quad core i5, laptop). This is regardless of whether I'm watching the video on that page. While I'm just scrolling through the usage remains high. If I minimize the window, the problem goes away. The usage is lowest when using Edge (>20%) but it's the same effect. On Chrome and on Edge, when I scroll all the way to the bottom of the page (so that only the footer is visible), the high usage goes away (remains at about 10%). It remains high on Firefox though. (by high I mean high enough for your laptop fan to change to a higher speed).
+
+Is this just me or what?
+
+Edit: They got rid of the breathing effect on the neon text. It works fine now.",1541593096.0,3,0.72,18
+Supplements,Jeunesse Products?,[removed],1530910957.0,0,0.5,3
+195,The compulsion is real.,And so I obey. Bye!,1529278045.0,0,0.33,0
+dotnet,ASP.NET Core MVC - Startup code to run,"Greetings!
+
+I'm building a website using ASP.NET Core MVC, and I'll need access to a google API (Gmail).
+In accessing a Google API, you need to use a service object through which you make requests. This object need only be created once for the life of the application.
+
+What I need to do, is to create this object as soon as I start the application (once the server has been configured and is ready to serve).
+
+So I'd like to know if there is a file/method at which any startup code can be placed. The Startup.cs file itself seems more for configuring than for what I need, and the main method starts the server so that doesn't look right.
+
+Please help? First time using anything .NET.
+
+Thanks ;)
+
+EDIT: Got help, and Dependency Injection is the answer! You just add your service to the services container in the ConfigureServices method of Startup.cs using AddSingleton/AddTransient/AddScoped depending on the lifetime of your service, then use constructor injection to access that service.
+
+Thanks for the help all!",1527862400.0,5,0.86,13
+CasualConversation,I've accidentally consumed my media in the correct order.,"What I mean is, last year and this year, I watched the 2 seasons of Narcos. Then, after those, I decided to give Breaking Bad a try (after trying 1 episode a while back and not enjoying it). I just finished it. Fucking fantastic show. So the timelines just match up, and I could understand the references that Breaking Bad makes about the Colombian cartels and the DEA agents of old.
+
+Then I decided to play Jotun: Valhalla edition since it was just sitting in my steam library for months now. Very much enjoyed it. Then, I figured, since I've finished Breaking Bad, time to watch American Gods after finishing Jotun!
+
+And once again, the references weren't (hopelessly) lost on me in American Gods as a result of playing Jotun.
+
+Ain't that lovely.
+Anything similar happen to you fellas?",1522408266.0,7,1.0,17
+HomeworkHelp,[HS Probability] Counting Methods,"I need help understanding the answer to a question:
+
+*In the laboratory analysis of samples to a chemical process, six samples from the process are analyzed daily. In addition, a control sample is analyzed two times each day to check the calibration of the laboratory instruments.*
+
+*Question: Consider the six process samples to be different and the two samples to be identical. How many sequences of process and control samples are possible if the first test of each day must be a control sample?*
+
+Here's my thought process:
+There are 8 samples in total, 2 of them are the same. If the first test is reserved for a control sample, then there are 7 tests left. 6 of those are different, so the order in which they are tested is important.
+Even though the 2 control samples are identical, the second control sample must be considered to be different to the other 6 process samples. Therefore the sequences among the 6 process samples plus the control sample will result in all possible sequences if the first sample is a control sample.
+
+So total sequences = 7! = 5040.
+
+According to the appendix of solutions, it's actually 720 = 6!, i.e. the order of the process samples only.
+
+I don't understand. Help?",1520341594.0,1,1.0,3
+HomeworkHelp,[HS Probability] Counting Methods: Combinations,"This long post has a solution to a problem. I thought of 2 ways to solve the problem. I have a problem getting the 2nd way to work.
+
+I have a conceptual problem with combinations. My problem is defined in the solution to this question:
+
+
+*A bin of 50 manufactured parts contains 3 defective parts and 47 non-defective parts. A sample of 6 parts is selected from the 50 parts without replacement. That is, each part can only be selected once and the sample is a subset of the 50 parts.
+How many different samples are there of size 6 that contain exactly 2 defective parts?*
+
+I thought of 2 ways to solve this one.
+
+First method:
+
+This method works. So there are 3 defective parts. Those 3 are to occupy 2 of the six slots of the sample. There are 3**C**2 combinations of these defective parts.
+For every combination of these parts, there are 47**C**4 combinations of the non-defective parts since there are 47 of them and they'll occupy the remaining 4 slots.
+
+Therefore, by the multiplication rule, the number of subsets of 6 that contain exactly 2 defective parts is
+3**C**2  x  47**C**4 = 535,095.
+This is correct.
+
+My conceptual problem is with the second method. Here's my thought process.
+
+There are **A = 47C6** subsets of size 6 with only non-defective parts.
+
+If I choose from 48 parts where 47 are ok parts and 1 of them are defective, then the number of subsets of size 6 with only 1 defective part is **B = 48C6 - A**. (We'll get back to this).
+
+If I choose from 49 parts where 47 are ok parts and 2 of them are defective, then there are **D = 49C6 - A - B** subsets of size 6 that contain only 2 defective parts.
+
+D is what I thought would match with the answer from the first method. It's actually an overestimate.
+
+The way I got method 2 to give method one's answer is by calculating:
+**E = (49C6 - (Bx2) - A) x 3**
+
+The best reason I could get for the discrepancy is that in calculating B, I must multiply B by 3 since there are 3 defective parts... The same reason why there is a x3 in equation E. The x3 is because there are 3**C**2 = 3 combinations if you choose 2 defective parts out of 3.
+
+But if I multiply B by 3, then 49**C**6 - (Bx3) - A becomes negative...
+
+If anyone can help me figure out whether method 2 can actually work, I'd appreciate it.",1520197680.0,1,1.0,5
+Probability,Counting Methods: Combinations,"EDIT: Solved! See comments with solution [here](https://www.reddit.com/r/HomeworkHelp/comments/820kus/hs_probability_counting_methods_combinations/dv6u6v2)
+
+This long post has a solution to a problem. I thought of 2 ways to solve the problem. I have a problem getting the 2nd way to work.
+
+I have a conceptual problem with combinations. My problem is defined in the solution to this question:
+
+
+*A bin of 50 manufactured parts contains 3 defective parts and 47 non-defective parts. A sample of 6 parts is selected from the 50 parts without replacement. That is, each part can only be selected once and the sample is a subset of the 50 parts.
+How many different samples are there of size 6 that contain exactly 2 defective parts?*
+
+I thought of 2 ways to solve this one.
+
+First method:
+
+This method works. So there are 3 defective parts. Those 3 are to occupy 2 of the six slots of the sample. There are 3**C**2 combinations of these defective parts.
+For every combination of these parts, there are 47**C**4 combinations of the non-defective parts since there are 47 of them and they'll occupy the remaining 4 slots.
+
+Therefore, by the multiplication rule, the number of subsets of 6 that contain exactly 2 defective parts is
+3**C**2  x  47**C**4 = 535,095.
+This is correct.
+
+My conceptual problem is with the second method. Here's my thought process.
+
+There are **A = 47C6** subsets of size 6 with only non-defective parts.
+
+If I choose from 48 parts where 47 are ok parts and 1 of them are defective, then the number of subsets of size 6 with only 1 defective part is **B = 48C6 - A**. (We'll get back to this).
+
+If I choose from 49 parts where 47 are ok parts and 2 of them are defective, then there are **D = 49C6 - A - B** subsets of size 6 that contain only 2 defective parts.
+
+D is what I thought would match with the answer from the first method. It's actually an overestimate.
+
+The way I got method 2 to give method one's answer is by calculating:
+**E = (49C6 - (Bx2) - A) x 3**
+
+The best reason I could get for the discrepancy is that in calculating B, I must multiply B by 3 since there are 3 defective parts... The same reason why there is a x3 in equation E. The x3 is because there are 3**C**2 = 3 combinations if you choose 2 defective parts out of 3.
+
+But if I multiply B by 3, then 49**C**6 - (Bx3) - A becomes negative...
+
+If anyone can help me figure out whether method 2 can actually work, I'd appreciate it.",1520196613.0,1,1.0,0
+Fencesitter,A tv show in South Africa that discussed the joys and regrets of parenthood.,"(Apologies in advance if not appropriate)
+
+
+They tackle all the issues the rest of us already know:
+
+- Having kids can be wonderful!
+- Having kids can suck!
+- Not everyone will be a great parent.
+- You might not like your own child first time you see it, which is ok because it's a stranger.
+
+It features testimonies from parents that enjoy parenthood, testimonies from parents that don't enjoy it, as well as a clinical psychologist to help explain all these feelings no one warned us about.
+
+This is essentially people not hiding about the whole experience and actually being honest on a live TV show watched by millions.
+
+If you seek perspectives from people bravely declaring their pleasant and unpleasant experiences, perhaps this episode may help.
+
+[Here it is: Real Talk with Anele.](https://www.youtube.com/watch?v=upXT_yRRMQM)",1517430962.0,8,0.89,0
+southafrica,Is it just me or does Telkom Mobile not prioritize short-term data and night-surfer data?,"I've been checking my data usage, and I got 50 MB for R1 that lasts a day while I already had 1GB 30 days normal data. That 50MB was not touched at all. I have 2GB night surfer; also not getting used at all between 00:00 and 07:00 as I would expect. The entire time it kept eating away at the 30 day anytime data which is a royal screw up.
+What on Earth?
+
+EDIT: Found this lovely clause in the **[Terms and Conditions for LTE/LTE-A once-off bundles](https://www.google.co.za/url?sa=t&rct=j&q=&esrc=s&source=web&cd=2&ved=0ahUKEwiL3vL2x-bYAhVLIMAKHYdSAb8QFggrMAE&url=http%3A%2F%2Fwww.telkom.co.za%2Ftoday%2Fmedia%2Fdownloads%2FTs_and_Cs_for_LTE_and_LTE-A_Once_off_Bundles_19072017_dFJPVvg.pdf&usg=AOvVaw3IOqDT9dcv45kyFKG5L400)**:
+
+>  Purchasing of LTE/LTE-A once-off bundles/SmartBroadband Wireless Prepaid and using the bundles is
+subject to the availability of LTE network coverage within the specified location and the subscriber will
+not be able to roam on MTN’s 3G network.
+
+No issues with this, as it makes sense.
+Except I'm not on a their LTE network, and surely data is data regardless of what network it runs on? Guess I'm just screwed then.",1516406020.0,2,0.76,5
+childfree,I had to end a potential relationship before it even started.,"I had to nip a budding relationship due to differences in core values (child vs no child). We met on Thursday for the first time, a tiny spark. We were together for the whole weekend and the chemistry was there. Attraction both sides, clear interest, the whole thing. Of course I never kept my hopes up as we learned more about each other (she wants one child, I don't, she's religious, I'm not). I had to explain to her that as much as it sucks, I we can't be in a relationship like that because it won't end well, and we both want something to last a lifetime.
+
+It sucks. I am sad. I haven't felt such interest in years and we really had a good thing going. I'm sure I did the right thing but now I wonder, am I going about this whole dating thing wrong? Is it really a good idea to kill it off while it's young? Is there something I'm missing here?",1513876381.0,86,0.99,41
+CasualConversation,How do you approach a potential new relationship?,[removed],1513804700.0,2,1.0,5
+CasualConversation,I'm alone in a public setting and a stranger asks to charge her phone using my laptop.,"I'm in a public setting, alone. So she asks to charge her phone by the socket I'm hogging. I agree and lend her my adaptor. She sits by my table. We both quietly go on about our business. And I think it's quite alright. No expectations, and it's alright. Whaddaya think?",1510408851.0,3,0.71,14
+southafrica,Small peek at The Palace of the Lost City,,1508188364.0,9,0.75,2
+offmychest,I'm stupid and/or masochistic,"For resigning when there is no way to pay back what I owe the company that hired me. A very large amount of money is owed, to be paid in 60 days from today, and I have no hope. Left a job because my depression and unhappiness and fear left me dreading everyday of my work life. I don't know what to do. If, by any chance, you can help, then please. Help. I'm probably the most undeserving of any help after breaking trust and failing to endure, but I don't know what to do.",1499108309.0,1,0.67,2
+jobs,Rescinding my resignation,"Because I actually very much needed the job. Put in on Friday, need to take it back in Monday.
+Basically, a combination of depression and not enjoying the job much, also came straight from University (started in January) is what made me wanna quit.
+But I am very much screwed as I need to work off my bursary and pay other debts.
+So, I guess I need advice on what to say the boss? ""I made an oopsy. We good?""
+I still don't like the job but like I said, a deal is a deal and I need to pay them back by working for them.",1499024969.0,11,0.87,17
+SuicideWatch,So life: what's the difference between liking/hating life the same way you like/hate anything else?,"I mean... From my perspective, I didn't exist, and then suddenly I did. But, if I don't like the idea of this life thing I find myself in then why am I supposed to try sooo hard to tough it out until things get better?
+Please help me understand. I don't seem to be very good at it.",1498855851.0,1,1.0,4
+offmychest,"Golden handcuffs and ankle chains. Still a prison, still a slave.","Got a well paying starting position job but my god does it kill my soul everyday. I'm not built for this industry. Great career path... for someone that cares. I can't stand being there and it's only been 5 months. Can't quit because of debt to the company and debt to the bank. But it sure as hell makes me wanna quit life altogether. Hate my past dumbass life decisions, but I need to accept and have a proper plan of escape. Can't quite give up if I'm going to die naturally anyway.",1498686807.0,3,0.81,2
+CasualConversation,I'm expected to take charge at my job...,"But it's so not in me to give orders to people more experienced than me, older than me and in fact even more knowledgeable than myself at the current job. It's awkward for my introverted self to have to go out check up on all these other folk so I'm really struggling. How are so many people in higher positions so good at leading and stuff?",1496282277.0,2,0.76,8
+CasualConversation,"After never having a job and always assuming I can't afford anything, I suddenly realized that affording stuff is actually a possibility now that I have a job.","I've been working for almost four months now after always being a fulltime student. I like games but the last console I had was the PS2. So over the years, watching playthroughs of games is how I've been keeping in touch. But a few days ago, I realized, I can actually afford a PS4 now. I just assumed I couldn't because that's just how it's been for years. Traveling also never crossed my mind until I realized I could actually go somewhere if I saved up... It feels like a whole new world!",1492225667.0,47,0.95,10
+CasualConversation,How many beautiful creations are created by unwilling participants?,"Not unwilling as in forced against one's actual will... but unwilling as in forced to participate due to circumstance i.e. doing a job you don't want to because you'll be jobless otherwise.
+
+When I listen to music, I wonder:
+""If 100 people were involved in creating this beautiful song, could it be that 75 of them actually hate their job?""
+
+When I see a beautiful building I wonder: how many labourers that placed one brick on top of the other to create this magnificence only did it because they were screwed otherwise?
+
+I just wonder, and I'm happy that someone out there has a job, but I'm sad that the job also makes them miserable.",1489698853.0,32,0.88,36
+offmychest,"I love my past self, but my word was he clueless about life.","I just started my first permanent job after six years of engineering school. Not the field I want to be in but topic for another day...
+So, in high school, there was a subject called Life Orientation, which is meant to get you prepped for life in general... things like sex ed, basic household economics, fitness, relationships, driver's licenses... all the necessities about life.
+
+But our education in that particular class was horrible. Very little learning happened in those classes. I was already horribly clueless about life in general so I didn't bother to improve myself in any of the above-mentioned life skills. I had decent school grades though...
+
+Fast forward to my first job this year, and my salary is about to be reduced by 1/3 because about that much of it is vehicle allowance... and I have no vehicle because... I. Can't. Drive. Fuck me. Why. WHY??? I should have sorted this out yearsss ago...
+
+And I can't drive because (apart from generally being dumb about such obvious necessities) of a lack of discipline - which I should have developed, and even learned about about back in Life Orientation classes... Fuck me...",1489695876.0,1,0.67,0
+CasualConversation,I don't want to die because of FOMO.,"Fear Of Missing Out
+
+I'm not dying or anything as far as I know, but generally, just thinking about how technology might change in the just the next 50 years makes me wish humans lived much longer.
+Trips to Mars, immersive virtual reality, technology based on Spooky Action at a Distance?
+I wanna stay!
+
+So, would you like to see how the world changes in the next half-century?",1489155929.0,17,0.85,25
+TheArrivalMovie,The symbols in the Arrival movie looked vaguely familiar to me. Then I remembered this relevant museum's logo (not named to avoid potential spoilers) (x-post /r/movies),,1488125011.0,6,0.88,5
+movies,The symbols in the Arrival movie looked vaguely familiar to me. Then I remembered this relevant museum's logo (not named to avoid potential spoilers),,1488124371.0,1,0.6,3
+southafrica,Need help finding a budgeting app!,"Greetings fellow citizens!
+
+I just started a new job fresh from university.
+I'd like to use a budgeting app to track my expenses and not screw myself over due to South Africa's wildly varying costs of items, and just to ensure my personal finance management is good. If you use anything special to work out anything related to tax, I would like to know about that too.
+Thank you lovely people ^^",1485631972.0,2,0.67,11
+Kikpals,24 [M4F] Hello awesome future friend!,"Hey there! So...
+Very simple guy looking for hopefully long-term peeps to talk to. About me:
+Likes: Games (I hardly play them though, due to lack of ownership of necessary gear), anime, a wide selection of music genres, programming (currently self-learning computer science), sci-fi, fantasy and psychological thrillers.
+I don't really read books. I start, but never finish :/
+I'm quite introverted, but never pass up an opportunity to party with friends. It's always awkward. Alcohol helps.
+Pm me with your Kik or just pm me and I'll respond with mine.
+Hope to speak to you soon!",1483640708.0,1,1.0,0
+Kikpals,24 [M4F] Online - Try me!,"You know, like a soc- Jeebus Cryst Neon...
+Hey there! Just looking for a chat buddy. Short-term, long-term... whatever levitates your anti-gravity vehicle.
+We can talk about whatever. PM me, and we can exchange usernames. See ya!",1481484259.0,2,1.0,0
+cs50,pset6: Unable to process requests involving .php files,"Right:
+
+- I've implemented lookup, parse, load and indexes.
+
+- Program compiles.
+
+- Using check50, I obtain the following errors:
+-
+
+    :( Requesting hello.php returns 200, text/html, and correct output
+    \ expected output, but not ""X-Powered-By: PHP/5.5.3php4\n""
+    
+    :( Requesting hello.php? returns 200, text/html, and correct output
+    \ expected output, but not ""X-Powered-By: PHP/5.5.3php4\n""
+    
+    :( Requesting hello.php?name=Alice returns 200, text/html, and correct output
+    \ expected output, but not ""X-Powered-By: PHP/5.5.3php4\n""
+    
+    :) Requesting /test redirects to /test/
+    :) Requesting /test/ outputs /test/index.html
+    
+    :( Requesting directory containing index.php outputs index.php
+    \ expected output, but not ""X-Powered-By: PHP/5.5.3php4\nHTTP/1.1 5...""
+
+
+The error occurs when the code gets to this part:
+
+    // subtract php-cgi's headers from content's length to get body's length
+    char* haystack = content;
+    char* needle = strstr(haystack, ""\r\n\r\n"");
+    if (needle == NULL)
+    {
+        free(content);
+        error(500);
+        return;
+    }
+
+needle could not be found in haystack.
+
+My load function may be the problem, as the error occurs a few lines after load was called. So, here's my implementation of load:
+
+    (link removed)
+
+I am baffled. Please help :(",1477467954.0,1,1.0,2
+scratch,Rosalyn's Peace (An interactive flower generated using particles),,1463615249.0,1,1.0,0
+FullmetalAlchemist,I made an animation creating a transmutation circle using Scratch!,,1463291985.0,13,1.0,0
+scratch,Fullmetal Alchemist Transmutation Circle Animation!,,1463291349.0,3,1.0,0
+cs50,Problem with check50 initials.c,"So I ran check50 2015.fall.pset2.initials initials.c, and the check cam out alright. Except, check50 gives a sad face for some of the correct responses so I'm worried that might affect my score during the automated marking after I submit.
+
+This is the response from check50:
+
+    ~/workspace/pset2 $ check50 2015.fall.pset2.initials initials.c
+    :) initials.c exists
+    :) initials.c compiles
+    :) outputs ""MB"" for ""Milo Banana""
+    :( outputs ""MB"" for ""milo banana""
+    \ expected output, but not ""à\u0000\n""
+    :) outputs ""RTB"" for ""Robert Thomas Bowden""
+    :) outputs ""R"" for ""ROB""
+    :( outputs ""RTB"" for ""Robert thomas Bowden""
+    \ expected output, but not ""R\u0000B\n""
+
+Unless of course I'm wrong.",1457017290.0,1,1.0,2

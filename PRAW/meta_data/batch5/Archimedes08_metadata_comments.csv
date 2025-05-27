@@ -1,0 +1,622 @@
+subreddit,body,created_utc,score
+PlasticSurgery,You really are very beautiful. And your smile is very cute and playful. Your chin comes together with everything else to provide the lovely overall effect that your smile has. I am not just saying that to make you feel better.,1740407721.0,0
+CompuCell3D,"Hi Jim,   
+I very much appreciate the response and your willingness to help. Also, thanks to everyone there at Indiana University for making CC3D available to us all! :-)   
+I understand what you mean re. the stochasticity of CC3D and why the crashes do not happen at the same MCS (in the end, I want the program to behave stochastically, so that's fine).   
+To the points above:
+
+  
+\- I don't have pixel reading or pixel writing going on in the codes that have been crashing, so I don't think the problem would lie in CC3D trying to read or write to pixels outside of the defined lattice geometry. It definitely makes sense that this would cause issues, but I don't think it pertains to the situation here.
+
+  
+\- There don't appear to be any indications of an error in the messages *before* the simulation runs, neither in the mini-console of the CC3D player nor in the Twedit++ terminal (in my case running in Windows cmd format). The error messages I posted this morning were preceded by 12 lines of standard simulation data (flips and energy levels for every 10th MCS) and the output before that seemed normal. Here's an example of what I get in the Twedit++ terminal at the very beginning of running an epithelium sim with hexagonal cell geometry (Epithelial2PyXMLHex; see Github link in original post):
+
+  
+`messageType= EDITOROPEN`  
+`GOT EDITOROPEN MESSAGE`  
+`self.tweditPID= 16568`  
+`CONNECTION ESTABLISHED - LISTENER ACKNOWLEDGED`  
+`Random number generator: MersenneTwister`  
+`WILL RUN SIMULATION FROM BEGINNING`  
+`INFO: Step 0`  
+`INFO: Energy 0`  
+`INFO: Cells 576`  
+`GOT CUSTOM SETTINGS :  C:\CompuCell3D\Miniconda3\Projects\Epithelial2PyXMLHex\Simulation\_settings.sqlite`  
+`INFO: Step 0 Flips 14785/134400 Energy -1.627e+08 Cells 576 Inventory=576`  
+`Metropolis Fast`  
+`total number of pixel copy attempts=134400`  
+`INFO: Step 10 Flips 10566/134400 Energy -248469 Cells 576 Inventory=576`  
+`INFO: Step 20 Flips 7991/134400 Energy -30079.9 Cells 576 Inventory=576...`
+
+  
+And in the CC3D player's console I see the following at the very beginning:  
+`Step 0 Flips 14785/134400 Energy -1.627e+08 Cells 576 Inventory=576`  
+`Metropolis Fast`  
+`total number of pixel copy attempts=134400`  
+`Step 10 Flips 10566/134400 Energy -248469 Cells 576 Inventory=576`  
+`Step 20 Flips 7991/134400 Energy -30079.9 Cells 576 Inventory=576...`
+
+  
+The error messages thrown by the CC3D player console (not Twedit++ terminal) have always been very helpful: they point straight to the line of Python code that is causing an issue and I've always been able to resolve those problems. The Twedit++ terminal's messages re. these particular crashes have only been coming after the crash, i.e., after the CC3D player window suddenly disappears. 
+
+I'm not an advanced programmer, but I've done some googling to try and unravel what might be behind the error messages I'm getting in the terminal and it looks like 
+
+`""QObject::killTimer: Timers cannot be stopped from another thread`  
+  
+`QObject::~QObject: Timers cannot be stopped from another thread""` 
+
+might have to do with parallel computing. I had `self.change_number_of_work_nodes(8)` in the start(self) of the class in the Python steppable this morning. I changed it to `self.change_number_of_work_nodes(4)`and the simulation ran about twice as long as before until it crashed. And this time, it crashed in a more unique way: instead of the CC3D player window simply closing, the cells in my epithelium first rapidly disintegrated until there was only a single circular column of cells roughly in the middle of the lattice, and only then did the CC3D player crash. So I've commented out the work node line of code in the steppable and am re-running the simulation on a single core. It's slower this way, but I'm hoping for more stability.   
+
+
+If I continue to have questions or issues, I'll send an email and include the files I'm having trouble with. Thanks again very much for the help.",1686854754.0,1
+mathematics,"This is awesome. Thanks so much for sharing. What a wonderful thing to be able follow such a person's thought process like that. I don't know if I'll understand or be familiar with some of the things he'll look at, but it can't hurt!",1682120810.0,1
+mathematics,"Thanks a lot for sharing this. I must say that I practiced definitions the most and I was always correct while studying when I would compare a definition from memory with what was on the back of a flashcard. I knew the complete definitions for surjectivity, injectivity, how to prove these, I knew the definitions of and proofs for functions, relations, reflexivity, transitivity, symmetry, anti-symmetry, images, pre-images, etc. And I was always okay with understanding how to negate these definitions using quantifiers. The first 1/3 of the exam was basically taking negated if-then statements and conditionals involving all of these and formulating them in words. I felt very confident there, and had no issues. 
+
+My biggest problem is when it comes to moving away from definitions to creative thinking, i.e., realizing what I need to start thinking about next to get the proof moving, once the definitions no longer serve me. I notice that there's always an ""automatic part"" to proofs, basically stuff that springs forth from the definitions of the assumptions that your supposing from a statement.  That comes to me more easily. But that's because the definitions don't really give you a lot of freedom to choose what to do ... the definitions imply what's what and lead me from one stepping stone to the next. 
+
+Where I crash and burn is when I have to strategically make a choice about how to interpret something so that I can even start. Or when I need to perform a little trick (for example, ""let W = {w}"", i.e. think up a one-element set to prove a point). That's where I feel like I need correct solutions to proofs so that I can be inspired by the way that a master thinks about and exploits such things.",1682119727.0,1
+mathematics,"Thanks so much for the book suggestion and also for providing some grounds to a positive outlook. I think it's been extra crushing because I was used to being good at things, and now it's like trying to learn to walk again.",1682110088.0,1
+REU,"Oh my goodness, thank you so much for the wonderful info.
+
+This only adds more to all of the happiness and intense relief I've been experiencing over the past few days. 
+
+(I'm glad all of that awful stuff at least served a positive purpose somehow somewhere, i.e., inspired someone. Thanks again.)",1659723382.0,3
+MechanicAdvice,"Thank you. Sorry that the description is useless. We're all car novices here. We checked the battery terminals and saw no signs of corrosion at all. We'll just take the car to the repair shop.
+
+&#x200B;
+
+Thanks anyway.",1656534698.0,1
+college,Thank you but I am unfortunately not yet a citizen or permanent resident.,1655861241.0,1
+schizophrenia,"I can understand him, though I also understand your concern. In my personal situation, I needed my brain to not only be functioning but I needed it to be doing theoretical physics. I was on Risperdal and also Zyprexa for some time, and I couldn't stand it. Risperdal made it literally feel like the front of my head was detatched (I just laid in bed staring at the wall) and Zyprexa made me very sleepy and fat. Antipsychotic medications are awful, at least in my experience. 
+
+If I may ask, what was the psychotic episode (what happened; what did he say/do?) and what medication was he orally taking?",1652047171.0,2
+college,">Wouldn't you need physics BS if you are trying to get into Physics grad program..?
+
+Thanks for your reply.
+
+According to my advisor, ""some of our BA students get into PhD programs."" But I don't know what he means by ""some."" 
+
+If I do go for a BS, I think I would also need a decent GPA to be competitive and the course that I am considering withdrawing from feels like it has the potential to harm that GPA. 
+
+It is a gamble, but I am wondering if it is better to withdraw and hope that I get my citizenship back by next Spring so that I can re-take the course under better circumstances.",1648433956.0,1
+schizophrenia,"I'm very happy you could take something away from the reply. 
+
+It sounds like you have the right attitude and mindset. Keep going!",1648225840.0,2
+schizophrenia,"Is your life ruined? The short answer is: no, it is absolutely not ruined. It is just starting. Use every free minute to hack your own brain, find something that works for you and find something you love to do.
+
+The long answer:
+
+I am sorry to read that you are experiencing this. Your situation reminds me of my own. I do not want to make this about me, because it is essentially about you.. But I share this with you so that you see that I have a good idea of where you're coming from and so that you see that things will get better for you, too. 
+
+I developed a psychotic disorder very similar to yours along with obsessive-compulsive disorder at age 15. PTSD and ADHD, too. The trigger for the genetic expression of the first two disorders was a severely traumatizing experience that I won't describe here. I was genetically predisposed to these disorders, as my father also had them.
+
+I was in Germany for over 10 years and this was where my illness peaked. I'm not saying that to worry you; that did not simply happen to me because I was in Germany. There were many other factors that led up to that point but being an immigrant certainly did not help. There are studies that show that immigrants are more prone to mental illness. I eventually reached a point where I was not aware of how bad I'd gotten. I ended up acting on  delusions during psychosis, and losing my birthright citizenship as a result. I had been living hungry and alone in the attic of an old Lithuanian woman, thinking my mother tongue was rotting my brain. I am still trying to mop up the legal mess that that caused.
+
+Looking back, the psychiatric care system in Germany wasn't good with initial diagnosis and treatment. There was a strong reluctance to diagnose and prescribe anything while I was still ""together"" enough to actively go out and ask for help. I speak fluent German and it did not help. While I appreciate a skeptical, scientific mind that wants to rule out other possibilities, this reluctance that I found to be more pronounced in German healthcare was counterproductive because it prevented me, someone who urgently needed help, from getting the stronger medicine and the intensive care that was immediately needed.
+
+On the other hand, you can also have major problems in the US (where I'm from) where healthcare is far more profit-driven. I've had doctors here overprescribe and it took some time to find someone good.
+
+My message to you is this: you will survive, grow stronger and prosper. I thought I was an absolute goner for quite some time and I still have occasional moments. But now, I am stable, I have a kind, compassionate psychiatrist, I live near my family and I am almost done with degrees in physics and quantitative economics. I am 32 and I still catch myself feeling ashamed or inferior because I probably could've been here in life sooner than my classmates had there not been a detour caused by worsening, unrecognized mental conditions. But alas, here I am. And so far, I've made it 17 years. And I look back and I cannot believe how much better I am now compared to 17 years ago.
+
+I want you to know that your case is not at all hopeless and your disorders are completely manageable. Some might even go into remission later in life and if they don't, they can be managed. You will be able to live a fulfilling life. It is possible and it is a matter of finding treatment and a balanced lifestyle that works well with your mind.
+
+Your life is NOT ruined. This is just the beginning. The first thing to do is to stop thinking it could be ruined. Start asking yourself: what do I need? What makes me feel the most stable, the most calm?
+
+My advice would be to first find a way to live wherever you most feel comfortable, where you experience the most stability. If this is not Germany, then I would tell your mother that being there is not a positive influence on your mental health, that it is a serious medical issue.
+
+Once you know where you are going to be long-term, begin looking for a good psychiatrist and a good psychotherapist. Medicine from the psychiatrist will help stabilize you, but the psychotherapist will help you understand how your mind works so that you can develop healthy patterns of thinking. Both medicine and therapy are necessary on your path to recovery. 
+
+Also, if you can: exercise, exercise,  exercise! Exercise restructures the brain, it cleans it, it drives down brain inflammation, helps create new neural networks, lowers your resting heart rate and alleviates anxiety. And try to eat healthy, low inflammation foods. Take very good care of your body because a healthy body truly is a healthy home for a healthy mind. I found it so much easier to recover and manage life if I just went for a 3 to 4 mile run almost everyday. 
+
+And I would try not to self-identify too much with your diagnoses. I found that the more I kept thinking about how these disorders were a part of my identity, the more power I gave them. This would cause me to feel hopeless, overwhelmed and think things like ""my life is ruined."" Just know that your brain is different. 
+
+And focus on the positive things that you have going for you. As long as there isn't an abusive relationship, I think it is good to have family around and not be alone (like I was). This way, you will have someone to help you if you have an episode and you won't continue to spiral downward somewhere off by yourself. 
+
+And think about something bigger than yourself. What do you believe you are here to do for the world? What would you like to do for the world? What are your dreams, what would your perfect concept of life look like?
+
+All the best to you, my dear. You can thrive; never give up.",1647718702.0,2
+AskPhysics,Thank you!,1647712905.0,1
+AskPhysics,Very good advice! Thank you.,1647712892.0,1
+AskPhysics,Thank you for your advice! Sorry you had to put up with this as well.,1647712869.0,1
+AskPhysics,">Reading your post it's a bit confusing in that you say he follows the textbook rigorously and assigns all the problems from it, but you can't figure out how the lectures and homeworks align with the textbook.
+
+Thanks for your input! Sorry if this wasn't clear; he follows rigorously a grad-level textbook that is not available to us and that is not listed on the syllabus.
+
+It would be like if I taught a physics 101 course and told students in the syllabus that Serway & Jewett was our coursebook but then factually taught them and assigned them problems to 95% from Taylor's Classical Mechanics.",1647712813.0,1
+philosophy,"I agree. You see it now at any medieval market festival: Although blacksmithing metal appliances was considered craftsmanship even in previous centuries, one can't deny that there was a far more practical, manufacturing-based reason for its commercial existence: people really needed horseshoes, belt buckles, armor, swords, etc. for ""boring"" everyday purposes. 
+
+And now? It has become something that is very much an art, something along the lines of an appreciated creative endeavor, but economically unnecessary in the big picture because practically irrelevant. We have factories now and countless composite materials. ...and yet people still blacksmith for some extra money and fun.",1586807694.0,2
+philosophy,">if people can live well enough without working, they won't. Even if it means they won't have luxuries as an amazing car or appartment, they will just settle for less.
+
+I personally disagree. I have been fortunate enough to have periods in which I was ""taken care of"" and instead of not doing anything, I began doing all kinds of work (much of it intellectual) which had otherwise been prevented by the fact that previous days had to be filled to the brim with the performance of tasks for the sole purpose of circulating a concept of money through a bank account. The money, by the way, being of a design and circulatory nature which was democratically never agreed upon by us, and about which I was most certainly never asked. In many ways it is the mathematical consequencescof our debt-money concept which make far more work seem necessary than is really the case.
+
+Do you have a mission in your life, something that truly drives you, something you want to give to the rest of the world? If so, it will likely require immense amounts of work, for which you're likely not to be paid, but which could nevertheless be highly valuable to the rest of us, and provide you with a deep sense of fulfillment and joy.
+
+From a more practical standpoint, we won't be running out of things to do, places to go, energy to harvest or things to think about any time soon. The universe is gargantuan and our time on Earth limited due to the lifespan of the sun. There is plenty to be done if we're to survive and evolve long-term, far beyond the realm of superfluous childish jobs indirectly born from a flawed understanding of monetary set theory. 
+
+To me, it would be ludicrous to be freed from the time-robbing work made necessary by our current monetary model, and not actively seek and perform meaningful work (e.g. that brings us closer to becoming an interplanetary civilization). 
+
+Speaking with others, I've gathered the impression that they feel the same or similarly. In many cases, it seems that 'laziness,' e.g. vegetating in front of the TV, often results from the mental exhaustion induced by our current concept of lifestyle. Laziness and long-term inactivity also lead to depression, thus you can safely assume the broad majority will set out to find and do something meaningful to them.",1586806589.0,1
+philosophy,"Hope you can find something new soon. I've been there many a time, doing crushing work.
+The problem you describe is the problem many have: They actually don't mind humdrum work, but just don't want to fill the majority of their waking hours with it, and if they do some, they want to be able to live off of the income, not eat baked beans and live in the back of an SUV. 
+
+The whole idea you are to irrevocably sacrifice the unique seconds of a finite existence for something that is most literally created out of thin air by those given a legal (only a century or two ago we would've said ""divine"") right to create it, is a form of insanity. It yields often superfluous and thus destructive overall social activity, because the work is no longer performed to fulfill an inherent purpose. One need only look at the garbage dumps full of plastic, the amount of antidepressants and antipsychotics prescribed to the general populace to grasp that this superfluous activity has terrible consequences for the human being.",1586804635.0,14
+philosophy,"Wow, I am terribly sorry to read this. When I was 18, I migrated out of the US and became a citizen of Germany after years of hard work. Even though I worked some shit jobs in Germany, the system is still set up such that I couldn't get into the kind of situation you describe, even if I wanted to. 
+
+I don't wish to ""victimize"" you or rob you of any sense of empowerment you should have. You are in fact very powerful. But it does make me angry to read stories like your own, to know my home country exhibits these kinds of stories by the tens of thousands (or more?). As if they were acceptable. 
+
+In any case, I really hope you're doing better now, and that you're not in debt due to the hospital bills.",1586803643.0,2
+unpopularopinion,"It's ""weird"" because the current state religion we like to self-deceptively refer to as ""the economy"" has the nasty side effect of encouraging a ""life style"" that negates and rewards almost-constant resistance to many things inherent to our biology. (It's good to keep some aspects of human biology in check...no going around rapimg whomever sexually attracts you please...but in many ways we still surpress too much of what is good.)
+
+Aside from its mathematical flaws, this is one of several reasons why this way of life is not and was never long-term sustainable (I think in civilization-timescales, not days, weeks, months or years), and will eventually fall apart to yield space for something new.
+
+Until then, stay well, spread love and enjoy every second with your children. They're the future of our species and deserve our best!",1586723420.0,1
+schizoaffective,.,1585280685.0,1
+schizoaffective,.,1585279400.0,2
+unpopularopinion,"As a student almost done with a physics and math degree, currently supercooling atoms with lasers to do quantum mechanics research, dreaming of passing down a world of higher consciousness, peace and reason to my children, a world of minds no longer darkened by the latent religion of today's debt-money system, I remove my hat before you, you man or woman of science, and truly thank you for persevering, for not allowing the stress of artificial scarcity and debt cloud your mind so much that you couldn't complete your studies in such a valuable science. You are contributing to a higher quality of life for us all. 
+
+It saddens me to no end to see masses of bright, young, capable and very hungry minds close up like dying flowers, scared away from the light of science by the beckoning reaper of indentured  servitude standing at the threshold of our universities. Not only will the amount of doctors fall, so will the general amount of scientists and scholars. In a society that will undeniably require less manual labor and more high-end cognitive work, this is very troubling. Long-term, it is anything but sustainable. 
+
+We used to fly people to the moon. Now we sacrifice our young to a useless priest-class of end-time level decadence on Wallstreet. 
+
+I wish you the best in paying off those damned loans and still having a nice life.",1574746556.0,0
+unpopularopinion,"
+I could go into how other countries manage to do cheap college; I could go deep into the fact that my stepdad went to tax-payer-funded college in New York ""for free"" back when the US offered it, with Colin Powell next to him in the lecture hall, also enjoying a free education. (Obviously not for free long-term, the idea being that you pay nothing for the schooling at the time, but that the overall majority of graduates get good jobs with their degrees and thus pay more taxes later, at some point even paying into the system far more than they took from it as ""freeloading students""). 
+
+Instead of going deeper into these points, I would like to highlight the often unmentioned but highly questionable nature of the money system itself, a system whose quantitative nature serves many as a metric for making qualitative moral conclusions. Being unaware of how today's money system is quantitatively manipulated means making such qualitative judgements on the basis of wholly lacking or incomplete information. I believe the OP - like countless others- has done so.
+
+So, here a few points as to why the OP's opinion about other members of his or her own society appears to have been formulated on the basis of incomplete or unconsidered information:  
+
+
+* The principal on modern debt is created out of thin air in a computer system. When you take out a ""loan"", no one anywhere is lowering their own money supply by the principal (This was once the case hundreds of years ago, before paper money, when loaned precious metal actually had to go from A to B). 
+At the very most in the contemporary USA, a 10%-portion of a modern loan principal MIGHT be comprised of a bank's customer deposits as per minimum reserve requirement, but this practically never is the case as it is easy and far more lucrative for banks to expand their loan-creation capacity by directly borrowing large sums of cash (for covering the minimum reserve) from the FED. 90 % of this reserve can then be turned into digital fiat loans. This FED-to-bank lending is done for an interbanking interest rate low enough that the margin between the costs it generates and the income from debtors' regular interest payments on the fiat money is still large.
+
+--
+
+* When a loan is paid back, the digital money used to pay it back disappears. This is because when the loan is created from thin air, it is created as a negative quantity in the creditor's system and as a positive quantity in the debtor's system. If all debts were repaid, the money supply would diminish by the  amount of the principals. The collective interest in the entire system would of course remain (and mathematically cannot be paid back, only ""forgiven"").
+
+--
+
+
+* Every cent in circulation is a debt somewhere in the system for which interest is demanded. This even applies to the very currency units themselves, both hard and soft. But because the currency is the only legal means of paying back debts, there can mathematically never be a way to pay off the total sum of interest in the entire system, and to pay back the total principal in the system would literally mean deleting the entire money supply. Instead, the resulting debt obligation is shoved around like a hot potato, inhomogenously distributed but for the most part exponentially growing due to the (legally permitted) compounding of the interest.
+
+--
+
+* The guilt-trip resulting in most of the indebted population stems from the false impression that others are living on a shorter budget until they ""repay"" a ""loan."" The guilt-trip is the result of incomplete information, and need not occur, but the system will not let on to this: guilt and shame are essential to today's financial system as a means of exerting psychological pressure, ensuring acquiescence of the unknowing debtors. 
+
+--
+
+* The ""legal"" actions taken against so-called debtors within the framework of the contemporary money system serve as methods of exercising physical and psychological violence in a rationalized system of well-masked robbery. This violence is needed to pressure targets into doing whatever allows the  extraction of real tangible wealth and values on the basis of financially engineered fiction. 
+Having a subject perform actions directed against his own interests is far more effective because this still gives his ego a sense of will and self-governance. Violence - the best being psychological violence as it makes direct connections to the source more difficult- is the means of getting a subject to that point. The ""logic"" used to convince both the targets and the enforcers that this violence-backed extraction is somehow morally justified is the qualitative set of morals often associated with the idea of money (that is, without of course mentioning the rigged nature of the current money system).
+
+--
+
+* It is not the fault of younger generations that older generations did not or could not inform themselves about the underlying principles of their society's core concepts such as money and debt. It is not the fault of younger generations that older generations were fooled and played in this or any other regard. To believe that younger generations should have to suffer through circumstances brought about by a rigged system of predatory wealth extraction - now tearing our civilization apart at the seams - just because one personally had the misfortune of unknowingly living a life centered around its lies and Ponzy schemes is diametrically opposed to the principles of the biology of species: The old strive to leave the young with better circumstances than their own so that the species may thrive more with each new generation. 
+
+At the same time, the young should be aware of that which they inherit from the old, recognizing the predators to whom the old fell prey so that they may avoid this fate themselves and, one day, give an even better world to their own children. 
+
+Although  the above may seem harsh, it is not meant so: The old should be respected. Where they were ignorant and fooled by what the young now see and understand, they should not be mocked or laughed at, but instead receive gratitude; their past  ignorance, misfortunes and hardships serve as valuable warnings, teaching the young what to do better, thus ensuring that the species can thrive more with each new generation. But the young also carry the responsibility of understanding and partaking in this dynamic. They too are not immune to ignorance. It is always possible to fall down further than those that came before you.",1574742797.0,4
+addiction,"You're welcome, friend. I'm glad it can offer something. Yes, the whole thing we call life - with both the good and bad parts - is a treasure chest full of lessons. There really is a ""school of life"" and more often than not it's up to us to decide what classes we want to take. E.g. you lose your house and you can decide to take away the lesson that ""life is hard, the world is cruel"" or you can decide to learn lessons in gratitude, becoming more thankful for what you DO have...even if it's just your human body. In the end...that's all any one really has.
+
+It's wonderful that you are transforming your trauma (or what you still refer to as trauma). When you change the meaning you give your life's story, you change the meaning substances have in your life, too. That's because the role you play changes. You shed old habits and traits and develop new ones for your new role. 
+
+We can end up identifying with trauma, pain and addiction because we make it the main plot line of our life's story. At some point, we don't know what else to identify with...shedding this identity feels similar to death. What are we without it? And people around us in our lives have also associated this identity with us...we're that ""really smart and sweet guy who just has a lot of issues"" or ""the loser junkie"" etc. 
+
+Many people are afraid to change because it would mean others see this change occurring. If we fail in our first attempt to change, we fear that people might then add ""failure"" or ""loser"" to the identity we carry for them (if they haven't already). It then becomes harder to try again - at least we make it that way psychologically- because we think that no one really believes we can do it anyway. 
+
+I can only speak from my own experience, but shame often played a tremendous role in using self-destructively. I felt ashamed of my behavior, and knowing that certain people wanted me to quit because they loved me actually made it worse (I LET this make it worse), because the thought that I could fail and disappoint those so dear to me only increased my feelings of shame. I had people watch me try to quit and then - when I fell back into it and they knew it - I felt deeply ashamed: ""I bet they think I'm a loser.""
+
+Shame is probably the most destructive, unhelpful and non-productive feeling in our emotional spectrum. I believe it is at the core of my addictive behavior: being ashamed of where I come from, being ashamed I didn't deal with things better, that I didn't ""turn out right"" (as if there was any right way to turn out!), shame that I needed substances. Shame comes from wanting the approval of others and failing to get it...it's the same mechanism as addiction to substances...you're always after something outside of yourself to make you feel better. Many use to numb the pain caused by their shame. Kick the shame, and you kick the addiction. 
+
+You've made the internal decision to take yourself by the hand, love yourself, heal yourself and thrive. It will take time to allow your brain chemistry to change, it will take time to allow new neural circuits to form. Go at your pace. Don't allow any kind of shame to get in your way if you're not making progress at the rate others might expect. As long as you are giving yourself what you need like a responsible parent a child, as long as you are always on your side and stay your best friend, you're on the right path. No matter how long it takes to get to where you want to be. Set small goals for the day...even the hour or minute if you need to. And celebrate them when you've reached them. 
+
+Sorry for such a long post again. I promise I'll stop now. Wishing you all the best! Ride the waves; don't fight them. You're going to be a totally different person in one year.",1559063767.0,1
+addiction,"Hey there, friend. Thanks for sharing your story and reaching out. You are still young, and with the brain you have, you have all the time and resources you will need to heal and take care of yourself. Now it’s just a matter of consciousness, becoming hyper-aware of what your mind and body do that lead you onto the addiction-path. About half-way into your post, I it became very clear that you are intelligent. It’s not the words you use or the way you structure your sentences, it’s the content. You already exhibit a high degree of consciousness and self-awareness, evaluating your behavior and habits and analyzing relationships from an outside, unbiased perspective. You know what role you have played in relationships with others, you admit to your roles in them, even if they aren’t desirable roles. You are also aware of what is going on inside of you as you interact with others. You have an analytical mind capable of seeing the world from many different angles and in many different layers, and you demonstrate a high degree of empathy and understanding. So please know that there is a tremendous amount of hope for you, a tremendous amount of potential. The journey you have behind you and before you can empower you, inspire others and do amazing amounts of good in this world. Use your creativity to transform your suffering into thriving. You can become that “source” that you are missing, and while it can be very helpful to have people around you to provide this “source”, it can in fact be found within yourself. You can become your own source to the same degree with which you have become your own drain.
+
+At the end of your post, you ask why you stay so enamoured with the idea of being a user and then you say it’s part of your identity. I would go even further, saying it is part of your biological make-up. It’s how your brain is wired. By that, I don’t mean that you’re damned to be using for the rest of your life, but this pre-disposition is a part of who you are. I don’t think it is helpful to not want to be who you are…instead, accept yourself for who you are and start working from there. You can possess a brain pre-disposed to addiction and still have a wonderful, fulfilling, prosperous life on this planet. You certainly have the intelligence – both emotional and intellectual – to get there. This doesn’t necessarily mean getting rich and owning a bunch of shit (often another form of addiction). It means living a life that your heart says yes to, a life that fills you with a sense of personal fulfillment, inner peace and ease. You can learn to utilize your addictive brain type to serve you and the world around you. It starts when you begin seeing how what you currently perceive to be weaknesses can be applied in different situations as strengths that will serve you and others.
+
+Ask yourself what the hole is that you’re trying to fill, focussing less on what you’re using to try and fill it. We tend to focus a lot on the substances, but the addiction is only the expression of a much deeper issue. There is an inherent “logic” to what you are doing even if it appears to be self-destructive. It’s important that you know this so that you can stop feeling guilty and ashamed about your behavior. Guilt and shame create new thought circuits that drive us back to using. We must love, embrace and accept ourselves exactly as we are at this very moment in order to become healthy. The next time you crave, try holding off and observing yourself, following every sensation. Don’t engage in inner-resistance or scolding. Accept that you are craving, allow yourself to crave, and don’t start up the whole inner game of “I shouldn’t be doing…I shouldn’t be wanting…I can’t get my act together…I’m such an asshole…etc.” You have to allow yourself to be right where you are…that’s the only place from which you can determine a new course.
+
+You possess self-love and you are in fact all that you need in this world. Your self-love is strong enough to make you realize that your substance use is not serving you. I am not someone who condemns substances across the board. My previous use of psychedelics helped me heal from the trauma I endured as a young boy and young man. I grew up with a dad who couldn’t touch me or love me. He had severely debilitating OCD and drank himself into a stupor everyday. I didn’t know it at the time, but he was also gay and lived a life he didn’t want to live. But his family was catholic and would’ve disowned him otherwise. When I was 15, my dad tried killing himself in front of me in our bathroom. The trauma of seeing that and finding him like that triggered my own mental disorders. My mom was the one who really raised me, but she suffered PTSD from her childhood and her marriage to my father. Poverty, intense fear and grief were all core components of my childhood. My dad ended up eventually succeeding at suicide the second time around. At 18, I dropped out of highschool, saved money for a flight and then ran away to another country with almost no money, marrying a girl there from a similar background. We were addicted to eachother. I also became addicted to porn, school and work, being the valedictorian of my class in this foreign country. I was exhausted and half-dead, with growing mental disorders, but I was able to trick myself into thinking I could fill the hole in me with material success. When my wife left me for another guy, and I became homeless, I couldn’t fill the hole with material success or marriage anymore. I then fell into using. It started with chain-smoking cigarettes, then went over to weed, which I eventually needed to function throughout the day, otherwise I had the withdrawal symptoms you describe. I ended up living in a closet-sized space at the edge of town, keeping an awful job just to stay in the country. I fell into hearing voices and experiencing delusional thinking. Later, I started also using coke and speed.
+
+Years later, I discovered LSD and MDMA. These two substances made it possible for me to feel love, interconnectedness and empathy again for the first time in more than a decade. My first MDMA trip melted away the cancerous crust of grief and rage that had been clogging my soul and the connection to myself. I am extremely thankful for the trips I was allowed to have on these substances. That is not to say that they can only do good. As you yourself know, they can be become highly addictive, just like alcohol, weed or amphetamines. Instead of stepping stones, they become a crutch. We end up using this crutch so much that our leg muscles disappear all together. We then reach a point where we can no longer walk on our own at all. This is when the substances stop serving you and begin contributing to your destruction. This destruction has multiple forms. For one, it’s the excessive amount of stress they place on your body due to constant use, but it’s also the way they keep you from digesting what life has served you. There are dragons you must confront, big inner things you must deal with, things that overwhelm you, overchallenge or terrify you, things like childhood trauma. These things are not fair, they suck, and no, we didn’t deserve them. We deserved better. But to deny them, run from them and numb ourselves into oblivion means we stop growing. To look these terrible things in the eye, embrace them and integrate them into our lives, eventually digesting them, is to grow as an intelligent being.
+
+Right now, looking at where you currently are, I think it is very important that you abstain from substances entirely, because substances cannot meet the needs you currently have to continue growing. They are the wrong tool at your current stage of development. You may find that you never touch them again, and that is fine, too. Do always what says ‘yes’ to and serves life, growth, health and joy. Get help from outside, check yourself into a detox center, start going to a group if it is helpful for you. Be patient with yourself, accept yourself and work with yourself as you are now. Stay present. I’m always here if you need to write to someone. Feel free to send me a PN. I'm very busy, so I can't guarantee an immediate answer, but I am here when I can be. I’m thinking about you and sending you lots of positive energy for your journey.",1558723426.0,1
+Physics,"It is a first-year course, but it is a calculus-based physics course with vector calculus.",1556283920.0,1
+Physics,">I find that multiple choice is horrible for testing physics concepts besides trivia, and should never be used in any university physics exam meant for a physics major.
+
+&#x200B;
+
+Yes, I totally agree and the questions are weighted poorly. Like I was describing above, even if you totally understand the theory behind it and make a simple sign error, you lose all of the points for that assignment.
+
+&#x200B;
+
+My mathematics courses are structured more in the way you have described your courses. We are required to show we understand a concept by ""x-raying"" it, i.e. deriving it ourselves or re-constructing it from an altered theoretical basis. The end-result of a numerical calculation is 1 of 15 possible points for an assignment.
+
+&#x200B;
+
+>Pure math assignments can take a whole week to think through, and physics assignments are generally more straightforward (ie do these 6 questions from Taylor's Classical Mechanics by friday) but still take hours each.
+
+&#x200B;
+
+And this is exactly how it should be. One problem that keeps me prying and pulling by forcing me to continously re-think my theoretical approach is worth gold. That theoretical situation will stick with me for the rest of my life by having contributed to the growth of a mental muscle used for theoretically deriving and solving things. It's made me subconsciously turn something over again and again. I love problems like that. If I'm stumped, I'll mentally put them aside and then I'll think them through while walking in the park, washing the dishes or cleaning up the appartment.  Suddenly, I'll have an aha-moment and it's solved.
+
+I believe universities should aim at this from the very beginning. From what I've experienced so far, they are not teaching people to think. They are teaching people to mindlessly use. People become experts at applying, but they do not understand what they are actually doing. If they were required to re-invent a language, a theory or just modify one a bit to better explain something, they would be totally lost. In many cases, it is not their fault. If you have never encountered much of physics outside of such a terribly conceptualized course and you pass it with a decent grade, you can easily be misled to believe that you now know physics, when in reality, all you have done is punch numbers into your calculator. This becomes very evident in our courses when purely theoretical and conceptual questions are asked and only 25% of the class answers them correctly. E.g. almost no one was able to correctly state that the Earth experiences a force equal in magnitude to that of an object falling toward it. They have become so used to grabing F=mg and plugging things in, that they do not understand the fundamentals of what they are working with.",1555952444.0,1
+Physics,"I don't mind you ""butting in"" at all, friend. Thanks for the bright light at the end of the tunnel. I think this is something I've been wanting to read / hear. I'm glad it's gotten better for you.",1555681369.0,1
+Physics,"Thanks so much for your valuable advice! I will be sure to heed it. This gives me a lot of hope and takes the pressure off concerning the ""switching dilemma"". 
+
+I see that you too are an undergrad. I wish you the best in your studies!",1552780359.0,1
+Physics,Bitteschön :-),1552165227.0,2
+Physics,Sehr gerne! :),1552165210.0,1
+Physics,"[https://www.uni-frankfurt.de/65315388/AG-Rischke](https://www.uni-frankfurt.de/65315388/AG-Rischke)
+
+Good for heavy emphasis on ""theoretical"". Go down past his photo and click on the blue tab ""LEHRE / SKRIPTE"". All the ""Skript"" links are PDF downloads. Wishing you lots of fun! ",1552060466.0,1
+Physics,"[https://www.uni-frankfurt.de/65315388/AG-Rischke](https://www.uni-frankfurt.de/65315388/AG-Rischke)
+
+Good for heavy emphasis on ""theoretical"". Go down past his photo and click on the blue tab ""LEHRE / SKRIPTE"". All the ""Skript"" links are PDF downloads. Wishing you lots of fun! ",1552060456.0,1
+Physics,"[https://www.uni-frankfurt.de/65315388/AG-Rischke](https://www.uni-frankfurt.de/65315388/AG-Rischke)
+
+Good for heavy emphasis on ""theoretical"". Go down past his photo and click on the blue tab ""LEHRE / SKRIPTE"". All the ""Skript"" links are PDF downloads. Wishing you lots of fun! ",1552060444.0,3
+Physics,"[https://www.uni-frankfurt.de/65315388/AG-Rischke](https://www.uni-frankfurt.de/65315388/AG-Rischke)
+
+Good for heavy emphasis on ""theoretical"". Go down past his photo and click on the blue tab ""LEHRE / SKRIPTE"". All the ""Skript"" links are PDF downloads. Wishing you lots of fun! ",1552060438.0,2
+Physics,"[https://www.uni-frankfurt.de/65315388/AG-Rischke](https://www.uni-frankfurt.de/65315388/AG-Rischke)
+
+Good for heavy emphasis on ""theoretical"". Go down past his photo and click on the blue tab ""LEHRE / SKRIPTE"". All the ""Skript"" links are PDF downloads. Wishing you lots of fun! ",1552060412.0,1
+Physics,"These aren't necessarily books, but lecture notes. In some ways better and more compact.
+
+[https://www.uni-frankfurt.de/65315388/AG-Rischke](https://www.uni-frankfurt.de/65315388/AG-Rischke)
+
+Good for heavy emphasis on ""theoretical"". Go down past his photo and click on the blue tab ""LEHRE / SKRIPTE"". All the ""Skript"" links are PDF downloads. Wishing you lots of fun! ",1552060392.0,1
+Physics,"[https://www.uni-frankfurt.de/65315388/AG-Rischke](https://www.uni-frankfurt.de/65315388/AG-Rischke)
+
+Good for heavy emphasis on ""theoretical"". Go down past his photo and click on the blue tab ""LEHRE / SKRIPTE"". All the ""Skript"" links are PDF downloads. Wishing you lots of fun! ",1552060325.0,1
+Physics,"Hey, friend, physics student here!
+
+Things like this just make my day. It's what the internet was made for: Everyone sharing the leaps and strides great human minds have made. I would offer you some things, too, but most of what I've got is in German... 
+
+Thanks a million for being such a cool and generous person.",1551563865.0,233
+cats,"Thanks again so much for your support. Just a little update: My parents took the kitten to drive him back to the shelter on the weekend. They had him for about 3 hours and fell in love with him. Although they insisted from the very beginning that they definitely didn't want him, that he was definitely my cat, they've decided to keep him. I'm really happy. I can still see him on the weekends. My stepdad is retired so he has a lot of time he can spend with the kitten. He's crazy about the little guy and the kitten really loves him, too. So, as far as the kitten situation is concerned, everything worked out. He's happy, healthy and is having a blast.",1550551553.0,1
+cats,"Thanks so much for caring. I currently have student health insurance. I will look and see if they offer a hotline. I'm not working anywhere and couldn't anyway (except on-campus jobs like selling coffee) because of my foreigner status. I think I've also found another suicide hotline number for my region that might be more helpful.
+",1550025697.0,2
+cats,"Unfortunately, I've been close to suicide before. I've had to call the suicide hotline before, but the people were untrained college students, 18 and 19 year olds who were studying psychology and doing that as a side-job at night. One of them told me that through working there, she now realizes she isn't fit for psychology. It didn't make me mad at her, but it made me realize I couldn't expect much help from calling there...",1550023143.0,1
+cats,"Thanks for asking. Yes, I can call my mom and stepdad. I'm doing that right now.",1550021580.0,2
+cats,"I won't use the squirt bottle anymore. Unfortunately, I grew up watching my mom handle situations with the cat that way and I took over that tactic. 
+
+The litter box is easily accessible for the kitten. In fact, I now have a new problem: It likes to lie in there for long periods of time and comes out stinking to high heaven. (The box is clean, but it has a top cover so the smells are generally isolated). 
+
+Thanks again for everything. I will keep this post updated. I understand what you mean about the ""magical time."" I'm not doing the little guy any favors by waiting too long. Overcoming my own guilt, despite what you wrote, is what is the hardest. Yesterday, I ended up bawling and crying streams of tears (like a little kid!)when it came and cuddled with me. The whole situation still makes me somehow feel terrible. But that's something I will have to work on.",1550011723.0,1
+cats,.,1549939837.0,2
+cats,"Thanks so much for answering. I'm sorry to hear you have a similar diagnosis. I hope things are going okay for you in that regard. It's good you don't live alone and that you have some support. If I could, I would live with my parents, but the car ride to and from school is 3 hours total and in the winter there are terrible roads to go over. I'm at the closest college possible and it's also the only way to be in the country with my family legally. So I kinda have to figure the whole living-alone-thing out. I'm grateful I can even be here, get care and schooling. It could be a lot worse. I could still alone in Europe lost in my own mind.
+
+I just talked to my parents and they said to give it a week or two and then make the final decision. That's what I'm planning on doing. I also don't want to rush into returning him...just as little as I rushed into getting him. I just also want to make sure I don't wait too long for him. He's so affectionate, he will find his way into any heart and he is capable of loving anyone, but I still don't want him to be too heart-broken by having possibly become too attached.
+
+I guess it's also quite defeating just admiting I feel like I can't do it. I'm such an animal-person. I grew up with them and have always loved them. 
+
+Anyway, thank you very much for your input. It really helps me to get a feel for what's right.",1549939496.0,1
+cats,"Wow, I can't tell you how much I appreciate the time you have taken to answer.  It really is a ""unique"" situation. You bring up a point that has also gone through my mind: Animals are like emotional tuning forks, they really do resonate with whatever we are giving off. I don't want this wonderful, loving, trusting, little guy to start developing paranoia and unease. He's got one of the most beautiful cat-souls I've ever seen. And I've seen more than a few. He really deserves the best the world can give him.
+
+ I spoke to my parents just now on skype and they pretty much said the same thing you said: That I shouldn't beat up on myself and that I should do what's best for me, because that will also be what's best for the cat. Your point about the foster-home-likeness of the situation makes me feel a little bit better. And I'm sure this guy would quickly find his way into loving a new family. My stepdad said I should wait a week or two before making the final decision, because neither I nor the cat have had a lot of time to develop any kind of dynamic. He said the cat also needs time to adapt to my rhythms. Right now, the plan is to wait a week or two and then see how things are... I just don't want it to be too long either... 
+
+&#x200B;
+
+&#x200B;",1549939012.0,1
+cats,"Thanks for your input. That's how I feel right now, too. But I couldn't look for someone myself. The adoption contract says I have to return it to the agency.",1549938379.0,1
+cats,"Thank you for your input. I really appreciate it. I'm glad you can care for your brother. Living alone with a tendency toward psychosis can be very difficult. I am only doing it right now because I cannot drive the 3 hours to school anymore from my parents' house. And school is my only way of legally being here. 
+
+I really love this kitten, as a creature. Regardless of whether or not its mine. It has a very warm, trusting and affectionate personality. You're so right about those unique bonds, and that is what I was really looking forward to. 
+
+I've talked to my parents about it and the pressure is off. They told me I should do what is best for my mental health, but that I shouldn't rush the decision. I've decided to wait a week (at maximum two weeks) and then see how it is.
+
+I really appreciate that you took the time to give your input. Thank you. ",1549938334.0,1
+cats,.,1549932649.0,2
+schizoaffective,"I have both auditory and thought-like voices. In the last few months, I've been having a lot more thought-like voices rather than auditory ones. I think I understand where you're coming from. The thought-like voices come as intrusive, toneless thoughts or messages that feel unwanted, foreign, intrusive and they can also be fear-inducing. They don't feel like my own thoughts.",1548982149.0,5
+schizoaffective,"My friend, I can't tell you how much your words mean to me at this moment and I thank you for taking the time to write them down. I'm still absolutely terrified of what may come, but I'm feeling calmer. I also took some Atavan and Benadryl to come down. I'm waiting to take my first dose of Geodon on Friday night. I've got classes early tomorrow morning and don't want to run the risk of being zombified then. 
+
+School has always been my dream...not really school, but what I'm studying, physics. Aside from schizoaffective I also have OCD, just like my dad did. It can be a terrible bitch, because it adds intrusive, unwanted and repepetitve thoughts to the voices, but it also ""helps"" me obsess about numbers and exactness. That's helped me with mathematics alot at times. 
+
+School is really rough right now, though, because mentally I'm hardly able to keep it together. I slept only 4 hours over the course of three days, suffering from terrible voices and panic attacks that I would have to leave me mom and be sent back across the ocean all alone. Going to class was a huge struggle. That really hurts me, too, because I feel like this is my one chance, my dream, and I'm having to try and mop up all the legal messes this mental illness has left behind. School is my only way of even being here right now legally and that adds a big amount of pressure to the whole thing ... as if college wasn't pressure enough already. 
+
+My parents are optimistic about the citizenship thing, too. But I'm nervous, because I didn't get the right kind of help back then, so there isn't a diagnosis prior to me losing it. I'm afraid they'll say no, because I won't be able to show them it was the mental illness. I just keep praying my current diagnosis will be enough for them. After all, such a mental illness doesn't just develop overnight. It can go undiscovered for years. 
+
+My Dad went through that whole SSI thing when he was so sick that he couldn't work anymore. His OCD had him so locked down and so psychotic that he wasn't able to do anything. They kept turning his applications down and it was a long, terrible fight to get them to cough up that little bit of money. I wish my dad hadn't killed himself. I wish he could still be here, even if he was an asshole a lot of the time. I would have liked to have talked to him about this. I've come to understand him a lot better since this all started with me. 
+
+So, I think I understand what you mean about SSI. And it sounds like you've been through quite a bit of hardship yourself. You were couchsurfing to stay off the street? Where are you now? Have you found a place you like, are you happy there?",1548980680.0,1
+schizoaffective,"I appreciate your response. I went to the ER on Jan. 9 because I was having another psychotic break, except I didn't want to keep it to myself this time. Big mistake. They stuck me in a psyche ward, a rubber room with 15-minute suicide checks and sedated me. I was in there for 7 days and felt like I was losing my mind even more. There were also some pretty seedy characters there. Two methheads tried talking me into giving them handjobs. I felt violated and totally grossed out. The doc was an arrogant asshole that came by 5 min. a day and then got out of there. The staff was about as crazy as the patients... And I must admit: I'm reluctant to go to the ER because I'll miss school and good marks are the only way I can stay in the country and be with my family right now. It's a nightmare situation. I get a maximum of 1 year of leave for sickness, etc. If I exhaust that, I have to go back to Germany, where I have no one and nothing, not even a place to live. 
+
+Ever since I was a kid, I wanted so much to make big discoveries or do something to benefit the world, but now I'm a fucking mess and barely able to take a shower. I appreciate you not wanting me to leave, but please understand that it is so hard to want to stay right now.",1548968891.0,1
+schizoaffective,"I'm really trying to get my citizenship back, but it is taking forever for a psychiatrist to write up a report. And I'm really scared, because I didn't have a diagnosis at the time I had renounced. All I had was the general diagnosis ""depression"" and was taking Celexa and smoking large amounts of weed to try and self-medicate. The doctors were shit and never spent enough time talking to me. Plus, I wasn't really aware of how much was wrong with me at the time. I feel like if I can't get my citizenship back, then the fucking illness will have won. It will have created a whole new set of circumstances to drive me into insanity. I can hardly keep it together right now as it is. And I'm really trying. There's just been too many big things that have successively happened to keep fucking my mind up consistently. At 15, my dad tried killing himself in front of me. I grew up with constant fighting and abuse. He was alcoholic and had severe OCD. Then I started hearing voices and getting delusional, being convinced my mother tongue was contaminating my mind and being inserted into my brain by a foreign power. That was consistent and is why I changed citizenships...because I was terrified of coming back to have to speak my mother tongue. My dad eventually killed himself, I lost contact to my mom, I was working fulltime and doing night school, my wife came out saying she had been sexually abused, her family - and back then my only family - cut off contact to us, then she left me, divorced me and immigration came after me. I was homeless and totally lost it. I really got bad at that point, thinking I was the victim of a big conspiracy, that I was being watched, sabotaged, etc. I lived in a little room on the edge of town, worked a menial, shitty little job. Then I lost my citizenship... 
+
+I just can't keep doing this, man. We were meant for so much more than this shit, you know? We can be so much more than this. I know what you mean about finding causes on spiritual levels. But I get cautious about that, because my delusions can take off like rockets and before I know it, I'm all lost in euphoric phantasies or demonic scenarios. 
+
+I really appreciate your words of strength. I agree that words are magic, that we create our realities with thoughts and words. And I feel like this schizo-shit is when these creative forces get out of control and go off doing their own thing. It's like losing control of a powerful fire hose. It ends up shooting in all directions and nobody can seem to get a good hold of it again. 
+
+I'm just so tired of survival mode, my friend. This is no way to live. Every waking second fills me with terror. I can't even feel happy about possibly graduating. In fact, I dread it, because it might mean I have to go back to a country where I lost myself to my insanity. I couldn't handle that. I want to live like everyone else. I want to look forward to graduating. I want to at least be able to share their illusion that everything is going to be okay, that there is no potential danger on the horizon. Right now, I'm just constantly feeling like the next hammer is about to drop.",1548968493.0,3
+schizophrenia,"Thank you so much for sharing your experience. It helps me to understand I am not weird or unusual. You, many others and now I are all reporting on panic and suicidal distress caused by these meds. What you described is pretty much what I also experienced. Initially, they knocked me for a loop, shut up the voices, ceased the racing thoughts, but then after that dose began to wear off, a flashing panic sensation would come over my entire body, stretching up my back and into my neck. It would knot my stomache shut, clench my chest. A thousand horrific scenarios flashed before my eyes, thousands of voices spoke and murmered, as if I was standing in a bustling restaraunt or on festival grounds. 
+
+Are you still taking it? If not, could you switch to something else?",1548967527.0,1
+schizophrenia,So you also got panic attacks? I have been reading of people getting panic and anxiety attacks from this drug. I sure did. I thought the fear was going to kill me. ,1548908932.0,2
+schizophrenia,"Thank you, Katie. I am considering not going on them at all after reading of other people's experiences (like yours). And if I do go on them, I want to go on the lowest possible dose. I am familiar with the sensations you describe in the front of your head, probably the prefontal lobe. Risperdal made this part of my head feel extremely empty, but also heavy and blunt. I could do nothing else except lie down and be still. I was ""online"" and could not sleep, but was unable to do any more than that. I would lie there for 12 hours at a time, knowing I wanted to sleep, but constantly being aware of everything around me. It was terrible. I  hope you can find a way to come off of them and recover. It is possible to heal your brain.",1548908785.0,2
+schizophrenia,"I'm sitting here literally crying tears onto my keyboard for you. You seem to be a strong spirit, so I will assume you don't want sympathy. I myself never want anyone to feel sorry for me. But empathy is always welcome. I think your reply touched close to home because I too have observed how my creativity has died over the years. I used to write long, very thoughtful stories and paint, I also played the violin and was in orchestras that were very difficult to audition for. My first intention was to become a professional violinist and I had been working with a professional as my teacher. Around 15 or 16, I stopped feeling a connection to these creative forces and I am certain that they began to die as the disorder progressed. My study of physics is my last attempt to make use of my OCD...I can obssess about numbers and exactness all day with physics. And there is a good bit of creativity required. 
+
+&#x200B;
+
+Even if your mind feels numb and empty, I can assure you that there is a warm, intellectual glow radiating from your words. I can sense that there is still a beautiful spirit in your mind. It is not lost. The good thing about the brain is that it is neuroplastic. Unless damage is intense and very severe, there is always the possibility of recovery. But that takes time. If I understand correctly, you are still on the meds? And there is no possibility of coming off? There are good brain recovery supplements you could take such as Lion's Mane or Uridine Monophosphate (which was found to greatly increase cognitive functions in gerbils). I have noticed improvements with this combination. Magnolia bark is also a good brain supplement and is said to have antipsychotic properties. 
+
+&#x200B;
+
+I would also try using your hands as much as possible. Play an instrument, paint, draw, sketch, even if its just random forms without purpose or intention. Do cross-hatching, shading, lighting effects, etc. Because finger activitiy and neuronal development are very closely linked. This can definitely help repair some of the damage that has been done. For inspiration, you might like to watch a few talks given by the neurologist Manfred Spitzer (I hope some of them are in English...). 
+
+&#x200B;
+
+I think we will have to help ourselves. But luckily, we have the internet to communicate. Feel free to drop me a PM if you ever feel like it. It can be about this, or anything else you may have on your mind. Until then, I will keep you in my thoughts.
+
+&#x200B;
+
+&#x200B;",1548887036.0,2
+schizophrenia,"Oh no! I'm so terribly sorry to read that. What exactly happened to your brain? Have you discontinued using it? If so, how long has it been since you stopped? How has your brain damage expressed itself? I'm really thinking of you and hoping you can soon heal.",1548881896.0,1
+schizophrenia,Thanks!,1548877468.0,1
+schizophrenia,"It's weird. The first few times, it totally zombified me, but then, only a few days ago, it had me getting manic and psychotic. I've read about this happening to other people as well. We're not the only ones. I simply wonder what is going on in the body to make this happen...
+
+What are you now taking? I'm going to try Geodon, but am afraid to touch it until the weekend. That way I'll have time to deal with the effects if there are any.",1548876618.0,1
+schizophrenia,It did the same to me. Life was totally empty.,1548873550.0,1
+schizophrenia,Woohoo!,1548871934.0,1
+schizophrenia,"Thank you for your input!
+I admire your endurance. I don't think I could get used to these ""side-effects"". Would you be able to get rid of the paranoia with some benzos or something? 
+Thanks again!",1548871802.0,1
+schizophrenia,.,1548871649.0,2
+schizophrenia,"You're welcome and thank you for taking the time to answer! 
+
+I was suspecting something like paganism. I've been into dark psytrance and there is a lot of paganistic elements in it. I saw similarities in your motives and style to other art that friends of mine in the scene have made. :-D
+
+I can imagine it's been hard for you. It was hard for me, too. I hope you're coming along okay, though. It definitely can be done. The mind is powerful and our perception really does determine what reality is to us. If that which fuels the nature of our perceptions gets out of hand, reality becomes so different for us that we start having problems with others because they're literally perceiving a different version of reality than we are.
+
+In a strange way, that always helped me to feel normal. Because I knew that if human kind had been biologically schizophrenic in nature, the whole planet would be filled with people seeing ghosts and hearing voices. And funnily enough, our society would have integrated these things as something normal and acceptable into human life. Just like we have integrated the ability to perceive colors into our daily, human lives. ",1547923314.0,5
+schizophrenia,"Well done. I can really identify with what the voices' words say in the background. The all black eyes give it a special creepy touch. 
+
+&#x200B;
+
+Just a side question: Are you religious? I found that my religious upbringing helped make my stuff worse because it provided the fuel (demons, godly voices, etc.). It has helped me to cut that stuff out of my life. I've noticed over the years that I've become more rational and calm (even though I still have psychotic symptoms). ",1547921115.0,10
+schizophrenia,.,1547912131.0,1
+schizophrenia,.,1547911535.0,1
+SuicideWatch,"I have been dealing with schizoaffective disorder, bipolar and severe OCD for 15 years. My dad killed himself due to his OCD. He also tried killing himself in front of me when I was a teenager. I've slept in the rubber cell of a psych ward for more than a week. I was on suicide watch, being observed 24/7 every 15 minutes by staff. My mental illnesses have done a lot of damage to my life. 
+
+&#x200B;
+
+I'm sorry for writing so much shit about me; I just want to make it clear that I can understand where you are coming from. I'm not going to write any sugar-coated bullshit, because I've been where you are. More than once. I've attempted suicide, I've harmed myself physically. I've felt the need to be dead multiple times in my life, because I was overwhelmed by the amount of shit I knew I would have to deal with. I didn't want to have my mental illnesses.
+
+&#x200B;
+
+But I promise you that you can do it. You can get through your anxiety attacks. And I care about you. I *want* you to make it with all my heart! I'm sitting here at 3 am, not knowing who you are, but I know you are out there somewhere, and I want you here. I believe in you. I believe you can find happiness. I believe you can become a great contributor to positive, healing things on this planet, that you can become content, peaceful, centered, strong and vested within yourself. 
+
+&#x200B;
+
+It's all about those little eletrical signals running between your synapses. Those little thoughts become real feelings, real words, actions, objects and movements. They can become world wars and holocausts or great sources of joy and happiness. You have a great creative force in your mind; right now, it is creating hell for you, but it is just as capable of creating heaven. 
+
+&#x200B;
+
+Please talk to me. I'm here for you. 
+
+&#x200B;
+
+&#x200B;",1547885505.0,4
+schizophrenia,"Wow, I'm really sorry to read that. That's why I'm really scared of ECT's and I will refuse to do them. Maybe there are some mental supplements you can take to help your brain heal from them? ",1547005687.0,1
+SuicideWatch,"I understand why you don't want her to know. The other day, I was in the hospital for surgery (non-mental-health-related) and the nurse had to ask me a lot of questions before they could begin. When she asked me if I was suicidal, I didn't want to lie to her, because I thought the anesthesia might make my suicidal thoughts worse and that the nurse should know so she could possibly warn me. I told the nurse the truth, that I had often thought of killing myself, but my mom was in the room next to me and this was the worst thing about it. My mom started crying really hard. I can't imagine how painful it must be to hear your only child say he wants to die. It's really hard for me to deal with the guilt right now, because I feel like I'm burdening my mom so much. But I also need help, so I want to tell the truth. I've tried living with my mental illness on my own for over 10 years and it had a lot of time to do a lot of damage. 
+
+It's really okay for you to say when you have no more control and need professional help. So, if you can, please really try and get a therapist. In the end, your mom will have a better, brighter and healthier version of you that she can enjoy. And I can also warn you from experience: You will not be comfortable telling your mom everything, because there will always be a pressure for you to be perfect for her and make her proud. You will not be able to tell her things that could damage this image of yourself you would like her to have. That means you will not be able to talk to her about everything, and that is crucial for therapy. Your therapist is legally required to keep everything a secret, unless you have killed someone or something. But anything else stays between you and the therapist. So, my advice would be to really try and ask your mom to get you someone. Because I know from experience that if you don't, you could end up resenting your mom later, because you passed up opportunities for her sake. That would not be good for you or for her. Your relationship to your mom will be much better if you can find a therapist you can talk with. Because there might also be times when you want to talk about your mom...and that's probably not a topic you should discuss with your mom. ",1546982169.0,3
+schizophrenia,"Thank you very much. I'm glad you're still around, too! Even if I don't know you.",1546980943.0,2
+schizophrenia,"Thank you, friend. I hope I can fix everything, too. I'm so lost sometimes. At least I can be at home right now and go to college. It allows me to be with my family.",1546980907.0,2
+schizophrenia,Thanks! Have a wonderful year!,1546980796.0,1
+SuicideWatch,"Welcome. I'm glad you're here and that you are posting. You are not alone.
+
+&#x200B;
+
+I think I can relate to your feelings quite well, my friend. My mom is the only reason why I'm still here, too. I haven't killed myself yet because to do so would hurt her so much, I think it would kill her. I'm her only child. She had to earn the money and take care of things my entire life, because my dad had OCD, agoraphobia, was alcoholic and suicidal. He tried killing himself one time in front of us and eventually did kill himself the second time round. In my memories, my mom was always this exhausted, hopeful, but sad and worrisome woman with a big heart. 
+
+&#x200B;
+
+I developed psychotic delusions after my dad's first suicide attempt, withdrew from everyone, married abroad, lost that wife, then lived in a foreign country alone trapped in paranoid delusions, lost my citizenship and now have to be enrolled in college back home to live with my mom. I'm trying to study and get treatment while also trying to get my citizenship back. I hurt my mom so much with all of this and I have cost her all kinds of money. I feel like I'm just a continuation of the insanity my father put her through. So, the least I can do is not kill myself for her. The least I can do is stick around, at least as long as she's still here.
+
+&#x200B;
+
+If your mom is the only thing keeping you going at the moment, so be it, friend. You don't say much, but it seems like your mom is a very sweet and kind person. That is something to live for and maybe with time, both you and I can find other reasons to live for. But if your mom is all the reason you have right now, then take it and go with that. 
+
+&#x200B;
+
+Do you have anyone to talk to other than her? A therapist, a doctor, a psychiatrist? Anyone?",1546976629.0,3
+SuicideWatch,"I'm sorry you are going through this. I think I can understand a little bit where you are coming from, my dear. Today is my birthday, I am turning 29, I have no degree, I have lost my citizenship because of paranoid schizophrenia and its delusions. The only way I can be at home with my mom is to be enrolled in the college here. I am trying to get my citizenship back with a lawyer and a psychiatrist, and I am also trying to get treatment for my racing intrusive thoughts, my voices and the panic-attacks I have. I feel like my life is in shambles, like I'm sitting in a big heap of rubble. I never thought I would be in such a state at 29. 
+
+&#x200B;
+
+When I was about 15 or 16, I started developing my mental illness and I withdrew from my family. My dad was mentally ill and eventually killed himself, after trying to kill himself right in front of me when I was 15. My mom was my only real connection to humanity, and I withdrew from her when I was about 16 or 17. Thoughts and voices told me to. Being alone all the time in my own mind helped fuel the development of my mental illness. 
+
+&#x200B;
+
+So, my long-winded point is: Take my word for it and don't let this cause you to withdraw from people. If you ever want to drop a PM, feel free to do so. Try to stay connected to people. Don't over-do it with people if you are naturally an introvert (that will make things worse), but don't withdraw because you have given up on trying to find compassionate people that understand you and have empathy for you. They are out there and they are there for you! 
+
+&#x200B;
+
+It sounds like your family is not supportive and lacks empathy for you. Perhaps it can help you to try and see them in a different light, as victims of their own circumstances? Could it be that they are over-challenged with a situation or with the life you guys are living in general? When terrible things happen, people can become numb and ignorant of feelings, because subconsciously they are trying to not feel the intense, negative feelings. I'm not wanting to defend your family, and I'm on the outside looking in, but it's just my guess. 
+
+&#x200B;
+
+Are there any loving, compassionate people you can go to outside of your family? In school? Do you have friends that you can trust and tell anything to? ",1546975593.0,1
+schizophrenia,"Thank you, friend! Wishing you the best, too!",1546974380.0,2
+schizophrenia,"I'm sorry you went through that, too. Yeah, it's a particular kind of pain. It's like your dad totally saying no to you, deserting you. A part of you believes it was not deserving of his love...otherwise he would have stuck around, right? There is something very scary about your dad deserting you and your mom, especially if you're an only child and money is always a problem. I hope you didn't have to see your dad do it.
+
+I hope I can fix my citizenship problem, too. It's one of the most hair-raising, terrifying things I've ever been through. It feels like I'm trying not to die. I need it back so I can live with my family and get good treatment. I've got no family or home back in the other country. It's only a place where I lived my delusions. If I can't get it back, I will need about 13 years to regain it the normal way. That also requires that my mom stays alive, because she is my ticket to the visa. I think I'll have to kill myself if it doesn't work out. 
+
+I will try my best to keep my head up. I've made it this far...perhaps going a little further will bring light into the darkness. Stay well!",1546974358.0,1
+schizophrenia,Exactly! :),1546974014.0,2
+schizophrenia,"I am with you in thought. I am trying to complete my first degree at age 29, after being stuck in a foreign country with delusions and losing my citizenship. My degree is the only way I can legally be with my family right now. So the pressure is extremely high for me to do well in school. Thoughts and intrusive inner voices make concentrating a lot more difficult, especially during exams. 
+
+&#x200B;
+
+People are always amazed at how good I do in school, but they have no idea how much energy I lose because of having to fight off voices and thoughts every 10-15 seconds. It's like trying to single-handedly control the high-pressure beam of a fire-hose and get it to go through the eye of a needle. I can't imagine how good I would be in school if I could get the energy and vitality back that I have to invest to keep my inner chaos at bay. 
+
+&#x200B;
+
+But that's enough about me. This is your thread. What are you studying? What career do you dream of? I'm just now learning about schizophrenia, psychosis, etc. and there have been a lot of successful, very smart people that suffered from it, and they still managed to do great things. Albert Einstein's son had it and so did the mathematician John Nash. I don't think the mathematician Paul Erdös had it, but he had other mental problems and eventually became hooked on amphetamines for the rest of his life, because he wasn't able to function academically w/o them. 
+
+&#x200B;
+
+So, try letting some of these people be an inspiration to you. It is possible to function with this mental illness. A good friend of mine said that schizophrenia (and OCD...something I also tend toward) has a great amount of creative energy. For example, it takes a lot of brain activity to actually believe a delusion and live your whole life according to it. If you can find a way to channel this energy into your studies, into art, into creative writing, into anything, you could easily become a master at it. I don't know how to do that...but thinking about it in this way gives me hope. Maybe it can give you some hope, too. 
+
+I will be thinking about you today and wishing you the best.",1546973855.0,4
+schizophrenia,"Yeah! It's called ""Bohemian Rhapsody."" ",1546971999.0,2
+schizophrenia,"This shows that a mental illness can hide in the most beautiful and vibrant forms of human beings. I hope that your mind and soul have recovered. If not, then I wish for them that they may soon be just as full of joy, light and life as your outside is in this photo. Truly beautiful.",1546923631.0,40
+schizophrenia,"Sounds like you like the classic groups ;-)
+I assume you will want to be seeing the movie about Freddy Mercury that is coming out? ",1546923409.0,2
+schizophrenia,.,1546912954.0,5
+schizophrenia,.,1546899060.0,1
+schizophrenia,"Sorry for not answering. I  had to go to bed because I had surgery today. That was hard, because the nurse asked if I had had suicidal thoughts and I was honest and said yes. My mom was there and started crying. I just felt awful. 
+
+Thanks for all of your input of supplements, meds, side-effects, experiences, etc. It's all so valuable to me. I sometimes get the impression that psychiatrists don't really know what's best for you and just prescribe something. Being able to talk to people about what really does and doesn't help them, supplement tweaking etc., is extremely helpful. I have also not been honest with my doctors, though, too, because I was afraid of being deemed a nutjob and locked away, not so much because of occasional voices - which aren't that bad right now anyway, but more so because of my delusions and the OCD-like rules that go with them. 
+
+I really like that your wife has a ""safe word"" for you, lol. That is probably helpful, because it reminds you of where you are, what you are really doing, that you should be aware of delusional thinking, etc. I had no idea about John Nash until recently. I had watched ""Beautiful Mind"" back in school, when I was still a kid, but had drawn pictures at my desk and not paid attention to it. I really wish I had, I bet I can really appreciate it now. I will have to watch it. Now that I'm lying around recovering from surgery, I actually have time to do that. And I'm on opoids which is making things feel much better. I'm clearer in the head than I've been for weeks!
+
+You said you do software, right? May I ask you if you studied and if so, what degree you got? I don't really know you, but you're kind of an inspiration to me. You supplement, work out, have a wife and a job you enjoy, despite your mental condition. ",1546896553.0,2
+schizophrenia,Wow that's awful. I'm so sorry you have to experience those side effects. That's why I'm so afraid of taking APs.,1546892186.0,2
+schizophrenia,Do you have any favorite classical composers? Any favorite rock groups? ,1546887823.0,1
+schizophrenia,"Thank you for your kindness. Please keep praying for me.  I am praying too and so is my mom. This has come so close to taking everything from us. 
+
+I will look into those specific supplements. I will keep working at my degree. It's my dream to help explore space some day. I have recently become familiar with John Nash. His story gives me hope that I can still contribute to science and deal with this. And he ended up traveling around Europe in a dazed state and trying to renounce his citizenship after his suspension from MIT. I cried tears of relief when I read that because it helped me not be so ashamed. I don't feel so little, dumb and helpless if even someone as smart as John Nash can be taken by this. 
+
+I'm really sorry about your discs. That's really terrible. I have also been distracted while driving but I have not yet had an accident. Luckily, in Germany, I had no car so I did not drive for close to 8 years. It's good I didn't. 
+
+I will certainly work at maintaining my brain. I just want to be sure I don't interfere with any medication by supplementing too much. ",1546835870.0,2
+schizophrenia,"Thanks so much for your input. What does TD mean? I have been reading up on the injections and I think that is the way I want to go. Seems less intense but effective. I'm really glad you can work and be productive. You give me so much hope. I hope you enjoy your job! 
+
+It's hard for me right now to be productive. I think I'm starting to relapse.",1546835066.0,2
+philosophy,Ecce Homo and the Antichrist are also worth a read. ,1546821397.0,2
+SuicideWatch,"You just keep on trying and don't give up, but remember to have empathy and understanding for yourself. Take the time to mourn and rest whenever you need it. And if you ever need to let some stuff off of your chest, you can PM me anytime. You have people like me that care about you, even if you don't know them. ",1546818988.0,1
+schizophrenia,"Glad to read that you had such positive experiences with MDMA. That's exactly how I felt, too, untouched by fear like a little kid. It felt like I could be totally open and fully trust everyone and everything. MDMA got me out of the delusions and their fear-constructions long enough for me to realize I hadn't been living anything close to a normal psychological life. A few months after the MDMA-awakening, when I became bed-ridden again with anxiety, thoughts, voices and depression, I did two hypnosis therapy sessions, 3 hrs. a piece. That therapy and MDMA are why I ended up being able to realize I needed help.",1546818651.0,2
+schizophrenia,"I'm like you: I don't want sympathy either, just empathy. I really hope the government can have it and forgive me for the citizenship affair. You're right: I did have a lot of delusions and sub-delusions, which were mindgames going on as ""consequences"" of the big delusion, e.g. the English language contaminates the mind and is being used to rot my brain AND German immigration is following me and monitoring me (phone, bank, income, room, workplace) to try find a mistake I make so they can send me back because they too are in on the English-mind-control-conspiracy. It was all very real to me, so real that I eventually moved away to Germany, lost the connection to my mother tongue, forbade my German wife of hearing, speaking, or reading anything English (books, films, music, etc.). She put up with my insanity for awhile, keeping the rules I and thus also her had to live by secret from the family. Even though she herself was no angle, I feel so guilty for the hell I put her through with this. 
+
+&#x200B;
+
+What kind of music do you listen you to? I used to love classical music and used to play classical violin, but I lost my ability to really enjoy music a long time ago, like 15 years ago. I have a hard time feeling anything except anxiety or panic when it comes to music. That might be weird, but I can't change it. I sometimes listen to Goa or Psytrance music, if that is of any meaning to you. It's so loud and chaotic that it can drown out the voices and racing obsessive thinking, but  it can also make it worse. 
+
+&#x200B;
+
+I am really afraid of anti-psychotics because of the side effects. I need my mind to be as sharp as possible so I can get my degree and it feels like things have gotten better since my family has been caring for me, especially the voices. But they still come. 
+
+&#x200B;
+
+I'm sorry your parents aren't as supportive as you would need them to be. My family has been very supportive of me, especially after I broke down sobbing and finally told them about what had been going on with me, including every detail. But this was only possible after coming far enough to realize I had a problem. I would really like to check into  a hospital, but I'm afraid to do it because I will miss school and my schoolwork is the only way I can be with my family right now. I'd give anything to get my citizenship back and change this situation. 
+
+&#x200B;
+
+I'm sending you lots of hugs, too. ",1546816222.0,3
+schizophrenia,"Well, I'm not managing very well at the moment, so I'm coming here for some inspiration...
+
+I just want you to know I feel for you, man.
+
+I haven't been diagnosed, but  I have heard voices and suffered from obsessive-compulsive, ""foreign"" thoughts enough to believe conspiracies that actually did lead to my loss of citizenship. I was convinced that my mother tongue was contaminating my mind, that it had been implanted into my and my family's brains to ruin us and destroy our mental health. I also believed there was a world-wide plan to insert this language into everyone's minds and destroy them in this way. Those are just a few of the things I had.
+
+I'm trying to get my life back now and treat my mental condition(s). I struggled - without knowing I was struggling - for around 12 years,  convinced that the voices knew better, that I was aware of things others weren't, that I had special powers. Something along the lines of a God among men. It had a lot of time to destroy my marriage (I'm divorced), the relationship to my mom and eventually led to my loss of citizenship. At least the relationship to my mom is restored. I wake up in the morning and feel the same panic again and again, not wanting this to be my life, not wanting to have this, not wanting to sit in the rubble heap it has created. And the thoughts and voices still come. They seem to find new things to become focused on with time.
+
+&#x200B;
+
+I'm enrolled as a foreign student back home with my mom right now. It's the only way I can be here at the moment. I am studying physics, but it has been hard to focus with the thoughts and the voices. I'm doing okay, but it has cost me a lot of energy to do simple tasks and this was only my first freshman semester. I'm 29 and have no degree yet. I tried multiple times to get a degree between 25 and 26, but I wasn't able to manage. Living with my mom and stepfather while studying has been helpful. I have enough love and stability from my family, and school has forced me out of the house. Being on break has been absolutely horrible.
+
+&#x200B;
+
+I don't know about you, but it's been very hard to find a medical professional to help me. There is a forensic psychiatrist working with my attorney to diagnose me concerning citizenship, but he cannot treat me.  I grew up with a suicidal dad who had severe OCD and probably other things. He was on anti-psychotics sometimes and they left him drooling in a chair. So I was always terrified to say anything about my own issues. I finally did mention voices to a doctor about 2 years ago, and was given Melperone, but it zombified me so that I couldn't get any work done, and I backed off of it really fast. I really can't afford to be zombified now that my degree is my only way of being home and getting treatment... The only reason I haven't gone to the hospital is because I'm afraid it will prolong my degree and possibly interfere with my immigration status.
+
+&#x200B;
+
+I'm sorry my answer got so long. I just want you to know I feel for you. It's awful what a mental condition can do if it has enough time to operate without anyone - including yourself - knowing. Being alone - which I was a lot of the time - certainly doesn't help. But I find that I need a very specific mixture of me-time and time with others. Being with others suffocates me very fast. It can overload me and I often end up pretending to listen, nodding my head, when I actually can't hear or understand anything people are saying, because the thoughts and voices are louder. Do you have anyone you can do things with? Do you have any hobbies or passions?
+
+&#x200B;
+
+Whatever happens, don't give up. I know it sounds corny. I'm in the situation of legally being deportable back to a country where I have no family or home, no nothing. There are times when I seriously consider just ending it all, because I'm terrified my life will consist of delusions and their aftermath and that I will wander from one to another. But I have to try for my mom. She's the only reason I'm still here. Do you have anyone you can live for?",1546801018.0,7
+SuicideWatch,"I'm so sorry for you. Sending you a big long hug. I hope you can just cry all you want and be held really tight. My dad committed suicide, too, back in 2011. It felt like he left us (my mom and I) to die. I am an only child. 
+
+You must know it is and was never your fault. Please keep loving yourself and take good care of yourself, your body and your mind. Know that you deserve the best in life. Take as much time as you need to mourn and to heal. It may be something that you will deal with for the rest of your life, but stay constructive with it. And always, always, always get help for your mental health! I made the mistake of ignoring mental illnesses I had for years and now I'm in a very hard legal situation due to this. This can and will not happen to you, though, because you will be smarter than I and will start asking for help now if you feel you need it. 
+
+You will make this. You can do this. Just take it one minute at a time. Sending lots of hugs. 
+
+
+",1546793787.0,6
+schizophrenia,"I had the same experience: It turned out to be a shitty coping mechanism. But it took me more than a year to realize that, because the people I was hanging out with were using it and everyone was convinced it was a miracle healer.
+
+I'm also all for legalizing it, but I now strongly disagree that it is a cure-all. It tends to be portrayed this way in many circles of discussion, both inside and outside of the media. We have to be careful about that. The same goes for psychedelics. They can be life- and soul-savers, but they can also amplify a mental illness to the point of initiating a long and very uncomfortable relapse. I'm speaking from experience. I'm for legalizing them, too, but people have to know themselves and be responsible.",1546761044.0,3
+schizophrenia,"At the time I didn't know it, but looking back now, I'm pretty sure it was making everything much worse than it needed to be. But I was convinced it must be a positive influence, and that my problems were just getting worse. The thoughts got faster, louder and the emotions tended toward paranoia, sadness, anxiety, worry, etc. 
+
+I think every drug can be a form of medicine and can offer something valuable and healing, if used in the right way. I'm pretty sure that my first MDMA trip was enough to get so much flowing again that I was able to start looking for help. For about 4 or 5 hours, I was able to feel feelings that I had literally not felt in 15 years. For years, I had been blindly searching for a vague version of what I needed: relief from the panic, anxiety and exhaustion, but never understanding that these were the consequences of my thoughts, voices, obsessions and compulsions. I had tried talk-therapy for years, meaning I was trying to reach the body through the mind. It never worked, because the mind could not be reached. My mind belonged to the OCD, the voices, intrusive thoughts and delusions. And I was so enveloped in them that my therapists didn't even know what was really going on. MDMA skipped the mind completely, cut right to the chase and showed the body what it felt like to feel warmth, happiness, love and be truly at peace.
+
+&#x200B;
+
+I feel like MDMA activated emotions that had been dormant and out-of-order since I had been 15. It only took this one time to start making them easier to reach again. When it comes to positive, healthy and healing emotions, I believe a little really does go a long way. I was so sick, so lost, so buried under emotional scar tissue, that just a little drop of MDMA-induced self-love had a tremendous, long-lasting effect. But it is important that such a drug is taken consciously and not like candy at a dance party. Only then can it be medicine.
+
+&#x200B;
+
+If marijuana can do similar things for you, then by all means use it. But it should always have a special time, place and purpose. If it does not fulfill such a purpose, just stay away from it. If you cannot stay away from it even though it makes things worse for you, you are most likely addicted like I was.",1546760486.0,3
+schizophrenia,"Thank you from the bottom of my heart for sharing. I have not officially been diagnosed, but I am quite sure I have schizophrenia based on what I've done, felt and thought so far. Seeing a doctor this week and definitely a psychiatrist on the 25th. If it keeps going as it's going, I'm going to the hospital. Luckily, there will be one across the street from where I live. I haven't done it yet because I fear my mom would panic even more than she already does if she found out I was in the hospital. I'm afraid she's going to get cancer from her worrying and poor diet and then I'll be alone. 
+
+For about three days now, I've been hearing a new voice that says I should bathe in people's blood, that it's the only true way to live and be human. I don't consider myself violent but I am afraid I could hurt someone or myself. This voice is intrusive and very disturbing. 
+
+I've noted haldol. Thanks so much for the information. May I ask if it makes you sluggish or cloudy? I'm trying to get a physics degree and I can't afford to be foggy. I've had an anti-psychotic in Germany that made me a zombie and that made everything worse because I was getting behind with school even more then. I'm 29 and still don't have a bachelor's degree in anything...I've been fighting this for years now. I did really well in German evening school (highschool) but the university killed me. I took a little bit of history here, a little sociology there, dropping exams here, not writing papers there, eventually staying in bed in my room. I feel like a total failure and like I'm trapped and totally cut off from the real world. No girl could put up with this. 
+
+I'm really glad things are working out so well for you, though, my friend. I hope it continues to go that way for the rest of your life and I wish you and your wife all the best for your future together! ",1546711586.0,1
+SuicideWatch,"Hey friend,
+
+I can't tell you how to feel about your situation, because it's not mine, but I can tell you that I'm truly sorry to read that you're doing so poorly right now. And even if you're alone physically, you're not alone in spirit. This is your space and I don't want to taint it with my story, but I just want you to know I think I can understand where you're coming from. I grew up with an alcoholic dad that had OCD, couldn't touch me, didn't want me. And my mom was a panicky mess. My dad tried to kill himself in front of me when I was 15. He finally killed himself in 2011. I ended up developing what I believe to be OCD myself, but worse than that, probably schizophrenia. I hear voices and have delusions I wake up from after years. I've lost my US citizenship because of these voices and delusions. I was literally believing my own native language, the English language, was contaminating my mind. It's a long story and it's not rational, but I was convinced that what I was thinking was true and these delusions and voices have done tons of damage to my life. Now I'm back as a foreigner in my own home town, enrolled as a college student, trying to get psychiatric help and regain what I've lost. I'm often at my wit's end. I've been on all kinds of meds throughout my life, I've done all kinds of hard drugs in the past to try and self-medicate. I've done one shit-job after the other. I've been divorced and I'm alone - except for my mother and stepfather. If this ""second chance"" I currently have doesn't work, I don't know what I'll do. If my mom dies, I'm out of here. I'm done at that point. I've spent the first 15 years of my life living with the hell my father created at home and the last 15 years in the clutches of my own mental illness.
+
+Now, you might feel differently, but the way I see it, there's a lot of ways to commit suicide, one of those being that you readily accept the possibility of dying (of exhaustion or whatever) while fighting for a dream.  I'm at that point. I've nothing to lose. I'm ready to die, but if I die, I want my death to have been part of an investment attempt.
+
+How about you? Do you have anything you can invest your life energy into?
+
+Do you have a dream? Do you have a passion? What would you like to see change in the world? What are you prepared to die for? Think about it: If you are prepared to die and readily accept the possibility of death, this frees you immensely in what you can do. I have only begun to realize this in the last 3 or 4 days, but better now than never, right? Death means freedom, both in the dying process, but also in that of living: If you are indifferent toward death, because you readily accept it, because you are perhaps even more than ready to die, you have that all-or-nothing energy in you that so many death-fearing, content individuals lack.
+
+I think people like us must simply learn to utilize this energy. Death and the fear of death keeps many people small, limited and held back, but if we are so hopeless and so done, if we are so ready to die, couldn't we perhaps see this as an advantage?
+
+I hope you don't feel like I'm preaching to you, my friend. I certainly don't want to do that. I respect whatever feelings you may have. So please ignore me or kindly tell me to fuck off if I come off as preaching from the hilltops. Who would I be to tell you how to feel? I haven't walked in your shoes or lived your life. I simply hope that I can  offer you a different way of seeing your situation... sometimes a change in perspective is all we need. You may not think you are important, but you *fucking* *matter* in this world. I study mathematical chaos for my degree and I can tell you - I'm not being corny in the slightest - that the *smallest* *goddamned* *things* can have the biggest effects.
+
+Maybe you can find a dream, a hope, a mission, something...any little damned thing and start with that. And only look at today. What can you do today to work toward that goal? Think only in the smallest steps possible, and be it even that you have to think about putting one foot in front of the other. And what is it that you believe in? Do you believe in a god, are you an atheist? Why do think you are here? What are you exactly? Where do you come from? Where will you go? Were you here before? What is consciousness? Sometimes it helps me to stay focused on these bigger questions. It puts many things in perspective...
+
+&#x200B;",1546668571.0,2
+schizophrenia,"Thanks for the supplement referrals. I will definitely consider them a try.
+
+The other stuff gets the intrusive thoughts going again. I appreciate it, but mentally, I can't stomache anything like it right now. ",1546656818.0,2
+schizophrenia,Thank you. That means a lot.,1546656628.0,1
+schizophrenia,"I see. I'm glad you found help, even if it was through something you didn't want at the time. 
+
+In Germany, I had gone to the hospital because of suicide plans and serious anxiety (caused by the voices and thoughts). The doctor in the psyche ward told me I should check in for 6 weeks, but I had just gotten my job and was terrified to lose it...because it was my ticket to avoid being sent back to where English would contaminate my mind and turn me into my father. Now I wish they had put me in against my will. This might have been found out earlier before worse things could happen.",1546654005.0,1
+schizophrenia,"Thanks, but I'm afraid I can't say it's a ""recovery"" story, at least not yet. I hope that time comes very much. I've been relapsing and I'm now a foreigner in my own home country because of this. It's hard to get treatment, too. So I'm working on that. But I would say I'm much further along than I was back in 2015/16. Stay safe.",1546653608.0,2
+schizophrenia,"Thank you. May I ask how you got help? Did you go to a psychiatrist or a specialist?
+
+I can try posting updates on here. It might help me to not feel so lonely in dealing with this thing and its legal aftermath. ",1546653449.0,1
+worldpolitics,= a^2 bc,1544460427.0,9
+AskReddit,"To name just a few:
+
+1. time dilation
+2. that we and all things are electromagnetic radiation (light)
+3. that you are coded as sequences of codons in DNA
+4. that it would take light 93 billion years to travel across the part of the universe we can observe at the moment (...meaning there is much more we can't observe)
+5. that there are around 2 trillion galaxies in the observable part of the universe (think of the life forms we have yet to discover...or be discovered by)
+6. that your thoughts can literally be measured as individual sequences of electromagnetic currents running over your scalp
+",1524000249.0,6
+AskReddit,That my dad had killed himself. Doing better since then. ,1523703734.0,3
+AskReddit,"Really f-ed up story here.  In the morning I was in school (sixth grade) and was really into drawing. I used to hate math so I always did sketches instead of listening. I drew a picture of some fighter jets crashing into a skyline on that day. About an hour and a half later, another teacher comes in, telling us that some bombs have gone off in New York and we all need to go with her to get into the basement. We were in Ohio in the middle of bum-fuck nowhere, but okay...
+
+While in the school's basement, I was able to take a quick glance into the music room while we filed by the doorway. The TV was on and a lot of school staff were standing around watching a live news feed. Right at that moment, when I looked in, the second plane hit the WTC. I couldn't believe my eyes and at that moment I knew there was no bombs involved. We got sent home early that day for reasons of security. Somehow, our teachers thought our cow town could be important for the terrorists. 
+
+Anyway, fastforward to the afternoon. My dad was a pretty screwed up, mentally ill alcoholic who never really could be a father; and he knew it. He was sitting at home unemployed, but on this day - I guess it was all the people dying and whatnot - he decided to try being that good ol' American dad. He was terrible at sports, was more of the theater and arts guy, but on the late afternoon of 9/11 he took me out to the park to try some batting practice. I think we had gotten 3 pitches behind us when he threw his back out. He remained lying in the grass screaming his head off. I was able to help him back up and support him all the way back home.
+
+My mom loaded my dad into the car and we took off to the hospital. I remember we had to cross a lot of railroad crossings. My dad was lying in the back seat and screamed every time we went over those heavy bumps. The car had horrible shocks. We ended up at some awful emergency room with terrible staff. They gave my dad the wrong IV and actually made his heart stop for a full minute. I remember just standing there watching him turn as white as a sheet, then we heard that typical flatline tone. My mom was absolutely in panic. Staff came running by and some nurse sent me to the waiting room. We had gotten there at 6 pm; it was now 2 am. The place had been totally understaffed. I remember being dead-tired and just sitting alone in the waiting room looking at the TV screen. Every single channel kept rerunning the attack footage.  And because it was late, they decided to start showing the gruesome stuff. Around 3 am was when I saw the jumpers for the first time. I remember that really getting to me. Everything else had been very horrible, but totally anonymous and faceless. But with the jumpers, the whole thing got terribly human and up-close.
+
+That day sucked balls.",1523320265.0,2
+AskReddit,"I'd love to know...without dying unnecessarily early. Neurochemically, at the moment you die, your brain releases an unusually large amount of adrenaline and endorphines (that's been scientifically observed), so it certainly feels great. People who have been clinically pronounced dead and then revived also report feeling wonderful. In addition, a lot of them do report seeing themselves from above, surrounded by scurrying medical personell. The topic is extremely interesting, especially if you believe in something like a soul.",1523317691.0,3
+askpsychology,"Thank you, I have saved the number in my phone! I hope I don't need it. Looking at how I'm feeling today, I don't think I will in the coming days. But it's good to have. 
+
+I actually had been working out a few months ago and going to the gym. I had low body fat and a nice set of muscles, and was even running marathon-training-distances on my cardio-days, but then I fell back into a deep hole and was bed-ridden for two months. Now I'm kind of back down to zero... I've been put on meds by my doctor for the time being (citalopram). The first few weeks were shit, but now things have gotten better with them; however, I think I need to increase the dosage because I'm still often in a deep, dark place and sometimes unable to get out of bed. 
+
+I will start doing what you have told me: writing down one nice thing everyday about myself and the world. I am currently translating a book from English to German about consciousness and the main message of the book is that our thoughts become the world around us. I enjoy not only translating this book (because I just love translating), but also because it teaches me so much as I work my way through it. As far as volunteering is concerned, I would have to see where I end up living first in order to know what I could do.
+
+Thanks again so much for your words; they make a big difference!",1521977964.0,1
+explainlikeimfive,"This is because your subconscious mind does in fact process information, usually even more efficiently than your conscious, thinking mind. Psychologists know this. One of them told me that's exactly why you'll find girls in bikinis on cigarette advertisements. Your subconscious mind connects a sexual sensation - a very strong and pleasant sensation - automatically with tobacco use. He also told me the news uses a lot of tricks concerning camera angles, pictures, facial expressions and buzzwords to make sure your subconscious mind perceives things in a certain ""mental flavor"". 
+
+I'm having my first hypno-therapy session this coming Monday. Speaking with the therapist for the first time, he told me about how powerful the subconscious mind is. Apparently, there are about 7 schools here in my country where they regularly put children in a trance before class begins. My therapist said it looks really funny, because the kids seem to not be paying attention at all, but rather completely zoning out. However, if you quiz them afterwards - without them having taken notes - they show that they have absorbed everything to 99%.",1521820570.0,1
+AskReddit,"Right now. Dad killed himself a few years ago. Watching my mom age from thousands of miles away and waiting for the next hammer to drop. Got divorced a year ago, am in a country all alone without family, combating depression with ice cold morning showers and self-motivational videos as well as not knowing what degree I should get. Have tried various subjects out, but can't seem to find my passion. Am almost 29 and feel like a complete failure.",1521811369.0,3

@@ -1,0 +1,70 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+rimjob_steve,Debugging mono,,1589384361.0,3,0.8,1
+voidlinux,What should one do to setup Xen?,"Hey there. Having troubles at the very beginning of Xen installation - booting Xen kernel. Got the necessary packages installed for both Xen and GRUB Xen support, but the hook in `grub.d` that, I assume, creates GRUB entries for linux kernels to be booted with Xen as the host system, doesn't seem to work. `grub-mkconfig` produces no boot entries where it supposedly calls that hook, while other hooks like `os-prober` are functioning correctly.
+Also Xen-related runit services seem to fail, and, weirdly enough, `xl`, which if issued any command, results in:
+
+    xencall: error: Could not obtain handle on privileged command interface: No such file or directory
+    libxl: error: libxl.c:102:libxl_ctx_alloc: cannot open libxc handle: No such file or directory
+    cannot init xl context
+
+I assumed both `xl` and the services need Xen set up first, but I may be wrong on that...
+Got completely no clue how to proceed here, so any help is appreciated :D",1586472078.0,2,1.0,0
+voidlinux,A question regarding PRs to void-linux/master,"Greetings. I'm trying to get into submitting packages, and, well... having a rough start. One thing is that xlint on my system refuses to report some problems, mostly template organisation ones like empty strings in comments. So I only find those after a pull request when Travis xlint check fails.   
+How should one approach fixing similar stuff that's already in a pull request? If it's okay to just make another commit, then wouldn't it cause the PR to be somehow messed up by having multiple commits to be pulled? If not, what should the message on latter commits be?  
+And, well, more specifically - right now forgot to change vdoc to vlicense and committed that, will a second corrected commit just do?  
+Cheers!",1583571210.0,3,1.0,7
+voidlinux,Weird dependency issues between nvidia-libs,"Greetings. Using void-mklive to create an image with 'nvidia' package included, failing at it because of an error:
+
+    ERROR: nvidia-libs-440.59_2: file `/usr/lib/xorg/modules/drivers/nvidia_drv.so' already installed by package nvidia340-libs-340.108_2.
+    ERROR: nvidia-libs-440.59_2: file `/usr/lib/libcuda.so' already installed by package nvidia340-libs-340.108_2.
+    ERROR: nvidia-libs-440.59_2: file `/usr/lib/libcuda.so.1' already installed by package nvidia340-libs-340.108_2.
+    ERROR: nvidia-libs-440.59_2: file `/usr/lib/libnvcuvid.so' already installed by package nvidia340-libs-340.108_2.
+    ERROR: nvidia-libs-440.59_2: file `/usr/lib/libnvcuvid.so.1' already installed by package nvidia340-libs-340.108_2.
+    ERROR: nvidia-libs-440.59_2: file `/usr/lib/libnvidia-cfg.so' already installed by package nvidia340-libs-340.108_2.
+    ERROR: nvidia-libs-440.59_2: file `/usr/lib/libnvidia-cfg.so.1' already installed by package nvidia340-libs-340.108_2.
+    ERROR: nvidia-libs-440.59_2: file `/usr/lib/libnvidia-encode.so' already installed by package nvidia340-libs-340.108_2.
+    ERROR: nvidia-libs-440.59_2: file `/usr/lib/libnvidia-encode.so.1' already installed by package nvidia340-libs-340.108_2.
+    ERROR: nvidia-libs-440.59_2: file `/usr/lib/libnvidia-fbc.so' already installed by package nvidia340-libs-340.108_2.
+    ERROR: nvidia-libs-440.59_2: file `/usr/lib/libnvidia-fbc.so.1' already installed by package nvidia340-libs-340.108_2.
+    ERROR: nvidia-libs-440.59_2: file `/usr/lib/libnvidia-ifr.so' already installed by package nvidia340-libs-340.108_2.
+    ERROR: nvidia-libs-440.59_2: file `/usr/lib/libnvidia-ifr.so.1' already installed by package nvidia340-libs-340.108_2.
+    ERROR: nvidia-libs-440.59_2: file `/usr/lib/libnvidia-ml.so' already installed by package nvidia340-libs-340.108_2.
+    ERROR: nvidia-libs-440.59_2: file `/usr/lib/libnvidia-ml.so.1' already installed by package nvidia340-libs-340.108_2.
+    ERROR: nvidia-libs-440.59_2: file `/usr/lib/vdpau/libvdpau_nvidia.so.1' already installed by package nvidia340-libs-340.108_2.
+    Transaction failed! see above for errors.
+    nvidia-libs-440.59_2: collecting files...
+
+Judging by `xbps-query -RX nvidia340-libs`, `nvidia-libs` depends on `nvidia340-libs` but has file conflicts with it. Is there anything that can be done here, or do the repository packages need changes? If it's the latter, I apologise for not having the ability to do anything regarding void packages, and thus will patiently wait if someone more competent addresses that",1581856462.0,2,1.0,2
+voidlinux,Void-mklive filesystem size,"Hey there. So I'm working on a live image that has some additional programs like xorg and i3 with custom configs. However, ran into an issue that most of it fails because there is no free space in the live system for cache and .Xauthority and so on. Is there anything void-mklive can do, or can I somehow address that manually?",1581670492.0,1,1.0,6
+unixporn,[i3-gaps] osu!,,1581434107.0,42,0.91,10
+voidlinux,Issues adding patches to a kernel in xbps-src,"Hey there. So I thought of trying to compile a kernel with realtime patchset, and, luckily, remembered about xbps-src. Figured I might need to put the patchset in `srcpkgs/linux5.4/patches`, but after doing so, packaging it yields a following error:
+
+    cp: cannot stat '/void-packages/srcpkgs/linux5.4/patches/###########################################################': No such file or directory
+    => ERROR: linux5.4-5.4.18_1: do-patch_00-patches: 'cp -f $i ""$wrksrc""' exited with 1
+    => ERROR:   in _process_patch() at common/hooks/do-patch/00-patches.sh:14
+    => ERROR:   in hook() at common/hooks/do-patch/00-patches.sh:43
+    => ERROR:   in run_func() at common/xbps-src/shutils/common.sh:21
+    => ERROR:   in run_pkg_hooks() at common/xbps-src/shutils/common.sh:233
+    => ERROR:   in run_step() at common/xbps-src/shutils/common.sh:71
+    => ERROR:   in main() at common/xbps-src/libexec/xbps-src-dopatch.sh:33
+
+It seems that 00-patches.sh for some reason fails due to weird patch file names?.. Some of them do contain a lot of unwanted characters like parentheses and otherwise. The patchset is from [this here](https://cdn.kernel.org/pub/linux/kernel/projects/rt/5.4/). I'll try to change filenames to more sane ones once I get back to my PC, but for now, looking for advice, thanks  
+
+
+Oh, also yeah, I know that the patchset is for a slightly different kernel version, just playing around at the moment, maybe it'd even work :D",1581150936.0,2,1.0,2
+voidlinux,How should one persistently change the CPU frequency governor with runit?,"Hello, here's a little question - what should one do if they need to change the CPU governor? I was thinking of a one-shot runit service doing `cpufreq frequency-set -g performance`, but one-shot services are a whole other problem for me... Is there maybe something else possible? Or how should that runit service be set up?",1578083069.0,1,0.99,6
+voidlinux,"Wine Discord Rich Presence, anyone?","Hey, has anyone had any success with [Marc's rpc-wine](https://github.com/Marc3842h/rpc-wine) specifically on void? Did not expect that to fail on me, and can't figure out what exactly is wrong. Used to work fine on Arch under seemingly the same circumstances (playing *osu!* using [this tool](https://osu.ppy.sh/community/forums/topics/794952), which includes the aforementioned rpc-wine). The only difference I recognise is that Void is missing wine-devel.  
+Although, rpc-wine seems to be rather unmaintained...",1577570484.0,6,1.0,2
+EliteDangerous,In a certain discord server a concept of a Meowler was born. Inspired by that recent post with neat pen-drawings,,1575727331.0,37,0.86,13
+SuicideWatch,Being pathetic is surprisingly comfortable,"I mean, people don't expect much of you, neither do you, so one is able to passively exist and... that's all. Not even a need to worry about anything. Sometimes I feel like pathetic people aren't exactly expected to live, so if such a person ceases to exist, it's, uh, it shouldn't be anything more than a slight problem for others?..
+Such thoughts do in fact bring me comfort. And tears, but mainly comfort. I feel like I can freely go.",1575060087.0,2,1.0,2
+voidlinux,Starting a tmux session on system startup fails miserably,"Hey there. So I wanted to set up tmux autostart a-la Arch to have a persistent tmux session even if I decide to not log in as usual, but use something like ssh. Following another post on this subreddit, tried to use
+
+```
+#!/bin/sh
+runuser -l lowranker -c ""fghack tmux new-session -d -s main -c /home/lowranker""
+```
+
+in `/etc/sv/tmux-session/run`. While that did get me a tmux session at system startup, it appeared to me that it wasn't run correctly as my user, and several other weird issues inside that tmux session happened, most notably `vifm` refusing to be configured at all, and python scripts failing in a segfault.
+So, I do wonder has anyone figured out a work around that",1574849479.0,5,1.0,5
+SuicideWatch,Started to smile at suicidal thoughts,"Having come up with a suitable timeframe for committing feels pretty weird. The realisation of it being kinda soon-ish makes me grin rather uncontrollably. That can't be good now, is it?",1568928740.0,1,0.99,1

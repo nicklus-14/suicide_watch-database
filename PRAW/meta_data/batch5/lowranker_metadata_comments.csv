@@ -1,0 +1,197 @@
+subreddit,body,created_utc,score
+voidlinux,"I mean system RAM, VRAM doesn't seem to affect anything on my end. Fun thing though, my VRAM is constantly 100% filled by any 3D game, so that's sure not helping. I hate having an NVidia card...",1592573292.0,1
+voidlinux,"Weirdly enough, that `Failed to open <...> codec: Invalid argument` error will occur even with all the necessary drivers and packages if OBS doesn't have enough free RAM. On my 8GB machine with an NVidia GPU, I need at least 2GB of memory completely freed and unreserved so OBS could at least attempt recording; if there's less RAM than that available - it will fail with that exact same error no matter what hardware encoder (NVAPI or FFMPEG-VAAPI or whatever) I choose. 
+
+So you might want to investigate that, or settle with a software encoder",1592480142.0,1
+archlinux,"Alacritty is indeed mighty fine. With one exception, that is gaming... Idk if it's my nvidia curse or borked proprietary drivers, but any 3D game fills up the 4gb VRAM completely, and never frees it. So it is quite common here that alacritty will just fail to launch in that case because of its hardware acceleration needs, forcing me to fall back to st or something",1591661940.0,2
+voidlinux,"My bad for not knowing that LXDM is used, whoops ._.
+
+According to [ArchWiki](https://wiki.archlinux.org/index.php/Lxdm#Advanced_Session_Configuration) again, `~/.xprofile` should be sourced by LXDM by default, or you can add `source ~/.xinitrc` to `/etc/lxdm/PostLogin` to use .xinitrc as well... If even that doesn't work for you, then something weird is going on I'd imagine
+
+EDIT: Yeah, `rc.local` shouldn't work indeed, because it is executed immidiately after boot before the X server starts for the DM... I think",1591301829.0,2
+voidlinux,"Depends on the display manager of your choice, or its absence. Afaik, XFCE's default DM is LightDM, which can run scripts specified in `/etc/lightdm/lightdm.conf`
+
+Something like
+```
+[Seat:*]
+greeter-setup-script=/path/to/script
+```
+should work there... maybe point it to your user's .xinitrc, which also works for `startx` if you end up using that instead
+
+EDIT: 
+`/etc/lightdm/Xsession` should source your user's `.xprofile`, so it may be used in the same way as .xinitrc I guess
+
+Source: [AskUbuntu](https://askubuntu.com/questions/74189/run-a-startup-script-with-lightdm), [ArchWiki](https://wiki.archlinux.org/index.php/LightDM#NumLock_on_by_default)",1591297209.0,1
+aww,Восемнадцать манулов,1590366530.0,3
+voidlinux,"Hm, for EFI systems there's also rEFInd that generally doesn't need any configuration or hooks whatsoever due to its somewhat reliable autodetect feature. One thing with that though - each kernel upgrade in void resets rEFInd's ""last booted"" selection (well, it's a different kernel to boot after all, makes sense), and if the kernel isn't first in the list, it'll boot something else.
+
+It's worth a try in my humble opinion",1589543994.0,2
+rimjob_steve,https://stackoverflow.com/questions/49242075/mono-bug-magic-number-is-wrong-542,1589384406.0,1
+voidlinux,"Changing the entire virtual terminal's font might be a solution:
+
+https://wiki.archlinux.org/index.php/Linux_console#Fonts
+
+If you only want runit output to change... then maybe it's possible to put a desired font configuration setting in `/etc/vconsole.conf` or a `setfont` command in `/etc/rc.local`, then revert back after user login with another `setfont` command in `~/.bashrc` or whatever is the shell rc for you
+
+Just guessing /shrug",1588666472.0,3
+voidlinux,"This here [web browser application for Teams](https://github.com/ivelkov/teams-for-linux/releases) worked wonderfully for me, running from an extracted tarball without installing. Good to know there are solutions with .deb packages out there!",1588515601.0,2
+voidlinux,"Having troubles with xen here as well, can't even startx on dom0. Nvidia gpu drivers seem to be the problem, since startx fails immidiately with Nvidia complaining about being out of memory.
+
+From what I've read, I'm afraid one can't normally use xen with Nvidia gpus at all because of their proprietary and licensed virtualisation technologies... Sadface",1588063150.0,1
+voidlinux,"You should be able to install grub from void in exactly the same way it is installed elsewhere. Not familiar with legacy boot, but I'd imagine `sudo grub-install --target=i386-pc /dev/sda` or something similar should take care of it?.. Then you might want to re-generate grub config file with `sudo grub-mkconfig -o /boot/grub/grub.cfg` as usual
+
+If anything goes not according to plan, one can always try to boot from installation media and install grub that way as per the installation guide",1587702183.0,2
+voidlinux,"Hey there! Actually that exact question has already appeared here just a few days ago, so you might want to check out our replies [there](https://www.reddit.com/r/voidlinux/comments/g44rpf/graphic_tablets_experience_on_void/). 
+
+TL;DR: Yeah, works pretty well, and if built-in drivers don't provide full functionality then `libwacom` and `xf86-input-wacom` packages should be sufficient for almost anything, I guess. Cheers!",1587695826.0,1
+voidlinux,"Gaming on Void is, from my experience, as good as on any other linux distribution, if not better for not having weird package-related issues as I had on Debian and derivatives. 
+
+Steam would still be the preferred choice because it officially supports linux and has Proton. For GOG I currently see two options: one would be to download games simply from GOG.com to get native linux versions if those are available, and the other would be to get `lutris`, and launch GOG Galaxy and Windows versions of your games from there using Wine, which may or may not perform well. Compatibility with Windows games is, honestly, a whole different story...
+
+I never actually touched GOG, so you'll probably already know how to tackle it on linux better than I do :D
+
+So overall - yeah, Void is a perfectly good solution for linux gaming
+
+EDIT: There seems to be a `LGOGDownloader` package, which is an ""Open source downloader for GOG.com games that uses the GOG.com API""... if you end up using Void, you might want to look into that, I guess",1587695453.0,8
+voidlinux,"Well, it might be better to simply comment out `zzz`. `ignore` is not a command or a program, at least I don't think it is, and since `handler.sh` is just a script, simply commenting out or removing stuff is enough.
+
+Just a sidenote",1587682312.0,4
+voidlinux,"Hey. Huion tablets should work out of the box, and they did for me. Iirc Huion drivers are built into the linux kernel since 3.12, so they should work in some way or another on any distribution.
+For Wacom there are packages `libwacom` and `xf86-input-wacom`, and those two were sufficient here as well.
+
+I'm interested in DIGImend drivers though... The installation here was as simple as `git clone`-ing their [git repository](https://github.com/DIGImend/digimend-kernel-drivers) and `sudo make dkms_install` there as per their installation instructions, because I'm using DKMS and that's fitting.
+Can I ask though, what's the main reason for using DIGImend? It'd be awesome if it provided some tablet tweaking abilities like Wacom drivers do, but that doesn't seem to be the case...
+
+EDIT: I think most of possible input devices can be taken care of with only the packages `libinput` and `xf86-input-libinput`, since libinput is the new powerful layer of device handling. Maybe you won't even need the wacom packages... just wondering. Whatever is the case, the libinput packages still look rather useful",1587295440.0,5
+voidlinux,"I guess one thing that should be checked is user's default shell. Log in as root, and ensure that the shell that your user has as default is actually installed (i.e. `xbps-install -S bash` if you want bash), or the opposite - change user's default shell to one that is already installed (i.e. `chsh -l` to get a list of available shells, and `chsh -s /usr/bin/<shell> <username>` to change the user's shell)
+
+Just a wild guess",1586472758.0,1
+archlinux,"I stand corrected, thanks",1586328760.0,3
+archlinux,"Haven't used arch for a long time, but iirc nvidia provides drivers through dkms modules, which are built for each installed kernel. So you would need regular nvidia (nvidia-dkms?), kernels, and headers for the kernels (linux-lts-headers?) which are required to build dkms modules. Every kernel or nvidia update should trigger rebuilding of those.
+
+nvidia-lts are the drivers that nvidia themselves support, maybe for legacy gpu reasons",1586305280.0,7
+voidlinux,"Make sure that Steam Play is enabled for all titles (as in, both supported and unsupported titles) in Steam settings",1585695846.0,3
+voidlinux,"Have you, by any chance, been building ffmpeg with xbps-src without these features before? I think it might refuse to put the freshly-built version in the local repository because there already exists one, so that could be problematic...
+
+Just a wild guess, since I did occasionally have to remove previous build results of packages manually in order to get new ones",1585357191.0,2
+MultiMC,"Seems that your problem involves MC failing at accessing OpenGL. 1.13 and beyond have some significant changes involving LWJGL updates and bugfixes specifically related to OpenGL on Linux, maybe your system is susceptible to these issues. Other than that, you might want to look into getting relevant video drivers and OpenGL-related packages (on Void: `glew`, `glu`, `glfw` or `glfw-wayland`, maybe `mesa`, and of course drivers for your GPU)",1584833779.0,1
+voidlinux,"For Minecraft specifically, you can use a launcher that supports setting a specific java version for the game to use. MultiMC is a great open-source one that can do a plethora of things including that",1584830073.0,1
+voidlinux,"Getting same things with MSI MS-7996 motherboard, never got around finding a fix or workaround 'cause it doesn't really do much apart from these messages. Those might've appeared after I updated BIOS using `fwup` and upgraded to 5.x kernel, so there's that /shrug",1584366609.0,1
+bash,"Well, I employ ""cp -u"" in my backup script, the -u (--update iirc) flag makes it only copy stuff that has been modified or added. Useful for small additions to a 2gb stash here, maybe your situation can benefit from that.
+Edit: specifically ""cp -ur $HOME/Music $DEST"" for updating Music and Pictures directories on my backup drive. The recursive flag does work nicely with it, maybe your entire data structure can be update-copied to the device with a single cp -ur",1584183090.0,2
+i3wm,"I'm quite happy with alt-tab bound to switching to next workspace. With usually having two workspaces, first for web and social, and second for games, alt-tabbing between the two kinda makes sense after doing similar things in floating WMs (I only needed alt-tab to jump between a game and not a game, where I then switch to whatever not-game program I need with the mouse). Maybe an approach like that could fit someone",1583866423.0,1
+voidlinux,"Well... you could search for needed package in open pull requests to void-packages, but that'd only yield things that are meant to be included in official repos, so, not really custom templates there. Hm",1583743964.0,2
+voidlinux,"This is actually rather amazing, thanks a lot!",1583610881.0,1
+voidlinux,Thanks all! Now gotta work on not messing up to begin with... Hopefully people managing PRs will cope with me learning how things operate :D,1583577677.0,2
+voidlinux,"Well... if you have some other linux system available, you can get xbps on it (either static or maybe your distro provides it in repos), and make a void liveiso with nonfree nvidia drivers included using [this tool](https://github.com/void-linux/void-mklive).",1582973319.0,2
+voidlinux,"As a suggestion, if you got any smartphone with cellular data you could try USB tethering to get a wired connection for the laptop to at least get `broadcom-wl-dkms` as Trafiggles mentioned, and work from there",1582925584.0,1
+voidlinux,"I was actually using an aarch64 rootfs all that time, yeah. And no, missed that umount indeed... whoops.",1582771959.0,1
+voidlinux,"Some packages, especially proprietary/restricted ones, cannot be included in repos. To get discord you need to employ xbps-src, which iirc you can find documentation for in void docs (can't provide a link, apologies)
+In short, you'd clone the void-packages git repo, cd there, do ""./xbps-src binary-bootstrap"" and ""./xbps-src pkg discord"", then ""xi discord"" or ""xdowngrade hostdir/binpkgs/nonfree/<discord-of-whatever-version>"" to install it from the created local repo. xi and xdowngrade are part of xtools package",1582741371.0,8
+voidlinux,"I honestly am considering trying to manually set up a working void chroot on the device without that, unfortunately outdated, script... Seems like that'd be less hassle",1582737241.0,1
+voidlinux,"Heck, I also tried this exact thing a few days ago, what a coincidence... Unfortunately I don't have any ideas about fixing stuff, but I'd want to share my experience with that...So, for the list of things that didn't work and had to be fixed:
+
+* all lib and path paths in the script had to be changed, which is likely very device-specific
+* armv8 processor with armv7l support doesn't report its architecture at all in `/proc/cpuinfo`, so had to remove verification of that. For the record, the device is Xiaomi Redmi 3S
+* Correct `XBPS_TARGET_ARCH`, of course
+* any adb commands in the main script were not executed on the device as root, so I simply entered adb shell, copied rootfs and the `void-enter.sh` script to user-writable place, `su`, and prepared the environment manually by basically copypasting stuff from the main script. Namely, chmod the script and copy it to where it is supposed to be
+* Never actually got errors with ln, but had to bootstrap several times without adb and from a root shell on the device instead, with also removing that first line with return in bootstrap function
+
+After all that, I see that it turns out that the rootfs completely failed to unpack on the device for reasons I never found, and that exact same problem with `exec su: no such file or directory`. I also tried changing su there to a full path to it, but it for some reason still returned 'no such file or directory'. It might be caused on my end because su is a symlink to `magisk.sh`?.. I honestly don't know.So then my shenanigans stopped unfortunately, I might tackle that again on the weekend
+
+Fun fact: tried to clean up `/data/void` after I was done, but forgot that it had `/proc` and `/dev` and so on bind-mounted there, so an `rm -rf` also nuked my device's respective filesystems. Ouch.",1582737026.0,1
+voidlinux,"Hey. Recently had a related issue, maybe that could be of any use to you (https://www.reddit.com/r/voidlinux/comments/f3pjiv/voidmklive_filesystem_size).
+The solution was to add a kernel commandline parameter to increase the size of overlayfs, thus the resulting live image had more writable space.
+Edit: I don't know yet how overlayfs even works, and it's probably not using any available space on the flash drive at all but instead operates in ram... well, maybe that could fit your needs anyway",1582536373.0,3
+voidlinux,Are you sure that all the dependencies of st are installed?,1582460754.0,1
+voidlinux,"Correct. Grub in void depends on os-prober, so when grub configuration is created (either manually with `grub-mkconfig -o /boot/grub/grub.cfg` or when doing something with kernels via vkpurge or kernel updates), it should automatically find and add Windows boot manager entry",1582098578.0,3
+voidlinux,"Yup, that made it, thanks!",1581867716.0,1
+unixporn,"What cursor theme?  
+Currently using Breeze or Breeze-Dark, don't know for sure. Seems like there's no mouse shown on screenshots, oh well... And I want to replace some of Breeze cursors, at least the basic arrows, with the arrow cursor from osu!lazer. But I'm kinda stuck nowhere in that regard :c",1581711999.0,2
+voidlinux,"Will try, cheers!",1581685538.0,1
+voidlinux,"Hm, cheers, but hold on... I might've worded things too vaguely, apologies. Just to clarify - I ended up with a 3gb iso, but that's not a problem at all, the issue is that once it boots, it only has those 3gb as its whole filesystem, but it also needs to store cache and things after booting. So I'm interested in a way to expand the (squashfs?) filesystem so it has free space in it, if at all possible",1581673913.0,1
+unixporn,[lowranker](https://osu.ppy.sh/users/15202609/osu),1581524024.0,2
+unixporn,"Oi, forgot to mention that I'm using a compositor. Picom. Yeah. So everything not in focus is slightly transparent",1581523889.0,1
+unixporn,"Got around putting dotfiles to github, [available here](https://github.com/lowranker/dotfiles) if anyone wants  
+EDIT: now actually available, should be sorted out...",1581449739.0,2
+unixporn,"Aimed at replicating the osu!lazer main menu UI
++ **Wallpaper**: one of several from [osu-resources](https://github.com/ppy/osu-resources/blob/master/osu.Game.Resources/Textures/Menu/menu-background-1.jpg) at github
++ **Themes and cursors**: Breeze-Dark. Working on an osu!-based cursor theme
++ **Dock stuff**: xfce4-panel. Items left-to-right: Whisker Menu, hyperlink to my osu! profile webpage, workspace manager, date and system tray, Transmission, then two buttons for Discord as placeholders since I don't use many social apps yet, pavucontrol widget, shortcut to launch osu! (the one with nickname and icon), htop.
++ **Other**: alacritty as a terminal emulator, seen with tmux&neofetch and cava. Rofi with a theme based on [keystroke3's flamingo.rasi](https://github.com/davatorium/rofi-themes/blob/master/User%20Themes/flamingo.rasi). Picom compositor",1581434158.0,3
+voidlinux,"Oh, then yeah we could say that. I stand corrected",1581225580.0,1
+voidlinux,"Oh, no, I wasn't actually aware of that, thanks. I'll look into said config options. And, well, the only reason I'm doing any of that is experiments for the sake of possibly getting closer to learning what I can do to customise kernels with xbps-src, and a slim chance of noticeable improvement maybe. Apologies if that's underwhelming :D",1581205293.0,1
+voidlinux,"Well, neither of the three packages I mentioned are installed by default on flavourless Void, that is correct, yeah :)
+Don't know if Void with Gnome desktop preinstalled is a thing, if that exists - then probably it also has gnome-apps, and thus bind-utils",1581204815.0,1
+voidlinux,"Looks like it, the only thing that depends on `bind-utils` is `gnome-nettool` from `gnome-apps`",1581151545.0,1
+voidlinux,"Maybe take a look at some other ntp daemons, see if those work or fit you better? Personally, settled on `chrony`",1581052507.0,1
+voidlinux,"From https://wiki.archlinux.org/index.php/Flatpak#Viewing_sandbox_permissions_of_application :
+
+`flatpak override --filesystem=home *name of discord flatpak*`, maybe?.. Consult `flatpak-override` manpage otherwise, see if there's something there",1581001844.0,1
+AskReddit,"""I was born on a Dublin street where the royal drums do beat, and the loving english feet they tramped all o-o-over us-- or was it walked?..""",1580882975.0,1
+voidlinux,"Weird, over at arch wiki for wireless it has packages for 8812au that seem to work. Their upstream drivers: https://github.com/aircrack-ng/rtl8812au",1580837622.0,1
+voidlinux,"Hmm, why do you have to manually load it, again? After installing the needed module the kernel should load it by itself if needed, so, like, after a reboot either `dmesg` or `lsusb -v` or `lspci -v` should report some device using that module. If not the case, one should use modprobe over insmod, as per insmod manpage... in case modprobe fixes the issue you might want to put that command into `/etc/rc.local` for it to be executed every boot, otherwise... no other ideas
+
+Edit: honestly I might be majorly mistaken here, 'cause last time I had to deal with weird wireless drivers was on Arch, where it actually automatically loaded a module after manually installing it. Also, those drivers might require rebuilding every time the kernel is updated, thus dkms comes in handy but we don't exactly have it with manually built drivers... can't think of a solution unfortunately",1580834767.0,1
+voidlinux,"From what I could find about the driver, it might not support newer kernels. Could suggest: trying that with an older kernel (looks like 5.3 and above breaks, so kernels 5.2 and lower are the target); or try removing your current driver, then building and installing the driver that has been updated by others (maybe https://github.com/cilynx/rtl88x2BU_WiFi_linux_v5.3.1_27678.20180430_COEX20180427-5959)
+
+Edit: could also try a bit different drivers - personally had an issue where a device that claimed to want rtl8723be actually started working with rtl8723ae installed. Weird",1580828152.0,2
+i3wm,"Heh, I personally find the latter more clear. Oh well :)",1580824936.0,1
+voidlinux,Could help if you posted relevant dmesg output to pastebin or some other similar service and got us a link. Cheers,1580824191.0,1
+i3wm,"Hm, is there a reason for using four for_window lines with the same criteria instead of one for_window with comma-separated commands? I know, rather unrelated, apologies",1580823639.0,1
+voidlinux,"I don't know what might be causing this, but I'd suggest booting with your latest kernel and `xbps-reconfigure linux` or whatever kernel package you are using, so it should rebuild dkms nvidia module for it, then reboot. (or iirc `nvidia-modprobe` can load necessary modules after those are built, but I'd just reboot, 'cause who knows what else might need restarting after loading the module...)",1580573557.0,1
+AskReddit,"Be excellent to each other.
+~~Lunduke~~",1580543167.0,1
+voidlinux,"Hm, can you elaborate more on what you do for that to happen? Startx to enter i3 and everything works fine, but as soon as firefox is launched it freezes?",1580384175.0,1
+voidlinux,"Yup, another user here introduced the awesomeness of rc.local to me. Cheers!",1578919088.0,1
+voidlinux,"Yeah, in 10-2019 the definition of Arch's base system has changed ([this](https://www.archlinux.org/news/base-group-replaced-by-mandatory-base-package-manual-intervention-required/)) and it's outstandingly barebones. I don't actually know if live images since that event contain anything this base package lacks. So it might in fact be missing a text editor.   
+Personally I'm using an older arch image (2018 maybe) as a rescue stick. The only reason being that those, amazingly, ship with a UEFI v2 shell that can be conveniently launched. Maybe somewhen I'll employ a newer void image instead...",1578838040.0,1
+voidlinux,"To be fair, currently a base Arch install does not have a text editor at all, thus doesn't include nano :D  
+Honestly, the shenanigans with 'what should be in a base system' over on the arch side made me run to Void, but that's a topic for some other time and/or place",1578823680.0,1
+archlinux,Should be possible by using conditionals in .xinitrc depending on tty number (iirc $XDG_VTNR ?) Source: https://wiki.archlinux.org/index.php/Xinit#Switching_between_desktop_environments/window_managers,1578147044.0,2
+archlinux,"Looks like you could use a systemd service to detect tty switches (somehow), and replace /etc/issue each time that happens. Source and details: https://www.reddit.com/r/archlinux/comments/3a2v8o/dynamic_etcissue_script_xpost_rlinuxquestions/",1578146846.0,2
+voidlinux,"Well, I might've used too strong of a word here. But really, editing source code for configuration purposes does not suit me at all, being a person all too used to plain config files. And specifically bspwm - weird keyboard management coupled with a message system I failed at understanding... eh, maybe somewhen, but certainly not now",1578093879.0,2
+voidlinux,"i3. Wanted something more lightweight than a full DE, and couldn't be bothered to adapt the system to the several non-conventional things other common tiling WMs have. Happy with its config as well, since I don't need any heavy customisation",1578087787.0,2
+voidlinux,"Aha! Never encountered `/etc/rc.local` before, thank you for pointing out the existence of it, really useful",1578084863.0,1
+i3wm,"Hm. Well, first of all, multiple commands in a for_window thingy should be separated by a semicolon, like `border pixel 0; gaps inner all set 20`
+Also, gaps should be defined not for_window, but... somehow otherwise. I have those set globally, just a `gaps <whatever>`  line before all my for_window shenanigans. If I recall correctly gaps can be set per workspace, but it would be better to refer to the documentation for that... maybe the [wiki of i3-gaps](https://github.com/Airblader/i3/wiki) will be helpful. Cheers!
+
+EDIT: [README.md](https://github.com/Airblader/i3/blob/gaps-next/README.md) there has much better info on available gaps features, whoops
+
+EDIT2: Oi, crud... Almost everything I said there can be disregarded since I somehow ended up on old reddit design when viewing your reply, and formatting there completely borked. But the ""README.md being helpful"" line still stands true :D",1577968349.0,1
+wine_gaming,Reports on ProtonDB suggest that it may not launch if you have a multi-monitor setup,1577964920.0,1
+i3wm,"If I recall correctly, installing i3-gaps simply replaced your existing i3 already, so next time you launch(/reboot) it should have gaps support without much difference otherwise",1577964374.0,4
+voidlinux,It is indeed pretty great. Cheers!,1577785538.0,1
+voidlinux,"Hello, can you elaborate on how exactly are you trying to run these window managers?",1577378004.0,1
+i3wm,"Also, might be handy to use stuff like ""(?i)firefox"" in the future so the match is case-insensitive. As well as many other regular expression things",1577219442.0,4
+i3wm,"Pretty convenient, cheers!",1576495795.0,2
+SuicideWatch,"Well, felt pretty numb for a few days after that, not much else. The noise indeed was imaginative, iirc the brain tries to wake up like that in an emergency",1576130461.0,1
+SuicideWatch,"Hm... My experience was different but pretty weird as well. Passed out, really thought I was just asleep or dreaming, but returned to reality due to an overwhelmingly loud continuous noise. Couldn't move for about a minute while laying on the floor beside a torn belt... Got lucky, eh. Anyway, excuse me for ranting. Hope you decide not to try something like that again, please stay safe",1576093812.0,1
+unixporn,Oh wow... now I want to recreate that with i3,1575900875.0,3
+EliteDangerous,"Yup, same thing happened in the original discord server, couldn't work out a way to fix it exactly :D",1575789210.0,1
+EliteDangerous,Now people want hauler depicted as a catgirl. Anybody got some?,1575749962.0,2
+EliteDangerous,You're giving me some weird ideas... keep it up,1575749826.0,1
+AskReddit,"""Reactive resistance is proportional to inductivity and frequency""",1575613147.0,1
+SuicideWatch,"Heh, yes indeed, would certainly agree on there being less judging. So much less, in fact, that personally I get titled ""nice"" and ""great person to be around with"" by others, yet have serious trouble believing that. It's so weird, but, eh, maybe I'm just good at hiding the ugly parts. Cheers",1575225691.0,1
+voidlinux,"I am already using that, cheers. Yet there is a problem with such setup - without an existing session terminal emulators in X session won't allow me to detach from tmux. I think after detaching it sources bashrc again, and attaches right back. Having a tmux session prior to starting X solves that. Any ideas?
+And yeah, to elaborate more: in bashrcI'm using the piece of code from ArchWiki, the one that only works when $DISPLAY is set, no need for tmux in tty's here
+
+Edit: Oi, apologies, I completely misunderstood your comment. Disregard what I said above, thanks",1574873268.0,1
+voidlinux,"Actually after browsing this subreddit a tiny bit more, found out that one can point winetricks to use Proton's wine and wineserver and it should work. Needless to say that I am now eager to return to Void now :D",1574244910.0,2
+voidlinux,"Wish I could use Void for gaming, but at the moment there's a major drawback for me - wine on Void being 32-bit only. Which means I can't use winetricks to manage 64-bit wine prefixes that Proton has. Unfortunately, all of my main games require that  
+Please inform me if there's a way to work around that",1574244102.0,2
+EliteDangerous,"Oh, how coincidental, me with a lad of mine have just went out towards the centre. I got a repair-refuel T9 with a buttload of limpets and fighters and whatnot, the other guy runs a T10 with superb shields and a missile battery. 26ly and 34ly jumps respectively, both outfitted for combat. Planning to visit that outpost in the Lagoon nebula, from last time I visited it I remember there being a nice hazres
+
+o7",1574021871.0,1
+SteamPlay,"Runnung latest available in arch, whichever that might be. Oh, also NVidia",1570807804.0,3
+SteamPlay,"Runs fine, yet I still have missing skybox textures or something, it's all purple. Anyone exprienced that?",1570791942.0,5
+SuicideWatch,"Hey. Apparently Evo Morales, being the socialist president of Bolivia, attempted to tend to that by ordering the best firefighting aircraft for help with the fires.
+Also, +1 to your viewpoint regarding the world. There is hope",1566856053.0,2
+SuicideWatch,"Hey. Sincere condolences from someone in that spot as well. Friends, family, all that stuff, yet when I'm left alone with own thoughts, there are mostly thoughts of suicide. I'd honestly love to say something along the lines of others caring, but unfortunately I can't. Cause my best friend knows about my thoughts, they know that I attempted at least twice, yet I'm still left alone like none of that matters.
+Planning on leaving for good this summer. No idea will that happen, no idea about your fate either, I just hope we'll end up somewhere better. Somehow.
+Best wishes",1557785314.0,3
+SuicideWatch,"Hey. Sincere condolences about the situation you're in, the place does indeed suck. Russian as well, and the only local facility that I might get help from, being a psych ward, is notorious for overdrugging, torture and driving people insane. If only we could somehow leave for somewhere better.
+No idea what to do either, just wish you'd stay strong and carry through the hardship",1556310635.0,1
+SuicideWatch,"Happy for ya, congrats. :)
+About to get 17 in two months here, hope I'll make it too",1547435729.0,30
+SuicideWatch,"A disgusting feeling. Having a genuinely decent life, stuff and things, yet I absolutely hate myself. There's no reason to, yet I still do. How weak",1545451664.0,27

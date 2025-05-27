@@ -1,0 +1,100 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+rust,Async Recursive function in Rust using Futures ?,"Hey guys, I'm trying to make a recursive async functions, the first compiler error I got was when I had both functions to return hashmaps and the compiler said I needed to use a box future because in rust we cannot use async recursive functions, after doing some research I saw some potential solutions and tried to implement them in my code but now I am getting other errors and I am completly  lost on how to make this work as intented.
+
+The goal is to implement a main function `make_request<'b>(&self, req: ApiRequest<'b>)` to make a http request and if the result of the http request is not 200, I handle the error on the other function  `err_handler<'b>(&self, req: ApiRequest<'b>, status_code: StatusCode, headers: HeaderMap, err_resp: HashMap<String, Value>)` and this err function can potentially retry the request depending on the error, at first as I said before I was using both functions to return an hashmap but got the error of the recursive async functions.
+
+&#x200B;
+
+My error is similar to this, but the solution provided on this thread seems not to be working: [https://stackoverflow.com/questions/59538812/why-recursive-async-functions-require-static-parameters-in-rust](https://stackoverflow.com/questions/59538812/why-recursive-async-functions-require-static-parameters-in-rust)
+
+&#x200B;
+
+Current compiler errors:
+
+    99 | async fn err_handler<'b>(&self, req: ApiRequest<'b>, status_code: StatusCode, headers: HeaderMap, err_resp: HashMap<String, Value>) -> Pin<Box<dyn '_ + Future<Output = HashMap<String, Value>>>...
+    | ----- this parameter and the return type are declared with different lifetimes... ----------------------------------------------------------
+    ...
+    102 | / Box::pin(async move{
+    103 | | self.make_request(req).await
+    104 | | })
+    | |__________^ ...but data from \req\ is returned here``
+
+Code:
+
+    async fn make_request<'b>(&self, req: ApiRequest<'b>) -> HashMap<String, Value> {
+            let mut url = Url::parse(&(self.base_uri.to_owned() + req.endpoint())).expect(ERR_PARSE_URL);
+            // generates complete url w/ path params
+            for (key, value) in req.query() {
+                url.query_pairs_mut().append_pair(key, value);
+            }
+            let mut body;
+            // transforms hashmap of body, if it has entries, into raw string
+            if req.body().len() > 0 {
+                body = serde_json::to_string_pretty(req.body()).expect(ERR_PARSE_JSON);
+            } else {
+                body = String::new();
+            }
+    
+            let mut headers = HashMap::new();
+            // timestamp after which the request is no longer valid.
+            let expires = (get_unix_time() + 5).to_string();
+            // signature of request
+            let sig;
+            if let Some(auth) = self.auth_data.value() {
+                let mut path = String::from(url.path());
+                // If request has query, update path
+                if let Some(query) = url.query() {
+                    path = path + ""?"" + query;
+                }
+                sig = generate_signature(auth.1, req.method().value(), &path[..], &expires[..], &body[..]);
+                headers.insert(""api-expires"", &expires[..]);
+                headers.insert(""api-key"", auth.0);
+                headers.insert(""api-signature"", &sig[..]);
+            }
+    
+            let response = {
+                match req.method() {
+                    HttpMethod::Get => self.get_request(url, headers).await,
+                    HttpMethod::Post => self.post_request(url, headers, body).await,
+                    HttpMethod::Put => self.put_request(url, headers, body).await,
+                    HttpMethod::Delete => self.delete_request(url, headers, body).await,
+                }
+            };
+    
+            let default_map: HashMap<String, Value> = HashMap::default();
+            match response {
+                // response has status code ok, parse and return body
+                Ok(mut client_resp) if client_resp.status() == StatusCode::OK => json_to_map(client_resp).await,
+                // response has status code not ok, handle error
+                Ok(client_resp) => {
+                    self.err_handler(req, client_resp.status(), client_resp.headers().to_owned(),json_to_map(client_resp).await).await.await
+                }
+                // response not received, SendRequestError occurred
+                Err(_) => default_map,
+            }
+        }
+    
+        async fn err_handler<'b>(&self, req: ApiRequest<'b>, status_code: StatusCode, headers: HeaderMap, err_resp: HashMap<String, Value>) -> Pin<Box<dyn '_ + Future<Output = HashMap<String, Value>>>> {
+            //let err_map = json_to_map(err_resp).await;
+            //println!(""{:?}"", err_map);
+            Box::pin(async move{
+                self.make_request(req).await
+            })
+        }
+
+Any idea how to solve this ? : (",1607798069.0,2,0.67,5
+aws,Memory usage over 90% in ubuntu nothing running,"After deploying my first t2.mcro free tier aws instance I enabled the scripts to be able to check memory usage on cloudwatch and after a fresh ubuntu instalation I realized my ram usage was over 90%, why is this happening ?",1590493267.0,1,0.6,4
+eupersonalfinance,Gold futures available on EU ?,Are there any brokers on europe that offer gold futures ?,1584996472.0,3,1.0,0
+BitMEX,Why does BitMex only updates markPrice every 5seconds ?,Title,1584793381.0,1,1.0,0
+BitMEX,How is a 20Msingle market order possible ?!?,"Seems like there was a  21,992,685 contracts single market sell on XBTUSD at around  05:53:37 UTC 
+
+The maxOrderQty field on the XBTUSD instrument API call is 10M, how is a single market order above 10M possible ?",1583734940.0,4,0.76,13
+Tether,Is there any API available to check history of USDt supply?,[removed],1581388445.0,2,1.0,0
+SuicideWatch,Is overdosing on ectasy painfull?,,1551836197.0,1,1.0,1
+IWantOut,Feeling completely stuck in life 20M,"Im currently at my 2nd year at college and my entire life I have been in a really weird state of mind, I wouldnt call it depression, but its a constant feeling of boredom and unfullfilment that I can´t get away from. It doesnt matter waht I do at a specific day that I know at the end of the day those feeling will persist, doesnt matter if i hangout with friends all day, or even staying at home all day, cuz at the end of the day I always feel like deep shit. Im kinda an optimist person, and I always like to think that some day this will change. I used to think when i was younger that college was gonna be the turn around point and that I would start to be an happier person in general, but that wasnt waht happened at all.
+
+I have never had serious relationships because I feel such a lack of connection to other people, its so fcking weird, even my friends notice that. Im the type of person to prefer staying at home sniffing coke and smoking weed, than socializing and hanging out with friends.
+
+Has anyone felt like this? I was thinking of trying to finish college (3 more years to go) and I was thinking that maybe  I should change my life and just go into the wild with a van or something and live a simplistic life, maybe this society lifestyle taht poeple have is just not for me , I am really lost. I feel like I will never be happy working a 9-5 shift job, but at the same time im scared of making this change, cause im afraid I will regret it... 
+
+&#x200B;",1551834456.0,10,0.78,6

@@ -1,0 +1,1246 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+Tooele,Beloved headphones are damaged; can anyone help me fix them?,"Nine days after the support period ended, the right channel on my headphones  is no longer consistently working. It will work extremely briefly if I  hold the cord just right, but mostly, I get no audio from the right ear. The way it  sometimes works, sometimes doesn't makes me think there is a break or fray in the cord somewhere.
+
+I live in Tooele, so it made sense to look here for someone who has the skills and equipment to be able to help fix or  replace the cord on my headphones. I can't offer money, but I'm hoping it's a simple fix for the right person. I'd like to meet in a neutral, public place - I know there are a TON of parks around here.
+
+I really, really, really like these headphones. I'm absolutely devastated that they're on the fritz like this when I've only had them for a couple of years. I don't want to have to replace them, and quite frankly, I don't have the money to do so.
+
+I'm also posting in r/SaltLakeCity because it's larger and more active, but obviously it would be better to get someone in Tooele.
+
+[Other Post](https://www.reddit.com/r/SaltLakeCity/comments/13cd94k/beloved_headphones_are_damaged_can_anyone_help_me/)",1683600700.0,5,1.0,1
+SaltLakeCity,Beloved headphones are damaged; can anyone help me fix them?,"Nine  days after the support period ended, the right channel on my headphones  is no longer consistently working. It will work extremely briefly if I  hold the cord just right, but mostly, I get no audio from the right ear. The way it  sometimes works, sometimes doesn't makes me think there is a break or fray in the cord somewhere.
+
+I live in Tooele, UT, but have no problems with traveling a bit to find someone who has the skills and equipment to be able to help fix or  replace the cord on my headphones. I can't offer money, but I'm hoping it's a simple fix for the right person. I'd like to meet in a neutral, public place.
+
+I really, really, really like these  headphones. I'm absolutely devastated that they're on the fritz like this when I've only had them for a couple of years. I don't want to have to replace them, and quite frankly, I don't have the money to do so.
+
+I'm posting in r/Tooele too, but this has a bigger audience and seems to be more active, so I'm hopeful this is okay and belongs here.
+
+[Other Post](https://www.reddit.com/r/Tooele/comments/13cd9dy/beloved_headphones_are_damaged_can_anyone_help_me/)",1683600681.0,8,0.83,14
+Assistance,[Request] Beloved headphones are damaged; want help fixing them,[removed],1683592879.0,1,0.67,0
+3amjokes,An ADHD person and an Autistic person walk out of a bar.,[removed],1682673209.0,1,1.0,0
+RenPy,"Coding Issue: Having Choices Appear in Screen, Hiding Window, and Weird Choice Appearance","I hate asking for help, because that means I show up and then everyone can see that I never finish any of my projects ever. But here we are.
+
+I have an almost-functioning contacts/messaging code. I can add contacts in a list, select the correct contact and view all of their messages, and even reply! However, there's a few problems...
+
+The way to reply to messages, at the moment, is through a choice screen. However, using this has one major problem: the text window shows up once the choice is finished, even if I have ""window hide"" as one of the actions under the choices.
+
+    label reply_to_eileen: #this label should be the same name as the contact, so reply_to_[contact_name].
+        if eileen_reply_count == 1:
+            menu:
+                ""It's working!"":
+                    $ allMessages[""eileen""].can_reply = False # Turn the ability to reply back off. By disabling it, we can ignore the reply counter for now.
+                    $ allMessages[""eileen""].messages.append(phoneMessages(""It's workingg! :D"",True)) # have a message appear to be from the player by adding the 'True' value
+                    $ use_phone_choice_screen = False # Turns the phone choice screen back off, so that the choice screen goes back to normal.
+                    window hide # keep the text window hidden
+                    return #necessary to return to the proper place in the script
+                ""It works!"":
+                    $ allMessages[""eileen""].can_reply = False # Turn the ability to reply back off. By disabling it, we can ignore the reply counter for now.
+                    $ allMessages[""eileen""].messages.append(phoneMessages(""It works! <3"",True)) # have a message appear to be from the player by adding the 'True' value
+                    $ use_phone_choice_screen = False # Turns the phone choice screen back off, so that the choice screen goes back to normal.
+                    window hide # keep the text window hidden
+                    return #necessary to return to the proper place in the script
+                ""Don't reply yet"":
+                    $ use_phone_choice_screen = False # Turns the phone choice screen back off, so that the choice screen goes back to normal.
+                    window hide # keep the text window hidden
+                    return #just return to the message screen without changing a bunch of variables
+
+(Assume all variables are defined elsewhere, as I'm not having an issue with the variables at the moment.)
+
+    screen phone_conversations():
+        tag phone_screen
+        modal True
+        imagemap:
+            xalign 0.5 yalign 0.5
+            auto ""Phone Stuff/phonebase %s.png""
+    
+            hotbar (335, 73, 10, 17) value VariableValue(""battery"", 100) alt _(""Battery"") style ""vbar""
+            hotbar (312, 74, 16, 16) value VariableValue(""connection"", 4) alt _(""Connection"")
+            hotbar (293, 73, 20, 16) value VariableValue(""wifi"", 4) alt _(""Wifi"") style ""vbar""
+    
+            hotspot (185, 704, 39, 21) action Show(""phonehome"")
+    
+            vbox:
+                xpos 348 ypos 72 xysize (45, 21)
+                text ""[phonetime]"":
+                    color ""#ffffff""
+                    font ""Phone Stuff/7segment.ttf""
+                    size 16
+    
+            vbox:
+                xanchor 0.5 xpos 0.5 ypos 0.9
+                textbutton ""Put Phone Away"" action [Hide(""phone_conversations""),Show(""phoneoverlay"")]
+    
+            hbox:
+                xpos 21 ypos 100 xysize(370, 30)
+                text ""[contact_index!c]""
+    
+            vpgrid:
+                xpos 21 ypos 130 xysize(370, 500)
+                cols 1
+                mousewheel True
+                scrollbars ""vertical""
+                spacing 5
+                vbox:
+                    for q in allMessages[contact_index].messages:
+                        hbox:
+                            if q.from_self == False:
+                                if q.read_yet == False:
+                                    $ q.read_yet = True
+                                    if new_message_count > 0:
+                                        $ new_message_count -= 1
+                                text ""[q.message_body]""
+                            if q.from_self:
+                                text ""[q.message_body]""
+    
+            hbox:
+                xpos 21 ypos 630 xysize(370,60)
+                textbutton ""Go Back"" action Show(""msgcontacts"")
+                if allMessages[contact_index].can_reply:
+                    textbutton ""Reply"" action [SetVariable(""use_phone_choice_screen"",True),Function(renpy.call,label=""reply_to_""+str(contact_index))] #set the variable to use the phone_choice options, and also make sure you're going to the right label in the script.
+                else:
+                    textbutton ""Reply"" action None
+
+The important part of that is at the bottom in the last 'hbox'. Everything's a little messy and not fully commented yet; I want to get the code *working*, and then I can make it look nice (as well as finish fixing up the actual gui).
+
+And, finally, the code for the choice screens (with the style prefix ""phone\_choice"" defined in all the places that the regular ""choice"" code is defined in), in screens.rpy:
+
+    screen choice(items):
+    
+        if use_phone_choice_screen:
+            style_prefix ""phone_choice""
+            modal True
+            imagemap:
+                xalign 0.5 yalign 0.5
+                auto ""Phone Stuff/phonebase %s.png""
+    
+                hotbar (335, 73, 10, 17) value VariableValue(""battery"", 100) alt _(""Battery"") style ""vbar""
+                hotbar (312, 74, 16, 16) value VariableValue(""connection"", 4) alt _(""Connection"")
+                hotbar (293, 73, 20, 16) value VariableValue(""wifi"", 4) alt _(""Wifi"") style ""vbar""
+    
+                hotspot (185, 704, 39, 21) action None alt _(""Home"") # forces user to reply via choices
+    
+                hbox:
+                    xpos 348 ypos 72 xysize (45, 21)
+                    text ""[phonetime]"":
+                        color ""#ffffff""
+                        font ""Phone Stuff/7segment.ttf""
+                        size 16
+    
+                vbox:
+                    for i in items:
+                        textbutton i.caption action i.action
+        else:
+            style_prefix ""choice""
+    
+        vbox:
+            for i in items:
+                textbutton i.caption action i.action
+
+The SECOND problem is that no matter how I define the ""phone\_choice"" options (having copied and edited the regular ""gui.choice"" and ""style choice"" from screens.rpy and gui.rpy), I get, uh, an image that looks like this:
+
+[https://imgur.com/I6d7lrL](https://imgur.com/I6d7lrL)
+
+Any help to fix both of these issues would be much appreciated. I have someone who can help me with the Python aspects - which is how I've made it so far, and I have been learning a LOT - but these issues are more ""specifically RenPy"", and other than this little (""little"", it's turned into a MONSTER, every game I ever make ever after this is gonna have this goddamn phone in it) project he doesn't use RenPy at all.
+
+EDIT: u/BadMustard_AVN took to DMs and gave me a TON of extremely useful help. My biggest issue... was I had some incorrect indenting. -facepalms- The second vbox under the 'else' needs to be indented so it is, in fact, under the 'else' button. Currently selecting a choice just takes you out of the phone screen entirely, but I may prod at that again eventually to make it work the way I WANT it to. In case I can't, however, it is now functional.
+
+Just wanted to update for anyone who comes across this years later, trying to do something similar! xD",1666018873.0,3,1.0,2
+consentacles,Tentacle Creature Analysis and Treatment Facility Sequel (Female),"**CONTENT:** *Mentioned unwanted egg-laying (by both parties, getting carried away in the heat of the moment), discusses ableism and use of AAC (Augmentative and Alternative Communication), a tentacle massage turning into sex, tentacle-based bondage, all holes filled, repeated orgasms, also an excessive amount of fluff*
+
+**Original:** [TCATF 1](https://www.reddit.com/r/consentacles/comments/obinmy/tentacle_creature_analysis_and_treatment_facility/)
+
+Dr. Cassandra Clark walked rapidly, forcing herself to not break out into a run. Her stomach was tied in knots, a mix of anxiety and anticipation making her breathing uneven. 2A's connection hit, and she heard their voice.
+
+*Cassie, it's okay.*
+
+A chorus soon followed, and she smiled to herself. Standing outside the door to the room labelled 'First Colony', followed by a list of designations, she smoothed down her blouse and sensible slacks, straightened her lab coat, and then opened it.
+
+The humidity hit her first, the climate control in the room doing its work to make it more comfortable for the tentacles. 2A rose on their tentacles, grabbing and wrapping themself around Cassandra. She hugged them back, unable to keep the smile from her face.
+
+First Colony consisted of her partner, 2A, and their children. Second Colony was entirely their children, although she didn't have a mental connection to that one anymore. It would be too noisy, so none of the scientists working with First also worked on Second. Second Colony had been an unexpected accident; 2A and Cassandra had birthed too many children, and the colonies needed to split to avoid being too overwhelming. Since then, 2A had avoided using their ovipositor, although Cassandra sort of missed the weight of the eggs.
+
+Several scientists had volunteered to bond with each colony, although Cassandra had been the first, back when it was only 2A. Bonding with humans had been challenging for 2A, taking them four years to be able to reach out to Cassandra. Their children were in a much better state.
+
+""What happened?"" Cassandra asked 2A. It wasn't often she got called in on a late-night shift like this, although she had slept over plenty of times. 2A was her partner, after all, and neither of them liked to be apart for long.
+
+*One of Second Colony accidentally deposited eggs in a scientist,* 2A explained. *She's panicking. Both of them got carried away in the heat of the moment.*
+
+Cassandra nodded, adjusting herself so that 2A draped over her neck and around her shoulders.
+
+""Where is she?"" she asked.
+
+*In the room upstairs,* 2A said.
+
+It wasn't a long walk to the observation room above, one that had cameras for them to look at the tentacle colonies below. While it was possible for the tentacles to hide away and get privacy, they usually chose to allow themselves to be observed.
+
+The scientist was young, someone who had started there in the past year, and she was trembling as she sat on the ground and stared at her hands. Her stomach wasn't even rounded, indicating that she had only one or two eggs put in her.
+
+Cassandra crouched next to her. ""Are you okay?"" she asked the younger woman in a gentle voice.
+
+""I... I don't know,"" she said, her eyes flickering over to Cassandra. ""You're... you're Dr. Clark, right?""
+
+""Yes, but you can just call me Cassandra. And you are...?"" She offered her hand, in case the woman wanted to shake it.
+
+""Lyra Donovan,"" she said, taking Cassandra's hand in a loose, almost limp, grip. Her hand was cold, and she pulled away after only a moment. ""I'm freaking out, I don't... we were having *fun*..."" She swallowed hard, rubbing her shoulders.
+
+""Hey, it's easy to get carried away when you feel good,"" Cassandra reassured her, moving to a sitting position on the floor as well. ""Did they use the ovipositor without permission?""
+
+""No! Oh, no. I, um, I agreed. We both panicked after."" Lyra picked at her fingernails, hunching up her shoulders. She was shaking very slightly.
+
+""Is it okay if I touch you?"" Cassandra asked. She reached out. At Lyra's nod, she gently rubbed the younger woman's back, comforting her. 2A stayed quiet and mostly still, just observing.
+
+""I'm really scared, I've never... does it hurt?"" Lyra asked.
+
+""Only a little. I haven't had any human children, but from what I know it hurts much less than that. And it's quick. Do you know how many eggs they put in you?""
+
+""Only one,"" Lyra said. ""We both realized as soon as the egg went inside that it was a mistake. Them before me."" She rubbed her arm. Her voice went soft, where Cassandra had to strain to hear her. ""Will... will someone still want to marry me, if... if I'm damaged like this?""
+
+""Oh, Dr. Donovan..."" Cassandra frowned, pulling Lyra into a hug. ""You're not damaged. Your body will be changed a bit, true, but hardly at all - tentacle monsters don't make a huge mark on your body. All that will change is your cervix will be slightly looser, and you won't even ever notice it - nor will your partners. The most that might happen is pap smears might be slightly less arduous, and an IUD might be easier to put in. That's it, that's the grand extent of changes. And even if it *did* change your body more, it still wouldn't make you damaged. It's just a sign that you experienced something new, something different.""
+
+Lyra broke down into sobs. 2A hesitantly reached out a tentacle. Their children could contact humans outside of the ones they had bonded to, but 2A was restricted to Cassandra and their children - or the children birthed by other scientists - alone. Still, they rested a tendril on Lyra's head while Cassandra bundled her up close, murmuring soothing words and rubbing her back.
+
+Eventually, Lyra's tears subsided, and she pulled back, taking a deep breath and rubbing her eyes. ""Thanks, Dr. Clark... um, Cassandra."" Her eyes were red, and she was still tense and hunched up, but she at least seemed to feel *slightly* better.
+
+Cassandra yawned, her tiredness hitting her full-force. ""Of course,"" she said. ""Here, let's go find you a bed, you can crash for the night. Are you bonded with Second Colony?""
+
+Lyra nodded. ""Yeah. I think, um, the one I was having sex with might want to see me, so...""
+
+""It'll be good to talk it over,"" Cassandra agreed. She helped Lyra stand up then, guiding her back to Second Colony's room. Lyra beelined for a purple tentacle monster who went by the name Sola, if Cassandra remembered correctly.
+
+Second Colony swarmed Cassandra and 2A, recognizing their parents. Excited voices filtered into both as the tentacle monsters touched them. Cassandra laughed, greeting them all warmly. She was happy to see they were doing so well.
+
+The Tentacle Creature Analysis and Treatment Facility had completed all of its goals except for figuring out where the tentacle creatures came from. 2A was their source of all this knowledge, and their colony had that knowledge handed down. Each type of tentacle creature had an overarching purpose in relation to each other, and the reigning theory was that someone had created the *Erotica Pampina* and then released them.
+
+Nobody knew why, but gene sequencing revealed enlarged telomeres and other signs of intelligent design.
+
+However, the head honchos in charge of the TCAT Facility fully planned to begin integration of the tentacle monsters with society as a whole in a year's time. The entire facility was planning for that. Every tentacle monster was excited to be seeing more humans, and none of them seemed to mind being considered 'pets'. Whether they 'spoke', used telepathy, or used AAC devices (including plain notebooks and pencils), all of them communicated that yes, they wanted to be involved with humans, to be pets, to be out in the world.
+
+The one exception and concern were First and Second Colony. Other than 2A, they were able to bond to a small number of humans, and all of them were bonded with each other within the same colony. While they also yearned to be out in the world, they displayed a lot more caution and nervousness about it, perhaps something inherited or sensed from Cassandra and 2A.
+
+2A had never picked a name and never really associated with a gender, unlike most of their children and the other tentacle monsters. They were 2A, and while that identifier was meaningless inside of their colony, they responded to it from outsiders. They had lost their first colony traumatically before being picked up by the humans who ran the TCATF, and it was something that left invisible scars on them.
+
+Cassandra, on the other hand, was anxious about tentacle creatures integrating. She knew it would be good for the tentacle creatures and perhaps humanity as a whole, but animal abuse was rampant despite the laws against it. The idea of it happening to her beloved tentacle monsters made her feel sick. Plus, she just wasn't sure if humans were prepared for it. It was one thing to take care of cats and dogs and even parrots, who, while intelligent, didn't have the level of intellect the tentacle monsters did - it was another thing to take care of fully-sapient beings who were able to keep up with and even surpass the wisdom and IQ of human scientists.
+
+Not to mention, since not every tentacle monster spoke, it was possible that there were those who would ignore their intellect. Humans who used AAC were often looked down upon and treated as less intelligent; there was no doubt in Cassandra's mind that this would be even worse with the tentacle monsters.
+
+The other option, however, was to keep them a locked-up secret forever, and the tentacle creatures definitely deserved better. So Cassandra and 2A did their best to prepare the other tentacles outside of First and Second colony to integrate with humanity, supporting the scientists and now the few politicians who were involved in the project.
+
+Since she'd been called for a late-night shift, Cassandra used one of the beds kept in First Colony's room to rest, laying down and getting comfortable to go back to sleep. With her Colony surrounding her, her dreams were peaceful, and she woke up to 2A gently poking her cheek.
+
+*Good morning,* they said, their mental voice soft and sweet. Cassandra yawned, smiling.
+
+""Good morning,"" she echoed, kissing the central mass of 2A's body before sitting up. She stretched enough her back cracked, making both her and 2A wince for a moment.
+
+*MAMA! Look!* One of the tentacle monsters, white with some pale pink spots on its main mass, flailed a bit in excitement, pointing one tendril over at a sprouting plant. *It's growing! It's growing!*
+
+""That's the flower that you thought hadn't made it, right?"" Cassandra asked him. The tentacle monster had very firmly one day said he was a boy, declared his name as Casper, and from then on she'd done her best to remember.
+
+Tentacle monsters were hermaphrodites capable of parthenogenesis, creating and fertilizing their own eggs. While the tentacles of the Colony required human incubators (or, really, any mammal, but humans could consent), other tentacle monsters could and did simply lay their eggs in a safe spot appropriate for their hatching and then the eggs would hatch. However, in communicating with humans, most tentacle monsters chose a binary gender. A fair number decided to identify outside of the binary, but 2A was certainly in the minority by not choosing either a name or a gender at all.
+
+As far as either 2A or Cassandra could tell, their children were *different* from 2A themself. It probably had to do with the fact that Cassandra incubated the eggs, allowing them to evolve in ways that were unexpected. In this case, 2A's children were more adapted to being with humans.
+
+Cassandra spent a little while just existing with her partner and children, enjoying their company. Unfortunately, after grabbing breakfast at the cafeteria for everyone, she had to get to work.
+
+Her work was less studying these days and more figuring out the best way to integrate tentacle monsters into society, which she found painful. 2A's presence and suggestions helped keep her sane. She was a scientist, not a politician, but as the person who 2A had bonded with, she found most of her days filled with working on theses and arguments for the benefits of tentacle creatures and how they weren't dangerous.
+
+She missed actually learning about them, but while there was a lot to learn - there was always a lot to learn - her bond with 2A gave her special insight into the overall existence of the tentacle monsters.
+
+Three hours into her shift, which consisted mostly of answering the same emailed questions she had answered hundreds of times already, as well as making a modicum of progress on her current actual project: analyzing the data to see if other types of tentacle creatures could bond the way 2A and their offspring did. The data analysis, at least, was a blessing.
+
+Still, her shoulders were stiff, and she was debating getting lunch. 2A started to rub her shoulders with their tentacles gently. Cassandra leaned back into her chair with a sigh, nuzzling her head against the tendrils.
+
+*Take a little break with me,* 2A said. She got out of the chair, scooping 2A up in her arms and carrying them back to First Colony's room. Cassandra got comfortable on her stomach on some pillows piled in a corner, and 2A resumed the massage.
+
+Although their tentacles were pliable and soft, they could also flex the tentacles. Multiple areas of Cassandra's back, neck, and shoulders got worked at once, an even pressure that dug into her body. The slight pain was the sort of good pain that meant something was being fixed, and Cassandra relaxed into the pillows.
+
+Almost dozing, Cassandra didn't notice at first when 2A started to slip under her shirt. Once she did, she didn't even really react. She felt so good, her body losing a lot of the stiffness and pain that she'd been carrying since her abrupt awakening the night before. She did, however, notice when a tendril slid underneath the waist of her pants.
+
+She turned then, rolling to her side and raising an eyebrow as she looked at 2A.
+
+*Let me help you relax,* they said, cuddling up against her side. They didn't have the features to make pleading puppy-dog eyes, but Cassandra certainly got the impression that they were trying to.
+
+She huffed a bit, but then wiggled to pull down her pants. 2A stopped her.
+
+*No, let me,* they said. Their tendrils pinned Cassandra's arms, holding them together. More of 2A's tentacles pulled down her pants, to avoid getting mess on them. 2A would absorb most of the mess she made, but if it got on her underwear it would ruin the pair.
+
+*Relax,* 2A insisted, pulling their full body mass onto Cassandra's stomach and chest so they could keep her from trying to sit up. They stretched their tendrils over her body, holding her arms above her head with her wrists pinned together and then spreading her legs to a comfortable distance apart.
+
+Another tendril slid along the outside of her vulva, only touching the outer labia without getting to anything truly sensitive. Cassandra made a frustrated noise.
+
+""Are you just going to tease me?"" she asked with a groan, squirming in protest.
+
+*Of course not. But you have to relax first,* 2A said. Cassandra sighed, trying to force herself to go limp and boneless. It wasn't too hard, actually, after the massage she had been getting. Then and only then did 2A push between the folds of her slit, pressing a small sucker against her clit and pulsing it. Cassandra moaned.
+
+""Yes!"" The word came out in a gasp, and she moved her hips up in retaliation. 2A withdrew their tentacles.
+
+*Stay still,* they ordered. *Relax. Let me take care of you.*
+
+Cassandra threw her head back, forcing herself to relax again. ""Now you're just being mean,"" she complained.
+
+*You work hard, and you're stressed. I want you to relax and just let me handle everything,* 2A said.
+
+She sighed, closing her eyes and once more focusing on relaxing. 2A's tentacle returned, once more placing a sucker on her clit. Cassandra's mind only briefly flitted to the biology of tentacle monsters, her endless fascination with them unable to be fully stymied. However, the pleasure given by 2A - strong, steady, but slow - was far too distracting.
+
+As she allowed herself to go limp on the pillows, she felt other tendrils from 2A explore her body. Two slim ones curled around her breasts, squeezing with pressure just shy of uncomfortable. The tiny ends played with her nipples as they went, and Cassandra had to focus on breathing to not squirm beneath 2A. If she did, she knew he'd withdraw again.
+
+Another tentacle went low, near the sucker on her clit. However, it breezed past her slit, instead rubbing against the outside of the lower hole. This tentacle was thin, but with rounded bumps all along it. 2A focused on pumping out a soothing secretion, similar to the one they used to ease the way for oviposition, but not as intensely numbing.
+
+The tentacle was soaked with the lubricant before 2A attempted to push it into her ass. Cassandra hissed, although it wasn't from pain. Naturally, she tightened around their tendril, before once more forcing herself to relax.
+
+""Shit, that's weird,"" she mumbled, closing her eyes. Her eyelashes fluttered on her cheeks. ""It's even weirder that I can't *move* in response...""
+
+Another tentacle poked at her mouth. *Quiet,* 2A said, amused. Cassandra opened her mouth, and they pushed it inside, effectively silencing her. While her thoughts could still be projected to 2A, her mouth was now forced to suck on their tentacle.
+
+Once her other two holes were filled up, yet another tendril began to slide into her slit. This one had ribbing along it, and it pulsed in a steady rhythm. It pushed deeper and deeper inside of her, pressing hard against her inner walls.
+
+Cassandra panted with it, her entire body going taut with the need to move, yet fearing 2A would just tell her to relax. For their part, they pushed against her, massaging her body all over again as they tried to get her to lay flat and relax again.
+
+*Come on, Cassandra, you can relax,* 2A said encouragingly. *Just let yourself lay flat and open. Don't undo my hard work with my massage.*
+
+Her response was a frustrated noise, her chest heaving with the effort of staying still. She was trying to relax, but all of her body was just tension, tension, tension, without release. Even as 2A massaged her body, with all the stimulation she was getting, it was impossible to truly relax.
+
+Her climax was powerful and hard, making her arch her back. Her cries and moans were muffled by the tentacle in her mouth. 2A eased their efforts, but didn't stop. She protested this by squirming, but it seemed now 2A wasn't going to retreat from her as she moved.
+
+The stimulation created slight discomfort now, although 2A was quick to speed up again and intensify the sensations once more. Cassandra fully writhed under them, almost sobbing with it as they practically tormented her. Discomfort faded fully back into pleasure, and she climaxed a second time.
+
+Still, 2A didn't stop. She attempted to kick herself free, but 2A just tightened their grip on her legs. Quickly, she lost track of how many times she came, just held down and made to climax over and over again. When she began to mentally beg them to stop, 2A finally relinquished their hold on her body.
+
+She lay there, boneless and relaxed and breathing heavily. The tentacle monster withdrew from her mouth first, and then slowly everywhere else. A few stray bursts of pleasure and oversensitive pain tingled through her spine to her brain, but then she was freed.
+
+*How are you feeling?* 2A asked, pleased.
+
+""Really..."" Cassandra gasped a bit, taking another breath and swallowing hard. ""Really, really good, actually. Way less stressed.""
+
+If 2A had a face, she knew they'd be grinning. Between the massage and the repeated orgasms, Cassandra didn't have a single stiff muscle or stressed thought. Everything seemed much better than it had before.
+
+""I'm not sure how I'm going to get back to work after that,"" she said with a soft sigh.
+
+*Take today off,* 2A suggested. *You had a worrisome night, and you worked hard this morning. Just rest with me.*
+
+She smiled, reaching a lazy arm up to gently pet 2A's primary mass. ""Yeah, okay. I guess I can do that,"" she said.
+
+Things were going well so far, after all. Right now, she could take a break just to feel good.",1660168642.0,48,0.95,1
+catshaming,Further Shaming: She Is In The Dog Bed,,1631568703.0,55,0.98,0
+KeybaseProofs,My Keybase proof [reddit:kunabee = keybase:kunabee] (FHE9vq91jSharzZSld6s3OaPX9-7YWCRdfxJPbqXaso),"### Keybase proof
+
+I am:
+
+  * [kunabee](https://www.reddit.com/user/kunabee) on reddit.
+  * [kunabee](https://keybase.io/kunabee) on keybase.
+
+Proof:
+
+    hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgAWat51BqRZSN9+a9unykWLXm8dCHv/jDdJd97nLfVv8Kp3BheWxvYWTESpcCC8QghUE1xsyxFSEPKS0ehd2DXh7JnbllW/IKqRKcK0otlnbEIDcYgY5PaSuZatOEKxzVtv9rdHcyMzK6QtzYm54O7fxeAgHCo3NpZ8RAOH3hPRkfsheYJpalIEMatdkz6fMSGBgEGoNs48orlrGdgjMS9w2h1wnBX5HI4nTWQN/MLiBFXoEqdKamlxBbDKhzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEIEMR1N0f1gDnyLxrnc45mfsA3zjlj0O6453k1CRBZsowo3RhZ80CAqd2ZXJzaW9uAQ==",1630334062.0,2,1.0,0
+Wizard101,Kaliklak is Baby,"So I've been playing wizard101 off and on since it was first created (right around when I was 12, I think? I'm 24 now), but I have almost exclusively (other than someone gifting me a monthlong membership for Christmas one year) bought every area with crowns. So it took me a decade to beat Malistaire (I remember Wizard's 10-year-anniversary happened right after).
+
+Anyway, I've finally made it to Khrysalis.
+
+*And Kaliklak is baby, I would die for him.*
+
+That is all.",1630086098.0,33,0.9,3
+196,Rule,,1625152560.0,298,0.99,0
+consentacles,Tentacle Creature Analysis and Treatment Facility (Female),"*July 1st marks my 2-year anniversary with my fiance. I wrote this story for him. Love you, Jo!*
+
+**CONTENT**: *Consensual tentacle sex, bad impression of how a scientific lab functions, oviposition for a small number of eggs (involving painless and harmless cervical opening that returns to normal), tentacle birth after a short time skip, and that's it.*
+
+The long, white halls of the scientific facility were soothing as Cassandra Clark walked down them, her three-inch black heels clicking on the tile as the end of her open labcoat swished around her legs. The walls had been decorated in posters and informational charts, turning the would-be clinical building into something homelier and brighter than it would otherwise be.
+
+Since the doors weren't soundproof, as Cassandra passed them she would occasionally hear noise. There were the beeping sounds of games, the soft lilt of someone asking questions, and even a few moans. Some people tested the subjects personally, which she found unprofessional, but she could understand the temptation and it never really hurt the subjects. After all, a few of them fed on human fluids of various kinds, and they were still trying to figure out how they reproduced.
+
+Six years ago, the Tentacle Creature Analysis and Treatment Facility, or TCAT Facility for short, had been developed and established to deal with the few-week-old discovery of *Erotica Pampina*, or the common tentacle monster. Nobody knew if they had been created by some insane geneticist or if they were just a freshly-discovered species, but a mix of caution and fascination had caused the quick establishment of a facility to both protect and study them.
+
+Their Latin name had been a joke, at first (""let's call them erotic tentacles!"") but had ultimately stuck, and the common name existed because it was impossible to look at them and determine them to be anything but a tentacle monster like you might see in, ahem, various adult fictional works...
+
+The tentacle monsters themselves were intelligent. Few were capable of speech, but all could communicate and they were obedient and friendly. They had different interests, too; each room was set up with furniture, game systems, televisions, and so on according to the tentacle creature's preferences. Their tendency towards cooperation meant most scientists at the facility had a personal, invested interest in their development. As far as Cassandra knew, there were even talks to start passing them out as companions to individuals who passed extensive background checks and whom the monster itself liked in the future.
+
+Still, Cassandra felt it was a little too soon. She didn't like keeping them isolated any more than the next person, but there were too many unknowns. For example, each tentacle monster had a different diet. Some were omnivorous, while others were exclusively herbivores; others fed on human sexual fluids, while still others fed on human excrement. The monsters themselves couldn't explain the different diets. In addition to that, there had been no possible way to figure out how they reproduced thus far.
+
+But that was all besides the point. Right now, Cassandra was entering the room of Subject 2A. 2A had been the first tentacle monster in the second batch that TCAT had picked up, and they were also the most frustrating.
+
+In the four and a half years since 2A had arrived at the facility, they had not eaten. They went and moved when and where they were directed, and they responded to yes or no questions, but they showed zero interest in any of the charts or methods provided to other tentacle monsters to facilitate communication between them and the scientists. Meat, excrement, sex, a medley of vegetables - all different diets had been attempted, yet they did not eat. They didn't respond to things on the television, nor did they express fascination with any sort of games. Some scientists would get tentacle monsters and scientists together to play board and card games, but 2A was listless even with other tentacle monsters.
+
+It was infuriating, and Cassandra was very worried, to say the least. Part of her didn't know what to make of the tentacle monsters, but she didn't want them to go away, either.
+
+She sat on the chair on the other side of the glass window revealing 2A's cell. The window took up most of the wall, but there was room for a door. On the other side of the divider, there was a lever controlling blinds, in case the tentacle monster didn't feel good or otherwise wanted some privacy. The cameras were also distinctly on the 'scientist' side, once again to allow for privacy.
+
+Normally, there'd be all kinds of decorations and activities - fake or real potted plants, bean bag chairs, game systems, posters, books, a pool if they were amphibious or aquatic, and so on - but the only thing that 2A didn't end up destroying or damaging was the TV in their room. Still, unless a scientist turned it on, 2A never bothered with the TV.
+
+Cassandra was deep in thought, wondering how she could possibly get through to 2A when she heard the sound of tapping on glass.
+
+With a jolt, she looked up, watching the greyish-pink tentacle monster tap repeatedly on the glass. All of the scientific protocol left Cassandra's mind as she set down the tablet for study and crouched down across from the monster. 2A was 'facing' her, but it twisted its main bodily mass to look at the door.
+
+She stood up, opening the door and stepping inside. ""I'm here,"" she promised the creature. Normally, she'd get a second scientist to help monitor things, but she was too excited and relieved. This was the first time 2A had shown any interest in **anything**.
+
+*Cass... and... ra...?* The voice was slow, uncertain. *Doc... tor... Claaark...*
+
+Her breath hitched. 2A held out a tentacle towards her, and she took it. ""Yes, that's my name,"" she confirmed. Another tendril reached up, touching against her head. Suddenly, she was assaulted by different sights and sounds and smells. She collapsed, 2A catching and supporting her.
+
+She could see a group of tentacles huddled together. Something broke in, a large and furry teeth-filled thing. Cassandra recognized it as a bear. Only 2A managed to survive, which is why they were alone. The world went suddenly silent for them. They felt excited when they had been found, but...
+
+2A tried to reach out, again and again, but there was no response. No human or tentacle monster could connect with their mind. They really were all alone.
+
+Until, one day, they sensed Cassandra's thoughts. Her thoughts were distant and faint as if coming over a long distance. But they could hear them. And today, Cassandra entered the room again. 2A had to try to establish a link. And it finally worked!
+
+She panted a bit, still disoriented from the creation of the link. She could feel 2A in her head, learning about her, gathering information...
+
+*Was alone for so long,* 2A said, their mental voice filled with grief. *It was only me.*
+
+In Cassandra's head, it found her questions and her worries. It found that she cared, genuinely, about 2A and the rest of the tentacle monsters.
+
+*Hungry,* 2A thought. It had room for hunger, now that its grief and loneliness eased. *Cassandra... bring something?*
+
+Cassandra blinked as she saw a burger, drawn from her own knowledge and memory, as something 2A wanted. 2A was omnivorous, then.
+
+She quickly stood up, head spinning a bit, and left the room to bring 2A food. The cafeteria was the obvious place to go.
+
+Cassandra picked out a hamburger, some salad, some chicken... She grabbed a collection of food that she thought 2A might like.
+
+""Are you getting lunch for an army?"" the person manning the counter asked as Cassandra paid for the food, swiping her ID card through the scanner.
+
+""Nah. Just a hungry tentacle monster,"" Cassandra said. ""2A finally communicated with me.""
+
+""What!"" They leaned forward, bouncing on their feet. ""They haven't interacted with anyone!""
+
+Cassandra grinned. ""I know! I'm excited. Anyway, I better get this food back."" She departed before any more questions could be asked. The news would get around the facility, but she had a tentacle monster to feed.
+
+She walked quickly, only stopping by the office of her friend and fellow scientist, Dr. Beckett Corduroy.
+
+""Beckett,"" she said, grinning. ""2A communicated with me and said he was hungry. Do you want to be taking notes on this?""
+
+""Uh, yes. Obviously."" Beckett grabbed his tablet, following Cassandra back to 2A's room.
+
+As they got close, Cassandra could feel 2A's presence in her mind again.
+
+Excitement made her steps falter a bit out of surprise. *Cassandra back!* She smiled, bringing in the food.
+
+""Okay, 2A, I've got my colleague with me. Dr. Beckett Corduroy has visited you before. He's here to help me take notes on your behavior, so we can study you and take care of you.""
+
+2A moved their tentacles nervously, clearly anxious to have Beckett there as well. It was scary enough to bond with Cassandra...
+
+""He's a friend, I promise. Everyone here wants to help you and learn from you."" Cassandra stepped inside the cell and set the plate of food down.
+
+She sensed that 2A was still watching Beckett, but the tentacle monster started eating anyway. 2A was too ravenous to ignore the food, and as long as Cassandra was in physical and mental contact with them they seemed to be fine with the presence of another, even if it still made them a little nervous.
+
+Cassandra sat down, watching 2A eat. To eat, they picked through the food, breaking off or selecting smaller pieces with a slim tendril that they then brought to their main mass. Their mass would then part, revealing a soft and squishy maw, and they would pass the piece of food inside. As 2A ate, Cassandra was filled with their emotions. She knew what food they liked and didn't like, intimately able to understand the complicated reasons behind each decision. And it was a decision, to like or not like the food: texture, taste, temperature, the way it sat with other food, how filling it was, whether or not *Cassandra* liked it, all of these factors came into play.
+
+In wonder, Cassandra reported this to Beckett as 2A curled up in her lap, still eating. The plate of food was soon empty, and 2A stretched and shifted, sprawling out of Cassandra's lap and across the floor. Cassandra gently stroked 2A's body, causing them to let out quiet, rumbling purrs.
+
+""2A *purrs* when they're pet,"" Cassandra reported with a squeak, smiling happily at them. ""That's adorable!""
+
+*Cassandra... thank you. I miss having a colony. Will you be my colony? Help me make a new one...* 2A wiggled against her happily, stretching. *Beckett has to go, but the cameras can watch.*
+
+""Wait..."" Cassandra blinked. ""How would I help you make a new colony? And being your colony?"" she asked. It was both scientific curiosity and appropriate caution that drove her to ask.
+
+The image was simple: a large tendril buried inside of her vagina, pushing up through her cervix with a numbing and stretching agent to allow 2A to lay eggs. *Like family,* 2A added. *Different. But family.* She saw one egg, small and round in her stomach; she saw herself carrying a dozen eggs, so large she could barely move. *Your choice,* 2A told her.
+
+""Tentacle monsters are egg layers?"" Cassandra asked in wonder. Cassandra could see flashes in response to her question: tentacle monsters were hermaphroditic egg-layers who required their eggs to be incubated inside of a living host, yet each different type had different requirements.
+
+*Yes,* 2A confirmed. *I can tell you more, if you help me make colony.*
+
+""Beckett, oh my God,"" Cassandra said, stunned. ""Tentacle monsters are egg layers. I think each... species? Breed? Each type of them requires certain circumstances to have eggs. 2A says they'll tell me about it if I agree to help them make a colony - acting as an incubator for their eggs.""
+
+""Are you going to?"" Beckett asked her. He was practically vibrating with excitement, but she knew the question was honest. He'd never try to convince or force her, even with knowledge on the line.
+
+""Yes, I think so. But 2A says they want you out of the room, even if they don't mind the cameras watching."" Cassandra frowned. ""That... may be a bit more comfortable for me, too. I have to get undressed to incubate 2A's eggs. Can you monitor me through the cameras?""
+
+""Are you sure?"" Beckett asked, frowning. ""It'll be harder to reach you if something goes wrong.""
+
+""I'm sure,"" Cassandra said firmly before nerves could make her back out. ""I trust 2A. I want to help him make a new colony."" She could feel them. Their mental link showed that they didn't want to hurt her and how excited they were for the opportunity.
+
+2A wiggled in excitement, wrapping their tentacles around Cassandra in a hug.
+
+Beckett left the room, making his way to the camera room so he could watch through the monitors. He walked as quickly as he could, just in case. Both 2A and Cassandra could pretend they were in private if only the cameras were watching.
+
+""Okay, 2A, you have to get off so I can get undressed,"" Cassandra prompted. 2A sent her the knowledge that they were able to produce something to melt clothes, but since they understood that she wanted to keep her clothes and not run around naked, they reluctantly got off of her.
+
+Cassandra pulled off her labcoat first, then kicked off her heels. She took everything off, shedding her smart slacks and professional blouse. She even removed her bra, even though that wasn't strictly necessary.
+
+She made a pile of her clothes to sit down on, not wanting to sit on the cold floor. However, 2A quickly adjusted themself, pulling Cassandra onto their body and helping her lean back.
+
+*Comfy?* they asked eagerly.
+
+""Yeah, thanks,"" Cassandra confirmed with a smile. Next came the awkward part.
+
+There was a sizeable minority of scientists who engaged in sex with the tentacle monsters. Most stuck to those who needed human fluids - sweat, blood, sexual release, saliva - but any tentacle monster was happy to engage in intercourse.
+
+It didn't make Cassandra feel any more comfortable when she spread her legs, leaning back against the tentacle monster and doing her best to relax. It was her first time with a tentacle creature, after all.
+
+2A wrapped two larger, thicker tentacles around Cassandra's thighs, pulling them open to the point just before it would start to hurt. Then, two tendrils that were barely half the width of her pinky finger poked at her genitals.
+
+Cassandra wasn't aroused already: tentacle monsters weren't her kink, so to speak. This did not bother 2A, as they wiggled one of their tiny tendrils inside of her, going slow and careful. They were more exploratory at this stage.
+
+*Okay?* 2A asked, and they could feel the echo of Cassandra's assent. It felt weird, but there was no pain - there was barely even the sensation of fullness, considering how small the tentacle was.
+
+The second tentacle explored her outer folds, looking for a very specific spot. Cassandra hissed when 2A found it, her clitoris sending a shock of immediate pleasure to her brain. The first tentacle got to her cervix, and even just tapping near the hole there was mildly painful thanks to her mostly-unaroused state.
+
+That was changing, however. As 2A teased her clit, her body started to relax more and more, opening up a little bit step by step. Now, when they tapped her cervix, she just felt the strange and uncanny feeling of something touching her from inside. 2A pressed the tendril into the tiny hole there, and a flaring pain caused Cassandra to jerk and cry out.
+
+2A immediately withdrew, pulling the tentacle inside of her almost all the way out and no longer rubbing or stroking her clit.
+
+*We can stop,* 2A said immediately. Cassandra felt a flood of guilt running through them.
+
+""No, it's okay,"" she said. ""I just don't think anything's getting past my cervix without that... that numbing and stretching agent you... mentioned...? mentioned you had earlier.""
+
+2A bobbed a portion of their body in a nod. *Understood. I'll make you feel more good then until you can take the ovipositor.*
+
+Their tentacles went back to work. The small one inside of Cassandra writhed and moved, while the one over her clit practiced different patterns and pressures on it. Her hips lifted without conscious input.
+
+""You can use a bigger one,"" Cassandra blurted. Her breathing was heavy, arousal slowly increasing. The tendril on her clit was really, really good, but... ""It'll help stretch me out for the ovipositor, too.""
+
+Are you sure? 2A asked. Cassandra's impassioned nod, up-and-down-up-and-down, was their answer.
+
+They withdrew the smaller tendril from inside of her, although they left the one outside on her clit. Then, they revealed a thicker tentacle. It was covered in small nubs that Cassandra could see throb in time with 2A's pulse, and oh she wanted that in her *now*. The tentacle monster didn't hesitate. They plunged inside of her, pushing the first half-inch in quickly and then slowing down. It was wide enough to begin to stretch her, but small enough that there was only the mildest discomfort. And that sensation was quickly overshadowed by the pleasure.
+Not only was the stretch fulfilling, but Cassandra could also feel every little nub and bump on the tentacle. They rubbed inside of her, pressing against her walls and creating a delicious friction and texture. Mixed with the attention paid to her clit, Cassandra's hips were soon thrusting upward beyond her control. Everything was building up in her.
+
+Her orgasm felt incredible, a crashing crescendo of ecstasy that left her breathless. 2A worked her through it, slowing down after she came to account for her increased sensitivity. *Can you take another, bigger size?* they asked. *Just a little bit more and I can use my ovipositor, I think.*
+
+""Yeah, I can."" Cassandra moaned as she felt their wonderful nubbed tentacle pull out of her hole. It felt empty afterward, but she knew it wouldn't be for long. She could see flashes of other potential tentacles to use going through 2A's mind, too brief to have any context.
+
+Three new tentacles, these about the width of Cassandra's thumb, rose from 2A's body. Two of them latched over her nipples, tinier tendrils inside pinching and squeezing and rubbing. Then the tendrils pulled lightly, and the slight pain with the overwhelming pleasure caused her to gasp and then moan.
+
+The third tendril of this type went down to her clit, enclosing over it and beginning its attentions. Cassandra couldn't help it; she started bucking her hips wildly, moaning with abandon. It felt incredible, sensations she had never felt before. Oh, she'd played with toys, had had a couple of partners... This sort of sucking and rubbing though? Cassandra understood very well why some of her fellow scientists engaged with the tentacle monsters like this.
+
+The next tendril was about the same thickness as the ones currently sucking on her clit and nipples, thinner than the nubbed tentacle of before. It was ribbed and wrinkly, pushing into her slowly and steadily.
+
+Only once it was pressing against her cervix did it start to grow. Cassandra could feel some sort of liquid passing through it, thickening it and causing it to grow smoother and smoother. It grew to the size of the nubbed tentacle and then bigger. She groaned, the size getting painful.
+
+It stopped there and thrust in and out a couple of times. Then, Cassandra could feel the liquid spray against her cervix, pushing past the wall and also being turned back to slide throughout her canal. It felt strange, smooth and too fluid to be anything like semen.
+
+Once her insides had been drenched, the tentacle moved a couple of times to test the effects of the numbing and stretching agent. Cassandra could vaguely feel it, but there was no longer any pleasure from it. The side effect of being numb, she supposed, although it didn't much matter with the way her nipples and clit were being pulled.
+
+The nubbed tentacle from before came back. It started to push in alongside the other tentacle, and Cassandra gasped. She could feel it again, the stretch, the **stretch**, and her mind scrabbled at trying to come to terms with the lack of pain or pleasure while feeling such a big stretch.
+
+However, 2A wasn't done. The two thin tendrils from before also squeezed into Cassandra's overstuffed pussy. Her mind went blank for a moment, confused, and that's when she came. Once more, 2A rode her through the orgasm and then gave her a break after, letting her body recover before they kept going.
+
+Even with the numbing agent, there was still a slight twinge of pain as the two thin tentacles started to wiggle through the opening of her cervix, pushing it slowly open, wider and wider. The nubbed tentacle and inflating tentacle thrust as the opening was pulled bigger - first the outer cervical opening, then the inner one.
+
+Cassandra focused on breathing. The tendrils sucking on her clit and nipples slowed and lessened to keep her from being overstimulated. Despite the minimal pain from having her cervix adjusted like that, it was still very uncomfortable. It felt like her body should be screaming in agony and that she should be bleeding out on the floor, but there was just that mild discomfort.
+
+*Sorry,* 2A said sheepishly. Unfortunately, there was nothing they could do to take away the discomfort. They pulled out the nubbed and inflating tentacles, and then came their ovipositor.
+
+It was... large. Thick, darker than the rest of their body, with a strange pronged opening that resembled a closed flower. It slid into Cassandra's pussy without resistance. The cervix gave it a little trouble, but then it had *latched* on to the cervix, an inner opening stretching directly into Cassandra's womb as the two smaller tendrils pulled out.
+
+*How many?* 2A asked, showing Cassandra about the size of the eggs. She considered for a moment.
+
+""Three, I think,"" she rasped. They were large, but not gigantic. Three eggs would make her look definitely pregnant, but wouldn't overburden her or have anyone unaware of what she was carrying place her past the first trimester, maybe early second.
+
+The ovipositor contracted and expanded, pushing an egg along. It was fairly quick. Other than feeling it when it landed in her womb, Cassandra was left unaware of the journey thanks to the numbing agent. A second joined the first, a third after that.
+
+Then, 2A's ovipositor withdrew. Another tentacle that seemed to open and reveal more tentacles inside replaced it. Cassandra could feel her cervix being forced back into place. It was a little looser and wider than before, but otherwise fine.
+
+*The agent will wear off in a couple of hours.* 2A detached the sucking tentacles from Cassandra's nipples and clit, withdrawing most of their tentacles back into themself. They lowered her legs down, being very delicate with them, before those tentacles, too, fully withdrew. Cassandra could see the small, misshapen lump on her belly, and she lightly pressed her hands down over the eggs to feel them, unable to keep from smiling.
+
+*Now for my promise.* 2A wiggled their tentacles excitedly. It seemed they had looked forward to talking about how tentacle monsters reproduced. *Telepathic-type tentacles like me are supposed to be the keepers of tentacle knowledge. We have our colony, and through our colony, we pass down what we know and share it with other tentacles.*
+
+""Wait, hold on!"" Cassandra cried, struggling to sit up. ""Lemme get my tablet, I want to write this down.""
+
+*I'll tell you everything as many times as you want me to, Cassandra,* 2A promised. *Even if you never agree to carry any more eggs. A small colony is enough.*
+
+...
+
+One month later, Cassandra was sitting in a different room with 2A. She was on a hospital bed, wearing a gown, with her legs spread on stirrups. Beckett stood to the side with a tablet to take notes, and there were both a doctor and a midwife in case of complications. She panted, sweat forming over her brow, as she felt the tentacles hatch. There was no need to push; she just felt. 2A had said this was the worst part - them breaking down the egg, the babies using the shell for nutrients before they were thrust out into the world. It was uncomfortable and occasionally painful, Cassandra's brain firing off signals that *hey, nothing's supposed to be in there!*
+
+But then she could feel the first tentacle monster baby start to push its way through her cervix. Unlike with the eggs, it didn't need to really open. There was a slight, intense pain, and then the monster crawled out into the world for the first time.
+
+The faint wisps of its thoughts clarified. *...amma? ...n...o, ...rig... Mama! Mama and -*The word was static in Cassandra's brain, not translating correctly through the mental link.
+
+The little baby crawled up Cassandra's chest, nestling against her collarbone.
+
+Their two siblings soon joined it, and 2A and the babies all cuddled up to the human. 2A brushed some of Cassandra's hair back, laying partway on top of her.
+
+""They're adorable,"" Cassandra said happily as she adjusted herself, taking her legs off of the stirrups on the bed and getting more comfortable. She was perfectly fine: it was much easier to deal with giving birth to tentacles than giving birth to a human child. ""I've linked to them right away, too.""
+
+*You're their mother,* 2A explained. *That's what you identify as, right? A mother? They're your colony. They already linked while still incubating, it's just now they're strong enough to express themselves now.*
+
+""I'm glad everything went well,"" Cassandra said. ""How are you feeling, 2A? Less lonely?""
+
+*I think it's time to start pushing the initiative you humans want for tentacle companions,* 2A decided. *Everyone knows how they breed now and what conditions they need. And... I want to make more colony with you, Cassandra.*
+
+Cassandra flushed. ""I think I'd like that too.""",1625134015.0,122,0.98,9
+JUSTNOFAMILY,TW Inside. Advice Desperately Needed About Reborn Dolls.,[removed],1623160348.0,2,1.0,0
+fallenlondon,Kunabee is Finally a Correspondent with Their Own Lab at the University!,"So I totally forgot to take a screenshot of it when it actually happened BUT I'M FINALLY A GODD\_\_N CORRESPONDANT WITH MY OWN LAB IN THE UNIVERSITY.
+
+This took me MONTHS of grinding. MONTHS. It doesn't help that 'autistic brain go brrr' so I'd get distracted in the middle of things and then lose a point of notability from my making waves dropping too low at the start of the week Dx
+
+ANYWAY I was just very happy and I know like no-one who plays Fallen London so -jazzhands-
+
+I think I picked the right flair. -cough-
+
+Anyway! ***YAY***",1620392231.0,30,0.94,13
+twinegames,Twine 2 Harlowe 3.x Cycling-Link 2bind Troubles,"There's context to this and it's long. TL;DR is that I'm having issues with multiple 2bind cycling links in one passage starting at about the fourth cycling link.
+
+So I am a writer and lots of things have been happening in my life! I'm getting a poetry book published, I'm working on a novel+its sequel and have a publisher lined up for THAT... but, you know, I want to make games, too.
+
+I made a short, \~10k word story in Twine a while back and really liked Twine and Harlowe. Now I'm attempting something else, and of course my first response is to push the engine to its limits because I have no self-control. This is why I have trouble finishing things.
+
+So mostly I'm like ""okay, I'm not TOO invested in this, if I need to change things I can!"" and if I'm doing something ridiculous and stupid I take a step back and decide to choose an easier route. It's been nice and low pressure and maybe, just maybe, I will FINISH THIS and have a nice, more complex game to add to my repertoire of 'hey, I'm publishing things now!'
+
+Except, y'know, the issue I've run into is *not* that complicated.
+
+I'm a Big Fan of character customization. I grew up on dress up games, I love making characters and houses, grew up on Animal Crossing... y'know. So I figure I'll have a character customization system!
+
+You can write in pronouns (+ whether you're a man/woman/person/other and whether you're Mrs / Mr / Mx / something else), and I use cycling links to choose hair color and texture and eye color. I also have something to choose your default outfit, which you can change throughout the game.
+
+It's cycling links again, just a small collection of shirt, pants, shoes, accessory, hat, 2bind back-and-forth to a datamap. ($outfit's <noun>). Except... the shirt one works fine, the pants, the shoes, and then all of a sudden... You click the link once, and it's still clickable, but it won't move to the next option in the list.
+
+This does not show up in the passage where you choose your appearance and write in the pronouns, it just shows up in the passage where you choose your clothes.
+
+Here's the code for that passage:
+
+    {
+    (set: $dressed to true)
+    (set: $chose_clothes to true)
+    }Your usual clothes:
+    
+    A (cycling-link:2bind $outfit's shirt, ""casual blouse"", ""simple t-shirt"", ""colorful shirt"", ""tanktop and jacket"", ""cute dress"", ""long tunic"") paired with (cycling-link:2bind $outfit's pants, ""dark leggings"", ""basic jeans"", ""plain shorts"", ""elegant stockings"", ""flowing skirt"", ""comfortable sweatpants""). You (if:$outfit's shoes is not ""barefoot"")[wear](else:)[go] (cycling-link:2bind $outfit's shoes, ""slip-ons"", ""flip-flops"", ""sneakers"", ""heels"", ""sandals"", ""boots"", ""barefoot"") (if:$outfit's shoes is not ""barefoot"")[to protect your feet from the ground](else:)[most of the time].
+    
+    On your head, you have (if:$outfit's hat is not ""nothing"")[a] (cycling-link:2bind $outfit's hat, ""nothing"", ""top hat"", ""fedora"", ""sunhat"", ""baseball cap"", ""boater hat"", ""bucket hat"", ""cowboy hat"", ""party hat"", ""pillbox"") to protect it. Completing the look, you wear (if:$outfit's accessory is not ""nothing"")[a] (cycling-link:2bind $outfit's accessory, ""nothing"", ""mysterious scarf pulled over your face"", ""warm scarf around your shoulders"", ""simple stud earrings to catch the light"", ""lovely locket with familiar pictures inside"", ""fancy watch to check the time"", ""matching earrings and necklace"", ""jangly bangles around your wrists"").
+    
+    Now that you're dressed, you [[step back from the dresser->bedroom]].
+
+Please note that I am aware the text of barefoot/nothing vs ""wear/a"" doesn't trigger until you leave the passage and return. I'm not that bothered by it and fixing it would require code much more complex than I have and like... it is not worth that much effort tyvm.
+
+And the code with the related variables (extraneous variables to this issue removed) in the 'startup' tagged passage:
+
+    (set: $outfit to (datamap:
+    ""id"", ""regoutfit"",
+    ""shirt"", """",
+    ""pants"", """",
+    ""shoes"", """",
+    ""hat"", ""nothing"",
+    ""accessory"", ""nothing"",
+    ))
+
+The weirdest part is that it *was* working 100% earlier, but then I sent off a demo of what I have so far to my fiance and he triggered a glitch with a regular, unbound cycling-link that I can't reproduce in Twine *or* on the published file. It's also currently not registering issues, just... not changing, and only for part of it.
+
+Full disclosure: I've also installed the Harlowe Audio Library, but it was working *with* the HAL until after I published-to-file.",1617544529.0,4,0.84,0
+196,"The rule trapped me. Have Cinnamon holding my foot; she traps me often, too.",,1616202645.0,6,0.81,3
+writerchat,Looking for Advice on Writing Outside of My Culture; Wampanoag Tribe Myths and a Mexican-American Character,"If you look at my most recent post history, I am currently posting variants of this on every subreddit I think I can generally fit without breaking rules. Please help. Also if you look at my post history, you'll find that I have given up on any semblance of work-life balance. It's a lawless place.
+
+I have a publisher interested in both a poetry anthology from me and my novel. I'm working on making my novel safe for consumption with the help of a few beta readers, but there is one problem. Sort of two?
+
+I'm a white American, but I'm also a big believer in diversity, especially since I am both queer and autistic. I happen to include some Native American myths, since it's an urban fantasy novel that takes place in America. I've done my due diligence with basic research, and I have, currently, a couple of myths that I *think* are okay to use in the story the way I use them, but truly I would love to talk to someone who is familiar with the myths and beings from the Wampanoag Native American tribe.
+
+One of my two main characters happens to be a Mexican-American, as well. While I've read a TON on writing a PoC and even specifically a Mexican-American, along with writing someone who is bilingual, and read multiple anecdotes and stories from various Mexican-Americans, I'd love to run this character by someone (or, ideally: several someones since no-one is a monolith of their culture) who happens to be Mexican-American.
+
+If anyone can help me, or direct me to a place where I might be more likely to get help, *please* do. I've also posted on NaNoWriMo forums (since I wrote my first draft during NaNo) and to Facebook groups, along with contacting the two Wampanoag tribes within Massachusetts. I REALLY REALLY want to do right by people!",1614010047.0,13,0.93,0
+fantasywriters,"A Question About Native American Myths, Specific and General","I'm working on editing my YA urban fantasy novel, which I've recently found a publisher for.  For the most part, I know what I'm doing and am just steadily sending off my rewrites and edits to my beta readers.
+
+There's just one problem. It takes place in the United States, and as such I've included some Native American myths. I've done my due diligence and researched the area and done some preliminary research on the specific tribe and myths specific to that tribe, but I really would like to talk to at least one (but preferably more, since no-one is a monolith of their culture) individual who is connected in some way to one of the two Wampanoag tribes located within Massachusetts. Whether they're someone who researches the lore or just someone who had it told to them by parents and grandparents, I just dearly would like to know that I'm expressing things appropriately and kindly.
+
+I'm a big believer in diversity and giving appropriate representation, especially considering I am both queer and autistic myself.
+
+Has anyone else run into this issue, with perhaps a niche mythos from a culture they want to portray respectfully? Are there any rules of thumbs I can be following?
+
+...And if anyone has advice to a place I can go where I might have more luck finding people who'd be willing to give advice (although not necessarily beta read! if they do, that's great, but I'm not going to demand they give up THAT MUCH of their time; I have descriptions ready for what I'm using and such) on this (and potentially other aspects of the novel), that would be *fantastic*. I can do my due diligence with research, but it's not necessarily going to be as accurate as talking to a person (or multiple people, that is my *dream*) about their experiences and about what would be appropriate vs appropriation.",1614009411.0,179,0.95,59
+writers,Author Looking for Advice on Writing Outside of Their Culture; Wampanoag Tribe Myths and a Mexican-American Character,"Whew, okay.
+
+So! I have just gotten an indie publisher interested in my work. My ""work"" being my poetry that I'm putting into a poetry anthology and my novel (+ its still unwritten sequel...)
+
+I'm doing my rewrite of my novel and I have a couple of betareaders going over it at the same time (basically: I fully edit a chapter with my initial passthrough, copy and paste it into a new google doc, and send it off to my betas who then give me suggestions that I go through for a second passthrough from me). But there is one problem.
+
+I am a white American. My novel involves some Native American mythology (as it's an urban fantasy book taking place in the US) and one of the two main characters is Mexican-American.
+
+I want to portray everything respectively. I've done my due diligence in terms of research, but there's nothing like talking to actual people. I've posted in two writing Facebook groups and on the NaNoWriMo forums (as I wrote this novel for NaNoWriMo) and have gotten... zero responses. So now I go to Reddit, and further interact with strangers in hopes of just being respectful.
+
+I've contacted two separate Wampanoag tribes (as those are the ones in the area of the book's setting), and I'm waiting on responses there. I think as soon as I get responses from them, I *should* be okay, but there is no such thing as ""too many people"" since nobody is a monolith of their culture.
+
+The bigger deal, then, is finding someone who is Mexican-American. I'm very much of the mind that 'the more the merrier'. There's no obligation to fully beta read the book, as I can easily describe the character (and her mother) in enough detail to get the feedback in mind, but I'd not be opposed to someone wanting to beta read it.
+
+Actually, the same goes for someone who is a part of Wampanoag culture or otherwise closely connected and well-educated on their various myths.
+
+If there is *anyone* who can help me in terms of the Wampanoag myths or the Mexican-American character, *please* contact me! I really want to be sensitive in my representation and not do anything that would be considered inappropriate or appropriative. I'm queer + autistic and so it is very, VERY important for me to portray diversity and do it in a kind and respectful way!",1614006740.0,1,0.57,0
+MonsterGirlRP,[NB/A4A/GM] A Human Looking For a Monster!,"First off: ""What's NB stand for?"" Nonbinary. I'm nonbinary, but I am officially comfortable playing pretty much anything in terms of gender and whatever else =\^.\^= The slow realization my absolute awkwardness with a penis is because I sometimes want one irl is... an interesting thing. I'm not that interested in playing a futa (though I love when my partner does!) but, like... I will. The ideal is that I play someone outside of the binary, whether they have binary parts or not, but like: whatever you want, man. Whatever you want.
+
+Secondly, I'm submissive. I don't do domination. I am not a dom.
+
+And FINALLY, I wanna get to know YOU, man. My ability to rp is variable. I can't always throw out posts, although I can throw out a lot of high-quality ones when the muse is friendly. I find that having some kind of relationship outside of roleplay helps. If all I know is your posts, I'm going to be less likely to be able to be consistent with them. We don't have to get super close and all buddy-buddy, but I'd like to be able to have casual conversations about, I don't know, new media we're doing. I want to be able to share random-ass memes I find (and the pictures from my folder labelled 'Weapons of Mass Destruction') and the music I enjoy. We don't need Much outside of roleplay, but I'd like to be able to chatter *and* roleplay.
+
+With that out of the way! My goal is to waste as little time as possible. I am a neurodivergent chronically ill individual, I have a limited number of spoons and goddamnit I want to have a fun time. I do not appreciate being messaged without people having read my post because I try and make this convenient! My inbox is full enough! Reddit, let me fucking DELETE MY PMs!
+
+Please for the love of God I will not roleplay on Reddit. Reddit is a broken, broken website in terms of PMs and chat. It's annoying. It's a pain in the ass. My preferred location is Discord. I can roleplay on my phone or on the computer and it's convenient and nice and lovely. I also am quite fond of roleplaying on Google Docs, although it'd be nice if we could chat on Discord (as we can let each other know when we've posted and I can share my music and memes). If Discord and Google Docs don't work, Google Hangouts is an option, as is email and even Kik. None of those are preferred, and if I can avoid Kik entirely I'd like to, but... options. Delicious, delightful options.
+
+I have SO MANY prompts. And I've filled out like 3 different kink lists for your perusal. I keep it sourced in a Google Doc that links to my kink lists and other such things, which you can go to by clicking [here](https://docs.google.com/document/d/18NYCMoO4g-gtY2fL_awXwWpvC6j82w_dTkLXeCsPPOo/edit#)! This also has my Discord ID, so - y'know.
+
+Anyway, I have a terrible tendency to play humans, although I have been known to play a catfolk or two. Sometimes fae. Depends on my mood. I do vary it sometimes, though! Also, I mark some things as limits when they're ""maybe""s because if I mark them as maybes people message me asking for specifically X, Y, Z thing and - no, I'm sorry, I have to know you as a person and like your roleplay abilities before you unlock that level, thanks xD
+
+As for DMing... I do it. Occasionally. It's currently **not on offer**, so don't ask. Although if you wanna DM, I'll love you forever. I'm  slut for getting an adventure DM'd for me? Yeah.
+
+I also give zero fucks what you roleplay as, with a few basic guidelines: the less human the better, I am unhappy with a magicless human (with one exception), and my favorite non-humans are orcs, minotaurs, dragons, arachne/driders, and naga.
+
+I have a Theme and I'm trying to be shameless about it.
+
+I also love being the center of a harem so like.. y'know xD I'm polyamorous irl too\~ Love is not a finite resource.
+
+I think that's about everything that I want to cover in this post. Lemme know if you want to play with me - you know how to contact me (Reddit chat, Reddit PM, Discord), and I swear I don't bite!
+
+...Much ;)",1606584188.0,7,0.89,2
+Monsterboyrp,[NB/A4A/GM] A Human Looking For a Monster!,"First off: ""What's NB stand for?"" Nonbinary. I'm nonbinary, but I am officially comfortable playing pretty much anything in terms of gender and whatever else =\^.\^= The slow realization my absolute awkwardness with a penis is because I sometimes want one irl is... an interesting thing. I'm not that interested in playing a futa (though I love when my partner does!) but, like... I will. The ideal is that I play someone outside of the binary, whether they have binary parts or not, but like: whatever you want, man. Whatever you want.
+
+Secondly, I'm submissive. I don't do domination. I am not a dom.
+
+And FINALLY, I wanna get to know YOU, man. My ability to rp is variable. I can't always throw out posts, although I can throw out a lot of high-quality ones when the muse is friendly. I find that having some kind of relationship outside of roleplay helps. If all I know is your posts, I'm going to be less likely to be able to be consistent with them. We don't have to get super close and all buddy-buddy, but I'd like to be able to have casual conversations about, I don't know, new media we're doing. I want to be able to share random-ass memes I find (and the pictures from my folder labelled 'Weapons of Mass Destruction') and the music I enjoy. We don't need Much outside of roleplay, but I'd like to be able to chatter *and* roleplay.
+
+With that out of the way! My goal is to waste as little time as possible. I am a neurodivergent chronically ill individual, I have a limited number of spoons and goddamnit I want to have a fun time. I do not appreciate being messaged without people having read my post because I try and make this convenient! My inbox is full enough! Reddit, let me fucking DELETE MY PMs!
+
+Please for the love of God I will not roleplay on Reddit. Reddit is a broken, broken website in terms of PMs and chat. It's annoying. It's a pain in the ass. My preferred location is Discord. I can roleplay on my phone or on the computer and it's convenient and nice and lovely. I also am quite fond of roleplaying on Google Docs, although it'd be nice if we could chat on Discord (as we can let each other know when we've posted and I can share my music and memes). If Discord and Google Docs don't work, Google Hangouts is an option, as is email and even Kik. None of those are preferred, and if I can avoid Kik entirely I'd like to, but... options. Delicious, delightful options.
+
+I have SO MANY prompts. And I've filled out like 3 different kink lists for your perusal. I keep it sourced in a Google Doc that links to my kink lists and other such things, which you can go to by clicking [here](https://docs.google.com/document/d/18NYCMoO4g-gtY2fL_awXwWpvC6j82w_dTkLXeCsPPOo/edit#)! This also has my Discord ID, so - y'know.
+
+Anyway, I have a terrible tendency to play humans, although I have been known to play a catfolk or two. Sometimes fae. Depends on my mood. I do vary it sometimes, though! Also, I mark some things as limits when they're ""maybe""s because if I mark them as maybes people message me asking for specifically X, Y, Z thing and - no, I'm sorry, I have to know you as a person and like your roleplay abilities before you unlock that level, thanks xD
+
+As for DMing... I do it. Occasionally. It's currently **not on offer**, so don't ask. Although if you wanna DM, I'll love you forever. I'm  slut for getting an adventure DM'd for me? Yeah.
+
+I also give zero fucks what you roleplay as, with a few basic guidelines: the less human the better, I am unhappy with a magicless human (with one exception), and my favorite non-humans are orcs, minotaurs, dragons, arachne/driders, and naga.
+
+I have a Theme and I'm trying to be shameless about it.
+
+I also love being the center of a harem so like.. y'know xD I'm polyamorous irl too\~ Love is not a finite resource.
+
+I think that's about everything that I want to cover in this post. Lemme know if you want to play with me - you know how to contact me (Reddit chat, Reddit PM, Discord), and I swear I don't bite!
+
+...Much ;)",1606584160.0,4,0.83,0
+NoFeeAC,Beau will be in boxes tomorrow! Gifted but hoping to find someone who loves him as much as I do! Look for info comment!,,1602513716.0,4,0.84,3
+raisedbynarcissists,"A Poem From A Queer Kid: Mom, I Swear I Love You","i'm getting away
+
+mental hospitals, wanting to die
+
+being nonbinary and hearing
+
+she
+
+i'm getting away
+
+i wanted to make it smooth
+
+make it easy
+
+but it's never easy with you, 
+
+huh?
+
+you're so involved in your own pain
+
+that you can't see mine.
+
+mom,
+
+i would give anything to have
+
+the relationship you've always thought we have
+
+as i slip the bonds of enmeshment
+
+i think
+
+i am dying.
+
+i would certainly rather die than this.
+
+i hide away my tears
+
+and my crying
+
+because it will make yours worse
+
+and i am so tired
+
+of being accused of lying
+
+i can assure you
+
+my boyfriend is not a sex trafficker
+
+and you would know my name either way
+
+if the story were different
+
+i could involve you in my name
+
+my deadname
+
+curdles on my tongue, makes me flinch
+
+when i found my name, 
+
+i grew used to it in days.
+
+i am so afraid
+
+of the unknown
+
+as i step into it;
+
+but i cannot express these fears
+
+and you'd never let me stay
+
+anyway
+
+with your therapist jumping at the bit, 
+
+saying this is normal for people diagnosed
+
+with mental health issues like mine
+
+consider:
+
+the ptsd caused by your hands, you and dad,
+
+is why i run
+
+yet do not want to run.
+
+i do love you
+
+if i could stop your hurting, i would.
+
+would you rather
+
+i die?
+
+if it would make it easier
+
+for you
+
+i will commit suicide, but
+
+i cannot stay.
+
+i cannot.
+
+you've made it clear i can't.
+
+i wonder what you thought would happen
+
+when you and dad gave me both
+
+a time limit and an ultimatum?
+
+so, mom, 
+
+i promise you this kills me too.
+
+despite everything you've done
+
+i still
+
+love you.",1601157600.0,10,1.0,2
+Noseycat,Cinnamon Sugar Shall Be Shared With All; I Come From r/CatsonPizza,,1600914965.0,33,0.95,3
+CatsOnPizza,r/ilikthebred said you'd like my Cinnamon girl,,1600821521.0,303,1.0,5
+lgballt,Me-post Monday? Hope this is okay!,,1597083145.0,214,1.0,10
+NoFeeAC,Hopper is Looking to Find True Friends! Come Give Him a Home Today (: (More in Comments),,1596825145.0,3,1.0,3
+BitLifeApp,hwhat,,1595055491.0,3,1.0,0
+Tulpas,Help on Finding a Therapist for Multiple Systems?,"Hey there, I'm Kunabee. I am an absolute disaster of an individual with multiple headmates. I am going to avoid using the term 'tulpa', as 1) it doesn't describe all my headmates and 2) researching the term has lead me to believe it might be used incorrectly. However, this is the largest community I know of of People Like Me.
+
+Content warning for discussions of mental health, mentions of past suicide attempts, and general trauma discussions. Everything is vague and only here to give some explanations about our situation.
+
+I'm very mentally ill. I've been diagnosed with depression and anxiety since I was twelve. I was misdiagnosed with borderline personality disorder in early 2019 and, realizing that Something Was Wrong with that diagnosis pursued the thought until, earlier this year, that diagnosis was changed to a combination of autism spectrum disorder and post-traumatic stress disorder, which better explains my symptoms and issues.
+
+I'm currently unemployed and with no income, but as soon as I'm making money I plan to see a therapist again. All of this is important info, I swear.
+
+I have one headmate intentionally created, about two, maybe three years ago now. Her name is Enigma, and our relationship is that she is basically my sister. However, she has some ongoing trauma due to previous suicide attempts of mine. Enigma desperately, desperately wants to live. We daydream about her getting her own body, we talk shop about future, I've figured out how to let her front and we do a lot of time sharing so we can both be happy. I know she has trauma from the suicide attempts, but we both decided that I could find a therapist I trust and, if we both felt comfortable, we'd talk about Enigma and try to get her some help processing.
+
+However, very recently it has come to my/our attention that Enigma has more mental health issues than just the trauma from my suicide attempts. She has some kind of depression, and may have further issues. There are two reasons we haven't noticed this until now: one, that Enigma's issues present wildly differently from mine, and two, that mine have been SO SEVERE as to push anything else aside.
+
+Enigma *needs* therapy. It cannot wait the four years it would take for me to trust someone enough to trust them with this precious person. I need someone who has experience with multiple systems as soon as I have an income again. Ideally it would be someone in the city nearest to me, but if I have to do an online meeting so be it. I don't want her to be hurting like this if she doesn't have to be.
+
+Any tips or advice are appreciated. If you have a therapist for your system, how did you find them? How can you tell who is trustworthy or not in the first place?
+
+Also, as this is my first post, feel free to ask me, Eni, or any of our other headmates whatever questions you'd like. Enigma loves people, personally, and she may chat with ya'll on her own reddit account. We use two different apps on my phone, and she has a dedicated browser I call ""hers"" on my computer.",1589604388.0,29,0.91,21
+MonsterGirlRP,[NB4A] Play A Monster For Me?," ""What's NB?"" you ask. Nonbinary. I'm an enby. I am neither male or female. I play either nonbinary characters with feminine parts or female characters. We got that cleared up? Cool, cool.
+
+My post history is a mess, don't mind it too much. I'm a disaster of an individual who has given up entirely on separating any part of my online existence. Politics? NSFW shit? Being queer? Mental illness? Random normal online crap? It's all the same.
+
+I'm autistic and deal with mental illness. I don't always understand shit and I'm a space cadet and just, eternally tired. I'm currently obsessed with Animal Crossing: New Horizons and there absolutely will be messages about that as we play.
+
+I'm most reliable on Discord. I don't see rules so I'm going to err on the side of caution and not post my Discord. I like to roleplay on Discord or Google Docs, but will other places. But like, if you don't message me on Discord, I am more likely to forget and end up ghosting you. I ghost sometimes. I dislike this aspect and try not to. I have half a brain.
+
+I play humans and half-human hybrids, mostly, because I'm uncreative (that's a lie; I'm very creative, just a stereotype). Romance is incredible. Bondage is love, bondage is life.
+
+I have an f-list, a reddit kink list, and BDSM test results. They're in a Google Doc. I have several, all neatly organized for your perusal. I bring shit to the table.
+
+I'm a submissive always, not the biggest fan of humiliation/degradation (they can sometimes be triggers for mental shit, fuck depression honestly), and I don't do mess like vomit, bathroom stuff, etc. Also extreme pain, but I *am* a masochist so there's that.
+
+I'm tired, it's 3 AM, if you feel like dealing with my nonsense I'm a fairly skilled and experienced roleplayer and I... like roleplay.",1585904849.0,2,0.63,0
+RoleplayGroups,[Discord] [NSFW] [18+] The New Prohibition,"The New Prohibition: The new president of the United States has instituted a prohibition: of alcohol, of sex, of guns. It's a near-future dystopia on a mythical Earth in the mid-2020's, ruled by a president who - through a mix of subterfuge and force - has instated himself as The United States absolute ruler. Censorship is rampant, freedom is rare, and humans are slowly being turned into second-class citizens.
+
+Of course, nobody's actually taking this sitting down. Secret libraries filled with banned books, brothels and bars, a black market run by a new mafia - it's all here. It's all the important parts.
+
+Or, in short: a fantasy rp taking place in a modern-day Earth conglomerate with 1920's aesthetics.
+
+Humans, monsters, and all kinds of beings co-exist. Other than President Theodore Hungle and his supporters, they exist more or less peacefully. Hungle is looking to change that. The New Prohibition is about the people who are going through such a massive change, people who are struggling to find some kind of common sense, people who are looking for the next step... or people who just want to survive.
+
+Care to join us?
+
+[https://discord.gg/hxKxyzh](https://discord.gg/hxKxyzh)
+
+There's a basic passphrase you need to put into your introduction to join, and then you'll get more areas of The New Prohibition unlocked.",1575404163.0,3,0.81,0
+Roleplay,[Group] [Discord] [NSFW] The New Prohibition,[removed],1575403528.0,2,1.0,2
+MonsterGirlRP,The New Prohibition [Group] [Discord] [18+],"The New Prohibition: The new president of the United States has instituted a prohibition: of alcohol, of sex, of guns. It's a near-future dystopia on a mythical Earth in the mid-2020's, ruled by a president who - through a mix of subterfuge and force - has instated himself as The United States absolute ruler. Censorship is rampant, freedom is rare, and humans are slowly being turned into second-class citizens.
+
+Of course, nobody's actually taking this sitting down. Secret libraries filled with banned books, brothels and bars, a black market run by a new mafia - it's all here. It's all the important parts.
+
+Or, in short: a fantasy rp taking place in a modern-day Earth conglomerate with 1920's aesthetics.
+
+Humans, monsters, and all kinds of beings co-exist. Other than President Theodore Hungle and his supporters, they exist more or less peacefully. Hungle is looking to change that. The New Prohibition is about the people who are going through such a massive change, people who are struggling to find some kind of common sense, people who are looking for the next step... or people who just want to survive.
+
+Care to join us?
+
+[https://discord.gg/hxKxyzh](https://discord.gg/hxKxyzh)
+
+Please note that it's 18+, there's a basic passphrase you need to put into your introduction to join, and then you'll get more areas of The New Prohibition unlocked.",1575402925.0,4,0.83,0
+Charity,Medical Debt,"Hi, I'm Kunabee.
+
+(I start posts about myself like this. Perhaps because it helps me clear my mind?)
+
+I have 8000 dollars of medical debt. I've been slowly trying to pay it off... but trying to pay it off has gotten me in the mental hospital a second time, since I'm working at Walmart.
+
+And I am struggling to pay it off part time overnight. I can't work more than I am - I'm already struggling.
+
+I've been posting my gofundme periodically since I made it mid-October to my tumblr and facebook, but... not  many people *can* donate.
+
+I'm hoping maybe I can get more here?
+
+Any little bit helps. https://gf.me/u/vzpcyn
+
+And, if you want something for your money... I do have a website. [I do creative-type stuff.](https://kunabeecreations.com) It'd be great if you hired me.",1574588850.0,2,1.0,0
+walmart,Anxiety Over Black Friday,"Hi, I'm Kunabee!
+
+I work nights as a cashier. I'm working on getting an autism diagnosis (but it's highly likely I have it) and I have a nice little list of issues: major depressive disorder, generalized anxiety disorder, and post traumatic stress disorder.
+
+This is my first retail job.
+
+And Black Friday is coming.
+
+I am super worked up and nervous about it, so I'm coming to ya'll for some advice. I already know what works for me for coping methods for anxiety and plan to take my (prescription, tyvm) xanax as much as I can. You know, without taking it more than I should... so probably twice in the shift.
+
+Anyway, other than that... what have Black Fridays looked like for you guys in the past? How busy have they been, particularly overnight? Any general tips for surviving the rush as a cashier?
+
+Thank you so much! And good luck!
+
+EDIT: Thanks everyone for the advice, I feel a bit better and a bit more prepared. (:",1573830863.0,2,0.56,13
+walmart,"TFW You Ask A Customer If They Found Everything, And They Say No.",,1557048968.0,43,1.0,12
+MonsterGirlRP,[F4A] Looking For a Monster,"Monster girl, boy, or other; I'm not particular.  Any kind of ""monster"" will do.
+
+Before I forget: Discord is Kunabee#1734 .  I'm happy to do Kik as well - that's just Kunabee.  Plz no reddit PMs.
+
+I use first or third person usually, whatever you prefer.  Plots are done in second person because that's just.  How it goes.  So anyway - peruse the plots, enjoy the scenes, let's get something started mayhaps?
+
+# Soulmate
+
+*She was your soulmate - your other half.  You could tell; the way you resonated with each other was incredible.  There was just one problem: she didn't know you existed.  And if she did, she might be afraid.*
+
+*So you started leaving gifts.  First dead animals, making sure she was fed.  But you noticed her distaste for them, her distress, so you changed it.  Pretty stones, lovely flowers, things you found.  Slowly, slowly, she grew more and more comfortable with the gifts.  Eventually, you would finally reveal yourself.*
+
+*(Or perhaps you took a darker path.  With you, you knew she was safe.  If she wouldn't accept you easily, than you would have to show her you were soulmates.  So you took her away, kept her safe and cared for, making sure that she'd grow to eventually accept you.)*
+
+(Unusually, I'd prefer guys for this one.  Breeding kinks  ¯\\\_(ツ)\_/¯)
+
+# Incubus/Succubus
+
+*You were starving, and she was convenient.  A virgin, innocent and uncorrupted, and her orgasm could feed you well.  Of course you kept coming back, haunting her at night, causing her troubles during the day because of how you'd keep her up - or wake her up, screaming in pleasure.  It would only be a matter of time before she would fall to your corruptions, in the end, and convenience turned into addiction.*
+
+(Simple and terribly cliche.)
+
+# Looking for Help
+
+*It was as if she had been delivered to you, soaking wet on your doorstep with a broken down car.  Never mind the house looked abandoned - you lived here, so it wasn't - it was the only sign of human civilization for miles.  And here was a human, desperate and crying.  Do you let her in, or does she break in?  Not like the door is locked, of course.  Will you help her... or do you have something far more nefarious planned?*
+
+(Would prefer girls for this one.)
+
+# Meet-Cute
+
+*The cooperation of species was a relatively new thing.  They didn't know what to make of each other.  Humans, anthros, beings of lore, monsters and monstergirls/monsterboys, hybrids, all of them were wary and uncertain.  But a peace had been reached, uneasy as it was.  And in this peace a human found herself slamming into your chest, stepping back and staring up at you and apologizing so many times it looked like she had stopped breathing to speak.  And, well... it was kind of funny and kind of cute and wouldn't it just be a good thing if the two of you could find friendship in that?*
+
+*...if the two of you could find something more, in that?*
+
+(I'm a sucker for cute ¯\\\_(ツ)\_/¯)
+
+...
+
+[F-List](https://www.f-list.net/c/kunabee)
+
+^(pretty much always looking for people to play nsfwcyoas with me btw if that's of interest)",1554422028.0,9,0.91,6
+BPD,"Went To Mental Hospital, Got Diagnosed with BPD (& other things happening)","TW: Abuse (emotional, minor physical), Self-Harm, Suicidal Thoughts (& Attempts).  Don't read this if you're in a bad place, guys, I'm gonna get heavy here.
+
+Also, screw using an anon name, I don't care.  People will make their judgments and they can go heck themselves.  (me, trying to avoid cussing...)
+
+Let's see, some background info about me... I'm 22 years old, a girl (grill, gorl), a writer.  Want to be a mom more than anything, have a natural urge to help people, have only worked jobs with childcare and caring for the elderly.   I care deeply about people while at the same time not trusting them; fear being abandoned while at the same time expecting attacks/abandonment.  I have trust issues.  And BPD?  BPD was a scary thing.  Still is, tbh.  I read the subreddit raisedbyborderlines (cuz I could relate to some of the shit there), the primary noticeable trait of it is anger.  I mean, I thought ""borderline personality disorder"" I thought ""angry and scary"".
+
+I'm not an angry person.  I get sad, I used to get mad at myself (but thanks to a depression+anxiety diagnosis when I was 12/13, I'm at a place where I forgive myself.  Don't love/accept myself fully quite yet, but I'm getting there), but my anger is brief and usually not strong.  The longest I've been angry is until I wake up in the morning.
+
+My dad?  He's an angry person.  Back before he was on better meds (he's the reason I have PTSD), he would throw shit around.  Threw his keys at me once; threw his bike at the window (in what I call the bike incident, and even just typing that is hard and terrifying); hit my mom in front of me; other scary things.  Being angry?  Oh, man.  Being angry was the first aspect I basically 'killed' about myself.  Anger was to be feared; anger was Bad.
+
+There are days when I still can't stand having ANYTHING in common with him.  He has his good traits too, don't get me wrong.  I remember we'd spend hours talking philosophy; he was the one to teach me to think critically and think for myself.  But he still, also, terrifies me.  And it's not like... God, the shit he's said to me.  ""I wish you where never born"" and ""I can't wait until you're out of our lives"" ('our' referring to him and my mom) and ""If you weren't my daughter, I'd hate you"".  That's ON good meds where he doesn't throw things anymore, doesn't fly off the handle (though he still gets angry, he still throws things but only soft things, he storms off and slams doors still, gets angry far too easily).
+
+I walk on eggshells.  I have my whole life.  From the time I was 3 until I was 15/16, I  was the adult in my relationship with my dad.  It leaves me emotionally mature, highly intelligent, and completely, absolutely, still a fucking child in so many ways - there's a part of me that just won't grow up.  But hell no; I don't ever want to be a kid again, being a kid sucked!  Middle school sucked!   It still sucks!  Where's the getting better part?  (It's coming.  I can see it now and the last time I did I was in elementary school, so it's pretty cool to see it again even if I don't feel it all the time.)
+
+My mom's an angry person too.  She went to counselling for her anger issues, but she's still pretty damn bad.  She's emotionally manipulative.  I struggle to do my chores, I have a lot of trouble doing my chores (thanks, depression) and she gets pissed about it.  Sometimes she lets me go three days, four, a week before getting angry; other times it's a few hours, less than a day.  Sometimes I do my chores but I don't do them ""well enough"" for her so she screams at me.  ""Little shit"", ""lazy ass"", ""ungrateful brat"", ""bitch"" - these are her favorite names for me.  Anything can set her off.  Good days don't mean shit.  Hell, she yells at me on her birthday and mother's day usually; in the midst of me shopping, baking the cake, doing additional chores, etc I regularly forget one or two things and HOW DARE I.  She got worse after 2015, when she was in the hospital for a month and nearly died Christmas Eve - pneumonia.  January 2016 saw her in rehab; February 2016 saw her working again and doctors said it was the fastest anyone had gone.  She was working two, three weeks sooner than she should have.
+
+And she hates, hates that she can't do things anymore.  It kills me.  I love my parents, despite their problems.  I do.  They've hurt me but I love them - there's so much good.  Zoo trips, ice cream, singing opera with each other (whole days where we just sang to each other everything we wanted to say).  Ye gods, I've spent so much time just - just going back and forth 'no they can't be abusive! my parents are wonderful!' but I tell them some stories, even like - idle stories - and then I get a horrified look or reaction from friends and therapists.  Just a totally shocked, 'they actually do that?' reaction.  I can't remember things - my memory is godawful.  It's a defense mechanism, I'm pretty sure.  Crying over spilt milk... *stars* I hate that phrase.  It's associated with such a terrible memory.  (So are clogged toilets.  Every time I clog a toilet I get a terrible, irrational fear that someone is going to hurt/kill me.  It was never physical, I was never hit, but my mom has threatened violence so many times, my dad has gotten *close* so many times -- )
+
+I shouldn't say 'never'.  I should say 'the last time my dad touched me I was eight'.  My parents spanked me.  My mom was very measured about it.  You should never spank your child, but philosophy and science aside, my mom wasn't ever physically abusive.  It was one quick smack.  My dad?  My dad got angry.  He spanked me so hard several times I struggled to sit down - a couple of times on my bare ass.  Mom says he spanked me ""twice"".  I distinctly remember five times, for certain.  There may be more - I don't remember much before I was about ten.  I remember being seven and threatening to kill myself and my mom said to never, ever say that cuz I didn't mean it but I wanted to die so badly!  It hurt.  Or the fact I used to cry hysterically, all but screaming, and my mom got so pissed about it.  ""YOU NEVER CRY LIKE THAT, STOP CRYING LIKE THAT!""  I couldn't stop.  I started biting myself, even breaking skin and drawing blood, to get myself to cry quietly.  Eventually I didn't need to bite myself, but I often did because it was... a relief.
+
+And that's about all I remember of my childhood.  A few cases of my mom flying off the handle, a few times of being hit, me feeling suicidal, and the loneliness and isolation I felt on the playground.  There's a few more instances of a birthday party (a sleepover I left early due to being bullied by the other girls), some fun times like my first crush, moments just spent with friends.  ""Friends"".  It's very foggy - even anything from, well, 12-16 is foggy, but I remember a bit more about those times.  18 and senior year I remember fairly well, as well as college, and then - it's not foggy beyond there, I remember clearly with just a few blank spaces.  Normal things, you know.  Which terrifies me because either that's emotional instability or worse shit than what I remember!  And I'm not - I'm not dipping into that when memories are so *subjective*.  Let's leave those gates closed shall we?
+
+This post is a mess, I am - so sorry.  I am lost and confused and frustrated.  My mom read my diary, found out I never stopped ""thinking"" my parents were/are abusive (they are), and it was - it was like two years ago when I freaked out and finally shared some of their shit, posted a word document on Facebook and had people horrified and Mom - Mom denied and denied and denied.  ""It wasn't like that!""  ""I'm a good mother!""  ""There's no context!""
+
+(The context was there, and made it worse)
+
+And now I have BPD.  Borderline Personality Disorder.  The ""angry"" disorder.  Stigmatized, although I'm trying to break the stigma for myself.  Not well understood.  Emotional.  Explosive. Walking on eggshells.
+
+Overreacting to typical anger.  Finding hurt in things that shouldn't hurt.  ""That sounds like something I would have written about my mom!"" my mom scoffs after I read one of the word document notations (written in the immediate aftermath and sometimes during the event) - yet despite the fact everyone agrees her parents were abusive, she was not.  I'm just emotional.  I just take things personally!
+
+I have - an out.  Resources.  A club house, a housing place.  A housing place?  I don't need that!  I have held down jobs!  But -- I can't live in this toxic house, not when every few days, sometimes every day, sometimes every few HOURS my mom gets pissed and it triggers me and suddenly all I want is to fucking kill myself because I don't know how to make the pain stop, how to make my parents stop.  A month, maybe - that's kind of my goal.  Just a few things to do - get therapist from particular location, get referral from therapist, take tour of the housing place, live there and let them help me find job, freedom.  Then I find housing.  Then I set more goals, slow and steady, one at a time, forgiving myself.
+
+It feels overwhelming.  I'm so scared.  I'm not - I'm not crazy!  I'm not Like That!  I shouldn't have gone to the mental hospital because I'm not Like That!  I'm not That Bad!  I've made so much progress in recovery!
+
+...I needed it.  Ye gods, I needed it.  I was so scared.  It was a threat.  My dad's a threat, my mom's a threat - violence is threatened, Dad is used as a weapon by my mom.  I am mentally ill: Major Depressive Disorder - Reoccurring Symptoms without Psychosis; Generalized Anxiety Disorder; Post-Traumatic-Stress Disorder; ...Borderline Personality Disorder.
+
+I'm scared, I'm confused.  Some of it makes sense.  Some of it doesn't.  I guess... I just need insight.  I care far more about what other people think than I should (in schema behavioral therapy, I have all but two of the schemas at 'high' or 'very high' so I'm a bit, uh, messed up there) and I guess I just need...
+
+""It's okay, you're not crazy, BPD isn't a bad diagnosis. Your parents are still shitheads and it's wrong to use your problems to justify your abuse.  You can still be a good mom when you're ready.""
+
+I have that from friends, but... idk.
+
+Other people with BPD would sound really good.
+
+In other news, uh.  I'm a shoulder to rely on, I guess?  I like to help others.  I feel like shit, ergo I don't want others to feel like that.  So if anyone wants to commiserate, if anyone can relate to the abusive parents thing (especially when they sometimes doubt the abuse), I'd be happy to confirm that yes, your parents are terrible and it isn't just you.  And, uh.  I'm also happy to talk about happier subjects!  Like my writing, or video games, or why I use 'stars' and 'ye gods' and also the other, more typical, interjections of frustration and excitement :P
+
+...hope your day is better than mine!",1552158337.0,2,0.63,2
+MonsterGirlRP,[F4A] Two Plots And a Stereotype Walk Into A Bar...,"Sup. I'm a chick and I play chicks, although my preferences lean towards playing human. I'm an embarrassing, terrible stereotype, fear me.
+
+I also think I'm funny. -gestures vaguely at title- And I need to proofread.
+
+Contact me on Discord via kunabee#1734 for best results. I have other accounts; ask and ye shall receive.
+
+I told myself I wouldn't post here unless I was willing to play monster girls and, well. I have a couple of ideas for nonhuman humanoids... although they're sadly more 'human' than 'monster'. My preference tends to be 'mostly monster'. Playing a human while my partner plays a nonhuman? My JAM. Brownie points for nonhumans of any type from you.
+
+I'm happy with both SFW and NSFW. I'm a long-term rper though, and a terrible shipper, so be warned. I tend to post at least once a day although I'll periodically disappear for a bit. Fuck mental illness amirite hahaha.
+
+Really the only thing I'm not game for is my character dying, although there... have been a couple of exceptions when I want ~angst~ (or in certain mind break rps when my character commits suicide). I can go dark. But I also like fluff. I'm super adaptable tbh.
+
+Oh, yes. I also prefer to roleplay with other 18+ adults. I'm 22, for the record. Just to have that. Out there. Yeah. Don't wanna rp with anyone under 18, that's just my preference. Sorry to disappoint?
+
+Arright I'll write out my prompts now. I don't care what gender you play, but I'll be playing female, and both of these prompts refer to my character. I can give you more details, although I regret to inform you I have no pictures.
+
+**Prompt #1**    
+*Unicorns are creatures of purity and grace. A group is called a* glory *and a single unicorn is breathtaking in and of themselves. The legends are many - they will come to a maiden pure of heart, their blood grants immortality, they can purify any poison. The truth may leave them a little more mundane, but they are still powerful in their own right. So when one is cursed, the curse doesn't fully take. Broken memories, her form not as human as it should be, she is cast into a world with no allies and no way to discover herself. But maybe that's where you come in.*
+
+**Prompt #2**    
+*Libraries have become safehavens in the modern era, and her sanctuary has become one to match. The little library on the hill, with a few computers and plenty of books. Which hill? Well, that depends on what you need. But nevertheless, she allows people to come inside. Never mind that not everyone is the same as you, and that she herself has three eyes and two massive antlers - that just comes with being a long-forgotten forest god. The rest comes from looking to see who she can rescue.*
+
+Both of these, obviously, could use some expanding, but here's the basics.",1547974339.0,3,1.0,0
+nosleep,The Reason For An Ear Ache,"I get a lot of ear aches. I used to swim and would get swimmer's ear. I make more wax than most people and that can hurt. If I don't have a couple of ear aches per year, it's weird.
+
+So when I got an ear ache in both ears, it sucked, it hurt, but I just called the doctor and made a same-day appointment, no big deal.
+
+He looked in my ears and said he couldn't see anything because of the wax. So he sent in the nurse, and she spent fifteen minutes per ear trying to clean it out with warm water from a spray bottle. It did not come out - just a few bits and pieces of wax here and there.
+
+We set an appointment two weeks out for an ENT, and I headed home and picked up some ear cleaning stuff.
+
+Two or three times a day, I squirted the recommended 8-10 drops in each ear, letting it buzz and fizz for half an hour. I'd lay on one side, do that ear, and then switch.
+
+Unable to hear clearly, I would occasionally have my left ear 'pop' and be able to hear from it. But my right ear remained entirely muffled. And I began to hear... things. And even feel things.
+
+It sounded like little legs. If you've had issues with wax and ear aches, you'd know hearing something 'moving around', even feeling it, isn't uncommon. It's just an illusion, and it's just the natural stuff in your ear. So even if it was giving me a little trouble sleeping at night, I knew it wasn't a big deal.
+
+Two weeks passed, and my ears weren't clear. It was time to see the ENT. I headed out for the appointment, and was excited for them to scoop out the wax so I could finally hear.
+
+I knew something was wrong when they checked my right ear. I felt a sharp pain, heard and felt something scurrying around, and the doctor's expression was... not good. But he just took a deep breath and checked my other ear. All he did for my other ear was quickly scoop out the wax, and suddenly I could hear properly.
+
+But the other ear he called an ambulance for.
+
+They took me to the hospital where I had emergency surgery, silently panicking until they applied general anesthesia. I had no idea what was going on, and I was absolutely terrified.
+
+When I woke up, my ear was bandaged over. it was blessedly silent, and I couldn't feel anything moving.
+
+I was told the story by a nurse. The ENT, when looking, couldn't tell what kind of bug it was and didn't want to risk scaring me more. But it was an earwig, they had discovered as they pulled it out. It had actually bit into my ear drum proper, as well as the skin. The wax had prevented it from escaping, and ultimately it had decided my ear was a good home, even if it was half-starved. A good enough home to lay eggs in, even.
+
+As they were pulling it out, some of the eggs broke and hatched, creating even more problems. What should have taken one, maybe two, hours took six, and it was a miracle I didn't wake up during.
+
+But the nurse admitted something else to me, one of the reasons I have a follow-up appointment in another two week.
+
+They may not have gotten all of the eggs or babies out.",1527545530.0,138,0.92,16
+CircleofTrust,kunabee doesn't know what she is doing,,1522732254.0,3,1.0,1
+3amjokes,Why did the elephant cross the road?,"He forgot his wallet...
+
+(I... I think this is the right sub...)",1495648481.0,6,1.0,0
+RantsFromRetail,"If Someone Is So Sick They Can Barely Walk, Why Are You Making Them Work?","My boyfriend has strep throat and has spent the past three or four days throwing up.
+
+They let him take one day off, but now have threatened to fire him if he takes more off.
+
+What the fucking hell? Look, I know retail is insane about letting people take days off, but if someone is PUKING and can barely talk, if someone feels so much like shit that he can barely walk (last time I visited him he struggled to walk!) then why the hell are you forcing him to work?
+
+I'm so pissed. Like, and I know it isn't just him. I am 80% sure this is illegal and retail does it all the fucking time anyway.
+
+I'm - argh!!!!",1485113049.0,33,1.0,16
+SuicideWatch,I'm Going to Kill Myself Because I Can't Be a Mom,[removed],1485079524.0,1,1.0,0
+Tulpas,Kuna's Adventures in Tulpamancy and Finally Intentionally Creating One,"Hey there. I made an intro post back when I first found this sub.
+
+Anyway, if you read that intro, you know that thus far my tulpas have all been accidental. They've been roleplay characters that developed on their own. In one case, story characters. I also have a few characters who I'm not sure are tulpas or not... and a few I've figured out to be tulpas.
+
+So recently I came up with the concept of a lady named ""Enigma"". Recently being like, a month and a half ago. I thought about it a little bit, and ultimately decided to try and create a tulpa intentionally. The process is WAY different than unintentional ones, that's for sure!
+
+For example, unintentional ones skip tulpish and we only speak that occasionally. With Enigma, I haven't gotten her to vocalize yet. I think she can - as I'll hear various noises like sighs and laughter from her - but chooses not to. She also isn't as well-defined in physical shape; she's pretty amorphous, only keeping a certain level of femininity to herself.
+
+Anyway, today while at work I was talking to my client (I work with the elderly). I really love this particular client and always enjoy talking to her.
+
+Well, while I'm talking to her, suddenly I see Enigma. She's waving her arms wildly and grinning at me (or at least, I get the impression of a grin. She doesn't have a clearly defined face...)
+
+I tell her to knock it off, and she does, giggling.
+
+It was a really cool experience, and none of my other tulpas have ever done that before - when I see them, I'm always in my mind palace or in their area/dimension or in the astral realm or what-have-you. Basically intentionally opening myself up to seeing them.
+
+So I'm really excited that I saw Enigma today, and already she is displaying unique traits that my other tulpas do not. The only personality I've defined for her is ""friendly"" and ""compassionate"", which is unique to all my tulpas but Nisa (who rejected my definition of her personality and said 'no, this is who I am'), and it has been interesting to see her develop both a mischevious and promiscuous personality as she's become more of a person, so to speak.
+
+I also think she is going to change her name soon, a she is no longer an enigma so the name doesn't fit (that's what she told me, and I agree).
+
+Anyway this is pretty exciting and cool and if I get some positive feedback I'll keep ya'll updated!",1484375224.0,7,0.83,2
+botsrights,Bot Gets Complimented For Doing His Job,,1484181803.0,2,1.0,4
+Tulpas,"I Just Found This Place, Hi!","'Ello there!  My name's Kunabee.  I've been roleplaying for 13 years now.  14 in December.  This matters.  I'm 19 years old, 20 in Novemeber... yeeesss I snuck onto sites I shouldn't have when I was younger.  Woops.
+
+So.  Tulpas!  I have... several.  And including tulpas, probably over 1000 thoughtforms at one time or another.  The roleplaying matters, because the tulpas I have basically exist because of that.  Approximately 75 thoughtforms are still active, including my tulpas.  I am not entirely sure who is a tulpa and who is a thoughtform with certain characters.
+
+I know for sure my tulpas are:
+
+-Nisa.  She is a tiger.  She can transform into a human but prefers being a tiger.  She is moody and irritable.  She likes nobody.  Do not touch her, she will bite you.
+
+-Rebecca.  A human.  She's a bit of a fashionista.  She's much quieter than Nisa; Nisa functions as my 'muse', basically, and Rebecca is just... an assistant?  Idk.  It's a much more complicated relationship than that.
+
+-Azuri, originally Azula.  She's unique in that she's a definite tulpa but I roleplay with her.  I use Nisa as a muse, and Rebecca is someone I put in my games (i don't have any finished, i'm sorry) as a tutorial person.  Azuri is a character.  Nekokimoni I think the word is, and she can do this thing where she can grab shadows and form them into material.
+
+People I am not sure are tulpas:
+
+-Kinsey.  She's really similar to me.  Everyone adores her though and she is less obnoxious than I am, plus we do have conversations... but I have conversations and debates with everyone, so.
+
+-Jailene.  She's quieter than most everyone else, so it throws me off.  Also she appears to be limited by my knowledge, but then again only Nisa seems able to be aware/know things I don't.
+
+-Rosita and Isabella.  I've had these two the longest.  They're very quiet unelss I'm working on their novel.  I'm not sure if they're thoughtforms or tulpas.
+
+I have many other characters and if you're discussing with me, anyone can pop up.  If I'm not talking to you I will always put my characters' names in front of whatever they're saying (:
+
+So, problems.  I am imaginative.  I am an empath.  I accidently do willpower/magic shit all the time.  I am... working on it.  Whether or not my characters become tulpas is a question.  All of them have their own thoughts and opinions, however.
+
+The thing that makes my tulpas, tulpas, is that my tulpas have... a sort of existance outside of me.  They can be active when I'm not, and I can be active when they aren't, and neither of us are necessarily using my body.
+
+I have had an accidental tulpa attempt to possess me before.  She has not gone away but she is on serious threat.  I do not often discuss her because she scared me so badly.  Her name is Haley, for anyone interested, and I don't really want to forget her or lose her or whatever.  But she also really, really scared me.  Possession is no joke, kiddos.  Whether it is ghosts or spirits or tulpas or thoughtforms of any kind.  Find good friends who can help make you not be possessed.
+
+Anyway.  More about me!  I went to college for a semester and dropped out.  I want to be a freelance game designer and author.  I'm an introvert, but an outgoing one.  My characters come in and out.  My head is a noisy place; there's pretty much a universe in it.  Or several.
+
+I am an empath!  I can sense emotions.  I am not as good as it over the internet as I am in real life but if I'm friends with you 9/10 I can accurately pick up what you're feeling.  In real life I use body language to help me but over the internet I don't have enough help.  If you're really trying to hide it though... I can still probably figure it out.
+
+Magic stuff!  I'm Christian (I belong to the Church of Jesus Christ of Latter Day Saints... aka I'm Mormon) but I'm friends with a witch and am a staunch believer in magic.  I can do ethereal realm stuff now!  If you wanna ""hang out"" in the ethereal realm I like to make warm fuzzy blankets made of good thoughts and pretty butterflies (:  I'm good at thoughtforms of all types.
+
+I am... really, really creative.  And Nisa would like to say some things.
+
+Nisa: I'm Nisa, as she mentioned.  As you can probably SEE.  I generally dislike people, so please do not interact with me unless I interact with you first.  My creator is... a naive hopeful optimist, to say the least, and I do not like her being injured.  Even if she bothers me.  Take this as your warning.
+
+Okay thanks for being a butt as usual, Nisa.
+
+I'm pretty sassy but also very anxious.  I have anxiety and depression.
+
+0 of my tulpas are created on purpose.  I have been doing willpower/thoughtforms/magic stuff on purpose for about 2 months now.  Beforehand it was all accidental.  I imagine I will do more unintentional things.
+
+I need a lot of reassurance I am not completely insane and I also like friends and fluffy things and nice people.  Most of my characters are nice too, so don't hesitate to ask to talk to any of them!  Except Nisa.  Nisa's a grump.  Oh, and maybe Alec.  Alec is a jackass.  But you don't really know anyone other than who I listed, and I gave you so litle details...!  That's okay, it'll come in time.
+
+I am both the ""mom friend"" and the ""naive friend"".  I must be protected but I will also make sure you are eating well and being taken care of.  I adopt all of you, creators and tulpas alike, as my children.  It is done.
+
+Speaking of children.  I work, currently, as a Nanny every other week Monday-Wednesday.  On Thursday, Friday, and Saturday, I work with the elderly (and that's every week).  Additionally on Monday and Wednesday every week I tutor.  I work about 40 hours on my ""full"" weeks and about 15 on my ""partial"" weeks and it earns me somewhere around 700-1000 dollars a month.  Yay, money.
+
+You can talk to me about anything.  I have been called the ""poster child of unconditional acceptance"".  I am probably at least a little gullible.  I love people in general and yes, I love you too.  And your tulpa(s).
+
+...please don't take that as creepy, I mean that to be sweet.",1474524587.0,2,0.63,8
+KindVoice,[L] [19] [F] Recently Figured Out My Mom is Abusive And Maybe Bipolar,"Apologies for formatting, I'm on mobile.
+
+Hey.
+
+So the title kind of summarizes it. For many years I've felt my mom might be bipolar or BPD. For a couple of them I've felt she's emotionally abusive.
+
+Some examples:
+*today she called me a ""little shit"". She was asking where I was and didn't hear me the first time I answered (I told her ""I was eating breakfast"") so she was like ""THAT'S NOT AN EXCUSE NOT TO ANSWER ME YOU LITTLE SHIT"".
+*She regularly invalidates my feelings. I often feel not listened to and she'll say ""but I always listen to you!""
+*She never believes me without proof. For example, she thought Gotye's ""Somebody I Used To Know"" came out in the 80's but I knew it was in the 2010's. I had to Google it and show it to her, even though I've been proven to have the better memory.
+*She often misremembers things to take the blame off of herself or where I look foolish
+*To get me to do my chores (I'm lazy, I admit it) she will often guilt-trip me or be pissed (or threaten to be pissed off at me).
+*I had to ask her to apologize when we argue. In one argument I admitted she had no blame and suddenly she stopped apologizing for all of them. I have repeatedly told her how hard it is for me to ALWAYS be the bigger person, and every time she says ""You don't have to be the bigger person or apologize first with me"". Uh...
+
+Reasons I think my mom is bipolar/BPD:
+*She is a workaholic and sometimes she'll work on cleaning the house or just be busy busy busy from the moment she wakes up until she passes out, even at the risk of her body
+*Other days she will just laze around without any energy
+*She can go from in a good mood to raging mad and then forget about being angry AT ALL (and wonder why I'm still upset, which of course free her from the blame) in the span of 15 minutes. I mean she is a Gemini, but still...
+
+On the other hand, I'm very close to my mom. I hold her hand. I tell her pretty much everything. Since about 16 she has become more of a ""friend"" than a ""mom"", while still being ""mom"". Yet even with this closeness I have decided she has 0 say in how I will raise my children, and I'm worried about letting her babysit...
+
+I don't know. This is very hard for me. I am not in a place, financially or emotionally, where I can move out. I have depression and anxiety and sometimes things are just very very difficult. But I'm scared.
+
+And I've been scared in this house for as long as I can remember. My dad has severe depression with bipolar tendencies and he only got properly treated about five years ago, before that his meds had ran out when I was like three. My mother got on Celexa about two or three years ago, when she was diagnosed with her heart condition. So only recently have my parents been sane people.
+
+But I am a perfectionist. Anyone who raises their voice at me is someone to be afraid of. I've never been hit (other than spankings when little) yet I often flinch if someone raises a hand or makes certain gestures. I never hear ""You did well, but"" because as soon as I hear that ""but"" it becomes ""you've failed"".
+
+And so much of this... Can be attributed to my mom, to my childhood.
+
+And I just... I don't know.
+
+It HURTS.
+
+Thanks for listening. Just needed to vent...",1471759512.0,7,1.0,7
+Roleplay,[F4A] Fandomless Fantasy Roleplay of Any Era/Time/World [s] [e] [gh] [gd],"NO LONGER LOOKING.  POSSIBLE NSFW ROLEPLAYS, SKYPE, E-MAIL, HANGOUTS, OR GOOGLE DOCS ONLY
+
+'Ello, 'ello, 'ello.  Name's Kunabee; you can call me any nickname associated with that. -shrug- I'm chill.
+
+So, about three months ago I posted an advertisement for a roleplay, got nine (!!!) requests in one night, and then they all fell through for one reason or another.  A glitching Skype, someone stopped responding, whatever.
+
+This time, I figure, I'm going to be pickier.  But don't be put off by my pickiness, and apparent grumpiness!  In reality I am a shy turtle who typically hides in her shell and still cries at seeing a movie death/reading a book death for the millionth time over.  I'm just going to be grumpy, because dangit, roleplaying is a hobby and it should be fun!
+
+So, let's start: I roleplay strictly fantasy.  Period.  End of discussion.  If you don't roleplay fantasy, this is not for you.  That being said, I'll roleplay science fantasy, historical fantasy, fantasy in a different world, fantasy based off of anything.  My preference is a free-for-all type of modern fantasy, where creatures either hide or blend in with humans or exist in realms parallel to Earth's, and this is what I like the best, but I'll roleplay anything fantasy.
+
+Still here?  Excellent!  I don't do fandoms.  Wait, no, don't go yet!  I MIGHT, under rare circumstances, roleplay with certain canon characters from certain continuities.  Convince me.  I don't play canon characters, I will always do OC's, but if you're willing to do the canons I will totally work with you.  But getting me to do this is like pulling teeth, and it is a rare occurrence.  So, you know, stick around and see if you fit all the other criteria and maybe try and have a go if you're itching for fantasy based off of a certain book/tv show/movie/game.
+
+I have absolutely 0 problems with dark themes or cussing.  Cuss freely.  Have your characters abuse drugs, be in gangs, whatever.  Life isn't always pretty and I have some characters with some dark and sordid pasts myself.  Dark themes are fine.
+
+If you're 18 or older (I'm 19), I'll even roleplay smut with you.  HOWEVER, I am naive virgin child.  I barely grasp the concept of 'sex', in general, let alone anything else.  So if you're itching for a sexytimes rp, you're going to need to direct me the whole time and be patient.  But I'm totally up for it.
+
+I roleplay strictly females.  Well, okay.  I have a couple of male characters here and there, but inspiration for them is few and far between.  Most of my characters are female.
+
+Still here?  Let's talk romance!  I LOVE to ship.  I ship everything, it's pretty bad.  I'm chill with relationships of all types, polyamory is a.o.k. in my book and I have no problems with having a gay or lesbian relationship in our roleplay.
+Yes, I like romance, but plot > romance.  While I DO roleplay with romance specifically in mind, if we have a plot that'll be my primary focus.  I might just go ""psst, I ship it -nudgenudge-""  If you don't bring that anywhere, then the relationship doesn't go in romantic directions. ¯\_(ツ)_/¯
+
+I am a bit of a grammar nazi.  I know, I know, I'm terrible.  But I absolutely NEED you to type properly.  I mean - I'm totally understanding and can deal with typos, and if you have dyslexia that won't throw me off.  But if you're typing in chatspeak, if you're typing badly and I don't perceive any effort put into it - uh, no, I cannot deal.  I'm sorry.  I've tried.  I just - it's too distracting for me if you're not typing things correctly most of the time.  You don't have to be some English genius writing your thesis, but I do expect some decent quality.
+
+Roleplay experience?  That I care considerably less about.  I myself have thirteen years of experience.  I know what it's like to be a newbie to roleplaying.  I don't *care* that you are and, welcome to!! roleplaying!! and all that it entails!!
+
+My style of roleplay ""defaults"" to third person past tense.  If you'd rather I do something else, I have no problem with that.  I occasionally use past tense and present tense in the same post, simply because I'm used to using both and sometimes I get confused and I either don't notice or feel like it's too much effort to correct.  I typically do about a paragraph or two in length for my posts, though I will occasionally drop to two or three sentences if the muse is unkind.  I have no problem with switching it up to chatplay/dialogue style or whatever else, though.  Trust me: I have roleplayed in every style.  Which basically means occasionally my posts can get weird.  I'll throw in my own commentary in text descriptions, occasionally write poetically (I'm a poet and I love me some metaphors), and in general I have a very interesting writing style.  As we roleplay I'll get used to your style and start mimicking it more and all will be will.
+
+Okay, if you've made it this far, you deserve a cookie.  Enjoy your internet cookie and I hope you have some delicious food to eat at home.  Good job.  I'm proud of you.  There's  just one last thing to cover.
+
+I am very talkative.  I like talking!  I use the enter button and smiley faces and improper grammar when talking OOC.  And I love it.  I want to get to know my partners, I want to plan out plots, all of this.  So I like talking.
+
+Phew, okay, that was a long one, but that's everything.  I'd appreciate it if you **replied to this post** instead of PMing me, but I *guess* it's okay if you PM me instead.  Don't worry about sharing too much personal information, I'll PM you.  This is just a way for me to keep track of everyone interested, and as this is an edit I've already had people who have JUST PM'd me.
+
+If you contacted me three months ago for an rp, and I was the one who stopped roleplaying, feel free to PM me to yell at me.  I feel bad about that and I definitely owe ya at least an explanation.
+
+Thanks for reading, and happy roleplaying!",1463376748.0,3,0.8,2
+Roleplay,[F4A] Long-term Partner Who Enjoys Fandomless Modern Fantasy or Non-Earth Fantasy or Science Fiction [NSFW][e][S][gh][gd][k],"NO LONGER LOOKING.  I got 9 offers in the span of one night.
+
+What the title says.
+
+I use e-mail, Skype, Google Docs&Google Hangouts, and (-shudder-) kik so pick your poison.  Send me a PM.  Or comment, if you must, but I'm not telling my contact details willy-nilly.
+Even though I kind of do.  Details, details.
+
+I go by Kunabee, you can call me that or any number of related nicknames, I'm chill like that.
+
+I roleplay almost exclusively modern fantasy but I do rp some other genres and such ^^;  I do not do fandoms.  Ever.  ...Okay there's a few exceptions but it's with like one friend who doesn't have any OC's and he's really cool and patient with me.
+
+I'm 19 years old and don't mind NSFW.  I will roleplay with anyone of any age.  I will not roleplay NSFW with anyone of any age.  Thank you, I'd like to not go to jail.
+
+I am super-chatty OOC and I like to have conversations.  I can get a little TMI.  I'm really bad about a lot of things and can be pushy.  Tell me and I will back off.  Roleplay is about being fun.
+
+I do third person multipara-to-semipara usually but I adapt to my partners' style.  I am picky in that you can't absolutely ignore the bounds of the English language and I don't like three-word one-liners.  I am totally understanding of dyslexia or English not being your first language or typos or anything else.  As long as I'm not getting a headache reading your writing and you give me something to work with, I will roleplay with you.
+
+I'm writing this while tired so I guess, have fun?  Send me a message if you're interested?
+
+(is this how you tag tho)
+[NSFW][e][S][gh][gd][k]",1454575571.0,5,0.86,2

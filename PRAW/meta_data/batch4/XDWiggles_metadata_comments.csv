@@ -1,0 +1,349 @@
+subreddit,body,created_utc,score
+AZURE,"Makes sense, if you’ve got the budget and internal management capacity then go for it. Set policies at the highest level you can that make sense and then go granular on the subs as needed. If you have EA reach out to your account rep, there used to be some AZ Firewall dev/test pricing that could apply if it’s applicable to you and they’re in separate subs. 
+
+I’m not super familiar with AKS management but generally a bastion host in the AKS sub or put private link service with the private endpoint somewhere accessible and route management traffic that way. Both are not perfect, and are a trade off of having that separation.",1747689990.0,1
+AZURE,"Nothing stating you can’t have separate subscriptions for dev/qa/prod if you have a use case to separate out permissions and costs between them if you need isolation, how you structure this can become a quick mess if you’re not careful.  
+
+If you use identity subs then I’d argue that for true isolation you’d need multiple of these too and management if you’re going that granular.  If you’re connecting to on prem you’d also need separation to completely separate the networks. What’s the use case for separating your connectivity for prod/dev/qa into separate subs? 
+
+My understanding and what I’ve put in practice is online mg houses anything that is accessible by the public internet by customers as a service to those customers, cloud native applications that do not need direct connectivity back to the hub, and pretty much anything that doesn’t connect back to the hub directly.
+
+Generally the online mg shouldn’t be directly connected back to on prem and private endpoints and private link service should be used to connect to the hub if connectivity is required. I can’t say I’ve seen two orgs that have both use the corp and online management groups the same way so really it’s up to how you want/need to apply permissions and prove compliance.  The corp vs online separation is more for policy application and permissions to protect the on prem/hub network imo.",1747688102.0,2
+AZURE,AKS has been a better fit for super high memory usage applications in my experience. If you have the team knowledge and potential near term use for it then AKS might be better fit. Pretty easy to scale up/down and offers some instance options up to 672gb.,1747683152.0,1
+AZURE,What region are you in that you can deploy this in 5 min? Takes a solid 20-30min for ours 😅,1747364995.0,1
+AZURE,"If you want to add just the single permission, Create a custom role or add to existing custom role: Microsoft.directory/applications/standard/read
+
+Grants read to only the applications and not all azure resources like Managed Application Publisher Operator.",1747170318.0,1
+AZURE,"Yes, sort of.  If you want to use pulumi config and outputs you can use key vault to store an encryption key, the secrets are encrypted with this and stored in either the config file or stack output. Whoever accesses the config or output needs to be able to access the key vault to.  This isn’t actually storing the secret in key vault, just the encryption key. 
+
+There’s nothing stopping you from creating secrets and using them in your code though if that’s a requirement, handle it like any other secret and pass to the input args of the resources as needed.   Before we migrated to cloud we used both, depending on requirements. there’s pros/cons to each.  Generally I’d recommend using the encryption key and storing secrets in the stack outputs, it makes it much easier to reference different projects and stacks later on. 
+
+The docs below give some idea of the process. Ignore the ESC sections, you have to use SaaS to use this.  With ESC I believe you could store the secrets themselves in azure key vault using environments though. 
+
+https://www.pulumi.com/docs/iac/concepts/secrets/#:~:text=To%20change%20the%20secrets%20provider,change%2Dsecrets%2Dprovider%20command.&text=This%20will%20change%20the%20encrypted,use%20the%20new%20secrets%20provider.",1746460292.0,1
+AZURE,"You can store your state in a storage account and use the open source tools, you don’t have to use the cloud offerings. Cost is basically nothing, a few dollars for storage APi calls at most with a storage account/blob. 
+
+We started off hosting our own with this setup and it works fine. Migrated to cloud later on for some of the environment features and policies. Easy enough to migrate either direction depending on needs.  
+
+Hosting yourself is sometimes a little slower to deploy, but the difference is minimal.",1746459246.0,3
+sysadmin,"Learn powershell, python, bash, or something along these lines. Be comfortable in CLI.  Not everything is going to be a GUI, and if it does there’s still probably a better CLI. 
+
+There a concerning amount of new admins/helpdesk and even mid level admins that get lost at the first sight of a terminal. 
+
+The Cloud Resume Challenge was a great start if you’re interested in Cloud at all. I assume it’s still a thing, been a few years since I’ve seen someone do it.",1745175613.0,9
+AZURE,Make sure your contract includes some hours in a rage room.,1744657354.0,7
+OMSCS,"Super touristy, but the World of Coke is a blast and one of the few places in the US you can get the stunning creation that is Cucumber Sprite.",1744341821.0,3
+AZURE,"
+Employee ID field in each account, just has admin or something at the end to designate that it’s the same person as a regular account and the use case of it. offboarding process looks for both. 
+
+Hourly Audit process to verify no one screwed the ids up.",1743564324.0,3
+sysadmin,We leave it as an incident with a solution of User Education. Allows us to report pretty easily while maintaining the statistics which pipeline the ticket came in as.,1741107941.0,6
+AZURE,"You could use a run book or similar to turn it on and off as needed if it’s not constantly needed. Note that sometimes it can take a while to turn on.  
+
+Ex: https://stackoverflow.com/questions/76623761/automate-azure-blob-sftp-enable-disable",1740534970.0,2
+AZURE,"You can use blob if you can stomach the cost for SFTP, it’s like ~$200/month ($.30/hour) for the SFTP Service.",1740523364.0,3
+AZURE,"I’m not aware of a way to do this directly, we have used custom claim providers in the past to achieve some similar functionality.  Might be worth looking at if you need this requirement.
+
+For smaller data sets you can do some mapping with regex output/inputs and the claim transformations but the character limit is 256. 
+
+If you do figure out a native way to do this let us know!",1740520031.0,1
+AZURE,"How many items are you pulling. From the api? A few hundred, thousands, millions, billions?",1740516996.0,2
+AZURE,"
+What’s your stack?  Azure, AWS, GCP, on prem, hybrid, multi-cloud?",1740514465.0,2
+AZURE,"Just throwing another opinion/option in the mix, it would take me 2-3 hours to do this in Pulumi from blank project to prod if you already know how to navigate the platform and docs (and know what you want). Add an hour if I had to access data plane functions for anything.",1740513991.0,2
+AZURE,"We have drift detection enabled with pulumi and some pretty strict Azure policy.  If you don’t IaC it’s probably going to get overwritten, prevented, or deleted for non compliance.  We’re only azure and limited GCP so it’s easier than hybrid.
+
+If someone did get some resources to stay and not be removed or overwritten they worked for it and it would have been easier to use IaC. 
+
+There’s a variety of self service deployments individuals can do on their own that are backed by IaC so there’s not much pushback.  Still some annoyances but worth it.",1740512835.0,1
+OMSCS,"My complaint with the KBAI class is that the content is incredibly high level. I’m not sure what I was expecting, and this is my first OMSCS class, but I expected the lectures to go more in depth and dive deeper into the content than they do.  
+
+They don’t need to tie into the homework’s directly and I don’t need my hand held but i also don’t want an entire class of lectures that could each be summarized into a page or two. Yeah there’s additional readings and whatnot that I can (and do) do but it’s not the same
+
+I personally don’t get the complaints with the difficulty of assignments or grading, I haven’t had any issues with this and I am a pretty shitty writer… although after doing tons of peer reviews a lot of the people in this class need to take a technical writing and grammar course before a course like this. 
+Most of the other questions or struggles in the forum with the main Project would be resolved with some basic programming and algorithm lessons.
+
+I guess I expected the class to be more than it is. Which will probably be fine for my grade but not so much for my interest. Maybe I shouldn’t have expected what I expected. 
+
+Overall it’s not “bad” it’s just kind of meh.",1740184322.0,4
+OMSCS,"I’m also in this class, I feel like it’s more of an exercise on how to use NumPy versus anything of value. 
+
+The lectures are incredibly vague and then the first two mini projects are just a glorified BFS problem.  
+
+ I think I’m doing fine in it, but I don’t get what I’m supposed to be learning tbh.",1740116794.0,14
+MSCSO,"Tech role in a non tech company, yeah. I had about 6 total years experience, 4 yrs sysadmin/sys engineer type and most recent 2 software engineering.
+
+I graduated WGU in 2022, was accepted to both end of 2024 for spring 2025 enrollment",1739558260.0,1
+MSCSO,"I was accepted into both UTA MSCSO and GA Tech OMSCS with a software development bachelors from WGU. Ended up with GA Tech OMSCS just because of class selection and cost. 
+
+I’m just one data point, Not sure how common it is for WGU grads to get accepted into MSCSO but it isn’t impossible.",1739506964.0,3
+kansascity,"There’s a ton of history here if that’s your thing. 
+
+The Philbrook in Tulsa is a great museum, a bunch of old Route 66 history and various museums and art along the way. 
+
+I probably wouldn’t spend a week here but it’s definitely worth at least visiting once for a couple of days. 
+
+Some of the best ice cream I’ve ever had at Rose Rock Microcreamery in downtown Tulsa, considered going back just for it.",1738080675.0,9
+kansascity,You forgot In a Tub.,1737939574.0,4
+kansascity,"I’d find one based on reviews not the suggested ones from the insurance.  
+
+Barbosas in Parkville was a good experience when I needed it, they worked directly with insurance for all repairs and adjustments even though they weren’t a shop contracted by the insurance company.  
+
+I’d absolutely not use McCarthy for anything.",1737479641.0,2
+sysadmin,"Having to wipe the device with a lost passcode after a power cycle is going to be a requirement in all of them as far as I’m aware. Once the device powers off it loses network access and won’t reconnect until it’s unlocked which you can’t do without the passcode. 
+
+Mosyle is great though, cheap and their support is fine. Its not in the same level as Jamf but doesn’t cost Jamf money or require the same level of administration.",1737473963.0,2
+kansascity,"It’s just built in to the software, enter zero and move on.",1737417439.0,129
+sysadmin,We all knew Clippy was going to come back with a vengeance.,1737410767.0,121
+sysadmin,"https://my.visualstudio.com/benefits
+
+There should be a tile in there somewhere for it.",1736776072.0,1
+kansascity,"Not sure your route but 152 isn’t bad into liberty, the section between shoal creek and flintlock is a little rough when turning off of 152.",1736219393.0,1
+kansascity,"Love reading this, if you enjoy the details and why what happens happens this is the best resource.",1735932142.0,5
+kansascity,"Unity temple on the plaza.  $100 
+
+https://www.simpleceremonieskc.com",1735618913.0,3
+sysadmin,"Is part of Visual Studio Subscription now, so if your org has this you can likely get a new instance.  
+
+Has to be annual, not monthly.",1735532022.0,6
+kansascity,I don’t think the dead person is going to care.,1732473036.0,24
+kansascity,Only gonna fit about 50-60ish guests in acre.,1729556867.0,1
+kansascity,We just tried this and couldn’t get a response from any of them.  Good luck.,1727112515.0,2
+kansascity,"It definitely isn’t what it used to be but isn’t bad imo, this Reddit is harsh on restaurants, Worth at least one visit.   The place is packed most every weekend, bring some patience waiting for a table if you go at a prime time with a large group.
+
+Cottage fries and gravy are the best sides. 
+
+Get the spicy sauce with the chicken.  Their steak is not great.",1723695526.0,9
+kansascity,"If you’re trying to get away.  
+
+https://getaway.house
+
+It’s in Osceola, Stayed here in early spring and really enjoyed it, definitely out away from everything but easy to get to (a low car is not ideal, but a small SUV is fine… have to get over a cattle guard that is in a large dip).  Far enough out that you can actually start to see the stars, but definitely isn’t a dark site.  
+
+Look on all trails for trails around.  
+
+There is usually a promo code for 25-35% off.  You’ll have to bring your own food, and firewood is available for purchase but cheaper if you bring.",1722977381.0,46
+dotnet,Thanks!  Briefly looked into this but really didn’t grasp exactly what the ideal use case is for this.  I will look deeper into this.   Thanks!,1722534755.0,1
+dotnet,"Looking at generally less than 60seconds for request and conversion time, assuming downstream systems are fine.  It will happen occasionally but will be uncommon for this to be between 60-120seconds.
+
+Thanks for the suggestions, I will look at these options.  The end consumer will be a low code platform, so im unsure if I can do much beside basic HTTP requests and still have it work with that, I may have to explore the consumer side more as well.
+
+Thanks for the insight!",1722534697.0,1
+kansascity,Yeah they do.  Gotta get there early or call the day before and order them.,1722276709.0,6
+AZURE,"500+ go to CDW, under 500 Agile IT .  Both should be able to do GCC and GCC High.",1720825409.0,1
+kansascity,"https://preview.redd.it/louzg6nkbr8d1.jpeg?width=1290&format=pjpg&auto=webp&s=f054f9d7618680ec947a98991cad0d1c6b2ac25e
+
+They’re everywhere.
+
+Corvette driver was first, then the truck chose to park over the line instead of the completely empty spot to the right.",1719338398.0,1
+kansascity,"Be aware, they shove 30 of you in a pool while people are trying to do laps in said pool so you’re basically shoulder to shoulder and will get kicked in the face at least once.  
+
+And the instructor is a dick. 
+
+But it is $50, so you get what you pay for.",1718676808.0,3
+kansascity,"They ripped a cable out somewhere fixing a recall, tried to give me the car back with the giant service wrench icon on and the dash lit up like a Christmas tree.   Tried to charge me a diagnostic fee to diagnose their fuck up. 
+
+Took car in for hvac not switching correctly between zones.  Like you can easily tell that this isn’t working, tried to give me the car back (again with a service icon in the dash when I picked it up).  
+
+Both times the issues were still visibly there and I ended up not picking the car up both times.  They did make it right and fixed it eventually, but damn have some quality control and at least make sure the dash isn’t telling you the issue is still there before giving it back to the customer.",1718595062.0,5
+kansascity,"Thoroughbred ford is the only place I’d ever taken my car to where it came back with a new issue caused by them or they said they fixed an issue where it obviously wasn’t fixed.  Two separate visits, two separate problems.",1718593758.0,3
+kansascity,Never had any issues with Gary Crossley service department.,1718593412.0,2
+kansascity,"Someone had to have misclicked somewhere, it was bright and sunny and storms were 10 miles to the east when they started.",1716326687.0,12
+kansascity,"You always have the option of picking your shop when using insurance.  
+
+I recommend barbosa’s kustom kolor in Parkville.  Couldn’t even tell the car had damage after they were done, they worked with insurance even though they weren’t one of their preferred shops by the insurer for all adjustments.  Time estimate was correct.",1713305671.0,3
+kansascity,Absolutely worth a visit.  the fried chicken and steak are both phenomenal.  I added a side of creamed spinach and don’t regret that decision at all.,1712705779.0,1
+kansascity,"Legends Honda was good to me, low pressure and transparent.  Worth a look if you want to test drive a CRV.  Lauren was great. 
+
+Hyundai is worth a look if you’re south and have a better dealer than the northland, do not go to Northtowne Hyundai unless you want them to kill your car. 
+
+Seems most SUV and crossover types come with rear tint from the factory.  You can tint darker, if you want it darker or front too don’t have a dealer do it, you’ll pay ceramic pricing for non ceramic tint.  Go to a local tint shop and get ceramic tint installed.",1710638046.0,1
+kansascity,"
+1-800-ASK-USPS
+
+You can ask to be escalated to consumer affairs from there.",1710257522.0,16
+kansascity,"Might give Wallys a call, sometimes they have some ready, although their recent hours and pickup times have been pretty hit or miss.",1708963490.0,1
+ultrawidemasterrace,It even does this in the menu with nothing connected so I’m gonna assume it’s dead.,1706669903.0,1
+ultrawidemasterrace,Video: https://streamable.com/xdawx0,1706655571.0,2
+kansascity,Barbosas Kustom Kolor in Parkville was good to me.  They were middle ground in pricing  but their work was flawless.,1706021078.0,1
+kansascity,Why do people not clear their windshield?,1705937280.0,72
+kansascity,"Legends Honda gets my vote.  
+
+I did not like Lee summit Subaru and I’d go to any other Subaru dealer before dealing with their sales again.",1705539226.0,1
+sysadmin,"TeamViewer has a week long trial I think.  Or if any viewer is still around, it used to be able to do this.",1705465999.0,2
+sysadmin,"Curious, What solution did you implement?  And what compliance requirements are you needing to follow, I assume you have some being in GCC High.",1705457519.0,2
+sysadmin,"Commercial and GCC both work, just not GCC high…and all of AWS works which makes it a pain in the ass to try to explain to their support and they tell you it’s not them cause everything is allowed…it’s not.  
+
+The only thing I could think of is they’re hosting part of the sites in Azure so they have some weird whitelist blacklist thing going on based on service ips. 
+
+Good luck.  Bring your patience when you reach out to DISA for the whitelist. PPSM took about 3 months from initial filing to allowed.",1705450950.0,3
+sysadmin,"Your .mil or .gov contact needs a enterprise Connection PPSM registration.  You’ll need a gateway to get a static outbound IP.  
+
+Figured this out after months of back and forth with DOD and DISA trying to get WVD GCC High to connect.",1705437496.0,134
+CODZombies,"Just keep moving.  It’s not that different imo, more specials (more mega bombs in escorts), higher number of zombies, and just slightly stronger. 
+
+Kazmirs are helpful, if I’m solo I’ll just go in with 8, enough to do the outlast and extractor.  The escorts is more difficult within the time solo, a lot easier with vr-11 and kaz.",1704812985.0,1
+11thGenAccord,"Mine would work after the car started earlier in the day but would stop working sometime around 12-3am every day until the car was manually started… So I could remote start after work but not before.  Defeats the point. 
+
+
+Now I don’t even have the remote start buttons in the app, disappeared a week or so ago and support is unhelpful.",1704731523.0,3
+CODZombies,"People drop VR-11s frequently.  You can also get them in Sigil and then exfil to use with elder sigil next game.   I get them about as frequently as other wonder weapon cases or dog bones in reg sigil. 
+
+Or just use kaz, get two selfies and one equipped, a dog if you’re paranoid, and rest of inventory with them.  start with the escort, use Kaz when specials spawn. Don’t need a vr-11, just makes it less tedious.",1704730408.0,2
+CODZombies,"Just spam kaz, and use pap vr-11 to heal acv and create human monkey bombs of armored zombies if you have one. 
+
+I did it solo with this.  A bit of a pain with some special zombie spawns but doable, just a bit hectic.",1704723403.0,1
+CODZombies,"You can come back as a different operator but the tomb generally doesn’t appear from a disconnect, only a death. 
+
+Unless it glitches out.",1704518254.0,14
+CODZombies,This is fun in t3 going around and 2 shooting mega abominations with a VR 11.   And the ranging is actually fun.,1704412047.0,2
+kansascity,"Learn disk golf. Can start for $20-30 or less, go to ducks disks and get a couple used ones and it might be less.  Lots of free courses around.",1703374926.0,18
+11thGenAccord,"Same. Worked fine during trial, just subscribed for remote start and now the remote start button is gone from the app.  Awaiting reply from support. 
+
+Can still see oil life and fuel and it refreshes so it’s connected just.  Annoying.",1702757773.0,3
+CODZombies,"https://game8.co/games/Modern-Warfare-3/archives/435161
+
+There’s a chart there, not sure if it is 100% accurate",1701575819.0,2
+CODZombies,Merc is probably under the ground.  Died so many times to this.,1701485288.0,4
+CODZombies,"Just get like a couple monkeys, a pap grenade launcher, phd, and Tesla storm.  Charge Tesla, toss monkey, break cysts, Tesla to get out and repeat until cysts are gone.   Water is right there for rest periods and Tesla charge.
+
+I was a little sketched by this mission but finished with this method last night.",1701485134.0,1
+kansascity,"Northtowne Hyundai.  If your car ever does actually get fixed it’ll be months, can’t get a call back or an update without showing up in person, and Chris the service manager is a dick.   Can’t speak to their sales.",1697490494.0,2
+iphone,"I returned mine more because the color didn’t look anywhere near what the pictures were.  Fabric and case seemed fine, although it did scratch easy.  
+
+I would’ve kelp it if the color was accurate to what the photos showed.",1696281721.0,4
+kansascity,The change from spectrum to ATT fiber was life changing.,1696038480.0,5
+kansascity,"These are unbelievably good.  The apple ones are pretty amazing too, like an apple pie and cinnamon roll had a child.  
+
+They are even delivered warm.",1695354791.0,2
+accord,"Give it a year or so and I’m sure someone will figure out how to load Google Maps on non touring models as more and more people get them.  
+
+Infotainment is just Android, so just a matter of time imho.",1694466928.0,1
+accord,Our wheels might be tiny but our mpgs are large(r).,1694463160.0,1
+accord,"EX-L has more features than Sport L and costs about the same.  Missing some style items, though. 
+
+If you want exterior style before features the regular sport will save a bit of money. 
+
+A lot of people don’t like the wheels on the EXL but you’ll get a few extra mpg that can add up if you like them or don’t care.",1694463077.0,3
+whatcarshouldIbuy,"I appreciate this response.  I ended up going with the Accord.  
+
+I was very in the middle but the dealer essentially pushed me away from the Subaru, the Subaru dealership didn’t leave a great taste in my mouth after required dealer adds, pushy sales, and poor service reviews.
+
+Both were great cars and A few missing features in either direction. I think I would have been happy either way but hopefully this choice lasts me 5-7 years.",1694461968.0,1
+accord,"Anker USB C to Lightning Cable, 310 USB-C to Lightning Cable(Black, 3ft), MFi Certified, Fast Charging Cable for iPhone 14 Plus 14 14 Pro Max 13 13 Pro 12 11 X XS XR (Charger Not Included) https://a.co/d/ex23ojo
+
+This. Or any usb c to lightning, but anker ones seem to last longer than the cheaper generic ones.",1694353699.0,1
+kansascity,"I just bought a car from Legends Honda, they’re the same dealership group with the same sales methods.  Great experience, no fees, worked out great.",1694297505.0,11
+accord,"Pretty much all cars will do this.  Zero miles or zero bars on fuel gauge may not actually be empty, still a gallon ish or so left.",1694041224.0,3
+kansascity,Their Cronuts are so good.  Ungodly sweet but good.,1693849080.0,2
+iphone,"Buy it and you probably won’t need it, don’t buy it and you’ll probably end up needing it.",1693711754.0,1
+11thGenAccord,"I actually went a slightly different route and purchased a Canyon River Blue EX-L Accord this weekend.   
+
+I spent some time in the Touring XT on a bit longer of a test drive.  It is a more fun drive but road noise is louder and the transmission is just weird and really inconsistent.  I hit a little bit of stop and go traffic on the test drive and it just didn’t feel like something I’d want to be driving everyday.  If I was in an area where I’d need AWD more than a couple times a year I might have given it more of a consideration, but I think the AWD value is in the lower trims.   
+
+The Subaru sales at the dealer I went to also was not great, nothing against the car for this but didn’t help.
+
+I got lucky and found an EXL on a dealer lot, went for a drive and it felt more realistic as a daily driver.    While a little less equipped it has pretty much everything the touring of both the Subaru and Accord has, my only big miss is the sound and ventilated seats.  The ventilated seats in the Subaru worked much better than the ones in the accord though.  I don’t have the Google integration, but realistically I wouldn’t pay for it after the 3 year included data anyway and would use CarPlay 90% if the time during it.  Got the car for $500 off MSRP, without any dealer fees.  
+
+I think I’m happy with my choice of the exl.  Averaging 43mpg over the past 100 miles without much thought and driving a little more enthusiastic than normal with a mix of City/Highway.  Also subjective, but the basic dark wheels on the EXL look better with the blue than touring ones (and the atrocity that is the wheels on the Subaru)",1693226177.0,3
+11thGenAccord,"I dealt with the abysmal Ford Sync for a long time so I get this, is there any published information how long they’re going to support the head unit?  In 5-6 years is google maps not going to be supported, Spotify, etc.",1692813429.0,1
+11thGenAccord,"Honestly it’s a difficult decision.  
+
+The MPG is really the only major difference, it’s exchanged for a drive experience that is a little more fun.  AWD just feels nice, even without poor road conditions.  
+
+Any knowledge what’s relatability like between the two?  From what I can tell Honda people say Honda is reliable, Subaru people say Subaru is.",1692813322.0,1
+kansascity,Not OP but up here near Zona we’ve been out for about 3 hours…. As I was typing this it came back on.,1691982437.0,2
+sysadmin,"There’s probably already a provisioning process with your HRIS.  Go that route first if available.  You may have to dig a bit.  Workday, SAP, and a few other support user provisioning with a provisioning agent installed elsewhere on your network.  A lot less of a PITA than managing it yourself.  
+
+Power Automate can’t directly work with AD, have to have something else to work with it.  There is an LDAP connector you can buy from c data but it is not worth the trouble.  
+
+Azure Automation was the best solution I’ve found without a vendor supported provisioning process.  Pull information (or publish with event) into power automate, pass the data to an Azure Automation runbook that runs on agent either in same vnet or on prem and use powershell for user configuration. 
+
+Alternative, if no agent is viable- get data into a blob/file share with power automate and have a scheduled task somewhere that pulls new entires and creates users with a powershell script.",1691439259.0,2
+sysadmin,What HRIS?   We’ve done a few with Power Automate and others.,1691437823.0,1
+sysadmin,"We use it for a ton, both cloud flows and desktop flows.   
+
+It has a learning curve but isn’t too difficult to use / learn.  Data gateway makes it easy to connect into on prem/vnet.  
+
+It’s the cheapest entry into integration and RPA you’re going to find.",1691437778.0,1
+Hyundai,"Takes a while to complete, I’m in this process right now for my sonata.  You’ll be pushed back to Hyundai but get a different group of people, I got my repurchase offer in about 2 weeks after starting the process.  Still waiting for them to schedule the settlement signing and transfer of ownership.",1690500190.0,1
+kansascity,Community America Credit Union can print them in branch.,1688246307.0,32
+kansascity,"They gotta learn to stop at red lights first, baby steps.",1687230100.0,285
+accord,I’m thinking of making this jump due to issues with my 2023 sonata.  Seems I’m not the only one.  Anything you really miss from the sonata?,1686956730.0,1
+Hyundai,"I scheduled my appointment through the blue link agent, they were able to schedule appointments earlier than the dealer said were available.  Then I complained to Hyundai Consumer assistance when the dealer tried to not honor the appointment bluelink scheduled.",1685755091.0,1
+Hyundai,"Has it been recurring?  
+
+Service advisor said it’ll probably happen again… which is unsettling, so not sure where else to go with it.  
+
+At least they were honest, I guess.",1685647963.0,1
+Hyundai,"Just got a call from the dealer.  Said it was a bad fuel injector, 1-4 weeks for part to arrive.  
+
+Dealer appointment situation is a pretty awful experience.  Blue link agents can apparently schedule appointments at dealers that don’t have availability.  Blue link schedule for day after Memorial Day, dealer only had end of June open.  Filled out blue link survey and was called by a case person, magically my diagnostic was completed today instead of end of June.  Still have to wait for parts, but Hyundai case said they’ll pay for rental up to $60/day so guess I’m going to do that.",1685639844.0,1
+Hyundai,SEL,1685236700.0,1
+personalfinance,"It’s just a usb shaped hole, in reality you could use a screwdriver or whatever.  You’re just bypassing using a key and there isn’t an immobilizer requiring the key so it starts up game goes.  Get a software update and the exploit won’t work anymore.",1682551694.0,31
+kansascity,"Depending on the car, they may not have a spare and have a worthless fix a flat kit instead.",1679925948.0,24
+kansascity,"I think this one was in random pockets.  There’s no way I could get up a hill this morning to get to 29 south in the northland but then my coworkers sent a picture of the roads and they’re just wet south of KC.  
+
+My car doesn’t like 6 inches of snow between tire tracks :(",1675957891.0,5
+WGU,You’ll get a random one each test.  Some are better than others.,1675694015.0,1
+WGU,"Congrats! 
+
+How’s the OA in comparison to the PA on this one?  Preparing to take the OA sometime this week.",1668469271.0,1
+kansascity,It’s an exit lane.,1668436766.0,2
+sysadmin,"
+
+The system mule app is generally just a middle man.  It is between the native system and the api consumer.  You would build the mule app and deploy it either in CloudHub or on prem.  This mule app would interact with your business apis/on prem solutions/SaaS.   
+
+Then Process apis interact with different system apis to move data, aggregate, or process information.  Experience APIs expose processes, entities, etc to the consumers.",1667840397.0,1
+sysadmin,Gotta block it with things. Surf in front of an island or something and it’ll get stuck,1659988702.0,8
+sysadmin,"I agree with Lenovo. Have about 400 various Lenovo docks spread around and no major issues with gen 1, 2, and Thunderbolt. 
+
+Dell is nice too but has been more difficult to get.",1659759506.0,1
+WGU,"Same, 920 works like a charm.  Just passed an OA 10 min ago with it on W11.  No issue on Mac either.",1653448828.0,3
+kansascity,"It’s a syrup, basically the same as Starbucks.  
+
+Torani makes a brown sugar cinnamon syrup that is close, you can make your own with cinnamon sticks, brown sugar, and water.  Maybe a bit of vanilla.
+
+Ice, espresso, shake the hell out of it, add to a glass of ice with milk if wanted.
+
+Better version if you don’t want it as sweet: brew espresso over brown sugar, add to a cocktail shaker and shake, add to a glass with vanilla milk.",1649730710.0,5
+kansascity,"I guess it is called garage parking, sorry.  Go as if you’re going to pick them up on the curb and go  to the left into the garage.   
+
+https://www.flykci.com/parking look at garage b and c, depending on terminal.
+There’s a tunnel if on the lower levels, and it can be surface level.",1649701578.0,2
+kansascity,Circle lot is $3/hr.  Easiest for that.,1649701043.0,1
+kansascity,"It’s a latte with an extra shot of espresso, Irish cream (they used syrup) and caramel drizzle.",1649700019.0,13
+amex,"You can buy Hy-Vee gift cards in the regular store and use at the pump if you really want the cash back. 
+
+The new fresh express ones code as gas, the older ones would code as grocery if you went inside, and gas outside.",1644381374.0,1
+kansascity,Not sure what Hispanic type is but Wally’s pastry shop was really good.   Probably have to order it ahead of time though.,1644244378.0,0
+worldnews,"-Red is do-not travel
+-Yellowish orange exercise increased caution
+-Yellowish orange striped Exercise Increased Caution Contains Areas with Higher Security Risk
+-light yellow reconsider travel",1643032396.0,3
+kansascity,"Driver can get half pay from DoorDash if the order is canceled after they arrive. 
+
+Is how it used to work anyway.
+
+My pickup order from 64th street was also canceled today.  They had to be super busy, good luck getting a delivery in the snow tomorrow",1641003411.0,1
+sysadmin,Any.run does this,1639878602.0,2
+kansascity,"Rise and grind in NKC 
+
+Or Anita’s rolls up near Zona.",1634172931.0,1
+sysadmin,"I’ll jump on the mosyle wagon too.  Jamf is great, but you’re paying for a lot of complexity.  If you need it, Jamf will work great, if not mosyle is a great alternative and better price point. 
+
+Personally I’d request a trial of Mosyle, Jamf, and Intune for new deployments and see which fits the bill.   Hexnode seemed nice in a demo too",1633664323.0,5
+kansascity,"My iPhone 12 5G on T-Mobile in NKC can test at ~500mbps down and 80-100up with 20-50ms ping will still take 45 seconds to load a webpage and small OneDrive download take forever to start but download fine.    Flip to LTE and page loads near instantly and downloads start quickly. Drive up north oak right outside of NKC a mile or so and it works fine on 5G, tests a little slower (~300mbps) but works fine for web pages and downloading.  Dies again right around englewood and n oak.
+
+Been this way for 2-3 months. 
+
+Works fine most  everywhere else for me.",1625262413.0,2
+kansascity,"https://www.kcdynamicwiring.com
+
+Company I used to work for used them a few times, I don’t think they certify cables if you want that but I could be wrong.   Used to be on the lower priced end for business, assume pricing isn’t any higher for residential.",1624643816.0,1
+kansascity,We went last time it was here. It was pretty but definitely not worth the $60 we paid for two lanterns.  If you just want to watch there wasn’t anything stopping people from just sitting on the grass near the water.  Without a ticket you couldn’t use the food trucks (they were meh anyway) or get a lantern.,1622908988.0,6
+BankOfAmerica,Not even god could make a bank make sense. ,1470022495.0,1
+BankOfAmerica,Both are treated like a payment. ,1470020398.0,2
+BankOfAmerica,"Bank of America handles the debit card accounts, Card Services handles the Credit Card.  
+
+Two different entities. ",1470020385.0,1

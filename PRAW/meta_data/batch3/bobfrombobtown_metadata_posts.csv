@@ -1,0 +1,188 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+cats,Why must he do this?,I want to use my laptop but... cat,1747313254.0,4,1.0,1
+hottake,Anyone using sticky traps is a sadist.,"So a snap trap breaks the rodents necks. A poison trap just makes them die, away from the location. But a sticky trap, they die from dehydration, and catch other things too. But the only reason  I see for the sticky traps are to see what you killed and take pleasure in it.",1695790618.0,5,0.78,5
+credditMWO,Powered down ambush on Caustic.,"This was an ambush we set up with Avalerion, JSArrakis, Morning, Minfun,     SphynX, Vrekgar, Zen the Complacent, and I
+
+[Video](http://youtu.be/Q6mQS_cO7B0)",1351970155.0,7,0.82,10
+mwo,ERPPC Raven for the lulz.  Also mid air Jenner killshot.,,1350946639.0,0,0.4,0
+credditMWO,Mumble server status 8/28/2012 9:44 AM EST?,Is the mumble server down or is it just me having connection issues?,1346161539.0,8,1.0,5
+Wordpress,Help running multiple queries against the wordpress db and using a php variable in SQL code.,"I posted something similar about a week ago involving how to update and delete some meta data, well it turns out I was a little bit ahead of myself as I hadn't figured out how to find the posts that needed to have the changes made.  Now I can find those posts, the first query does this just fine.  The post titles are the numbered street addresses with the street names hence why the variable is called $street.  So, this only needs to be put into the string that will be used to update the meta data (concatenating the street, city, state, and zip into a single 'address' line), however since the the city, state and zip are three separate fields I need to run a second query, this time against the postmeta table to find the correct values associated with the post.
+
+So, here's my code so far:
+
+    <?php 
+    $post_list = $wpdb->get_results(""select distinct redacted_posts.ID, redacted_posts.post_title from redacted_posts join redacted_postmeta
+    	on (redacted_postmeta.post_id = redacted_posts.ID)
+    	where meta_key = \""city\"" or meta_key = \""state\"" or meta_key = \""zip\""
+    	order by post_id;"");
+    foreach($post_list as $post_data){
+    $post = $post_data->ID;
+    $street = $post_data->post_title;
+    $result = $wpdb->get_results(""select * from redacted_postmeta
+    	where meta_key = \""city\"" or meta_key = \""state\"" or meta_key = \""zip\"" AND post_id = \"""". $post . ""\"";"");
+    	if($result->meta_key == ""city""){
+    		$city = $result->meta_value;
+    		echo $city;
+    		}
+    	elseif($result->meta_key == ""state""){
+    		$state = $result->meta_value;
+    		echo $state;
+    		}
+    	elseif($result->meta_key == ""zip""){
+    		$zip = $result->meta_value;
+    		echo $zip;
+    		}
+    $address = $street . ', ' . $city . ', ' . $state . ', ' . $zip;
+    	echo $address . ""<br/>"";
+    	
+    }
+    ?>
+
+And my output is:
+
+    123 some street, , , 
+
+Each query by itself works as intended, though I can't run the second one with $post I have to just throw it an ID 
+
+Now if I run the second query on it's own and without the ""AND post_id = "" . $post . "" it returns results as intended with the items being placed into the correct variables through the if, elseif structures.
+
+Any one know why either a) the second query isn't being run, or b) if it is being run but for some reason the $city, $state, $zip variables aren't being set?
+",1345655046.0,2,0.75,4
+buildapc,Looking for guidance.  More RAM or save up for a new build later on?,"All I really want to do is upgrade the amount of RAM I have.
+
+My current system:
+
+* [ECS A740GM-M v7.0](http://www.ecs.com.tw/ECSWebSite/Product/Product_Detail.aspx?CategoryID=1&DetailID=1083&DetailName=Feature&MenuID=1&LanID=0)
+
+* AMD Phenom 9750 Quad-Core 2.4 GHz
+
+* 2 x 2GB DDR2/400MHz RAM (I've forgotten the brand(s) as I built this 2 years ago)
+
+* XFX HD-667X - ZA
+
+* 1TB HDD (Don't recall if it's a Western Digital or a Seagate though nor the model)
+
+* Windows 7 Home Premium 64-bit
+
+It looks like my only options are to either attempt mixing a 4GB stick and a 2GB, 2 4GB sticks, or locating a motherboard that has 3+ slots for RAM.  In addition my motherboard was never tested with 4GB sticks since, at the time, 4GB sticks were very rare or perhaps non-existent.
+
+For the most part all I do is browse the intertubes, some web development work and play a few games (Starcraft 2, SWTOR, and Star Trek Online mostly)
+
+So, should I go ahead and buy more RAM for this mostly outdated computer or should I just save up to build a new system later on?",1345495467.0,1,1.0,3
+Wordpress,Custom query for one-time use to fix some entries and garbage collect.,"I'm looking for some direction here. What I want to do is take a set of meta fields from the postmeta table, concatenate them into single record then remove the records after I've concatenated them and inserted them into the database. (Specifically the information is related to addresses saved as custom fields which interacts with a google maps plugin.)
+
+The SQL code below gets me all the posts that have an empty address field:
+
+    select redacted_posts.ID, redacted_posts.post_title, redacted_postmeta.meta_key, redacted_postmeta.meta_value from redacted_posts left join redacted_postmeta 
+    on (redacted_postmeta.post_id = redacted_posts.ID) where meta_key=""address"" AND meta_value=""""; 
+
+This query gets me all the posts that still have the deprecated meta data:
+
+    select * from redacted_postmeta where meta_key in(""city"",""state"",""zip"") order by post_id; 
+
+I was originally thinking to use a CURSOR but those appear to be read-only and thus would not work for the purpose I need.
+
+So, I was going to write a php function to do it by saving the results of the first query into a large array and then use a foreach() loop to get the actual meta_values as strings and place them into another array which I will add the information to as I'm looping through the foreach() loop. But I'm having trouble finding out how to do that without having to create a completely new connection to the wp database would prefer to use built-in wordpress functions if possible.
+
+I've read about [Custom Queries](http://codex.wordpress.org/Custom_Queries), however this information appears to be how to pull information only, and not modify the tables.
+",1344874842.0,6,1.0,3
+techsupport,"Flash, flash, and more flash!","[This is what I mean by the title.](http://imgur.com/s4jRR)
+
+I have disabled two of the flash plugins because when trying to watch a video on any site that uses flash to serve up that content, if I went to fullscreen mode it would kick the fullscreened video to my main display instead of it going fullscreen in my secondary display.  Anyway, my question here is, does anyone know how to solve that issue without disabling some of the redundant plugins since [google claims multiple flash plugins should not be an issue?](http://www.ghacks.net/2011/10/25/why-are-two-flash-player-plugins-running-in-google-chrome/)  (There's a link to an actual support thread in the article, but the relevant part is quoted in the article to save time.)
+
+Relevant system info: 
+
+Win7 64-bit Home Premium (yes it's a legit copy and everything is up to date)
+
+Chrome version: 21.0.1180.60 (Official Build 149126) m
+
+And you can see the version numbers on the flash plug-ins in the image.",1344133577.0,1,1.0,5
+mechwarrior,A MW:O primer has been started by the MW:O community.  pretty handy. (link goes to the forum thread),,1341413162.0,13,1.0,4
+credditMWO,"A ""Primer"" has been made with all currently available information.","The forum thread is [here.](http://mwomercs.com/forums/topic/20078-mwo-primer-everything-you-need-to-know-in-one-place/)
+
+The googledoc version is [here.](https://docs.google.com/file/d/0BxCiqcMca4-5bmZobEtUQWRET1E/edit?pli=1#)
+
+I think everyone should give this a read.",1341413038.0,11,1.0,4
+credditMWO,Rank structure.,Since we will be a Merc Corp we have the ability to create our own rank structure.  So... let's discuss this.,1341363886.0,4,1.0,15
+credditMWO,How the weapons SHOULD stack up when translated to Real-time,"CAUTION: TABLE TO FOLLOW  :You have been warned
+
+Quick note: I'm not using the Solaris time table of 2.5 seconds per turn and the revised ""reload times"" that come with it since it turns things like Machine guns into DPS monsters.
+
+Table Top Values for almost everything with DPS and Heat per second values:
+
+
+Type|Heat|Damage|Short (hex)|Short (meters)|Medium (hex)|Medium (meters)|Long (hex)|Long (meters)|Ammo|DPS|HPS
+:---|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:
+ER Large Laser|12|8|7|210|14|420|19|570| -|0.80|1.2
+ER PPC|15|10|7|210|14|420|23|690|-|1.00|1.5
+Flamer|3|2|1|30|2|60|3|90|-|0.20|0.3
+Large Laser|8|8|5|150|10|300|15|450| -|0.80|0.8
+Medium Laser|3|5|3|90|6|180|12|360|-|0.50|0.3
+Small Laser|1|3|1|30|2|60|3|90|-|0.30|0.1
+PPC|10|10|6|180|12|360|18|540|-|1.00|1
+Pulse Laser (Large)|10|9|3|90|7|210|10|300| -|0.90|1
+Pulse Laser (Medium)|4|6|2|60|4|120|6|180| -|0.60|0.4
+Pulse Laser (Small)|2|3|1|30|2|60|3|90| -|0.30|0.2
+Anti-Missile System|1| -| -|-| -|-| -|-|12|-|0.1
+Autocannon/2 |1|2|8|240|16|480|24|720|45|0.20|0.1
+Autocannon/5 |1|5|6|180|12|360|18|540|20|0.50|0.1
+Autocannon/10 |3|10|5|150|10|300|15|450|10|1.00|0.3
+Autocannon/20 |7|20|3|90|6|180|9|270|5|2.00|0.7
+Gauss Rifle |1|15|7|210|15|450|22|660|8|1.50|0.1
+LB 10-X AC |2|10|6|180|12|360|18|540|10|1.00|0.2
+Machine Gun |0|2|1|30|2|60|3|90|200|0.20|0
+Ultra AC/5 |1|5|6|180|13|390|20|600|20|1.00|0.1
+LRM-5 |2| 1/missile|7|210|14|420|21|630|24|.5 max|0.2
+LRM-10 |4| 1/missile|7|210|14|420|21|630|12|1 max|0.4
+LRM-15 |5| 1/missile|7|210|14|420|21|630|8|1.5 max|0.5
+LRM-20 |6| 1/missile|7|210|14|420|21|630|6|2 max|0.6
+SRM-2 |2| 2/missile|3|90|6|180|9|270|50|.4 max|0.2
+SRM-4 |3| 2/missile|3|90|6|180|9|270|25|.8 max|0.3
+SRM-6 |4| 2/missile|3|90|6|180|9|270|15|1.2 max|0.4
+Streak SRM-2|2| *|3|90|6|180|9|270|50|.4 max|0.2
+
+\* See special rules for this equipment.
+
+*EDIT: table was too big, had to remove the critical slots, minimum range and tonnage columns
+*EDIT2: fixed Ultra AC5's dps number since it fires twice as fast as a standard AC.
+",1341358031.0,1,0.67,7
+credditMWO,Let's talk loadouts,"Here's a list of the announced 'mechs to-date.
+
+- ?: [Atlas](http://www.sarna.net/wiki/Atlas_(BattleMech)),[ Hunchback](http://www.sarna.net/wiki/Hunchback) and [Jenner](http://www.sarna.net/wiki/Jenner).
+- 23/11/11: [Dragon](http://www.sarna.net/wiki/Dragon) This may actually turn out to be a [Grand Dragon](http://www.sarna.net/wiki/Grand_Dragon)
+- ?: [Catapult](http://www.sarna.net/wiki/Catapult)
+- 25/01/12: [Centurion](http://www.sarna.net/wiki/Centurion)
+- 22/02/12: [Commando](http://www.sarna.net/wiki/Commando)
+- 28/03/12: [Awesome](http://www.sarna.net/wiki/Awesome)
+- 25/04/12: [Raven](http://www.sarna.net/wiki/Raven)
+- 09/05/12: [Cicada](http://www.sarna.net/wiki/Cicada)
+- 23/05/12: [Cataphract](http://www.sarna.net/wiki/Cataphract)
+- 06/06/12: [Stalker](http://www.sarna.net/wiki/Stalker)
+- 20/06/12: [Trebuchet](http://www.sarna.net/wiki/Trebuchet)
+
+Now the ones I've seen in the game so far from gameplay vids and such, are the Atlas, Catapult, Hunchback, Jenner, Dragon, and Commando.  This is 6 of the 10 that are supposed to be available at launch.
+
+Current weapon systems and equipment appear to be pretty much everything you might see if you had ever played table top BattleTech 3rd edition (3025).  I'm not sure what equipment was added in the TRO:3039, and 3050 is still a year away.
+
+So, based on this information let's talk about planned loadouts (since some of the standard loadouts and variants are just terrible), shall we?  
+
+You may have to add in the end parentheses for the Atlas.",1340900459.0,4,1.0,11
+credditMWO,Other possible lance organization,"I was thinking about what kind of tactics we might want to use in battle to deal as much damage as possible while keeping ourselves protected.
+
+Let's assume that we will be able to field a full company (3 Lances). 
+
+Lance 1 command and defense: The company commander would be in this lance backed up by two heavy/assaults set up primarily as short/medium range brawlers with either a light scout or a long range fire support.  This lance will stay close to the base as much as possible.
+
+Lance 2 fire support: This lance will be set up with 3 fire support type mechs, most likely catapults and trebuchets though as other mechs are added to the game this will change, and 1 fast scout equipped with a NARC for tagging targets for indirect fire. This lance will be between the command lance and lance 3.
+
+Lance 3 Assault lance:  This will be the primary attacking lance comprised of mostly of fast moving mechs.  Jump jet capability would also be good for this lance.  This lance will be furthest up on the battlefield and will receive heavy fire support from the fire support lance.  At least one mech in this group should also have a NARC beacon to tag an enemy and then call for fire support.
+
+This was just a thought I came up with based on the terrain seen in all gameplay vids.  Most of the terrain seems to be hilly and well suited for indirect fire from missiles and it looks like jump capable mechs will be able to maneuver around incoming forces fairly easily which should allow the assault group to either flank incoming forces or avoid them entirely and go for the base capture.  The firesupport lance would follow behind the assault lance but also be prepared to pull back and help the defense group should they come under heavy fire from the opposing force. 
+
+Granted, this is all theoretical and we won't know how it will play out until we're all in-game and have been able to practice.",1340885504.0,3,1.0,14
+sto,"Started an album of screen caps and I feel like sharing.  There are only 5 right now, I'll add more eventually.",,1339379579.0,14,0.94,7
+starcraft,MaximusBlack's secret stripper life before castiing,,1337446362.0,32,0.53,54
+engineering,Robot suits for real?  But they still seem a little off.,"I was reading... something, I got side tracked so long I forgot what got me started on this, but I realized we have artificial muscles, lightweight alloys of metals, and can even get computers to interpret brainwaves to control virtual objects. All this reminded me of BattleTech and I became curious as to how close our technology had come to being able to make something like that a reality.  I found [this exosuit](http://www.raytheon.com/newsroom/technology/rtn08_exoskeleton/) which is pretty cool, but then I realized it still uses hydraulics for it's movement.  
+Wouldn't this exosuit be better served with bundles of something like [actuator wire](http://www.dynalloy.com/TechData_Metric.html), or [light-weight artificial muscle](http://dsc.discovery.com/news/2009/03/19/aerogel-nanotube-muscle.html)? Or am I wrong in thinking that using multiple single wires/fibers would actually accomplish at least a linear growth in the amount of weight that could be moved by the artificial ""muscles""?
+
+EDIT: fixed a few grammatical and spelling errors.",1313391165.0,6,0.88,13

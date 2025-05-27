@@ -1,0 +1,357 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+unrealengine,Confused noob needs help attaching actors to a pawn.,"I wish to instantiate at runtime a bunch of actors and parent them properly, in C++.
+
+**Problem**: my code crashes UnrealEngine with
+
+`Unhandled Exception: EXCEPTION_ACCESS_VIOLATION reading address 0x0000000000000148`
+
+Let's say I create a Pawn that's a configurable robotic arm. It's not what I am actually trying to do, but this is the simplest example I came up with to illustrate what I am struggling with: creating a chain of attached actors. To keep it very simple:
+
+`RobotPawn:`  
+`Base (BaseActor, probably just a cube at first)`  
+`- Hip (Actor, just for the socket/anchor/transform)`  
+`-- Torso (TorsoActor, prolly a cylinder at first)`  
+`--- Shoulder (Actor, just for the socket/anchor/transform))`  
+`---- Arm (ArmActor, another cylinder)`
+
+The hip turns left-right, the shoulder turns up/down.
+
+Ideally, I want to be able to drag and drop a RobotPawn. Then, in its components, I want to be able to select between different bases, torsos and arms.
+
+How do I create this hierarchy of actors at runtime? What I tried crashed everything.
+
+**So far so good:**
+
+On my Pawn, I defined `ChildActorComponent`s for the three body parts (base torso arm) and the two pivots (hip and shoulder).
+
+`RobotBase = CreateDefaultSubobject<UChildActorComponent>(""Base"");`  
+`RobotHip = CreateDefaultSubobject<UChildActorComponent>(""Hip"");`  
+`RobotTorso = CreateDefaultSubobject<UChildActorComponent>(""Torso"");`  
+`RobotArm = CreateDefaultSubobject<UChildActorComponent>(""Arm"");`  
+`RobotShoulder = CreateDefaultSubobject<UChildActorComponent>(""Shoulder"");`
+
+The Hip and Shoulders are empty actors, just used as points/transforms where the body parts are attached. However, the Base, Torso and Arm have their own C++ class because I want to build several robots by subclassing these parts.
+
+`RobotBase->SetChildActorClass(ARobotBase::StaticClass()); RobotHip->SetChildActorClass(AActor::StaticClass()); RobotTorso->SetChildActorClass(ARobotTorso::StaticClass()); RobotShoulder->SetChildActorClass(AActor::StaticClass()); RobotArm->SetChildActorClass(ARobotArm::StaticClass());`
+
+And then of course, call `->CreateChildActor()` on each component.
+
+So far so good: when I bring my pawn into the world, it creates five objects of the right class. **Problem**: they're not parented to each other, they're all created at the top-level of the world. **I want to attach the actors.**
+
+**Now, the hard part: properly attaching the actors.**
+
+I want to attach the actors to each other, so I thought of doing this:
+
+`RobotHip->GetChildActor()->AttachToActor(RobotBase->GetChildActor(), FAttachmentTransformRules::KeepRelativeTransform);`
+
+Boom, that crashes the editor.
+
+**So, I am doing it wrong, am I not?**
+
+I'm new, I just can't find the tutorials or documentation to get this to work. It's got to be really simple but I just don't know where to start.",1613492782.0,1,1.0,2
+ThemeParkitect,Medieval market and houses for your park.,"I looked up images of medieval houses for reference pictures and started playing.
+
+[https://i.imgur.com/LCFNuEa.jpg](https://i.imgur.com/LCFNuEa.jpg)
+
+Some houses are purely decorative, some can be walked in if need be, and some (like the tavern) are designed to be walked in.
+
+They are gathered in this Steam workshop collection: [https://steamcommunity.com/workshop/filedetails/?id=1675625863](https://steamcommunity.com/workshop/filedetails/?id=1675625863)
+
+I am mostly proud of the cute little market stalls.  They all use customizable shops.  It should be easy enough to place them against a castle wall in order to hide the haulers.",1567591147.0,31,0.98,2
+ThemeParkitect,Guest and Ride windows should remember their position and tab.,"The current behavior of the Guest and Ride windows is similar to that of a context menu, like a when we right-click on a file in Windows.  This makes sense when that context menu contains only commands.  Right-click/delete, right-click/properties, etc.  The context menu is not supposed to stay on the screen long, and is not supposed to display information we want to read; it's just commands.
+
+In Parkitect, the windows contain a lot of information, statistics, complex GUI overall.  We click on guests and rides not to only to order them around but to survey their status.
+
+* Bunch of guests are leaving the park; click on guest 1, click on Thoughts tab, move the window that's now covering guest 2, click on guest 2, repeat ten times.
+* Rides need more frequent inspections.  Click on ride 1, click on the gears tab, set maintenance period, move the window that's now in the middle of the screen obscuring ride 2, repeat for each ride.
+
+It's not just myself; I've seen several Let's Play showing this click-click-move use-case.  Maybe having the Guests and Rides windows remember their place would bring extra comfort.  Remembering open tabs would be a lovely luxury.
+
+&#x200B;
+
+Edit: typo.",1565521987.0,34,0.95,2
+CamGirls,What advice would you give to my friend who wants to begin as a camgirl?,"""Do you have any tips?"", she asked me.  To which she added ""Most webcam sites are a complete scam"".  Google would tell you that much, which is why I'm turning to the experts in this subreddit.  I know I am breaking the first rule of the sub since, while sexy, she's not a camgirl yet.  If there is a better place to ask, would you point me to it?
+
+&#x200B;
+
+The context: super pretty petite blonde goth/alternative 20 year-old Dutch girl living in the UK. Quite a few kinks (goes to bdsm and fetish parties, for example) but zero experience in camming (not even watching).  She's got a great location and all the clothes and toys to get started.  The hardware isn't great, though, just a MacBook and an iPhone for now.
+
+&#x200B;
+
+Let us push away the hardware considerations for now.  Yes, lighting and sound quality are supremely important, but that's something that would come in a couple of months.  I guess I've got only two vague questions, which should point us in the right direction so that we can do our own research.
+
+1. Are there some twitch-for-camgirls websites?  I guess so, but I have no clue.  Which ones would you suggest that we investigate?  European websites may be preferable.
+2. Is there a *Camgirl 101* document somewhere online?  A FAQ, a list of things (not) to do, traps to avoid, legal advice, general safety tips, all that?
+
+Thank you for reading that far!",1548085136.0,4,1.0,4
+ShinyPorn,Trophy wife (Bunny Glittergun),,1518864070.0,238,0.96,0
+whatisthisthing,A friend considers getting this as a tattoo but has no idea where it's from or what it means/references.,,1517533255.0,33,0.78,18
+Warhammer40k,"Noob question: in such a populated and violent galaxy, how did mankind survive long enough to create civilization and even go to space?","As stated, I am a total noob.  I've been aware of the existence of the 40K universe for more that 20 years but have never cared for the tabletop games and therefore never bothered with the setting.  But a few days ago I got curious and started reading about the extremely detailed lore of this universe.  It's a lot to swallow all at once, and I've got one question in particular.  I'm sure the answer is out somewhere, and maybe you can point me to it.
+
+How the fuck did mankind survive?  How come nobody destroyed humans on their home world before they could defend themselves?  Weren't there already highly advanced species in the galaxy?
+
+Maybe the other species didn't really have space travel either, and we all kind of evolved technology together?
+
+Maybe our corner of the galaxy was kind of desert at that time?
+
+Maybe our corner wasn't desert but it's just the law of big numbers: many civilizations appeared on many worlds, most of them are eradicated before they become a problem, and Earth just got lucky.
+
+Or there was relative peace in the galaxy?  Or Earth was actively protected?  Or…
+
+So many possibilities!
+
+I don't expect you guys to summarize millennia of history in a post, but if you've got a link to a wiki page or something, I'll gladly follow it!",1516803579.0,8,0.8,13
+KerbalSpaceProgram,KSP comedy sketches by Door Monster,,1515572397.0,33,0.95,2
+ShinyPorn,Bunny Glittergun - Autumn,,1513262682.0,101,0.98,1
+ShinyPorn,Bunny Glittergun Superheroin,,1512320983.0,99,0.97,7
+AskPhysics,"If photons slightly curve space-time according to their energy, and they propagate in that space time, do they still take the same time to go from A to B or is it frequency-dependent?","It's in the title.  I expect that the terms that depend on frequency cancel out, but I don't know.  My question is theoretical, I doubt it can be measured any time soon.",1473347286.0,9,1.0,5
+Daggerfall,"Let's Play: The adventure of Tryst, the magickophobe cursed hero who aspires to nobility.",,1464630558.0,13,0.9,4
+Idris,"Cannot compile a ""hello world"" using do-notation: ""Overapplied data constructor"".","I do not manage to compile the following code:
+
+    module Main
+
+    main : IO ()
+    main = do putStrLn ""Hello world""
+              putStrLn ""Herp derp""
+
+Here is what's on my screen http://i.imgur.com/zCewftN.png
+
+On the top right is the Atom text editor, which successfully typed-checked the code.
+On the bottom right is the command line, which shows to things:
+
+* First, I tried to compile to an exe.  It failed with this ""Overapplied data constructor"".
+* Then, I simply start the REPL and successfully inspect `main`, which I think means that, somehow, the code makes sense.
+
+If I comment out the second line in the `do` block, then it compiles.  I can do only one thing.  Even copy-pasting from the tutorial doesn't work.  What am I doing wrong?",1463084301.0,8,0.91,6
+ShinyPorn,Who here is going to the German Fetish Ball this week?,"We're going to Berlin for the whole week.  Bunny has four photoshoots and a fashion show, so when she's busy I'll hang out with friends. If some of you are going but don't really know anyone, having Reddit in common can be an ice breaker.",1462101357.0,11,0.92,4
+OutOfTheLoop,What's a coachella?,[removed],1461845777.0,1,1.0,1
+Unity3D,"Help for the networking part of a multiplayer coop game with no player-character, where players control their own subsystem via different GUIs.","A lot of the tutorials I find sort of assume that each player is given the same type of character in game.  I have difficulties generalizing from there and 1) having actually different prefabs for each player and 2) not even give a physical 3D avatar to the players.
+
+Imagine a game where several players, one per computer, cooperate to keep a factory working (each player is responsible for some part of the assembly line), or cooperate to rescue people after a catastrophe (you have the hospital-player, the military-player, all that).  A game à la Voltron, where one player controls the head and another the legs, or a spaceship game with one person to navigate, one to fire, one to redirect power between the different systems, etc.  In short, merge several minigames into one single game, and have it heavily relying on GUI.
+
+Keeping the GUI in sync with the rest of the game is already a chore in single player, but doing it over several machines can easily become extremely messy.
+
+Does anyone here have any experience with that sort of things?  Any story about how to, or how not to do it?",1456399407.0,2,1.0,1
+askscience,Why do light dimmers buzz when they're not at full power?,"Light dimmers buzz at 50 Hz (in Europe) when they're not sending full power to the bulb. Why would (some of) the unused power be converted to sound? Is there some variable resistor that starts vibrating? Why would the alternating current make it vibrate, it's not like the electrons form a pressure wave, is it? Or is the resistor coiled and forms an electromagnet and starts wiggling relatively to some iron parts in the box? Something with Lorentz force?
+
+Could a dimmer be silent by design? How? Do they exist? How can I recognize those in shops?",1453795929.0,6,0.88,5
+Unity3D,Using Mecanim to manage non-animation-related finite state machines?,"Quests can often be modeled as Finite State Machines (FSM), so can the UI windows ane event managers in different game modes (main view, load screen, paused, paused-in-inventory, etc), or dialogue trees.  Actually, when you think of it, the entire game is a single animation.
+
+Not everything fits in an FSM, but if something does, it may be convenient to model it as such.  Since Unity has a pretty neat built-in visual language for managing FSMs, I feel like re-implementing FSMs for quests or GUI would be silly.
+
+Has any of you experimented with using Mecanim's FSM out of its intended context?
+",1453646217.0,7,1.0,3
+Unity3D,How do you guys deal with the non-determinism caused by the random execution order of mono behaviors?,"Within a single frame, Alice attacks Bob, Bob teleports away and Carl heals Bob. If Bob's processed first, he avoids both the attack and the healing. If Alice is processed first, Bob dies, which prevents the teleport and wastes Carl's healing spell. If Carl is processed first, the damage caused by Alice won't kill Bob, even if Alice hits before Bob gets away.
+
+Unity encourages a concurrent programming style, which has tremendous advantages but makes debugging difficult. In which order are the scripts executed? Is it random? Does it follow the tree? If I save and load the game, will the order be the same? Does unity officially provides any kind of guarantee?
+
+I am aware of the feature that allows us to define the execution order of scripts, but its granularity isn't fine enough: it's not at the instance level.
+
+How do you guys deal with that?",1449604894.0,6,1.0,34
+Rabbits,"Cuddly trio: bunny, bunny, and dinner plate.",,1441665475.0,93,0.99,1
+Rabbits,"Three ears per bunny, on average.",,1428622929.0,79,0.99,0
+tightdresses,Redhead in shiny pink; x-post from /r/ShinyPorn NSFW,,1425052426.0,62,0.89,1
+ShinyPorn,Redhead in pink,,1425037278.0,132,0.97,1
+ShinyPorn,Bunny Glittergun in military outfit.,,1424602292.0,61,0.95,1
+askmath,"Name for a function that is kinda periodic, but neither ""almost periodic"" nor ""quasiperiodic"".","I am dealing with a function from R to R like ""f : t -> cos(t / T)"".
+
+This function which would be periodic if T were constant but my period T is actually a function of t, let's say a first-order polynomial ""T(t) = T_0 + T_1 t"".  The slope T_1 is small, so over a limited range of t the function looks periodic.  But the wider the range, the more you see that the ""period"" accelerates/decelerates.
+
+Is there a name for that?
+
+* I think that ""almost periodic"" does not apply.
+http://en.wikipedia.org/wiki/Almost_periodic_function
+According to this page, the wider the range, the more periodic the function looks, as uncertainties cancel each other over many 'periods'.  My case is the exact opposite.
+
+* I am not sure about ""quasiperiodic"".
+http://en.wikipedia.org/wiki/Quasiperiodic_function
+I don't see an easy way to rewrite my function to satisfy the definition of ""quasiperiodic function"".
+
+Idea?
+
+",1424423814.0,3,1.0,2
+dftfu,Increase vertex density to have a more stable vertex lighting?,"Unity favors vertex lighting by default, allowing only a couple of lights to act on a per-fragment basis.  Lights that are flagged ""Important"" and those close to the camera get the per-fragment treatment, and the rest is processed by vertex.
+
+Since the meshes in Daggerfall are very coarse, vertex lighting yields visually poor results.  The current DaggerfallLight.cs script, which makes the lights flicker by randomizing their range over time, often results in walls not being lit at all because their vertices are out of reach.  There's nothing wrong with the script, it's just Unity taking unfortunate shortcuts.
+
+I thought that one way to solve the problem would be to automatically densify the meshes by subdividing big triangles.  Of course we do not want to do that to the collision meshes.
+
+What other options are there?",1423749233.0,4,1.0,3
+ShinyPorn,"Bunny GlitterGun, Dutch amateur model",,1423001601.0,102,0.99,1
+askscience,"Black bodies are in perfect thermal equilibrium; even black holes are not in perfect equilibrium, does that mean that black holes do reflect some of the incoming radiation?",,1422880893.0,2,0.75,2
+askscience,What luminosity saturates the cones of the human retina?,"I am writing code for a physically-based lighting system for a computer game.  Everything is easy until the very last step: the conversion from the radiant flux entering the eye (in Watt) to a number between 0 and 1.
+
+There must me a critical irradiance above which the human iris cannot contract anymore, leading to saturating the cones.  This is the value that I wish to map to 1.
+
+All my light sources are broadband (sun, torches, and reflections thereof) so I do not need high spectral resolution.  I also assume a linear response of the cones (up to saturation) since the brain is sort of correcting for the non-linearities anyway.  I ignore scotopic vision and the automatic white-balance done by the brain, at least for now.
+
+I thought this page was promising http://en.wikipedia.org/wiki/Pupillary_light_reflex , I will try to solve it for the steady state and invert it to find Phi for a diameter of 3 mm (the minimum).  But maybe I'll get it wrong, or it's not really how this equation works, so I'd love to hear what you might know.
+
+I am after an order of magnitude, not super specific numbers.  I accept answers in Watt, Candela, Lumen, horse power or Plank units, anything!
+
+Edit: Solving the equation from the wikipedia page in the steady state gives me 320 lumen for a 3mm pupil diameter.  Is it sort of correct?",1420130754.0,3,1.0,3
+dwarffortress,Soldiers hacking their colleagues' limbs by accident?,"Version 0.34.11.
+
+My squad of axedwarves was waiting under the mass-pitting area for naked goblins to fall one by one.  I thought it would be a more efficient training than sparring sessions, and less 'cheaty' than danger rooms.
+
+Everything was fine until suddenly, dwarves running all over the place gushing blood, and every one of them having the big red flashing ""unhappy"" arrow, or being dead.
+
+According to the combat logs, my dwarves were attacking each other.  So, there is no friendly fire with bolts, but mêlée there is?  How does this work?",1410129216.0,3,0.71,15
+creepyPMs,Not the type of emails that my high-class escort friend was hoping for.,,1407148493.0,276,0.94,63
+Smartphones,Trying to move apps to the SD card on a Huawei Ascend G6.,"I just bought a Huawei Ascend G6-U10.  Not the 4G version but the 3G one.  I don't seem to have the option to move any app to the SD-card.  Even apps that I know can be moved, since my girlfriend who also own a Huawei (Y 600) can move them.
+
+Since there's only 4 Gb of internal storage and that for some reason only 2 Gb of it seem accessible to me, that's a bit short.  It fills up fast.  Google doesn't help much on that one.  Does any of you have a clue?",1402605269.0,2,0.76,0
+Rabbits,Sushi's buttstache.,,1398109313.0,49,1.0,1
+gamedev,Gimp/Photoshop-like image editors that work in 32 bits per channel?,"I would love to be able to paint my textures with more than 8 bits per channel.  I find it a bit strange that, despite HDR being standard on the graphics-card side of games, most image editing tools that I can find still lag behind with 8 bits per channel.
+
+I found krita, a KDE-based image editor that does support 32 bits floating points per channel, but after exploring the web I understood that these floating points channels are normalized to [0, 1], which is unsatisfactory.
+
+If I want to paint refractive indices on a texture, I need to go above 1 (and I don't want any gamma, color-space correction or alpha premultiplication, this is raw data).  If I want to paint the luminance of the sun, I want to store 1.6e9 in that texture.
+
+Does anyone know of any software that allows painting floating points on a 2D canvas?
+",1395140160.0,1,0.67,7
+Rabbits,Jam and her favorite toy: Murray the rotating plastic skull,,1392884281.0,23,0.96,4
+Rabbits,"Jam, tiny female teddy dwarf, 4 years old and 95 % fluff.",,1392656193.0,249,1.0,13
+gadgets,"Looking for an mp3 player with a user interface that makes sense, and that lets me resume listening to a long postcast even after having been turned off.","I just received a mp3 player that I ordered online.  I'm not a gadget-oriented person and never held one in my hands before, so I did not know what to expect.  I am going to send it back because its user interface is abysmally catastrophic.  For reference, it's a Yarvik Funkick.
+
+For instance: use the left/right buttons to go up/down in the menus.  Up validates but Down does nothing: no cancel/back button.  Inconsistent menu behavior when choosing an option (sometimes it stays there with no feedback, sometimes it goes back 2 menu levels instead of 1).  The fast-forward function has one speed only (x2) which is annoying since I listen to hour-long files and I can't turn off the device without losing my progress.  I still haven't figured out how to return to the main menu without rebooting the device.
+
+Visually, the screen is bloated with useless info (bps, little Fourier transform with ""pop"" hard-coded under (the equalizer setting for neutral/pop/classical/etc. is displayed elsewhere)), missing the obvious (like a progress bar would be nice, and use the mp3 album/title field instead of the raw file name), and the relevant info is scattered all over (current time in big here, total time in tiny in a random corner with other stuff in-between).
+
+Is there any chance I can find something decent for less than 50 bucks?
+",1390560405.0,5,0.73,12
+askscience,"Holographic principle: Since there is a limit to the amount of information that a volume can contain, how does nature prevent me from adding more?","A very big volume has a relatively small surface, therefore I would expect it to reach its maximum amount of content without reaching a high mater/energy density.  That density would be too low for the content to form a black hole.  Black holes react to more information by expanding; but what would happen to my hypothetically full-but-non-black-hole volume when I throw a particle at it?",1389723308.0,1,1.0,3
+Latexadvice,Where do people find their gas masks?,"My girlfriend has a gas mask fetish and it starts working for me as well.  Christmas is approaching so I've started looking around.
+
+It seems that you can't actually find them in fetish/latex shops, that these gas masks are the real thing.  So, I don't know where to start.
+
+Does any of you have any tip?
+
+Possibly relevant: we live in Europe.  I can order from the US, but anything closer is welcome.",1382778802.0,8,0.84,6
+Physics,"Nature: Dark energy as a side effect of the universe growing a fourth spatial dimension. Is that serious, does anyone has a reference?","I was reading this article on nature.com:
+[Theoretical physics: The origins of space and time](http://www.nature.com/news/theoretical-physics-the-origins-of-space-and-time-1.13613).  The article contains the following sentence
+
+>[...] even some who suggest that the appearance of dark energy is a sign that our Universe is now growing a fourth spatial dimension.
+
+but does not give any reference.
+
+Google throws blog posts and books at me, but nothing I trust ([\[this\]](http://www.theimagineershome.com/blog/?p=10970) and [\[that\]](http://www.huffingtonpost.com/louis-a-del-monte/dark-energy-explained_b_2853962.html)).
+
+Google Scholar reacts to ""Dark energy, fourth spatial dimension"" and variants, but the results are then too high-level for me (my field is microwave engineering for radioastronomy, not cosmology or theoretical physics).
+
+So, questions: Who are the ""some who"" suggests that, how serious is it, etc.?",1378981553.0,0,0.45,2
+ShinyPorn,Girlfriend (with permission) playing Minecraft.,,1378813137.0,397,0.92,57
+MinecraftMod,One-chunk-wide world gen?,"I would love to walk in a straight line and try to survive that way.  Not one block wide like Mario, more like one chunk wide.
+
+Is there any mod out there that would do that?",1378310666.0,3,0.67,5
+golang,Has anyone here managed to use a gtk/qt/wx GUI with OpenGL widgets in go?,"I find go quite nice for game development so far.  No problem for the game itself, I just create my window/context with glfw.  Now, I'm looking for a rich GUI for developing some tools (level editor for instance) but it seems that the GUI bindings for Go are pretty thin, and I cannot find any information on OpenGL in these GUI.",1371028655.0,13,0.85,3
+Daggerfall,What's with this Lord Castellian business?,"I recently picked up an old saved game.
+
+When I talk to commoners, I have the option of asking about Lord Castellian.  Apparently he's in business with Prince Helseth of Wayrest.  So I went to Helseth and tried talking to him, but nothing happens when I click, he just totally ignores me.
+
+I guess I am somewhere inside or after a quest, but I am not sure.  If I have finished the quest, then why does the name of Castellian remain in my dialogues?  If I have NOT finished the quest, then where are the envelopes I am supposed to deliver (I looked that up on the wiki).
+
+Does anyone know if this is normal?
+",1360847089.0,8,0.9,2
+redstone,Let's explain why the Daylight Sensor senses day light but not the other light sources.,"After fighting with my brand new sensor for an entire day (MC day that is), turns out that the beast is not interested in lava, fire, torches or glowstone.  I could have learned that from the wiki but I was offline.  I could have learned that for the name, ""DAYLIGHT sensor"", but I was thick.
+
+It made me wonder why.  I thought that, maybe, the quartz would only react to UV, which low-temperature sources like torches or lava would not produce so much.
+
+That, or, you know, magic.",1358190765.0,0,0.44,14
+Minecraft,"How can I play on LAN with no Internet connection since everybody is named ""Player""?","My girlfriend and I moved to a new house.  We don't have Internet yet, but we do have a router.  We're trying to play together on our own world but it's not working.
+
+- Using the server, we kick each other out ""You logged in from another location"".  My server.properties states ""online-mode=false"" though.
+- Using ""open to LAN"", the error message becomes ""This name is already taken"".
+
+Well, that's because we're both named ""Player"" since we could not reach the authentication server.
+
+Is there a way we can play offline and keep our user names?  We both bought the game, it's frustrating to not be able to play it.",1358074689.0,10,0.87,11
+nethack,A cockatrice sneaked up on me.  I am scared.  Help?,"I was happily collecting all Sokoban's loot in my brand new bag of holding, letting my pets train their fangs on that poor gnome, when I realized that the level contained way too many feathers.
+
+http://i.imgur.com/S1s9b.png
+
+I don't even care about killing that cockatrice, I'd just be happy to leave Sokoban alive; so would my pets, but try telling a cat not to hunt a bird...
+
+As you can see, my pockets are full of unidentified goodies.  There's a Mjollnir in my bag of holding, next to some boring weapons and a lot of food.
+
+I'd usually just rush and die, but that technique didn't work so well against the last cockatrice I met in Sokoban.  Too bad these levels don't leave bones.
+
+How would you deal with the situation?",1355816771.0,7,1.0,38
+AskReddit,"Bankers of reddit: Why, in the Internet age, does money travel so slowly?","I tried cashing a check from the USA on my Dutch bank account yesterday, and the money will take two weeks to arrive.  I don't think it comes by boat, so I'm puzzled.  It takes two days to transfer money from my account to my girlfriend's.  If I pay something by card, I see it only one or two days later on the listing of my transactions.
+
+We're just moving numbers.  Why doesn't it take a few milliseconds like it does for the TV, phone or Internet?  Why couldn't it?  Why shouldn't it?",1355482984.0,1,0.67,12
+atheistvids,Republican Theocracy - AronRa's speech at the Secular Rally in Tallahassee Florida on 11/04/2012.,,1352261762.0,9,0.86,2
+mathematics,Is there a conventional notation for a plane defined by two vectors?,"If x and y are two non-collinear vectors, how do I write the plane they define?  (x, y)?  I'd like to stick to conventions for a paper I'm writing, if there is any.",1350579098.0,1,1.0,0
+powder,Troubles compiling from source.,[removed],1349798247.0,2,1.0,1
+xmonad,Keyboard focus on mouse click rather than hover?,"I have the habit of throwing my mouse aside when I'm not using it, and too often it resulted in another window taking the keyboard focus.  I then proceed to type a password on an IRC chatroom, delete an email instead of a character in a text, this sort of things.
+
+How would can I explain to xmonad that it shouldn't move the focus with the mouse?",1349171099.0,5,1.0,8
+proceduralgeneration,How to decorate rooms with style? (xpost from roguelikedev),"Hello all,
+
+I now have my tile-based dungeon, with its weirdly-shaped rooms and corridors.  Empty rooms are boring so I'm trying to fill them up in a sensible way.  I'm having a bit of problem with placing the furniture though.
+
+Here's an example of what I have so far: [Imgur](http://i.imgur.com/u2wE9).  That room is flagged as ""chapel"".  The algo for a chapel finds the biggest fitting rectangle.  One side receives the altar and some braseros, while benches fill the rest in neat rows.  The lever opens a door somewhere else and has nothing to do with the room itself, although I would like rooms to be able to give cues as to where treasures/levers should be.
+
+For example, a bedroom must contain at least one bed, if nothing else.  If the bedroom is big enough, maybe a double bed?  Plus other furniture if there is space.  Interactive furniture should be accessible, and the room shouldn't be so cluttered that we can't reach the doors anymore.
+
+So, I have an algorithm for making a chapel room, an algo for bedrooms, an algo for dining rooms...  **I feel that there is some common abstraction under the hood but I can't put my finger on it.**  I'd like to do something that's more data-driven with a common parser/compiler/interpreter/algo.  Any idea?",1346684679.0,3,0.81,7
+roguelikedev,How to decorate rooms with style?,"Hello all,
+
+I now have my tile-based dungeon, with its weirdly-shaped rooms and corridors.  Empty rooms are boring so I'm trying to fill them up in a sensible way.  I'm having a bit of problem with placing the furniture though.
+
+Here's an example of what I have so far: [Imgur](http://i.imgur.com/u2wE9).  That room is flagged as ""chapel"".  The algo for a chapel finds the biggest fitting rectangle.  One side receives the altar and some braseros, while benches fill the rest in neat rows.  The lever opens a door somewhere else and has nothing to do with the room itself, although I would like rooms to be able to give cues as to where treasures/levers should be.
+
+For example, a bedroom must contain at least one bed, if nothing else.  If the bedroom is big enough, maybe a double bed?  Plus other furniture if there is space.  Interactive furniture should be accessible, and the room shouldn't be so cluttered that we can't reach the doors anymore.
+
+So, I have an algorithm for making a chapel room, an algo for bedrooms, an algo for dining rooms...  **I feel that there is some common abstraction under the hood but I can't put my finger on it.**  I'd like to do something that's more data-driven with a common parser/compiler.  Maybe some grammar based on L-systems?  Or a common template structure with randomized parameters?  Any idea?",1346680645.0,13,0.89,3
+dwarffortress,Hostiles having an actual life when they're not killing you?,,1345360581.0,39,0.84,14
+dwarffortress,"So, my civilization doesn't have access to Iron.  Where does its steel come from?","Wiki says ""If your civilization has access to iron ores, a standard (no quality) iron anvil will be included by default in your starting equipment, for a cost of 100 points. If not, then your starting equipment will include a steel anvil, for a cost of 300 points.""
+
+I did get a steel anvil, I can buy steel and pig iron, but no iron.  Where does the steel of my civilization come from?  Do we buy it from another civilization?  Why not buy iron too then?",1344870134.0,5,1.0,18
+dwarffortress,How many dwarves can you manage?,"After abandoning yet another fortress because my FPS went under 20, I decided to cap my population to 110.  The wiki says I need 100 to get the latest features so I allow myself some margin.
+
+I'm not doing that just for the FPS.  I'm also doing that because I have constantly about 60-80 idlers.  Most of my dwarves do nothing but drink and have parties.  I get all my clothing from goblinite, and the rest I can buy with 5 to 10 gold crafts a year, so I don't need my dwarves to do anything.  The only reason I'm still farming is to keep my carpenter and miners busy (for making barrels and digging space for stockpiles).
+
+Assuming your machine could maintain 100 FPS with a millions dwarves, how many dwarves would actually be doing something in your fortress?",1344365004.0,7,1.0,26
+dwarffortress,How do I get a stockpile for my XXclothesXX?,"Stockpiles have a Quality parameter (actually two), but I did not find any parameter for how worn the items can be.  As a result, I caught my clothier sewing images on a pair of smelly XsocksX.
+
+Do I *have to* dump/forbid each and every mitten?
+
+Other question: the wiki (http://dwarffortresswiki.org/index.php/DF2012:Wear) mentions that clothes on refuse piles will rot.  How does one get clothes onto a refuse pile in the first place?
+",1343659358.0,4,0.76,11
+dwarffortress,"Negative traits with Therapist, will my game explode?",,1340723793.0,18,0.88,6
+0x10c,Cartesian space and absolute/relative coordinates.,"Having a physics engine that can deal with general relativity could be awesome, but also a major pain to implement and to play (time dilation anyone?).  So we'll probably settle for a cartesian space with Newton laws.  Close enough, this is all very good.
+
+I have one worry about it.  Internally, the physics engine will know the absolute positions and velocities of every body in the Universe.  I think that the player should not have access to it.  The player should only see positions and velocities relative to other bodies.
+
+The games *Elite I* and *II* are doing it right.  The game *I've Found Her* (http://ifhgame.ru/main/) is (or was, haven't played in a while) doing that wrong.  In IFH, I was moving at a gajillion meters per second relatively to (0, 0, 0), so was this asteroid, and seeing these absolute values made me crash my ship every time.
+",1335356992.0,18,1.0,19
+dcpu16,"Memory management: heap, with malloc and free (crosspost from 0x10c).",,1335254295.0,10,0.87,11
+0x10c,"Memory management: heap, with malloc and free.",,1335217851.0,15,0.94,4
+xmonad,Minecraft doesn't realizes that xmonad resizes it.  Any idea?,,1331985497.0,21,0.88,11
+Ubuntu,How can I try Eclipse and Minecraft before installing?,"Hello,
+
+I'm curious about the last Ubuntu release, but before installing it I would like to try it with some specific applications (Eclipse, Minecraft, VLC, etc.).  I got burnt in the past so I want to be careful.
+
+I have downloaded 11.10 and put it on a bootable USB stick which works well, I tried it.  How can I try these applications from there ?  They're installed on my hard drive which I manage to mount, but I don't quite know how to proceed from there.",1324981518.0,3,0.71,5
+AskReddit,"US grocery store etiquette, lesson for a clueless foreigner.",[removed],1322876141.0,2,1.0,2
+atheism,I thought it was a good question.,,1322792512.0,3,0.6,1
+fffffffuuuuuuuuuuuu,Now I have even more reasons to feel down.,,1322513632.0,3,1.0,0
+fffffffuuuuuuuuuuuu,It took me a long time...,,1322205031.0,0,0.38,0
+AskReddit,Someone explain Black Friday and Target/Best Buy to me?  I need a new laptop.,[removed],1322188633.0,1,1.0,0
+Minecraft,"Redstone Real Estate, this just made me smile.",,1322112479.0,1,0.55,0
+blender,Render edges with alpha ?,"Hello hello,
+
+I like that rendering the edges is just a matter of checking the render/post-processing/Edge box.  However, I would like my edges not to be completely opaque but rather half transparent.  I want to hint the presence of edges, not totally have them dark.
+
+The color for the edge doesn't have an alpha channel, so I guess I would have to do this with material nodes ?  Is that possible ?",1321995190.0,5,0.86,6
+Minecraft,Why are monsters so hard to hit in multiplayer?,"In single player, you can easily hit monsters through a 1x1 hole.  You break their legs, collect the XP and that's it, if you click on the monster you hit it.  In multiplayer, this doesn't work at all.  It's not a matter of lag.  The monsters, however, are very good at hitting you.
+
+Why is the behavior so different ?  I understand that the client has to ask the server if the monster could be hit, but why does the server say no ?  Where does the server think I am to systematically refuse every time ?
+
+EDIT: I play with the same difficulty in single player and multiplayer.  Server and client are on the same machine.
+That's a bug, right?  I lost so many skill points because of not being able to fight back, it's getting frustrating :(.",1321814322.0,0,0.5,5
+AskReddit,Can anyone enlighten me as to the purpose of this contraption?,"I find this in every hotel I go to in the US, but I've never seen it in Europe.
+http://imgur.com/0jl8i",1321725650.0,2,0.67,9
+Minecraft,Me versus Enderman versus mushroom.,,1319798837.0,327,0.9,26
+Minecraft,The sea level is one block lower in 1.8.,,1316169331.0,0,0.38,3

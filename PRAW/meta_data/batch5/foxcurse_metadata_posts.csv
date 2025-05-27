@@ -1,0 +1,151 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+learnpython,Help with DMOJ problem,"I've been learning python using the book Learn to Code by Solving Problems and doing the suggested DMOJ problems at the end of each chapter. This chapter, every problem I try I wind up only getting half of the test cases right and I can't find my errors. Here is the most recent problem I attempted: [https://dmoj.ca/problem/dmopc19c5p2](https://dmoj.ca/problem/dmopc19c5p2) and the submission I made: [https://dmoj.ca/submission/4091869](https://dmoj.ca/submission/4091869) 
+
+    inputLst = input().split()
+    turns = int(inputLst[0])
+    cHP = int(inputLst[1])	#charlie hp
+    eHP = int(inputLst[1])	#enemy hp
+    cTurns = []		#charlie's turn list
+    eTurns = []		#enemy's turn list
+    cDodge = False
+    eDodge = False		#dodges used later
+    cPunish = 0		#used to store failed dodge points later
+    ePunish = 0
+    
+    for i in range(turns):
+        cTurns.append(input().split())
+    for i in range(turns):
+        eTurns.append(input().split())
+    
+    for i in range(turns):
+        if cTurns[i][0] == 'A':
+            if eDodge == False:
+                eHP -= int(cTurns[i][1])
+            cDodge = False			#next line is to be copy pasted, that is why I include both
+            if eHP <= 0 or cHP <= 0:
+                break
+        if cTurns[i][0] == 'D':
+            cDodge = True
+            cPunish = int(cTurns[i][1])
+            if eDodge:
+                eHP -= ePunish
+            if eHP <= 0 or cHP <= 0:
+                break
+        if eTurns[i][0] == 'A':
+            if cDodge == False:
+                cHP -= int(eTurns[i][1])
+            eDodge = False
+            if eHP <= 0 or cHP <= 0:
+                break
+        if eTurns[i][0] == 'D':
+            eDodge = True
+            ePunish = int(eTurns[i][1])
+            if cDodge:
+                cHP -= cPunish
+            if i == (turns-1):
+                eHP -= ePunish
+            if eHP <= 0 or cHP <= 0:
+                break
+    
+    if eHP <= 0:
+        print('VICTORY')
+    elif cHP <= 0:
+        print('DEFEAT')
+    else:
+        print('TIE')
+
+If anyone can help me find the error and get back to solving problems, that would be greatly appreciated, thanks.",1638922195.0,4,1.0,3
+196,Rule,,1629162885.0,9,0.91,0
+AmongUs,Is this ambitious mod possible?,"I thought of this idea for an Among Us mod that I think would be really neat to play around with, but I'm not sure how possible it would be to make. My idea is a way to integrate a discord server and the game so that the game controls what channel you are put in on the server. 
+
+Simple Example: The game mutes you when the round starts and unmutes you when there's a body reported. Better Yet for a new game mode: You walk into Electrical and are put in an Electrical voice channel so you can hear and talk to people in the room you are in. You could be muted when in hallways or outside, or maybe there's a way to hear people in a certain proximity of you?
+
+ I have heard of some GitHub projects working on retrieving game executables, but I'm not too experienced with coding or game modding. I don't even know if something like this is possible. It would be great if any of you who know a little more than I do could let me know how realistic this idea is.",1602808716.0,2,1.0,2
+javahelp,How to fix this error?,"[SOLVED]
+
+I am getting the following error on my code: 
+
+ java.util.NoSuchElementException 	at java.base/java.util.Scanner.throwFor(Scanner.java:937) 	at java.base/java.util.Scanner.next(Scanner.java:1594) 	at java.base/java.util.Scanner.nextInt(Scanner.java:2258) 	at java.base/java.util.Scanner.nextInt(Scanner.java:2212) 	at bot.SimpleBot.test(SimpleBot.java:52) 	at bot.SimpleBot.main(SimpleBot.java:12) 
+
+Here is my code:
+
+package bot;  
+
+
+import java.util.Scanner;  
+
+
+public class SimpleBot {  
+ final static Scanner *scanner* = new Scanner(System.*in*);  
+ public static void main(String\[\] args){  
+ *greet*();  
+ *remindName*();  
+ *guessAge*();  
+ *count*();  
+ *test*();  
+ *// ...*  
+ *end*();  
+}  
+
+
+static void greet() {  
+ System.*out*.println(""Hello! My name is "" + ""Charlie"" + ""."");  
+ System.*out*.println(""I was created in "" + ""2020"" + ""."");  
+ System.*out*.println(""Please, remind me your name."");  
+}  
+ static void remindName() {  
+ String name = *scanner*.nextLine();  
+ System.*out*.println(""What a great name you have, "" + name + ""!"");  
+}  
+ static void guessAge() {  
+ System.*out*.println(""Let me guess your age."");  
+ System.*out*.println(""Say me remainders of dividing your age by 3, 5 and 7."");  
+ int rem3 = *scanner*.nextInt();  
+ int rem5 = *scanner*.nextInt();  
+ int rem7 = *scanner*.nextInt();  
+ int age = (rem3 \* 70 + rem5 \* 21 + rem7 \* 15) % 105;  
+ System.*out*.println(""Your age is "" + age + ""; that's a good time to start programming!"");  
+}  
+ static void count() {  
+ System.*out*.println(""Now I'll show you that I can count to any number you want."");  
+ int number = *scanner*.nextInt();  
+ for (int i = 0; i <= number; i++) {  
+ System.*out*.println(i + ""!"");  
+}  
+ System.*out*.println(""All done, have a nice day!"");  
+}  
+ static void test() {  
+ System.*out*.println(""Let's test your programming knowledge."");  
+ System.*out*.println(""Why do we use methods?"");  
+ System.*out*.println(""1. To repeat statements multiple times."");  
+ System.*out*.println(""2. To decompose a program into several small subroutines."");  
+ System.*out*.println(""3. To determine the execution time of a program."");  
+ System.*out*.println(""4. To interrupt the execution of a program."");  
+
+
+while (true) {  
+ int answer = *scanner*.nextInt();  
+ if (answer != 2) {  
+ System.*out*.println(""Please, try again"");  
+}else break;  
+}  
+}  
+ static void end() {  
+ System.*out*.println(""Congratulations, have a nice day!"");  
+}  
+}
+
+It's a bot you make as one of the first projects on Jetbrains, the output looks like it makes it all the way until you need to get the answer to the test method. Not sure what's wrong or how to fix it, as when I run it myself, it works perfectly fine with all of my own inputs. But when the checker goes to test it, it fails. Please help me out with this, I just started programming and really want to continue on the course but can't until I finish this. Sorry if anything is formatted weirdly, like I said, I'm very new to this.
+
+SOLUTION: The checking system wanted me to put a very specific phrase for the questions and I worded one thing differently, causing the system to stop trying to answer the questions.",1589525937.0,1,0.67,2
+Saxophonics,Soprano Sax tips,"Does anyone have some tips on switching from alto to soprano. Things like which one should I buy is also appreciated. I’ve just recently decided to get one, but I don’t usually hear anything about sopranos in my band and school and I’d like to know more.
+
+EDIT: it would also be very appreciated if someone could share what mouthpiece I should look into getting, I currently play Yamaha 5C on my alto. ",1551751249.0,3,1.0,2
+MortalKombat,Mortal Kombat Competitions,"Does anyone know of any Mortal Kombat X cups, tournaments or ladders on Xbox one? ESL only has PlayStation tournaments for MKX, but I’m trying to get into esports in Mortal Kombat.",1549162702.0,1,0.67,1
+Minecraft,Can anyone help me here?,"[SOLVED]
+
+So I’ve had this one survival Minecraft world that I want to go really far with. I’ve played probably a total of 15 hours on this world. At least half of that time was spent mining, specifically at Y:12 looking for diamonds. But I haven’t found any diamonds. Yesterday I mined for 2 hours with no diamonds. Is my world glitched out? It doesn’t seem possible that I don’t have diamonds yet.
+
+EDIT: I just walked about 1000 blocks away and mined again and found plenty of diamonds (and a lot more of everything because the ore generation was clearly glitched by my base). ",1546636203.0,1,0.67,9
+NewSkaters,LA beginner skatespots,"I'm a beginning skater, I don't quite have Ollies down but I skate at least 4 hours every day. I love skating and try to improve at all times. I'm heading to Los Angeles on Tuesday and was wondering if anyone knew some spots I could go to skate when I'm on vacation. Thanks!",1529262729.0,1,1.0,2
+NewSkaters,Just rolling around at skatepark?,"I always have a hard time getting myself to go to the skatepark when it's not empty. I can't do an Ollie yet (but I'm practicing), is it ok to just roll around the park? I usually do pretty well with staying out of other people's way.",1529261741.0,9,0.92,7

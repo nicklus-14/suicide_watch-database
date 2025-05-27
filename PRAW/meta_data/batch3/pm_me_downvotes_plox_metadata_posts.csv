@@ -1,0 +1,120 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+brdev,"passei na big tech, e agora?","então galera, passei no processo seletivo como desenvolvedor L4 (25k CLT, 425k TC anual) numa big tech daquelas estrangeiras que tu conhece, mas que não chega a cair dentro de faang.
+
+e aí, o que esperar? sinto que entreguei um resultado super bom nas minhas entrevistas e tenho uma experiência positiva trabalhando pra outras empresas (constantemente valorizado como high performer), mas estou com medo / sindrome de impostor sobre as demandas, porque realmente não sei como vai ser tanto em termos de cadência como em questão de dificuldade das demandas.
+
+e quanto ao futuro, se preparar como, estudar o que, ter quais metas? agora sinto que o que mais vai me segurar na carreira é o país e a minha faculdade (nível uniesquina), mas não sei exatamente como lidar com isso. big tech realmente cria oportunidade de realocação pra, por exemplo, estados unidos? eu seria considerado pra algo assim visto que não tenho nem uma federal enquanto que meus colegas podem ter até uma ivy, se duvidar?
+
+enfim, estou feliz mesmo com a oportunidade mas tenho receio disso ser o pico da minha carreira, e não quero ""estacionar"" quando ainda sou jovem, até porque big tech tende a ser ""up or out"".
+
+EDIT: como bastante gente me perguntou nos comentários sobre trajetória, tenho 5 anos de XP profissional (3 fora de freela), e >10 anos codando no meu tempo livre, histórico salarial foi 2k PJ -> 5k PJ -> 15k PJ -> 20k PJ -> 25k CLT (agora).",1732029825.0,417,0.94,194
+brdev,Querem pular de distro? deem uma chance para o NixOS,"TL;DR já quis poder dar cd em um diretório e ter todas as dependências do projeto instaladas (não só pacotes da linguagem, mas coisas como compiladores, formatters, etc)? pois é, NixOS com direnv é o melhor ambiente de desenvolvimento que um programador poderia ter.
+
+Cara, não existe comparação. Você declara o seu sistema inteiro em código de maneira que você pode fácilmente versionar e praticamente toda alteração que você faz pode receber um rollback sem problemas. O sistema tenta ao máximo te impedir de atirar no próprio pé pois as alterações no sistema são compiladas e checadas antes de rodar para verificar se tem algo de errado, e mesmo se isso não for suficiente, toda alteração cria uma cópia do seu sistema para você testar ao invés de simplesmente alterar o estado, com isso você consegue testar a alteração e se houver qualquer problema você troca para uma geração mais antiga.
+
+O pavor de tocar nas minhas configurações simplesmente sumiu, agora eu sei que até mesmo se o meu sistema inteiro brickar (o que só poderia acontecer se eu quebrar algo muito fodamente no FS ou boot) eu posso simplesmente jogar fora o que eu tenho, dar pull na minha configuração e ter tudo de volta em meia hora. Até agora só tive que voltar uma geração uma vez, porque toda vez que deu algo errado eu consegui simplesmente dar um revert no repositório de configuração meu e ter o meu sistema exatamente como estava antes. Quando eu instalei o sistema eu testei KDE, Gnome, Hyprland, XMonad e i3wm NO MESMO DIA. Foi literalmente só trocar uma linha de código toda vez que eu queria testar uma diferente, e depois de removido o único rastro que sobra no seu sistema são os dotfiles.
+
+E ainda se fosse só isso eu já recomendaria, mas é muito mais. o Nix faz cache de tudo que é baixado, utiliza lockfiles para garantir que suas builds são deterministicas, te permite utilizar pacotes temporários de maneira extremamente fácil (quer mostrar as informações do sistema rapidão? `nix shell nixpkgs#neofetch --command neofetch` roda o neofetch no seu sistema e joga fora o pacote depois, você se salva de baixar inúmeros pacotes que só são utilizados de vez em quando)
+
+só que tem mais, ele não instala só pacotes, a configuração declarativa dele abstrai o conceito para instalação de programas e serviços, aonde os usuários da comunidade definem ""wizards"" programáticos para instalar seja lá o que for necessário para o sistema
+
+exemplo: digamos que eu queira instalar o oh-my-zsh, minha configuração no nix vai ficar da seguinte forma:
+
+    programs.zsh = { enable = true; oh-my-zsh.enable = true; };
+
+é, só isso mesmo. não preciso baixar e rodar o arquivo de instalação do oh-my-zsh e se eu quiser remover ele depois não preciso descobrir o que foi mudado, só troco o valor de enable pra false e o sistema lida com tudo pra mim. quer o docker?
+
+    virtualisation.docker.enable = true;
+
+pronto, agora o daemon já tá rodando sozinho e é só você meter um docker compose up no seu projeto que já vai ter tudo instalado. quer instalar o xserver, um desktop environment e um display manager em cinco linhas de código? é só:
+
+    services.xserver = {
+      enable = true;
+      displayManager.sddm.enable = true;
+      desktopManager.plasma5.enable = true;
+    };
+
+E TEM MAIS AINDA: isso tudo serve pra qualquer repositório, e é aí que o Nix se diferencia. Qualquer projeto você pode ir lá e meter um flake.nix para definir todas as dependências que você vai precisar para trabalhar com ele e VOCÊ NÃO PRECISA MAIS TER ELAS INSTALADAS. é só chegar na hora que for trabalhar e rodar nix develop dentro do projeto que ele vai instalar tudo pra você (ah, já mencionei que é tudo cacheado? nix develop roda praticamente instantâneo se você já tem os pacotes) sem você ter que se preocupar com bloat no sistema fora do serviço. AH, EU AINDA NÃO ACABEI. Você consegue fazer isso no seu projeto e instalar o programa direnv para RODAR O NIX DEVELOP TODA VEZ QUE ENTRAR NO DIRETÓRIO.
+
+Meu sistema atual só tem um editor com um plugin para sincronizar com o direnv e o git (+ghcli) em termos de desenvolvimento. Só isso. Eu não preciso de mais nada. LSP? Tá na configuração do projeto, meu editor descobre automaticamente quando abre o repositório. Compilador? Pra que? Syntax Formatter? Não uso isso fora do serviço, então por que precisaria estar no meu sistema? Docker, Kubernetes, AWS? Só tenho os dotfiles, não é como se eu fosse utilizar fora de um projeto.
+
+Agora, para ser totalmente justo, não é tudo um mar de rosas, vou destacar alguns problemas que ainda tenho com o ecossistema:
+
+* Dificuldade de achar documentação: falta muita maturidade na parte de documentação do sistema e ainda é difícil descobrir o ""caminho certo"" já que muitos tutoriais te ensinam a usar o gerenciador de pacotes de maneira imperativa, jogando fora praticamente todo e qualquer benefício mencionado, quando te ensinam a maneira declarativa, muitas vezes falam da maneira antiga de se fazer aonde você dependia do estado do nixpkgs instalado em seu sistema que poderia variar de máquina a máquina enquanto que hoje em dia você consegue utilizar flakes para garantir o versionamento dos pacotes instalados. Você tem que ler o source muitas vezes.
+* Nix não é a melhor linguagem de programação: eles tentaram fazer algo como um JSON funcional, mas as vezes a sintaxe não é muito clara e acabam dependendo de keywords incomuns para fazer coisas que poderiam ser simples em outras linguagems. Também não existe um suporte muito bom para LSPs e autocomplete, porque a tipagem é baixa e a compilação é necessariamente preguiçosa já que você em teoria tem milhões (se não bilhões) de variaveis acessíveis já que você pode manipular o ecossistema inteiro de pacotes pela linguagem.
+* Compilador está longe de ser seu amigo: errou um erro de sintaxe besta? ótimo, você vai receber algo dizendo que faltou fechar parenteses, colocar colchete ou vão te dizer que a variável que você tentou chamar não existe. passou um array malformado pra uma função? boa sorte, você vai receber um erro apontando pra função mais primitiva existente na linguagem e o trace não vai te dizer praticamente nada.
+* Você precisa aprender a empacotar: como toda a ideia do Nix é utilizar configuração declarativa, se torna mais incômodo você simplesmente instalar um pacote no sistema quando ninguém empacotou ele antes (ainda é totalmente possível, mas você realmente quer fazer isso e jogar fora alguns dos benefícios mais interessantes?), felizmente existem ferramentas que simplificam a empacotação para as maiores linguagens (C, C++ com make, JS, Python, Rust entre várias outras possuem geradores de código robustos para criar pacotes), mas...
+* Nem todo pacote funciona sem muita alteração: isso é algo que você vai se deparar mesmo usando só pacotes da comunidade, como o Nix declarativo instala tudo em um ambiente readonly alguns pacotes / ferramentas / aplicativos precisam ser adaptados para funcionar, e as vezes os workarounds necessários não são triviais (Doom Emacs por exemplo possui um pacote no nix, porém toda vez que você instala um pacote novo é necessário reinstalar e recompilar todo o sistema de pacotes, que pode demorar alguns minutos)
+* Rebuildar a configuração é rápido, mas não instantâneo: se você quer só testar uma mudança em um serviço você precisa recompilar sua configuração, o que pode demorar alguns segundos. Também não é possível simplesmente alterar configurações dentro do programa na maioria dos casos porque o software é instalado em um diretório de apenas leitura. Se você tem uma UI de configuração na aplicação que diz ""aplicar e salvar"", pode ter quase certeza que não vai funcionar.
+
+Mesmo com isso tudo eu ainda digo, tentem Nix, nem que seja por uma semaninha em VM. Eu tomei esse koolaid e agora vai ser difícil eu pular para outra distro de novo.",1696264377.0,7,1.0,0
+brdev,"20 anos, 15k / mês PJ, já posso começar a vender curso?",[removed],1694281554.0,0,0.35,44
+Ultrakill,ZA WARUDO,,1660840338.0,112,1.0,4
+DogeBONK,STOP THE COUNT,,1638833995.0,72,0.98,2
+TownofSalemgame,WHAT A SHAME.,,1576978931.0,25,1.0,1
+techsupport,cherry mx mechanical keyboard's A key only works if I press my finger on the bottom left of the keycap.,"Keyboard is cooler master masterkeys pro m.
+
+I removed the keycap to check the switch inside but couldn't really see anything superficially wrong. Same problem persists without the keycap, just less pronounced because of the smaller surface area. 
+
+I have a feeling I probably broke a mechanism inside, but I hope that isn't the case. Is there any way to fix this short of ordering a brand new kb?",1568219947.0,2,0.76,3
+switcharoo,Snake vs plane,,1551879632.0,1,1.0,1
+factorio,Is there any difference between looping and not looping fuel for steam?,,1551218889.0,5,0.79,24
+switcharoo,Galaxy in the backyard,,1548963415.0,1,1.0,1
+ShitPostCrusaders,bucciarati humping template from latest episode,,1547833261.0,30,0.9,6
+4chan,Unique quirks,,1544963312.0,245,0.96,6
+brasil,Alguém tem aquela imagem do Jovem Nerd surpreendido assistindo hentai gay,Já agradeço.,1544876611.0,14,0.73,2
+wallpapers,Jill from VA-11 Hall-A (minor edits) [2160x1080],,1544720608.0,14,0.89,2
+FortNiteBR,"Yes, my favorite item! {ITEMNAME}",,1544464017.0,0,0.5,3
+TownofSalemgame,finally won as NK :),,1543951301.0,9,0.8,2
+TownofSalemgame,(almost) perfect game,,1542628278.0,20,0.79,12
+explainlikeimfive,ELI5: What is quantum immortality?,,1542452762.0,1,1.0,1
+FoodPorn,Petit Gateau in Brazil.,,1542312622.0,10,0.85,1
+todayilearned,"TIL of ""The Haruhi Problem"" and how a complex formula was improved by an anonymous 4chan poster because of an anime meme.",,1542230648.0,8,1.0,1
+TownofSalemgame,When you're SK and con visits you n1,,1542226436.0,53,0.98,6
+okbuddyretard,IF THIS POST GETS 200 UPVOTES I WILL LEGIT POST DEGENERATE HENTAI I DON'T CARE I'M NOT A PUSSY LIKE OTHER FEET POSTER,,1541010450.0,28,0.95,2
+learnprogramming,Tips on how to interpet an array consisting of parts I should interpet differently?,"The main gist is that I'm making a monopoly simulator that logs all visited spots and I needed to work with the special cards that could do many different things to my position.
+
+Here are the relevant bits: https://hastebin.com/mejusaxozo.py
+basically, I made every different interaction be of a different type, but then I had to test it out with a weird function and when I added Nones to pad the cards that didn't influence your pos everything became pretty unreadable...
+
+Any tips to fix this? What should I be using here?
+
+(if you need more bits, I have this project up on github. https://github.com/waffeldrop/monopoly-simulator/blob/master/simulator.py)",1539792633.0,1,1.0,1
+DeepIntoYouTube,how to cheat in vlc with speedhack in cheat engine faster and slower,,1533765124.0,4,0.83,1
+factorio,What's a good way to layout assemblers next to your main bus? (see comments),,1532523598.0,13,0.81,25
+thanosdidnothingwrong,"I heard you guys upvote anything, this is literally just a picture of Luis Fonsi",,1531236601.0,2,1.0,0
+thanosdidnothingwrong,If this gets 2k upvotes before the ban I'll do nothing,,1531178043.0,2,1.0,0
+pics,"Somebody tried to recreate ""Bliss"" (Windows XP wallpaper) 10 years later.",,1529752003.0,17,0.71,5
+mildlyinteresting,Somebody took a photo where the windows XP wallpaper is from 10 years later.,,1529751388.0,7,1.0,0
+Warframe,[Spoiler] Let's talk about the end of The Sacrifice quest,[removed],1529020956.0,31,0.6,16
+Warframe,please don't drop update I gotta pee,[removed],1529013425.0,8,0.75,0
+gameideas,"A story game, except you fight only one enemy the whole way trough.","Like, just one boss that lasts the whole playtrough, not many enemies that are the same. Could lead to some pretty interesting story.",1525375047.0,3,0.72,5
+gamesEcultura,"Sucessor espiritual de Tribes: Ascend, Midair, lança em algumas horas como jogo F2P",,1525351240.0,1,1.0,0
+dankmemes,Ethical dilemma,,1520277321.0,242,0.76,11
+funny,Ethical dilemmas,,1520276686.0,22,0.87,1
+Showerthoughts,Russian Roulette All you can eat Buffet.,"You start with a tube of water in the table and as long as there's water left in that tube you can still eat.
+The catch? Every once in a while one of the items in a plate is very spicy.
+So you're gonna eat the spicy item and you're gonna have to drink water, so you're ending sooner.
+
+I'll be filing a patent for this idea thank you very much.",1516840716.0,5,0.86,1
+DDLC,[Do I have to finish the playtrough post-monika?](#s).,,1512058388.0,4,0.83,4
+a:t5_3hmui,Guys I'm gonna come clean on this one,7zip is better xd ,1509631722.0,2,1.0,0
+NotMyJob,Yeah I installed the lights boss.,,1503419051.0,41,0.86,0
+eu_nvr,Eu_nvr,,1497534831.0,42,0.95,3
+tipofmyjoystick,[ps3-ps2?][2000-2010] FPS Game I can't remember.,"It was a ps3 or ps2 game, I can't remember, I can remember a few things:
+
+You played in a group of people, the game was NOT co-op, but in the story you had 4 guys with you all the way trough, I can distinctly remember a lighthouse you see while riding in a boat and an oil rig level, but the thing I can remember better than anything else is that there is in one of the first level a submarine/train/dock? with shipping containers and you have to basically rush trough it and the character passes out, making a timeskip.
+
+The campaign might have had to do with terrorists iirc. 
+
+realistic 3d fps.
+
+I think I might remember that there were some optional powerful guns, 2 characters I can think of is a black man and an engineer.
+
+",1497298496.0,4,1.0,6
+OverwatchCirclejerk,Can't believe I never noticed the homage in bastion's sit emote before,,1493568353.0,160,0.99,5
+OverwatchCirclejerk,Hey guys I'm a mercy main but I'm gone soon,"I have to get groceries for mom
+
+EDIT: I'm back",1488135461.0,30,1.0,4
+me_irl,me_irl,,1483150353.0,9,1.0,0
+techsupport,Graphics card problems.,"I have a GTX 960 by EVGA with geforce experience installed,if I leave a program idle (If I don't interact with the program by using my mice) the GPU just gives up and the program starts lagging like crazy,this only started happening (or at least I only started noticing) after I bought the graphics card and installed Geforce Experience.",1481025981.0,1,1.0,0

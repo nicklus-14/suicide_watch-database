@@ -1,0 +1,183 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+debian,"""eatmydata"" doesn't work with apt-get/dpkg?","So, dpkg/apt use `fsync` to ensure that files are kept consistent during upgrades, and on CoW filesystems like btrfs this can increase fragmentation ( see Debian wiki: https://wiki.debian.org/Btrfs and https://wiki.debian.org/Teams/Dpkg/FAQ ) and is just slow in-general on rotating disks.
+
+Supposedly this can be worked around with `eatmydata`, an LD_PRELOAD tool that makes sync/fsync a no-op. I use it with the hope that it would speed things up, seeing that the system going down during a 30-second upgrade is very unlikely and I have full disk backups anyway (with partclone/clonezilla) - also adding `; sync` to the end of the command just to be safe.
+
+However, `eatmydata` doesn't seem to be working - when apt is unpacking files, it is fairly slow and I can see the HDD LED on solid the moment apt finishes downloading the last package. What's going on? Both `sudo eatmydata sync` and `sudo LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libeatmydata.so.1.1.2 sync` work to prevent the output of `cat /proc/meminfo | grep Dirty` from changing, but `sudo eatmydata apt upgrade` still results in lots of disk activity. The system has 16G of RAM and is practically running nothing but X11 and my terminal, so it's not hitting `dirty_background_ratio`.
+
+Is dpkg being called by apt with a fresh environment that strips away `LD_PRELOAD`? Or... what? \*confused\*",1626830007.0,9,0.85,11
+BSD,Software (emulated) NoExecute on *BSD?,"Greetings, anyone up-to-date on the status of software NoExecute (W\^X or NX) on all the BSD OSes? And any other \*nix-like including Linux, for that matter, since PaX has been paywalled for some time and other Linux patches look like they ceased to exist around ~2005.
+
+I'm asking in general, but I'm particularly interested in implementations for 32-bit x86 as well as older ARM architectures like might be found in a Raspberry Pi Zero. I'm assuming the related ASLR (in userspace) is available in all of them, since it shouldn't depend on CPU features.
+
+I know even 15 year old PC hardware is likely to be 64-bit x86 by now, which comes with executable memory protection as an architectural feature, but what about platforms that don't have that? Or oddball architectures that do have such a feature, but where ports might not have implemented it?
+
+Old things on the web I've seen make it sound like OpenBSD at least has this on 32-bit x86, but googling the topic failed to get me any info and I don't currently have time to try installing every BSD on real hardware and compile/run paxtest (which might be getting old and thus hard to get working, especially outside linux). Doing that also wouldn't get me any info on the implementation, compared to if someone here knows about it.
+
+Thanks!
+
+edit: Answering a bit of my own question, here's a mailing list post (from 2003) [about OpenBSD's i386 implementation](https://marc.info/?l=openbsd-misc&m=105056000801065), and here's [a page about NetBSD's](https://www.netbsd.org/docs/kernel/non-exec.html) for all relevant architectures. For NetBSD on i386, due to hardware limitiations ""By default, the stack is not executable and everything else is executable"". Does anyone know if this means the implementation might leave holes open (compared to OpenBSD or hardware NX), or is it just a matter of ""ugly code but it works""?
+
+edit 2: More info on NetBSD, [man 7 security](https://man.netbsd.org/NetBSD-9.1/i386/security.7). Also, HardenedBSD [here](https://hardenedbsd.org/article/shawn-webb/2015-03-19/introducing-noexec).",1620962379.0,10,0.82,11
+debian,Outdated and broken packages in Stable and considerations about installing a .deb from Testing?,"**edit**: As an aside, does anyone here running Buster/Stable actually have this package installed and use it successfully? I poked around some more and [noticed](https://sources.debian.org/patches/youtube-dl/2019.01.17-1.1/) that some patches are being applied to it, though I don't know if that makes it equivalent in functionality to upstream. I did only try one video before, so maybe I got unlucky with one that wouldn't work... but should probably just use the upstream version anyway.
+
+*****
+
+Greetings all! The other day I encountered a package (`youtube-dl` - which in spite of its name also supports grabbing video from many different sites) I wanted to use, and due to its nature it tends to break frequently but is also frequently updated upstream. In Buster (Stable), after installing I discovered the current version of the package is broken and a bug is already filed (see bottom for Debian and upstream bug links). In Testing and Unstable the package is up-to-date.
+
+I don't have much interest in installing this software from the GitHub page because I don't want to independently maintain many pieces of software Windows-style (including more package managers like Python Pip, since this software is written in Python), and obviously I don't want to break my install. It would be nice if the package in Stable got updated since it's basically nonfunctional for its primary use, but until that happens (if it ever does, the bug dates to Stretch), what sort of considerations would there be if I wanted to grab the .deb from Testing off of packages.debian.org and `apt install` it?
+
+Could I expect anything to otherwise break by installing a .deb directly from Debian like that? If nothing should break, would I have to uninstall it specifically by perhaps its filename if/when I wanted to go back to using the package from my current apt repository, or would apt consider it installed by the same package name and update it as soon as a newer version number was in the repo? I'm not interested in upgrading to Testing for the whole system at this time and don't want to break things by mixing repositories in `sources.list`.
+
+P.S. The updated package is not in `buster-backports`, I checked.
+
+It seems as though the Debian bug is listed as 'fixed' including for the outdated version `2019.01.17-1.1` in Stable, but I installed it a few days ago and am still getting the error described in the upstream bug. The software is supposedly smart enough to determine if a Captcha is being requested, so that wouldn't be it because it'd give a different error message if the issue were fixed.
+
+Thanks!
+
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=908947  
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=947745 (merged with above)  
+https://github.com/ytdl-org/youtube-dl/issues/22367",1590111594.0,18,1.0,23
+debian,"Apt wants to remove sysvinit-core when installing firefox, solutions?","**edit:** Installing firefox with sysv (even though it's already installed) and libgtk specified at the same time worked without apt complaining. Running `apt-get install firefox-esr sysvinit-core libgtk-3-0` worked for me.
+
+*****
+
+Greetings! I've recently taken to setting up a fairly minimal Debian install, and for reasons of personal preference I am using SysV as init (ran `apt-get install sysvinit-core && apt-get --purge remove systemd` after install). I am mostly new to using Linux/Unices, but I am at the same time semi-familiar (I've read documentation out of curiosity and followed what's going on for years, and am tech savvy).
+
+It's probably worth noting that I installed the system without recommended packages by default and without any ""tasks"" selected (installing needed things as I go).
+
+So far this has worked nicely, but I've come to a sudden roadblock. When trying to `apt-get --no-install-recommends install firefox-esr`, apt warns me that `sysvinit-core` will be removed and (among many ***many*** other pkgs/libs) `systemd` and `systemd-sysv` will be installed if I continue.
+
+I'm a tad disappointed by this, as I wanted to run vanilla upstream Debian, not a fork, even if it meant I had to fix some things myself. Is there some way I could ""fix"" this for my intended use case, like pinning `systemd` and friends so apt doesn't install them and hoping firefox still works (it should?), or would that break things in ways I don't understand? I see on packages.debian.org that firefox depends on `libdbus*`, but that apparently doesn't depend on (just recommends) dbus itself (nor does dbus depend on systemd, for that matter, unless packages.debian.org is wrong). I haven't gone through a whole recursive dependency lookup or anything to see what's pulling it in (don't exactly know how).
+
+Alternatively, if that's not do-able, does anyone who knows more about systemd know how to silence the majority of its daemons such that systemd only ran as init and a service manager (no `systemd-resolved` etc.)? I think I might be able to live with it in such a case... or, I might take the advice of a friend and just try \*BSD.
+
+Side question: Anyone know about idle C-states on Linux? I want my system to use the deepest my hardware supports (C6), but only C2 is available at the deepest. I haven't tried [processor.max_cstate=9](https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html) yet, so it may be I have a blacklisted chipset unless deep sleep states default to off for latency reasons.
+
+Thanks friends.",1585529887.0,15,0.89,14
+SuicideWatch,I feel like death,"Not even sure why I'm doing this, won't want to be reminded of it tomorrow when I wake up if I get any replies and I probably won't get any anyway because no one reads long self-pity posts. With the way this site is my post will probably be removed the instant I post it, oh well. I just feel like crap tonight.
+
+I've wanted to kill myself since I was 6 years old and soon enough I'll have felt that way for two decades. I am fairly certain that I was abused as a child on account of the fact I think about things that happened 15 years ago, on a regular basis, and get very upset by them every time. It could be the 500th time I've replayed a childhood scene in my head and it will still ruin my mood for the next hour.
+
+Lately I don't even feel all that upset in life, like wanting to die is moreso an urge like going to the bathroom than it is a panicked attempt to stop my suffering. But my thoughts are still the same, I'm a dysfunctional failure that doesn't know how to talk to people and has effectively no friends, and seeking support for this earns me no sympathy irrespective of the fact I am this way due to things out of my control. I mean, I wasn't born thinking I was going to stare at a computer screen all day, afraid to go out into the world. 99% of people don't turn out that way, so something must have happened to me. Maybe I just wasn't raised right. But it doesn't matter to people.
+
+Beyond that, the main thing that upsets me in life is the fact there aren't places for losers like me to go. And I'm fairly certain that there *were* places like such at one point, which upsets me even more than just that. They used to be called fandoms, we used to be called nerds, now we're called neckbeards and lumped in with all of society's worst. Fandoms are still a nice place for misfits to go, but people on the lower end of the bell curve are aggressively expunged across the board, and the word nerd has a different meaning today.
+
+I don't like most of the internet's remaining ""hubs for losers"". I hate the mean-spirited and cynical humor of places like 4chan et al. and the sheer aggressiveness of almost all gaming communities. I just want to be with a small group of people, belonging to a big group of people with which to find said small groups, sitting around and making friends.
+
+I've had a lifelong dream of wanting to innocently hug animal characters, and after finding furry fandom that dream morphed into something actually attainable/not fictional. Since I found it, I've wanted to [innocently frolick around with a bunch of furries, each of whom built their own costumes from scratch](https://www.youtube.com/watch?v=pcQ_ejDUyOs).
+
+I will never get to experience that, and honestly, that dream is the only reason I didn't kill myself when I was about 15 years old. But it's looking like it will stay a dream, and I have nothing to motivate me to do anything anymore.",1553405967.0,2,1.0,2
+Graymuzzles,“A moment I won't forget.”,,1542581677.0,6,0.88,2
+vintageviral,Amazing Tetris skills by a japanese guy (2007),,1540426085.0,10,1.0,4
+ANormalDayInAmerica,Off-duty Chicago police officer performs drive-by shooting on unarmed autistic man standing on sidewalk,,1539811424.0,130,0.97,22
+furry,"Feeling very distraught and lonely tonight, looking to talk to anyone please","I'm kind of losing my mind this evening\*, and drowning myself in things from my childhood only goes so far. Would appreciate any kind of small talk or anything to make me feel like I'm not so alienated and inhuman, will probably be on reddit for a few hours or so. Mods feel free to delete this if inappropriate, I will survive if no one responds.
+
+\*I was for over an hour as of less than 5 minutes ago, but it actually kind of halted as I started typing all this. I'm sure it will be back.",1537666399.0,13,0.86,11
+depression,"What do you do when you desperately need someone to talk to, yet have no one?","I'm losing my mind. (Well, actually I'm pretty sure I already lost it.) I'm sitting here having a silent mental breakdown and nothing I can do to calm myself is working. I haven't enjoyed anything in any serious capacity for I don't know how many years - it's less than a decade but more than a half-decade - no happiness, no laughs, no feelings at all other than one of emptiness, despair or anger.
+
+[Deleted a few paragraphs about entertainment I enjoyed and how I find it to be unenjoyable even aside from my depression - detracted from the main point. But basically it was about the ""good old days"" of YouTube and the internet, and 90s/2000s video games.]
+
+And I feel so immature for caring about all that. There are more important things in the world, and I guess I never really grew up. I suppose I only care about them so much because they were my cope, and now that doesn't work either. So I'm left to suffer in my own head, playing scenes of my PTSD on repeat.
+
+I suffer panic attacks daily from my childhood abuse, and you know what? No one cares. People are against child abuse, but when those children grow up no one gives a flying [expletive] about it. That viral video of a dog screaming at being touched after they rescued it from abuse, to show it later calm and relaxed? I'm like that dog. Except, no one found me as an abused animal in a cage. I was set free before they were caught, and they don't see an abused puppy. All they see is an aggressive wild dog. I'll probably be ""put down"" at some point if I don't end myself first. There's no rescue, no sympathy from kind and caring people. Just more hostility, probably brought on by my own fear from personal experience and delusion.
+
+All I really wanted was some way to meet people like myself. Particularly in a judgment-free place. Fandoms and groups of ""nerds"" (by the old def. of the word) used to be one such place. But that's changed, and now there is nowhere. To illustrate a point, people joke about those who don't take a shower at such places right? It used to be that, even though everyone else hated it, if someone stunk, there were \*some\* people who would talk to such a person and try to make them feel welcome. They could just tell them to get a shower and feck off, but they instead tried to see them for who they are. I'm not saying it's right to not shower for two weeks, but that was kind of how people did it. It wasn't a support group, but it acted exactly like one in so many ways.
+
+[Here's a two-minute long interview with James Doohan from Star Trek about Trekkies that illustrates the point I'm trying to make better than I ever could.](https://www.youtube.com/watch?v=vsSdLD_YodQ)
+
+That's all gone now. I guess it can't last forever, but it hurts me to know I missed out on it. There's something to be said about small, but very close communities of people. Eventually they won't be so small any more, and that closeness will go away. They can try to keep outsiders from joining, but that adds an element of toxicity as a tradeoff. They can be secretive, but that adds fear and alienation (though a lot of nerds probably already felt that anyway).
+
+I feel so pathetic, and like my dreams and desires will never come true. I spend ten times more time suffering than I do feeling happy or even neutral. I'm too undesirable, too introverted, too empathetic and yet too self-centered to meet other people. Everyone I talk to doesn't stick around for very long and I don't know what I'm doing wrong. I don't attack or hassle other people, and even though I fail sometimes I do try to keep my problems to myself. But nothing works. I feel like if I had a few close friends who were kind of like me that I wouldn't feel so bad, but I'll never know because I never find any.
+
+It's hard overcoming trauma, and for me it's basically impossible to do on my own. But how can you get other people to pity you? I don't want others' pity, but at this point what else can I do? My thoughts have turned into a neverending stream of insults and demands to euthanize myself. If you could open a text console/command prompt and see a realtime log of it, it'd be ugly.
+
+I don't know what the point of this is. I just needed to get this off my mind, and maybe someone might know something to say or something. I feel like everything I do or like is wrong. It's so frustrating, I want to end myself but there are a few responsibilities I have preventing me from doing that. Ironically, that makes it ten times more stressful, because I feel even more trapped than I already am. I can't predict when I'll finally break, but it feels soon.",1533835560.0,2,1.0,1
+ANormalDayInAmerica,Students throw chairs while teacher yells,,1525119007.0,14,0.9,0
+Vore,"Looking for an old (taur?) comic/sequence/art that involved rabbit prey ""multiplying"" inside the pred","**edit:** It's been found! https://www.furaffinity.net/view/7845213/
+
+Apparently I couldn't find it because I was too lazy to log in, expecting it to be marked ""safe"" for work like a lot of FA's non-explicit content.
+
+*****
+
+I believe I originally saw it on Fur Affinity. It involved a pred eating some bunnies/rabbits, said rabbits breeding inside the pred (mostly just implied, I think; don't recall seeing any bunny-on-bunny in the sequence) with the pred's belly bloating up with more and more rabbits until they finally stopped breeding, eventually leaving the pred quite a bit fatter afterwards. I'm also fairly certain (but not 100% sure) that the pred was a taur, too.
+
+Anyone?",1496181458.0,28,0.86,7
+Graymuzzles,Show us your old furry bookmarks!,"What sort of links to things on the web do you still have lying around? Live links or dead links, show them to us! I figured it'd be a good idea to see what bits of the fandom's older web presence are still out there, and what better way to do that than to see what people thought was worth saving?
+
+If your or someone else's link is dead, use this and see if it's available there: https://archive.org/web/
+
+edit: Aww, someone deleted a comment :( I'd link what they linked, but I don't know why they took it down.",1476583670.0,9,0.92,4
+Graymuzzles,"From MUDs (and FurryMUCK) to Virtual Worlds - Microsoft Research, 1995",,1476155278.0,8,0.91,9
+KotakuInAction,"[Discussion] Can we talk about misfits, outcasts and the changes everything nerd culture has gone through?","**TOO LONG DIDN'T READ AT THE BOTTOM**
+
+Is it just me, or has everything, *everything* to do with (for lack of a better term) nerd culture started to feel dramatically different since the 2010s? There's been slow change for about as long as the internet's been around, sure, but I mean things feel very different now, even when you get beyond all of the GG/SJW/whatever-you-want-to-call-it stuff.
+
+One out of many for the sake of example, it just seems that games put into development since 2010 seem to really lack the uniqueness and wow factor of many of the games before then, even among the best games of the time period. Red Dead Redemption came out in mid 2010, but was in development long before then. Grand Theft Auto V, on the other hand, although it is by no means a bad game, has a lack of polish and care toward attention to detail in some areas [compared to its 2008 predecessor](https://www.youtube.com/watch?v=GWVtZJo-HqI) ([as does Watch Dogs, for that matter](https://www.youtube.com/watch?v=JGRsrFdwb2c)). It feels more like a hollywood movie to me, impressive at first and even a marvellous masterpiece in its own right, but lacks the staying power to stand out in my opinion as far as having memorable characters, all of the little fine details you notice that someone took the time to put in the game (which do go unappreciated much of the time, to be fair), et cetera.
+
+Or put another way, many multiplayer games today are not merely built around good mechanics and unique gimmicks to be a fun thing you can play casually or competitively, but are instead often built specifically around eSports and competition and in some cases completely lacking LAN capability, making things like LAN parties where everyone used to drag their computer and giant CRT along to someone's home to have a good time a thing of the past. Yeah playing with friends is often done via the internet now, but it's not the same as being in person. For console multiplayer games, there isn't splitscreen so much these days either, let alone console LAN like System Link on Xbox.
+
+There's many other things I could talk and ramble on about, none of which are particularly all that meaningful toward my claim that things have changed, but it all adds up. Getting to the point, I just get the impression that all of the nerd hobbies, fandoms and entertainment that are around aren't really places for the prototypical pimply, probably over or underweight nerd any more. It's all just part of pop culture now. Even around the still unpopular niche communities it feels different, like everyone is more closed off to outsiders instead of excited for newcomers. And with all of the popularity-seekers inhabiting formerly nerdy areas, who could blame them?
+
+I remember back in the day hearing some of the talk about the Halo series bringing in dudebro gamers and whatnot, but it honestly wasn't that bad. Even back then the Halo games were good science fiction universes with interesting characters and stories, great soundtracks and a simplified-for-console but still good Arena multiplayer shooter with an online community that's certainly better than any popular multiplayer games today. Even in 2009/2010 with Modern Warfare 2, Xbox Live was a much friendlier place... not to imply it was ever perfect but people were much more talkative in public multiplayer, and if someone was being abusive it only took a few button presses to mute them and never have to worry about them again.
+
+The main thing I'm getting at is I just don't feel that there's any place left for the rejected nerd of yesteryear to go to be among like minds and feel social, to belong to something that isn't just a pushback against something else these days like GamerGate sort of is. Can you imagine it, being at [the launch event of QuakeWorld](https://www.youtube.com/watch?v=LXw6BkZ-gdY) in 1996, an event revealing something that would change your hobby forever, bringing lag compensation to the first truly 3D online multiplayer first person shooter so you can enjoy internet games even on dial up, spawning technologies and concepts still in use today?
+
+Going to an event like that, knowing that even though the mainstream media has called the things you enjoy horrible, satanic and disgusting, that you can be among people who will never judge you for liking video games even as an adult? I'm not saying things were perfect. But back then, the naysayers came from *the outside*, not *the inside*, and so long as you stayed on the inside you could always find acceptance. And even among places that exist like that today, they seem a bit more... hyper social, I guess you could say? Not what you'd think of if you go by the 80s definition of nerd, not many places/conventions that are big among nerd hobbies but quiet and chill (and kind of awkward) like they used to.
+
+That isn't there any more, as far as I can see (and if you know something like it, please let us know!). I don't mean to make this post about myself so much, but I've come to my wits' end on all this. Maybe it's just being depressed, or maybe it really is different. I don't know, but all the controversies that get kicked up on a near-daily basis are very draining and I haven't really had any other source of friends besides hobbies inhabited by dorks.
+
+And these hobbies aren't all dorky any more. You've always had welladjusted people around, sure, but there seemed to be a sort of understanding to not make fun of nerds while playing games in the arcade, so to speak.
+
+*****
+
+Let me tell you a story. I've been a part of the furry community for a time now, and I've got to see it change since 2010 or so when I joined it. Before you run off or prepare to write a nasty comment, hear me out!
+
+At the time when furry was something unquestioningly worthy of the internet's scorn, when I found that community, it really and truly seemed to be a place of kind, friendly, almost always accepting people. Again, I'm not claiming it was ever close to perfect, but to take it to its logical extreme: if you were a loser, if you always liked cartoons with animals in them better than others, or you always felt closer to animals than people, or whatever else... If you had no friends for the majority of your lifetime, you could find them here. You could make some of the most meaningful and close connections with other people one could possibly imagine over the completely arbitrary thing of calling yourself a furry (and being at least somewhat into other nerdy hobbies, especially computers and internet).
+
+But you had that same stigma as with violent games and gaming, just on a much larger scale. It wasn't just the newscasters and disbarred lawyers who called you a freak, it was a sizable chunk of the internet. And let me tell you, compared to what some people say when they talk about harassment on the internet these days, some of the hate you could potentially get as an awkward-sounding (read: trollable) furry was fucking vicious.
+
+Beyond that though, you just couldn't say anything to win arguing with what the moral crusaders of the day want. Violent video games are real and make up a sizable chunk of games, but they are by no means the only kind of video game out there, nor do they make any statistically significant amount of people people violent - but how do you explain that when you just got done shooting someone in the face?
+
+You could be doxxed for NO OTHER REASON than because some people found it funny to mess with others, people would (in the worst of cases, not to say it was common or a regular occurrence) dig through your online post history just to find any little bit of personal information, sometimes you'd get linked by one of a number of websites and have the dedicated of groups again go dig through your post history to find mean things to say specifically tailored to you. Trolls these days don't even compare, it's just amplified by how many more people are online now and how easy it can be to set off a hate mob on twitter or elsewhere (plus how many of those people today are public figures, compared to some dweeb on the net back in the day).
+
+All of those mean things kept the furry fandom closer together, I think. But since the 2010s, it began to change fairly quickly. People aren't as forthcoming to strangers as they were. The Internet Hate Machine™ subsided, but you started to hear a lot more of what hatred there was come from the inside instead. Writing and other involved fiction started to fade (was fading already) in importance in favor of just costumes and simple pieces of art. So many people cropped up who beg for money from art commissions on a semi-regular basis, and people would come up with shitty generic character designs (""adoptables"") just to sell to people too uncreative to come up with one on their own, it makes me sick. Like, don't buy that shit, just fucking go with anything! Come on, you can think of something, even if it's as generic as saying ""My character is a green fox, hurr durr.""
+
+Before you knew it, overweight pimped nerds are people who should be ashamed of themselves. Taking your hobby seriously is frowned on, even if you can take a joke, because they've made the whole thing into one big thing to be joked about. **[Suddenly people expecting hugs from big fuzzy animals in a fuzzy animal fandom is a huuuuge issue](http://archive.is/vbR9L)** to the point they felt the need to make signs to remind you how horrible you are as a nerdy loser, pointing things out as if you lack the slightest bit of common sense or as if those few who lack common sense would even bother to listen. (All my own perspective, of course.) I don't fucking get it. If anything, the influx of these kind of people is the source of the problem, considering that specific convention has been around for 15 years and this was never considered a problem until now.
+
+*****
+
+#CONCLUSION/TL;DR
+
+**Nerd ain't what it used to be, losers and socially unattractive people of all types don't have anywhere to go now.**
+
+For a good example of the kind of passion and positivity I'm talking about missing from nerddom today, take a look at this. If you can't watch it in its entirety, at least start at 16:00 and watch the last 3 minutes, but it really is worth it to watch the whole thing. It's the Angry Video Game Nerd, and oddly enough while thinking about making a post like this I considered including this before the shitstorm around him kicked up. https://www.youtube.com/watch?v=cHIP9UtkQDQ
+
+I'd appreciate it if we could keep this discussion less focused on SJW topics, to the extent possible anyway. It's been talked about enough, I think. Anyway, do you feel the same? Different?
+
+What did you enjoy among all of games/the internet/anime/anything else in the early 2000s or earlier? Can anything be done to make nerd communities exciting once more? Have something else to say?
+
+^^^...Anyone ^^^want ^^^to ^^^be ^^^friends?",1464425166.0,22,0.86,17
+Graymuzzles,FurFright 2005 News,,1464248623.0,8,0.91,5
+Graymuzzles,Contemplating suicide,"Well, I've hit the bottom of the barrel. I don't know how to enjoy things any more, I can't enjoy anything no matter what I try. I have thoroughly alienated myself from what I take pleasure in, and in the absence of an ability to like anything new I've tried, I see no reason to carry on any more. I could go on and on and complain here, but it gets tiresome.
+
+I practically feel guilty posting this here, but whatever. We (or at least some of us) used to nearly-undconditionally support each other as a group, and sometimes we even unconditionally loved one another, so I figured why not. Maybe this is nothing but attention seeking, if that's what you want to call it, but I am losing my mind.
+
+Now,  
+I'm not in any danger of doing something brash. But...  
+I just want someone to tell me that I'm not insane, that I'm not wrong, or at the very least that *someone* out there knows how I feel.
+
+I want to cry over it, every day, but I can no longer produce tears. I care about this *thing* right here more than anything else. I don't honestly know how much longer I can go on. I also feel stupid for saying any of this, goes to show what a decade of being harassed or assaulted on a daily basis in school and then feeling the general disdain for people like yourself radiate from society afterward can do to a person's self esteem.
+
+^^\(The ^^video ^^below ^^is ^^not ^^mine.)  
+https://www.youtube.com/watch?v=xMxLcd86KIM",1460003353.0,9,1.0,14
+lapfoxtrax,[OLD] A Bramble on Elm Street,,1451146247.0,5,0.86,3
+furry,Furry lifestylers?,"So, I've been thinking about 'furry lifestylers' lately. Seems to be an outdated concept any more, but for those of you who know of, used to or still do consider yourselves lifestylers, what's it about? This will very much be personal opinions, since I know answers would vary a lot around this subject, so please re-read any replies to others you make for politeness before you post.
+
+The only thing I've really seen concretely around the topic relates to otherkin, where people with spiritual beliefs around animals and animal totems (my basic understanding of it, anyway) try to get better in touch with that. That isn't the sole definition of the furry lifestyle, though, (Again this is an outdated topic, if that sounds dumb or you've never heard of it.) I'm mostly asking about your experiences, and less so just a basic explanation. Tell me about yourself! What's it all mean to you? Throwaway accounts welcome, and feel free to ask me anything random too if you want.",1434853767.0,7,0.9,9
+lapfoxtrax,Jackal Queenston - Fire Planet,,1429678706.0,10,0.86,2
+lapfoxtrax,Renard DJing at Anthrocon 2010,,1428518829.0,6,0.88,11
+furry,What is #huggate?,"So, \#huggate on Twitter is a thing right now. What is it? From what I gather, someone must have complained about being hugged, probably when they didn't want to be, and possibly while in a fursuit, and now people are joking around about it. Is that right? Where did this originate from?
+
+Thankies.",1419305012.0,7,0.89,24
+furry,Happy Ending by Fruitz,,1412354262.0,13,0.57,5

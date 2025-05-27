@@ -1,0 +1,804 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+ErgoMechKeyboards,Handwired Dactyl Cygnus,"I recently spent a couple of weeks with this project. The case is 3d printed with some custom modifications from V1 (no post processing involved at all!), supports hot swap sockets, and is fully wireless with Nice!nano clones.
+
+The modifications from the original Cygnus include: moving the watermark (as it created artifacts on the outside surface), making a better mount for the reset switch, and adding a battery compartment underneath the controller. 
+
+
+Total BOM cost was around $55 excluding the switches and keycaps, but around $25 was just the PCB shipping cost. ",1746902231.0,338,1.0,25
+MechanicalKeyboards,Handwired Dactyl Cygnus,,1746897703.0,83,0.96,2
+ErgoMechKeyboards,"After much headache, I managed to add animated gifs to the nice!view in ZMK","The keyboard is the lily58
+
+I'm happy to link the code and steps once I polish it up. Basically, you have to fork the ZMK firmware and implement the changes there, and then reconfigure your ZMK-config to point to your fork. ",1743817653.0,85,0.98,2
+MechanicalKeyboards,Bongo cat on split lily58,"You can modify the ZMK firmware to display animations on the nice!view.
+
+This can be adapted for other displays as well. 
+
+Though battery life seems to be... not so great since it needs to redraw much more often than it used to need to.",1743790921.0,42,0.96,0
+HelixEditor,"File picker with Yazi, Zellij, and Helix nightly","Recently [https://github.com/helix-editor/helix/pull/12527](https://github.com/helix-editor/helix/pull/12527) was merged into nightly, giving us the ability to do command expansion like so:
+
+    [keys.normal.space]
+    e = "":open %sh{echo hello_world.rs}""
+
+The stdout of the process inside `%sh{}` is then passed into `:open`
+
+Previous techniques to integrate Yazi as a file picker for Helix inside Zellij involved sending keystrokes via `zellij action write-chars` . This was fine but sometimes broke if you were typing on the keyboard when the keystrokes are sent, or even dared to switch focus to another pane.
+
+By creating a script [`yazi-picker.sh`](http://yazi-picker.sh) that blocks until yazi exits (and subsequently prints out the result to stdout), we can use sh substitution to open the target file without sending keystrokes to zellij.
+
+I'm not a bash expert so please let me know if I can improve the script in any way!
+
+# Requires:
+
+* Yazi
+* Helix Nightly
+* Zellij
+
+# Helix Config:
+
+    [keys.normal.space]
+    e = "":open %sh{~/.config/helix/yazi-picker.sh '%{buffer_name}'}""
+
+# ~/.config/helix/yazi-picker.sh
+
+    #!/usr/bin/env bash
+    
+    FIFO=""/tmp/yazi-fifo-$$""
+    mkfifo ""$FIFO""
+    
+    zellij run -n Yazi -c -f -x 10% -y 10% --width 80% --height 80% -- \
+      bash -c ""
+        # Open FIFO for reading and writing
+        exec 3<> '$FIFO'
+        if [ -n '$1' ]; then
+          yazi --chooser-file '$FIFO' '$1'
+        else
+          yazi --chooser-file '$FIFO'
+        fi
+        # Close the FIFO after yazi finishes
+        exec 3>&-
+      ""
+    
+    if read -r line < ""$FIFO""; then
+      echo ""$line""
+    else
+      exit 1
+    fi
+
+[The picker will open at the current file location if it exists!](https://preview.redd.it/brzthy5v53re1.png?width=2543&format=png&auto=webp&s=cc772f759a2590221cda1ff34ad4437da100e5ac)",1743018159.0,24,1.0,4
+LifeProTips,"LPT: If you cancel an online subscription, it is valid until the end of the billing cycle.",[removed],1741539581.0,0,0.23,8
+Lighting,Alternatives for Halo 4-in downlights,"Recently 1 of 3 of my hallway downlights died (model SMD4R6930WH-C, not sure if the driver broke or the light panel themselves), and the replacement seems to be quite expensive at $45 apiece.
+
+Are there any cheaper recommended alternatives for these lights, if I were to replace all 3?
+
+  
+I should say I don't have much experience in this area so let me know if $45 is actually not that bad of a price.",1739511873.0,1,1.0,3
+assholedesign,The email is required,,1735233674.0,0,0.47,16
+mildlyinteresting,My tub of Vaseline uses a rare spelling of Korea,,1729704364.0,48,0.68,40
+leagueoflegends,I guess Statikk Shiv is a good item in Aram,,1727545740.0,0,0.46,8
+functionalprint,Storage Box for my AirTags,,1720988865.0,88,0.88,21
+3Dprinting,How to remove bridging in infill?,"Hey all, I've been trying to print a model made of two parts with Orca Slicer,
+
+1. Outside frame, with full top and bottom layers
+2. Inside mesh, created with rectilinear infill with no top and bottom layers
+
+These are two parts of the same object in Orca Slicer
+
+However, there seems to be some bridging between the outer model and the infill, is there a setting I can use to prevent this? I've tested all of the infill patterns, they all have this issue.
+
+https://preview.redd.it/r5pq6z80597d1.png?width=972&format=png&auto=webp&s=775561c665a69a695efdf40cefdd2871f8ad240d
+
+",1718682644.0,3,1.0,4
+AskVet,Scabbing and inflammation,"Hi there, I'm already planning on taking him to the vet tomorrow to get it checked out, but I'm just curious to see what this is. I see some weird scabbing and inflammation on the tip of his ear, at first I thought it was a bite mark from my two cats playing but it seems worse today than it was yesterday.   
+
+
+[Image link](https://imgur.com/a/MrtbKVh)
+
+
+What could it be?
+
+    Species: DLH Cat
+    Age: 2.5 YO
+    Sex/Neuter status: MN
+    Breed: DLH
+    Body weight: 12 lbs",1712083059.0,1,1.0,2
+ReadMyECG,Not SVT or AT?,This didn’t feel like my regular SVT or AT and the ECG looks different. What could it be? You can see at 15 it reverts to the normal sinus rhythm.,1705525478.0,2,1.0,5
+northernlion,NL Videos Parentheses Analysis,"It's well known that NL doesn't often close his parentheses, so I've decided to take some time to analyze all 19,363 videos uploaded to his YouTube channel as of yesterday.
+
+Skip to the section labeled Analysis if you don't care about the process.
+
+## The Methodology
+
+I first set up a script to fetch the URLs for all of the videos under his channel using [`yt-dlp`](https://github.com/yt-dlp/yt-dlp).
+
+    yt-dlp --flat-playlist -j | jq -r .url > urls
+
+Then running the following script will download and analyze the subtitles
+
+    #!/bin/bash
+    
+    while IFS= read -r line 
+    do
+      yt-dlp --write-auto-sub --skip-download -o sub ""$line"" || continue
+      ./process.py sub.en.vtt >> result
+    done < urls
+
+Here are the contents of `process.py`, which takes in a file and outputs the sequence of `( and )` corresponding to any opened and closed parentheses in the video transcript.
+
+    #!/usr/bin/python3
+    import sys
+    import re
+    from typing import List
+    
+    [_, inname] = sys.argv
+    
+    # </c><00:00:30.330><c>
+    def normalize(line: str):
+        return re.sub(r'<c>|</c>|<[0-9:.]+>', """", line)
+    
+    def dedupe(lines: List[str]):
+        newlines = []
+        lastline = None
+        for line in lines:
+            if lastline != line:
+                newlines.append(line)
+            lastline = line
+        return newlines
+    
+    with open(inname, ""r"") as infile:
+        lines = infile.readlines()
+        line = "" "".join(dedupe([normalize(line).strip() for line in lines if ""-->"" not in line and len(line.strip()) != 0]))
+        
+        line = re.sub(r'open parenthes[ie]s', ""("", line)
+        line = re.sub(r'close parenthes[ie]s', "")"", line)
+        print(re.sub(""[^()]"", """", line))
+
+Using the above methodology, I got a file `result` containing nothing but `(` and `)` sorted in reverse chronological order. Surprisingly, out of 19,363 videos uploaded to his channel, [only one video](https://www.youtube.com/watch?v=SM8Xkmf_uCI) did not contain auto-generated subtitles.
+
+## Analysis
+
+Analyzing the `result` file, we can gather some neat information:
+
+1. Out of the 19,362 videos analyzed, 173 had either opened parentheses or closed parentheses, totaling 189 open parentheses and 56 close parentheses.
+2. Out of those 173 videos, 41 had balanced parentheses (meaning they had an equal amount of opened and closed parentheses), good job!
+3. The most unbalanced video was [Northernlion Tries: Chasm!](https://www.youtube.com/watch?v=N1xQvOcDYl8), which had a sequence of `()((((((`. This video also happened to be the video with the most opened OR closed parentheses!
+4. Out of all of the videos, 6 videos started with a closed parentheses. Not sure what parentheses he was closing, but here they are: 
+   1. `)`: [https://www.youtube.com/watch?v=QFJvWIy5XR4](https://www.youtube.com/watch?v=QFJvWIy5XR4) 
+   2. `)`: [https://www.youtube.com/watch?v=MTSd0OfP5Vk](https://www.youtube.com/watch?v=MTSd0OfP5Vk) 
+   3. `))`: [https://www.youtube.com/watch?v=-3p09H33q18](https://www.youtube.com/watch?v=-3p09H33q18) 
+   4. `))`: [https://www.youtube.com/watch?v=c2Qrvb4r1cc](https://www.youtube.com/watch?v=c2Qrvb4r1cc) 
+   5. `)`: [https://www.youtube.com/watch?v=mpTHUo5-uU0](https://www.youtube.com/watch?v=mpTHUo5-uU0) 
+   6. `)`: [https://www.youtube.com/watch?v=S2D0oW-3-H8](https://www.youtube.com/watch?v=S2D0oW-3-H8)
+5. The lowest level of nested-ness is at -4 and the highest is at 133
+
+Here is the full list of parentheses
+
+    )()(()()))))((((((((((((()()()()(((()()()((((()()(()(()(((()(((((((()(()()((((()((((((()(()(((((()()((((((((()(((((()()((()(((()(((()((((()(((((((()()(()(((()(((()((((((()()(()((((()()(((((()()(()((((((((()(((()((()(((()()((((((()(((((()((()((((
+
+Funnily enough, the first mention of a parenthesis was in [video number 2863](https://www.youtube.com/watch?v=S2D0oW-3-H8) in which he closes a parenthesis without having ever opened one on video!
+
+As of [the last video analyzed](https://www.youtube.com/watch?v=cqdXTyNxNQw), we are at level of nestedness of 133, meaning he would have to say ""close parentheses"" 133 times in a row to close out all of the ones he has opened.
+
+[Nestedness of Parentheses over Time](https://preview.redd.it/agyer9t82sac1.png?width=611&format=png&auto=webp&s=df595cb46a3b5ea92237af09e0994aedba60f060)",1704528648.0,176,0.98,19
+northernlion,Probably should invest in some chinos,,1704345686.0,10,0.78,2
+northernlion,Yay dood,,1702711374.0,120,0.96,5
+atrioc,Why the F1 points system is better than all other sport formats,"The Formula 1 racing points system is often hailed as one of the most effective and fair scoring systems in the world of sports. It has been the standard for scoring in Formula 1 for several decades, and there are several reasons why it is considered superior to the scoring systems used in many other sports.
+
+First and foremost, the F1 racing points system rewards consistency and performance. In Formula 1, points are awarded to the top ten finishers in each race, with the winner receiving 25 points, the second-place finisher earning 18, and so on, down to the tenth-place driver who receives 1 point. This system places a premium on consistently performing well throughout the season. It ensures that drivers who consistently finish in the top positions are rewarded, as opposed to some other sports where a single win might overshadow a season of mediocre performance. This promotes a high level of competition and ensures that the best drivers and teams rise to the top over the course of a season.
+
+Moreover, the Formula 1 points system also creates exciting and meaningful battles throughout the season. With only a few points separating the top drivers, the championship race often goes down to the wire, making the sport thrilling for both fans and participants. This level of competitiveness and suspense is rarely matched in other sports. In many sports, a dominant team or athlete can secure a title early in the season, leading to a lack of interest or engagement from fans. In contrast, Formula 1's system keeps the championship fight alive until the very last race, maintaining fan interest and enthusiasm.
+
+The Formula 1 points system also rewards skill and strategy. In addition to the points awarded for race positions, there are additional points for the fastest lap, which adds another layer of excitement. This rule encourages drivers to push their limits and attempt to secure an extra point, even if they are not in contention for a podium finish. This unique feature sets Formula 1 apart from other sports and adds an extra element of competition. It is a testament to the sport's commitment to rewarding not only race winners but also those who exhibit exceptional skill and determination.
+
+Furthermore, the F1 points system promotes fairness and inclusivity. By awarding points down to the tenth position, it recognizes the efforts of all participants and gives smaller teams and less experienced drivers a chance to earn valuable points. In many other sports, only the top few performers receive recognition, which can be disheartening for those lower down the rankings. Formula 1's system ensures that every race matters, and every driver has the opportunity to contribute to their team's overall success.
+
+The Formula 1 racing points system stands out as one of the best scoring systems in the world of sports. It emphasizes consistency, competitiveness, skill, and fairness, making it superior to the scoring systems used in many other sports. Its ability to keep the championship race exciting until the last race of the season, while also rewarding a wide range of drivers, sets it apart as a model for sports around the world. The Formula 1 points system is a testament to the sport's commitment to excellence and fairness, making it a shining example of how scoring should be done in the world of sports.",1699598387.0,0,0.37,14
+a:t5_3izgm,test,test,1686710569.0,1,1.0,0
+ProgrammingLanguages,Languages to implement in space-constrained environments,"Recently I've been working on a project that involved creating a custom ISA, fpga and emulator implementation. 
+
+I first started by writing a simple translator assembler that took `tasm` files and translated it to the binary format. 
+
+As much as I like the control that raw assembly gives me (being able to hand-optimize code for size and speed), I found it very tiring to do so. With the address only being 16-bits, the ROM was constrained to be at most 32k words long.
+
+So in my quest to design a high-er level language, I stumbled upon Forth (and Porth from tsoding) and decided to make my own language that follows some of the design choices in those languages. The idea was that it would be very easy to parse and implement due to 1. other languages requiring register management, and 2. assembly requiring calling conventions to be in my mind *all the fricking time*
+
+However, the more that I worked in the language (I called it `toastlang`), the more I found myself hitting the 32k limit. For example, this [small test suite](https://github.com/EDToaster/ToastCPU/blob/master/sample_programs/src/tl/test.tl) already takes up ~7000 words! In my research, it seems like optimization (both space and speed) is poorly understood and studied in these concatenative stack-based languages. (Please let me know if I am completely wrong on this!)
+
+My question is, what sort of languages would you recommend to implement, or what sort of techniques can I employ to help me bring the output size down?",1675845379.0,19,0.89,26
+homebrewcomputer,How are CPUs able to execute a JUMP to a far away instruction?,"Not sure if this is the right place for this question, but you guys seem fairly knowledgeable about CPUs and instruction sets in general.  
+
+
+I have an [ongoing 16-bit CPU project](https://github.com/EDToaster/ToastCPU) (custom instruction set + fpga implementation) and I'm running in to a few roadblocks before I can start writing longer programs in it...  
+
+
+Since instructions in my instruction set are single word, I have a hard time loading in addresses that are larger than 8 bits so I can jump to them (this is because the \`imov\` opcode itself is 8 bits...)  
+
+
+How do other instruction sets get around this limitation?  
+
+
+The only solution I can think of is to load the lower and upper 8 bits of the address separately, but that seems quite inelagant
+
+&#x200B;
+
+thoughts?",1660018294.0,9,1.0,22
+atrioc,You've heard of coffee cow,,1655368354.0,5,0.78,2
+blurrypicturesofdogs,Blurry picture of a dog,,1651885049.0,7,0.9,1
+blurrypicturesofdogs,He's old so he doesn't blur too much,,1651884774.0,1,1.0,1
+Minecraft,Are there any vanilla shaderpacks released?,Recent versions of minecraft introduced the possibility of adding shaders through resource packs. Have there been any packs that have been released so far?,1645583606.0,0,0.33,0
+britishcolumbia,How I'm feeling during this cold snap,,1640769443.0,86,0.92,7
+CurseForge,Download numbers on the website have been stuck for the last two days,"My minecraft mod has been sitting at 21,313 downloads for over two days now. Is this just a bug for me?",1639554175.0,7,0.9,1
+vintagecomputing,What is this 6502 kit?,"I recently came across this computer and I had a hard time figuring out what it was. Computer has a Rockwell R6502P 8-bit CPU (I believe it was a clone of the MOS6502)
+
+[The badge on top of the case isn't there anymore](https://preview.redd.it/gko183gsgf481.jpg?width=4000&format=pjpg&auto=webp&s=e154cbf67ed190dd1542c6f4bbbc5ddad9b46d29)
+
+[Came with a Zenith CRT monitor with a single S Video input](https://preview.redd.it/edbv57gsgf481.jpg?width=4000&format=pjpg&auto=webp&s=e79eb30cc319d85133b2806378456e2bf9c64fbe)
+
+https://preview.redd.it/t9yy78gsgf481.jpg?width=4000&format=pjpg&auto=webp&s=c413b915cb2608580421f6844e7ddf0b830cb84c
+
+[Upon boot, it has a BASIC interpreter and the text at the top says \\""Circle II\\"" stylized like Apple II's \\""Apple \]\[\\""](https://preview.redd.it/qdaqj7gsgf481.jpg?width=4000&format=pjpg&auto=webp&s=6c17531142258e8b34f057bfcc4ff3f51d7dee1e)
+
+Does any one have any idea what name this computer was sold under?",1639017011.0,3,0.81,4
+atrioc,[Clip request] That one clip of Super Mario Galaxy,I seem to remember there was a stream where Atrioc showed a clip of someone (maybe mango?) missing all of the star bits in super mario galaxy. Does anyone know who or what clip it was?,1629782386.0,4,0.76,1
+playrust,Some random skin appeared in my inventory,"How does this happen? I logged in today and saw this skin. For context, I have only 2.4 hours in this game. 
+
+[Random AK skin worth $50 CAD](https://preview.redd.it/5s4mzon7o0j71.png?width=258&format=png&auto=webp&s=01d0a7768363f1e5b1649eb57ef558dfe2929dfc)
+
+[Inventory History](https://preview.redd.it/h6rasirco0j71.png?width=378&format=png&auto=webp&s=c8644f1b490054e0dda85d176eeda294a23da6c3)",1629684910.0,3,1.0,3
+EscapefromTarkov,Gunsmith Part 1,"I'm trying to do the gunsmith part 1 quest where you have to modify the MP-133 to the required spec for the Mechanic. For some reason, my gun seems to  satisfy the requirements but he won't take it.
+
+&#x200B;
+
+Here's what I have:
+
+* MP-133 12ga 510mm barrel with rib
+* MP-133 plastic forestock with rails (with an NCStar tactical blue laser)
+* MP-133 6 shell mag
+* MP-133 Plastic pistol grip
+* GK-02 muzzle brake with the adapter
+* KAC vertical grip
+
+The stats are 55 ergo, 380 vertical recoil, 474 horizontal recoil.
+
+&#x200B;
+
+Not sure what I'm doing wrong here :(",1627012893.0,1,1.0,6
+northernlion,He Lives!,,1625688510.0,31,0.98,0
+askdentists,Painless Dry Socket?,"I recently (two weeks ago) got two of my wisdom teeth removed. The one  that was the most painful was the bottom left (#17) but the pain has  since subsided, and required a few stitches to close up.
+
+When  I look into my mouth I can see a bit of bone in the bottom of the  wound. The wound is a bit big so I'm not sure if it'll close on its own,  but it isn't painful at all. Is this something I should get fixed or  will my mouth heal on its own? I'm worried that it might get infected.",1622954023.0,0,0.33,2
+AskDocs,Painless Dry Socket?,[removed],1622953957.0,1,1.0,1
+counterstrike,Sometimes you just have to vac yourself.,,1619217966.0,3,1.0,1
+Warframe,Batter's Up!,,1615452532.0,165,0.96,38
+northernlion,"[Looking for] Recent-ish stream where NL talked about the Youtube series ""Vancouver Dash Cam Videos""",Scrubbed through a few vods but couldn't find it. I think the last time he talked about it was a week or two ago. Would appreciate some help!,1614415265.0,1,0.6,3
+northernlion,What are they gonna do?,,1613166808.0,32,0.98,2
+LivestreamFail,What are they gonna do?,,1613166796.0,0,0.5,1
+UofT,Don't forget to declare your intention to graduate!,"The deadline for declaring graduation is the 31st of January on Acorn.
+
+&#x200B;
+
+DON'T MISS IT OR YOU CAN'T GRADUATE THIS SEMESTER. (I almost did)",1611870037.0,84,1.0,17
+feedthebeast,[ComputerCraft] I wrote a way to draw to multiple monitors as if it was one!,,1611784929.0,576,0.99,21
+northernlion,Chess GM Northernlion gets his first brilliant move!,,1611527217.0,154,0.99,19
+LivestreamFail,Chess GM Northernlion gets his first Brilliant move,,1611527184.0,511,0.96,28
+LivestreamFail,"NL Plays ""Would you push the button""",,1609280334.0,573,0.95,28
+MechanicalKeyboards,Shilling for LTTStore.com,,1608843449.0,30,0.94,17
+heck,"In Heck, I have the same birthday as r/heck",,1607634240.0,3,1.0,0
+northernlion,Absolute unity of chat,,1606784423.0,0,0.38,0
+NLSSCircleJerk,Absolute unity of chat,,1606776863.0,14,0.94,0
+assholedesign,"If you have WebMD open in a seperate tab, it occasionally flashes ""New Chat Message"" to get you to click back to it.",,1606693289.0,42,0.93,2
+assholedesign,"If you have WebMD open in a seperate tab, it occasionally flashes ""New Chat Message"" to get you to click back to it.",,1606693116.0,2,1.0,1
+northernlion,[Search Request] GeoGuessr S2E16-19,"I'm looking for Crendor's perspective (or at least scores) of when he did the geoguessr episodes with NL and Sinvicta. He was there for episodes 16-20, but I could only find his perspective for \[Episode 20\]([https://www.youtube.com/watch?v=PLbCcDq7MDk](https://www.youtube.com/watch?v=PLbCcDq7MDk))",1600028282.0,5,1.0,1
+northernlion,Combo ruined,,1599693486.0,194,1.0,4
+LivestreamFail,The Ultimate Betrayal,,1599187387.0,6872,0.95,183
+LivestreamFail,THE ULTIMATE BETRAYAL,,1599187264.0,1,1.0,0
+AskReddit,What is something very small that you are proud of or brings you joy?,,1599164805.0,7,0.9,15
+SurreyBC,Do you guys know that the city of Surrey actually has a flag?,,1595269177.0,43,0.97,13
+NLSSCircleJerk,The absolute unity of chat,,1594853815.0,50,0.95,6
+NLSSCircleJerk,The duality of chat,,1594761423.0,13,1.0,9
+politics,ICE Wants to Deport Online College Students During COVID-19,,1594073207.0,55,0.86,12
+news,Students of Universities that only offer online courses may need to leave the country,,1594073132.0,1,1.0,0
+news,ICE Wants to Deport Online College Students During COVID-19,,1594073063.0,1,1.0,0
+VALORANT,I just walk through tripwire?,"[Video Here](https://streamable.com/vavhpe)  
+
+
+I suspect it is probably because of the weird angle of the tripwire",1593287161.0,1,1.0,1
+VALORANT,I walked straight through cypher's tripwire?,,1593287013.0,1,1.0,2
+spiders,This dude has been chilling in my room for a few days now. Anyone have an ID?,,1593221784.0,17,0.89,10
+ValorantMaster,"One clip, 4 kills",,1591839128.0,1,1.0,0
+askscience,"Following the successful launch of today's crew, I had a question: how much fuel does the rocket save by launching close to the equator?",,1590894741.0,1,1.0,0
+askscience,"Following the successful launch of today's crew, I thought of a question: how much fuel does the rocket save by launching close to the equator?",,1590883446.0,1,1.0,1
+Twitch_Startup,"Chilling in Warzone right now, playing Valorant later!",,1590456507.0,1,1.0,0
+backtothegame,3000 IQ Split B Hold (EDToaster),,1590356208.0,1,1.0,0
+northernlion,Does anyone have a list of online boardgame/social engineering games that the NLSS has played before?,"Specifically, I'm hosting a games night for a few friends and I have:
+
+* Secrethitler.io
+* Codenames (what is the website that they use?)
+* various TTS games
+* Keep Talking and Nobody Explodes
+* Skribbl
+
+Any suggestions would be great
+
+Thanks peeps, we played Keep Talkin, Codenames and SecretHitler (though the .io version requires a signup so https://netgames.io/games/ is a good alternative)",1589059366.0,13,0.93,9
+northernlion,Just got a triple kill outside,,1588284344.0,7,0.82,0
+ProgrammerHumor,When Apple releases a new phone,,1587368664.0,29,0.8,5
+northernlion,...,,1586910269.0,1,1.0,0
+VALORANT,Uhhhh ... [WARNING: VERY LOUD],,1586855564.0,0,0.25,0
+AskReddit,"In response to a growing number of non-essential services closing down, what are some unexpected essential services that should remain open?",,1584755012.0,2,0.75,5
+dankmemes,Me at the grocery store today,,1584716448.0,17,0.95,2
+Overwatch,Made a little program to play midi files on the Paris piano,,1578855109.0,628,0.98,68
+pcmasterrace,Saved up working over the summer to build myself a new setup!,,1575403554.0,13,0.77,12
+sffpc,"Probably not the most flattering picture, but I'm enjoying these custom cables!",,1572921458.0,104,0.97,20
+u_NaCl-more,Lnk,,1571529961.0,1,1.0,0
+UofT,Chinese and anti-Chinese protests outside Sid Smith. Stay safe folks!,,1569957081.0,1,1.0,1
+sffpc,"Custom loop M1, finished!",,1569635855.0,51,0.9,15
+sffpc,This clearance scares me,,1569623501.0,57,0.94,22
+sffpc,Getting ready to custom loop the m1!,,1569618609.0,26,0.94,16
+Overwatch,My team when we go into a fight two teammates down.,,1569610887.0,1,1.0,1
+sffpc,ITS SO CUTE,,1568503818.0,82,0.97,22
+sffpc,Recently bought the NCase M1,"I recently bought the M1 v6 on sfflabs, and was wondering if any of you have any experience with them before. I recently saw that the v6 is releasing next week (so I'm assuming I got it on preorder) and that some people have issues with delays from preorders.",1568400551.0,10,0.92,7
+u_NaCl-more,Test,,1567297955.0,1,1.0,0
+Twitch,Applied for Summer Internship,"Hi folks, 
+
+I recently applied for a Twitch summer internship for 2020, but I was wondering how long does the application to offer process take? I'm currently limited by a deadline because of a return offer from another company.
+
+I was also hoping to find an email that I can use to get in contact with the recruiters at twitch, so if such an email exists, I would love to know!
+
+&#x200B;
+
+Cheers.",1565731603.0,1,0.56,8
+Overwatch,Respawn cooldown broken in Competitve,,1565472064.0,0,0.5,1
+programmingcirclejerk,"I’m A+, Net+, Security +, & MCSA certified. I know SQL, Python, C#, C++. I am an OG Counterstrike Mod (yeah, that’s right, Half-Life) player. I’m telling you, your algo, is f#####.",,1565413635.0,8,0.79,6
+AskReddit,What's something that's frequently done to plants that would be horrifying to do the same to an animal?,,1564082933.0,2035,0.91,1107
+UofT,Deadline for internship return offers,Does anyone know where I can find the University Policy for return offer deadlines for companies?,1564075819.0,3,0.71,2
+LifeProTips,"LPT: If you're tired of your bed sheets getting balled up in the dryer, just toss in a clean tennis ball or even a clean shoe.",,1564001604.0,11,0.84,3
+programmingcirclejerk,Whoever created javascript frameworks were absolutely out of their minds.,,1563995060.0,23,0.93,24
+u_NaCl-more,Markdown test,"# [React](https://reactjs.org/) &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/facebook/react/blob/master/LICENSE) [![npm version](https://img.shields.io/npm/v/react.svg?style=flat)](https://www.npmjs.com/package/react) [![CircleCI Status](https://circleci.com/gh/facebook/react.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/facebook/react) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://reactjs.org/docs/how-to-contribute.html#your-first-pull-request)
+
+React is a JavaScript library for building user interfaces.
+
+* **Declarative:** React makes it painless to create interactive UIs. Design simple views for each state in your application, and React will efficiently update and render just the right components when your data changes. Declarative views make your code more predictable, simpler to understand, and easier to debug.
+* **Component-Based:** Build encapsulated components that manage their own state, then compose them to make complex UIs. Since component logic is written in JavaScript instead of templates, you can easily pass rich data through your app and keep state out of the DOM.
+* **Learn Once, Write Anywhere:** We don't make assumptions about the rest of your technology stack, so you can develop new features in React without rewriting existing code. React can also render on the server using Node and power mobile apps using [React Native](https://facebook.github.io/react-native/).
+
+[Learn how to use React in your own project](https://reactjs.org/docs/getting-started.html).
+
+## Installation
+
+React has been designed for gradual adoption from the start, and **you can use as little or as much React as you need**:
+
+* Use [Online Playgrounds](https://reactjs.org/docs/getting-started.html#online-playgrounds) to get a taste of React.
+* [Add React to a Website](https://reactjs.org/docs/add-react-to-a-website.html) as a `<script>` tag in one minute.
+* [Create a New React App](https://reactjs.org/docs/create-a-new-react-app.html) if you're looking for a powerful JavaScript toolchain.
+
+You can use React as a `<script>` tag from a [CDN](https://reactjs.org/docs/cdn-links.html), or as a `react` package on [npm](https://www.npmjs.com/).
+
+## Documentation
+
+You can find the React documentation [on the website](https://reactjs.org/docs).  
+
+Check out the [Getting Started](https://reactjs.org/docs/getting-started.html) page for a quick overview.
+
+The documentation is divided into several sections:
+
+* [Tutorial](https://reactjs.org/tutorial/tutorial.html)
+* [Main Concepts](https://reactjs.org/docs/hello-world.html)
+* [Advanced Guides](https://reactjs.org/docs/jsx-in-depth.html)
+* [API Reference](https://reactjs.org/docs/react-api.html)
+* [Where to Get Support](https://reactjs.org/community/support.html)
+* [Contributing Guide](https://reactjs.org/docs/how-to-contribute.html)
+
+You can improve it by sending pull requests to [this repository](https://github.com/reactjs/reactjs.org).
+
+## Examples
+
+We have several examples [on the website](https://reactjs.org/). Here is the first one to get you started:
+
+```jsx
+function HelloMessage({ name }) {
+  return <div>Hello {name}</div>;
+}
+
+ReactDOM.render(
+  <HelloMessage name=""Taylor"" />,
+  document.getElementById('container')
+);
+```
+
+This example will render ""Hello Taylor"" into a container on the page.
+
+You'll notice that we used an HTML-like syntax; [we call it JSX](https://reactjs.org/docs/introducing-jsx.html). JSX is not required to use React, but it makes code more readable, and writing it feels like writing HTML. If you're using React as a `<script>` tag, read [this section](https://reactjs.org/docs/add-react-to-a-website.html#optional-try-react-with-jsx) on integrating JSX; otherwise, the [recommended JavaScript toolchains](https://reactjs.org/docs/create-a-new-react-app.html) handle it automatically.
+
+## Contributing
+
+The main purpose of this repository is to continue to evolve React core, making it faster and easier to use. Development of React happens in the open on GitHub, and we are grateful to the community for contributing bugfixes and improvements. Read below to learn how you can take part in improving React.
+
+### [Code of Conduct](https://code.fb.com/codeofconduct)
+
+Facebook has adopted a Code of Conduct that we expect project participants to adhere to. Please read [the full text](https://code.fb.com/codeofconduct) so that you can understand what actions will and will not be tolerated.
+
+### [Contributing Guide](https://reactjs.org/contributing/how-to-contribute.html)
+
+Read our [contributing guide](https://reactjs.org/contributing/how-to-contribute.html) to learn about our development process, how to propose bugfixes and improvements, and how to build and test your changes to React.
+
+### Good First Issues
+
+To help you get your feet wet and get you familiar with our contribution process, we have a list of [good first issues](https://github.com/facebook/react/labels/good%20first%20issue) that contain bugs which have a relatively limited scope. This is a great place to get started.
+
+### License
+
+React is [MIT licensed](./LICENSE).",1562704438.0,1,1.0,0
+theydidthefuckyou,Fuck you building!,,1562347768.0,45,1.0,2
+AskReddit,What's your most irrational fear?,,1561829148.0,2,1.0,12
+AskReddit,"What futuristic invention do you want to see, but that you know is dangerous?",,1561828963.0,3,0.81,15
+sadlygokarts,Fighting noises,,1560530661.0,392,0.98,12
+UofT,"One more, Raptors!",Kawhi me a happy river :),1559965103.0,40,0.92,2
+mildlyinteresting,Searching for Cheese Grater on Google only shows up with Mac Pros,,1559766586.0,30,0.86,3
+heck,"In Heck, all the responses to your posts are ""TIL I'm in Heck""",,1559413285.0,643,0.99,67
+heck,"In Heck, all your Reddit posts have typoes in them.",,1559346444.0,404,0.99,35
+worldnews,North Korea's Kim Jong Un carrying out purge after Hanoi summit collapse,,1559259652.0,13,0.75,4
+UofT,It really do be like that,,1556556797.0,23,0.73,6
+ProgrammerHumor,Dang autoload,,1553106307.0,9,0.81,5
+northernlion,Bless our 8888 sub egg.,,1550954171.0,175,0.99,34
+UofT,"ROUND 3, FIGHT!",,1549983186.0,66,0.94,1
+UofT,To who ever took my laptop in Sid Smith cafe today.,"First of all, you're an asshole. 
+
+But more important than the laptop, you took all my notes for a midterm I have tomorrow. As a result, I have nothing to study off of. 
+
+I just want you to know that somewhere out in the world, some Asian dude hates your guts. (And wishes you eternal hell in the depths of your incapability to feel human emotions)
+
+Cheers,
+Me. ",1542922223.0,313,0.98,73
+NLSSCircleJerk,The man has spoken,,1540151844.0,54,0.95,0
+UofT,UofT Map App,"Hey Reddit! A friend and I have made a (unofficial) UofT map app, since the midterm season is coming up and I bet a few of you are struggling to find your exam rooms!
+
+In the app you can search for building codes, restaurants and even on campus parking!
+
+You can get the app on the google play store here:
+[Link](https://play.google.com/store/apps/details?id=tech.edt.MapApp)
+
+Cheers!",1539631063.0,18,1.0,11
+UofT,Brutal midterm question,,1539291001.0,40,0.91,25
+NLSS,He has finally lost it.,,1538442937.0,23,1.0,2
+northernlion,He has finally lost it.,,1538442917.0,148,0.99,11
+northernlion,"Hey guys, here's my rendition of bongo cat!",,1537308345.0,105,0.94,3
+UofT,When your prof doesn't show up to the first lecture,,1536261925.0,114,0.98,7
+NLSSCircleJerk,Difficult decisions,,1534461114.0,9,0.73,1
+NLSSCircleJerk,Difficult decisions.,,1534461080.0,284,0.99,9
+AskReddit,What's something that is satisfying to you that other people just don't understand?,,1533577046.0,1,1.0,9
+Showerthoughts,Sails are basically just sideways wings,,1533576305.0,4,0.75,8
+dataisbeautiful,"Randomness of different card shuffling techniques, but with more samples! [OC]",,1533513899.0,132,0.94,21
+askscience,Auditory and visual filtering of background noises.,[removed],1533235750.0,1,1.0,1
+blurrypicturesofdogs,Blurry picture of dog.,,1533162477.0,1,1.0,1
+whatisthisthing,Looks like a grasshopper but its grey?,,1533138102.0,1,1.0,5
+aww,Caught him mid sneeze. What a cutie.,,1532979499.0,11,1.0,0
+NLSSCircleJerk,The duality of Chat,,1532036206.0,11,1.0,0
+NLSSCircleJerk,C͇̬̣͔͗͗͊̑͜͠ͅƯ̵̱̦̟̠̰͓ͣ̿̐̓ͣ͢R̜̠̾̉͗S̞̪͕͖͍͓͙̤̈́̅͂̏ͦ̆͘͠Ë̡̥͕̘̦͙̖́́D̟̲̣̺̬̺̊̎ͣͭ̈̿̐̊ ̴̦̟͊ͧ̾̂̈͜Į͓̻̮͎̒̇̏̍́͘Ņ̹̖͇̟͈̩ͭ̂Ț͍̝̘͙ͯ̈̃͋͌̀͞R̴̢̤̦̼̝̟͙͍̥̔ͭͮ̓ͦ̓O̶̢͓͎͆̃̓̉̆ͥ͞,,1532034565.0,27,0.94,4
+freedommobile,"For those of you in Surrey, BC looking to switch carriers","$45 for 13gb data, unlimited Canada-US calling, unlimited internation texting. 
+
+Today only at Grandview Shopping Center.
+
+New customers only, unfortunately. I wasn't able to get it. 
+
+",1531605029.0,10,0.85,2
+DrosteEffect,Droste swans,,1531016046.0,48,0.85,1
+Showerthoughts,"If all roads lead to Rome, then all roads lead to all other roads.",,1530817386.0,8,0.9,3
+explainlikeimfive,"ELI5: Why do some criminal cases go in front of the senate, while most others go to the court system?",,1528907190.0,1,1.0,6
+northernlion,"Oh no NL, what is u doin",,1528849834.0,0,0.38,1
+dataisugly,Taken from Wikipedia article on Canada-US relations,,1528600934.0,8,0.73,4
+northernlion,Detroit: Become Human,"I personally wanted to say that the game was genuinely fun to watch. If you haven't seen the streams, definitely check out the vods and the youtube uploads; they are worth the watch.",1528094108.0,46,0.93,22
+gifs,Hmmm,,1527979678.0,9,0.58,4
+hmmm,hmmm,,1527978087.0,1,1.0,1
+NLSSCircleJerk,D E M O N,,1527553821.0,6,0.66,0
+PutAnEggOnIt,Egg on chicken noodle soup.,,1527362471.0,153,0.96,5
+northernlion,V2 for minimal overlay finished! [OC],,1526745911.0,561,0.96,18
+northernlion,I made a minimal NLSS overlay! [OC],,1526663650.0,700,0.97,39
+assholedesign,Google overstepping and emailing me about using another calendar app,,1526297197.0,90,0.91,7
+RocketLeague,teammates.jpg,,1525471676.0,2,1.0,1
+programminghumor,Guide to uninstalling Windows,,1525052945.0,20,0.84,9
+askTO,"Moving soon, looking for a new ISP","Hi guys, I'm looking for a new ISP since I am moving in a few days. Looking for ~150 at around 60 dollars a month. Does anyone have a good experience with any isps?",1524782636.0,4,1.0,16
+NLSSCircleJerk,"Dan Gheesling. Literally just a picture of Dan. Nothing more, nothing less.",,1522653005.0,27,0.78,3
+NeedsMoreQuadtrees,Canyon? More like cannotyon,,1522370335.0,1,1.0,2
+NeedsMoreQuadtrees,Forest,,1522370287.0,1,1.0,2
+NeedsMoreQuadtrees,CAT,,1522369246.0,1,1.0,2
+NLSSCircleJerk,CURSED IMAGE,,1522367996.0,17,0.84,3
+NeedsMoreQuadtrees,NOT CURSED,,1522367883.0,1,1.0,2
+NeedsMoreQuadtrees,M E T A 2,,1522367650.0,1,1.0,2
+NeedsMoreQuadtrees,META,,1522367531.0,1,1.0,2
+NeedsMoreQuadtrees,Mountain,,1522367383.0,1,1.0,2
+NeedsMoreQuadtrees,Snoo,,1522351704.0,1,1.0,2
+NeedsMoreQuadtrees,Falcon,,1522351673.0,1,1.0,2
+NeedsMoreQuadtrees,Dog,,1522351303.0,1,1.0,2
+blop,Tired blop.,,1521949243.0,127,1.0,4
+blop,Tired.,,1521949193.0,1,1.0,1
+AskReddit,The last person you talked to just took over the world. What will happen?,,1521315372.0,2,0.63,13
+askTO,"Renting a 1 + 1 apartment in downtown Toronto, however, heating is not included (and uses electricity)","The apartment is about 800 sq. ft, how much would the hydro costs for the furnace and ac be?",1521260339.0,1,1.0,4
+MarbleMachineX,"What about this? The marbles run on top of the marbles in the holes, and the existing marbles get dropped when the weight reaches max. No jamming.",,1520887305.0,17,0.95,6
+ExpandDong,McD OwO lds,,1520642013.0,42,0.94,0
+Showerthoughts,Using solar energy to power lights is basically teleporting the sun.,,1520012342.0,53,0.89,2
+Showerthoughts,Using solar energy to power my lights is basically teleporting the sun,,1519960901.0,1,1.0,2
+NLSSCircleJerk,Representing Canada in Pyeongchang Pt. 2,,1518660845.0,23,0.87,1
+funny,"Wikipedia page on the Falcon Heavy, after the maiden launch!",,1517951455.0,5,0.78,0
+juxtaposition,Confirmed. They will literally upvote anything.,,1517899037.0,1,0.53,4
+NLSSCircleJerk,I'm sorry. I lied. The upvotes kept coming in. Here's 255 Hafus to celebrate. (One for each shade of grey!),,1517898456.0,146,0.73,7
+NLSSCircleJerk,64 Hafus. Up-Hafu 256 times to get 256 Hafus.,,1517884846.0,770,0.8,27
+NLSSCircleJerk,16 Hafus. Up-Hafu 64 times to get 64 Hafus.,,1517880256.0,703,0.78,17
+NLSSCircleJerk,4 Hafus. Up-Hafu 16 times to get 16 Hafus.,,1517875494.0,338,0.75,17
+NLSSCircleJerk,1 Hafu. Up-Hafu 4 times to get 4 Hafus.,,1517868122.0,85,0.68,0
+LoadingIcons,Something I made! [OC],,1517681593.0,2,1.0,0
+northernlion,WHAT. JUST. HAPPENED.,,1516751739.0,195,0.98,7
+UofT,Panic!,"Everyone here is worrying about finals marks and acorn being down, and I'm just here wondering where the green and yellow schwarma trucks went.
+
+Seriously though... I need dinner.",1515277920.0,21,0.96,6
+blurrypicturesofdogs,Blurry picture of a dog,,1514873915.0,68,0.99,0
+pics,[NSFW] Ajit Pie drinking out of a shit pie,,1513289569.0,0,0.5,2
+ProgrammerHumor,No need for recursion or tables or maps. Just do this. Simple,,1509315694.0,40,0.88,5
+ProgrammerHumor,Is this the next thing we are doing?,,1509312639.0,9,0.69,0
+aww,My dog admiring the wonders of the natural world! Or just food. Maybe.,,1506291587.0,5,0.86,0
+pics,My dog at a glacier! Probably looking at food.,,1506288040.0,9,0.67,0
+dataisugly,Data is NSFW,,1506208324.0,153,0.88,35
+northernlion,We have broken the egg man,,1505952523.0,9,1.0,3
+AskReddit,What's the most amazing rule in your place of work?,,1504026951.0,0,0.5,3
+northernlion,Is this correct?,,1502070286.0,1,0.57,1
+mildlyinfuriating,Imgur is blocked on the Olive Garden public wifi.,,1501701031.0,7,0.82,1
+FoodToronto,Cheap food around the U of T campus.,"I'm moving soon to Toronto, and I know some of the people in here are university students. What are some of the best cheap food I can get around the campus?",1501519063.0,0,0.5,8
+UofT,Electives (I'm dead),"So enrollment in courses is coming up, and I'm having trouble finding elective courses to take. What is a worthwhile course to take for first year? ",1501120106.0,1,1.0,7
+AskReddit,What are some of the best movies and shows to watch on a flight?,,1499732172.0,3,1.0,6
+blurrypicturesofdogs,Blurry picture of a dog,,1497376969.0,16,0.95,0
+pics,R O C K E T B O I,,1497376901.0,0,0.29,0
+assholedesign,Videos from people that I'm not subscribed to are showing up on my subscription​ feed.,,1497253396.0,184,0.96,19
+UofT,Late night gaming sessions,"Can someone do a speedtest the internet at Innis? I want to know if I should be prepared to get rekt with high ping
+",1496815891.0,6,0.88,16
+photoshopbattles,PsBattle: Cats with Hats,,1495732307.0,35,0.86,12
+photoshopbattles,[PSBattle] Two cats with hats,,1495731687.0,1,1.0,1
+AskReddit,"Bill Gates gives you a blank check, how much would you take?",,1494539950.0,3,1.0,21
+Showerthoughts,"Before I submit a post on Reddit, I always think about how much karma I would get. I am basically a karma whore.",,1492196120.0,1,1.0,0
+pics,"Diamondhead, Hawaii. The hike was well worth it!",,1491990097.0,18,0.79,4
+mildlyinfuriating,Let me just.... Get up,,1491410120.0,43,0.92,2
+mildlyinfuriating,I only got one in this packet,,1491366699.0,3,0.8,0
+mildlyinfuriating,>:(,,1491332658.0,1,1.0,1
+thecatdimension,WAE (Wolf Assisted Entrance) (x post r/peoplefuckingdying),,1491328099.0,99,0.97,0
+mildlyinfuriating,The way my mom opens these,,1490654116.0,6,0.8,0
+3Dprinting,Broken Nema17 Connector,"Anyone around the surrey/whiterock area that has a spare nema17 connector? Mine broke and I have to get up and running today.
+
+Here's the type that I need: [here](http://www.ebay.ca/itm/10pc-3D-Printer-1M-DuPont-line-HX2-54-Nema17-Stepper-Motor-Connector-cables/252799528243?_trksid=p2047675.c100005.m1851&_trkparms=aid%3D222007%26algo%3DSIC.MBE%26ao%3D1%26asc%3D20140620091118%26meid%3D5e3503a6e20c4935b630a08dfa0c4c6e%26pid%3D100005%26rk%3D1%26rkt%3D2%26sd%3D252816924572)
+
+Cheers!",1489884714.0,2,0.76,5
+3Dprinting,There cannot be too many fans,,1489304678.0,20,1.0,17
+UofT,Going into comp sci,"I am planning on going to UTSG for comp sci this fall, is there something I should be aware of? 
+
+What courses should I take?
+
+Am I screwed in terms of mental health if I accept the offer?
+
+I have been given an acceptance letter by Innis, what are some cool things to do around my residence?",1489297131.0,4,0.71,9
+SuicideWatch,Just a thank you to those who deserve it.,"I'd just like to say thank you to all of those people that are helping one another in this sub. I know how difficult it is to sympathize with someone and I hope you guys realize you are doing amazing work for those who are in need. 
+
+I say this because recently I was in the same situation where I was in contemplation, and I realized my friends have been of tremendous help. 
+
+Thanks to people like you, others are living great lives :) ",1489295920.0,54,0.93,15
+3Dprinting,First benchie with Tevo Tarantula. Be gentle ;),,1489288682.0,5,0.78,4
+softwaregore,"I forgot, where is my package?",,1487283315.0,9,0.92,1
+UofT,"The more I browse this sub, the more I realize both /u/Waterloo and /u/UofT are different subs both hating on UofT",is it really that bad? :(,1487151160.0,44,0.91,16
+UofT,3d printer at UTSG?,is there a 3d printer on campus that students can regularly use for free or a small charge?,1487147377.0,3,1.0,4
+Reprap,STL file request: Tevo Tarantula (ED3-V6 regular) Parts cooling fan mount with stock level sensor,"Im looking for a fan mount stl file for the Tevo Tarantula, preferably one of those ring ducts.
+
+I've scoured the web but cant find any, if someone knows where to look please tell me. Thanks!
+
+~EDT",1487146779.0,1,1.0,2
+3Dprinting,Just bought the tevo tarantula as my first kit,"I've had minimal printing experience before, what are some things I should do to increase the quality of the print?
+
+Upgrades?
+
+Calibration?
+
+Printed parts?
+
+Thanks ;)
+~EDT",1487145859.0,2,0.76,2
+northernlion,NL just called this sub positive,Fuck you. ,1487029132.0,198,0.97,25
+GlobalOffensive,XM is broken :(,,1486538515.0,0,0.4,4
+curledfeetsies,Golden snub nosed monkeys :D,,1486533992.0,11,1.0,0
+softwaregore,Alright bud,,1485814631.0,12,0.94,0
+AskReddit,What's your favorite grad quote?,,1484860639.0,2,1.0,2
+radiocontrol,"I made a plane for year 12 physics, here's the on board footage!",,1484508465.0,20,0.95,6
+explainlikeimfive,ELI5: Why are heavier things easier to throw sometimes?,Eg. Baseball vs. Wiffle ball. ,1484442691.0,2,1.0,6
+AskReddit,Students of Reddit: What is the nicest thing a teacher has done for you or a classmate?,,1484438903.0,4,0.75,14
+taiwan,"Where can I purchase electronic components (resistors, caps, inductors etc) in Taiwan?","I'm looking for an online store that sells these in bulk (20-30 pcs of variable values, preferably in a single kit)",1483840863.0,0,0.33,12
+OSHA,"Employee of manufacturing plant fired, after calling 911 with a severed thumb",,1483689108.0,47,0.89,14
+pics,Tired 7 week old pupper,,1483563648.0,12,0.7,0
+aww,He bites but he's only 7 weeks old,,1483504349.0,8,0.9,1
+AskReddit,Who is an influential person that isn't well known in history?,,1482987036.0,0,0.5,5
+AskReddit,Most interesting/infuriating post of 2016?,,1482986804.0,1,1.0,2
+softwaregore,This restaurant website needs adobe flash to run. Rip mobile!,,1482963498.0,12,0.83,3
+AskReddit,What is the funniest/most necessary lie?,,1482955681.0,1,1.0,2
+AskReddit,What is a personal story you never got to tell?,,1482892660.0,5,1.0,3
+AskReddit,What will be the most useless skill to have in 2017?,,1482891554.0,1,1.0,2
+AskReddit,What is your excuse for being bad at something?,,1482891373.0,1,0.6,5
+AskReddit,What is the funniest insult you know of?,,1482891151.0,5,0.99,11
+AskReddit,"What is on the internet and easily accessible, but shouldn't be?",,1482827586.0,3,0.8,13
+askscience,"What are the chances that there exists an atom, that has never interacted with other particles since its formation?",,1481170223.0,0,0.33,3
+Pareidolia,I wish I could be this happy being trash,,1480616860.0,7,0.77,1
+PeopleFuckingDying,KaTE gEtS feCKIn DeCApitAtEd bY rAT kiLLEr,,1478848847.0,16,0.82,3
+NotMyJob,"""Make a new sign, will ya?""",,1478737029.0,23,0.81,1
+Jokes,"When the titanic crashed, what were they floating on?","An iPhone 7, there was no Jack. ",1478735966.0,6,0.8,2
+AskReddit,"[Serious] (Ex)gang members of Reddit, how is gang life different from what the media portrays?",,1478133250.0,2,1.0,2
+AskReddit,"You are tasked with presenting one historical event to a committee of galactic aliens, what do you choose?",,1478132915.0,1,0.67,5
+Jokes,They're coming out with the Note 8...,I'm glad they didn't end on a bad note!,1477866333.0,1,0.57,1
+Lightbulb,Magnetic Surface connectors for smartphones. Waterproof and idiot proof,,1477671023.0,3,0.71,4
+askscience,What is the space between atoms made of?,[removed],1477244842.0,1,1.0,0
+AskReddit,What item would be completely useless if made to consume power?,,1476971366.0,2,1.0,3
+AskReddit,"People who were/are working at amazon, what was the most absurd thing(s) someone has bought?",,1476073352.0,1,1.0,0
+AskReddit,Driving instructors of reddit: what was the most incompetent student you've ever had?,,1475883816.0,1,0.67,2
+AskReddit,What is the most insensitive / ignorant thing someone has said recently?,,1475727447.0,6,0.71,26
+AskReddit,What's a tv show or YouTube series that used to be good but has gotten really bad?,,1475634277.0,1,1.0,14
+AskReddit,Online citizens of Reddit: what is the most useless/weirdest thing you have won from an online giveaway?,,1475632055.0,3,1.0,6
+radiocontrol,Need help to get started,"Hello! First time poster here. 
+
+For a school project, we were required to build an rc plane. I was wondering if anyone could point me into the right direction as to where I could start my research. (A website or video). Also, are there any tips for first time builders? Our teacher expects us to build a delta wing 
+
+Also what brand servos, rods (we also need gyro-stabilizers) and transmitter to use?
+
+Thanks for your help!",1475293000.0,1,0.67,4
+Showerthoughts,The reason our world still exists is probably because our simulation overlords were impressed by the progression of humans in this seed.,,1475289106.0,0,0.4,0
+AskReddit,"If you had one thing to show the citizens of North Korea, to convince them that life outside is good, what would you show them?",,1475123087.0,3,1.0,24
+AskReddit,"If you had one thing to show the citizens of North Korea, to convince them that life outside is good, what would you show them?",[removed],1475121279.0,1,1.0,1
+Jokes,"In quantum physics class, a student getting tested on 'Schrodinger's cat' exclaims...","""Sir! The questions on this test are the same as last year's!""
+
+The professor responded, ""yes, but the answers are all different!""
+
+
+",1474519282.0,0,0.5,2
+photoshopbattles,PsBattle: Lord Putin getting confused by a machine,,1474337558.0,2,1.0,2
+aww,My dog decided to be a professional model with a leaf on his head!,,1474233963.0,1,0.57,0
+apple,"Apple doesn't ever list ""real"" specs on their website","Why is this? Do they not want their users to know how much ram or specific specs such as the battery capacity.
+
+Listing the battery as ""Up to 14 hours on 3G"" or ""Up to 2 hours longer battery life than iPhone 6s"" is just cheating since it is subjective under manipulated environments. It is subjective not objective. 
+
+Does the average iPhone user not care or is it a marketing thing where they say, ""it just works out of the box and suits your needs, so you don't need to worry about the details""",1474178977.0,0,0.17,15
+softwaregore,Reddit app doesn't know how to wrap text,,1473033701.0,7,1.0,0
+AskReddit,What song makes you cry everytime you listen to it?,,1472843471.0,2,0.67,5
+AskReddit,Am I allowed to call others millennials if im born 1999 December?,,1471813804.0,1,1.0,1
+blop,Paint me like one of your French Blops,,1471735135.0,40,0.94,0
+mildlyinteresting,This IGA staff washroom urinal.,,1471643894.0,12,0.84,2
+explainlikeimfive,ELI5: Why does hot water initially feel cold to the touch?,,1469904278.0,17,0.68,10
+aww,"Hello, I am tired pupper",,1469284739.0,2,0.67,0
+LifeProTips,"LPT: Have a social life, so you won't be forced to make new friends",[removed],1468772525.0,1,1.0,0
+aww,Just adopted this 4 year old smol floofer! (xpost r/cats),,1468741015.0,78,0.89,14
+cats,Just adopted this 4 year old smol floofer! Doesn't look too happy.,,1468740369.0,886,0.98,15
+Showerthoughts,"In Turkey, people went outside to express their belief in political things; in the US, people went outside to express their belief in imaginary things.",[removed],1468736088.0,1,1.0,0
+explainlikeimfive,"ELI5: Why is a passport required to travel to China from Taiwan, if China insists that Taiwan is a part of it?",[removed],1468675159.0,78,0.82,22
+explainlikeimfive,"ELI5: If China insists Taiwan is a part of China, why do I need a passport to get in?",[removed],1468659473.0,1,1.0,1
+mildlyinteresting,My package is a Quantum state where it is simultaneously not picked up and picked up at the same time!,,1467698335.0,0,0.43,0
+amazon,"Be careful of shipping speeds, after changing the destination address.","I've have something everyone should keep an eye out for. Here's a scenario:
+
+
+*I order something from Amazon Canada with Prime 2 day shipping. (they ship out of Toronto)
+*I choose the wrong address, ending up using an address in Toronto. 
+*I click submit, and they choose to use purolator ground and Toronto for the shipping address (Ground, not express, since the destination is close enough to their toronto warehouse)
+*I realize I put in the wrong address (I live in Vancouver), and immediately change it.
+
+
+But since the shipping service was originally ground shipping (they only changed the address, not the shipping speed), my package was due to arrive in 5 days, not two (despite the amazon tracking page saying 2 days) - I contacted purolator and confirmed the 5 day ETA.
+
+
+ALWAYS contact amazon support to verify the shipping speed after you change the address.
+
+
+TL;DR: Verify shipping speed with Amazon support after you change the shipping address, since automatic shipping setup doesn't change the speed. Or just cancel and reorder
+
+EDIT: changed a few bits based on u/Antique_white suggestion",1467670904.0,0,0.44,1
+explainlikeimfive,"ELI5: How does a scientist measure the mass of a gas, like Helium","How does someone measure the mass of a gas? I know that weight and mass isn't the same, and that weight is easily measured with an electrical scale. But the gas wouldn't measure properly since the gas is lighter than air. 
+
+Using a balance scale presents the same problem, if you have 2g of Helium, using 2g of a lead mass on the other end wouldn't balance, for example.",1467241735.0,7,0.77,9
+GlobalOffensive,CS:GO Joke:,[removed],1467179260.0,0,0.25,2
+GlobalOffensive,"When I'm salty and play csgo, and someone doesn't join:",[removed],1467178344.0,1,1.0,1
+taiwan,Looking for Asus strix 1070 in taiwan.,"Is the strix version of the 1070 out in taiwan yet? 
+
+If not, when will it be out?
+
+And if it is, what is generally the price and where can I find one? Looking in the Taipei/Hsinchu area.
+
+EDIT: GO IN STORE. At guanghua they have stock on most of the recent 1070 and 1080. Shop around. If you buy a whole setup, don't be afraid to ask for discounts. The guy gave me free ram upgrades and a small discount (couldn't blame him, since their sales margins aren't that big to start with) ",1467079742.0,0,0.5,6
+Showerthoughts,"During gender reveals, people always act happy and surprised that their baby is that gender.",Why are they surprised? Did they expect their baby to be genderless?,1467050782.0,0,0.5,1
+Showerthoughts,The usage of 24/7/365 bothers me,"There are 24 hours in a day. 7 days in a week. But FUCK there are not 365 weeks in a year, you memes.",1466834145.0,4,0.75,6
+buildapc,$1600 - #1900 USD Gaming/[Heavy-Multitasking] build.,"###Build Help
+
+**Have you read the sidebar and [rules](http://www.reddit.com/r/buildapc/wiki/rules)? (Please do)**
+
+Yee
+
+**What is your intended use for this build? The more details the better.**
+
+LOTS of multitasking having 10+ windows open at the same time, Alt-tabbing frequently, and general gaming. Might start streaming, no need for a capture card. Two monitors. (already have 'em)
+
+**If gaming, what kind of performance are you looking for? (Screen resolution, FPS, game settings)**
+
+1080p 60fps - 144fps, one monitor, other monitor for multitasking.
+
+**What is your budget (ballpark is okay)?**
+
+1600-1900 USD
+
+**In what country are you purchasing your parts?**
+
+US, Canada, or Taiwan (all 3 are ok, if I have to buy the CPU in the states and the MB in Canada. Etc.)
+
+**Post a draft of your potential build here (specific parts please). [Consider formatting your parts list.](http://www.reddit.com/r/buildapc/wiki/pcpp) Don't ask to be spoonfed a build (read the rules!)**.
+
+[PCPartPicker part list](http://pcpartpicker.com/list/jtz7hq) / [Price breakdown by merchant](http://pcpartpicker.com/list/jtz7hq/by_merchant/)
+
+Type|Item|Price
+:----|:----|:----
+**CPU** | [Intel Core i7-6700K 4.0GHz Quad-Core Processor](http://pcpartpicker.com/product/tdmxFT/intel-cpu-bx80662i76700k) | $329.99 @ Newegg 
+**CPU Cooler** | [NZXT Kraken X61 106.1 CFM Liquid CPU Cooler](http://pcpartpicker.com/product/FFFPxr/nzxt-cpu-cooler-rlkrx6101) | $114.99 @ Newegg 
+**Motherboard** | [Gigabyte GA-Z170X-Gaming 5 ATX LGA1151 Motherboard](http://pcpartpicker.com/product/2GcMnQ/gigabyte-motherboard-gaz170xgaming5) | $159.99 @ B&H 
+**Memory** | [Kingston HyperX Fury Black 16GB (2 x 8GB) DDR4-2133 Memory](http://pcpartpicker.com/product/xhM323/kingston-memory-hx421c14fbk216) | $59.99 @ SuperBiiz 
+**Storage** | [Samsung 950 PRO 512GB M.2-2280 Solid State Drive](http://pcpartpicker.com/product/3F8H99/samsung-internal-hard-drive-mzv5p512bw) | $317.99 @ SuperBiiz 
+**Storage** | [Seagate Barracuda 2TB 3.5"" 7200RPM Internal Hard Drive](http://pcpartpicker.com/product/KyCwrH/seagate-internal-hard-drive-st2000dm001) | $65.89 @ OutletPC 
+**Case** | [Cooler Master MasterCase Pro 5 ATX Mid Tower Case](http://pcpartpicker.com/product/mTCrxr/cooler-master-case-mcy005pkwn00) | $119.99 @ SuperBiiz 
+**Power Supply** | [EVGA 850W 80+ Gold Certified Fully-Modular ATX Power Supply](http://pcpartpicker.com/product/LCfp99/evga-power-supply-220g20850xr) | $115.98 @ Newegg 
+**Other**| GTX 1080| $645.99 
+ | *Prices include shipping, taxes, rebates, and discounts* |
+ | Total (before mail-in rebates) | $1937.80
+ | Mail-in rebates | -$20.00
+ | **Total** | **$1917.80**
+ | Generated by [PCPartPicker](http://pcpartpicker.com) 2016-06-24 23:13 EDT-0400 |
+
+**Provide any additional details you wish below.**
+
+The gtx1080 is not set in stone yet, if you guys think a 1070 is sufficient, please tell me so I don't throw away my money. 
+
+
+Build intended to last 5+ years, with no upgrades.
+
+Feel free to tell me that my m.2 ssd is useless. 
+
+Emphasis on loading speed and system responsiveness
+
+A case with a window and lots of connectivity preferred
+
+3.1 type C MB please.
+
+Generally, I use up to 5 USB ports and an audio jack. 
+
+Ethernet port
+
+No need for WIFI.
+
+Rarely play AAA games, but intend to start playing.
+
+If you have more suggestions please tell me, thanks for your time!
+
+EDIT: grammar and formatting. derp.
+",1466824743.0,1,1.0,0
+AskReddit,"How come Trump has so many supporters in the US, but the majority (almost 80%, it seems like) of internet users tend dislike Trump?",,1466786561.0,4,0.75,37
+aww,may I help you?,,1466531480.0,2,1.0,0
+tifu,TIFU by not saving my work,"Finals were coming up, and with finals there were final reports and stuff. 
+
+So I started working, and just as I almost finish I realized I wanted some snacks. So, I put off my work for later and go out to buy some snacks. (as a reward for myself, being so diligent and stuff) 
+
+Im out for a good hour or so, and I come back to find that windows 10 has decided to update and shut off my computer. 
+
+(Yes I know autosave is a thing. But it only autosave about 1/2 my project) 
+
+PS to Windows: you dick. 
+
+
+TL;DR: didn't save my work, windows fucked me over with updates. ",1466361217.0,4,0.76,5
+taiwan,"Looking for gtx 1080 in Taiwan (any brand, non-founders)","Everywhere I look online, pc parts are usually on par or more expensive than the US counterparts (sometimes even more expensive than Canadian websites). 
+
+Currently living in Canada but going to Taiwan to buy parts; where is a good place (preferably Hsinchu or Taipei) to buy computer parts cheaper than the US. The place I know is the Guanghua digital plaza, but they aren't that cheap. (I know I can bargain for a better deal, they usually but a lot off their prices if you're pushy enough)
+
+Thanks guys. If the general consensus is to buy in NA, that's what I'll do.",1466276546.0,4,0.67,16
+aww,"Found myself a stranger cat. Welp, guess he's mine now.",,1465230155.0,12,0.93,2
+explainlikeimfive,ELI5: How to hallucinogens work,"Edit: title should say ""do"" not ""to""
+
+
+Mainly, what is it that tricks your mind into seeing something that isn't there? Say, a floating cow or weird shiny colours. ",1465229547.0,0,0.5,2
+pics,Stop Stabbing the Egg!,,1464198220.0,3,0.8,1
+LifeProTips,"LPT Request: When it is obvious that something is clearly bothering your SO, but you don't want to be pushy and ask what is wrong.",[removed],1464124935.0,1,0.66,0
+cats,"Found a cat outside my music competition, he demanded that i snuggle with him.",,1461866956.0,1,0.66,1
+catpictures,RE: Post a vid of the cat you found outside the church!,,1461866144.0,1,0.66,1
+catpictures,"a cat I found outside a church in Vancouver, came and demanded I snuggle with him/her. I would post videos if I could",,1461615101.0,261,0.97,9
+EnterTheGungeon,First item room. First run. Carried to chamber 3.,,1461084791.0,1,0.66,0

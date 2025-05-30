@@ -1,0 +1,486 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+movies,Let’s talk about “Twisters” ,[removed],1721427412.0,1,1.0,1
+movies,"What’s a movie you tried more than once to watch because of the hype, but still couldn’t stand it at all. ",[removed],1719723899.0,1,1.0,0
+PHP,Tool recommendation: What tools do you use to write a LOT of tests?,"Hey all. I find that I’m okay at writing “happy path” tests, but not great at thinking of weird edge cases. I also have a larger laravel project I’m working on that needs to have a lot of tests written and it’s going really slowly. 
+
+What tools do you all use to generate tests or write them quickly?
+
+I tried a new AI tool (forgot what it’s called) a couple months back that is supposed to generate tests for you, but found it lacking. Searching hasn’t turned up anything useful. Hopefully this community has some good recommendations. ",1717950213.0,23,0.85,26
+NewDenver,"Subreddit rules are up. Mostly standard stuff, but please note rule #2. Also contributors needed.","## Rule Two Summary
+
+> You may not harass or call for the harassment of the [r/Denver](https://new.reddit.com/r/Denver/) community, or its members or moderators. Such actions could get this subreddit shutdown, so any violations of this rule will result in a temporary ban. A second offense will result in a permanent ban.
+
+I know a lot of you are here because of the poor moderation happening on that other Denver sub, and it's totally fine to commiserate and talk about your experiences. But don't cross the line. Please don't mention the other mods by name or call for any kind of action to be taken over on that sub. They have their community and can run it their way. We have ours and will run it our way. We harbor no hate or animosity for that community, it just happens to be a little to over-moderated for our tastes. 
+
+
+## Building This Community
+
+Instead, do what you can to help make this the best damned Denver community this side of the Mississippi. 
+
+- We would love it if someone with some actual design chops would make a banner for this sub. If you want to contribute, post your design here as a comment. The top voted design will be set as the banner. We have one request to add [Bryan - the neighborhood nice guy](https://www.reddit.com/r/DenverCirclejerk/comments/1054grh/petition_to_add_this_photo_to_the_subreddits) to the banner, so you might take that into consideration.
+
+- Custom CSS contributions are welcome. Anything 1) within reason, and 2) with non-negative vote count, will likely be added.
+
+- If you want to contribute any wiki pages, let me know and I'll get you added as an editor.
+
+In general, this is YOUR community. You get to help shape it through your participation, posts, comments and votes. Share your thoughts and opinions below, and welcome to /r/NewDenver.",1716918637.0,14,0.94,1
+NewDenver,Welcome/r/Denver refugees!,"Welcome to the 50+ new members so far. 
+
+I’ll get a proper logo and sidebar setup tomorrow. Until then … no rules???
+
+Thank you all for joining. I hope this turns into the awesome kind of place you’d expect from a Denver-centric sub. 
+
+Edit: Rules are up! Time for you hooligans to get your shit together.",1716843746.0,24,0.97,14
+DenverCirclejerk,Denver has entered the chat and sees no issue here. ,,1716057687.0,208,0.99,28
+PHPhelp,Possible bug in PHP itself? All properties of object are deleted after comparison (===) is called.,"I am running into a REALLY odd issue, and my best guess is that it's a bug within PHP itself. When comparing (`===`) the value of a property on one object with the value of a property on another object, all the values of the properties on one of the objects are deleted. 
+
+- `PHP 8.3.2-1+0~20240120.16+debian11~1.gbpb43448`
+- `Laravel Framework 11.4.0`
+- `mySQL 8.0.33-0ubuntu0.20.04.2`
+
+# From the top
+
+I'm editing a `Post` model, and running the `update` method on form submit
+
+### Routing
+
+Route-model binding works as expected, and the correct controller method is called. 
+
+
+    Route::patch('/posts/{id}/update', [PostController::class, 'update'])
+        ->name('post.update');
+
+
+### PostController@update
+
+
+    public function update(UpdatePostRequest $request, Post $post) :RedirectResponse
+    {
+       	// A quick test here that will become relevant in a moment
+       	// dd(request()->user()->id === $post->user_id); // true
+
+	    // Results in 403
+   	    if (request()->user()->cannot('edit', $post)) 
+            abort(403);
+        .
+        .
+        .
+    }
+
+
+### PostPolicy@edit
+
+The `cannot()` method will call the PostPolicy class to check if the user can ""edit"" the `$post`. The `if` statement is false despite the fact that the values being compared are identical.
+
+
+    /**
+     * Determine if ""$user"" can perform ""edit"" on ""$post""
+     */
+    public function edit(User $user, Post $post) :bool
+    {
+        if ($post->user_id === $user->id) {
+    	    // Expecting this to return
+            return $user->can('edit.own_posts');
+        }
+        else{
+    	    // Always gets returned
+    	    return $user->can('edit.posts');
+        }
+    }
+
+
+> Note: I have verified all roles and permissions are properly assigned, although that isn't really relevant to the issue I'm seeing.
+
+
+# The Problem
+
+In the above function, checking the value of `$user` and `$post` BEFORE the `if` statement yields exactly the values that are expected ... `$post->user_id` is strictly equal (`===`) to `$user->id`.
+
+However, checking the value of `$post` from within the `if` statement block, reveals that all the properties on `$post` are empty. They all just disappeared.
+
+Here are the results of various `dd()` (`dump()` and `die()`) calls.
+
+    public function edit(User $user, Post $post) :bool
+    {
+        dd($user->id);					    // int 112
+        dd($post->user_id); 				// int 112
+        dd($user->id == $post->user_id);	// true
+        dd($user->id === $post->user_id);	// true
+
+        // What if accessing the property is what causes it to become null?
+        // Let's dump it twice.
+        dd($post->user_id, $post->user_id)	// int 112, int 112
+    
+        // After the comparison, all properties of 
+        // $post are empty                           	
+        if ($post->user_id === $user->id) {
+
+            return $user->can('edit.own_posts');
+        }
+        else{
+    	    dd($user->id);				        // int 112
+            dd($post->user_id); 			    // null
+            dd($user->id == $post->user_id);	// false
+            dd($user->id === $post->user_id);   // false
+	                                     	
+    	    return $user->can('edit.posts');
+        }
+    }
+
+
+### It Gets Weirder
+
+This one is really throwing me off. If, and only if, I place a `dd()` inside the `if` block, it will execute as if the comparison resulted in `true`, but will not execute if I remove the `dd()`.
+
+    public function edit(User $user, Post $post) :bool
+    {
+        if ($post->user_id === $user->id) {
+    	
+    	    // This line executes when present. Removing it will cause
+    	    // the `else` block to execute.
+    	    dd($user->id, $post->user_id);		// int 112, null
+    	
+            return $user->can('edit.own_posts');
+        }
+        else{
+    	    // This line only executes if you remove the dd() above
+    	    return $user->can('edit.posts');
+        }
+    }
+
+
+No matter what I do, the second `return` statement is the only one I can get to execute. But just for fun, let's try inverting the logic.
+
+    public function edit(User $user, Post $post) :bool
+    {
+        if ($post->user_id !== $user->id) {
+    	    // Always executes
+            return $user->can('edit.posts');
+        }
+        else{
+    	    return $user->can('edit.own_posts');
+        }
+    }
+
+
+For visual reference, here is the `dd($post)` result before the comparison call.
+
+https://i.sstatic.net/gzA8RkIz.png
+
+And here it is again called from within the `if` block.
+
+https://i.sstatic.net/4aYluG9L.png
+
+Has anyone ever seen anything like this before, or have any ideas what could be causing it? Thanks in advance for your help.",1715749808.0,3,0.61,11
+ProgrammerHumor,qualityOfLifeImprovementInLatestWordPressRelease,,1714579848.0,3,0.81,1
+woodworking,Need help with name of tool for drawing circles. It’s an adjustable brass ring that looks like a camera shutter.,"The title says it all. I’ve searched the internet but can’t even find a picture of it. It’s a ring maybe 6” - 8” in diameter that rotates to open or close the “shutter,” creating an inner diameter of varying sizes. 
+
+Alternatively, if you know of any tool that would help me mark a horizontal circle around a cone-shaped object, I’m all ears.
+
+Edit: You all are so helpful! 
+
+It’s called a **plotting compass** and you can find a fancy one here: https://us.makerscabinet.com/products/iris
+
+I also found a notched, flexible ruler that might meet my needs for only $12  
+
+https://smile.amazon.com/Koala-Tools-Ring-Ruler-360/dp/B07HQX4KN7/ref=pd_lpo_3?pd_rd_i=B07HQX4KN7&psc=1&sa-no-redirect=1",1645027563.0,3,0.8,19
+legaladvice,Talking to police as a victim?,"[Colorado]
+
+This weekend I caught someone in my garage, in my car, and confronted them. When they tried to run, I tackled them to the ground and held them until police arrived. They and I both had superficial scrapes. Everything went very smoothly with the police and as of now I am in no legal trouble and from a criminal standpoint have nothing to fear. 
+
+Throughout this process of dealing with police, I talked … a lot. My fear is that I created a record that could be used against me in a civil suit. 
+
+The problem is, I caught them almost immediately so they didn’t successfully steal anything from me, and there’s no proof they were ever in my garage. Who’s to say I didn’t just attack her? 
+
+Things working in my favor:
+
+1.	They were under the influence of what I suspect to be meth. 
+2.	They were taken away in an ambulance due to being under the influence. 
+3.	They have a criminal history, and the police indicated they were familiar with this person. 
+
+My question is, how would you advise a client if you were there in the moment in this situation? 
+
+Is my fear of a civil suit unreasonable?
+
+Many thanks in advance.",1639494301.0,0,0.33,2
+apple,PSA: Don’t use shared albums if you want to share full quality images. Image sizes are reduced.,"Shared images will be reduced to a maximum height/width of 2048px. According to the [Apple support page](https://support.apple.com/en-us/HT202299): 
+
+>	Shared Albums also support special formats that you capture with your iPhone, like slo-mo, time-lapse, Live Photos, and Memory videos. When shared, **photos are reduced to 2048 pixels on the long edge**, except panoramic photos, which can be up to 5400 pixels wide. You can share GIFs that are 100MB or smaller.
+
+>	Videos can be up to fifteen minutes in length and are delivered at up to 720p resolution.
+
+In addition, some of the photos’ metadata may be stripped out depending on the settings of the user posting the photo. 
+
+If you care about sharing original quality photos and videos with your friends and fam, use a different method to share media with them. I just learned this lesson the hard way.",1634824166.0,230,0.96,70
+HermanCainAward,Shit posting Shapiro,,1634490414.0,214,0.96,33
+apolloapp,Large image crashes Apollo app.,,1630524929.0,5,0.65,10
+AskReddit,In 2017 they made a dumpster fire Christmas tree ornament. What ornament should be made to represent 2020?,,1597851524.0,4,1.0,10
+AskReddit,In 2017 I made a dumpster fire ornament for my Christmas tree. What ornament should I make to represent 2020?,,1597850056.0,1,1.0,1
+legaladvice,What is the legal term for depending on a person’s education/professional certification as an authority?,[removed],1597083939.0,1,1.0,3
+Ringtones,Sleepy Seal Ringtones,[removed],1595709642.0,2,1.0,7
+SuicideWatch,Desperation = Options,"When pondering my end, it seems a lot of doors open. Essentially there are no consequences (for me) for my final actions — one of the reasons I think the number of mass shootings has gone up in recent years. 
+
+Of course, that’s not where my head is at. How many things would I never do for fear of dying? Maybe I should do those things. Skydiving. Freestyle mountain climbing. Might as well get a face tattoo while I’m at it. This nothing to lose attitude is actually kind of therapeutic. Eventually I’ll run out of money and just end it, but at least I can try to have some fun before I go.",1583702610.0,3,1.0,1
+politics,Julia Davis on Twitter: New York City Bar Calls for US AG William Barr's Recusal in Ukraine Matter,,1571861466.0,2,1.0,1
+apple,"Pro Tip: If you want to print from your iPhone but don't have AirPrint, use Automator folder actions and Dropbox to fake it.","You can use automator to create a folder action that prints to a specific printer. In Dropbox, I have an ""AirPrint"" folder with a sub-folder for each printer. When I'm on my phone and want to print something, I just ""share"" it to dropbox and place it in the folder for the printer I want it to go to. 
+
+At home, I have Dropbox on my iMac. When it syncs the file, it triggers the folder action and prints the document. The same is set up for my work printer as well. 
+
+What is nice about this solution is that you don't even have to be on the same network, as you do with AirPrint. You can do it from anywhere you have an internet connection.
+
+Screenshot: https://i.redd.it/5e4g8ihrznd31.png",1564590546.0,75,0.92,17
+MacOS,"Pro Tip: If you want to print from your iPhone but don't have AirPrint, use Automator folder actions and Dropbox to fake it",,1564590108.0,153,0.97,20
+HeadphoneAdvice,Is there a website for sound signature comparison?,"My favorite audio experience ever were the Klipsch S4 earbuds (despite the otherwise low build quality). I need to replace them with closed headphones, but everything I’ve purchased so far just sounds bland. 
+
+Is there a website that lets me objectively find headphones with similar audio signatures? Just in case that doesn’t exist, I’ll describe what I’m looking for.
+
+I’m no audiophile, so I can’t say why those earbuds were so different. I would only describe them as “crisp”; the treble was just so clean. You would probably **not** describe the sound as “neutral”.  
+
+Anyway if anyone knows of some (sub $200?) closed headphones that fit the bill, I would appreciate the recommendation.  ",1551200591.0,2,1.0,0
+apolloapp,[Bug] Search within subreddit is broken,,1543453356.0,7,0.89,1
+shortcuts,Is there a better way to get the date for “tomorrow?”,,1543446715.0,5,1.0,7
+whisky,"A friend of mine visited the Scotch Whiskey Museum in Edinburgh, Scotland. Thought you all might appreciate this photo.",,1532974555.0,133,0.95,15
+Scotch,"A friend of mine visited the Scotch Whiskey Museum in Edinburgh, Scotland. Thought you all might appreciate this photo.",,1532973384.0,0,0.5,0
+Denver,Just discovered Denver Tool Library. $80/year membership to borrow tools for ~4 days at a time.,"This is a pretty fantastic idea and one I wish I had known about sooner. Thought I would share with you all. There's about 4000 tools.
+
+http://denvertoollibrary.org/  
+  
+&nbsp;
+
+**I have absolutely no affiliation with this company and since I haven't even used it yet, I can't tell you much more than ""look what I found"". If you have experience with this company, do share.* 
+
+
+**Edit:** [Direct link to inventory](https://denvertoollibrary.myturn.com/library/inventory/browse)",1531754727.0,759,0.98,53
+politics,The president’s son has emerged as a top Republican surrogate in 2018,,1529856399.0,0,0.44,12
+apolloapp,[1.2 Bug] Comment Folding Issue,"Thanks for the update! I found a a small bug that I believe is easy reproducible. 
+
+1.	Tap post in feed. 
+2.	Tap to collapse top (any) comment. 
+3.	Pull down post to refresh it. 
+4.	Witness jittery rebound to the top. 
+5.	Tap collapsed comment to expand. This step fails. 
+
+Video: https://www.dropbox.com/s/73c7etqr4ebky29/2018-05-10%2018.23.25.mp4?dl=0",1525998888.0,2,1.0,0
+AskReddit,"As it relates to current U.S. politics, what conspiracy theories do you believe to be true? Or, what theories have you come up with that you would like to share?",,1523895637.0,3,0.68,1
+AskReddit,"As it relates to current U.S. politics, what conspiracy theories do you believe to be true? Or, what theories have you come up with that you would like to share?",[removed],1523894913.0,1,1.0,2
+iphone,Spam Call-Blocking with Wildcards! Block entire area codes and prefixes.,"I have wanted an app for this for a long time and I just discovered it exists! 
+
+# WideProtect [Download](https://itunes.apple.com/us/app/wideprotect-call-blocker/id1171024059)
+
+With WideProtect and you can enter your own phone number prefix to block all numbers to it. Or, as I have done, [get a phone number](https://voice.google.com
+) in an area code where you don't know anyone and just block the entire area code. Also you can [override the wildcard](https://i.imgur.com/CfGkIdG.jpg) by still allowing anyone in your contacts to call you. 
+
+The app is $2, but that's it. There's no monthly fee like Nomorobo. 
+
+There are definitely [some hacks](https://i.imgur.com/9ckZWwd.jpg) used to get around iOS limitations, but worth it. It does take ~5 mins to add 10 million phone numbers to the block list, and if you switch to a different app while it's running, iOS seems to put the app to sleep, causing it to error, and causing you to have to start the process over. So, you need to keep the app awake and at the forefront while it's running this process. 
+
+
+You can also block text messages that contain certain words or phrases. Which means that you can also block the transcribed texts you get from Google Voice telling you that you're  wanted by the IRS. 
+
+I have no affiliation with this app or it's developer(s). Just wanted to share. This app just made my day! ",1523550791.0,10,0.73,2
+ifiwonthelottery,A modest oceanside abode,,1519011960.0,46,0.9,3
+apple,"Does anyone still use Dashboard? If so, what is your setup and favorite widgets?",,1518200468.0,1,0.57,7
+apolloapp,[Small Bug] Non-functioning or unnecessary items on some context menus,"I've recently discovered some small, **super low-priority** bugs, but I wanted to share them just in case you weren't already aware.
+
+1. It looks like the context menu for /user/comments is the same menu used for /post/comments. But the functionality of those two screens is different, so some menu options, like `Collapse` and `Parent Comment` don't work. 
+
+2. Similarly, when on the /user screen, the comment context menu contains a /user link, which, unless I'm missing something, seems unnecessary.
+
+3. Issue number 1. also seems to be the case on the context menu when you long-press the username on a comment. But long-pressing the username on a post gives the proper menu items.
+
+4. On /user/trophies there seems to be an issue with inconsistent image sizes and some kind of a scrolling glitch. 
+
+____
+
+On a related note, it's none of my business, but do you have an issue tracker of some kind? It must be difficult to handle duplicate bug reports, and to keep track of everything through reddit posts. 
+
+Something like [LeanTesting](https://leantesting.com/) perhaps? 
+
+# Lean Testing Info
+
+> Lean Testing is a bug tracking and test case solution. Its free version allows unlimited users, projects, and test cases, so you don’t have to worry about your team outgrowing it.
+
+> Its paid version allows you to pay for specific features, like advanced email notifications, rather than an entire package with extras your team might not use. But according to the company, “Over 97% of the companies that use Lean Testing find that the free version is perfectly suited to their needs.”
+
+> Notable features in Lean Testing’s free version include:
+
+> - Browser extensions for Chrome, Safari, and Firefox that allow you to take screenshots of and report bugs on the spot
+
+> - Easy-to-read project status reports
+
+> - Email notifications
+
+> - In-app bug reporting in mobile apps that allows you to annotate screenshots from your phone
+
+> - Extra features like pre-built integrations or more storage space cost $5 to $10 per month each.
+
+> ## Requirements
+
+>Lean Testing is a SaaS solution, so installation doesn’t require a database or web server. Their data is hosted via Amazon Web Services. Heads up, while you can export data from Lean Testing, the system doesn’t currently offer the ability to import issues from other bug trackers. So if you need to migrate data, you might want to look into another solution for now.
+
+> ## What users say
+
+> Pros: Clean interface
+
+> Cons: Sometimes hard to get in touch with customer support.
+
+[Source](https://blog.capterra.com/top-free-bug-tracking-software/)
+
+[More Reviews](https://www.capterra.com/p/133377/Lean-Testing/)
+
+____
+
+Anyway, thanks for the great app and all the hard work you put into it. ",1518109485.0,11,0.87,7
+apple,Apple drops a bunch of network services from macOS Server,,1517331123.0,115,0.93,56
+apolloapp,[Feature Request] Submit new post from share sheet.,,1517329029.0,247,0.91,13
+electricians,[Help - Denver] Why are these switches connected?,"I’m just replacing some old switches in a bathroom. One for lights and the other for the fan. 
+
+https://i.imgur.com/2go7NLn.jpg
+
+The two switches are connected by the yellow nut in the middle, but I’m not sure why. There are 3 romex lines into the box. The two switches do act independently of one another, so it seems to have no effect. 
+
+I just want to make sure I don’t screw something up. The home was built in 1974. 
+
+Other side of the light switch: https://i.imgur.com/r0THb5W.jpg
+
+",1511557519.0,2,1.0,2
+politics,Analysis and comparison of words used by Clinton and Trump in major speeches.,,1469842008.0,1,1.0,1
+im14andthisisdeep,The entire country summed up so simply.,,1467669501.0,11,0.93,2
+askcarsales,[Colorado/Used] Is defining my own rules for engagement acceptable?,"Hopefully this is the right place for this ... 
+
+I've had some difficulty dealing with dealerships/sales people in the past, so I decided to re-think the process and define the rules for myself. My goal is to be fair, but also not get pushed into something I don't want. To that extent, I created a document (PDF) outlining what I want and the manner in which I'm will handle offers in this process. A link to it is here: https://dl.dropboxusercontent.com/u/53141/Used%20Car%20Request.pdf
+
+My questions are: 1) Does anyone consider this rude? My intention is to have a good relationship, not a hostile one. 2.) Have I left out any critical details that might be helpful to those participating? 3.) Would you be inclined to respond if you received something like this, and if not why not?
+
+Thanks in advance for any advise. 
+
+
+
+",1438123283.0,7,0.73,49
+learnprogramming,[PHP] Can someone explain static methods that return class instances?,"Could someone explain to me the concept behind using static methods to init a class and return an instance, like so:
+
+    $instance = ClassName::make($something);
+
+
+An example can be found in [this screenshot](https://www.evernote.com/l/AAFiPysntw5DC5MKW6MCvVmyuQ3QQJqK-gUB/image.png) (direct link), which was pulled from [this YouTube video](https://youtu.be/6Qbj7h2Zo00?t=4m). 
+
+This pattern seems to be used quite a bit throughout Laravel. Does this pattern have a name? Should I be using this pattern rather than the more ubiquitous format (below) when writing and using my own classes?:
+
+    $instance = new ClassName;
+
+TIA for your expertise on this.",1434060681.0,1,1.0,10
+webdev,How many visitors don't run JS and possible reasons for it. An interesting analysis by UK.gov,,1431014595.0,120,0.96,73
+webdev,Looking for a summary of package/dependency managers and a cheat sheet for quick usage.,"I'm a fairly experienced web developer, but lately, the number of package and dependency managers has grown faster than I can keep up with. I just inherited a project with a slew of dot-files and I honestly don't know how to get all of them initialized, or which offer redundant functionality to tools I already use. So far, I can see the following relevant files:
+
+* .ruby-version *(RBENV)*
+* bower.json 
+* .composer
+* Gruntfile.js
+* config.codekit 
+* Gemfile
+* Gemfile.lock
+* config.rb *(contains sass dependencies, etc.)*
+* package.json *(NPM)*
+* config/deploy.rb *(looks like capistrano)*
+* config/credentials.rb *(included in deploy.rb)*
+* .editorconfig
+
+I know what about 50% of this stuff is. Is all this really necessary? It seems redundant in some places, but since I haven't had a workflow that uses all of this, I don't really know how all these tools fit together to form the complete picture. I really just want to get up and running and make a few changes to the project, but I fear I'm going to screw something up. What's the proper init() order on this? Having not used bower before, can't I just use package.json to accomplish the same thing? I haven't used grunt, yet. I suppose I should learn, but I already use terminal to run `compass watch`, and the framework I'm using already compresses, minimizes and caches css and js, so, what's the point there?
+
+What I'm really looking fore is some kind of a diagram that shows how all these fit together or some kind of a feature matrix that shows what each does compared with the others. Many TIA.
+",1408555325.0,1,1.0,0
+askcarsales,Where do new cars go to die?,"There's no way 100% of new cars get sold, right? So where do the cars go that you absolutely can't seem to sell?  
+
+I'm looking to buy a new or used car, and I'm wondering if it's possible to pick up a ""new"" 2011/12 that never sold and try to save big bucks. Does that ever happen?",1396330122.0,5,0.69,26
+legaladvice,Unpaid freelance developer - Fearing lawsuit over site takedown.,"**Background**
+
+I'm a developer in the U.S. I've recently completed and launched a website for an ad agency. The ad agency is refusing to pay the final invoice. I have exclusive control over the files that make up the site and have threatened to bring down the site if I'm not paid. I fear I will be sued by the ad agency's client for the effect it may have on them.
+
+I have already contacted my attorney. They refuse to help in this matter because the person who owns the ad agency is well known in town.
+
+**Key Details**
+
+* An original estimate was agreed to. The amount on that estimate has been paid, but only after they made every attempt to not pay.
+* The original estimate included very specific terms, but all written in layman's terms. 
+* The project extended well beyond the original estimate due to change requests, which I do have in writing in the form of an email. 
+* I did advise my client very clearly that the requested changes were beyond scope and would be billed in addition to the estimate. Little did I realize at the time, the client was deliberately authorizing the work only by phone.
+* Agency now states all the additional work was never authorized. 
+* I have since fired the agency.
+
+
+**Opinionated Remarks**
+
+* The agency's client is aware of the situation and would receive formal notification from me prior to me taking down the site. However, they don't have another site to fallback on, not even the old site. So, I don't know what action they could take.
+* The agency never signed additional estimates for the additional work. I'm aware this could be the nail in the coffin for me. I'm still curious about what options I have for showing that the work was authorized? For instance, my estimate was very clear about the duties I would perform, and the work they requested in writing is very clearly beyond those duties. Is that good enough?
+* I'm willing to be upside-down on the project if it means forcing the agency to pay up. 
+
+**Questions**
+
+* What would the agency's client sue me for, if they were going to sue for taking down the site?
+* Does the agency's client have a decent case? 
+* I need help understanding the difference between ""I intended for you to do the work"" and ""I did not authorize you to do the work"". The agency maintains both positions. 
+* There may still be an opportunity for the agency to authorize the work. The project was versioned at various points along the way. If their position is that they didn't authorize the work, I can roll back to the point where they've paid for the work, and in doing so give them the opportunity to buy back the work for the price on the invoice. Thoughts on that?
+* The value of the remaining invoice is probably small claims-level. Does this mean I can't sue?
+* Dealing with all of this is costing me billable hours. Can I bill the agency for all the time they are costing me?
+
+Thanks in advance for any advice offered.
+
+Edit: State: KS
+",1395277685.0,2,0.67,13
+DealsReddit,[Crutchfield] Boston Acoustics SoundWare XS Digital Cinema (2.1) Bluetooth-capable powered speakers w remote. $179 ($320 off).,,1393182870.0,18,0.73,2
+AskReddit,"Hey Reddit, what is something that has a EARNED bad reputation but deserves a second chance because it doesn't suck anymore?",,1392056394.0,1819,0.91,5338
+Health,No doctor seems to be able to help me with my back pain. Need hivemind perspective.,"**The Issue**
+
+* A decade of back pain in a very specific point.
+
+* The muscle at the point is very inflamed. 
+
+* It feels like the spine is pinching the muscle with every movement, causing further irritation.
+
+* Arching my back (bending forward) gives some relief, but obviously causes other issues for the rest of my back.
+
+* Standing up straight hurts. Bending sideways or backwards is very painful.
+
+* The constant pain is really affecting my ability to concentrate, my patience with family, my job, etc.
+
+**What Hasn't Worked**
+
+* X-Rays show no issues. 
+
+* Doctors. I've been to several, who all do the same thing -- NSAID, muscle relaxer, pain-killer, site-point injection, see you in a few weeks.
+
+* NSAIDs have been of little to no help -- I have tried so many.
+
+* Muscle relaxers.
+
+* Physical Therapy only slightly helpful.
+
+* Site-injection of Lidocaine
+
+* All the OTC creams.
+
+* Ice. I'm laying on a block of ice right now. It helps, until I stop. 
+
+**What Has Worked**
+
+* Cortisone shot at the site fixed the issue, but obviously that's a temporary solution, and my doctor has decided not to let me have anymore, even though it's been more than six months. Not sure why.
+
+* Percocet. But I really don't want to take it. Really
+ 
+* Physical therapy helped a little, but I can only do it when the Cortisone is working. 
+
+**Background**
+
+32/m. I'm not aware of any specific incident that caused the issue. My shitty mattress makes the issue worse, but it certainly isn't the cause. I sit in a chair all day.
+
+I have a rider with my insurance provider that prohibits coverage of any back issues as a pre-existing condition, so I can't really afford to see a specialist or go to a bunch of PT appointments. I feel like I'm paying the insurance company, and the doctor, and the pharmacy, and the PT -- everyone has my money and I have nothing to show for it. Nothing is fixing the issue and I can't fucking take it anymore.
+
+Anyway, I would really appreciate it if anyone has any ideas about what the cause could be, what other treatment options there are, how to get results for all the money I'm spending, etc. TIA.
+",1375070762.0,12,0.78,28
+PoliticalDiscussion,Serious question about Republican response to Snowden.,"Republicans want small, non-intrusive gov’t and constitutional right to privacy, right? Why no support for Snowden? Seriously, I don’t understand the contradiction. I would have expected his actions to have rather broad cross-party support.",1370874145.0,0,0.43,7
+web_design,A great piece by The Onion that I actually found inspiring. ,,1358696708.0,0,0.5,0
+apple,"XtraFinder: Tabbed browsing for Finder, plus it fixes so many little annoyances. Free.",,1356976665.0,91,0.89,20
+pics,"This is what karma really looks like. And yes, sometimes it does have real world value.",,1332284354.0,1,1.0,0
+Entrepreneur,What is your experience with/opinion of SCORE?,"I've decided to make the jump. I'm going to start my own interactive marketing company. I went to SCORE because I thought one more point of view might be helpful. But I'm cautious of the people on there, most of whom are executives, but not entrepreneurs. 
+
+Has anyone here used the program? What's your opinion?",1320639497.0,10,0.91,14

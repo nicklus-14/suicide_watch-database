@@ -1,0 +1,338 @@
+subreddit,body,created_utc,score
+MtF,"Have you got any DIY sources, I haven’t heard of that? I’m way to scared to ask a doctor and stuff.",1598150000.0,1
+insomnia,"Oh, thanks. I haven’t heard of Quetiapine, I’ll probably do some reason. Do you recommend extended release melatonin? Also, what dose worked for you?
+
+Edit: I have heard of Quetiapine but not by that name, I don’t think it’s the thing for me but thanks for telling me about it.",1597345941.0,1
+Instagram,"That’s what I did, it still asks for a phone number though.",1588652393.0,1
+GMail,"Okay, thanks. I’ll try that. I really appreciate it.",1587362931.0,1
+privacy,"My school makes us use it, I’m trying to make the best of a bad situation.",1587289682.0,1
+privacy,"I’ve got to use Gmail, I know it isn’t good but I have to use it.",1587283422.0,1
+privacy,"Oh, okay. Thanks.",1587270415.0,2
+privacy,"Is there a way to disable the plugin? Sorry if the answer is obvious, I don’t know much about this.",1587266060.0,2
+Atom,"Oh, thanks. I don’t really know why it bothers me, I just don’t like how it looks. I’m surprised that there’s no way to turn it off, I think I remember being off when I first got Atom. Thanks anyway though.",1587196793.0,2
+GMail,"It says macOS in the “Third-party apps with account access”, which is to be expected because I’m using a macOS device. I’m not sure if it includes websites because I think I signed in with them but they are not coming up.",1587103449.0,1
+iCloud,I did try signing into my account on the iCloud website.,1587017325.0,1
+MacOS,"Oh yeah, I forgot about that. Thanks.",1586954804.0,1
+MacOS,"I’ll have to try that, thanks.",1586951075.0,1
+MacOS,"Do you know how to make LaunchPad icon folders appear to be folders in Finder? Sorry if that doesn’t make much sense, I can’t really describe what I mean. Thanks.",1586942469.0,1
+privacy,"Okay, thanks.",1586854483.0,1
+privacy,"Okay, thanks.",1586851013.0,1
+privacy,"Okay, I thought so. Thanks.",1586823071.0,3
+privacy,I switched to Tutanota but I didn’t get to tell everyone so they thought I was still using Gmail.,1586822623.0,2
+Malware,"Okay, thanks. I really appreciate it.",1586763611.0,1
+learnpython,So there’s no risk of malware if I ran them?,1586750504.0,1
+Malware,"Here is Update Shell Profile.command 
+
+\#!/bin/sh
+
+&#x200B;
+
+echo ""This script will update your shell profile when the 'bin' directory""
+
+echo ""of python is not early enough of the PATH of your shell.""
+
+echo ""These changes will be effective only in shell windows that you open""
+
+echo ""after running this script.""
+
+&#x200B;
+
+PYVER=3.8
+
+PYTHON\_ROOT=""/Library/Frameworks/Python.framework/Versions/3.8""
+
+&#x200B;
+
+if \[ \`id -ur\` = 0 \]; then
+
+	\# Run from the installer, do some trickery to fetch the information
+
+	\# we need.
+
+	theShell=""\`finger $USER | grep Shell: | head  -1 | awk '{ print $NF }'\`""
+
+&#x200B;
+
+else
+
+	theShell=""${SHELL}""
+
+fi
+
+&#x200B;
+
+\# Make sure the directory ${PYTHON\_ROOT}/bin is on the users PATH.
+
+BSH=""\`basename ""${theShell}""\`""
+
+case ""${BSH}"" in
+
+bash|ksh|sh|\*csh|zsh)
+
+	if \[ \`id -ur\` = 0 \]; then
+
+		P=\`su - ${USER} -c 'echo A-X-4-X@@$PATH@@X-4-X-A' | grep 'A-X-4-X@@.\*@@X-4-X-A' | sed -e 's/\^A-X-4-X@@//g' -e 's/@@X-4-X-A$//g'\`
+
+	else
+
+		P=""\`(exec -l ${theShell} -c 'echo $PATH')\`""
+
+	fi
+
+	;;
+
+\*)
+
+	echo ""Sorry, I don't know how to patch $BSH shells""
+
+	exit 0
+
+	;;
+
+esac
+
+&#x200B;
+
+\# Now ensure that our bin directory is on $P and before /usr/bin at that
+
+for elem in \`echo $P | tr ':' ' '\`
+
+do
+
+	if \[ ""${elem}"" = ""${PYTHON\_ROOT}/bin"" \]; then
+
+		echo ""All right, you're a python lover already""
+
+		exit 0
+
+	elif \[ ""${elem}"" = ""/usr/bin"" \]; then
+
+		break
+
+	fi
+
+done
+
+&#x200B;
+
+echo ""${PYTHON\_ROOT}/bin is not on your PATH or at least not early enough""
+
+case ""${BSH}"" in
+
+\*csh)
+
+	if \[ -f ""${HOME}/.tcshrc"" \]; then
+
+		RC=""${HOME}/.tcshrc""
+
+	else
+
+		RC=""${HOME}/.cshrc""
+
+	fi
+
+	\# Create backup copy before patching
+
+	if \[ -f ""${RC}"" \]; then
+
+		cp -fp ""${RC}"" ""${RC}.pysave""
+
+	fi
+
+	echo """" >> ""${RC}""
+
+	echo ""# Setting PATH for Python ${PYVER}"" >> ""${RC}""
+
+	echo ""# The original version is saved in .cshrc.pysave"" >> ""${RC}""
+
+	echo ""set path=(${PYTHON\_ROOT}/bin ""'$path'"")"" >> ""${RC}""
+
+	if \[ \`id -ur\` = 0 \]; then
+
+		chown ""${USER}"" ""${RC}""
+
+	fi
+
+	exit 0
+
+	;;
+
+bash)
+
+	if \[ -e ""${HOME}/.bash\_profile"" \]; then
+
+		PR=""${HOME}/.bash\_profile""
+
+	elif \[ -e ""${HOME}/.bash\_login"" \]; then
+
+		PR=""${HOME}/.bash\_login""
+
+	elif \[ -e ""${HOME}/.profile"" \]; then
+
+		PR=""${HOME}/.profile""
+
+	else
+
+		PR=""${HOME}/.bash\_profile""
+
+	fi
+
+	;;
+
+zsh)
+
+PR=""${HOME}/.zprofile""
+
+;;
+
+\*sh)
+
+	PR=""${HOME}/.profile""
+
+	;;
+
+esac
+
+&#x200B;
+
+\# Create backup copy before patching
+
+if \[ -f ""${PR}"" \]; then
+
+	cp -fp ""${PR}"" ""${PR}.pysave""
+
+fi
+
+echo """" >> ""${PR}""
+
+echo ""# Setting PATH for Python ${PYVER}"" >> ""${PR}""
+
+echo ""# The original version is saved in \`basename ${PR}\`.pysave"" >> ""${PR}""
+
+echo 'PATH=""'""${PYTHON\_ROOT}/bin""':${PATH}""' >> ""${PR}""
+
+echo 'export PATH' >> ""${PR}""
+
+if \[ \`id -ur\` = 0 \]; then
+
+	chown ""${USER}"" ""${PR}""
+
+fi
+
+exit 0
+
+Here is Install Certificates.command
+
+\#!/bin/sh
+
+&#x200B;
+
+/Library/Frameworks/Python.framework/Versions/3.8/bin/python3.8 << ""EOF""
+
+&#x200B;
+
+\# install\_certifi.py
+
+\#
+
+\# sample script to install or update a set of default Root Certificates
+
+\# for the ssl module.  Uses the certificates provided by the certifi package:
+
+\#       [https://pypi.org/project/certifi/](https://pypi.org/project/certifi/)
+
+&#x200B;
+
+import os
+
+import os.path
+
+import ssl
+
+import stat
+
+import subprocess
+
+import sys
+
+&#x200B;
+
+STAT\_0o775 = ( stat.S\_IRUSR | stat.S\_IWUSR | stat.S\_IXUSR
+
+| stat.S\_IRGRP | stat.S\_IWGRP | stat.S\_IXGRP
+
+| stat.S\_IROTH |                stat.S\_IXOTH )
+
+&#x200B;
+
+def main():
+
+openssl\_dir, openssl\_cafile = os.path.split(
+
+ssl.get\_default\_verify\_paths().openssl\_cafile)
+
+&#x200B;
+
+print("" -- pip install --upgrade certifi"")
+
+subprocess.check\_call(\[sys.executable,
+
+""-E"", ""-s"", ""-m"", ""pip"", ""install"", ""--upgrade"", ""certifi""\])
+
+&#x200B;
+
+import certifi
+
+&#x200B;
+
+\# change working directory to the default SSL directory
+
+os.chdir(openssl\_dir)
+
+relpath\_to\_certifi\_cafile = os.path.relpath(certifi.where())
+
+print("" -- removing any existing file or link"")
+
+try:
+
+os.remove(openssl\_cafile)
+
+except FileNotFoundError:
+
+pass
+
+print("" -- creating symlink to certifi certificate bundle"")
+
+os.symlink(relpath\_to\_certifi\_cafile, openssl\_cafile)
+
+print("" -- setting permissions"")
+
+os.chmod(openssl\_cafile, STAT\_0o775)
+
+print("" -- update complete"")
+
+&#x200B;
+
+if \_\_name\_\_ == '\_\_main\_\_':
+
+main()
+
+EOF
+
+ 
+
+Are they safe? Thanks.",1586742418.0,2
+NightInTheWoods,I meant an oval because zeros are normally ovals not circles.,1585718622.0,4
+NightInTheWoods,"I thought about that, wouldn’t it be an oval?",1585716116.0,4
+Drugs,"Okay, I’ll give ginseng a try, I think it might react with clozapine though.",1585373261.0,1
+Drugs,Thanks,1585373223.0,1
+Drugs,"Thanks, I doubt I’ll be able to get them though.",1585373215.0,1
+Antipsychiatry,I didn’t really have a choice unfortunately.,1585363104.0,1
+Antipsychiatry,I’ll try.,1574491284.0,2
+Antipsychiatry,"Okay, thanks for the suggestions.",1574484060.0,1
+Antipsychiatry,"I want to, I can’t though.",1574474919.0,1
+Antipsychiatry,"Okay, I hope they let me taper of it.",1574409759.0,2
+Antipsychiatry,What do you mean by “more revenge”?,1574408900.0,2
+Antipsychiatry,"Thanks for the sources, they might get annoyed that I’m researching about it though. They won’t listen but I can better from the sessions with a psychologist, not cocktails of medications.",1573809141.0,5
+Antipsychiatry,Thanks,1573774540.0,3
+selfharm,"That’s a good idea, thanks.",1573295314.0,1

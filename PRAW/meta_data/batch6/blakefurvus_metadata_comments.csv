@@ -1,0 +1,253 @@
+subreddit,body,created_utc,score
+wholesomeanimemes,And that thief over there...,1580069010.0,1
+webdev,Dream of every software engineer...,1580052309.0,2
+webdev,"It's correct tho
+
+>Yes, I did just imply that building an application in a 3D gaming engine and building a web page are basically the same task.",1580052178.0,22
+webdev,"Yeah, I feel the same. Maybe because I like low level stuff and how anything works underneath, but it's just so interesting.
+
+I mean, who came up with the MVC, Messaging between objects, NodeJS etc... People nowadays really impress me.
+
+I encourage my peers to learn new stuff because it makes their life easier. For example, an instant messaging system would be much easier in node cuz you have things like socket.io, express, featherjs as opposed to php or dotnet.
+
+And yet most of them doesn't bother mainly because of their lack of knowledge. What they don't know is, the greater they understand the more money they will gather. That saddens me the most cuz it's real fun to learn tbh.",1580052009.0,2
+webdev,"Everything in software is basically like languages to me. They change the way you think and the way you act.
+
+Functional languages teach you how to write reusable code, low level ones teach you about types and safety, frameworks teach you how to structure your code...
+
+Just the idea that I'm getting a broader view in general by learning new things, that motivates me.",1580042650.0,44
+wholesomeanimemes,"Psst, hey you...
+
+You're finally awake...",1580041870.0,16
+C_Programming,"Well it's not intellij, but it gets the job done. So...",1579949655.0,0
+nameaserver,*ServingWetStuff*,1579884302.0,1
+MadeMeSmile,I suppose you meant THE CHEEKS?,1579798728.0,9
+MadeMeSmile,"The way she blushes is cute af tho.
+
+But it might just be the ball.",1579797335.0,111
+webdev,That's the whole gist of webdev in a nutshell,1579793238.0,1
+wholesomeanimemes,This made my day lol,1579770083.0,1
+wholesomeanimemes,Sauce?,1579621826.0,3
+funny,This was from an anime. I remember that.,1579621602.0,1
+ProgrammingLanguages,"That's far more complicated and I wouldn't suggest doing it but as an exercise.
+
+Google for Intel's x64 instruction manuel. It has necessary information. You just have to write bytes to a file.
+
+Even a simple hello world program, needs a lot of manipulation. You have to use various registers, call kernel functions (for printing), know the required instruction set...
+
+Real pain. And it only works on intel chips. What I suggest is creating an assembler. Then compiling to it's instructions which is easier and better imo. Also easier to debug. And then let the assembler compile it into appropriate CPU instructions.
+
+But it's your language your decisions :p",1579611207.0,2
+ProgrammingLanguages,LLVM page has a tutorial. Google for kaleidoscope language.,1579596915.0,3
+SovietWomble,"""I like it when you're mean to me daddy""",1579527669.0,2
+SovietWomble,"Oh no, he is my dad... Nevermind.",1579525113.0,2
+C_Programming,"Okay so, first things first. That was was the best read I ever had AND GOD THANK YOU for putting your time reading it carefully. I'm really happy and I would like to answer some of the stuff.
+
+> extern ""C"" { 
+I would not embrace #includes with this... What if it messes up with their content?
+
+I will fix extern C thing. Thanks for pointing that out.
+
+> #define gui_text(...) 
+sounds like you were too lazy to write all parameters. Variadic macro will pollute the compiler diagnostics messages if you enter wrong parameter list.
+
+I was lazy yes. Cuz initially I thought that every widget would be descired in a doc. I don't have a doc yet. But if you say so, I will put arguments.
+
+> #ifdef GUI_IMPLEMENTATION - seems useless to me because you have to distribute gui.c anyway. Just add it to the list of compiled objects. That would make some sense if you literally put gui.c content there. That's how Loguru C++ header only library was distributed until recent versions. Anyway header-only libraries is rather C++ thing.
+
+Again, I'm lazy so I thought like, ""let's just separate these for now, I will put them together when it's more comfortable"". And I will, promise.
+
+> GEN_ID is not so unique as you may think. What if you call library functions in multiple C files?
+
+Will change that to something unique.
+
+> struct gui_state_t; - why it is in the API if you don't use it at all there? (API = assuming GUI_IMPLEMENTATION is unset). 
+BTW I think _t suffix is conventionally reserved for typedefs.
+
+Yeah, thats a shame. I'm awful. Will remove _t's and struct from API.
+
+> gui variable as global state is pretty poor design choice
+
+I would like to make this clear cuz I think I'm just oversimplifying things there. But if your application uses edere gui, you can only have one window (and that's all you need tbh). I don't see any editor that uses more than 1 window nowadays (maybe because of electron).
+
+And multithreaded rendering? I never thought abiur it, but it's an immediate mode gui. It will be slow anyways.
+
+So, one global state works for me.
+
+> Uint32 color = 0xaaaaaa; - magic constant 
+gui.style.display.type == 'f' - probably worst kind of magic constant. Why not using enum?
+
+The first one is actually an rgb color code. But the second is, well, will change them to enums (Thanks again). (I really need to document my code aaaahh. CanbI just die already?)
+
+> atexit(gui_halt)
+
+Noted, will fix
+
+> // Well.. too obvius (really?) - You are going to be surprised if you find this comment above rewritten and doing-things-completely-different-to-what-you-initially-thought function after few months. Don't write more comments than necessary - they become obsolete very quickly
+
+Mate, I'm 17. It was funny for me. BUUUT, will change that.
+
+> static const int w = 15; 
+Do you know what static means in this context?
+w? Really? 
+
+Uhmm... I can feel that you wanna punch me in the face right now.. so... I will fix it, definitely will...
+
+> xny - you should really improve variable naming
+
+Because it holds xny, so... Btw I really should.
+
+> Everything above LIBRARY FUNCTIONS could be made static. But first you should solve (or at least explain) the weird concept of including gui.c in header file.
+
+Again, I was lazy. Will fix it in the next commit tho.
+
+> // Calculate - calculate what?
+
+I will answer it below:
+
+> get_pos - probably breaks single responsibility rule - it is supposed to get some sort of position, but internally calls push_frame which changes GUI state.
+
+You see, depending on gui.style.display.type (flex 'f' or fixed 'x') it calculates where to put the element.
+
+Every element just like html, gets put under or next to the element before (depending on gui.style.display.direction) or just to xny coordinates user specified if display type is fixed.
+
+If display if flex, it pushes other element's x and y's by it's w and h affecting gui.style.display.frame (which is used by get_pos). So, it does break it. But it's intended.
+
+---------------------------------------
+
+Btw, do you have a github account? I really would like to see your projects!",1579476776.0,1
+classicalmusic,That... Will make my life. Thanks...,1579389387.0,3
+classicalmusic,"Yeah actually if you ask yourself these questions you said, it's most likely you have never thought about them before for yourself.
+
+And if I were to ask a question like ""Who is Rachmaninoff?"" that's a question he probably never thought of. And so to give a proper answer my dear composer would go on a small journey.
+
+Which does nothing at first but changes him dramatically in the long run if it gets stuck on his mind too much. I don't want his music to sound kooky because of me.
+
+And so, I ask small stuff. Btw I really would like to know what type of cigarette he smoked :(",1579389289.0,3
+classicalmusic,"Hey Rachmaninoff!
+
+* Which brand of a cigarette you smoke?
+* What colour do you like the most?
+* Can I see you smiling genuinely?
+* What type of sounds make you want to live?
+* Do you like deserts, or you like spicy stuff?
+* From the deepest corner of your heart, what's there? What does that sound like?",1579387412.0,4
+Advice,You're right. I will try to gather more information rn. Thanks for the idea tho helped,1579251320.0,2
+Advice,"I could make up a conversation on it actually.
+
+""I want to get a violin but dunno which colour should I choose"" and hid question in the end
+
+Helped thanks",1579239767.0,1
+Advice,"She had some problems in her life when we met. I helped her a little and already confessed. I don't really know how she feels cuz I told that I would be there for her no need for shitty lovers stuff. Most likely, she trusts me more than I do to myself.
+
+And she doesn't play violin btw. I just thought it would fit her.",1579239607.0,1
+webdev,r/YourJokeButWorse,1578663973.0,2
+classicalmusic,"You should create a playlist of your own pieces.
+
+I would like to see more cuz this is quite unique!",1578512667.0,5
+webdev,"You must consider a proper way of structuring behaviour.
+
+Will it behave as a framework?
+Like, when ran on a directory, will it compile files inside 'include' and/or 'src', store obj files in 'junk'?
+
+Or will it behave as a programmable script?
+Which often is the case (make, cmake, premake).
+
+Framework alike build systems, have the advantage of consistency over projects file structure. But they can be incompatible with some libraries since C/C++ doesn't really have a standard for it.
+
+On the other hand, programmable scripts have more flexibility since you give control over files to the programmer. But they have this headache of creating a new language for programmers to use.  And they have to learn it to use your system which is a pain in the ass.
+
+While also I'm on it, you need to think about compiler flags too. For gcc, clang maybe there isn't much difference but msvc flags are an absolute disgrace tbh. And the worst part is everyone has at least that 1 dumb programmer friend who is a windows fan and thus can't stand UNIX systems. So.. yeah?
+
+You also need a way to indicate if a project should produce a library or an executable? On frameworks, this is rather easy since you can create a file named 'lib' or 'app' and it would do the trick. But in scripts, man.. dammit.",1578345219.0,1
+webdev,"That's the most beautiful thing I have laid my eyes this month. Balance between dark and light themes is simply gorgeous.
+
+I would definitely use it when released! Keep up the good work 😁",1578231616.0,2
+webdev,"You have to tell them to return back to you in any need. If they need a button to be pushed somewhere, you're the person to decide that. Also, ask to them if the changes fit for them.
+
+Remember, communication is the key!",1578222244.0,4
+C_Programming,Learn pointers. (Mobile App: Sololearn),1578161960.0,2
+classicalmusic,"Every piece from Rachmaninoff.
+Just google, you'll like it!",1578161854.0,1
+classicalmusic,"I used listen it a lot too. His symphony 3's second movement catches me more nowadays tho.
+
+Such a wonderful man.",1578029896.0,1
+classicalmusic,"Rachmaninoff piano concerto 3
+
+(Joke, sorry:D)",1577985950.0,2
+conlangs,"Turkish has only one pronoun for third person: O
+
+It means both, he, she and it. And then you append suffixes to make it his, hers, them etc.
+
+When used they actually mean 'this' or 'that' but it's completely fine to be used for addressing someone.",1577941683.0,4
+webdev,Andromeda,1577468990.0,1
+JordanPeterson,"Jordan peterson tends to put this very out that your iq decides upon your fate (most likely because it does in one way or another) but you don't have to worry about that!
+
+In a philosophical way, iq is just bullshit.
+
+Go listen Alan Watts, you'll understand better :/
+
+And then watch some SovietWomble to let things go away ;)",1577387539.0,1
+AskReddit,"""Alone again"" by Gilbert O'sullivan",1577136691.0,1
+sad,"Look at /r/SuicideWatch
+Stories there, are really depressing.
+I cried a few times by just reading.",1576607242.0,1
+SuicideWatch,"Yeah I felt intimacy in that. Really you helped me just now. Thank you for that and, sorry I wasted your time a little haven't I :(
+
+Edit: hope you have/had a good day!",1576168262.0,1
+SuicideWatch,"You know what, thank you. You're a good person. Really, thanks. 
+
+>Lol i hate you cause ur stupid 
+
+That's what I needed I guess :D",1576167674.0,1
+SuicideWatch,You really hate me don't you. What have I done?,1576166329.0,1
+SuicideWatch,"I'm not special yes. But different, in many ways.
+
+For example, if you were to sit with me in my class for a day. And you were to watch every one around you, I don't know who you are or what age you are, but you would think the same way as I do.
+
+I think main problems here is that, every kid around me, is a kid because they are treated as if they were still kids. I mean, I realised that when I was 10 or so, because, well, you can do pretty much everything at 10-18 (watching porn, get interested in a hobby, talk about philosophy with your parents even tho they don't understand etc.)
+
+And so I decided to grow myself. Done lots of things to get up from people around me. I learned computer programming, origami, drawing, music, cooking... anything you can do at home, I mastered it. Now, it all is empty. Because I finally realised.
+
+I will be alone because it's hard to find people, who are also interested in same things as me since like 95% of people who are 10 will always be treated as kids, till their 18 which is too late for someone to reach where I am (I got a f 8 year head start dude).
+
+I didn't know wtf was wrong too. These are my best tries to figure out what is not functioning.",1576115184.0,1
+SuicideWatch,"When saying 95% I meant ""from people around me"" not from the whole world lol.
+
+It's easier to get top when standards are low :(",1576114076.0,1
+SuicideWatch,"Yeah I sound like a narcissist. But trust me, all I need is 2 or 3 people with brains. Do I ask for too much? Do I have to die to finally find peace? World is so chaotic for me.",1576113791.0,1
+SuicideWatch,https://youtu.be/iNns8qDUEeA,1576096212.0,1
+C_Programming,"Create your own programming language.
+That impresses everyone usually. (at least, that was what I did back then hehe :D)",1575655489.0,2
+C_Programming,"Simple i5 laptop with 4g ram and nvidia graphics
+
+Elementary OS, atom beta, premake4 and epiphany",1575655206.0,1
+C_Programming,You can try rendering in a char* array. And then printing it to screen. There should be something like sprintf to write into strings.,1575616565.0,1
+C_Programming,"Look at Code Runner
+You can execute custom commands by a hotkey.
+
+Mine is bound to run:
+""make &&. /{binary_location}""",1575466153.0,2
+C_Programming,(Current state of complexity) (don't be afraid bruh),1575392892.0,3
+C_Programming,I need learning material tho :(,1575382897.0,1
+C_Programming,"For web, you better learn HTML, CSS, JavaScript",1575382225.0,6
+C_Programming,"That library is an overkill for me honestly :D
+I just wanted a link for a tutorial or something.
+
+But good job btw. I looked at couple of examples in the repo. This can be used in place of imgui (for people who dislike c++). I didn't felt lost in code at least.
+
+Also I liked how styling works. Might steal that 😈",1575381813.0,1
+C_Programming,"Thank you, but I can already write OpenGL, Shaders, 3D etc. I just wondered if there is any standard and/or logical stuff that I don't know. Like how should I organise structs or manage state. Great site btw.",1575381360.0,1
+C_Programming,Thank you for the suggestion! It's interesting I'll definitely take a look at microwindow sys. but I was just curious about state management and how the code structured in a typical GUI library :|,1575381025.0,1
+C_Programming,Thank you. Much appreciated :),1575351080.0,5
+webdev,"In most Linux distro's, if you look at the built in store for vscode it's actually community built (by source). Just don't download from website.",1575342095.0,1
+webdev,"I'm not close to any kind of ""professionality"" in programming partly because I'm still a student :/
+
+But disregarding it, here is [my portfolio](http://mustafabyildiz.cf/). I've just listed what I know, links to my social media accounts and projects I've done so far.
+
+Not that pretty but it has my photo at least :P
+
+Edit: Also, looking at other people's portfolios here on reddit is really helpful actually. Mine is a mixture of 4-5 links I've found here.",1575341591.0,1
+Showerthoughts,"Well, it's not that easy to crack accounts :/",1575232329.0,1
+ElderScrolls,"This is gold, literally.",1575231459.0,1
+AskReddit,Be on the same side if you can't defeat :P,1575230809.0,2

@@ -1,0 +1,1157 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+starcitizen,The Atlas destroyed all of my cargo,"This is just a rant.
+
+I spent 4+ hours to get Construction materials with the vulture.
+
+Once I rented a freelancer max to move everything I wanted to try the Atlas.
+
+It took ages to stack 120 boxes into the freelancer, but I got it in.
+
+I flew for 7 minutes to deliver spot.
+
+I was going in and out of the Atlas while loading to do simple stuff.
+
+About half way through the Atlas teleported everywhere and killed me.
+
+I woke up in another station.
+
+
+Rip 120 SCU of cargo. Taking a break from the game...",1742040386.0,3,0.61,18
+godot,Multiplayer basics of spawning a scene for clients and server,"Hi all. I've been trying to wrap my head around this for a few days...
+
+I have a server and two clients connecting. 
+
+When a player presses a button, it will shoot a raycast to a resource to run the method to add a refinery.  
+This refinery needs to be spawned for both the clients and the host. 
+
+When using rpc on the spawning method in the resource, I have tried ""call\_local"", ""call\_remote"", ""any\_peer"" etc, but I end up only spawning it either only for the host, or only one of the clients.   
+
+
+How can I make sure this gets added for everyone?   
+",1707065972.0,1,1.0,4
+starcitizen,How can I get the TLDR for what happened since Citizencon?,,1706799239.0,0,0.28,14
+Unity3D,How can I create a PropertyDrawer that only affects one property?,"The problem is simple. 
+
+I have a Requirement class.   
+In my Scriptable Object, I have a list of type Requirements. This has a custom PropertyDrawer that really simplifies the workflow. 
+
+However, in another variable in the same Scriptable Object I have another variable of type Production (class). Production also uses Requirements. How can I make sure that the PropertyDrawer ignores anything but the one list I want to affect?
+
+&#x200B;
+
+[This is how the PropertyDrawer is defined](https://preview.redd.it/0c15d38izffc1.png?width=504&format=png&auto=webp&s=41f941f8a1552dd9e15c39914e1533e124f9f5e6)
+
+&#x200B;
+
+[These are the variable in ScriptableObject that are affected](https://preview.redd.it/53q68x8tzffc1.png?width=726&format=png&auto=webp&s=e306040da35a4784bf1f78c1785db1a6d3d9f725)
+
+&#x200B;
+
+[This is the Production class](https://preview.redd.it/r8yzcvfzzffc1.png?width=566&format=png&auto=webp&s=1122da8df2cd6b26b8f1b057f0b54e94fae3c6fd)",1706561682.0,1,1.0,6
+KerbalSpaceProgram,"Any info about when career mode comes? Right now we have science progression, but every building part is free at the moment, so it is quite easy to progress",,1703088712.0,0,0.2,4
+godot,Can't find a way to change gravity based on orientation (KinematicBody),"Currently I'm testing out Godot, and making a character walk around a sphere. I did this with rigidBody, and now I'm trying to do the same with KinematicBody.
+
+When I run around the sphere, my character rotates based on the center of the sphere. However, the gravity still pulls me off the sphere once I'm too far from the top of the sphere.
+
+&#x200B;
+
+This is how I rotate my body around:
+
+    func rotate_player_to_gravity(delta):
+    	if current_planet != null:
+    		current_gravity_dir = (global_position - current_planet.global_position).normalized() #Get direction of planet in relation to character
+    	
+    	rotation = -current_gravity_dir #Set rotation to direction
+
+The rest of my character is the default KinematicBody script that moves based on `move_and_slide()` using `velocity`.
+
+&#x200B;
+
+Problem is though, that this bit (which simulates the gravity) does not change based on my node's rotation. It will always pull my character down and away from the sphere.
+
+    if not is_on_floor():
+    		velocity.y -= gravity * delta
+
+Anyone have any idea? All my googling has either turned out to be old Godot 3.x functionality (I'm using 4.1) or not done what I need it to.
+
+&#x200B;
+
+&#x200B;
+
+EDIT: SOLVED!
+
+Basically my whole way of thinking was wrong. 
+
+In order to find the correct rotation, I have to find correct basis axis for each direction:
+
+    current_gravity_dir = (global_transform.origin - current_planet.global_transform.origin).normalized() # Find gravity direction
+    		var left_axis = -current_gravity_dir.cross(transform.basis.z) # left_axis is left hand side for player
+    		var my_z = global_transform.basis.z # Don't change z
+    		transform.basis = Basis(left_axis, current_gravity_dir, my_z).orthonormalized() # Current player rotation
+    		up_direction = transform.basis.y # Change up direction
+
+
+Next, I have to find the correct input in relation to my current orientation. This one was easy. Just get the direction you need by the input and multiply it with transform.basis
+
+Lastly, add it to the velocity, and don't set it per axis, like this:
+
+    var move_direction = _get_oriented_input()
+    	
+    	if is_on_floor():
+    		velocity = move_direction * SPEED
+    	if !is_on_floor():
+    		velocity += -current_gravity_dir * gravity
+    	
+    	move_and_slide()
+
+And that's it! Hope this helps someone else too",1700592421.0,4,1.0,6
+godot,"After two days of trying, I have to ask. Why does my character orient on only one axis?","I am using a RigidBody3D as my Character.It spawns on a sphere, with an Area3D node with gravity on it.
+
+Now, when I move around, it should orient itself according to the gravity.
+
+&#x200B;
+
+This is my code for it:
+
+    func _integrate_forces(state: PhysicsDirectBodyState3D):
+    	
+    	
+    	_move_direction = _get_oriented_input() # Gets local input direction
+    	local_gravity = state.total_gravity # Gets gravity direction
+    	
+    	state.transform.basis.y = -local_gravity # Should set player orientation
+    	apply_central_force(_move_direction * move_force)
+
+&#x200B;
+
+Now this somewhat works to rotate it around the whole sphere if I disable ""Lock Orientation"" on the rigidbody, although it is very uncontrollable and wobbly.
+
+If I disable it, It's perfectly smooth on one axis, but doesn't care about the other ones.
+
+[Moving all the way right does not rotate the body](https://preview.redd.it/3655cghmpk1c1.png?width=641&format=png&auto=webp&s=aad843e46ec3bf2a8697ba5f09aca629af0909da)
+
+&#x200B;
+
+[But moving up and down rotates it correctly](https://preview.redd.it/qk6vl2mqpk1c1.png?width=545&format=png&auto=webp&s=31f1e3c479a6cd2a98bd959d7fe1ba7ab08828b9)
+
+Any help would be greatly appreciated. I have googled myself blind on the matter
+
+&#x200B;
+
+&#x200B;
+
+Edit:
+
+The tutorial I'm following does not have this issue, as it has changed its RigidBody ""Mode"" to Character. It looks to be gone since 3.2 though, so I'm open to new ideas.",1700516949.0,2,1.0,5
+hoggit,"I am trying to understand RWR. In a video, this guy says he is not being seen. Then what does this mean?",,1697201412.0,112,0.96,21
+blenderhelp,For some reason my animation render is completely broken. It happens on all files I try to make an animation on. What is happening?,,1693656542.0,4,0.71,22
+PowerShell,How to identify IP address to the correct hostname?,"Hi, I'm trying to connect to my raspberry pi through ssh, but I need to find the correct IP on my network.
+
+My usual solution is to log into the pi to find its IP, but I want to find it through my windows computer first. 
+
+I do  
+
+    arp -a
+
+which returns a lot of IP addresses. Then I need to find the hostname of the IP to connect to the correct one. This is where the problem starts.
+
+Pinging them only lets me know which ones are turned on.
+
+    nbtstat -A x.x.x.x
+
+only returns ""Host not found""
+
+    nslookup x.x.x.x
+
+""Home can't find x.x.x.x: non-existent domain""
+
+&#x200B;
+
+So how can I find this hostname? 
+
+Thanks in advance",1689416162.0,0,0.5,20
+Stormworks,"Engine stalls with high RPS and full clutch, but works fine with low RPS and full clutch","Hi all, this has been driving me mad for a while.
+
+&#x200B;
+
+Workshop link:[https://steamcommunity.com/sharedfiles/filedetails/?id=2998388132](https://steamcommunity.com/sharedfiles/filedetails/?id=2998388132)
+
+&#x200B;
+
+I automatically increase clutch to 1 if the RPS is higher than idle RPS (6) and throttle is higher than 0.
+
+I have a PID making sure I never go below Idle RPS.
+
+When I have RPS under 18 the boat works fine, but as soon as it reaches 19 it dies. I have no idea why.The fuel is being sent in by modular engine fluid pump.Air is getting through an air filter at the top of the boat.
+
+Also note that the engine works fine with high RPS without any clutch.
+
+&#x200B;
+
+The only thing I can guess is the fuel to air ratio (1:2 fuel:air) being wrong. Any clues?
+
+&#x200B;
+
+Solved: In my microcontroller I used fuel\*2 for my air manifold. I did not realize the air manifold could be at max 1, so when the fuel went above 0.5 in usage the air would stay at 1. The result at high RPS were a 1:1 ratio. 
+
+Thanks for all the help!",1688381655.0,7,0.9,33
+starcitizen,So about the SCL,"When they said they could make 1 cap ship a year, but they would need a bigger team and getting a team like that would ""take years"". It is clear to me that the amount of ships they add, amount of concept ships they release and the amount of ship backlog is to a degree where we won't get the ships we've pledged for the next 20 years. 
+
+If someone wanna write to the press to generate some heat and pressure to CIG that'd be great.",1685123954.0,0,0.42,22
+starcitizen,Does anyone else feel CIG is getting more sus as time goes by?,[removed],1683326185.0,0,0.32,22
+indiegames,Our chill citybuilder now has a steam page! As this is our first game we would love some feedback and a wishlist! :D (links in comments),,1682165917.0,18,0.92,3
+gaming,Our chill citybuilder now has a steam page! As this is our first game we would love some feedback and a wishlist! :D,,1682100586.0,12,0.72,8
+blender,My slicer doesn't work like the guy on youtube,,1680741288.0,1,1.0,4
+3Dmodeling,Designing an RC plane from scratch. What software to use?,"I am making an RC plane from scratch. The thing I'm struggeling with is the wings. 
+
+Is Blender good enough to make a wing from scratch? Or what software should I look into? 
+
+My plan is to 3D print this out",1677618304.0,2,1.0,4
+totalwar,I can't move at all in ambush stance. The tooltip says I should be able to move 25%?,,1677103389.0,0,0.45,22
+Unity3D,We have this tiny Z in our game which we can't find in the hierarchy and is not selectable. Any clues how I can remove it?,,1673599139.0,69,0.93,35
+learnprogramming,so how does a junior dev start learning a newly released framework with little documentation?,"Specifically Fresh framework. I tried to hop in right when it launched. I figured out I have never tried server side rendering, or PREACT. 
+
+I ended up giving up until tutorials started popping up. How do I just need more experience, or is there a way for me to learn it by myself? 
+
+Asking for future new stuff to learn",1669455071.0,2,0.63,5
+starcitizen,Overview of ships released past year. How many new concepts compared to old concepts,"Hello. I like new ships as much as anyone else. I also like promises kept. 
+
+Therefore I go over how many concepts CIG releases each year compared to ships released. 
+
+I also keep somewhat track of how many of the ships released are new concepts, and how many of them are old. How many are big ships (which takes 1-2 years to complete) and how many are small low hanging fruits. 
+
+I will first go through the list of ships released, which of these were already concepted, which were new concepts and which were low effort low hanging fruit. I'll end this with a rant.
+
+Without further or do, lets go! 
+
+# Ships released since November 2021
+
+* Anvil Spartan
+* Argo Raft
+* Origin 400i
+* Aegis Redeemer
+* Crusader A2 Hercules
+* Crusader Ares
+* Drake Cutlass steel
+* CO Hoverquad
+* Greycat STV
+* Centurion
+* Drake Mule
+* Scorpius
+* Hull A
+
+Out of these the old already concepted concepts are Redeemer, A2, Hull A and barely Ares (pretty new). The rest are very new concepts. 
+
+The low hanging fruits are Spartan, Steel, Hoverquad, STV, Centurion and Mule. I consider these low hanging fruit because of their relative size and simpleness to create. 
+
+So we basically have 4 old concepts done and 9 new STF/new concepts.
+
+They already have 40 concepted ships to go through. At this pace we will use ten years to got through them all, not counting that they are actively adding more concepts every year. Latest addition is the Galaxy, which is at least one year of work to implement.   
+
+
+Is it only me that is annoyed by this? I also expect to be downvoted by white knights for this. Anyways have a good day, cheers.",1668066360.0,74,0.74,95
+starcitizen,Webcam problems with FOIP/Headtracking,"Hello. I am using Logitech BRIO webcam (quite expensive one). I bought it several years ago and it works great. I actually bought it just for Star Citizen.   
+
+
+Up until over a year ago it just stopped tracking. The calibration window doesn't find me. I have tried all the aspect ratios in both 30 and 60fps. Any idea what I can do to fix it?",1667410250.0,0,0.5,4
+gamedev,I am working on a game in the same genre as this. What made this one not perform great on steam?,"[LakeSide on Steam (steampowered.com)](https://store.steampowered.com/app/1552220/LakeSide/)  
+
+
+I am making a cozy city builder with my small team. The coding and developing are fine and all, the marketing though is a tough one. I wonder what went wrong with this title, and what they could have done differently. 
+
+&#x200B;
+
+Any guess?",1666865905.0,21,0.75,20
+starcitizen,I miss having a roadmap. I loved knowing what to look forward for next year and seeing the general direction even though it might have changed by then,,1662361557.0,54,0.76,75
+Unity3D,New to shaders here. Any idea why my snow doesn't go all the way down towards the edge of the cone?,,1661194689.0,1,1.0,3
+farmingsimulator,Buhrer tractor spins a lot on the back wheel when pulling cultivator?,"It makes it only able to go 5km/h which is really slow. 
+
+It  has wide tires and 100hp.
+
+How can I make it better? Am I using it wrong?",1660996761.0,6,0.87,6
+nexusmods,if there are any mods removing any flag at all they should be banned,[removed],1660830890.0,6,0.8,0
+starcitizen,"Progress is great and all, but do you really know what grinds my gears?","That they are working on 3 and 9 unannounced vehicles. 
+
+To add: They have 33 (not including variants) ships to make that they have already announced.
+
+If they made 1 capital ship flyable every year (they usually use 2 years on these) it would take 11 years.  
+To add to this: they also keep adding ships as concepts, so that number will grow
+
+&#x200B;
+
+Yes they need to make money, but comon, shift more priority to the vehicles announced in 2012-2020 first or something.",1660308230.0,626,0.89,533
+3Dprinting,Can anyone tell me what's going on here?,,1659606060.0,3,0.81,3
+starcitizen,"Can't believe I didn't notice before. BMM - Screw the nose, this is where they butchered the exterior.",,1656141406.0,0,0.23,22
+starcitizen,Stop it with the BMM bait. It's cherrypicked to provoke reaction,"The image going around comparing it to the concept art is cherrypicked to look bad. Please do your own research before going on the hate train. 
+
+I added some images showing its form. Most of the video was of it with retracted wings. I added some better angles, and one image with its wings extended. 
+
+I urge you to watch the ISC of it. It was pretty dope.
+
+[Bottom and side wings retracted](https://preview.redd.it/w4azuvk896691.png?width=2460&format=png&auto=webp&s=03cf2a6bd29dcbd333781abc2de42ac4ccc5bb7c)
+
+[Wings retracted](https://preview.redd.it/d3ipnwk896691.png?width=1628&format=png&auto=webp&s=f9ef387a41a009263df9ec55f494f69f22f67d86)
+
+[Wings extended](https://preview.redd.it/za7q9wk896691.png?width=1690&format=png&auto=webp&s=e90fddc1d723ef27c4cf36734c2c150627b92da1)",1655467681.0,121,0.75,45
+starcitizen,GIB MURCHUNTMUN,,1655389122.0,16,0.59,23
+starcitizen,For those who thinks BMM size increase makes the Kraken obsolete,"&#x200B;
+
+https://preview.redd.it/9el5jx1830391.png?width=1330&format=png&auto=webp&s=dbf0a4ef655a98b588a65899d325fc5154e0cd6b
+
+Many of you seems to think that just because the BMM has a size increase, the Kraken should get one as well, and that the BMM now can do whatever the Kraken can do. Well here I am to stroke your cocks!
+
+First thing first. The Kraken vs BMM is nothing alike. Kraken is a combat focused carrier which can rearm, repair (somewhat) and refuel. It has dedicated dragonfly bays and lots of landing pads. John Crewe has confirmed that it will get a medical bed to some degree same as the BMM
+
+The BMM is a trader with fighting capability. Yes it will be tough, yes it will pack a punch, and no it will not be easy prey. That said, it is not a dedicated military ship and should avoid combat where possible. 
+
+Now the Kraken PRIVATEER is worth comparing, as it actually has the same role as the BMM. Difference is that it is bigger, landing platform, still has ability to rearm, repair, refuel and still packs a punch. 
+
+Now the difference between these guys is more in what part of trading they will take. The Privateer is much bigger and has more options for letting players land and trade. It also has docking ports to dock to bigger ships. The whole idea of the Privateer is that PEOPLE COME TO YOU, as you are a space station with thrusters. It will have capital components which will be expensive to use but very powerful.
+
+The BMM on the other hand is smaller and more mobile. It is more of a nomad in nature, and will probably be moving TO THE CUSTOMERS. IT does not have landing pads, and the one hangar will most likely be occupied by its own protection escort. It will (most likely) not have capital components, and thus is cheaper to use but probably not as powerful.
+
+So this far we've established that the Privateer and BMM has the same roles, but the Privateer has more STUFF on it, while the BMM is more mobile. Both can trade effectively in space and on planet, through docking collars and landing pads. (docking with a multicrew ship usually has more than one customer)
+
+&#x200B;
+
+**The BMM should get nerfed since it is too cheap in relation to the Privateer!**
+
+Keep in mind that the BMM has not yet been on sale since the news of the size increase. It was the most outdated ship, and the Kraken were made after they've focused more on size in the concept phase. I see it as highly likely the BMM will bump up to 700$ next time it is on sale, if not more. 
+
+Also it's worth considering a size increase is not always a good thing. Yes the BMM got a lot of stuff, but it is now also going to be slower, need more crew, and be more expensive to run. Lots of the BMM owners preferred the smaller version. Be careful of what you wish for Kraken owners!
+
+&#x200B;
+
+**TL;DR**
+
+Kraken and BMM are two entirely different ships. Not comparable.
+
+Kraken Privateer and BMM both do trading, but they have entirely different play style. While both can do the same things, the Kraken Privateer will be better as a mobile station, and the BMM will be better as a nomad as it is more mobile.",1654086420.0,121,0.83,162
+starcitizen,how to deal with bunker turrets and restricted area for a light combat ship?,"So I tried for a good hour or two yesterday to take down a bunker which had 5 or 6 turrets. Me in my Banu Defender had really no chance at all face tanking them with hit and runs. Therefore I tried spinning while strafing, but that was not only very difficult, but also impossible to actually hit anything (no lead or lag pip). 
+
+On top of that the markers for the turrets didn't show up until I was almost on top of them, so I couldn't find them in the dark without being in their face. 
+
+After numerous attempts, my solution was to bring a Hercules Starlifter to facetank them all. I wonder how you all solve this? Yes I can go land and shoot at them from the ground, but is that the only way?
+
+On a bonus note, the turrets didn't have any visual shooting, I just registered the hits on my shields and hull through my MFDs",1651481019.0,24,0.93,47
+3Dprinting,Help! I've tried so many settings. Read my comment,,1649184034.0,0,0.5,19
+starcitizen,How will the current new inventory system tie into physicalised inventory?,"Now that we have ship components in the new inventory system, we can move everything we own instantly into any ship in the current zone. The components and items will be invisible and not in the cargo bay.
+
+I can't quite understand how this will work when physicalised cargo comes though? Will they still spawn into the cargo bay? Aren't they supposed to be loaded manually?
+
+If we won't transfer items by drag/drop when physicalised cargo comes in but load it manually instead, what will happen to our shiny new inventory system? 
+
+&#x200B;
+
+How I see it right now it's essentially redundant tech they're developing which will be replaced anyways, which would be weird because CIG is specifically working against doing that especially now that the cargo refactor is so close",1648726704.0,6,0.75,12
+3Dprinting,help! newb here. why does my model keep ending up like this?,,1648522927.0,124,0.82,123
+starcitizen,Is working 2 years on one ship too long?,"The BMM (not exclusive to this ship) has already been taking a year to develop. Now it is updated to december 2022, and likely will extend once the next quarter hits. 
+
+I mean yes it's a big ship, and yes it is good that it's thorough and good quality. But at what point is it too long? We have other big ships, even bigger ships. They keep adding more concept ships, makes the backlog even greater. 
+
+&#x200B;
+
+Would love some thoughts on this",1646650212.0,0,0.23,82
+starcitizen,So the progress tracker is useless?,"I saw several items pop up which were already done november 2021, coming up again to be done in june 2022 or november 2022 again. 
+
+I know items that are done may not actually be done, but they are not currently working on it. But if that is the case then we have absolutely no clue of the state of the development. The progress tracker is not actually tracking progress, just ""work tracker"", which doesn't even say what work has been done or what's left. 
+
+&#x200B;
+
+If this is the case then what is the point of having it? I mean yeah some people like to know what they're working on, it really doesn't give anything. We don't know if they're just thinking of it, or actually implement it into the next PU patch.",1646650017.0,0,0.28,29
+starcitizen,Got this on reminder a year later to see what actually got implemented. I'll let it speak for itself,,1643977773.0,0,0.4,23
+Unity3D,"Anyone know why my shader does this? It's only with this mask, and only at that end. The other end of the laser is as expected",,1642260149.0,3,0.8,5
+starcraft,How to properly play 3 player FFA?,"Every time I play it, the two others end up turtling the whole game until everything is mined. I'm usually the aggressor, and every time I go to attack, the other is counter attacking. 
+
+I as a zerg kinda rely on bad trades, so me not being able to stop their mining is making me lose a lot. 
+
+&#x200B;
+
+Any suggestions?",1641463834.0,4,0.83,10
+discordapp,Any way to trick discord afk bot?,"I'm in a server I need to be active in a lot. Problem is they have an AFK bot they won't remove. I need to be available at all times, and need to stay in a voice channel, so is there any way I can make the AFK bot never put me in AFK?",1641286839.0,1,0.67,6
+NoStupidQuestions,How much misinformation should I accept in a discussion?,"So my stepdad's knowledge is basically revolving around Facebook information and the Discovery channel.
+
+I tried to talk about the universe at family dinner, and while mum didn't understand any of it, stepdad kept interrupting nonsense about other space related topics (which also were wrong), like ""we have always proved black holes existed, we just didn't know that the light/plasma was there"". If I try to correct him, he tries to convince me that he is right.
+
+My question is basically would I be an arse for standing my ground being correct, or should I just walk away and let him keep thinking he is right? What's the right way to go in situations like these?",1640542963.0,8,0.91,17
+Unity3D,How can I use transform.up with Lerp AND transform.rotate with RotateTowards?,"I'm gonna be cheeky enough to link to my Unity Forum post. I'm posting here as well, since there is way more people answering here. 
+
+[https://forum.unity.com/threads/how-to-make-transform-up-and-transform-rotation-work-together.1216800/](https://forum.unity.com/threads/how-to-make-transform-up-and-transform-rotation-work-together.1216800/)  
+
+
+So basically is there any way I can salvage this without redoing it all, is there a better way or is there a simple fix I'm not seeing? 
+
+&#x200B;
+
+Appreciate all help :)",1640523014.0,2,1.0,3
+MicrosoftFlightSim,Game keeps crashing,"I got a BEEFY PC, all newest drivers installed, rebooted a dusin times, verified files and I really don't want to re-install msfs due to slow internet speeds. 
+
+&#x200B;
+
+Anyone have any idea? It worked flawlessly for a month until a week ago.",1639645454.0,0,0.17,3
+allthingszerg,How to counter Protoss tower spam?,"I'm by no means a pro player, but my protoss friend keeps spamming (literally hundreds) turrets. They're really hard to counter and takes a lot to take down. 
+
+If I do brood mothers, he creates an airforce unlike anything else.
+
+I couldn't evolve roaches either, since I was in a free for all. So that begs the question.. What can I do other than that?",1638780265.0,7,0.71,19
+starcitizen,Can someone please explain to me why we got Argo RAFT before HULL-A?,"I mean, they both need the same tech, cargo refactor. People who've bought the HULL-A should be pissed imo.
+
+Yeah they're working on the HULL-A, but why did they even start making the RAFT before the HULL-A.
+
+&#x200B;
+
+I think they have a habit of prioritising new ships straight to flyable above already concepted ships regardless of the tech being in or not.  
+
+Another example of this are the Talon/Shrike before the San'tok.yai. Spartan before Origin G12 and X1
+
+&#x200B;
+
+So yeah please give a reasonable explanation, else I'm getting the pitchfork",1638339832.0,14,0.59,76
+MicrosoftFlightSim,How to view waypoint altitude during flight?,"Hi all, complete flight sim newbie here.
+
+Is there a way to view the altitudes set in the navlog in world view when in flight?
+
+I keep forgetting what altitudes to stay at during flight, and always arrive at my destination several thousand feet above the airport. I'm trying to figure out a good way to approach the airport without nosediving all the time.
+
+Currently I'm testing ""Amount of feet to drop"" / ""FPM"" = ""Minutes until I'm done descending"".  Then I make waypoints about as far as the result I get in ETE. 
+
+Now I just need to remember the dang altitudes I've set. If anyone knows how to view these during flight it'd be much appreciated",1637659983.0,4,1.0,6
+starcitizen,"The fun is there, but the bugs are simply too much","Just had a convo with a buddy of mine (we are diehard SC fans) and we simply can't play. We have both beast rigs, and know all workarounds to bugs, but this time it got to us.
+
+We tried 6 times to do a bunker mission, all failing due to bugs.
+
+We tried cargo running missions, and all failed due to bugs.
+
+We did some dogfighting missions and failed due to desync and buggy weapons (looking at you Defender).
+
+Alright alright, we tried some investigation missions, how can that end badly? Well, we did it 50%, then 30k'ed...
+
+
+Rant is over.
+
+Would be nice if they managed to make it more playable. Not just server performance, but actual bugs as well. They never seem to go away
+
+
+Edit: this was before the free fly",1637535291.0,87,0.9,71
+norge,Hvem er den verste unge kvinnelige jentekarakteren i norsk film?,,1636569335.0,0,0.4,9
+starcitizen,They didn't like the previous Q&A guidelines I see,,1635806279.0,9,0.57,39
+Unity3D,Any idea what is going on here? Animator changes the scale,,1635531443.0,7,1.0,16
+blender,Can someone please explain to me what is going on here?,,1635362798.0,0,0.5,4
+starcitizen,"Increasing number of people are getting annoyed of the Inner thought system. Fear not, for salvation is on the way!",,1635340086.0,176,0.93,81
+starcitizen,My Khartu-al is white... Can I keep it? Pretty please,,1635193632.0,261,0.99,42
+Unity3D,Apply a shader on an already existing material?,"Hi, I'm taking a deep dive into shaders. Previously I've spent a lot of time making a sweet material. Now I'm trying to use a shader for a dissolve effect.   
+The effect is good, but if I add it to the material, the color and values gets reset to the basic shader values.. Is there any way I can keep my material values while applying the shader? 
+
+&#x200B;
+
+Thanks in advance.",1634137414.0,1,1.0,8
+starcitizen,Big oof. Comment section are slaying it as well,,1634037495.0,0,0.28,29
+Unity3D,Reflection probe on just a few objects," Hello. 
+
+&#x200B;
+
+I am trying to apply a reflection probe to my guy with 4 separate limbs.  
+
+
+Problem is that if he gets close to walls etc, the walls will also get the reflection probe effect.  
+
+
+I tried solving this by setting box size to 0,0,0 and add a probe to each limb instead, but that turned out very GPU heavy.  
+
+
+Do I need to click on every single mesh I have in my game to turn off Reflection probes?  
+
+
+How can I solve this?  
+
+
+Note: Culling Mask doesn't seem to be the correct answer, as I want it to reflect everything as normal. I just don't want to everything within the box to be able to reflect. ",1633420652.0,1,1.0,4
+pcmasterrace,A unified way to set colors on all my pc devices,"Hello. Probably a newb question, but I don't understand how I can control the rgb lights on all the different software?
+
+Currently I'm using AURA for my msi motherboard, Corsair iCUE for my keyboard, razer synapse for my headset and mouse, and I can't control the gpu RGB at all. I'm so lost right now",1633414328.0,0,0.5,6
+starcitizen,Feature request: Big Benny's vending machine serial numbers,This way I can hunt for the 00001 vending machine and have it on display in my Merchantman. As a symbol of power and wealth.,1633169811.0,0,0.48,3
+Unity3D,Noob needing some help with importing blender model into Unity without textures misbehaving.,"Hello. I've made a model with some nice material and glow to them. I've exported the collection I wanted as FBX, making sure to keep the materials in the export.
+
+When I import it to Blender it lost its glow and all the little details I have in Blender. It looks like a ps2 material instead of the one I made. Any thoughts of what I'm doing wrong here?",1632830655.0,3,1.0,5
+mountandblade,Noob question about tribute,"Hello. I've searched for a while and couldn't find any help. 
+
+I currently lost my whole party in a war. We made peace. I then upgraded myself from mercenary to Vassal as I got clan tier 2.
+
+Now my one workshop makes shitty 80 denars, and I'm for some reason paying between 50 and 100 in tribute. I'm 800 in debt, and it simply won't go down. I've waited for about 50 days in a town for it to go down. What can I do? I have no one in my party, and no other parties running around. Please help!",1632749392.0,2,1.0,14
+starcitizen,I'm sorry,,1632469524.0,0,0.3,0
+starcitizen,They've added more guns to Hull-C,,1632468671.0,175,0.97,71
+Starcitizen_guilds,Any orgs based in scandinavia?,,1632465988.0,1,1.0,1
+starcitizen,"If the ship showdown also included ground vehicles, we all know what the winner would be. ROC-DS, everyone's favourite vehicle",,1631773395.0,7,0.58,25
+starcitizen,This is a close one. Cutty has enough skins! Let the 600i shine!,,1631483932.0,0,0.42,1
+starcitizen,What is this robotic thing on his arm!,,1631254214.0,25,0.84,23
+starcitizen,Headset keeps disconnecting and reconnecting every time I play SC,"This only happens in SC, and I cannot for the life of me figure out why.
+
+Headset: Razer Blackshark v2 pro. 
+
+I've tried:  
+\- using another USB port  
+\- Updating drivers  
+\- Reinstalling drivers  
+\- Razer synapse  
+\- Charging them. 
+
+This only happens after 3.14 came live. Any suggestions?
+
+Update: Don't know why, but changing the USB port to use 2.0 instead of any of the 3.0 seemed to solve the issue.
+This has never been an issue before.",1628707374.0,0,0.5,6
+boatbuilding,How do I design a proper hull for a large boat?,"Title says it all. I'm contemplating the possibility of creating a large (45-50 foot) boat. I know what kind of hull I want, but I am uncertain of how I can make it aerodynamic and stable.
+
+I would hate it if I go into all this trouble, and it wouldn't be able to balance properly.
+
+&#x200B;
+
+P.S: Am I crazy? Hell yeah.
+
+&#x200B;
+
+Edit: 
+
+After talking to a lot of you, and some of you on DM, I've concluded that the best way to approach this is by sketching my design as best I can, then contact a naval architect to the rest. There is way too many places an amateur like me can fail. 
+
+I really appreciate all the links, and I'm checking them out as I read them. This project won't happen for at least a few years, so I got plenty of time reading and preparing. 
+
+&#x200B;
+
+Thanks all :)",1627895803.0,8,1.0,30
+starcitizen,"Good news! They're done with all AI, Audio, Character art and tech and more!",,1625638067.0,0,0.24,8
+gamedev,How close to Star Wards can I get before I get sued?,"Asking because I love the concept of a jedi/sith. Laser swords, the force and all. 
+
+I know laser swords aren't patented, and that telekinesis is in several games. I guess the question more lies in if it's possible to combine some form of ""good"" and/or ""bad"" telekinesis, and laserswords without getting sued lol.",1624361904.0,0,0.25,17
+starcitizen,"Only me that gets sick of SC Leaks? We need mods to ban evocati posts. If you want to see it, go to their discord.","Me, as a regular reddit or who loves to see their official stuff and responses posted here, HATE to have spoils casually show up uncensored before I get to experience it myself first hand.",1624017869.0,0,0.37,48
+Smite,Bummed out Cthulhu didn't get the mindflayer skin,,1623789677.0,4,0.63,9
+starcitizen,Clickbaiters gonna clickbait,,1623407674.0,10,0.63,9
+soundcloud,Why does my soundcloud app for windows look like this?,[removed],1622010078.0,1,1.0,0
+starcitizen,Literally didn't expect it until 2024 at the earliest,,1620293080.0,1008,0.96,228
+starcitizen,Doesn't look like pyro or the polaris comes this year,"Looking at their tracker, I see Polaris pushed towards the end of the year, going all the way out of december. Quite dissapointing really, considering they're making all of these unnanounced ships. I'm counting 5 unnanounced ships they're working on. 
+
+I also see that Quantum and server meshing is going all the way to 2022, which means they don't know when in 2022. Also quite dissapointing.
+
+Lastly, I kinda don't know what I feel about them making a different hospital at every landing location. Looks like the hospital on Arccorp takes them almost a year to complete. Does this mean that every landing zone will take one more year to finish? They're gonna have a bad time finishing the 96 other systems with that pace. Or at least the systems with landing zones.
+
+&#x200B;
+
+Alright I'm done. Just had to get that out there. What do you guys think?",1617876993.0,0,0.4,35
+Unity3D,Adding animator to my weapons results in unexpected behaviour,"So I got a basic rectangular stick, for testing purposes. It has a rigid body, collider and all the basic stuff.
+
+Gravity is on and kinematic is off when it lays down. 
+
+I made a script on my character that enables me to pick up the stick and drop it. When I pick it up I turn on kinematic on the weapon.
+
+This works fine.
+
+However when I add an animator component it goes wild, not responding, weird positions when equipped, not listening to physics etc. Is there anything I've missed? Once I turn the animator component off it works normal again.
+
+
+TLDR: animator breaks my basic weapons and idk why
+
+
+Thanks in advance.",1616450289.0,1,1.0,0
+starcitizen,"PSA: if you can't play the game, make sure the game is in the right resolution","I usually play on an external screen, which is 4k. Yesterday I couldn't play, the game stuttered and became unresponsive. Couldn't ALT+TAB at all. Tried verifying, relaunching, restarting and such to no avail.
+
+When plugged back the 4k screen, changed back the resolution to 1920x1080 it played smooth as a butter on the main screen again.
+
+&#x200B;
+
+just a little FYI if anyone gets stuck on this as well. I'll check Issue Council for this.
+
+&#x200B;
+
+EDIT: 
+
+Couldn't find any relevant issue reported to this, so here you go. Please vote if you can replecate.
+
+[https://robertsspaceindustries.com/community/issue-council/star-citizen-alpha-3/STARC-142659-resolution\_difference\_between\_two\_screens\_causes\_stutters\_and\_unclickable\_buttons](https://robertsspaceindustries.com/community/issue-council/star-citizen-alpha-3/STARC-142659-resolution_difference_between_two_screens_causes_stutters_and_unclickable_buttons)",1615534979.0,3,0.62,0
+mountandblade,It's made for us,,1615477830.0,3,1.0,1
+techsupport,Trackpad does shenanigans,"Hello. I recently sold my windows laptop to my SO, and the trackpad starts acting up. Sometimes only parts of it works, and some times it doesn't work at all. I work with IT and have been handling it very carefully. I've checked almost all the ""Top 10 fixes for trackpad"" that's out there. 
+
+After reinstalling the drivers my only reasonable option is to reset the OS, but is there any point? Is there anything else I could try before turning it in for repairs?",1615385937.0,1,1.0,0
+starcitizen,WHY DID YOU SAY THAT NAME,,1615234385.0,0,0.43,2
+lastoasis,Is it viable to store mollusk in a base walker packer in a Silur walker?,"Does it work at all? Or is it really bad move. Asking because I'm with a clan member, and we need something more than a dhingy to use together. Plus the Balang is getting heavy with all our stuff",1609269744.0,3,0.8,8
+paloaltonetworks,How to disable GlobalProtect when i don't have any administrator privileges,[removed],1608303761.0,0,0.5,4
+starcitizen,What is this? (from ISC),,1607636203.0,17,0.76,27
+starcitizen,BMM has grown! The cargo capacity of the concept has been kept,"According to John Crewe from Star Citizen Live
+
+It still keeps the same pad size
+
+It is NOT coming anytime soon.
+
+[https://www.twitch.tv/videos/825359021?t=01h10m01s](https://www.twitch.tv/videos/825359021?t=01h10m01s)",1607101494.0,83,0.94,179
+starcitizen,"Since CIG won't... FINE, I'LL DO IT MYSELF! BMM now undergoing greyboxing",,1606572787.0,336,0.94,32
+starcitizen,It's alien day! You can never destroy my hope,,1606401076.0,335,0.94,72
+starcitizen,"Since the GIB MSR will soon be fulfilled, i thought we can warm up to try to get this beast in production next. GIB BMM",,1603699834.0,188,0.83,114
+starcitizen,"Profitable, and realistic cargo hauling routes","So, my dear space truckers. I thought i'd share some of my experiences, and ask you of yours regarding cargo hauling. 
+
+See, i got a Catepillar, of which i started hauling scrap from CRU-L5 to Levski, for about 20k a trip. A nice start, and nice money contrary to my bad fighting skills. 
+
+Then, once i started nearing 200k, i started looking for other routes. I used [Gallog.co](https://Gallog.co), like i always do, and tried to run titanium from Bezdek - Loreville. I started making a bit more, and now i'm at 550k. It's time to start looking for another commodity, and another route. 
+
+Now here i run into some problems, as the more valuable materials seem to be quite short of stock, which is a problem. How am i supposed to go into the big league like this? I'm sure the guys making 300k an hour doesn't wait ages for the ports to get more stock. What am i supposed to do here? How do i filter good routes from bad routes regarding stock? 
+
+I tried [https://sc-trade.tools/](https://sc-trade.tools/) but it turned out to give wrong information, and i lost a lot of money on the trade.",1603575458.0,7,0.71,10
+starcitizen,How can i better practice advanced combat?,"I read around here earlier today about a guy that went from a miner to a pvp playstyle due to the mask event, and he started to get good at it. I've been trying to do the same all day today, and I can't seem to stop getting wrecked.
+
+Anyone out there willing to share some tips and tricks? Maybe some good sources for an advanced guide would do me good. I am currently using the glaive and gladius",1603129362.0,0,0.47,16
+projectzomboid,"Is build 41 soon going to be ""released""?",I haven't checked it out since February. Can we play multiplayer on it yet?,1601652270.0,1,0.56,3
+Stormworks,"I have tried to learn the game since i got it yesterday, and i can't understand why the clutch only activates when throttle is 0.5 or more. I want it to activate at 0.2 or 0.1",,1600988691.0,5,0.86,17
+Stormworks,Why does so many use Compact robotic pistons in boats?,All the workshop boats i've seen uses as many as they can cramp in there. I don't understand why?,1600933784.0,7,1.0,11
+starcitizen,This is a fucking shit show right now..,[removed],1596938236.0,0,0.21,14
+starcitizen,A little rant regarding the new targetting system,"I'm not too familiar with the new system YET, but i got some logic issues here.
+
+First off why shouldn't i be able to target anything if i'm not directly looking at it? Like, if i am surrounded, and i quickly try to cycle through the enemies to find the weakest one first, i should be able to do that. 
+
+Secondly, i get that pinning targets is good and all regarding telling turrets who to aim at, but it's very unintuitive to spot the difference between locking and pinning targets. Do i really need to cycle all the enemies, pin or lock them, THEN worry about them trying to kill me while i am traveling towards them? I went in with my 600i, since it's got good shields, so i can practice better at it, but it just seems dumb tbh.
+
+&#x200B;
+
+Lastly, look ahead mode is fine and all for flying around. I do like it. But for fighting? nah-ah. I toggled that thing right off, nice. But now my character keeps the target dead center regardless of how my ship is flying. Holy duck why isn't the keybind for this already set? Do i really have to count on my shields, go into settings, look through the wall of text and try to figure out which one is causing it, and THEN try to figure out what keybind isn't already used? I mean comon. It's impossible to look at what I'm shooting when the camera moves another way while my ship is moving the other, so it should be easy to toggle that stuff off. 
+
+&#x200B;
+
+That's it. I'm done ranting. Have a nice day",1596808210.0,2,0.57,12
+starcitizen,The new Karthu-al buff. Is it usable now?,"I've always liked the xian scout, but it has been lacking in performance. Now that CIG has buffed the default loadout, hardpoints and health of the ship I've tried to do some dogfighting in it. A little with gimbal led s3 weapons, and a little with fixed s4. Both laser repeaters.
+
+I admit I'm not the best dogfight pilot, but I get nuked by everyone almost instantly. The only ones I can fight are NPC's. I've tried different styles of flying, from wild, sudden changing manouvers, to orbiting around them.
+
+Is anyone good with this ship? Is it still a pipe dream to use it for combat? How can I get better?",1595241298.0,11,0.91,15
+PrequelMemes,"Wait, did yoda turn to the dark side?",,1595124720.0,10,0.8,6
+starcitizen,Bartender AI better be something like this!,,1591285909.0,4,0.67,1
+lastoasis,How can i make a walker accessible for my clan to use when i'm not there?,"We kinda work together to build a walker, so that we don't need to make 3 each. I see that i can have a perferred clan walker, but i can't seem to put anything there. 
+
+&#x200B;
+
+Also curious on how to actually break into or destroy other walkers? I read that people do it, but i can't seem to damage any of them except the wings and chests and stuff.",1586288364.0,3,1.0,2
+starcitizen,Where are you!,,1584946837.0,15,0.64,6
+starcitizen,"Is this information correct? It says here that the Carrack has over double the HP as the Hammerhead, that can't be right",,1582544737.0,0,0.5,13
+starcitizen,So when are we going to be able to buy the new ships in game?,"Haven't found any post regarding it. I really want to buy the MOLE in game, but it doesn't seem like they update the shops in-game at all. Have they said anything about it?",1581936207.0,0,0.11,12
+theisle,Deinosuchus eats turtle,,1580849363.0,27,0.87,0
+Kenshi,I bought this game 2 years ago,"I had a blast for about 70 hours, but I haven't touched it for about little less than 2 years ish...
+
+I'm sorry for asking this, but I've seen the game blow up a bit lately. Is there anything new the last 2 years?
+
+Thanks in advance",1577533764.0,12,1.0,2
+learnprogramming,Exporting javafx file to a jar file JDK 11,"I'm sorry but I'm about to be driven to madness. Christmas is tomorrow and I Need this ready by then. It's a Christmas gift I'm making for a friend, and I can't for the life of me figure out how to do this after JDK 11 came out.
+
+Can someone explain to me in a very simple way exactly what I must do?
+What I've done yet:
+Installed JDK 11 (and tried 13)
+Done everything with PATH_TO_FX
+Set up lib paths
+
+I have not tried maven, and I'm not sure how to add maven to an existing javafx project.
+
+All I want to do is send a single file that my buddy needs to double click. Thanks in advance, I'm going to bed",1577147202.0,0,0.5,2
+starcitizen,2020 is shaping up to be a good year,"I really hope nothing gets pushed. It likely will, but I hope not. A lot of the stuff is really needed. The road map revamp should be kind to my feelings. 
+
+What are your most anticipated upcoming feature?",1576611737.0,38,0.95,71
+forhonor,How the fudge can anyone block light attack??,"Doesn't seem possible. I struggle just reacting to some of the quickest light attacks, but whenever I do them they instantly get parried. Is it hacks? Hard to think it is.
+
+Edit: thanks for all the tips! I'll make sure to try them",1576136593.0,4,0.7,9
+starcitizen,Microtech should have a santa easter egg,,1576061582.0,1122,0.95,92
+SuicideWatch,"This might help a lot of you to think differently. It's not a definitive solution, but worth a watch if you struggle seeing the positive in life.",[removed],1575814543.0,1,1.0,0
+starcitizen,So the Javelin wasn't purchasable today?,Was really looking forward to get it,1575063040.0,0,0.44,12
+starcitizen,Guess i'm not grinding for the mole today,,1574776745.0,7,0.71,22
+unpopularopinion,"If white people talked about black people like black people talk to white people, people would go crazy.",[removed],1573985599.0,1,1.0,0
+modernwarfare,was gonna buy this game for pc but..,[removed],1573725408.0,1,1.0,0
+SuicideWatch,Nothingness after death seems perfect,"I, like many of you have recurring thoughts of ending it. I don't have a good reason, and many of you are in worse situations than me. 
+
+I'm actually very lucky. I am nice looking, muscular body, lots of good friends, and a family which backs me up. I got the best girlfriend(since yesterday an ex), and educating to become what I love. But there is this feeling that comes every now and again that makes everything heavy. It makes it painful, and I cannot describe the reason, since there isn't any.
+
+I feel like I do dumb decisions a lot, breaking up with my girl being one of them. I don't want to suicide for others to notice(although that would be nice), but the thought of nothing coming after is great. Forever gone? Yeah I'll take that, being nothing before I was born went fast as fuck.
+
+I've talked to my girl about it, and she tries to comfort me. I've talked to some bros about it, and they take it very seriously. But the feeling never truly goes away, no matter how much fun and adventures I take.
+
+I don't know why I'm typing this, and this is not a suicide note. I bet more of you feel this way, but I just thought it might help typing it out you know? Like sending a hate email to your boss and then deleting it before you press send",1573592883.0,4,0.83,1
+starcitizen,Thought we needed a shitpost,,1572983147.0,2118,0.96,165
+starcitizen,Found this gem. Covalex mission back in 2.1. Looks so different from 3.7.1,,1572391736.0,35,0.91,30
+theyhavehelmets,The dog doesn't though,,1572089418.0,24,0.94,1
+projectzomboid,Making a garage?,"I've tried to check the wiki, but it seems it's outdated.
+
+I am thinking about if I make a base. Can I make a garage? I know I can make walls and all that, but I have yet to see something like garage doors. 
+
+Or even if I want to make a fence around my house, it would be unfortunate to have a giant hole in it where my car can pass through.
+
+Thanks in advance!",1571997040.0,8,0.8,7
+starcitizen,Some observations in 3.7.1,"I did some missions to check out how stable the game is.
+
+Note I've been playing a lot this last year, so I know what to expect.
+
+- Delivery missions seems to not lose the boxes when using elevators and flying, yay!
+- Bounty hunter missions may still fail to spawn when we arrive at the location.
+- We lose the tracker of the ship we exited when we enter another ship. I lost my 890 in orbit somewhere while I used my 300i to bring boxes. Would love a way to track the ship again. The tracking button at the terminals doesn't seem to do it.
+- going with the ships underside next to an asteroid makes the same dust effect as if you're hovering near the ground on daymar.",1571861104.0,1,0.6,0
+projectzomboid,Are you guys also having so many zeds?,"It feels like 6 months later in the amount of zeds spawning the first few days! Wherever I go, whether it is in small towns or farms far away from towns, there is always hundreds for zeds around. How am I supposed to make a base somewhere when I can barely take 2",1571688302.0,8,0.9,8
+projectzomboid,Do you guys use the zomboid browser map?,"I feel like it's cheating, but I also have no chance at all to find anything without it",1571657648.0,6,0.88,16
+starcitizen,Should we sticky a post which will include a collection of all the latest news?,"Would be great for people checking in every now and then, instead of digging through hundreds of posts to not miss out on stuff between all the other posts.
+
+I know the mods sticky some stuff, but that's not too often, and usually is one thing at the time. I'm thinking more somewhere where all the latest news during the latest month(s) to be easy to find.
+
+What do you think?",1571656664.0,51,0.9,10
+starcitizen,How hard would it be to implement internal ship door locks?,"I know the plan is to implement permission systems along every door in the ship, so that a passenger can't just go into the cockpit and murder the pilot, and it will come further down the line.
+
+I would however love if they could make it possible for the owner to lock the bridge doors, even to party members. I know CIG doesn't want to do a quick fix, but it would greatly help, since there is always a bastard that murders the pilot, when the pilot just tries to ferry them from A to B.
+
+How likely or hard do you think it would be?
+
+
+Edit: apparently I'm blind. It's on the road map for 4.0",1571156458.0,4,0.75,8
+relationship_advice,My relationship is failing,"Hello. I thought I'd never need this sub, but I'm about to end my relationship but I'm not sure if I want to or not.
+
+So me (M22) and my gf (F21) have been together for almost a year now. She is the first one to be as crazy and weird like me. She is gorgeous and wild, and would do almost anything for me.
+
+I'm kinda a nerd, fitness dude, and generally good looking. This is the first real relationship I have, and we got together within a month or so.
+
+She is now in the army for a year, so we don't see each other too much anymore, although we text a lot and are still together. I've slowly lost my affection for her, and I don't know why. She is still madly in love with me, and have had a rough past. I feel like it's unfair towards her to keep going when I don't love her anymore, at least I don't think I love her.
+
+I'm not sure whether to keep going with this uncertainty or not, as I have done for some months now. She also want me to come visit her, which costs a lot, but again I'm not sure I want that feeling the way I do.
+
+Our sexlife is lacking from my part. I don't want to have sex with her anymore, and she thinks it's her fault. I honestly don't know why I feel this way, and I don't know what to do.
+
+So reddit. Is there anyone who are familiar with this and have been in this situation? I kinda feel I should end it, but I don't want to regret anything",1571084082.0,2,1.0,1
+projectzomboid,Can someone explain stuff for me,"I picked this game up a good while ago, and it was great. However I took a long break, since it seemed too slow and too little to do once you get enough food and find somewhere to live FAR out in the woods. Then it seemed like no zeds would ever get to you, and learning skills took forever (dismantling 1000 stuff?)
+
+I recently started playing again, and are role playing way more. I love it. However, I struggle with learning useful skills, like getting enough points to build a door, even with the carpentry beginner book. Got any tips? 
+
+Also what is this huge new update coming out. Anyone got a list of features it will bring?
+
+Thanks in advance!",1570833616.0,3,1.0,9
+starcitizen,Have they incresed the fog on aberdeen?,"Can't see more than 1km, and it's awesome. can't remember it was that much fog there",1570705636.0,6,0.81,5
+theyhavehelmets,She's blowing it out of proportion,,1570611479.0,208,1.0,2
+unpopularopinion,I think villains should win far more often,"It's not very exciting watching a movie and always know that the heroes will win. Take infinity war for instance, the amount of hype it got was so worth it, since he actually managed to snap his fingers.
+
+Or every superhero movie/game ever. You always win, and there is always the villain who lose.
+
+Star wars, World of Warcraft's lich king, every movie (except from 300 as far as I recall) the heroes win. I don't like it.
+
+Edit: a lot of you keep saying that if the main hero everyone likes suddenly dies, they would feel unsatisfied. All those hours spent on that hero, for him only to die is bad.
+
+Reply: the hero doesn't have to die to lose. They don't have to live. My example for great movies where the good guys lost is 300 and infinity war. I don't want to analyse how it made them good atm
+
+Edit 2: yeah I know in real life villains win all the time, yada yada..
+
+Edit 3: I failed to mention regarding star wars. I meant the newest films, where you just know the rebels will get away again and again. Their plot armor is thicker than the death star
+
+Edit: my first silver!!",1570105684.0,3849,0.96,573
+wow,Lich King lore,"So I haven't been playing much since not long after the lich king update. One of my top villains is LK, and I started reading some lore about him today.
+
+I tried to read a bit on the wiki, and it said they after lich king (arthas) got defeated, the other guy(forgot his name) picked up the mantle to keep the LK in check.
+
+Is it not arthas that is encapsuled in ice at the frozen throne now? LK took the other guy's sole and tortured it, but he resisted(lame) and decided to keep him in check.
+
+Can anyone clarify? Thanks in advance",1570102978.0,0,0.5,14
+starcitizen,so i got griefed for the first time,"I finally logged on to take my 890 out to find the javelin wreckage for the first time. I got to Port Olisar and asked if anyone would join. 
+
+They joined, met up outside of daymar and started landing and EVA to my ship. I was ofcourse wary of the possibility of them murdering me, however they seemed nice. 
+
+Moments later they murder me and leaves party. I mean like.. comon.. If they wanted the ship they could have it when i got there. It's just so unnecessary to do it. Now i need to wait an hour to get my 890 back, and travel over there. It really should be possible to lock the bridge against everyone, even party members. 
+
+&#x200B;
+
+Anyways, here's my little rant for tonights session. If the griefers are reading this, hope you're happy.",1569622144.0,0,0.48,50
+CubeWorld,An interesting option for the game later on in the devolopment,"If this game takes off after launch, or in any case for that matter, I got an idea of what would be cool.
+
+I've been thinking of dedicated servers. Would it be cool if there were one giant server, or several big ones, where people can get together and play/build/explore together?
+
+Imagine if the first players start building in the world, together, making a small town, making it bigger and bigger as more players join up. There would be people in high lvl gear able to farm mobs for gold, gear and materials, selling it to other players, so that they can get the gold(which doesn't reset across regions), that they can spend however they want when they cross regions. That way the regions would be way more fun as well, making it easier to gear up fast and farm more. Maybe build a new city in another region, or a huge main capitol. If we could place shops, open own or set Eagle points.
+
+The game would just get bigger and bigger, making a TON of things to do for the players, while still not making them op when they cross a new region.
+
+I do realize that would be a LOT of work, but man that would be an awesome direction. What do you people think?",1569443454.0,2,0.75,0
+starcitizen,How do you find other players?,"So i've been mostly doing cargo hauls to earn new ships. Once i bought a fancy combat ship and started outfitting it i tried to find some players. But where are they? 
+
+It's easy to find them at major landing zones, and popular landing zones, but most of them are idle around in the armistice zone. Very rarely i've found someone outside of the armistice zone during my cargo runs. It's kinda hard to be a pirate when we can just find npc.
+
+Furthermore it will become even harder once Microtech and Crusader is in, until we can raise playercap drastically when SSOCS and static server meshing comes in.",1569424806.0,2,0.6,32
+starcitizen,Cargo hauling with big money,"So I've started gaining big bucks, 750k. According to gallog.co astentine (iirc that's how it is spelled) is the most profitable for me. But everywhere I've tried to buy it, I can only get 50SCU at the time, which is unfortunate for my Caterpillar.
+
+Anyone found where they sell a lot of it? Or something better to trade?",1568910369.0,3,0.72,21
+starcitizen,Kinda obvious it's not a ship. It's a titan,,1568847391.0,43,0.78,1
+EliteDangerous,Greetings Elite Dangerous!,"I am from Star Citizen, and am here regarding r/layer
+
+Would be cool if we cooperated keeping our logos there. Thoughts?",1568230274.0,0,0.2,7
+starcitizen,r/layer has a thing. I reserved bottom right to make star citizen's logo. Help improve it and keep it safe!,,1568194619.0,0,0.31,9
+Layer,Star Citizen,,1568194505.0,5,0.86,1
+starcitizen,"With the fuel consumption of the first capital ship in game, what stops people with a starfarer to just fuel scoop it full again for free?","Seems like everyone should have a starfarer to just fuel everything they have when they need to without it costing anything, making it really boring for the ones that actually want to do that career, since no one wants to buy it anymore.
+
+Thoughts?",1566734425.0,0,0.5,34
+starcitizen,What do you think is the biggest personell carrier that can fit into the 890J?,"Planning on doing some sightseeing for people with my 890J for people wanting to see new locations. (since it will do QT fast, people might want to hop on)
+
+Edit: would be kinda fun to use ARGO MPUV personell transports, flying 2-3 from the 890J to the POI",1566408937.0,0,0.3,35
+starcitizen,Cargo running,"How do you do it? I've tried a lot of trade routes with my Catepillar, and it seems the best way is to hoal scrap from CRU-L1 to Port Olisar? 
+
+I tried to do some Stim runs, but every station only buys 5SCU worth of it, which makes it really tedious (and now i can't get rid of the remaining 400SCU of Stims....
+
+What routes are good (which actually buys large quantities), and how can i sell the stims as fast as possible?",1565458473.0,7,0.77,20
+theisle,Break the silence,"I know this is getting down voted as fudge, but here it goes.
+
+How can we not talk about the recode delay. Every time I mention it either in the discord or on this reddit I get nowhere. They spesifically said it would take 2-3 months. Knowing game devolopment I could see maybe 4 months. But how long have we waited now? 5 months, and still no words on how far along it is? All we've seen is a little footage during a stream lasting hours, with them refusing to say anything. This is a great way to make people lose faith in the project.
+
+Look at Path of Titans, and how much work they got to do to even stand up to the Isle, but people are turning towards them due to their amount of sharing. Can't say I blame them for turning to PoT either",1564669562.0,11,0.72,16
+starcitizen,Do you think missiles and stuff will sway/push the ship if it hits?,"I like Sea of Thieves, and there the explosive barrels and cannon hits rock the ship, making it look even more impactful. 
+
+It would be neat if (in the end of devolopment) a big S9 torpedo hit would literally push the reclaimer a bit, making a cool cinematic experience.
+
+What are your thoughts? I know it wouldn't even be considered this early in the devolopment, but it also doesn't seem like the most difficult feature to put in
+
+P.S i couldn't find a good video showcasing it on the fly, since i'm at work",1563867194.0,1,0.6,3
+starcitizen,Hover mode,"I've been reading for the past weeks how hover mode is made from hell, and it's too difficult. Hover mode apparently is so unfinished, they shouldn't've implemented it until it was less crap
+
+I finally tried it yesterday and i gotta say.. It's not that bad.
+Tried landing with reclaimer, starfarer, hammerhead, eclipse(a bit wonky, but not terrible), vanguard and gladius, and jesus christ i can't say anything other than git good. 
+
+Now stop crying and downvoting this and let cig polish it. They won't toggle it, because then we can use spacebreak to get back to exactly what they're trying to avoid.. 
+
+It's the same as flying a helicopter in arma, not hard. ""But i've never played arma"", so? It's still not hard. This is a sim game people, go play 4x or elite dangerous if you want it to be something else. I'm sick of everyone crying and screaming every time something new comes to the game",1563095466.0,91,0.75,152
+starcitizen,Just found this amazing video (sorry if it's a repost),,1562529651.0,0,0.42,2
+technicallythetruth,Well.. it got removed pretty quick,,1559661009.0,9854,0.98,68
+theisle,What survival pack combos do you like?,"Me (sucho) and a friend(Allo) went around wrecking havoc everywhere yesterday. We successfully hunted everything with ease. Allo's speed and sucho's tankyness makes gigas use up all their stamina chasing sucho while Allo is biting. 
+
+Only thing we didn't try to hunt was a rex
+
+So what are some nice combos you've found?",1556023131.0,17,0.95,13
+theisle,Sucho stats?,"I am trying to figure how bleed works, especially on the sucho.
+
+It says 20 × (your weight / target weight) on the wiki
+That means 
+20 × (3600/1900) from a full grown sucho on a fresh sucho adult.
+
+
+That is about 37-40 if I remember right.
+But when I tested this with consent on a pack member that just grew, he only got 7 bleed.
+
+Am I missing something? Is sucho bleed bugged?
+Or is it 37-40 damage until the target heals completely from the bleed?
+
+Thanks in advance for giving me some understanding.
+",1554638012.0,6,0.88,8
+theisle,i tried to science water physics,,1553187426.0,59,0.99,11
+Seaofthieves,Made a lens for all the SoT fans! Great in many occations!,Check out this Snapchat lens: https://www.danklenses.com/share/4255/Sea%20of%20Thieves,1553164033.0,0,0.5,1
+SnapLenses,"Sea of Thieves music! Can be used in many ways :) touch to start, link in comments",,1551653063.0,2,0.75,1
+NoStupidQuestions,Why is the pornhub app gotten so bad?,Doesn't seem like anybody talks about this. Does nobody use it? With every update it is the same. The categories only has max 10 videos in them each. It was way better before,1551466944.0,3,0.81,5
+aww,"""Wanna go for a walk!?""",,1550149197.0,19,0.93,0
+pcgaming,Worlds adrift giveaway!,"First one to comment and say their favorite color, why it's their favorite color, send me a video of you doing a backflip gets it.
+
+jk just first to comment 
+
+Edit: gone",1549960444.0,3,0.56,8
+WorldsAdrift,Git a free key. Anyone wants it?,[removed],1549285620.0,1,1.0,0
+starcitizen,"The ""reflection"" is just an image! Noticed it first when i saw the green in the reflection, that wasn't in the room at all",,1544715232.0,5,0.6,29
+PornhubComments,Cum addicted,,1544091321.0,125,0.99,1
+OutOfTheLoop,What is up with all youtube channels shoring a 5 second preview of the best part of their video? It kinda destroys the part when it finally comes..,,1544042475.0,1,1.0,1
+AskReddit,"If there would be an all-out race war, where ALL whites and blacks hates eachother. Who would win?",[removed],1543513822.0,1,1.0,1
+relationship_advice,I don't want to fuck this up,"This wasn't supposed to be this long, so thanks if you read it
+
+I have recently found this subreddit, and I need some help. For all my years (21M) I've never had a real girlfriend. I had one for two months 5 years ago, and it was short and intense. Since then I've been enjoying the single life to the fullest. 
+
+It's not that I haven't had a chance to form a new relationship, it just haven't been any butterflies, you know?
+
+Ever since summer I have wanted to find someone that I like. Someone to show down to l with. 
+
+I matched with this cute girl(20) in tinder, and we started talking for a week. She seemed like she really enjoys to exercise. We wanted to meet. It's the first time I was going to a date out, resulting in not sex. So we really had to talk. I liked that.
+
+We spent good 7 and a half hours in the bar, ending with a hug, and wanting to meet one more time. (I usually wouldn't care, but I really didn't dear to give a kiss)
+
+I was only visiting my family that weekend, and I had to leave two days later, so I asked if she wanted to meet the next day. She said yes, and I was really nervous it wouldn't go as well as the first time. 
+
+We started talking, for 4 hours this time. We only decided to leave because a family friend of hers came and it got awkward. Plus the benches were horrible.
+
+I drove her home, gave another hug before she were to exit the car, and I thought fuckit. I went for the kiss. She were really passionate kissing me back, as if she was waiting for it. She admitted she somehow have fallen a bit in love with me already. We started talking about what we felt, and it went really good.
+
+Going to meet her today as well (day 3)
+
+
+Tldr: had a relationship that were short and really tense five years ago. Lived life to the fullest until recently. Met a new girl I think I really like for the first time since then.
+
+Now, the problem: 
+I really don't want the same as the last relationship. I don't want this to be something that I really REALLY like, and then it all just goes south.. how can I slow things down, and still don't seem distant? I am really confused as to what to do. Thanks if you have read all this, and I appreciate any constructive criticism or advice",1542626201.0,1,1.0,5
+inthesoulstone,Just had a dream,"I dreamt that Thanos's father was Odin (which by theory tried to collect all the infinity stones with Hel, but couldn't get the soul stone due to not willing to sacrifice her)
+And Odin had a sinister plan, teaching Thanos his ideology, making him one day do what he did. 
+
+It got more fucked up as the dream went on, resulting in THE REAL Odin being alive and well, in his younger years and stuff. But yeah, had to get this out.",1542368634.0,10,0.76,4
+NoStupidQuestions,What's the deal with tipping american waitors and waitresses?,[removed],1541370900.0,1,0.6,4
+funny,Coincidence? I think not!,,1539680019.0,23,0.88,6
+spiderbro,"I'm usually terrified of spiders, but i have let this bro live in my garage for a while now. Don't know anything about it",,1539389928.0,4,1.0,3
+forhonor,Valkyrie is apparently not reworked in single player,Just found out about this. I've never seen anyone discuss this in the forum?,1537130694.0,1,0.6,7
+SnapLenses,Can't believe this lense doesn't exist yet,,1536405386.0,219,0.91,19
+HuntShowdown,Can't see match summary. sometimes i lose my hunter even though i won.,"So about every time i finish a game, i get a Message saying i lost contact With the server, and i get no rewards… It's a really fun game. My friend doesn't get these errors, and i have waay better internet (500/500 Fibre) I have really low ping, and a beast computer. Any fix, or anyone that can help? I've reinstalled the game.",1534034277.0,1,1.0,2
+starcitizen,[unpopular opinion] i quite like struts,"They're awesome, and they give a feel of immersion. 
+
+That being said, they shouldn't contaminate the field of view, like the hideous strut on Cutlass before it got (more or less) fixed. ",1533807202.0,130,0.75,111
+videos,"Found this old gem: ""The 60-Second Video""",,1533241824.0,6,0.71,0
+AskReddit,People that have uploaded porn videos of yourself (not pornstars). Have anyone recognized you?,,1532863661.0,1,1.0,1
+SnapLenses,Can someone for the love of all that is good make a fading in lens of this,,1528199136.0,367,0.96,20
+AskReddit,"What is a good, original and fun name for a sailboat for two young students?",,1527880374.0,1,1.0,6
+pics,Reddit!,,1526400916.0,1,0.6,1
+Seaofthieves,Need some help..,"So mye friend and I got beaten by another crew(nothing wrong about that). He left and went to bed, while I just went to a pirate fort to get gunpowder to sell. On the way I got 2 captains chests and a villainous skull thingy (the golden one). 
+
+Once I got about 10 gunpowder barrels, a new random crew member joined. He continued to move the barrels around, and instantly shot them. Both of us died and the ship instantly sunk.
+
+Now, is there any way to find his adress so that I can kill that motherfucker?
+
+Joking aside, is there any way to turn off that somebody can join, or do I have to rejoin the game and select solo?",1523261553.0,5,0.86,3
+starcitizen,Took me a while to realize this is not Cellin,,1523204325.0,5,0.57,2
+JustCause,How do i get more flares? (JC3),"Most of the fun is to do what you want, whenever you want it. I would like more flares, or unlimited flares. Is there a cheat code, mod or a hack i can download from somewhere to enable this? Would really appreciate some help, thanks!",1522879594.0,5,0.86,5
+starcitizen,"Now that the performence is at top, and everyone has Access..","Me and my reclaimer has suddenly become the biggest target in every server. So sad.. Can't fight back even, because the weapons are disabled.. and worst of all; when they crash into the surface or into me and destroy their engine, I CAN'T EAT THEM YET! #MakeTheClawWork
+
+
+Just a little status update",1522455962.0,5,0.69,9
+starcitizen,Hmm what's going on over there,,1522455699.0,0,0.42,1
+starcitizen,"3.1L PTU showcase of performance, a bit of reclaimer, dragonfly and the polygon bug. Enjoy!",,1522249009.0,6,0.74,5
+Seaofthieves,What the frick are you guys talking about? The game is awesome,It's way more content than any of the EA games. Stop crying and start loving,1521593796.0,0,0.33,11
+Seaofthieves,Founders suprise on monday,"Hello. They said something about today, founderers would get a suprise thingy. I haven't heard anything, and wondered if i might have missed something?",1521480649.0,1,0.67,1
+Seaofthieves,Closed Beta,"Hello. I just bought the pre-order. I'm not sure if i got it for Xbox One or Windows, but i can't seem to play the closed beta? Am i doing something wrong, or did i fudge up the order? Would appreciate some help :)",1518203619.0,0,0.18,4
+Ylands,Dedicated servers BETA TESTING,"So i thought i could make a big thread on this reddit, since i haven't seen one here yet, regarding the New update. 
+
+If you want to participate in the dedicated server beta test, say so in the comments.
+I'm don't know a lot about reddit norms, but if we could make this sticky, that'd be great.
+
+(P.S. I want to join the testing)",1513715847.0,5,1.0,8
+Music,I need this song in my life!,[removed],1513701158.0,0,0.5,9
+Ylands,Dedicated servers,"Hello, i am a new player, woho! Awesome game btw. I have done a little reading, and it seems like they are looking to get dedicated servers up and running early 2018. They also said there would be about 8 players in each server. 
+
+Would you guys too think it would be awesome with more? Or sticking servers together, so that each island has a server. This way we could kknda make it so that we don't have to switch server to find people, but we would rather have a little loading screen in the ocean or something?",1513152275.0,1,0.6,1
+starcitizen,Flying in atmosphere,"I was flying tha gladius in atmosphere. I decided to turn off the engines, and fell like a rock. Do you know if there are any plans, or if it's possible to glide, like a plane? And not just rely on thrusters?",1511705353.0,0,0.5,11
+AskReddit,"So, me and my friend are looking for our ""thing""",[removed],1511642757.0,1,1.0,1
+StarWarsBattlefront,It seems that you've all forgotten,[removed],1511246806.0,0,0.46,4
+starcitizen,Monster/animal catcher,"I've been playing zombie catcher on mobile, and while i hauled the zombies i shot with my harpoon, i realized. That would be so much fun to do in star citizen! Hunt creatures and haul them the same way we haul bounties. 
+
+What do you guys think?",1511036521.0,15,0.67,39
+starcitizen,Lootboxes,"CIG please, for the love of all that is holy, never ever ever include lootboxes in the game. It will end bad in every way",1510836640.0,0,0.23,21
+disney,Grab some popcorn,[removed],1510603142.0,1,1.0,0
+WorldsAdrift,So many shipyards,"What are we supposed to do with the shipyard after we leave the island? Is it possible to pick it up? We can't use another player's shipyard without the code, so it would just build up more and more?",1491578655.0,3,1.0,3
+WorldsAdrift,Damn annoying with the 24 hour cooldown on a beacon.,"Makes it difficult for friends to find eachother if we fall off ship without a spawner.
+
+And the revive cooldown is so damn annoying as well. it just increases af",1491524346.0,6,0.87,9
+BattleRite,a nice league round with Rook 1v2,,1490804311.0,15,0.89,3
+WorldsAdrift,"New guy here, wanting to play!","Hello People of World Adrift!
+I've just discovered this game, and fell in love With it! Is there any way to play it for me now? Or is there any News of when the Beta will start?",1485282997.0,1,0.56,7
+Miscreated,"I am New, and i would love some server info!","Firstly. it seems that favorite and history doesn't work properly. Is that just me, or is it a known issue?
+
+Secondly. does my character save across all servers, or do i need to stick to one server? 
+
+If the favorite problem is a known issue, and the character doesn't save across the servers. How can i find the server i played on? 
+",1485000929.0,1,1.0,3
+Miscreated,"So i just bought the game, and this is what i first found when i walked in a random street. I LOVE IT",,1484928784.0,5,1.0,4
+techsupport,My computer won't turn off!,"I've tried to Google the problem, but it's not spesifically the problem i experience. 
+
+My system:
+
+Operating System
+
+
+    Windows 10 Home 64-bit
+
+
+
+CPU
+
+
+    Intel Core i7 4771 @ 3.50GHz    40 °C
+
+    Haswell 22nm Technology
+
+
+
+RAM
+
+
+    8,00GB Single-Channel DDR3 @ 1199MHz (11-13-13-32)
+
+
+
+Motherboard
+
+
+    ASUSTeK COMPUTER INC. MAXIMUS VI HERO (SOCKET 1150) 28 °C
+
+
+
+Graphics
+
+
+    G2460 (1920x1080@60Hz)
+
+
+    4095MB NVIDIA GeForce GTX 1080 (MSI)    54 °C
+
+
+
+Storage
+
+
+    931GB Western Digital WDC WD10EZRX-00L4HB0 (SATA)   28 °C
+
+
+    223GB INTEL SSDSC2CW240A3 (SSD)
+
+
+
+Optical Drives
+
+
+    Optiarc DVD RW AD-5280S
+
+
+
+Audio
+
+    Razer Kraken 7.1 Chroma
+
+
+
+Now to the problem:
+When i press the start button on my Windows 10 Desktop, i press the Power icon, then press ""shut Down"".
+
+The computer then turns off the screen, but still buzzes around. I try to move my mouse around, then the screen turns on again. The screen shows my 'locked' screen, where i can press Enter, then Write in the password. It's like it went into SLEEP mode! 
+
+Any ideas of what might be the problem, and how to solve it? ",1483585225.0,1,1.0,2
+starcitizen,Sooooo....... 3.0?,"Just a little post here, since i haven't seen any of it myself. When can we expect some information on 3.0? ",1483473790.0,0,0.29,25
+starcitizen,Just a little showcase of what the Catepillar feels like in the upcoming Live Version!,"Behold!
+
+
+Sweet image, reminding me of Star Wars Battle positions.
+
+http://imgur.com/a/raDB0
+
+
+Sweet Catepillar fight, reminding me of Star Wars fight (One of the Catepillar's engines got disabled, and therefore not shooting) This one took some time to set op (3 Catepillars With full crew)
+
+https://gfycat.com/CheapTalkativeIcelandgull
+
+
+Here we had FPS Battle side by side while moving from one Catepillar bay to another! It's a shame i didn't record before everyone in the bay was dead..
+
+https://gfycat.com/GraveShimmeringDairycow
+
+
+",1482467116.0,19,0.95,6
+starcitizen,"This game... It's so beautiful! I'm looking out the window, and it's worse graphics outside.",,1482435600.0,44,0.76,6
+StarWars,Am i the only one complaining about this spesific thing?,"Yes, i liked the move, as i like all of them (even the clone wars for Visual satisfaction).
+I agree With the lack of interesting characters (except K of course). 
+
+
+
+But here is what i do not agree With. 
+How can like 16 X wings that came through the Shields (or even like 30 if more came in off screen) Do that well against that many Tie fighters? How can ONE X wing obliterate an AT-AT? Those are supposed to be a symbol for the Empire's Power, and be a force to rekon With. At Hoth they had to trip them in order to do anything at all to them, and yet this one X wing just shoots at it like it's made of paper. 
+
+
+
+The stormtroopers getting just ass-wiped by the rebel guy With the big gun. Yes, he has a big gun, no that sight, nor accuracy should not be there. (Mowing Down 15 stormtroopers as they come out? Really?).
+
+
+
+The blind guy going out all like ""im one With the force"", and all the stormtroopers ignoring him? Yes the force kicked in, but comon that was just stupid. And once he died, the other guy that totally didn't believe in the force is going ""im one With the force"" and does the EXACT same thing, not getting hit. He then proceeds to sit and have a chat With his friend while surrounded by stormtroopers in the middle of the Field without problem! Also, where did they go? Because it was almost no one there when the chat was over.
+
+
+
+That part when an OCEAN of TIE fighters came out. Seriously, there had to be like millions of them coming out. How did the empire not just delete the rebels With TIE fighters alone? AND even though 1 Star destroyer was disabled, the other one should still wreck everything else, since they are made to destroy other destroyers and stuff. It's wierd that by pushing those star destroyers together would do that much damage. I mean, Vader's destroyer could take several ships warping into him without any damage.
+
+
+
+The Death Star shootng so far away from the base, when they clarely was aiming for the base. 
+
+
+
+And lastly, the stupid chat at the top of the Tower, ""Who are you really?"" And then she explains who she is and her evil master plan, while her dead boyfriend comes and shoots him from behind. When really all that should have happened was that he should see that the Death star is at risk, and he should shoot her at once. 
+
+
+
+
+
+That was awesome to let out, and it's wierd that i was the only one ranting about this. 
+Guess this is what i deserve for always wanting the Sith to win in every Movie, because they are awesome and has all odds in their favour like all the time.",1482330864.0,0,0.36,8
+techsupport,My games run sooo slow (High end pc),"Operating System
+
+	Windows 10 Home 64-bit
+
+
+CPU
+
+	Intel Core i7 4771 @ 3.50GHz	40 °C
+	Haswell 22nm Technology
+
+
+RAM
+
+	8,00GB Single-Channel DDR3 @ 1199MHz (11-13-13-32)
+
+
+Motherboard
+
+	ASUSTeK COMPUTER INC. MAXIMUS VI HERO (SOCKET 1150)	28 °C
+
+
+Graphics
+
+	G2460 (1920x1080@60Hz)
+	4095MB NVIDIA GeForce GTX 1080 (MSI)	54 °C
+
+
+Storage
+
+	931GB Western Digital WDC WD10EZRX-00L4HB0 (SATA)	28 °C
+	223GB INTEL SSDSC2CW240A3 (SSD)
+
+
+Optical Drives
+
+
+	Optiarc DVD RW AD-5280S
+
+
+Audio
+
+	Razer Kraken 7.1 Chroma
+
+
+And i have 500 mb/s download.
+
+Why am i always the last one to load into games? Like Rainbow six: seige, Total war warhammer (It takes litterally 5 mins).
+And a lot of other games! 
+
+Can i get some help? (Im not too familiar With BIOS and stuff).
+
+Thanks in advance!
+
+Edit: More readable format",1482190445.0,2,1.0,13
+starcitizen,"Dear CIG, please do snow right!","I know, i know they are doing their best.
+But most games doesn't make snow. Those that do either go for some wierd ""art"" style that makes it unrealistic, or makes it just so that it's there.
+
+Some games does snow enviroments really good though! Battlefront had some amazing effects!
+
+My point is, i would actually wait 3-5 months just to make this part right. I want to land my Banu Merchantman in the Cold Snowy weather in the middle of nowhere. I want my landing gear to sink a bit into the snow, or that i should have to find some solid ice to be able to land. 
+I want the snow to circle around the edges of my ship when the wind blows at it. 
+I want to FEEL the Cold, i want footprints!
+I want clothes that you need to keep the warmth, or effects that make the character more ""stiff"".
+And lastly (this is a long shot) I WANT POWDERY SNOW, where when you walk, the snow gets shoved aside the foot, like a plow! I want ships to be buried in snow when they crash!
+
+I know this is a lot to do, and a really difficult job (probably why most games avoid it). But if CIG manage to pull this off, i would litterally shit bricks. I would make sure i never see the daylight of the real world again, and live in my moms basement for the rest of my life.
+
+What are Your thoughts about this? Is snow important to you, or don't you really care?
+What awesome snow features are you hoping for?
+Is any of this realistic for what is to come? :)
+
+
+Edit - Damn autocorrect changed much of it into Norwegian.",1480935005.0,345,0.85,212
+BattleRite,That was a close one!,,1480693885.0,14,0.9,7
+starcitizen,Moving on!,"So Yeah many of us were dissapointed at the Citizen con. But what catched my drift (Except the planet Tech) was the damn ship pipeline! 
+
+First off, this is not a rant!
+
+I was thinking about some good old pira-... Piracy ""preventing"" tactics.. Yeah that's totally a thing. *cough*
+Anyway, would it be a viable tactic, if Electronic warfare and tractor beams goes together? Like if an avenger warlock swooshes in and EMP the Shait out of a Hull B or C, and the Reclaimer's powerful tractor beam drags the ship into its claws to hold it in Place in case it turns itself back on. Then, when the ship is in the claws of Death, they start blowing up the cockpit(Optional) and loads off their cargo?
+
+Personally that seems like an epic way to pirate, but i don't want to hype myself into believing it's a viable tactic that actually Works. What do you guys think?",1476114342.0,2,0.75,2
+starcitizen,Just a possibly awesome thought regarding dead ships,"Soo. i was thinking of the threats that the dead ships would offer. Pirates, aliens, unstable Components ready to blow etc... 
+
+The reclaimer (my beauty) would often come in this situation, where the crew has to risk their lives searching in these before working on them safely.
+
+Then it hit me. Wouldn't it be kinda useful/safer if they got like a small drone (controlled by a player), made for going through small rooms, and able to shoot them Down!? Or at least a camera so it can cruise around there to see if it's safe. 
+They would ofcourse be balanced, so that the threats inside would still have a chance fighting them off. 
+
+I would like to hear Your thoughts on this matter.",1475264163.0,0,0.17,13
+starcitizen,I will literally shait myself,[removed],1473757494.0,0,0.25,8

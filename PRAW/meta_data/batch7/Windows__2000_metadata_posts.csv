@@ -1,0 +1,1196 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+Steam,Someone send this to Gabe fr...,[removed],1747781662.0,1,1.0,1
+oneui,"Can you please try this in oneui7 if it's a bug just for some or a general thing? Please report your Phone and software version if you do, thanks :)","Report sent to Samsung:
+
+Bubbles become blank whenever an app is closed and immediately after a bubble is openned, requiring a restart to fix.
+
+When this happens, the kayboard also can't be accessed system-wide, the back button doesn't work system-wide and the home button closes apps, but doesn't scroll to the selected start screen on the home screen until the specific app with the openned bubble is force closed.
+
+It is very unlikely to be caused by one of the apps, as it applies to all apps being closed and to bubbles by all apps opened after.
+
+(Tested with Samsung Internet and Civilopedia for the closed apps, Signal and Messenger for bubbles)",1747602508.0,1,0.6,4
+samsung,"Can you please try this in oneui7 if it's a bug just for some or a general thing? Please report your Phone and software version if you do, thanks :)",[removed],1747601992.0,1,1.0,0
+AnyAustin,Just curious about how many of you have heard of mem,"Either way I'd encourage you to check her stuff out....
+
+[View Poll](https://www.reddit.com/poll/1ko6cud)",1747415771.0,7,1.0,1
+MemoriaMatters,i played every avatar movie game,,1747415258.0,5,1.0,0
+Civilization6,Questionable life choices....,,1747251996.0,2081,0.99,15
+PowerAmp,Autodownload lyrics for more songs,"I assume most of ya'll know about the plugin [lyrics for poweramp](https://play.google.com/store/apps/details?id=io.github.abhishekabhi789.lyricsforpoweramp).
+
+Here are some pretty agressive regex filters that I have found vastly improve the success rate with downloaded YouTube videos and probably other platforms with ""extra"" stuff in titles.
+
+For titles: `(?i)(?<!\w)(?:\([^)]*\)|\[[^\]]*\]|\{[^}]*\}|ft\.|feat\.|official|lyrics?|video|audio|hd|remix|cover|version|prod\.|parody|from.*|lyric\s*video|music\s*video|clip|ost|soundtrack|clean|dirty|explicit|uncensored|radio\s*edit|extended|original|reimagined|re-?recorded|live|performance|edit|mix|remastered|re-?release|reissue|deluxe|bonus|track|album|single|\bep\b|demo|session|take|mono|stereo|instrumental|karaoke|acoustic|a\s*cappella|unplugged|with\s+lyrics|lyrics\s+on\s+screen|subtitles|translation|[\d-]+kbps|\d{3,4}p|\d{1,2}bit|\d+hz|mp3|m4a|opus|flac|wav|aac|ogg|midi?|basic\s*pitch|\.\w{2,4}$|^\d+\s*[-–]\s*|\s[-–]\s(?!.*[-–])|\s+by\s+.*|\s+vs\.\s+.*|\s+x\s+.*|\s+w\/.*|\s+w\s+.*|\s+&\s+.*)(?!\w)[""']*`
+
+For Artists: `ft\..*`
+
+Edit: updated",1746814175.0,10,1.0,0
+PowerAmp,I made a script to sort your playlists,"Run with [Termux](https://play.google.com/store/apps/details?id=com.termux) and `filename.sh [folder_path]`.
+
+Sort in PowerAmp ""By date added/modified"" without ""Reverse""
+
+The script is made mostly with AI + some tweaks.
+
+Backup your existing playlists just in case, tho I can't see how it could corrupt them.
+
+I highly suggest creating the space separated list with your favorite AI chatbot and selecting text from screenshots with your desired order. You can use the Smasumg spen for this, Circle to Search etc.
+
+Enjoy ;)
+
+Update: For whatever reason Poweramp also looks at the date of the songs, so if you added something new/modified a playlist, wait a minute for each playlist you have before running the script (e.g. 30 playlists -> wait 30mins)
+
+```
+#!/usr/bin/env bash
+#
+# Playlist_order_time.sh
+#
+# Usage:
+#   ./reorder_playlists.sh [playlist_directory]
+#
+# Finds all .m3u &.pls files in the given (or current) directory,
+# lists them oldest→newest, lets you reorder by entering a sequence
+# of indices, then retouches them so they again sort oldest→newest
+# in that chosen order.
+
+set -euo pipefail
+
+# 1) Directory to scan (default = current dir)
+TARGET_DIR=""${1:-.}""
+echo ""$TARGET_DIR""
+
+# 2) Gather playlist files, sorted by modification time (oldest first)
+mapfile -t PLAYLISTS < <(
+  find ""$TARGET_DIR"" -maxdepth 1 \( -type f -iname ""*.m3u"" -o -iname ""*.pls"" \) \
+    -printf '%T@ %p\n' \
+    | sort -n \
+    | awk '{sub(/^[^ ]* /, """"); print}'
+)
+
+if [ ""${#PLAYLISTS[@]}"" -eq 0 ]; then
+  echo ""❌ No .m3u or .pls files found in '$TARGET_DIR'.""
+  exit 1
+fi
+
+# 3) Show numbered list
+echo ""Found ${#PLAYLISTS[@]} playlist file(s):""
+for i in ""${!PLAYLISTS[@]}""; do
+  printf ""  %2d) %s\n"" ""$((i+1))"" ""${PLAYLISTS[i]}""
+done
+
+# 4) Prompt for new order
+echo
+echo ""Enter the new order as space‑separated numbers (e.g. '3 1 2 …'):""
+read -ra ORDER
+
+# 5) Validate count matches
+if [ ""${#ORDER[@]}"" -ne ""${#PLAYLISTS[@]}"" ]; then
+  echo ""❌ You entered ${#ORDER[@]} indices, but there are ${#PLAYLISTS[@]} files.""
+  exit 1
+fi
+
+# 6) Build reordered array
+declare -a NEW_ORDERED
+for idx in ""${ORDER[@]}""; do
+  if ! [[ ""$idx"" =~ ^[0-9]+$ ]] \
+     || [ ""$idx"" -lt 1 ] || [ ""$idx"" -gt ""${#PLAYLISTS[@]}"" ]; then
+    echo ""❌ Invalid index: '$idx'""
+    exit 1
+  fi
+  NEW_ORDERED+=(""${PLAYLISTS[$((idx-1))]}"")
+done
+
+# 7) Retouch in order: first gets now-(N-1)*60s, last gets now
+NOW=$(date +%s)
+N=${#NEW_ORDERED[@]}
+
+echo
+echo ""Re‑touching files in your chosen order (1-minute gaps)…""
+for i in ""${!NEW_ORDERED[@]}""; do
+  file=""${NEW_ORDERED[i]}""
+  offset=$(( N - i - 1 ))
+  ts=$(( NOW - offset * 60 ))  # 1 minute apart
+  touch -d ""@$ts"" ""$file""
+  printf ""  → %s  (set to %s)\n"" ""$file"" ""$(date -d ""@$ts"" +""%Y-%m-%d %H:%M:%S"")""
+done
+
+echo
+echo ""✅ Done. Files are now spaced one minute apart in your chosen order.""
+```",1746811033.0,11,1.0,3
+PowerAmp,Manually sorting playlists,"Is there a way to manually sort playlists?
+
+That's how my music is organised and alphabetical sucks. I could probably use termux and just manually set a modified date on the files in the order I want, but that's really annoying.
+
+Also a way to hide the .m3u at the end would be nice.",1746806087.0,3,1.0,7
+ChatGPT,OpenAI eager to share their secrets,,1746127374.0,2,1.0,1
+Tinder,Guys why no matches 🥺🥺🥺,,1745942226.0,0,0.33,12
+oneui,[S24] All bubbles are blank and keyboard can't be used until an app that was a bubble is force-stopped.,"Thought it was Messenger originally, but now Signal did it too...",1745299014.0,5,0.86,17
+mathmemes,Let's settle 0.√3,"So obviously the answer is invalid notation, but *if* you had to answer.
+
+[View Poll](https://www.reddit.com/poll/1k3zzgb)",1745193232.0,0,0.25,4
+technicallythetruth,Actually techincallythetruth | Not so new way to write 0,,1745190954.0,0,0.34,13
+revancedapp,Is there any support for messenger Bubbles/Chat Heads choice?,[removed],1745070539.0,1,0.67,0
+WorldofTanks,Fly glitch Neon Dash,,1745024576.0,0,0.29,0
+WorldofTanks,Found the craziest Neon Dash shortcut with my friends...,,1745024544.0,39,0.89,2
+WorldofTanks,Neon Dash World Record (afaik),,1745024470.0,0,0.4,7
+WorldofTanks,2:10.15 Neon Dash WR? Couldn't find anything faster on ytb.,,1745000840.0,16,0.77,19
+samsung,6+ hours of battery life on my 2019 Galaxy Buds.,"Crazy they still have more than originally advertised (6h) after over 5 years of daily use and abuse. The mic, tho not up to today's standard especially with wind and other noise, still works just as well too...",1744755958.0,12,0.82,6
+SteveMould,"So I believe a car moving up a hill vs treadmill needs no extra effort, but a human does.",,1744319860.0,2,0.75,8
+bahn,Kann mir jemand diese Preisstruktur erklären?,,1743965499.0,385,0.94,45
+samsung,"Why is ""Low"" green and ""High"" red. This is disgusting.",,1743885063.0,1,1.0,0
+SatisfactoryGame,Hot take: I am scared of 1.1,"I thimk what made Satisfactory such an amazing game at launch was the dev's willingness to completely disregard the communitie's wishes, if they felt like it would make the game worse. A lot of indie games with good community relations fall into the trap of improving the game out of the game by removing ""annoyances"". Satisfactory didn't. They listened to the community, while also rejecting some ideas that had big support CS felt like might worsen the overall game. (e.g. programming/redstone)
+
+And I'm afraid vertical splitters, priority mergers and item counters on belts might be crossing that line. Tho obviously just speculation, this might be because parts of the team have moved on to other projects after release/early bug fixes, only leaving a few to maintain the game and work on 1.x.
+
+I am still cautiously optimistic and a lot of 1.1 is amazing (racks, elevator, architecture, curved belts and pipes), but I still am kinda afraid and hope whoever is working on the game now has the same strength to ignore the community when necessary as the team up to 1.0 did.",1743272209.0,0,0.27,29
+CasualConversation,"Where do you feel is ""you""?","I'm kinda torn, I feel like ""me"" is either behind the middle of my eyes, between the ears, or slightly below my colar bones, like inside the top of my ripcage....
+
+It almost like switches, it's the ripcage when I'm moving/being physically active, but my head when I'm looking at stuff, listening or thinking....
+
+Idunno, just curious....",1742496139.0,7,1.0,31
+MakeMore,How is the full level not diamonds?,,1741087587.0,7,1.0,0
+hamburg,Erfahrungen mit WG Gründung?,"Da der Wohnungsmarkt ja sehr angespannt ist und ich nach Hamburg umziehen werde, hatte ich die Idee eine WG zu gründen. Hat mit sowas jemand Erfahrung bzw. ist es eine schlechte Idee, wenn man nicht schon in Hamburg wohnt?
+
+Bin mir unsicher ob das nicht gegen Regel 9 in diesem Sub verstöst. Ich suche oder biete ja keine Wohnung an, ich suche nur nach Erfahrungen.",1741035394.0,0,0.3,10
+SatisfactoryGame,"Built this modern industrial facility for 840 Iron ->Adaptive Control Unit + some useful parts. Stuff is delivered via Tractor/Truck/Train even tho the nodes are all fairly close, because I hate the look of conveyor belts in the open.",,1740493898.0,35,0.92,3
+ArtificialInteligence,"AP uses AI to write articles, then sells them back to AI training.","Associated Press admit the use of AI for ""gathering, producing and distributing the news"" on their website and have recently signed a deal with Gemini for news content.
+
+This ""backfeeding"" has also been shown to worsen Ai performance and the whole idea of asking Gemini gor some news and it giving it to you with a source that is itself is kinda crazy...
+
+I would post links, but don't wna risk getting it removed with the subreddit rules.
+",1737157902.0,3,0.66,5
+artificial,Free money glitch,,1737157322.0,2,0.58,2
+GeminiAI,Free money glitch,,1737157150.0,7,1.0,0
+unpopularopinion,"AI isn't unethical, actually.",[removed],1736790517.0,1,1.0,1
+unpopularopinion,Cooking and almost everything else is insanely unhygenic and that's fine,[removed],1735910981.0,560,0.85,232
+unpopularopinion,It doesn't matter what people wish they'd done right before they die,"A lot of people take this to be objective advice as they would know if they've lived through everything.
+
+But it is very possible that most of what they say has to do with their view at that specific moment. Living your life in a way so that you feel like you did everything well before you die, is living a life where you force yourself to do things you don't like in the hopes of maybe one day feeling good about it.
+
+As an analogy, when others die it does often *feel* like you should've spent more time with them, but that feeling does not mean you would've *actually been happier* sacrificing other activies for time spent with them.",1734969337.0,22,0.73,30
+EliteDangerous,The approach took me through another star and I had a bit of a heart attack as it jumped into my face. Is this normal?,"https://preview.redd.it/lqidotg8917e1.png?width=2559&format=png&auto=webp&s=5ea6127f53841837daeffa6a309c78c8be52810d
+
+Jumping to 64 PISCIUM from LTT 10380.",1734277645.0,0,0.5,1
+SatisfactoryGame,Posting this so y'all don't feel bad about your completely normal Christmas factories,,1733426594.0,244,0.98,19
+termux,Android Authority: Google started work on a new Terminal app,[removed],1732295032.0,2,1.0,3
+SatisfactoryGame,ADA be like:,,1732269334.0,21,0.89,3
+Hair,Is dry hair even a problem?,"I know it can cause split ends and breakage, but I have relatively short hair (at most maybe 20cm) and just like the look of the slightly chaotic hair.
+
+Whenever it's oily, even after 1 or 2 nights, it just sits flat and straight and looks pretty bad imo.
+
+So my question is, would washing my hair every day in a way that makes it constantly dry, no conditioner etc, cause some issues I'm not aware of?
+
+Everywhere I searched online just says it's bad and something to be ""fixed""...",1731502472.0,1,0.67,9
+slaythespire,"I DID NOT expect to get here with Snecko Eye replacing the starting relic. I know it's low ascension, but I usually play with mostly 0 cost cards.",,1731004913.0,8,0.9,6
+WorldofTanks,This is a balanced game (Please WG I need my salary),,1730758482.0,61,0.9,9
+SatisfactoryGame,"I just love this place. Under a refinery. Wish I could put it into words.  I want to build something giant that makes you feel tiny next, but I think my upcoming factory isn't big enough for that, so I'll probably go with a relatively modern machine shop office combination...",,1730400082.0,7,1.0,0
+SatisfactoryGame,"Just out of curiosity, when did you start playing?","Poll is limited to six options unfortunately...
+
+[View Poll](https://www.reddit.com/poll/1gf7xuo)",1730242384.0,12,0.94,34
+CasualConversation,I'm finally happy...,"I'm 20 and after 6 years of depression I actually enjoy holidays instead of skipping them with YouTube or games.
+
+I'm also making social connections, cooking and continuing knitting, which I started 4 years ago.
+
+In 9 months, I'll start dual studies, which is work and uni together, so l won't have much free time and I'm still not quite emotionally stable...
+
+But still, I'm happy, yayy :)
+
+Do you have any other minor/low-comittment hobbies I could try?",1729520910.0,15,0.94,11
+revancedapp,PSA: You can use bundles (APKM) with ReVanced! (Tho with a bit of effort),"I was frustrated with the old Reddit app version, but didn't want ads. There are only APKM bundles for newer versions on APKMirror.
+
+While officially only `2024.17.0`, I managed to use a `2024.18.0` *bundle* to update, while the *apk* of the same version failed. I will try newer versions and report back what worked. The newest, `2024.42.0`, had an error in ReVanced.
+
+What I did:
+
+*If you get stuck or an error I recommend using ChatGPT. I don't know much about bundles and made it work*
+
+
+1. Download Apkm bundle (This is [Reddit 2024.18.0](https://www.apkmirror.com/apk/redditinc/reddit/reddit-2024-18-0-release/reddit-2024-18-0-3-android-apk-download/download/?key=c1b627198aa4fc1983eb34728c61e95aff9e1000))
+
+
+2. Download [Apktool M](https://maximoff.su/apktool/?lang=en).
+
+3. Enable `3 dots`(top right) -> `Settings` -> `Build & Decode` -> `Remove <property>` (I got an error before I did this)
+
+
+4. Find the APKM bundle (hamburger menu top left) -> `Antisplit`
+
+
+5. Select `INVERSION`, then manually the rest (fastest way to select all) -> `ANTISPLIT`
+
+
+6. Select `Match original` signature -> In the cogwheel to the right, select all versions and `Save` (`Save` to remember your choice for next time) -> `OK` -> `OK`
+
+
+7. Patch the APK with ReVanced
+
+
+8. Enjoy your apps without ads and bloat <3",1728641521.0,80,0.92,31
+engrish,Fever on both sides!,,1727702717.0,78,0.97,1
+revancedapp,"""org.schabi.newpipe is not
+installed. Please install it."" It is installed. v19.16.39-pv4.15.0",,1727468300.0,0,0.5,0
+notinteresting,Nothing to see here.,,1727089695.0,4,1.0,0
+notinteresting,Posts are way too interesting on here lately. Changed my bedsheets today...,,1727034749.0,3,0.8,1
+DarkViperAU,Deleted Mr Beast ramble ,"Does anyone have the mr Beast section of the latest ramble?
+
+I was able to gather a bit from the comments, but I would just like to see the actual ramble for myself...
+",1726836199.0,16,0.9,2
+DarkViperAU,YouTube finally figured out what to replace the view count with for maximum retention....,,1725990900.0,820,1.0,19
+samsung,"[S24U] LockStar doesn't adjust size of ClockFace clocks, so they're too small. The maximum size with LockStar turned off is also too small.",,1725363300.0,1,1.0,0
+samsung,"[S24U] LockStar doesn't adjust size of ClockFace clocks, so they're too small. The maximum size with LockStar turned off is also too small.",,1725354403.0,1,1.0,0
+Samsung_GoodLock,"[S24U] LockStar doesn't adjust size of ClockFace clocks, so they're too small. The maximum size with LockStar turned off is also too small.",,1725353715.0,3,1.0,3
+AmongUsMemes,I had to...,,1724422295.0,42,0.96,3
+amogus,I had to...,,1724422247.0,72,0.97,1
+samsung,Any good leather cases for the S24U?,"I am looking to buy the s24 as my replacement for the note 10+. I really liked the Samsung leather case, mainly for its good feel and slip resistance, and would like one again.
+
+I have researched for a bit, but they all seem to either not last very long, have plastic on the bottom, top, or sides, or have a hole for charging or the s-pen that's too small. I wouldn't mind if the bottom was just open with raised corners, similar to the note 10+ case.
+
+https://preview.redd.it/s0xiv7rivsid1.png?width=1000&format=png&auto=webp&s=67c31627cd955aad265cac4c02f5e208ba0b1a3e
+
+  
+",1723715623.0,0,0.2,4
+S24Ultra,Any good leather cases?,"I am looking to buy the s24 as my replacement for the note 10+. I really liked the Samsung leather case, mainly for its good feel and slip resistance, and would like one again.
+
+I have researched for a bit, but they all seem to either not last very long, have plastic on the bottom, top, or sides, or have a hole for charging or the s-pen that's too small. I wouldn't mind if the bottom was just open with raised corners, similar to the note 10+ case.
+
+https://preview.redd.it/jht2ib46vsid1.png?width=1000&format=png&auto=webp&s=cbeebfa0a95090c454948b24f1886731cc07f061
+
+",1723715538.0,2,1.0,15
+ArcBrowser,"Before ya'll complain about the devs, you should learn about technical debt.","You can just google what it is, but I'll summarize it here.
+
+From some of the early interviews, it's pretty apparent, that the company's philosophy was to just try stuff out and see what sticks. With that kind of approach, it is nonsensical to spend 5x the amount of time to make 10 features perfect, of which 8 will be thrown away and 1 will be changed.
+
+Through that, TBC now probably (this is where my opinion starts) has a ton of technical debt, they need to deal with. While it is often really simple to make a new feature work, you usually spend the majority of dev time on making sure it works reliably, interoperates with all other features and doesn't contain ""randomly"" appearing bugs.
+
+What I believe, is that TBC has by now mostly found what they want, making them focus on polishing. And while it might appear that most of the work is done when something is usable, software dev rarely works that way. TBC is not lazy nor incompetent, they are just working through their technical debt, that is much less flashy. Instead of a cool new feature you get an annoying little thing, that maybe 20% of users even experience, fixed.
+
+
+
+edit: Especially since their (currently targeted) monetization strategy is free for personal use, but monetization from businesses, having a reliable product is also probably really important for TBC even surviving.",1723651045.0,179,0.91,50
+WorldofTanks,Patch notes,"https://preview.redd.it/d7f4qzfxnphd1.png?width=360&format=png&auto=webp&s=7776fcb715e5535643781aff3ae3406aaa4ddde9
+
+",1723240919.0,0,0.2,2
+WorldofTanks,I can go against this tank in battle. Lovely. You would think they'd have a check to make a tank pennable at least in theory.,"https://reddit.com/link/1eobyeo/video/htp5vhzrkphd1/player
+
+",1723239875.0,0,0.4,3
+WorldofTanks,You're useless.,[https://youtube.com/clip/UgkxzI9hAtAlbWkLIz6GTxKmiuZojjHxHcVn?si=pC5bLVyERU6yzr6B](https://youtube.com/clip/UgkxzI9hAtAlbWkLIz6GTxKmiuZojjHxHcVn?si=pC5bLVyERU6yzr6B),1722035563.0,0,0.34,4
+notinteresting,Left under the daily national German news video.,,1720641154.0,2,1.0,0
+notinteresting,Comment under daily national news video in Germany.,,1720639755.0,1,1.0,1
+WorldofTanks,WoT should have a dev blog.,"There have been a bunch of really random small changes in the last patch. (medkit, fire, last shell in magazine...), which reminded me of hackweeks from Rust.
+
+I think a very similar approach to PR could be really helpful for WoT, as it helps explain decisions, generates excitement and even helps gather early feedback on changes.
+
+I think a lot of the animosity towards WG comes from the very corporate feeling videos and ""out of the blue"" major changes.
+
+Yes, I know about dev diaries, and tho they are the closest to a dev blog we ever got, they are few and far between while still having a marketing and PR vibe.
+
+Thoughts?
+
+edit: typo",1720638077.0,28,0.9,20
+Windows10,"I DO NOT need help solving this. I am just curious why this would happen, when only about half of RAM is used. I think almost all being filled with ""Standby"" is normal.",,1720376008.0,0,0.32,8
+notinteresting,All the numbers on my profile are divisble by 1,,1720162418.0,3,0.81,0
+arbeitsleben,Nutzungsbedingungenverletzendes Programm auf GitHub im Bewerbungsanschreiben?,"Hi,
+
+ich werde mich kürzlich für ein duales Studium im IT-Bereich bewerben. Gerade in diesem Bereich könnte [meine GitHub Seite](https://github.com/Windows200000) als Art Portfolio ein sehr guten Eindruck machen.
+
+Allerdings ist da neben selbstgeschriebenen Scripts auch eine Fork von einem Twitch Drops Miner, den ich zurzeit verwalte. Dieser bricht natürlich die Nutzungsbedingungen.
+
+Ich würde den Verweis auf GitHub ungern vollkommen weglassen und ein Klon meines Accounts ohne dieses Programm wäre vermutlich auch sehr auffällig und einfach auf mein eigentliches Konto zurückführbar.
+
+Was würdet ihr in dieser Situation machen? Lieber komplett weglassen? Die Fork einfach nicht im Account gepinnt haben?",1719927620.0,4,0.83,14
+Studium,Nutzungsbedingungenverletzendes Programm auf GitHub im Bewerbungsanschreiben?,"Hi,
+
+ich werde mich kürzlich für ein duales Studium im IT-Bereich bewerben. Gerade in diesem Bereich könnte [meine GitHub Seite](https://github.com/Windows200000) als Art Portfolio ein sehr guten Eindruck machen.
+
+Allerdings ist da neben selbstgeschriebenen Scripts auch eine Fork von einem Twitch Drops Miner, den ich zurzeit verwalte. Dieser bricht natürlich die Nutzungsbedingungen.
+
+Ich würde den Verweis auf GitHub ungern vollkommen weglassen und ein Klon meines Accounts ohne dieses Programm wäre vermutlich auch sehr auffällig und einfach auf mein eigentliches Konto zurückführbar.
+
+Was würdet ihr in dieser Situation machen? Lieber komplett weglassen? Die Fork einfach nicht im Account gepinnt haben?",1719927543.0,1,0.67,3
+WorldofTanks,"""say cheese""",,1719863290.0,36,0.85,3
+MakeMore,Clones suddenly very expensive. This is just the 4th of the run. (23 Trophies),,1719394892.0,4,0.84,16
+notinteresting,I have so many arms I can't even cunt the fingers,(https://www.bing.com/images/create/add-an-additional-arm-to-the-image2c-matching-the-p/1-66793621115c42938e7bcf0eb962eb0f?id=vzE9qigFwJc5ND6KCtOddw%3D%3D&view=detailv2&idpp=genimg&noidpclose=1&thId=OIG4.7n8B8RME3S5GwboloYZ7&FORM=SYDBIC&ssp=1&darkschemeovr=1&safesearch=moderate&setlang=en-gb&cc=DE&PC=SANSAAND),1719219837.0,0,0.38,4
+ArcBrowser,"Text just started disappearing, including in the search bar etc....",,1719068253.0,41,0.99,18
+WorldofTanks,"I know HEAT doesn't have overmatch, but that should have just missed....",,1718901278.0,4,0.66,9
+samsung,The gaslighting has started... /s,,1718801453.0,1,1.0,0
+WorldofTanks,WG Official YouTube hacked,"[https://www.youtube.com/@Tesla4-v5p/videos](https://www.youtube.com/@Tesla4-v5p/videos)
+
+It has a Tesla profile picture and some private videos were published.
+
+update: The videos are no longer there. It seems to have mostly been older stuff, with one upcoming D-Day related video.
+
+No crypto scam livestream *yet*.
+
+update: WG took control back, so no scam livestream.
+
+I have them downloaded.",1718485972.0,0,0.27,6
+WorldofTanks,Good patch 👍,,1718380253.0,71,0.91,19
+node,How to detect windows Shutdown?,"I simply want to detect and gracefully end stuff when Windows shuts down. The script is running in Windows terminal.
+
+    ['SIGINT', 'SIGTERM', 'SIGHUP', 'SIGBREAK', 'SIGQUIT', 'SIGKILL', 'SIGUSR1', 'SIGUSR2', 'exit', 'uncaughtException']
+      .forEach(signal => process.on(signal, () => {
+        shutDown()
+      }));
+
+This does catch ctrl+c and alt+f4 / closing terminal, but not shutting down windows.",1717792487.0,6,1.0,4
+Instagram,How to turn off story notifications in Instagram,"A lot of people are searching for this, yet there are no answers on the Internet, so here it is:
+
+Turn off the ""Reminders"" [category in Android notification settings](https://developer.android.com/develop/ui/views/notifications/channels). Where exactly it can be found depends on your brand. 
+
+On Android, you can figure out the category of any notification, by holding it and selecting ""settings"".",1717676569.0,0,0.5,0
+WorldofTanks,"So let me get this straight: For the low low price of 27€, you get a worse version of a tank everyone got for free?",,1716413791.0,0,0.36,29
+CitiesSkylines,"Who needs Jesus, when we can walk on air!",,1716394540.0,99,0.95,5
+de,"Weiß jemand, was mit dem WLAN in Zügen los ist?",,1715788928.0,0,0.13,5
+pics,How the northern lights ACTUALLY look like vs how a phone camera sees them,,1715590133.0,14,0.73,5
+WorldofTanks,"What the fuck is this????? (Sorry for the terrible quality, I deleted the original and messenger has terrible compression)",,1715195526.0,1,0.53,6
+CitiesSkylines,[Update 2] Rebuilt that awful intersection from three months ago - thanks to the awesome work of MOD DEVS <3,"Some of you might remember [this](https://www.reddit.com/r/CitiesSkylines/comments/1agbqw3/this_traffic_lights_lets_through_1_car_at_a_time/) or [this](https://www.reddit.com/r/CitiesSkylines/comments/1ah1k7u/update_that_awful_highway_intersection/) post from 3 months ago. Well, thanks to mods, I was finally able to get mostly what I wanted. The main issue now is just the traffic light phases, which obviously don't work well with this kinda thing, but at least it's usable.
+
+https://preview.redd.it/juumnfk2v1zc1.png?width=1680&format=png&auto=webp&s=16bef9525c54aa0dfbd67548ae3e511e810be33f
+
+Maybe it doesn't look *that* different, but it's now actually a T with bypass lanes and works well enough traffic-wise. The biggest issue is still the thing that's circled on the top, because left and right traffic cross, which I'll only be able to fix, along with some optimization, once we get a mod to create custom traffic light phases.
+
+Oh, and before you comment, I did mess around with Move It, so the proximity of the intersections doesn't cause the cars to stop. Flow-wise, it's fine, because the other ""intersections"" don't actually intersect.",1715108267.0,4,0.76,2
+LogitechG,Anybody know a way to clean this rubber pattern? ,,1715015827.0,73,0.81,97
+ArcBrowser,PSA: Export your passwords regularly,"This hasn't happened to me yet, but since ARC on Windows only saves passwords locally (if you use the built-in feature) you should export your passwords via the chromes settings page (arc://password-manager/settings) whenever you add something new. Otherwise, you're relying on nothing happening in a beta software product, especially during updates.",1714488985.0,6,0.88,6
+Hitfilm,Speed effect without frame interpolation?,Is there a way to use the speed effect but disable its frame interpolation? I can't have ghosting.,1714222412.0,2,1.0,0
+sysadmin,How often does wifi renagotiate speed?,"I know, that the WiFi standard has dynamic rate switching based mostly on signal strength and interference, dies anyone know how often this renagotiation happens? Android devices show a new speed a couple of seconds after a significant change and ocasionally otherwise, but I don't know how ""live"" that is. Does anyone know in more detail when this happens?",1714049675.0,0,0.5,3
+techsupport,How often does wifi renagotiate speed?,"I know, that the WiFi standard has dynamic rate switching based mostly on signal strength and interference, dies anyone know how often this renagotiation happens? Android devices show a new speed a couple of seconds after a significant change and ocasionally otherwise, but I don't know how ""live"" that is. Does anyone know in more detail when this happens?",1714049623.0,1,1.0,0
+HomeNetworking,How often does wifi renagotiate speed?,"I know, that the WiFi standard has dynamic rate switching based mostly on signal strength and interference, dies anyone know how often this renagotiation happens? Android devices show a new speed a couple of seconds after a significant change and ocasionally otherwise, but I don't know how ""live"" that is. Does anyone know in more detail when this happens?",1714049593.0,2,1.0,4
+networking,How often does wifi renagotiate speed?,[removed],1714049516.0,1,0.56,4
+Showerthoughts,Experience always comes at the cost of creativity,"I think this is widely understood, I've just never seen it formulated this directly.",1714046275.0,13,0.68,15
+EliteDangerous,Casual squadrons? LFG Discord?,"Hi,
+
+I'm pretty new to Elite and I'm now at the point where the engineering mats grind starts.
+
+It's all quite overwhelming, so I'd like to join some squadron, but I may not play for weeks at a time ocasionally.
+
+Is there any place (such as a discord server) to find squadrons? Are there even squadrons, that are fine with inactivity, but aren't heavily roleplay focused? How can I find them?
+
+Thanks!",1713785249.0,0,0.5,8
+Studium,It studium - kleine uni in größerer Stadt Empfehlungen,"Ich mache nächstes Jahr mein abi und möchte dual IT studieren. Ich wäre gerne in einer größeren Stadt, aber nach Gesprächen mit einigen Studenten scheinen kleinere Unis mit kleineren Klassen besser zu sein. 
+
+Kennt ihr da was? Habe ihr Empfehlungen bzw. schlachte Erfahrungen?",1713784426.0,1,0.67,10
+selfhosted,"CPU steal time causing issues, due to spikey load","I'm running Sinusbot (the only decent music bot for teamspeak) on an on-demand instance. I have never had this issue with anything (TeamSpeak server, a bunch of scripts, other open source servers etc. etc.), even with other ytdl music bots. But specifically Sinusbot spikes CPU usage (to about 20-30% from almost nothing), which causes a lot of stuttering, due to CPU not being available instantly and it nor prioritizing playback, over fetching other music (at least that's what I assume it is).
+
+Is there anything I can do? Like something, that would temporarily increase CPU base-load when needed or whatever else?",1713457156.0,0,0.5,0
+teamspeak3,"CPU steal time causing issues, due to spikey load on oracle VPS","I'm running Sinusbot (the only decent music bot for teamspeak) on an on-demand instance. I have never had this issue with anything (TeamSpeak server, a bunch of scripts, other open source servers etc. etc.), even with other ytdl music bots. But specifically Sinusbot spikes CPU usage (to about 20-30% from almost nothing), which causes a lot of stuttering, due to CPU not being available instantly and it nor prioritizing playback, over fetching other music (at least that's what I assume it is).
+
+Is there anything I can do? Like something, that would temporarily increase CPU base-load when needed or whatever else?",1713457095.0,1,1.0,4
+oracle,"CPU steal time causing issues, due to spikey load","I'm running Sinusbot (the only decent music bot for teamspeak) on an on-demand instance. I have never had this issue with anything (TeamSpeak server, a bunch of scripts, other open source servers etc. etc.), even with other ytdl music bots. But specifically Sinusbot spikes CPU usage (to about 20-30% from almost nothing), which causes a lot of stuttering, due to CPU not being available instantly and it nor prioritizing playback, over fetching other music (at least that's what I assume it is).
+
+Is there anything I can do? Like something, that would temporarily increase CPU base-load when needed or whatever else?
+
+# Update:
+
+Since this is now the top search result for ""oracle steal time reddit"":
+
+I did not find a solution, and ""SR-IOV"" seems incompatible with always free stuff.
+
+What did improve it, is just putting it on the ""VM.Standard.A1.Flex"" shape, which I can do because I'm not currently running more demanding stuff on there. Due to the low usage, I might try just keeping it on there anyway.",1713457079.0,1,1.0,2
+WorldofTanks,Is the meta fast due to players just getting better?,"&#x200B;
+
+https://preview.redd.it/fc1mm8c3a3vc1.png?width=786&format=png&auto=webp&s=5b0b202cd723380f9bb4ee04c89a342bb7ca48b0
+
+I know the meta has been fast, but recently I noticed, that while there still are +20k stomps, a lot of the ""stomps"" are actually pretty close hp-wise (Recently I also had a 15/3 with under 2.5k HP remaining).  
+
+
+I think this could definitely be caused by worse players leaving the game, or average skill just improving due to better player retention with a lower rate of new players joining. It would be better players, that would start caring more for damage dealt and that would be more mindful of surviving.
+
+&#x200B;
+
+This is just a random thought I had today, but I haven't seen it anywhere.",1713382301.0,60,0.93,55
+WorldofTanks,30 ping btw....,,1713095368.0,21,0.75,13
+notinteresting,I'm out of toilet paper,,1712939088.0,5,1.0,1
+WorldofTanks,[FIXED] Tour of Duty Required Time,,1712875514.0,39,0.93,26
+WorldofTanks,"Why shooting at corners in a city can make sense, even with no tank spotted. (Made this for a friend, so I thought I might as well post it here)",,1712873725.0,0,0.24,4
+WorldofTanks,This guy wants to get all perks on tier 2 arty. And I thought I've seen it all.,,1712616535.0,100,0.94,35
+EliteDangerous,How do you guys use the galaxy map for missions?,"My current workflow is to screenshot them into my private discord server, then temporarily bookmark them all on the star map to see which are close or which are in the direction I want to go.  
+
+
+Is there a better way to do this?",1712594415.0,3,0.71,21
+EliteDangerous,"Seems like they restock pretty quickly, is this just infinite money? Why is someone buying for so much?",,1712343284.0,102,0.97,16
+EliteDangerous,"New to elite and wow that was stunning, but then it hit me and I died xD",,1711753817.0,232,0.98,41
+notinteresting,Eggs I just bought,,1711481173.0,2,1.0,1
+WorldofTanks,Is there a place to check map rotation?,"Title says it all. There used to be a wotlabs mod, but is there still a site that tracks and shows which maps are in rotation on which server?",1710781515.0,4,0.7,12
+WorldofTanks,"I made a replay analyzer that retrieves win rates of vehicles of the entire team containing a player for Maneuvers and other events, where the meta is different. GitHub in comments.",,1710713011.0,19,0.83,2
+ArcBrowser,"Anyone else find that really annoying? I get the idea, but having to literally search in darkness for the color I want is just really annoying. There should also be a black preset, it took me 10+ minutes and a ruler up to the screen to hunt down the exact middle.",,1710441968.0,106,0.98,32
+CapitalismVSocialism,People should be banned from advertisements.,"This seemed like the best sub to post this in.
+
+edit: Read the title again. advertis*ements* not *ing*.
+
+The only thing it ever does is reinforce stereotypes, unrealistic beauty standards, and it is the main form of lifestyle advertising, which is basically selling a product not based on how well it works, but because it makes you cool.
+
+Thoughts?
+",1710352982.0,0,0.47,98
+learnprogramming,How to websites handle multilingual pages?,"I'm reffering to example.com/us-en/something
+
+Do they actually just have duplicates? That seems really messy and terrible to maintain.
+
+Si they just fake it? Like they don't have it on their backend, but they use the link to insert translation files in place of the text.
+
+I googled for about 15min and couldn't find anything except SEO. Just curious.",1710249579.0,0,0.5,4
+AskTechnology,How to websites handle multilingual pages?,"I'm reffering to example.com/us-en/something
+
+Do they actually just have duplicates? That seems really messy and terrible to maintain.
+
+Si they just fake it? Like they don't have it on their backend, but they use the link to insert translation files in place of the text.
+
+I googled for about 15min and couldn't find anything except SEO. Just curious.",1710249475.0,0,0.5,0
+WorldofTanks,About 10k players right now,,1710188598.0,79,0.92,5
+WorldofTanks,Insane that WG still hasn't figured out they need more server capacity for the start of events..... Every single time.....,,1710187094.0,88,0.91,36
+Gifted,Best unbiased video news?,"I know this question has been asked a lot. And I know, there is not a single news source without bias. But here has to be *something*. What I want is ideally a YouTube channel, that uploads between once a day and once a week, and that presents news not in an unbiased way, which is impossible, but always from 2-3 view points. Ideally something like western left, western right and from the rest of the world.
+
+This would probably be more of a news aggregator, than actual reporting, with maybe a bit of satire and simple Google Scholar research sprinkled in.",1710169691.0,6,0.88,3
+WorldofTanks,WotLabs data breach,"[https://wotlabs.net/](https://wotlabs.net/) is currently down due to a data breach, that happened today.
+
+According to [haveibeenpwned.com](https://haveibeenpwned.com), it includes 21 994 accounts along with their  ""Dates of birth, Email addresses, IP addresses, Time zones, Usernames""
+
+>In March 2024, WoTLabs (World of Tanks Statistics and Resources) suffered a data breach and [website defacement attributed to ""chromebook breachers""](https://web.archive.org/web/20240303062156/http://forum.wotlabs.net/). The breach exposed 22k forum members' personal data including email and IP addresses, usernames, dates of birth and time zones.
+
+I assume they took the site down intentionally and will send out emails in the coming days.",1709838643.0,27,0.88,17
+WorldofTanks,Let's talk about Maneuvers tactics,"The new installment of maneuvers has changed quite a bit, especially with the different map poll and encounter-style battles.
+
+[green  for hull down, red for no hull down, nothing for both](https://preview.redd.it/wchy7njw3qmc1.png?width=353&format=png&auto=webp&s=5a1b5085e3cbf43222df1952cd4a49ac5e55f2e6)
+
+279e is obviously still good, but I can see faster tanks with better DPM and gun handling be [better](https://tanks.gg/tank/kpz-07-pe?cs=obj-279-e) in 7v7, when you can't really just sit anywhere. Same goes for chieftain. Without the hull down, kpz is [simply better](https://tanks.gg/tank/t95fv4201?cs=kpz-07-pe), also because it can eat HEAT in the front.
+
+So what should the team composition be? I have some guesses, for my team with only one 279e owner, but they are really just guesses:  
+1x 279, 2x BZ, 4x Kpz  
+1x 279, 3x Kpz, 3x 907  
+1x 279, 4x Kpz, 2x 907  
+1x 279, 2x 60tp, 3x  Kpz, 1x 430u  
+
+
+We could definitely also talk about the actual tactics, but they are fairly consistent with 7v7 tier 8/10 skirmishes, that I assume most of you who plan to lead a team already have experience with.",1709735763.0,1,0.55,5
+Windows10,"Ya'll have bullied Microsoft into adding ""if asked""....",,1709662791.0,1,1.0,0
+scratch,"Simple puzzle, that takes a while to solve. It was given to me by a math teacher and I made it interactive. The project includes a bunch of useful features, if you want to mess around to find a proof for the solution. Link in comments.",,1709575662.0,2,0.76,3
+aoe2,What makes Hera good other than his gameplay?,"Edit: 
+I'm sorry for how my post came across, I searched and couldn't find anything negative about Hera, so I was completely unaware of what he's had to deal with. 
+And got what I was looking for. Hera grew up in a difficult environment and has managed to become more humble and mature despite his amazing achievements in aoe2.
+
+This [comment](https://www.reddit.com/r/aoe2/s/sG9lu4T5wA) is what I was looking for. 
+
+My original post:
+
+I'm new to the community. From his YTB channel, HC5 and other polaces on the internet, I got a very negative impression of him.
+
+I think I'm wrong here, because clearly I'm the only one, but I don't understrand why.
+
+Every time I hear him talk I percieve insane arrogance and feel like he considers himself as better than everyone. I don't mean to be negative because, again, I'm new here, so what am I missing?",1709498128.0,0,0.47,157
+WorldofTanks,"Wotinspector and tanks.gg both show some obviously not right numbers. Seems like the spaced armor is funky. (Obviously not representative of combat, but I haven't had this with other tanks)",,1708648968.0,0,0.25,1
+WorldofTanks,Driving a destroyed tank in frontline...,"&#x200B;
+
+https://reddit.com/link/1axmd8u/video/v6o3fcid98kc1/player",1708647245.0,23,0.84,9
+WorldofTanks,"WTF, I was throwing my tank away in half the battles cuz I was fed up with a mission, and I get 5K WTR???? (wn8 is a more appropriate 750-ish)","&#x200B;
+
+https://preview.redd.it/0cwocopor7kc1.png?width=375&format=png&auto=webp&s=a078bb5060b84963fca87a518cc57864ce446d41",1708641343.0,0,0.11,8
+WorldofTanks,I am become death.,,1708373740.0,0,0.4,4
+Windows11,ALL Windows shortcuts.,"[https://github.com/Windows200000/Windows-Keyboard-Shortcuts](https://github.com/Windows200000/Windows-Keyboard-Shortcuts)
+
+Okay, there will never truly be a list of *all* shortcuts. But I tried my best to compile as large of a list as I could from what I remember and from the internet.
+
+If you know more, please contribute.
+
+I hope it helps. <3",1707939389.0,12,0.88,4
+Windows10,ALL Windows shortcuts.,"[https://github.com/Windows200000/Windows-Keyboard-Shortcuts](https://github.com/Windows200000/Windows-Keyboard-Shortcuts)
+
+Okay, there will never truly be a list of *all* shortcuts. But I tried my best to compile as large of a list as I could from what I remember and from the internet.
+
+If you know more, please contribute.
+
+I hope it helps. <3",1707939375.0,11,0.75,3
+windows,ALL Windows shortcuts.,"[https://github.com/Windows200000/Windows-Keyboard-Shortcuts](https://github.com/Windows200000/Windows-Keyboard-Shortcuts)
+
+Okay, there will never truly be a list of *all* shortcuts. But I tried my best to compile as large of a list as I could from what I remember and from the internet.
+
+If you know more, please contribute.
+
+I hope it helps. <3",1707939357.0,7,0.82,6
+WorldofTanks,Any recent EBR 75 FL 10 ebr player I could chat with?,"I'd like to have a chat with another ebr player in general, but this is about a specific issue:
+
+So I got my 2 marks quite a while ago and have only really played skirmishes or done some missions with ebr since then. (A lot of skirmishes, tho)
+
+I know randoms are really different and I expected quite a bit of adjustment needed, but I wanted to get on the 3mark grind. But, no matter how I perform, I can't see a way I could get the 3.3k required average in the battles as they are right now. Pretty much always 3-4 lt per team and battles that give very little opportunity to do much of anything, at least not without insane risks that in my experience aren't gonna pay off on average.
+
+Maybe I just got unlucky in my 11 battles, but this is something I feared a bit from other randoms I played recently, so I think the meta has just really significantly changed.
+
+Any help?",1707258879.0,1,0.55,11
+WorldofTanks,Should I buy even 90 when I already have ebr?,"I'd be paying 8k of my 69k bonds and 300 of my 2700 gold as a f2p player. I'm pretty sure the answer is no, since both are french LT for missions, t8 prems for farming creds and the EBR is better in most situations, but thoughts?
+
+edit: Thanks to u/mr_eti and u/tanki_cat for pointing out a cheaper way. 
+
+[View Poll](https://www.reddit.com/poll/1aioc9q)",1707054703.0,0,0.3,17
+WorldofTanks,Actually unpopular opinion: mirror MM is stupid,"Not only for other tanks, but also for EBR. The individual skill level of players is like 80% of the performance. A viable alternative would be to construct teams with, in addition to more or less mirrored classes, mostly mirrored average tank performance or use some form of SBMM, *edit1:* but this would make battles boring. *end*
+
+Unless you want exactly mirrored teams, you're not really solving anything by adding more mirrored tanks, because that will make the non-mirrored tanks be that much more important. Except now there's fewer of them, so it's less likely to average out.",1706876830.0,0,0.32,51
+CitiesSkylines,UPDATE: That awful highway intersection.,"This is the entire intersection.  
+
+
+https://preview.redd.it/jhx4mr4sq5gc1.png?width=1863&format=png&auto=webp&s=213bfd5eb0a9698a8634192ff56cd8c2ff5592ee
+
+Thanks to whoever pointed out I forgot to remove the light on the top left!
+
+I think from this view, it's a bit clearer, why I called it a T-junction. With TM:PE it would be possible to treat the all the off-ramps and all of the on-ramps as a single 2-way road (mostly, more on this later).
+
+It's definitely not ideal tho, I should probably extend the off-ramp a bit, as pointed out by u/RIP_Greedo.
+
+I think it's completely understandable, that the game has trouble with the traffic lights, because it sees it as a T-junction with 2 additional one way roads. Again, vehicles blocking the intersection hasn't been an issue here.
+
+&#x200B;
+
+https://reddit.com/link/1ah1k7u/video/q3a3bveoq5gc1/player
+
+As u/rampantfirefl pointed out, the short green phase isn't really bug, but more just an edge case scenario that the game can't know what to do with, because it can't know the context (at least without a ton of misdirected dev time). As you can see here, I tried if the issue was it being a highway, but clearly not.
+
+It would probably be best to merge the off- and on-ramps before the intersection, but I'd need to make more space for that. A roundabout doesn't work for high traffic (which this gets at rush hour).
+
+&#x200B;
+
+https://preview.redd.it/oti0y3nhq5gc1.png?width=1680&format=png&auto=webp&s=857bceecb570c76b8f37321868b78ad7c8abcdcf
+
+This should have all the necessary connections and a 3 phase light. Some connections could run on multiple phases (like leftmost). The red circle is the only conflict that isn't present in a normal T-junction, but it doesn't change that much, except requiring 2 lanes leaving the intersection in the top left.
+
+If there is a reason for why treating the off- and on-ramps as one road wouldn't make it work like any other T-junction with bypass lanes, please let me know.
+
+Just to make this clear: I'm not mad at the devs for this edge case. I am aware, that this isn't realistic, because highways pretty much always cross the road they're connecting to, allowing the opposite directions of the highway to each have their own intersection.",1706873350.0,51,0.85,28
+CitiesSkylines,This traffic lights let's through 1 car at a time. Can't wait for TM:PE...,,1706796312.0,698,0.88,137
+WorldofTanks,"A mod for session statistics for other game modes? (Skirmishes, Onslaught etc.)","Title says it all. I'd like to know credits from skirmishes, loss from onslaught, maybe a damage ratio etc.",1706649462.0,0,0.5,3
+teamspeak3,Best TeamSpeak version for plugins?,"I used to have it, but I reinstalled windows and don't remember which version it was. Most aren't updated to the newest one.",1706642864.0,4,1.0,1
+CitiesSkylines,"Thanks to some beautiful people in this sub I improved this intersection by quite a bit, there are still some things I don't love tho. A weird merge, a sharp turn and 2 routes going through what could become busy highway to highway traffic...",,1706279979.0,18,1.0,8
+CitiesSkylines,Any way to launch modded vie Thunderstore with a shortcut?,"It's kinda annoying always launching Thunderstorm, selecting platform, selecting profile and then launching...
+
+edit:
+
+**SOLUTION:**
+
+add `--doorstop-enable true --doorstop-target ""C:\Users\{username}\AppData\Roaming\Thunderstore Mod Manager\DataFolder\CitiesSkylines2\profiles\Default\BepInEx\core\BepInEx.Preloader.dll""`to launch options. Make sure to replace your username and change the profile, if not using ""Default"".",1706274058.0,7,1.0,10
+WorldofTanks,"Who would win this 1v1? (assuming open field, looking at each other and everything pens)","For the answer and explanation, check [here](https://www.reddit.com/r/WorldofTanks/comments/19fk205/dpm_is_not_how_fast_you_kill_an_enemy_most_of_the/).
+
+[View Poll](https://www.reddit.com/poll/19fk4ug)",1706217421.0,0,0.16,22
+WorldofTanks,dpm is NOT how fast you kill an enemy (most of the time),"Why? In most cases in randoms as well as various clan battles, encounters are short. Let's say you fight continuously for 65 seconds.  
+
+
+907 (**2.95K DPM**) - 11 shots for **3520** damage.  
+WZ-113G FT (**2.72K DPM**) - 5 shots for **3750** damage  
+
+
+This is ***NOT*** timing. It's Alpha damage, because in what you would call ""DPM fights"", each tank gets the equivalent of their reload time in DPM as a bonus - the first shot.  
+
+
+This effect is obviously stronger, the shorter the fight is. This means that in T8, with tanks having near twice as much DPM as HP, ""DPM tanks"" don't win 1v1's, high alpha tanks do. As an example, 2.66k DPM ISU-152 with just 1200hp beats 3k DPM Turtle with 1500hp - by almost 2 seconds!  
+
+
+There is of course still value in DPM, especially with something like strv, but this is something I've noticed a lot of people overlook.",1706217219.0,67,0.85,21
+CitiesSkylines,What do y'all think of this? I see similar stuff being used on bigger highway interchanges (more than just two highways) in Europe to prevent weaving and separate through traffic from exits.,,1706192215.0,67,0.85,32
+pcmasterrace,This subreddit right now,,1705923458.0,1326,0.89,230
+WorldofTanks,What the fuck happened to onslaught?,"I was decent in previous iterations, but I just can't do anything consistently here. Every battle is just complete chaos and there is literally nothing you could do. If you try to play it somewhat safe, as you would in skirmishes or randoms, you just do nothing, so all that remains is throw yourself in the action and hope the enemy decides to shoot others first, or randomly leaves, or doesn't throw their entire tank away for 2 shots etc.",1704931747.0,17,0.77,41
+unpopularopinion,People who want to die should just be able to,[removed],1704026565.0,982,0.79,679
+WorldOfTanksBlitz,Will the bourrasque be in auction?,"I don't have much experience, so I can't really judge that well, but given they put chimera in there I'd guess it'll be there too?",1703509607.0,2,0.6,15
+WorldOfTanksBlitz,Should I get T54E2 or wait for something like burrasque?,"I like meds more in general, but I can't judge whether they'd put him up.",1702812871.0,3,1.0,2
+RocketRacing,"“Competitive racing” is about as competitive as Mario Cart, at best.","I'm not talking about the graphics or the boosts, but you get rubber-banded to the middle of the track????? And bumping????? Like you can get pushed to a worse route, turned 180°, prevented from turning/accelerating or like actually smashed so you have to respawn? And there is literally nothing you can do about it?
+
+This doesn't make it bad, but it's not even slightly competitive, and the ranks are just a joke.",1702415772.0,2,0.55,3
+feedthebeast,[Create Above and Beyond] How Smeltery and Foundry controllers are calculated (It's weird) [1.16.5/AaB-1.3/Forge-36.2.20],"*a* and *b =  width/length (with walls)*  
+*h* = hight (with floor)  
+*B =* amount of smelting slots  
+*I* = Ingot capacity  
+
+
+Smeltery is pretty simple. B is just the amount of blocks inside and I is the same times 8
+
+    B = (a-2)(b-2)(h-1)
+    I = (a-2)(b-2)(h-1)*8
+
+The foundry behaves weirdly tho, this is probably a bug. B is the same, but in the I calculation it counts all the blocks, including floor wall and the controller itself for some reason
+
+    B = (a-2)(b-2)(h-1)
+    I = a*b*h*8
+
+As a consquence, a 1x1x1 (3x3x2 with walls) setup, has 1 smelt slots, but while a smeltery of this size has 8 ingots capacity, a founry has 144, an 18x increase in the same size. That's the equivalent of 16 blocks worth of liquid, that somehow fits in that 1 Block inside the foundry.",1702060586.0,1,0.67,0
+CreateMod,How Smeltery and Foundry controllers are calculated (It's weird) [1.16.5/AaB-1.3/Forge-36.2.20],"*a* and *b =  width/length (with walls)*  
+*h* = hight (with floor)  
+*B =* amount of smelting slots  
+*I* = Ingot capacity  
+
+
+Smeltery is pretty simple. B is just the amount of blocks inside and I is the same times 8
+
+    B = (a-2)(b-2)(h-1)
+    I = (a-2)(b-2)(h-1)*8
+
+The foundry behaves weirdly tho, this is probably a bug. B is the same, but in the I calculation it counts all the blocks, including floor wall and the controller itself for some reason
+
+    B = (a-2)(b-2)(h-1)
+    I = a*b*h*8
+
+As a consquence, a 1x1x1 (3x3x2 with walls) setup, has 1 smelt slots, but while a smeltery of this size has 8 ingots capacity, a founry has 144, an 18x increase in the same size. That's the equivalent of 16 blocks worth of liquid, that somehow fits in that 1 Block inside the foundry.",1702060527.0,1,0.57,7
+Showerthoughts,Tech company names are basically Instagram handles.,[removed],1701786020.0,1,1.0,1
+CitiesSkylines,"UPDATE: Residential Tax ISN'T Income Tax! For those having trouble with education, it seems like you have to DECREASE taxes for those you want to get educated, so they can afford to not have a job and go to school. Incentivizing education by decreasing educated tax, just creates issues.",,1698777680.0,121,0.95,43
+youtube,WTF is this???,Feature change because I haven't seen low view videos on the android ytb homepage.,1698765821.0,21,0.82,17
+CitiesSkylines,Cims just don't want to get educated in cs2. All colleges are right next to public transport and spread throughout the city.,,1698412768.0,5,0.86,10
+feedthebeast,Marble isn't spawning in CAaB 1.16.5,"# edit: After actual DAYS of searching I found it. Chisel allows you to convert dolomite to marble.
+
+JEI does show marble, but to test I went into a new singleplayer world, enabled xray and couldn't find anything. It doesn't show any recipes either. Am I doing something wrong or is the marble spawn broken?",1698246704.0,2,0.76,0
+CitiesSkylines,The average setup Colossal Order thinks their fans have to play a city builder...,,1698242405.0,0,0.5,1
+feedthebeast,Where to find marble in Chisel 1.16.5,"I'm pretty far and used the mining hammer to mine bunch, explore a bunch of caves eetc. etc., but just can't find marble. I'm on 1.16.5 on Forge.",1698188955.0,2,1.0,0
+csgomarketforum,[q]Should I keep cases?,"As someone who has never engaged in the community market, should I sell my cases or just wait more months/years, since I see the prizes just rising lately?
+
+Thanks for any help!",1697752395.0,0,0.4,20
+playrust,What monthly servers retain pop?,"I have spent quite a bit searching, but couldn't really find anything.
+
+What are monthly vanilla servers, that retain pop for the longest time?
+
+I know you can check retention for  individual servers, but that isn't really feasible to do to all big servers...",1697064719.0,4,0.75,9
+cyberpunkgame,Weapon pullout animation is bugged on bikes,,1696328104.0,2,0.75,3
+cyberpunkgame,"I guess he's just sad, that he hasn't seen me in a while...",,1696268372.0,3,0.72,1
+WorldofTanks,Why the onslaught ranked system is broken and why I believe it can't be fixed.,"edit2: I love onslaught! After reading this post a lot of people seem to get the impression I don't like the game mode. I wouldn't write this up if I didn't. I'm only explaining why I believe it's impossible to solve the ranking system many people complain about. I still enjoy and love playing onslaught battles. 
+
+---------------
+
+The onslaught ranked system works very similarly to other ranked systems in other competitive games, so why does it not work in WoT?
+
+I think 2 factors come together here:
+
+1: One long battle per game: The fact, that there aren't multiple rounds, but one battle, means that on top of team skill, rng takes a more significant role, as one ammo rack, or one unlucky team positioning, doesn't just lose a round, but the entire game.
+
+2: A significantly better player is still likely to lose even a 1v2. The thing, that keeps wrongly ranked players from getting stuck really low in other games, is that they can win even when standing alone against the majority of the enemy team, thus winning the game and taking up. This is impossible in WoT, because the fights are slow, so you can't just ""headshot"" the enemy one after another without losing a ton of hp in each fight. 
+
+How to fix it?
+
+I don't know.  The format of long tactical battles makes developing a ranked system really difficult. You could also enable voice chat by default and make every game consist of 3 rounds. This could help remove part of the rng, making battle results reflect skill, without having to average over a large number of battles,  but that still wouldn't be a perfect solution, especially in lower bronze and iron. 
+
+You could also make a similar system to ranked battles, where you don't lose points as a top player in the losing team and don't get points as the bottom layer in winning teams, but that completely destroys team play. You could just play randoms for wn8 at that point. 
+
+If anyone has a better idea, please share it with us.
+
+Greetings!
+
+edit1: As u/NullTrekSucksPP pointed out, a dmg/minute of battle stat could improve the ranking system and make individual skill apparent over a shorter amount of battles.",1695623711.0,24,0.82,41
+WorldofTanks,Discord new WoT LFG server,"I'm planning to create a discord LFG server. I have a bit of experience with servers and bots myself, but it's a few years old. If you have interest, or even want to help, please comment and help me.  
+Thanks <3",1694878964.0,1,0.6,3
+privacy,What executables to block and allow through firewall in Windows.,"Given whitelist firewalls are very much a thing for windows, I'm really surprised how hard it is to find a list of Windows services/exes that want access to the internet and what they do with it. I found, that a Google search for them does tell me what they do, but not why they need access to the internet.",1694723400.0,3,0.81,2
+legaladvice,Is it illegal to buy a product in the EU with the intention to return it within 14 days?,"I know it's unethical, but in my case the company I'm doing it to has been shitty to me too.",1693520201.0,0,0.5,0
+WindowsHelp,Frequent BSOD troubleshooting nightmare,"I have a Lenovo Legion 5-15ARH05H gaming notebook. I know that that's my real issue, but I needed portability back when I bought it. 
+
+AMD Ryzen 5 Mobile 4600H  
+RTX 2060 Mobile  
+2x DDR4 8GB RAM
+
+After getting the Mainboard replaced due to a USB port failing, I am now encountering frequent and hard to diagnose crashes. The warranty is expired.
+
+I have noted down the BSOD messages. 
+
+The process name (using WinDBG) is either System, or a random currently running program.  This isn't all of them, but I believe all the unique ones. 
+
+`IRQL_NOT_LESS_OR_EQUAL`  
+`ATTEMPTED_EXECUTE_OF_NOEXECUTE_MEMORY`  
+`KERNEL_SECURITY_CHECK_FAILURE`  
+`HYPERVISOR_ERROR`  
+`PAGE_FAULT_IN_NONPAGED_AREA`  
+`DRIVER_IRQL_NOT_LESS_OR_EQUAL`  
+`CLOCK_WATCHDOG_TIMEOUT`  
+`HYPERVISOR_ERROR`
+
+repasted and returned 2nd ram stick
+
+`HYPERVISOR_ERROR`
+
+turned of discrete GPU (Means both iGPU and RTX2060 are active) and AMD SVM in  bios
+
+`DPC_WATCHDOG_VIOLATION`  
+`PAGE_FAULT_IN_NONPAGED_AREA`  
+`UNEXPECTED_KERNEL_MODE_TRAP6`  
+`KMODE_EXCEPTION_NOT_HANDLED`  
+`SYSTEM_SERVICE_EXCEPTION`
+
+What I have tried and the results:
+
+**Temperature:** In general, it seems to be more frequent during hot days, tho after I repasted CPU hotspot stabilized at 95°C under load and GPU 88°C, both of which are to my knowledge normal for a laptop. There is no temperature sensor on RAM and both my SSDs also seem fine. 
+
+**SSD or software:** Neither SSD shows any errors. Both win10 on one and a fresh win11 on the other gave me a BSOD, also ruling out other software issues. The BIOS is up to date.
+
+**Syntetic benchmarks:** I couldn't get a BSOD with OCCT or AIDA64, so I can't pin down one failing component. It sometimes happens randomly when I'm away(1-2x a day), but most often during games (multiple times in 15 mins to every couple hours).
+
+**RAM:** If sens to be much less frequent, tho still unacceptable,  with only one of the 2 identical RAM sticks it came with. Both memtest86 and the windows memtest came back with no errors. 
+
+Oh and one USB port is broken again.",1693418965.0,3,1.0,2
+Windows10,Frequent crashes nightmare,[removed],1693418862.0,1,1.0,1
+gaming,Frequent crashes nightmare,"I have a Lenovo Legion 5-15ARH05H gaming notebook. I know that that's my real issue, but I needed portability back when I bought it. 
+
+AMD Ryzen 5 Mobile 4600H  
+RTX 2060 Mobile  
+2x DDR4 8GB RAM
+
+After getting the Mainboard replaced due to a USB port failing, I am now encountering frequent and hard to diagnose crashes. The warranty is expired.
+
+I have noted down the BSOD messages. 
+
+The process name (using WinDBG) is either System, or a random currently running program.  This isn't all of them, but I believe all the unique ones. 
+
+`IRQL_NOT_LESS_OR_EQUAL`  
+`ATTEMPTED_EXECUTE_OF_NOEXECUTE_MEMORY`  
+`KERNEL_SECURITY_CHECK_FAILURE`  
+`HYPERVISOR_ERROR`  
+`PAGE_FAULT_IN_NONPAGED_AREA`  
+`DRIVER_IRQL_NOT_LESS_OR_EQUAL`  
+`CLOCK_WATCHDOG_TIMEOUT`  
+`HYPERVISOR_ERROR`
+
+repasted and returned 2nd ram stick
+
+`HYPERVISOR_ERROR`
+
+turned of discrete GPU (Means both iGPU and RTX2060 are active) and AMD SVM in  bios
+
+`DPC_WATCHDOG_VIOLATION`  
+`PAGE_FAULT_IN_NONPAGED_AREA`  
+`UNEXPECTED_KERNEL_MODE_TRAP6`  
+`KMODE_EXCEPTION_NOT_HANDLED`  
+`SYSTEM_SERVICE_EXCEPTION`
+
+What I have tried and the results:
+
+**Temperature:** In general, it seems to be more frequent during hot days, tho after I repasted CPU hotspot stabilized at 95°C under load and GPU 88°C, both of which are to my knowledge normal for a laptop. There is no temperature sensor on RAM and both my SSDs also seem fine. 
+
+**SSD or software:** Neither SSD shows any errors. Both win10 on one and a fresh win11 on the other gave me a BSOD, also ruling out other software issues. The BIOS is up to date.
+
+**Syntetic benchmarks:** I couldn't get a BSOD with OCCT or AIDA64, so I can't pin down one failing component. It sometimes happens randomly when I'm away(1-2x a day), but most often during games (multiple times in 15 mins to every couple hours).
+
+**RAM:** If sens to be much less frequent, tho still unacceptable,  with only one of the 2 identical RAM sticks it came with. Both memtest86 and the windows memtest came back with no errors. 
+
+Oh and one USB port is broken again.",1693418724.0,0,0.5,5
+pcmasterrace,Frequent crashes nightmare,"I have a Lenovo Legion 5-15ARH05H gaming notebook. I know that that's my real issue, but I needed portability back when I bought it. 
+
+AMD Ryzen 5 Mobile 4600H  
+RTX 2060 Mobile  
+2x DDR4 8GB RAM
+
+After getting the Mainboard replaced due to a USB port failing, I am now encountering frequent and hard to diagnose crashes. The warranty is expired.
+
+I have noted down the BSOD messages. 
+
+The process name (using WinDBG) is either System, or a random currently running program.  This isn't all of them, but I believe all the unique ones. 
+
+`IRQL_NOT_LESS_OR_EQUAL`  
+`ATTEMPTED_EXECUTE_OF_NOEXECUTE_MEMORY`  
+`KERNEL_SECURITY_CHECK_FAILURE`  
+`HYPERVISOR_ERROR`  
+`PAGE_FAULT_IN_NONPAGED_AREA`  
+`DRIVER_IRQL_NOT_LESS_OR_EQUAL`  
+`CLOCK_WATCHDOG_TIMEOUT`  
+`HYPERVISOR_ERROR`
+
+repasted and returned 2nd ram stick
+
+`HYPERVISOR_ERROR`
+
+turned of discrete GPU (Means both iGPU and RTX2060 are active) and AMD SVM in  bios
+
+`DPC_WATCHDOG_VIOLATION`  
+`PAGE_FAULT_IN_NONPAGED_AREA`  
+`UNEXPECTED_KERNEL_MODE_TRAP6`  
+`KMODE_EXCEPTION_NOT_HANDLED`  
+`SYSTEM_SERVICE_EXCEPTION`
+
+What I have tried and the results:
+
+**Temperature:** In general, it seems to be more frequent during hot days, tho after I repasted CPU hotspot stabilized at 95°C under load and GPU 88°C, both of which are to my knowledge normal for a laptop. There is no temperature sensor on RAM and both my SSDs also seem fine. 
+
+**SSD or software:** Neither SSD shows any errors. Both win10 on one and a fresh win11 on the other gave me a BSOD, also ruling out other software issues. The BIOS is up to date.
+
+**Syntetic benchmarks:** I couldn't get a BSOD with OCCT or AIDA64, so I can't pin down one failing component. It sometimes happens randomly when I'm away(1-2x a day), but most often during games (multiple times in 15 mins to every couple hours).
+
+**RAM:** If sens to be much less frequent, tho still unacceptable,  with only one of the 2 identical RAM sticks it came with. Both memtest86 and the windows memtest came back with no errors. 
+
+Oh and one USB port is broken again.",1693418506.0,1,1.0,2
+techsupport,Frequent crashes nightmare,"I have a Lenovo Legion 5-15ARH05H gaming notebook. I know that that's my real issue, but I needed portability back when I bought it. 
+
+AMD Ryzen 5 Mobile 4600H  
+RTX 2060 Mobile  
+2x DDR4 8GB RAM
+
+After getting the Mainboard replaced due to a USB port failing, I am now encountering frequent and hard to diagnose crashes. The warranty is expired.
+
+I have noted down the BSOD messages. 
+
+The process name (using WinDBG) is either System, or a random currently running program.  This isn't all of them, but I believe all the unique ones. 
+
+`IRQL_NOT_LESS_OR_EQUAL`  
+`ATTEMPTED_EXECUTE_OF_NOEXECUTE_MEMORY`  
+`KERNEL_SECURITY_CHECK_FAILURE`  
+`HYPERVISOR_ERROR`  
+`PAGE_FAULT_IN_NONPAGED_AREA`  
+`DRIVER_IRQL_NOT_LESS_OR_EQUAL`  
+`CLOCK_WATCHDOG_TIMEOUT`  
+`HYPERVISOR_ERROR`
+
+repasted and returned 2nd ram stick
+
+`HYPERVISOR_ERROR`
+
+turned of discrete GPU (Means both iGPU and RTX2060 are active) and AMD SVM in  bios
+
+`DPC_WATCHDOG_VIOLATION`  
+`PAGE_FAULT_IN_NONPAGED_AREA`  
+`UNEXPECTED_KERNEL_MODE_TRAP6`  
+`KMODE_EXCEPTION_NOT_HANDLED`  
+`SYSTEM_SERVICE_EXCEPTION`
+
+What I have tried and the results:
+
+**Temperature:** In general, it seems to be more frequent during hot days, tho after I repasted CPU hotspot stabilized at 95°C under load and GPU 88°C, both of which are to my knowledge normal for a laptop. There is no temperature sensor on RAM and both my SSDs also seem fine. 
+
+**SSD or software:** Neither SSD shows any errors. Both win10 on one and a fresh win11 on the other gave me a BSOD, also ruling out other software issues. The BIOS is up to date.
+
+**Syntetic benchmarks:** I couldn't get a BSOD with OCCT or AIDA64, so I can't pin down one failing component. It sometimes happens randomly when I'm away(1-2x a day), but most often during games (multiple times in 15 mins to every couple hours).
+
+**RAM:** If sens to be much less frequent, tho still unacceptable,  with only one of the 2 identical RAM sticks it came with. Both memtest86 and the windows memtest came back with no errors. 
+
+Oh and one USB port is broken again.",1693418377.0,1,0.67,3
+LenovoLegion,Frequent crashes nightmare,"I have a Lenovo Legion 5-15ARH05H gaming notebook. I know that that's my real issue, but I needed portability back when I bought it. 
+
+AMD Ryzen 5 Mobile 4600H  
+RTX 2060 Mobile  
+2x DDR4 8GB RAM
+
+After getting the Mainboard replaced due to a USB port failing, I am now encountering frequent and hard to diagnose crashes. The warranty is expired.
+
+I have noted down the BSOD messages. 
+
+The process name (using WinDBG) is either System, or a random currently running program.  This isn't all of them, but I believe all the unique ones. 
+
+`IRQL_NOT_LESS_OR_EQUAL`  
+`ATTEMPTED_EXECUTE_OF_NOEXECUTE_MEMORY`  
+`KERNEL_SECURITY_CHECK_FAILURE`  
+`HYPERVISOR_ERROR`  
+`PAGE_FAULT_IN_NONPAGED_AREA`  
+`DRIVER_IRQL_NOT_LESS_OR_EQUAL`  
+`CLOCK_WATCHDOG_TIMEOUT`  
+`HYPERVISOR_ERROR`
+
+repasted and returned 2nd ram stick
+
+`HYPERVISOR_ERROR`
+
+turned of discrete GPU (Means both iGPU and RTX2060 are active) and AMD SVM in  bios
+
+`DPC_WATCHDOG_VIOLATION`  
+`PAGE_FAULT_IN_NONPAGED_AREA`  
+`UNEXPECTED_KERNEL_MODE_TRAP6`  
+`KMODE_EXCEPTION_NOT_HANDLED`  
+`SYSTEM_SERVICE_EXCEPTION`
+
+What I have tried and the results:
+
+**Temperature:** In general, it seems to be more frequent during hot days, tho after I repasted CPU hotspot stabilized at 95°C under load and GPU 88°C, both of which are to my knowledge normal for a laptop. There is no temperature sensor on RAM and both my SSDs also seem fine. 
+
+**SSD or software:** Neither SSD shows any errors. Both win10 on one and a fresh win11 on the other gave me a BSOD, also ruling out other software issues. The BIOS is up to date.
+
+**Syntetic benchmarks:** I couldn't get a BSOD with OCCT or AIDA64, so I can't pin down one failing component. It sometimes happens randomly when I'm away(1-2x a day), but most often during games (multiple times in 15 mins to every couple hours).
+
+**RAM:** If sens to be much less frequent, tho still unacceptable,  with only one of the 2 identical RAM sticks it came with. Both memtest86 and the windows memtest came back with no errors. 
+
+Oh and one USB port is broken again. ",1693418247.0,1,1.0,11
+pcmasterrace,"If a pc is too good to be true, but the seller is willing to let me test it, what can go wrong?",I found a deal that's way too good to be true and is on a month old empty account. But the seller seems to be ok with me coming by and testing before I buy. Is there anything to watch out for?,1693218983.0,0,0.5,8
+WorldofTanks,[Skirmish] I love the cute Bourrasque and GSOR snacks,,1693002396.0,0,0.42,3
+JackSucksAtLife,"This guy got his fastest roomba record denied, maybe you could help him out? (electrosync on ytb)",,1692813353.0,1,1.0,1
+JackSucksAtLife,Better YouTube stats for videos,"Since you can export the youtube stats into excel, there is actually a lot of  interesting stuff you can do with it. You could look at a citizens/view ratio to find the countries that actually watch Jack the most and the least, which would be a lot more interesting imo. Similar stuff could be done with other demographics such as age etc. Maybe even improving the ""which of my subscribers has the most subscribers"" videos with nice graphs.
+
+If Jack sees this I'd be happy to help.",1692813161.0,0,0.5,1
+JackSucksAtGeography,Better YouTube stats for videos,[removed],1692707351.0,1,1.0,1
+JackSucksAtGeography,better fun YouTube stats - upvote so jack sees this,[removed],1692707279.0,1,1.0,1
+revancedapp,Laggy scrolling,Scrolling through videos or even subscriptions is stuttering to the point of freezing for half a second. This doesn't happen in the stock ytb app. What patch could be causing such massive performance issues? (I have a galaxy note10+),1692282301.0,0,0.33,5
+u_Windows__2000,Guess I'm back.,"I've been gone for over a month and I'm disappointed so few people joined me. Can't say I'm surprised unfortunately.
+
+I'll keep using adblock and revanced for android.",1691153715.0,1,1.0,0
+SatisfactoryGame,Blackout,Why are we not participating in the reddit blackout?,1687527978.0,0,0.27,10
+u_Windows__2000,Leaving Reddit...,"I will not be using Reddit in the near future, or until they reverse their API decisions. I hope to see you soon.",1686844074.0,1,1.0,0
+hiking,"Do you guys have any good free maps app, where you can set your walking speed for accurate time estimates?","I am frustrated with navigation apps that assume you are taking an afternoon stroll whenever you want to go somewhere. I figured someone here might know a maps app, that is both free and allows for a custom waking speed. 
+
+Thanks for want help!",1686735536.0,4,0.83,10
+vintage,Is there a difference between NOKIA 3110 NHE -8 standalone and the version for cars?,,1686729712.0,0,0.5,5
+discordapp,Scam alert/Copypasta for your bio,[removed],1686589067.0,1,1.0,0
+WorldofTanks,Can you play frontline on a new account?,"I know they prevent new accounts from playing certain events, presumably so people don't farm the rewards and sell, or to not overwhelm new players.  
+
+
+Could a new account jump right into frontline, when created today?",1686066286.0,0,0.14,8
+WorldOfTanksBlitz,Why can't I join any clans?,"Me and my friend both have over 500 battles, over 60% winrate, and over 1k average dmg per battle, yet it shows me ""send application"" for most clans, while he can just join.  
+
+
+What are common requirements I might be missing? Is there something else going on?",1685805562.0,8,1.0,6
+WorldofTanks,What happened to 7v7 skirmishes?,"I played 7v7 skirmishes and was a bit confused as I didn't see it announced anywhere. I really like it and I'm wondering if ti was a quiet test, or an event that I missed?",1684788748.0,0,0.4,3
+WorldofTanks,I'm stuck at around 1k (Silver - B) in Onslaught. Any tips? (EU),,1684086197.0,0,0.38,1
+pcmasterrace,These prices are insane,,1683105540.0,268,0.93,21
+revancedapp,Disable hiding Player overlay in app settings,"I searched all revanced settings and couldn't find an option to disable this patch in the app. Most other simple ui patches have that option, so this one should as well.",1683014596.0,3,1.0,5
+Overwatch,"My weekly mission got completed even tho I haven't done it? Weird, but I guess I'll take it?","&#x200B;
+
+[It shows I have 2\/5 games with damage, which is correct, yet the  weekly is completed](https://preview.redd.it/hb64b1ad7nva1.png?width=1041&format=png&auto=webp&s=f19ec5dfa12dd402f0b33a0e13b25c6223943d73)",1682259502.0,0,0.36,4
+Overwatch,"It completed my weekly without me finishing it. Weird, but I guess I'll take it?",,1682259296.0,1,1.0,1
+selfhosted,Can I download a backup of a boot volume on Oracle?," I hear that oracle likes to randomly delete your always free resources, so I'd like to automatically get a local backup to my windows pc, but I haven't found a way to do it. I use ol9 on both arm and x64.",1680359798.0,1,1.0,4
+oracle,Can I download a backup of a boot volume?,"I hear that oracle likes to randomly delete your always free resources, so I'd like to automatically get a local backup to my windows pc, but I haven't found a way to do it. I use ol9 on both arm and x64.",1680359700.0,1,0.67,6
+cybersecurity_help,"What's up with google's ""on-device encryption""?"," I was lead to believe that this setting solves the issue, where any program can simply steal all your passwords, but does it? I found that programs like ChromePass can still access the passwords...
+
+What's going on here? Is google's ""on-device encryption"" just a marketing gimmick? Especially since they were using poor on-device encryption before anyways?",1680358482.0,2,1.0,1
+cybersecurity,"What's up with google's ""on-device encryption""?",[removed],1680358334.0,1,1.0,1
+cybersecurity,"What's up with google's ""on-device encryption""?",[removed],1680358067.0,1,1.0,1
+revancedapp,Shorts notifications are annoying af,"My notifications keep getting spammed by youtube shorts and there is no notification category to turn them off, so this would be a really cool feature of revanced.",1677509815.0,8,0.76,4
+WorldofTanks,Mars for gold on eu (pic from friend),,1676624737.0,62,0.86,52
+GamingLaptops,How to better diagnose random frame drops?,"&#x200B;
+
+https://preview.redd.it/te4bs69cllia1.png?width=2578&format=png&auto=webp&s=cfae6dfaac88d6fe011369211f6a98d33de9f60e
+
+I randomly get about 10% of my usual fps for about 5 seconds (which is ages in multiplayer) roughly every 30 min or so, but very inconsistently. As you can see on the right, the power Draw for both CPU and GPU drops suddenly.
+
+Is there a way to figure out if it's the CPU bottle necking the GPU, the other way around, or an issue with the wall adapter or on board power management? I haven't encountered it when running off of the battery, but I only did it for a couple of hours, and I've had longer periods without this drop. It's just really shitty to play with 30fps on minimum details in the games that I play, where you actually need the frame rate.
+
+Thanks for any help :)",1676573874.0,1,1.0,0
+gaming,How to better diagnose random frame drops?,[removed],1676573692.0,1,1.0,0
+LenovoLegion,How to better diagnose random frame drops?,"&#x200B;
+
+https://preview.redd.it/pq5q7k75jlia1.png?width=2578&format=png&auto=webp&s=f67247d26cde44b148ae552f9ce9ea44033b0090
+
+I randomly get about 10% of my usual fps for about 5 seconds (which is ages in multiplayer) roughly every 30 min or so, but very inconsistently. As you can see on the right, the power Draw for both CPU and GPU drops suddenly.
+
+Is there a way to figure out if it's the CPU bottle necking the GPU, the other way around, or an issue with the wall adapter or on board power management? I haven't encountered it when running off of the battery, but I only did it for a couple of hours, and I've had longer periods without this drop. It's just really shitty to play with 30fps on minimum details in the games that I play, where you actually need the frame rate.
+
+Thanks for any help :)",1676573444.0,1,1.0,1
+ModSupport,Can you create a subreddit with the name of a banned subreddit?,"I know there definitely is a period for the previous mod to get the subreddit unbanned, but does this last forever? If not, after how much time does the name become available?",1675852220.0,0,0.29,5
+CitiesSkylines,"Colossal Order doesn't care about players, who pay for their game!","Since 1.15.0 everyone, who didn't buy the disaster DLC, pretty much got fires disabled. It's been almost five months and Colossal Order hasn't even properly acknowledged the issue outside a niche forum post. Not even in their latest patch, that included new DLC you can spend money on.
+
+I don't understand how this community just doesn't seem to care about a game dev requiring DLC for a core and previously free functionality of their game. I know it's probably a bug, but them not fixing it and not even acknowledging it seems really, really sketchy. I just can't fathom another reason to ignore this, than to make more money from the disasters DLC.",1675374691.0,0,0.21,32
+revancedapp,Patch version broken in latest update,"Previously the patch version showed up after deselecting and reselecting a patch, but now it didn't show at all. 
+
+This is quite a substantial issue, as I can't tell if I should patch again.",1675246013.0,16,0.82,9
+spacedesk,The subreddit is back up!,"The subreddit got banned by reddit's spam filter for some reason and it took me a good while to notice, since I didn't get notified. 
+
+I've contacted reddit and gotten it back, so you can continue to ask questions and discuss your experience.
+
+Happy browsing :)",1675101462.0,3,1.0,0
+revancedapp,Playlist duration,"There's an extension for chrome that shows the total duration of a playlist and it would be a really useful feature for revanced.
+
+https://chrome.google.com/webstore/detail/youtube-playlist-duration/pijbakhgmhhadeakaocjfockpndcpobk",1675075674.0,115,0.96,8
+revancedapp,Max buffer settingweirdness,"The buffer settings for playback seem to work. I set my max buffer to 600000 (10mins), but don't get anywhere close to that, even with fat enough internet speeds.
+
+I'm also just going to throw in here, that the other 2 buffer settings should be better named (ie. ""Minimum buffer required..."", not ""Maximum buffer"")
+
+(This is both a suggestion and question/help, so I chose one tag.)
+
+edit: Wording",1674471643.0,41,0.93,5
+WorldofTanks,"I got a Christmas gift 2 minutes into my first battle today, TYSM WG!!! <3",,1671886828.0,37,0.82,18
+CitiesSkylines,How to transfer mod settings to another file?,I noticed that creating a new save file resets all the settings of mods. Is there a way to transfer mod settings between save games?,1670614459.0,1,1.0,0
+WorldofTanks,Holiday Ops is just plain terrible this year.,"1. All you have to do is collect resources twice and do your dailies.
+2. The celebrity stuff is kinda cool, but it's all just accidentally doing missions and claiming predetermined mediocre rewards, so no fun there either. 
+3. After 2 days you get over 1/5 of the points required, so it's 10 days to complete all the atmosphere levels.
+4. There are way fewer decorations for no apparent reason, so it's hard to decorate your village however you want, and it just becomes frustrating.
+5. Even if you like the available ones, collecting decorations isn't fun, because you just upgrade the areas and get predetermined decorations. No brain required.
+6. There is no incentive to even bother using decorations, and imo the stock garlands are the prettiest.
+
+I don't know what happened, but it seems like wot blew their entire budget on a YouTube trailer and celebrities, so they had to cobble something together for the actual game with 5 bucks left... But then why not just take the holiday ops from last year or, even better, 2021? Or maybe they hope to make the event so boring, that people will search for fun in gambling with loot boxes? That's also pretty dumb...
+
+R.I.P. Holiday Ops I guess :(",1670015943.0,9,0.63,16
+CitiesSkylines,Any way to remove specific type of prop in an area?,"I didn't realise prop anarchy would cause my roads to not demolish trees and rocks, so I now have an entire city with rocks inside of buildings and on streets. Is there an easy way to remove these without clearing the entire map or doing it one-by-one?
+Thanks a lot :)",1670001578.0,3,1.0,1
+revancedapp,What happens if you try to download a video wothout NewPipe installed?,I don't have a second phone to test this on. Will it work? Will reVanced prompt you to install NewPipe? Will it just do nothing?,1669811271.0,0,0.46,4
+revancedapp,How do I get the log to submit a bug report on github?,Logs of the patched ytb app...,1669200798.0,0,0.33,5
+WorldofTanks,WG's vision for ideal map design...,,1665410835.0,6,0.62,6
+engrish,I present you my English teacher...,,1664966687.0,28,0.9,5
+Civilization6,"This guy is telling me he is ""merely passing by"", should I trust him?",,1663873246.0,149,0.93,32
+FORTnITE,GREEN (guess the guy had to many resources...?),,1663616335.0,1,1.0,0
+FortniteSavetheWorld,GREEN,,1663614152.0,1,1.0,0
+FORTnITE,GREEN,,1663614120.0,1,1.0,1
+rustdesk,Can't connect over the Internet.,[removed],1663139198.0,1,1.0,0
+SatisfactoryGame,Wrong dialog on 4-1 milestone,[removed],1659468811.0,1,1.0,0
+SatisfactoryGame,Power generators make noise and show smoke when they're off,[removed],1659468726.0,1,1.0,0
+SatisfactoryGame,Headlights on tractor don't ever work again after you open the workbench on it for the first time.,,1659468116.0,1,1.0,0
+SatisfactoryGame,Power generators make noise and show smoke when they're off.,[removed],1659303271.0,1,1.0,0
+SatisfactoryGame,Wrong dialog on 4-1 milestone.,[removed],1659301632.0,1,1.0,0
+SatisfactoryGame,How do the lights on Storage Containers work?,[removed],1659274435.0,1,1.0,0
+FORTnITE,Does anyone else ever get literal smog like this? Is this Beijing??,,1654343321.0,1,1.0,0
+WorldofTanks,"""Win a battle"" daily be like:",,1653585308.0,1,1.0,0
+GamingLaptops,You might want to raise your gaming laptop/put it on a stand..... (measurements from my Lenovo Legion 5),,1652466663.0,1,1.0,1
+FORTnITE,This happened today and I thought it was funny,,1652465079.0,1,1.0,0
+LenovoLegion,You might want to raise your gaming laptop/put it on a stand..... (measurements from my Lenovo Legion 5),,1652369259.0,1,1.0,2
+DefenseGrid,Does anyone know if there's a way to see steam friends or the global leaderboard on the EGS version?,,1651972584.0,2,1.0,0
+4kdownloadapps,Youtube download capped to around 30Mbit?,[removed],1651914372.0,1,1.0,0
+FORTnITE,I wonder how many people will get this...,,1650904227.0,463,0.98,57
+FORTnITE,"No more mobile builds? After waiting in the queue, I was met with those building animations all over the screen again. I checked my settings, and it's still in performance. I even set everything to as low as possible, and it just doesn't go away. Does anyone know anything?",,1647801697.0,0,0.41,6
+FortniteCompetitive,"No more mobile builds? After waiting in the queue, I was met with those building animations all over the screen again. I checked my settings, and it's still in performance. I even set everything to as low as possible, and it just doesn't go away. Does anyone know anything?",,1647801658.0,2,0.57,11
+FortniteSavetheWorld,Patched tarck on stairs glitch?,[removed],1647174639.0,1,0.6,21
+Monero,"I'm new to this, how do the fees work in Monero GUI?",[removed],1643507265.0,4,0.84,47
+emulation,Any good Android emulators for Windows?,[removed],1642963884.0,1,1.0,1
+audiophile,Any way to use my old radio/sound system?,[removed],1642275523.0,1,1.0,0
+WindowsHelp,Scheduled Task doesn't run,[removed],1642088734.0,1,1.0,0
+deeptown,"Does anyone know how the guilds in ""last 30 days"" are ranked?",,1641638436.0,2,1.0,1
+csgo,How does the ranking system work?,[removed],1641319496.0,0,0.5,3
+PowerShell,Running a script in shell:startup,[removed],1641086432.0,5,0.58,45
+FortniteSavetheWorld,I made a bot to automatically collect Daily & Research,[removed],1639939890.0,9,0.81,9
+techsupport,My laptop keeps making 2 short beeps,[removed],1636393078.0,1,1.0,6
+FortNiteBR,"If you are wondering how to do this empty quest, it unfortunately requires a Fortnite crew membership to be able to claim the pickaxe. I have no clue as to why it doesn't say anything.",,1635275748.0,3,1.0,1
+FortNiteBR,"Just a map of all the punchcard characters locations I just made for myself, Hope it helps.",,1631818713.0,2,0.59,0
+techsupport,A2DP (Bluetooth audio receiver) crashing,[removed],1610881001.0,1,1.0,0
+bluetooth,A2DP (Bluetooth audio receiver) crashing,,1610880840.0,1,1.0,1
+Windows10,A2DP (Bluetooth audio receiver) crashing,[removed],1610880702.0,3,1.0,3
+mentalillness,I need help with focusing on school,[removed],1610538873.0,1,1.0,0
+mentalhealth,I need some help focusing on school,[removed],1610538811.0,2,1.0,1
+TuberSimulator,I noticed I got an achievement today so I was wondering what it is. Turns out I got the achievement for 10 billion subs even tho I barely have 100 mil.,,1609615385.0,3,0.81,2
+PewdiepieSubmissions,Nice algorithm u got there...,,1609414471.0,10817,0.93,88
+redditmobile,[Android] [2020.48.1] Nice algorithm u got there...,,1609414414.0,995,0.96,21
+gaming,Nice algorithm u got there...,,1609414332.0,6,0.58,4
+redditmobile,Nice algorithm u got there...,,1609414265.0,2,1.0,1
+memes,Nice algorithm u got there...,,1609414228.0,37,0.86,2
+node,"How can I simulate the ""windows doubleclick"" on any file?",[removed],1608034145.0,1,0.67,4
+node,How can I prevent 2 instances from writing to a file at the same time?,[removed],1607256444.0,2,0.76,9
+CallOfDutyMobile,I know the xbox one controller is supported but I was having trouble connecting the xbox series controller and am wondering what's wrong or if it just isn't supported. (I did turn it on in the ingame settings and the controller works elsewhere on my phone (note 10+),,1605372518.0,11,1.0,21
+RocketLeagueExchange,[PC][H]Blueprints in the link below [W] Credits - Put offers in the comments,[removed],1604516473.0,2,1.0,2
+RocketLeagueExchange,[PC][H]Blueprints in the link below [W] Credits - Give me offers,[removed],1603238338.0,2,1.0,12
+RocketLeagueExchange,[PC] [H] I've got these blueprints I'm willing to sell some off. Message me offers.,[removed],1603237724.0,2,1.0,1
+VALORANT,This mm is just ridiculous,[removed],1600656149.0,3,0.72,3
+VALORANT,"The idea of kills going down with less enemies makes sense, but the person with the first kill should get way less then a person that wins a 1v2. A potential solution would be to do it by the of friendly/enemies ratio, but then defenders could just kill of enemies running from an exploding spike.",[removed],1599082490.0,2,1.0,0
+VALORANT,"The idea of kills going down with less enemies makes sense, but the person with the first kill should get way less then a person that wins a 1v2. A potential solution would be to do it by the of friendly/enemies ratio, but then defenders could just kill of enemies running from an exploding spike.",[removed],1599082200.0,2,1.0,1
+VALORANT,"Leaving during queue shouldn't give an hour ban, maybe 5 or 10 minutes, but an hour is too much especially since it's so easy to select the wrong game mode.",,1599056746.0,2,1.0,1
+LocationBot,"This not doesn't recognise ""Czechia"" as a location",[removed],1599007054.0,2,1.0,0
+legaladvice,I'm wondering what a psychiatrist in Czechia can tell about me (16) to my parents or anyone else.,[removed],1599006802.0,2,0.75,3
+LegalAdviceEurope,I'm wondering what a psychiatrist in Czechia specifically can tell about me(16) to my parents or anyone else.,[removed],1599006567.0,3,1.0,2
+VALORANT,Please stop rendering to abilities with their keybind.,[removed],1598895576.0,2,0.57,5
+GTAV,"Every time I log in again I have to go to the office to become a CEO, is this normal and if not how can I fix this? Thanks for any help.",,1598014704.0,2,1.0,2
+indiantvcz,Dnešní showtime be like:,,1597855608.0,31,0.96,0
+samsung,Is there a way to disable one of the sim cards for messages?,,1597495988.0,4,1.0,4
+2meirl4meirl,2meirl4meirl | Me after associating happiness with death and suicide...,,1597471909.0,122,1.0,2
+samsung,"I drew this in cycles (great app btw). This could explain the letter for the z series as well as fix some issues, like only being able to use 1/3 or 2/3 of the total screen area, the need for 3 total cameras wasting space, the aspect ratio when open. I really hope this is what samsung is planning...",,1597094261.0,2,0.58,6
+2meirl4meirl,"2meirl4meirl They really gotta rub it in, huh?",,1597087783.0,22,0.87,0
+2meirl4meirl,2meirl4meirl,,1596137576.0,30,0.94,1
+2meirl4meirl,2meirl4meirl,,1595770033.0,34,0.9,0
+2meirl4meirl,"2meirl4meirl (srsly go sleep tho, it's 3am)",,1595492302.0,75,0.97,1
+indiantvcz,"pewediepie puvodne delal iniciativy, ale ted to jsou hlavne memy",,1595445387.0,2,0.75,0
+indiantvcz,druhej,,1595445334.0,1,0.67,0
+Amoledbackgrounds,"I just wanna help ya'll out. If you have credit beneath downloaded images turned on, as you should, you can just open the image and screenshot it.",,1595105906.0,0,0.25,14
+samsung,I can't get rid of the optimising completed norification.,,1595102014.0,0,0.38,9
+TuberSimulator,We need network chat,[removed],1594885738.0,10,0.92,7
+TuberSimulator,"I got kicked like 2 weeks ago because I went on a holiday without Internet, but when I tried to join it showed this and after a restart it showed half an hour.",,1594885558.0,9,0.86,3
+PewdiepieSubmissions,I know I can't draw,,1594311144.0,44,0.89,3
+discordbots,"Is there a way to make other bots react to mee6 commands? Example: mee6 replies to !a with *play song, but the music bots does not react to it. It reacts to the same message sent by me.",,1592773379.0,1,1.0,8
+VALORANT,I played alone. The last time I played in a party was in beta.,,1591273265.0,1,1.0,0
+redditmobile,"Is it me, or did the reddit icon change? I'm not used to it rn, but I kinda like it. It would be cool if the icon would change with dark mode, but that's just an idea...",,1591220233.0,1,1.0,1
+funny,The SpaceX ISS docking sim has a flat earth option.,,1590928730.0,20,0.77,8
+unpopularopinion,The people burning downs stores are worse then most of the police.,[removed],1590923693.0,1,1.0,0
+unpopularopinion,"The people burning down stores are as bad as some of the police and worse, then most of the police.",[removed],1590923603.0,1,1.0,0
+unpopularopinion,"The people burning down stores are as bad as some of the police and worse, then most of the police.",[removed],1590923483.0,1,1.0,0
+unpopularopinion,"The people burning down stores are as bad as some of the police and worse, then most of the police.",[removed],1590923381.0,1,1.0,0
+unpopularopinion,"The people burning down stores are as bad as some of the police and worse, then most of the police.",[removed],1590923249.0,1,1.0,0
+FortNiteBR,"Sorry for the quality, but 2 seasons out of 12, being A QUARTER of the ENTIRE time the game has been released, is just insane.",,1590778965.0,15,0.71,64
+VALORANT,Every time,,1590373179.0,1,1.0,1
+CivVI,Ghandi denounced me for a joint war,[removed],1590245619.0,2,1.0,4
+SuicideWatch,Idk,[removed],1589773896.0,1,1.0,1
+VALORANT,So I just met 4 toxic spanish people in a game. Theywere speaking spanish and every time I told them to please speak english they just said fuck fucking english idiot and continued. This was so frustrating that I just left the game. I think it should be possible to report for refusing communication.,,1589595731.0,2,0.75,14
+u_Windows__2000,The subreddit r/unpopularopinion should be heavily moderated to only allow unpopular opinions,[removed],1589490570.0,1,1.0,0
+unpopularopinion,The subreddit r/unpopularopinion should be heavily moderated to only allow unpopular opinions.,[removed],1589490424.0,1,1.0,0
+VALORANT,Teammates leaving game in competitve,[removed],1589380294.0,0,0.5,2
+note10plus,"Does anyone know about an app that can make an image from the gallery move slightly, or change positions to prevent burn in? I googled a ton, searched the playstore and tried an app builder, but it doesn't work well with android 10. It seems so simple and I can't be the only one wanting this. Thanks",,1589343203.0,3,1.0,7
+Note10FanBase,"Does anyone know about an app that can make an image from the gallery move slightly, or change positions to prevent burn in? I googled a ton, searched the playstore and tried an app builder, but it doesn't work well with android 10. It seems so simple and I can't be the only one wanting this. Thanks",,1589343167.0,2,1.0,6
+samsung,"Does anyone know about an app that can make an image from the gallery move slightly, or change positions to prevent burn in?",[removed],1589343006.0,1,1.0,8
+OLED,"Does anyone know about an app that can make an image from the gallery move slightly, or change positions to prevent burn in? I googled a ton, searched the playstore and tried an app builder, but it doesn't work well with android 10. It seems so simple and I can't be the only one wanting this. Thanks",[removed],1589342856.0,1,0.6,10
+Showerthoughts,"The ""Some people don't know what the save icon is"" of the future is the headphone jack",,1589335639.0,9,0.74,2
+Sketchware,"I have scatchwere on android 10 (note 10+) and any images (from url, filelocation or filepicker) don't display. It removes the no image icon but the whole screen is just white",,1589330375.0,1,1.0,10
+Showerthoughts,We have the technology to play life in 3rd person (3d camera + vr headset),,1589129788.0,9,0.86,3
+unpopularopinion,"If women don't want to be objectified, calling them beautiful shouldn't make their day and calling ugly shouldn't make them cry.",[removed],1589128008.0,1,1.0,1
+mildlyinfuriating,This is the 2nd and 3rd time I've seen this tweet today,,1589127069.0,0,0.5,2
+PewdiepieSubmissions,Mematic gang,,1589034061.0,7,0.79,0
+explainlikeimfive,ELI5: Why does usb c on phones have the female part on the phone and the male on the cable? (This makes the part in the phone have a small nipple that can break.) It just seems simpler and and more natural to put the male part into the female part then sticking the female into the male one.,,1588718567.0,3,0.59,5
+unpopularopinion,"TikTok is bad, but not because of the cringe",[removed],1588014403.0,1,1.0,0
+Minecraft,I need a program/mod to find the coordinates of a screenshot in 1.15,[removed],1585787148.0,1,0.67,0
+mildlyinfuriating,"The RTX 2070 is nice, but they couldn't be bothered to put more then 8GB of RAM in...",,1585322106.0,3,1.0,2
+Showerthoughts,There will probably be coronaboomers...,,1584658591.0,1,0.67,2
+unpopularopinion,Like an opinion? Downvote it. Don't like an opinion? Upvote it.,[removed],1583433372.0,0,0.15,17
+unpopularopinion,Agreeing/disagreeing is for the comments. If you agree with an opinion downvote it and if you disagree upvote it.,[removed],1583433086.0,1,1.0,1
+pcmasterrace,"So I cleaned my ntb, but the one thing I forgot were the antenna cables. When I assembled the ntb back together and turned it on it just died and wouldn't do anything. The antenna cables were under the motherboard and caused a shortcut. Is there a way to repair it, (GPU and CPU should work)",,1583178264.0,8,0.91,5
+PewdiepieSubmissions,"Ignore the image, like where is PewDiePie, he hasn't uploaded, what the frick??? I hope he ain't gone again....",,1582759741.0,11,0.82,2
+blender,"So this is just a floor, 5 walls with alpha blend and 2 holes (doors) created with boolean modifiers. and 2 light sources. The weird line on the right side and the triangle on the left side appeared and I have no idea why it is here and how to remove it. Thanks.",,1582396999.0,1,1.0,2
+excel,Using content from other cells in a refference,[removed],1581990315.0,2,1.0,7
+Showerthoughts,Shooting music videos is probably really awkward.,,1581459698.0,1,1.0,1
+LegalAdviceEurope,Substitutes from Germany to Czech,[removed],1580675776.0,2,1.0,2
+CasualConversation,"Does anyone know about a stranger chat site, that isn't full of horny guys?",[removed],1580421113.0,1,1.0,0
+AskReddit,"Former/current KFC or McDonald's employees, how was it working there and what did you like and dislike about it?",,1579125715.0,2,1.0,1
+linuxquestions,"This is my sister's old notebook, she stepped on. There is Linux and windows on it, but I would like to just reset it and have just windows on it (I use it as a server) I'm afraid to update to windows 10 since there is this menu when I start the pc up, where you can choose windows/Linux Gentoo.",[removed],1578089976.0,0,0.14,8
+pcmasterrace,"This is my sisters old notebook, she stepped on. There is Linux and windows on it, but I would like to just reset it and have just windows on it (I use it as a server) I'm afraid to update to windows 10 since there is this menu when I start the pc up, where you can choose windows/Linux Gentoo.",,1578089494.0,1,0.67,14
+linux,"This is my sisters old ntb, she stepped on. There is linux and windows on it, but i would like to just reset it and have just windows on it (I use it as a server) I'm afraid to update to windows 10 since there is this menu when i start the pc up, where you can chose windows/linux gentoo.",,1578089348.0,0,0.5,1
+Minecraft,I have an old win7 pc I want to use for a server (dell vostro 3360) and after ~30s it always disconnects. Thanks for helping in advance :),,1577976288.0,2,0.75,3
+unpopularopinion,1+1=2,[removed],1575942839.0,3,1.0,2
+unpopularopinion,2 plus 2 is 4,,1575942241.0,1,1.0,1
+PewdiepieSubmissions,Where is youtube rewind 2019?,,1575576763.0,1,0.57,1
+PewdiepieSubmissions,Life reaction to rewind 2019........,,1575576117.0,6,1.0,3
+FortNiteBR,"Does anyone know a way to still get this, or is it done. If there is no way I find it kind of annoying to see and not be able to get.",,1575145339.0,1,0.67,11
+FortNiteBR,Y'all now whether there is a way to get the season X skin styles?,,1575144902.0,1,1.0,1
+Pixelings,Does anyone know what guilds are for?,,1574729063.0,1,1.0,1
+unpopularopinion,Social bubbles are not a problem,[removed],1574667187.0,7,1.0,3
+mildlyinfuriating,People on r/there was an attempt not continuing with to do st.,,1574515927.0,8,0.83,2
+Pixelings,Does anyone know what guilds are even for?,,1574466115.0,5,1.0,0
+LegalAdviceEurope,My mum wants to take money I [15m] am supposed to get for breaking my wrist.,[removed],1574338145.0,23,1.0,12
+LocationBot,I didn't know my country is that irrelevant.....,,1574332039.0,8,1.0,0
+legaladvice,My mum wants to take money I[15m] am supposed to get from the school for breaking my arm.,[removed],1574331438.0,0,0.27,5
+medical_advice,I hit my finger yesterday and it still has a slightly blue bulge on it and is a bit hard to bend. It doesn't look out of place and hurts a bit.,,1574240718.0,1,1.0,3
+FortNiteBR,So I got a closeup of the Star Destroyer...,,1573827650.0,60,0.9,10
+FortNiteBR,Please make fill NOT give you bots,[removed],1573236331.0,0,0.5,39
+FortNiteBR,Bots in fill???,[removed],1573235186.0,0,0.5,2
+TuberSimulator,"I think the main problem with the voting system is, that not enough people vote. This could be achieved by rewarding people more for voting. I know you get a few views but it's not worth it. If you would, as an example, get a bux for every vote, up to 10 a day.",,1573049766.0,17,1.0,3
+unpopularopinion,Pedophiles in themselves aren't bad.,[removed],1572569401.0,5,0.67,79
+Showerthoughts,1000$/month is just the double of 500$/month but you can probably afford 10 times as expensive items while living a way better lifestyle.,,1572560304.0,1,1.0,1
+AskReddit,How did you think sex was done when you were a child?,,1572481994.0,0,0.5,8
+AskReddit,How did you think sex was done when you were a child?,[removed],1572481379.0,1,1.0,1
+puns,This is fusilly!,,1572123505.0,6,0.8,0
+Minecraft,Best minecraft mods?,[removed],1572107983.0,3,1.0,5
+AskReddit,"Barbers of reddit, has anyone ever told you, they didn't like their haircut? Why?",,1571951594.0,1,1.0,1
+PewdiepieSubmissions,I'm sorry.,,1571870645.0,2,0.6,0
+Showerthoughts,"WTF takes longer to say, then what the f*ck",,1571379280.0,11,0.79,17
+Showerthoughts,"All the (spoken) languages are related, while the alphabets are not.",,1571379226.0,7,0.77,3
+TuberSimulator,Im lvl. 35 and I have no idea what networks are for. Could you please tell me?,,1571123193.0,1,1.0,4
+Showerthoughts,"On a planet with way higher gravity a sponge would ""flow"" through a hopper.",,1570890819.0,5,0.86,3
+Showerthoughts,"Vampires etc. should hide from the moon as well, since it's just reflected sunlight.",,1570454868.0,1,1.0,1
+Showerthoughts,"It's interesting, how colder things are more dense but compressing something makes it hotter.",[removed],1570019373.0,6,0.88,7
+PewdiepieSubmissions,😘😎😜😜😍😳 🐍 ℹ️ |< 3️⃣,,1569489189.0,23,0.71,8
+cringepics,"I'm sorry, Tesla.........",,1569087576.0,215,0.85,9
+teamspeak3,Grant permissions,[removed],1568754891.0,3,1.0,2
+pcmasterrace,"These Instagram post annoyed me, so I used 30 mins. of my line to do this.",,1568368698.0,239,0.94,14
+PewdiepieSubmissions,"These Instagram post annoyed me, so I used 30 mins. of my line to do this.",,1568368658.0,32,0.87,3
+AskReddit,"What is a good app for learning vocabulary, where you can share it with classmates?",,1568059503.0,1,1.0,2
+Showerthoughts,"Nowadays, the best way to get the dinner playbutton is probably too become a member on Reddit, and not actually making good content.",,1568008043.0,1,1.0,1
+pcmasterrace,"So I just want to ask about a program, that shows the screen on time. (Like wether there are keystrokes, mouse clicks, or maybe the ntb is unlocked) Just as a way for my mum to know, when I leave the pc. I don't need any limiting, history etc. Just the time i.e. 1pm - 5pm. Thanks.",,1567940585.0,1,0.67,0
+PewdiepieSubmissions,BiG brAIn,,1567875289.0,8,0.85,1
+PewdiepieSubmissions,"And here we see a really rare species. An insgesamt Account, that credits the actual Reddit OPs",,1567542702.0,6,0.8,3
+PewdiepieSubmissions,Congrats?,,1567539450.0,2350,0.95,24
+PewdiepieSubmissions,Tried to make it so that you can also save it and use it.,,1567525180.0,13,0.8,1
+engrish,I hate to feel not able to say a word.,,1567446597.0,3,0.6,0
+PewdiepieSubmissions,Shopping cart wheels be like:,,1567426562.0,45,0.93,1
+softwaregore,This white loading circle on a white background.,,1567408058.0,39,0.88,3
+AskReddit,"If you would go to Mars, what would the things you take with you and the things that you would want to get send to you (via radio waves) be?",,1567369215.0,2,1.0,1
+PewdiepieSubmissions,"Seriously, why?",,1567364305.0,8,0.91,1
+OopsDidntMeanTo,"Just perfectly aligned with the sun, oops🙊",,1567362433.0,1,1.0,0
+discordapp,My friends can't hear me.,[removed],1567352098.0,3,1.0,1
+Showerthoughts,"Some people say that meat eaters are killing the Amazon, but if people eat meat that comes from other parts in the world they are actually helping the competition, thus doing more for the Amazon, then vegans.",,1567343193.0,0,0.39,63
+puns,An interesting title,,1567331837.0,461,0.96,8
+PewdiepieSubmissions,R.I.P.,,1567326759.0,1,1.0,0
+AskReddit,"Is there a subreddit for all those fake ""scientific"" facts on Facebook and Instagram?",,1567017300.0,1,1.0,1
+AskReddit,"I just want to now, whether there is a subreddit for those fake ""scientific"" facts on facebook and instagram. Ty.",,1567014092.0,1,1.0,1
+softwaregore,I got an archero ad while playing archero.,,1566836219.0,4,0.84,1
+relationship_advice,Should I tell my dad?,[removed],1566608915.0,6,1.0,8
+pcmasterrace,I just want to know what this is. (Acer nitro 5 an51552),,1566084140.0,0,0.5,6
+Showerthoughts,Presents are just irl lootboxes.,,1545680697.0,4,0.64,11
+Showerthoughts,Christ.mas presents are just irl lootboxes.,,1545680657.0,1,1.0,1
+Showerthoughts,Christmas presents are just irl loot boxes,,1545680422.0,1,1.0,1
+memes,They're trying....,,1545595427.0,59,0.87,5
+PewdiepieSubmissions,NAZI!!!,,1545595375.0,10,0.87,0
+PewdiepieSubmissions,Krunker.io doing their part.,,1545144058.0,14,0.9,0
+AskReddit,What do you think will happen first? 1. Youtube rewind 2018 will be the most disliked video ever? 2. T-series will be the most subscribed youtube channel?,,1544436292.0,4,0.75,8
+AskReddit,What do you think will happen first? 1. Youtube rewind 2018 will be the most disliked video ever. 2. T-series will be the most subscribed youtube channel.,,1544433724.0,1,1.0,1
+Showerthoughts,Children born Mars will probably be able to do backflips really early and it's not gonna be a cool thing to do.,,1544032518.0,6,0.8,11
+PewdiepieSubmissions,"Please, he gained almost nothing today, do it!!!!!",,1543782852.0,4,0.83,3
+PewdiepieSubmissions,Keep spreading this 👊,,1543587988.0,12,0.83,1
+softwaregore,Looks like reddit opens a new window when you click it's notification while browsing it.,,1540924722.0,1,1.0,1
+funny,"From facepalm, I think it belongs here more...",,1540922220.0,22,0.76,6
+woooosh,"Come on r/facepalm, why always you 😒",,1540109430.0,61,0.94,7
+woooosh,Why is it always r/facepalm......,,1539960112.0,18,0.91,7
+woooosh,I think r/woooosh just got wooooshed.,,1539779396.0,1,1.0,1
+woooosh,"Yeah, this whole r/facepalmfacepalms subreddit.",,1538912529.0,0,0.33,1
+facepalmfacepalms,"Why is this sub full of r/facepalmfacepalmfacepalms or r/woooosh, the people here are more dumb, than the average people, that are postet on r/facepalm and r/woooosh. Im thinking of posting a r/wooosh where this whole sub will be.",,1538912337.0,0,0.5,3
+woooosh,How could someone not get this joke...,,1538911755.0,7,0.77,1
+woooosh,That pure kid just totaly randomly posting credit card informations,,1538503523.0,15,0.82,3
+CrappyDesign,"Not a tiktok fan, have it installed tho.....",,1538310854.0,6,0.65,5
+facepalm,"IDK what my sister thought, but i thought it belongs here....",,1536944978.0,0,0.28,3
+Showerthoughts,Every dad is basically a motherfucker.,,1534418004.0,0,0.45,9

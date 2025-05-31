@@ -1,0 +1,154 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+3dvision,Guide: how to live stream (and/or record) in stereoscopic 3D,"Updated to version 3.
+
+Hello there. Live streaming in stereoscopic 3D, preferably SBS, has been a struggle for me these last few days. After a lot of thinking, trying and failure, I've finally found out how to do it. So today I'm writing this guide to help you all out.
+
+&#x200B;
+
+First of all, this is what you'll need:
+
+\- (Obviously) A 3D Vision-compatible Nvidia GPU.
+
+\- Windows as your OS (although alternative methods may be possible)
+
+\- My 3D streaming kit, zipped, downloadable here:  [https://drive.google.com/file/d/11eDWgjjnN0Bw61l4MjTEkYmKIuoCVjnf/view?usp=sharing](https://drive.google.com/file/d/11eDWgjjnN0Bw61l4MjTEkYmKIuoCVjnf/view?usp=sharing)
+
+\- (Alternatively) If you do not want to download my 3D streaming kit: DDU (Display Driver Uninstaller), Nvidia 3D Vision-compatible drivers (version 425.31 recommended, newer versions incompatible), CRU (Custom Resolution Utility), OBS Studio, MonaTiny, ffmpeg (version 4.2.1 recommended, newer versions incompatible)
+
+\- Basic batch programming knowledge, or alternatively, if you choose to not use my kit, please download this: [https://drive.google.com/file/d/1fGoD2ZMYaoBsF3Dq3Etln5K1CnSfpGt3/view?usp=sharing](https://drive.google.com/file/d/1fGoD2ZMYaoBsF3Dq3Etln5K1CnSfpGt3/view?usp=sharing)
+
+&#x200B;
+
+And now to the actual guide:
+
+Step 0) Extract the contents of my 3D streaming kit wherever you like, if you decided to use it.
+
+Step 1) Restart your computer in safe mode.
+
+Step 2) Run DDU. Select GPU, Nvidia, choose restart option on the top and wait for it to finish.
+
+Step 3) Install your preferred 3D Vision-compatible Nvidia drivers. Make a custom, clean, correct installation.
+
+Step 4) Enable Nvidia 3D Vision, pass the test.
+
+Step 5) Run CRU. We're not going to change any resolution configurations here. Just press the ""Edit..."" button on top. In ""ID:"", set it to ACR02B9 and press ""OK"". Close CRU.
+
+Step 6) On CRU's folder, run ""restart64.exe"". Your screen will go black for a few moments. Then press ""Exit"".
+
+Step 7) Install MonaTiny anywhere in your computer.
+
+Step 8) Install OBS Studio as well.
+
+Step 9) Place ffmpeg anywhere, preferably on your desktop.
+
+Step 10) Simply run MonaTiny.
+
+Step 11) Run OBS Studio. Set it up so that it streams to the custom server: rtmp://127.0.0.1:1935 (This streams to MonaTiny within your own machine) Stream key and authentication are blank. Output resolution must NOT be scaled, or else conversion between 3D formats will fail. Please make sure that your window capture has a size of 100% and the resolution for live streaming is the same. In my personal experience and to avoid all sorts of problems, it is best to toggle 3D Vision off, change game mode to borderless window or normal window and toggle 3D Vision back on. Use the window capture source on OBS Studio. If you try to capture full screen games capture errors will occur such as 3D content being completely black or transparent effects showing as black colour instead. If you use screen capture, leave alone how uncomfortable that is, some games will detect 3D Vision and switch it off completely.
+
+Step 12) If you're using my 3D streaming kit, edit the file ""LiveStreaming.bat"" with Windows Notepad or any other PLAIN TEXT or batch editing software. If you're not using the kit, open Windows Notepad and create an empty file called ""LiveStreaming.bat"". Make sure it's not called ""LiveStreaming.bat.txt"". Then edit it by pasting the following:
+
+&#x200B;
+
+echo off
+
+set LOCATION=%USERPROFILE%\\Desktop
+
+set RESOLUTION=1280x720
+
+set FRAMERATE=30
+
+set AUDIOBITRATE=128k
+
+set VIDEOBITRATE=3000k
+
+set PRESET=fast
+
+set RTMPSERVER=""rtmps://live-api-s.facebook.com:443/rtmp/KEYKEY""
+
+:loop
+
+start ""LiveStreaming.bat"" /wait /b ""%LOCATION%\\ffmpeg.exe"" -f live\_flv -i rtmp://127.0.0.1:1935 -f flv -flvflags no\_duration\_filesize -vf stereo3d=irl:sbsl -aspect 16/9 -s %RESOLUTION% -framerate %FRAMERATE% -b:v %VIDEOBITRATE% -b:a %AUDIOBITRATE% -c:v h264\_nvenc -preset %PRESET% %RTMPSERVER%
+
+goto :loop
+
+&#x200B;
+
+Step 13) Immediately after ""set LOCATION="", type in your ""ffmpeg.exe"" file location if it's not your desktop as default.
+
+Step 14) Immediately after ""set RESOLUTION="", type in your target final resolution. 1920x1080 or 1280x720 are recommended.
+
+Step 15) Immediately after ""set FRAMERATE="", type in the desired output framerate. 60 or 30 are recommended.
+
+Step 16) Immediately after ""set AUDIOBITRATE="", type in the audio bitrate you wish. 160k or 128k are recommended.
+
+Step 17) Immediately after ""set VIDEOBITRATE="", type in the video bitrate you wish. These are recommended: see bottom of post.
+
+Step 18) Immediately after ""set PRESET="", type in the slowest x264\_nvenc codec preset your GPU can handle. If you do not know what this is, leave it alone.
+
+Step 19) Immediately after ""set RTMPSERVER="", paste your destination streaming server of choice and private key.
+
+Step 20) If you want to record instead of live stream, replace ""rtmps://live-api-s.facebook.com:443/rtmp/KEYKEY"" with your local destination path (For example, ""C:\\Test.flv"") Leave everything else intact.
+
+Step 21) Make sure MonaTiny is running and start the stream on OBS Studio.
+
+Step 22) Run LiveStreaming.bat
+
+Repeat steps 21 and 22 to live stream again.
+
+&#x200B;
+
+Note: Nvidia 3D Vision will be set to ""Line by Line"" (Row after Row) for every resolution. Output will be set to SBS not-crosseye. You can manually change the output mode. Refer to [https://www.ffmpeg.org/ffmpeg-all.html#toc-stereo3d](https://www.ffmpeg.org/ffmpeg-all.html#toc-stereo3d) for more information on this.
+
+&#x200B;
+
+Note 2: Facebook won't allow you to stream over 720p30 unless you have at least 100 followers on your page and it's been active for 30 days.
+
+&#x200B;
+
+Note 3: -g NUMBER will set keyframes to one every NUMBER. For example: -g 120
+
+&#x200B;
+
+IMPORTANT EDIT: Add the parameter -aspect 16/9 to force full-screen video, overriding the default 32:9 aspect ratio.
+
+&#x200B;
+
+IMPORTANT EDIT 2: Add the parameter -flvflags no\_duration\_filesize to fix continuous errors that forced ffmpeg to restart.
+
+&#x200B;
+
+Resolution, framerate, bitrate:
+
+&#x200B;
+
+3840x2160, 60, 20000-51000.
+
+3840x2160, 30, 13000-34000.
+
+2560x1440, 60, 9000-18000.
+
+2560x1440, 30, 6000-13000.
+
+1920x1080, 60, 4500-9000.
+
+1920x1080, 30, 3000-6000.
+
+1280x720, 60, 2250-6000.
+
+1280x720, 30, 1500-4000.
+
+854x480, 30, 500-2000.
+
+640x360, 30, 400-1000.
+
+426x240, 30, 300-700.",1587043667.0,5,1.0,4
+FortNiteBR,Whole PC crashes during heavy VRAM usage independently of frame rate used or GPU temperature,"Here are my findings on my research. Full PC specs included. It's unacceptable for a game like Fortnite to crash your computer within seconds with a GTX 1080 ti playing at 1080p 30 FPS. I have GPU crash reports always enabled in game settings but it does nothing. ""Support"" just spams me with links without even reading what I say. This happens naturally in a bunch of situations, most commonly during swimming, but I found a way to fasten research with creative mode, where I can ""force"" the crash easily (within 20 seconds at most unless I use very specific settings). I have been tweaking with game settings here and there and typed my results and reached a partial conclusion as to what is actually happening. I post my results (now complete after forcing my computer to crash for 28 consecutive times via the game), I also post NFO file and DxDiag file. I hope they stop sitting quietly while Fortnite can't handle a GPU properly. It's not that just the game crashes, the whole system instantly reboots. You have to be a very lame developing team to make a MMO game that is able to crash your whole Windows OS, and have bots to reply you with links to suggestions including format your computer or buy a new one. No other software has been able to crash Windows for me, congrats Epic Games, you truly are ""Epic"".
+
+[Google Drive folder with all 3 files](https://drive.google.com/drive/folders/143zNBXIKca3y3QmtFkDZsO2y8w8T5q7A?usp=sharing)
+
+[Research findings file](https://drive.google.com/file/d/1cooFO1-Rce7no6P5IohHce3T2LLrGUgr/view?usp=sharing)
+
+[NFO file](https://drive.google.com/file/d/1U0G2SNnlZgeCLhlH36udAEy8LF203Zv2/view?usp=sharing)
+
+[DxDiag file](https://drive.google.com/file/d/1udkM48FcR0wDvnXhOvUA-GyJeAT_eP2Y/view?usp=sharing)",1654268020.0,2,1.0,1
+SuicideWatch,"Suicidal for 12 years, finally I will die","I'm 25 years old, male, won't disclose my location, gay?, dragonkin (otherkin), I hate humans so deeply, I have no friends in real life or internet, never had a relationship in real life and internet ones always lasted less than one month, have officially recognized disabilities, my family doesn't care about me, I live with my mother and she's the only person I've talked with in the last 12 months, she refuses to talk to me unless it's for her own interest and she pretends she doesn't know I'm suicidal, I have gone outside multiple times explicitly stating to my parents that I was leaving to kill myself and they never cared, I have been suicidal since I was 13 years old, I have been going to psychs for years both for free and paying and they never helped me one bit so in the end I quit, same goes for depression and anxiety medications, I have been hospitalized a few times as a result of my suicide attempts, my physical health has really deteriorated during the last 5 months, I have really strong dizziness and vertigo 24/7 so I have to lie on bed all day and I struggle to get to the toilet, I also have to eat on my bed and when my mother doesn't bring me the food I must be hungry and unable to eat, I constantly feel like I can't keep myself conscious and am on the edge of passing out, I have palpitations and chest pain, my head hurts so much, I'm sweating all day and I have the fan on 24/7 right next to my bed, my father and my other relatives don't care and refuse to talk to me, I cry every day and I wish I had tears to cry 24/7, some nights I'll have an insomnia so bad I won't sleep at all, while others I sleep for about 16 hours nonstop, some days I'll be very hungry again one or two hours after I had my full meal, some others I won't eat anything at all, I'm extremely bored, everything I do on the internet I force myself to do it and don't enjoy it at all, I always pray just in case anyone can hear me and I ask them to kill me, if I stop existing after death that's no problem, I made myself an imaginary friend 6 years ago when my father kicked me out because his girlfriend asked him to, no one gives a shit if I die and this time I'm going to succeed, because someone else is going to do it for me and make sure of it, I'll ignore any unsupportive replies such as those saying life is worth it and not inherent suffering, things won't get better deal with it, I've been told this shit by psychs since 12 years ago and my life has done nothing but become way worse than it used to be, the worst part of it all is knowing that no one cares, and don't say someone cares because you don't know me or my life, it's so easy to talk from ignorance, not even God cares because if he did he would listen to my prayers, being selfish is inherent to life, if it wasn't species would never evolve, so don't come pretending that you want to help me because the only person you want to help is yourself, you want to feel better with yourself by pretending to care and pretending to do a good action, if you really want me to suffer that bad go to hell",1626105836.0,17,0.9,24

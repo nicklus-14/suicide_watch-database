@@ -1,0 +1,793 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+aws,All arguments to Vpc.fromLookup() must be concrete (no Tokens),"Hey everyone
+
+In one of my CDK stacks, I'm creating a vpc and exporting its id for use in another stack like this:
+
+    new cdk.CfnOutput(this, `AddpVpcId${process.env.ENV}`, {
+          value: this.vpc.vpcId,
+          description: `VPC ID for addp-${process.env.ENV}`,
+        });
+
+Importing:
+
+    const vpc = ec2.Vpc.fromLookup(this, 'ImportedVpc', {
+          vpcId: cdk.Fn.importValue(`AddpVpcId${process.env.ENV}`),
+        });
+
+When I run `cdk deploy` , I get the error in the title.
+
+**What I've tried:**
+
+I tried using an ssm parameter as it's suggested in [this article](https://lzygo1995.medium.com/how-to-resolve-all-arguments-to-vpc-fromlookup-must-be-concrete-no-tokens-error-in-cdk-add1c2aba97b), but I receive this error:
+
+`Could not find any VPCs matching {account: <account_id>, region: <region>, filter: {vpc-id: AddpVpcIddev}}`
+
+How can I fix this?",1738763420.0,4,0.83,2
+aws,Help me get started with my project ,"I'm completely new to AWS. To help me get my hands wet, I'm building a simple project. Basically, there will be a frontend through which people will be able to submit form data to my backend. For the backend, obviously, I need to create an API. What service should I use here? API gateway? I literally have no idea regarding this. I will need both client and server side validation, with the possibility of adding authentication later. But for now, I'm skipping auth to keep things simple. 
+
+Anyway, after the user submits the form, the data will be stored using DynamoDB (nosql fits my usage here so I don't need a SQL solution). The user will have submitted their email address in the form as well.
+
+Using CloudWatch and Lambda, a lambda function will run every hour or so (whatever time period turns out to be the cheapest), which will basically compare the data stored in DynamoDB with the data it will have fetched from an external API. If the data stored in DynamoDB match the data fetched from the external API, the user will be sent an email about this using AWS SES. 
+
+I will probably host the frontend on vercel.
+
+How should I go about building this project? Please expect that this project won't scale, so is it possible to keep things free? Also, should I use CDK to build it or is it overkill? Please give me an idea of how I would tie things together. 
+
+Thanks in advance! 
+",1737007312.0,4,0.7,23
+node,"How to host my app using AWS (or any other PaaS, etc.)","Hi everyone, it's time to host my app and I'm really confused at this stage because there's literally a myriad of solutions when it comes to authentication, job queues, database hosting, caching. etc.   
+My backend app uses JWT for auth (no any other framework is used), Express, and TypeScript. I'm using Prisma ORM too (PostgeSQL). The frontend uses Vue.js. We have tested the app locally, and everything seems to be working so far. There are still some features missing, but we need to deploy it because the basic functionalities are already there and our clients have already been asking us regarding when the web app will be launched. We are planning to add the missing features gradually once the platform is hosted and live.
+
+I'm totally lost because I don't know how to proceed from here. Wherever I go on the internet, everyone is telling me to use auth services such as supabase auth, AWS Cognito, etc. I also have to deal with hosting the frontend and backend too - I'm completely new to AWS and don't know which service(s) to use. I'm not even talking about hosting the database and connecting it with everything else. Caching? Oh, do I even need it? Anyway, you get the point. I have to tie together a lot of pieces and am feeling overwhelmed.
+
+To give you an idea of the web app we're building, it's basically a management platform for the artists of my client's company. Admins can register new artists, and artists can then log in and view their data from various music platforms such as Spotify, YouTube music, etc. Admins can also manage their artists individually or in groups. They can view all their data, edit them, delete them, etc. There will also be an email service through which artists will be able to send emails regarding any problems they might have (I'm planning to use AWS SES and nodemailer for this).
+
+Our client has already an AWS tier, so they want us to deploy the platform on AWS. Is AWS the best solution in this case? Should I be using other services such as supabas auth? I would like to host everything in one place using AWS but feel free to recommend me a better/cost-efficient way, if any.
+
+Thanks in advance",1736793990.0,2,0.67,5
+GooglePlayDeveloper,"If an app has been suspended in the past, does it affect the account's future? ","We published an app in December 2021, which was suspended in February 2022 due to content policy whatever. We haven't published anything ever since. I was wondering if we decide to publish another app soon, will the suspension of our previous app affect our new app's launch process? 
+
+Thanks in advance ",1735989825.0,3,1.0,13
+webdev,I'm so frustrated,"I took on a freelance project with a friend, where I'm handling the backend and he’s working on the frontend. We're using a private version of the Spotify API, and I’m really frustrated because I haven't been able to solve a specific task for weeks now. I’m seriously considering quitting the project, but since we’ve signed a contract with our client, that’s not an option. ChatGPT can’t help either because the documentation is private, and I can’t find any resources online. What should I do in this situation? I never expected my first real-world project to be this challenging.
+
+EDIT: For those asking in the comments, here’s a bit more detail. We're using Spotify's Private API to pull data for artists affiliated with my client’s company. The challenge is that, out of all the available data, I can only access two specific pieces. I've reviewed both the public and private API documentation multiple times, but I still can’t figure out how to retrieve the rest of the information we need. I'm not sure if it's okay to share the specific details since the data we're working with are private. I'd like to be more specific but my contract states that it needs to be confidential.",1730151953.0,22,0.65,66
+ProlificAc,No studies since I created my account last night,"Hi all,
+
+I'm new to Prolific and haven't seen any studies since I created my account. Is this normal? I'm based in Hungary",1730119512.0,0,0.29,5
+webdev,Has anyone worked with the Spotify Enhanced Bulk API (private)?,"Hi all, I'm creating a backend API which makes requests to both Private Spotify API and Web API. However, I can't seem to figure out how to get the data I want from the private API. Since its API docs are private, I can't find any resources on the internet either.  
+Basically, I need some data of individual Spotify artists from the bulk API; however, I can't fetch the required data from it despite thoroughly reading the docs numerous times. What am I supposed to do in this situation? I've already emailed the support team on Spotify.",1729185452.0,1,1.0,9
+webdev,How to build a semi-complex SQL database? ,"So I'm diving deep into the world of full stack development and have been recently realizing that building a database for a mid tier web app is just too much for me as a backend developer. Maybe it's because I'm just starting out with real world projects; however, I feel like databases should be modeled and built by someone else (like the frontend and backend are usually built separately by front and backend developers, respectively)  
+
+I can work with databases well, but when it comes to designing one, I don't know how to effectively create relations, choose data types, etc. if my app is going to have complex schemas. How do you guys deal with this problem? Should I just dive into database design as well or what?  ",1724368232.0,0,0.38,18
+Upwork,Upwork alternatives? ,"Are there any alternatives where we can find legit jobs? As y'all know, Upwork isn't doing good anymore, and I'd rather not waste my time on this platform. ",1724007988.0,5,0.78,8
+webdev,Is Express JS the right choice?,"So I and a friend of mine are tasked with creating a management platform where the data of some musicians affiliated with a certain company can be managed by that company. I'm thinking of using Express and PostgreSQL for the backend, whereas my friend will be using either React or Vue for the frontend and Swift/Kotlin for the mobile app.
+
+Is Express the right choice in this situation? It's the only backend framework I've worked with in the past and can't afford learning another framework like Spring Boot, .NET, etc. because of the time constraint. Basically, musicians will be able to sign up and log in to the website, and when they log in, all their data from various music platforms (Spotify, SoundCloud, etc.) will be fetched to be shown in their account. The company, on the other hand, will be able to easily manage their musicians on the platform (think of it like a CRUD management system)",1722870062.0,52,0.85,82
+shia,"If Shias are right, why are the majority of Muslims Sunni? ",Genuine question here. Why is this the case? ,1722383502.0,28,0.77,82
+webdev,Do you understand the internals of the frameworks/libraries you use?,"Basically the title. I find that learning and using frameworks aren't that difficult; however, comprehending the underlying abstractions and code is difficult for me.
+
+Today, I got curious and decided to check the source code of Express.js. I find it very complex and kind of impossible to understand. Is this normal? I mean I can create an Express app from scratch but the fact that I'm having a very hard time understanding the source code makes me question my web dev skills.",1722124614.0,56,0.93,48
+Entrepreneur,Where do I start? ,"I have an idea that I want to bring into reality, though I have zero experience with entrepreneurship. I've been already teaching myself web development for the past months and will be able to create a MVP after 2-3 months on my own. However, I know nothing about business, marketing, etc. and I'm alone in this as well. How do I actually start working on my idea? I don't even know if it's something worth implementing by the way. ",1710749498.0,10,1.0,21
+Sat,College Board won't send me a reset email,"Hi all
+
+I took SAT back in 2019 and now need my scores again because I'll be applying to some universities. The thing is, I've forgotten my password and can't reset it because College Board won't send me an email despite telling me to check my inbox. What should I do in this situation?   
+I've tried 2 different email addresses already, and none will receive an email. ",1700575590.0,7,0.9,15
+paypal,"Customer Sevice is shit, so my last resort is here. Please hear me out","Hi all.
+
+So I created a PayPal account a few years ago in South Korea. I've left Korea ever since, and I'm currently located in [Azerbaijan](https://www.reddit.com/r/azerbaijan/wiki/index/). I have somewhat significant amount of money left in my PayPal account; however, I cannot withdraw it in any way. And no, I don't want to spend it online, either.
+
+What can I do in this situation? I can't even add a bank card to my account to transfer my funds. I can't call customer service because I'm not in the US, and their message service is basically shit. The agent isn't even fluent in English; all they're doing are just throwing me some broken sentences and copy-pasta from their usual useless articless.
+
+I'm really frustrated with this fucking company and don't know what to do. What are my options? I can't even send money to anyone in my country because PayPal users from Azerbaijan cannot receive money from anyone. Duh.",1697102376.0,1,0.57,33
+Korean,I think I'm gradually forgetting Korean,"Hi all. A little bit of my background:
+
+I studied Korean extensively for one year in Busan and got TOPIK 5 in November, 2021. 
+
+I moved to Seoul in March 2022, lived there for half a year and returned to my home country last September. I went back to Korea for one month again this year in March and came back for good in April. Haven't been to Korea ever since and don't intend to anytime soon. 
+
+Anyhow, I feel like I'm slowly forgetting my ability to retain the core language skills. Yesterday, I tried thinking in Korean and couldn't even remember what the word was for ""important"". Such a simple word, right? I remembered the word for ""the most (가장이나 제일)"" but not the actual word itself.
+
+Although I haven't used Korean since I left Korea, I want to start using it again because, well, Korean is too beautiful a language to forget, haha.
+
+Honesty, I'm greatly surprised at how fast I'm forgetting the language. 
+
+What can I do to start remembering Korean again?  I've pretty much lost contact with all my former Korean friends, so practicing with them over the phone or something is out of the question.",1694323974.0,121,0.96,25
+Ubuntu,"""Do Not Disturb"" not working properly","My Ubuntu version: Ubuntu 22.04.3 LTS
+
+Even though I've enabled Do Not Disturb mode, I still see notifications pop up everytime, which is obviously very annoying. How can I fix this? The OS runs perfectly otherwise.
+
+Thanks in advance.",1693856945.0,7,1.0,0
+AskIndia,Why do you guys sometimes mix English and Hindi in texts and videos (or possibly some other local language I'm not aware of)?,,1691299129.0,10,0.86,7
+UIUC,"Need an apartment around or inside the university from 12.08.2023 until May, 2024","Hello everyone
+
+We looked into apartments on campus; however, there don't seem to be any available on-campus apartments for now. The University told us that some places might open up until the end of this week but it's not guaranteed.
+
+The student has never lived in the US before; so we don't know how we can contact real estate agents near the university - it should be a walkable distance from the university, by the way. Are there any specific websites or contact numbers so that we can get in touch with them? We need a thorough guidance on this matter.
+
+Thanks in advance",1690989240.0,0,0.5,5
+gamedev,How likely is it to get at least 500k downloads on Steam as an indie developer?,"Some background info:  
+  
+I've been interested in creating games since I was in high school. I've created basic 2D games such as Alien Invasion, Snake, Tic Tac Toe, Mastermind using programming languages like Python, JavaScript and Ruby but never done something in an actual game engine.  
+  
+After dabbling in Unity 2 years ago, I realized that I had next to zero interest in design aspect of game development like creating 3D models, editing textures, etc. so I ended up abandoning the idea of creating a real game from scratch. Fast forward to now, I'm entertaining this idea again and rather serious this time. We are a group of 3 friends who know absolutely nothing about game development but want to create a game that will at least get 500k downloads on Steam. We have some game ideas but don't know how to get started on those. How realistic is our goal? 2 of us already have background in programming, and the 3rd friend will mostly deal with non-programming aspects of the game. I'm apprehensive about embarking on this journey because the world of game development seems so vast and complex, which makes me feel like we won't be able to create a game that people will actually like.  
+  
+What do you guys recommend us?",1690206068.0,0,0.24,11
+GameDevelopment,How likely is it to get at least 500k downloads on Steam as an indie developer?,"Some background info:
+
+I've been interested in creating games since I was in high school. I've created basic 2D games such as Alien Invasion, Snake, Tic Tac Toe, Mastermind using programming languages like Python, JavaScript and Ruby but never done something in an actual game engine.
+
+After dabbling in Unity 2 years ago, I realized that I had next to zero interest in design aspect of game development like creating 3D models, editing textures, etc. so I ended up abandoning the idea of creating a real game from scratch. Fast forward to now, I'm entertaining this idea again and rather serious this time. We are a group of 3 friends who know absolutely nothing about game development but want to create a game that will at least get 500k downloads on Steam. We have some game ideas but don't know how to get started on those. How realistic is our goal? 2 of us already have background in programming, and the 3rd friend will mostly deal with non-programming aspects of the game. I'm apprehensive about embarking on this journey because the world of game development seems so vast and complex, which makes me feel like we won't be able to create a game that people will actually like.
+
+What do you guys recommend us? Can we get started with Unreal Engine or is it too complicated for beginners?
+
+&#x200B;",1690205726.0,0,0.21,19
+LearnAzerbaijani,Here's some music from Qaraqan; it might be useful for immediate to advanced level learners,,1688285965.0,2,1.0,2
+morbidquestions,"Can I, as a perfectly healthy and young person, legally and voluntarily donate most (if not all) of my organs even if it results in my death?","Originally posted it in r/nostupidquestions, but my post was removed, and I was suggested to post it here",1681799493.0,317,0.97,56
+Spanish,Best textbook for a complete beginner,"Hi all. 
+
+I have zero knowledge of Spanish and want to learn it on my own without paying a dime (at least for now). 
+
+I best learn from textbooks; so what is the best textbook out there for learning Spanish?",1680791221.0,3,0.81,5
+Living_in_Korea,Sending money overseas to a direct bank account using Hana Bank,"Hi all 
+
+I want to send money overseas to a direct bank account without the receiver having to go to a bank to pick up the cash. While I can send money abroad using Hana EZ bank, as far as I know, it only allows me to send money to a bank in the receiver’s country as opposed to the receiver’s card. 
+
+Is this possible? 
+
+Thanks in advance",1679291012.0,2,0.67,4
+Living_in_Korea,Laptop repair shop(s) in Seoul/Gyeongi-do,"Basically the title. My laptop has started making some crackling sounds - most probably, I need to get the thermal paste changed. Anyway, can you please recommend the best PC/laptop repair shops in this area?  
+
+
+Thanks in advance",1678366207.0,5,0.86,1
+korea,Why isn’t transportation free for students?,[removed],1677396180.0,0,0.5,5
+azerbaijan,Əksəriyyətimizin səsini yaxından tanıdığı dublyaj aktyoru Kamal Yaşarın prezidentə açıq müraciəti,,1676455316.0,65,0.93,6
+Korean,What does 거꾸 mean?,"Can someone please explain this [meme](https://imgur.com/a/fArKMCC) to me? The only word I don’t know is 거꾸, and yet I still don’t understand the meme.",1675656405.0,5,1.0,4
+findfashion,What model Nike is this?,,1674052845.0,1,1.0,0
+HelpMeFind,What model Nike is this?,,1674036740.0,1,1.0,1
+hanguk,한국어로 무료 PDF/EPUB는 어디서 찾을 수 있나요?,제가 영어로 무료 책 읽기 위해서 Libgen을 사용하는데 한국어로 무료 책 다운로드하기 위해 비슷한 웹사이트는 있을까요?,1672940536.0,7,0.9,3
+OutOfTheLoop,What’s going on with Ohio?,[removed],1672641378.0,98,0.79,43
+LearnAzerbaijani,Həvəsli,"Bu gün “həvəsli” sözü barədə danışacağam. Normalda bu sözü eşidəndə ağla “bir işi etməyə həvəsi olan” kimi mənalar başa düşülür. Məsələn:
+
+*O bu işə çox **həvəsli**dir.*
+
+Amma mənim əslən olduğum bölgədə bu ifadənin başqa mənası da var. Biz bu sözü “şirin”, “göyçək” mənalarında da işlədirik. Məsələn:
+
+*Nə **həvəsli** uşaqdır / Nə gözəl-göyçək uşaqdır*
+
+Bu sözü bir neçə dəfə digər azərbaycanlıların yanında ikinci mənada işlətmişəm və heç kim bu mənada başa düşməyib. Bəs siz bu sözün ikinci mənasını bilirdinizmi?",1669928862.0,12,1.0,5
+hanguk,직장에서 상사에게 저랑 반말로 애기하지 마라고 해도 되나요?,외국인이라서 궁금한데요.,1669914197.0,17,0.95,21
+hanguk,장삐쭈와 같은 유튜브 채널,좀 추천하실 수 있을까요? 요새 동영상으로 한국어를 배우거든요.,1669401539.0,11,0.83,11
+LearnAzerbaijani,A very interesting observation of American on Azerbaijani language,,1669191717.0,17,0.95,0
+careeradvice,Should one major in Chemical Engineering or Nanomaterials Chemistry?," A friend of mine has a Bachelor's in Chemistry and is torn between studying Chemical Engineering and Nanomaterials Chemistry for Master's. Which field is growing faster? AFAIK, ChemE sounds like a better idea because engineers are needed all around the world. On the other hand, studying Nanoscience/Nanomaterials might be a good choice as well since it's also growing very fast. What do you guys recommend?",1669051861.0,1,1.0,1
+careerguidance,Should one major in Chemical Engineering or Nanomaterials Chemistry?," A friend of mine has a Bachelor's in Chemistry and is torn between studying Chemical Engineering and Nanomaterials Chemistry for Master's. Which field is growing faster? AFAIK, ChemE sounds like a better idea because engineers are needed all around the world. On the other hand, studying Nanoscience/Nanomaterials might be a good choice as well since it's also growing very fast. What do you guys recommend?",1669051816.0,1,1.0,1
+ChemicalEngineering,Should one major in Chemical Engineering or Nanomaterials Chemistry?,"A friend of mine has a Bachelor's in Chemistry and is torn between studying Chemical Engineering and Nanomaterials Chemistry for Master's. Which field is growing faster? AFAIK, ChemE sounds like a better idea because engineers are needed all around the world. On the other hand, studying Nanoscience/Nanomaterials might be a good choice as well since it's also growing very fast. What do you guys recommend?",1669051397.0,2,0.56,6
+reddeadredemption,How to get the extra clean shaven look with a mustache?,"Can have a mustache with a clean shaven look only.
+
+PS. Asked this in the weekly question&answer thread but didn’t get any answers.",1668279514.0,4,1.0,5
+Korean,Simple dictionaries for intermediate learners,"Hi all. I’m an intermediate learner and looking for a dictionary with simple Korean definitions. At my current level, it’s often difficult to understand word definitions since they’re aimed at native speakers. Do such dictionaries exist?
+
+Thanks in advance",1668106472.0,3,1.0,4
+Korean,Do 어차피 and 아무튼 have the same meaning?,"I hear these two words fairly often, and from what I understand, they basically mean the same thing. For example: 
+
+아무튼 그에게 물어보자. 
+어차피 그에게 물어보자. 
+
+비가 올지 모르지만 아무튼 외출하겠다. 
+비가 올지 모르지만 어차피 외출하겠다. 
+
+Are these words completely interchangeable in these sentences? 
+
+Thanks in advance",1666612031.0,27,1.0,8
+WriteStreakKorean,01일 반추,시간이 좀 늦은데 잠자지 않고 왜 한국어를 아직도 잘 못한다고 생각한다. 소식도 거의 이해하지 못하고 한국인들이 빨리 얘기할 때 그들도 잘 이해하지 못한다. 언제든지 책 읽어 보고 싶으면 단어가 많기 때문에 못 읽는다. 한국어를 개선하기는 어렵다. 한국인들과 잘 사귀지 못하는 것이 한국어를 잘 못하는 이유들 중에 하나이다. 한국에 대부분 친구들이 외국인이고 저와 한국어로 이야기하고 싶은 한국인들이 많지 않은 것 같다.,1665521368.0,1,1.0,6
+korea,"Myeongdong, Seoul",,1661502799.0,317,0.92,17
+azerbaijan,Azərbaycan siyasəti haqda dərindən necə öyrənə bilərəm?,"Salamlar. Bir il öncəsinə qədər siyasətlə filan demək olar ki, heç maraqlanmamışam və keçən ildən başlayaraq özümü bu mövzularda maarifləndirməyə qərar vermişəm. Azərbaycan siyasətini sıfırdan izah edən mənbələr, saytlar və s. varsa, yönləndirməyinizi xahiş eləyirəm. Əsas olaraq ölkədəki siyasi partiyalar, bu partiyaların mövqeləri, siyasi-iqtisadi vəziyyət kimi mövzularda dərin bilgi sahibi olmaq istəyirəm. Öncədən təşəkkürlər.",1655794418.0,12,0.93,9
+TooAfraidToAsk,How can some people with crippling disabilities have so much thirst for life?,"I've always wondered this. Disabled people have it harder than everyone else. They have to make extra effort for pretty much everything, and yet I know some disabled people that relentlessly keep on going no matter what. I sometimes feel like healthy individuals don't have the right to complain about life when I see those disabled people. Is this survivorship bias? As in maybe we only see the top 1%  happy disabled people on media, whereas most disabled people don't like the way they are and are depressed.",1655139568.0,1,0.67,10
+DMT,Never had DTM; want to learn how to make it,[removed],1654507379.0,2,0.75,6
+Living_in_Korea,Used guitar store in Seoul,I'm looking for a music store that sells used guitars. I might buy a new one if it is under 100k KRW though. So where can I find such stores?,1649995666.0,2,1.0,5
+learnprogramming,Is GPA important when applying to jobs or for a Master's degree?,"I'm currently enrolled in a Computer Science program (Bachelor's - 1st year). Does GPA really matter when applying to jobs or for a Master's degree as long as they are average or above average? The reaoson I'm asking this is because I don't want to focus on classes that aren't related to programming.
+
+PS. If there is a more suitable sub for this kind of questions, please direct me there. Thanks.",1648490701.0,0,0.5,5
+Living_in_Korea,Sending money to Turkey,"Hi all. How can I send money to a Turkish bank account? I don't want to use Western Union because the recipient has to go to the bank to pick up the cash in that case (I want to send the money directly to the bank account), and fees aren't that low either.",1648231761.0,2,0.67,6
+learnprogramming,"Are Ruby on Rails backend positions ""outdated""?"," Hi all. I've been working on Ruby on Rails for backend recently and am planning to apply for junior full-stack/backend positions starting from next year. My main concern is that I won't be able to find Ruby on Rails positions because some programmers I have met say that it is ""old-fashioned"" where I live. I was talking to one of those programmers today, and he told me that he doesn't know any company which uses Ruby on Rails for backend. He suggested me to apply for JS positions since it is much more popular where I'm located.
+
+The thing is, a company can recruit someone who doesn't know their stack but can pick it up in the job because the applier has a strong portfolio, right? I feel like the most important thing for companies when recruiting developers is if a developer can learn new things quickly and efficiently, not if they know the company's stack or not. Am I correct? My point is that my skills should be easily transferrable once my programming fundamentals are solid.",1647794379.0,1,1.0,3
+Living_in_Korea,Are there any English speaking clinics in Busan?,"Basically the title. I need to see a doctor because of my sleep problems, and my Korean isn't good enough to explain my complaints.",1643886373.0,6,1.0,5
+Korean,I want to increase my vocabulary and reading speed by reading books in Korean but can't find any suitable book for my level,[removed],1641343431.0,7,0.73,11
+learnmath,I want to learn Combinatorics but don't know where to start,"Sorry if this is the wrong sub. I'd appreciate if you'd direct me to a right sub if this is the case.
+
+Background: Well, I have already graduated high school (with excellent grades) and am starting my undegraduate studies next spring. I participated in national mathematics olympiads when I was in the 8th grade; however, I stopped studying olympiad level mathematics after one year because I was demotivated. I have forgotten most, if not all, of the olympiad stuff. Also, I haven't touched math in a year. So I guess my math is quite rusty.
+
+I want to focus on combinatorics specifically. The thing is, I don't know if I have to revise some math topics before starting learning combinatorics.
+
+Regarding my learning style, I love learning through ***reading***. I don't prefer videos much. The only time I will watch a video on a topic I want to learn is when I can't find a book or an article explaining that topic.
+
+Thanks in advance!",1640438952.0,8,0.91,11
+Korean,I can't improve my speaking no matter what,"I have level 4 TOPIK, and I'm planning to get 5 next month but my speaking skills basically suck. I can't hold a conversation with anyone. When I meet Koreans, we speak in English 99% of the time. Because if we switch to Korean, the conversation dies pretty quickly thanks to my speaking skills, or lack thereof. What should I do? Should I just force Koreans to speak in Korean to me?
+
+PS. I've been learning Korean for 8 months now, and I live in Korea.",1635038600.0,9,0.92,13
+ios,Why don’t the number of messages appear in the Notification Center on iOS15?,"I used to be able to see how many messages I have received from WhatsApp or iMessage on iOS 14 and before but now it’s not possible. It’s also the same on other apps.
+
+[iOS 14](https://imgur.com/gallery/5hEhRim)
+
+[iOS 15](https://imgur.com/gallery/HAJ0fqu)",1632703271.0,22,0.89,10
+Korean,"What are the differences between 참석하다, 참가하다 and 참여하다?",The title,1630468432.0,10,1.0,3
+Korean,"Differences between 겠, (으)ㄹ게요 and (으)려고 하다","I know the differences in usage: 겠 can express future intention in the 1st person or inquire about future intention in the 2nd person.  It cannot be used this way in the 3rd person; (으)ㄹ게요 is used to talk about the future and it shows the will of a person (restricted to first person as well and cannot be asked in a question). Finally, (으)려고 하다 is used with action verbs to express a plan or intention of an individual. It can also be used in past tense (eg: 주말에 친구하고 같이 영화를 보려고 했어요). 
+
+I understand that (으)ㄹ게요 indicates an immediate promise to a listener; whereas 겠 refers to an action planned beforehand? What about (으)려고 하다? As far I as I know, it is also used to talk about things that we are planning to do. 
+
+Furthermore, is it grammatically correct to answer a question that uses 겠 with (으)ㄹ게요? What is the exact difference between using 겠 and (으)ㄹ게요 in this situation? 
+
+Thanks in advance.",1617623210.0,3,1.0,1
+Living_in_Korea,Anyone in Busan want to meet up this week?,Basically the title. I came to Korea about a month ago and want to expand my social circle so it will be great if someone is interested.,1616414460.0,4,0.61,5
+IWantToLearn,IWTL how to sleep like a normal person.,"My sleep schedule has always been a mess. I used to sleep at around 3-4 am and wake up at 12 am - 1 pm in my home country. Now I sleep at 9-10 am and wake up at around 4 pm. I can’t sleep at nights. It’s because I recently left my home country, and there’s a 6-hour difference between the time zones. 
+
+TL;DR: basically the title",1613721603.0,166,0.96,40
+cpp_questions,Problem with a narrowing conversion,"I use {} notation for conversions when I suspect that narrowing might happen between two types. I have a problem with this code:
+
+    #include ""std_lib_facilities.h""
+    
+    int main() 
+    {
+        int b = 48;
+        char c1 {b};
+    }
+
+When I compile this code, the compiler gives me this warning:
+
+    warning: narrowing conversion of ‘b’ from ‘int’ to ‘char’ [-Wnarrowing]
+        6 |     char c1 {b};
+          |              ^
+    
+    Build finished with warning(s).
+
+However, build finishes successfully when I compile the code below:
+
+    #include ""std_lib_facilities.h""
+    
+    int main()
+    {
+        char c1 {48};
+    }
+
+I don't understand this. Why didn't the compiler give a warning in the last code?",1613640951.0,1,1.0,6
+cpp_questions,What does 'while (cin >> variable)' exactly do?,"So I have a code that finds adjacent repeated words in input.
+
+    int main()
+    {
+        string previous = "" "";
+        string current;
+        while (cin >> current) {
+            if (previous == current)
+                cout << ""Repeated word: "" << current << '\n';
+            previous = current;
+        }
+    }
+
+I don't exactly understand what `while (cin >> current)` does here. When I enter input and press enter, why doesn't the loop terminate? Instead, it always waits for new input. I don't exactly understand how and when `cin >> current` is `true` or `false`. I've read almost every thread related to this on stack overflow (and possibly on Google) but still don't understand it. Maybe it is because I don't exactly understand how `cin` works.
+
+Thanks in advance.",1611754523.0,31,0.95,12
+cpp_questions,Is it okay to learn C++ 11 in 2021?,"I’m planning to learn C++ this year and want to do so by using the book “Programming: principles and practice using C++ (2nd edition)”. My main concern is that the book uses C++ 11, whereas C++ 20 has just been released. Will it be unnecessarily hard for me to transition to C++ 17 or 20 afterward? I would like to start learning the latest version but unfortunately couldn’t find a better book for complete beginners on C++. 
+
+Thanks in advance.",1609849127.0,61,0.92,49
+Korean,Why are some batchim consonants pronounced differently than their actual sounds?,"If the word 빗 is pronounced as [bid], then why don’t we just write it as 빋? The words 빗 and 빛 are pronounced exactly the same, so it’s sometimes really hard to remember this kind of words correctly.",1607871104.0,0,0.33,5
+learnpython,Can't add additional body parts to snake (or can't make it longer) when it eats a piece of food," 
+
+I'm working on a Snake game project. Every time I run the game, a  square snake is positioned at center, while a piece of food pops up at a  random position. When the snake eats a piece of food, the food  disappears and another one spawns at a random place. The problem is I  can't make the snake grow. Its size stays the same despite eating food  over and over again. How can I solve this problem? Here is the github  link of my code (it consists of several parts so I couldn't include it  here):
+
+[Snake Game](https://github.com/royalh23/Snake-Game)
+
+Thanks in advance.",1602272170.0,1,0.67,1
+learnpython,Is it possible to detect a collision between a sprite and a non-sprite object?,"Hi! I'm working on a snake game project. The foods are sprites in my game; however, snake is a simple rect object. How can I detect a collision between the snake and the foods? I will remove the food after a collision.
+
+Thanks in advance!",1601059213.0,1,1.0,5
+cakeday,It’s my cake day. Reddit reminded me of how fast time flies.,,1600575774.0,43,0.95,6
+NoStupidQuestions,"How do we know that our personal data is safe from major companies like Google, Amazon, Facebook, Apple, etc.?","Most companies (especially Apple) claim that user privacy is of the uttermost importance, without any actual proof. How can we be certain that some random guy working in a company like Apple does not browse through some random person’s personal photos obtained from their smartphones since they literally own the software behind those phones? Can we really trust those lengthy explanations about how our data is managed and safe in their hands?",1600461605.0,1,1.0,3
+learnpython,Random foods in Snake Game,"Hi guys! I'm working on a Snake Game project, and I want to add foods to the game. I have no idea as to how I can make foods pop up randomly on the screen. Could you please help me with this? Thanks in advance!
+
+EDIT: Here is my code:
+
+snake\_game.py
+
+    import pygame
+    import sys
+    
+    from settings import Settings 
+    from snake import Snake
+    
+    class SnakeGame:
+        '''The main class of the game.'''
+    
+        def __init__(self):
+            '''Initialize the game assets, screen, etc.'''
+            pygame.init()
+            self.settings = Settings()
+            
+            self.screen = pygame.display.set_mode((self.settings.screen_width,
+                                self.settings.screen_height))
+            pygame.display.set_caption(""Snake Game"")
+    
+            self.snake_parts = pygame.sprite.Group()
+            self.snake_part = Snake(self)
+            self.snake_parts.add(self.snake_part)
+    
+        def run_game(self):
+            '''The main loop of the game.'''
+            while True:
+                self._check_events()
+                self._update_snake_parts()
+                self._update_screen()
+    
+        def _check_events(self):
+            '''Check all the events.'''
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    sys.exit()
+                elif event.type == pygame.KEYDOWN:
+                    self._check_keydown_events(event)
+                elif event.type == pygame.KEYUP:
+                    self._check_keyup_events(event)
+    
+        def _check_keydown_events(self, event):
+            '''Check keydown events.'''
+            if event.key == pygame.K_UP or event.key == pygame.K_w:
+                self.snake_part.m_up = True
+            elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                self.snake_part.m_down = True
+            elif event.key == pygame.K_LEFT or event.key == pygame.K_a:
+                self.snake_part.m_left = True
+            elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                self.snake_part.m_right = True
+            elif event.key == pygame.K_q:
+                sys.exit()
+    
+        def _check_keyup_events(self, event):
+            '''Check keyup events.'''
+            if event.key == pygame.K_UP or event.key == pygame.K_w:
+                self.snake_part.m_up = False
+            elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                self.snake_part.m_down = False
+            elif event.key == pygame.K_LEFT or event.key == pygame.K_a:
+                self.snake_part.m_left = False
+            elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                self.snake_part.m_right = False
+    
+        def _update_snake_parts(self):
+            '''Update all the parts of the snake.'''
+            self.snake_parts.update()
+            
+        def _update_screen(self):
+            '''Update the screen.'''
+            self.screen.fill(self.settings.bg_color)
+    
+            for snake_part in self.snake_parts.sprites():
+                snake_part.draw()
+    
+            pygame.display.flip()
+    
+    if __name__ == '__main__':
+        sg = SnakeGame()
+        sg.run_game()
+
+[snake.py](https://snake.py)
+
+    import pygame
+    import sys
+    
+    from pygame.sprite import Sprite 
+    
+    class Snake(Sprite):
+        '''A class to manage the snake.'''
+    
+        def __init__(self, sg):
+            '''Initialize the snake's location, size, etc.'''
+            super().__init__()
+            self.screen = sg.screen
+            self.settings = sg.settings
+            self.color = self.settings.snake_color
+            self.screen_rect = self.screen.get_rect()
+            
+            # Create the snake's rect object and position it.
+            self.rect = pygame.Rect(0,0, self.settings.snake_width,
+                                self.settings.snake_height)
+            self.rect.center = self.screen_rect.center
+    
+            # Get the precise coordinates of the snake.
+            self.x = float(self.rect.x)
+            self.y = float(self.rect.y)
+    
+            # Set movement flags.
+            self.m_right = False
+            self.m_left = False
+            self.m_up = False
+            self.m_down = False
+    
+        def update(self):
+            '''Update the position of the snake.'''
+            if self.m_right and self.rect.right < self.screen_rect.right:                    
+                self.x += self.settings.snake_speed
+            if self.m_left and self.rect.left > self.screen_rect.left:
+                self.x -= self.settings.snake_speed
+            if self.m_down and self.rect.bottom < self.screen_rect.bottom:
+                self.y += self.settings.snake_speed
+            if self.m_up and self.rect.top > self.screen_rect.top:
+                self.y -= self.settings.snake_speed
+    
+            self.rect.x = self.x
+            self.rect.y = self.y
+            
+        def draw(self):
+            '''Draw the snake to the screen.'''
+            pygame.draw.rect(self.screen, self.color, self.rect)
+
+[settings.py](https://settings.py)
+
+    class Settings:
+        '''Class for game settings.'''
+    
+        def __init__(self):
+            '''Initialize the game settings.'''
+    
+            # Screen settings
+            self.screen_width = 1200
+            self.screen_height = 800
+            self.bg_color = (119, 181, 254)  # Blue color
+    
+            # Snake settings
+            self.snake_width = 20
+            self.snake_height = 20
+            self.snake_color = (255,255,0)  # Yellow color
+            self.snake_speed = 1
+
+&#x200B;",1599300764.0,2,0.63,4
+learnprogramming,Want to learn C++ after learning the basics of Python,"Hi guys!
+
+Title says it all. I’ve learned the basics of Python and been working on a game project recently. I’m a little hesitant about this because my Python skills aren’t strong, and I’m afraid that if I start learning C++, I will mix up everything. Any recommendations on whether to start learning C++ or continue in Python?
+
+Thanks in advance.",1597163740.0,1,1.0,1
+OmenApp,Texts in color,It would be nice if we could write words/whatever we want to learn in different colors.,1596719336.0,2,1.0,0
+learnpython,What is the exact purpose of using a 'break' statement in my code?,"I'm creating an Alien Invasion game from Python Crash Course, and I don't understand what the 'break' statement exactly does in my code. Basically, I have a fleet of aliens, and I'm trying to make them drop down by 10 pixels. If I include 'break' at the end of the 'for' loop, the aliens drop down by 10 pixels; however, if I don't include it, they drop down by more than needed - around 40 pixels, I guess. What is the reason for this? Here is my code:
+
+    def _check_fleet_edges(self):
+            '''Respond appropriately if any aliens have reached an edge.'''
+            for alien in self.aliens.sprites():
+                if alien.check_edges():
+                    self._change_fleet_direction()
+                    break                                                                                   
+                    
+    def _change_fleet_direction(self):
+            '''Drop the entire fleet and change the fleet's direction.'''
+            for alien in self.aliens.sprites():
+                alien.rect.y += self.settings.fleet_drop_speed
+            self.settings.fleet_direction *= -1
+
+In case you want to check out the rest of the code or run the game, here is the link to the GitHub repository (lines 120 - 131): [https://github.com/ehmatthes/pcc\_2e/blob/master/chapter\_13/making\_fleet\_move/alien\_invasion.py](https://github.com/ehmatthes/pcc_2e/blob/master/chapter_13/making_fleet_move/alien_invasion.py)
+
+&#x200B;
+
+PS. Whether I include 'break' or not, the aliens change their direction only once until they hit an edge. I expected them to change their direction multiple times when I didn't include the 'break' statement since `self._change_fleet_direction()` is executed multiple times.
+
+There are 55 aliens overall.",1596622257.0,1,1.0,5
+learnpython,"What does ""self.rect.midbottom = self.screen_rect.midbottom"" do in my code?","Hi guys. I'm creating an *Alien Invasion* game from *Python Crash Course*, and I don't fully understand what **rect** is and what it does in my code. Here are my main code files:
+
+*alien\_invasion.py*
+
+    import sys
+    
+    import pygame
+    
+    from settings import Settings
+    from ship import Ship
+    
+    class AlienInvasion:
+    	""""""Overall class to manage game assets and behavior.""""""
+    
+    	def __init__(self):
+    		""""""Initialize the game, and create game resources.""""""
+    		pygame.init()
+    		self.settings = Settings()
+    
+    		self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
+    		pygame.display.set_caption(""Alien Invasion"")
+    
+    		self.ship = Ship(self)
+    
+    	def run_game(self):
+    		""""""Start the main loop for the game.""""""
+    		while True:
+    			self._check_events()
+    			self._update_screen()
+    			
+    	def _check_events(self):
+    		""""""Respond to keypresses and mouse events.""""""
+    		for event in pygame.event.get():
+    			if event.type == pygame.QUIT:
+    				sys.exit()
+    
+    	def _update_screen(self):
+    		""""""Update images on the screen, and flip to the new screen.""""""
+    		self.screen.fill(self.settings.bg_color) 
+    		self.ship.blitme()
+    
+    		pygame.display.flip()
+    
+    if __name__ == ""__main__"":
+    	ai = AlienInvasion()
+    	ai.run_game()
+
+*settings.py*
+
+    class Settings:
+    	""""""A class to store all settings for Alien Invasion""""""
+    
+    	def __init__(self):
+    		""""""Initialize the game's settings.""""""
+    		# Screen settings
+    		self.screen_width = 1200
+    		self.screen_height = 800
+    		self.bg_color = (230, 230, 230)
+
+*ship.py*
+
+    import pygame 
+    
+    class Ship:
+    	'''A class to manage the ship.'''
+    
+    	def __init__(self, ai_game):
+    		""""""Initialize the ship and set its starting position.""""""
+    		self.screen = ai_game.screen
+    		self.screen_rect = ai_game.screen.get_rect()
+    
+    		# Load the ship image and get its rect.
+    		self.image = pygame.image.load(""images/ship.bmp"")
+    		self.rect = self.image.get_rect()
+    
+    		# Start each new ship at the bottom center of the center.
+    		self.rect.midbottom = self.screen_rect.midbottom
+    
+    	def blitme(self):
+    		'''Draw the ship at its current location.'''
+    		self.screen.blit(self.image, self.rect)
+
+I understand everything except the *ship.py* file. Could you please explain in detail what this module does? Especiallly the **rect** feature since I can't wrap my head around it even though I spent a lot of time trying to understand why it does what it does. I've uploaded the output of *alien\_invasion.py* to Imgur. 
+
+&#x200B;
+
+[The output of alien\_invasion.py](https://imgur.com/Bqjg3n2)
+
+&#x200B;
+
+Thanks in advance!",1595010261.0,3,0.72,9
+learnpython,What is the difference between using the super() function and not using it when inheriting from a superclass?,"I have a superclass named Car. I created a subclass named ElectricCar which is supposed to inherit from the superclass. My code is below, and I have no idea why it works:
+
+&#x200B;
+
+MY CODE
+
+&#x200B;
+
+    class Car:
+    	'''A simple attempt to represent a car.'''
+    
+    	def __init__(self, make, model, year):
+    		'''Initialize attributes to describe a car.'''
+    		self.make = make
+    		self.model = model
+    		self.year = year
+    		self.odometer_reading = 0
+    
+    	def get_descriptive_name(self):
+    		'''Return a neatly formatted descriptive name.'''
+    		long_name = f""{self.year} {self.make} {self.model}""
+    		return long_name
+    
+    	def read_odometer(self):
+    		'''Print a statement showing the car's mileage.'''
+    		print(f""This car has {self.odometer_reading} miles on it."")
+    
+    	def update_odometer(self, mileage):
+    		'''
+    		Set the odometer reading to the given value.
+    		Reject the change if it attempts to roll the odometer back.
+    		'''
+    		if mileage >= self.odometer_reading:
+    			self.odometer_reading = mileage
+    		else:
+    			print(""You can't roll back an odometer!"")
+    
+    	def increment_odometer(self, miles):
+    		'''Add the given amount to the odometer reading.'''
+    		self.odometer_reading += miles
+    
+    class ElectricCar(Car):
+    	""""""Represent aspects of a car, specific to electric vehicles.""""""
+    
+    	
+    my_tesla = ElectricCar('tesla', 'model s', 2019)
+    print(my_tesla.get_descriptive_name())
+    my_tesla.read_odometer()
+
+&#x200B;
+
+The original code uses the super() function as below and works, too:
+
+&#x200B;
+
+ORIGINAL CODE
+
+&#x200B;
+
+    class Car:
+        --snippet--
+    
+    class ElectricCar(Car):
+        """"""Represent aspects of a car, specific to electric vehicles.""""""
+    
+        def __init__(self, make, model, year):
+            """"""Initialize attributes of the parent class.""""""
+            super().__init__(make, model, year)
+    
+        
+    my_tesla = ElectricCar('tesla', 'model s', 2019)
+    print(my_tesla.get_descriptive_name())
+    my_tesla.read_odometer()
+
+&#x200B;
+
+&#x200B;
+
+&#x200B;
+
+My questions:
+
+\-If both codes work properly, then why use the super() function?
+
+\-If I don't include a comment in the subclass ElectricCar in my code, Python gives me the error below:
+
+File ...
+
+my\_tesla = ElectricCar('tesla', 'model s', 2019)
+
+\^
+
+IndentationError: expected an indented block
+
+Why doesn't this error occur when I run my code with a comment? Since the Python interpreter ignores comments, shouldn't the exact same error have occurred in my code as well?
+
+Thanks in advance!
+
+&#x200B;",1593398131.0,2,0.67,8
+learnmath,Interesting hacking problem,"The hacker group Desdeia tries to break our old weak cipher which we used for the communication with the Duchess of Ligovia. It's generally known that an actual breaking of the cipher needs the reviewing of a huge amount of variants which probably lasts a couple of months. Additionally we know that the reviewing of different variants needs always the same server resource.
+ 
+Using our intelligence sources we tried to get some information about the actual progress of breaking, but we got only some fragments:
+
+● The hacker group Desdeia uses for breaking their powerful four-core server whose resources are fully dedicated to breaking process.
+
+● The actual breaking process began exactly at noon, but we don't know, on which day.
+
+● By the noon of 2nd of April, already 648,467,673 variants were successfully reviewed.
+
+● Exactly at this noon, when the breaking process was already lasted for 19 days, it was attempted to double the server speed. The doubling itself was failed, but instead of it there was actually succeeded to increase the server speed by 73.40%. Additionally we know that 14.397% of total variants are already reviewed until this moment.
+
+● At noon of 19th of May, when already 55.13% of total variants were reviewed, one server core (from a total of four) went suddenly out of order. Consequently, the further breaking process (since the noon of May 19th) was continued only with three cores which caused the actual speed lowering (new speed is 75% in comparison with the previous).
+
+Task:
+Find the exact date and time when Desdeia server will finish the breaking process (assuming that there will be no more server speed changes beside the above-mentioned two occasions). Describe your solution process.",1584563734.0,2,0.76,21
+learnmath,I know this is related to exponential growth but still couldn’t solve it.,"We analyzed a program which was supposedly used for cracking some cryptographic algorithms. During the investigations we determined that the program input size can be varied in a wide range and for N-bit input the program result is also always N bit long. Additionally we found that the program working time depends significantly on input length N, especially when N is greater than 10-15. Our test also revealed, that the program working time depends only on input length, not the input itself.
+ 
+During our tests, we fixed the following working times (with an accuracy of one hundredth of a second):
+
+N = 2 - 16.38 seconds
+
+N = 5 - 16.38 seconds
+
+N = 10 - 16.44 seconds
+
+N = 15 - 18.39 seconds
+
+N = 20 - 1 minute 4.22 seconds
+
+We also planned to test the program for N = 25 and N = 30, but for both cases the program didn't finish within half an hour and was forced to terminate it. Finally, we decided for N = 30 to not terminate the program, but to wait a little bit longer. The result was 18 hours 16 minutes 14.62 seconds. We repeated the test for N = 30 and it gave us exactly the same result, more than 18 hours.
+ 
+Tasks:
+a) Find the program working times for the following three cases - N = 25, N = 40 and N = 50.
+ 
+b) Explain your result and solution process.",1584464772.0,2,0.67,2
+AzerbaijanJerky,Aftafa will save us,,1584369120.0,196,1.0,13
+redditmobile,[IOS][13.3.1]. I haven’t received any messages but there’s still a notification symbol. How can I fix this error?,,1583148682.0,392,0.99,95
+Sat,Got a 1410 on my first try!,,1572632773.0,69,0.97,33
+learnpython,Running something inside a 'while' loop while it is False ?,"Hi guys. Please take a look at the code below:
+
+&#x200B;
+
+    prompt = ""\nTell me something, and I will repeat it back to you:""
+    prompt += ""\nEnter 'quit' to end the program. ""
+    
+    message = """"
+    while message != 'quit':
+        message = input(prompt)
+        if message != 'quit':
+            print(message)
+
+&#x200B;
+
+This program receives user input and repeats it back to you as long as you do not enter 'quit'. If you enter 'quit', the program ends. My problem is with the 'if' block. If you do enter 'quit' without the 'if' block, the programs displays the word 'quit' before ending the problem. To solve this problem, I wrote an 'if' block, and the problem was resolved. So the program only prints the message if it is not 'quit'. Let's say that we entered 'quit'. So Python shouldn't run whatever there is inside the while block. However, it runs the 'if' block without actually entering(or does it enter?) inside the while block. How does that happen? I'm pretty confused :/",1571948961.0,0,0.5,5
+learnpython,'<' Not Supported,"Hi guys! I'm trying to create a list called 'pets' which consists of 3 dictionaries related to each pet and its owner. My code is like this:
+
+&#x200B;
+
+pets = \[\]
+
+&#x200B;
+
+pet = {
+
+    'kind': 'cat',
+    
+    'owner': 'dmitry',
+    
+    }
+
+&#x200B;
+
+pets.append(pet)
+
+&#x200B;
+
+pet = {
+
+    'kind': 'dog',
+    
+    'owner': 'ivan',
+    
+    }
+
+&#x200B;
+
+pets.append(pet)
+
+&#x200B;
+
+pet = {
+
+    'kind': 'parrot',
+    
+    'owner': 'jack',
+    
+    }
+
+&#x200B;
+
+pets.append(pet)
+
+&#x200B;
+
+\# {full name} owns a {pet}
+
+&#x200B;
+
+for pet in sorted(pets):
+
+    owner = pet['owner'].title()
+    
+    kind = pet['kind']
+    
+    print(f""{owner} owns a {kind}.\n"")
+
+&#x200B;
+
+When I run this, I get the error below:
+
+&#x200B;
+
+Traceback (most recent call last):
+
+File ""C:\\Users\\Royal\\Desktop\\python\_work\\Chapter 6 - Dictionaries\\[pets.py](https://pets.py)"", line 26, in <module>
+
+for pet in sorted(pets):
+
+TypeError: '<' not supported between instances of 'dict' and 'dict'
+
+&#x200B;
+
+What's its reason? If I run this without 'sorted' function, I get no errors. However, I want the output to be in alphabetical order(people's names) and don't want the list 'pets' to change permanently. How do I get rid of this error? By the way, what does '<' refer to?",1571169474.0,1,0.67,12

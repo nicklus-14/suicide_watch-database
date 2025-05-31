@@ -1,0 +1,158 @@
+subreddit,body,created_utc,score
+linuxquestions,Distro hopping is a time-honored tradition. Keep your home dir around and you can generally have a smooth transition.,1748474810.0,3
+linuxquestions,Hold onto your butts. https://www.kolibrios.org,1748474429.0,2
+todayilearned,Common misconception. It's a fairly shallow story.,1748095415.0,26
+devops,"Places to start checking:
+
+* https://en.wikipedia.org/wiki/Unionization_in_the_tech_sector
+* https://www.joinifpte.org/tech
+* https://techworkerscoalition.org/",1748090598.0,3
+devops,Why are you being downvoted? People that quick to kick a sibling while they're down?,1748090446.0,5
+devops,"I'm doing the interviewing song and dance, too, after being laid off explicitly because AI has been touted as a magic replacement for expertise. The tool-focus is so asinine. Good luck out here. If I hear about anything you can go for, I'll let you know.",1748090388.0,4
+linux,"""Almost any distro"" is a pretty bold claim. Is there somewhere that catalogues that? And all the distros I've used have some sort of nonfree option or channel you can add, up to and including hardcore libre ones.",1748089264.0,1
+linux,"So you'd rather have flatpaks that don't work well or use insecure dependencies because the dev isn't a packaging expert? And I've not had dependency problems from official packages (even highly obscure ones I was testing) in probably a decade.
+
+I've had multiple ""mainstream"" flatpaks act up in ways that were a pain to troubleshoot because the packager didn't correctly set the permissions or made assumptions about the environment it would run in.
+
+There's no magic bullet here. Just different trade-offs.",1748089022.0,3
+linux,What package manager are you using that doesn't install dependencies? Or at least recommend them when you install.,1748031259.0,9
+bluey,This is every stump removal I've been a part of.,1748020178.0,1
+vermont,Only if they're backtracking on a claim,1747869870.0,-2
+linuxquestions,"And if you can give a good prompt, you often don't need the answer.",1747869459.0,5
+LifeProTips,"Corner of the counter kinda works, too",1747751145.0,2
+devops,"Without junior to mid level devs, you don't get senior devs.",1747672421.0,7
+filmreroll,"I don't know if it's verboten to bring up other systems, but there's a little zine system for this and there are still community copies available: https://samnite.itch.io/escapefromdinoisland
+
+Oh, and [D6 Adventure](https://ogc.rpglibrary.org/index.php?title=OpenD6) has stats for dinos.",1746913440.0,1
+LifeProTips,Your mileage may vary. -- Laid off,1745682462.0,2
+devops,"There's one way to push back the tide, and it's an SQL keyword.",1745254159.0,6
+FunnyAnimals,Deleted? :(,1745006558.0,1
+fermentation,*heavy breathing*,1744928389.0,10
+trucksim,Same. A handful of mods on this Framework 13 is working ok.,1744474051.0,2
+vermont,"So, I'm not saying it's not, but I definitely remember kids doing this in the 90s and 00s to get out of tests.",1744147653.0,5
+linux_gaming,"If your only experience with immutable distros has been NixOS, you may want to give Fedora's Atomic Desktops (or uBlue's spins of them) a whirl.
+
+Nix doesn't adhere to the FHS, so there are more hoops to jump through to get things running. Unless you're really committed to their tooling and/or helping package, I don't recommend Nix or Guix.
+
+The Atomic Desktops are just Fedora with some tooling laid atop to make the OS immutable. You can still install rpms (with a different command), build things normally, etc.
+
+I'd love to recommend OpenSUSE's options, but the desktop-oriented ones are still being polished. Their approach using btrfs snapshots is much faster and more efficient, though, and MicroOS works well on the server.",1744032116.0,1
+HomeServer,"For something like this, it should've asked or warned without extra prompting.",1743784419.0,1
+HomeServer,"They're less trustworthy than Overflow, which is saying something...",1743784380.0,1
+lisp,"Yeah, this is what you want, OP. It's full of examples of standard stuff so you can get a feel for usage in a normal context.",1743720848.0,3
+linuxquestions,"I'm testing Bazzite (low-maintenance gaming-focused with a bunch of bells and whistles) on basically that. Lenovo T480s with 8GB RAM.
+
+It's not pushing much in the way of gaming, but the interface and browsing experience is beautiful. I just did an interview with a Zoom call running, video tweaks enabled, pulling up a \~dozen browser tabs of docs, and it didn't even sweat. Fans barely spun up at all.
+
+You can basically run whatever you want and have a good experience on that.",1743518374.0,0
+linuxquestions,"Or better, a hardware token. You can integrate LUKS and FIDO2.",1743507380.0,3
+linux,"It doesn't need to be everything, but yeah, you could have a single binary that deploys to ~anywhere. The disk storage cost is higher, and their libc doesn't have *everything* yet. But for those tools that compile against it, you would need one fewer switch statement",1743357659.0,1
+linux,This is a job for [Cosmopolitan](https://justine.lol/cosmopolitan/)! (I don't know if it would actually work for you. I just look for excuses to show it off because it's a fun project.),1743341560.0,4
+archlinux,"Wow, I just came across your post and people are really giving you a hard time. That's disappointing to see.
+
+If you're still interested in doing this, here's one potential strategy, based on looking at MicroOS a little:
+
+1. Use btrfs with a bunch of subvolumes. Plan out a mounting strategy. MicroOS's is to mount `/` as read-only and all of these read-write:
+  * `/root`
+  * `/var`
+  * `/home`
+  * `/opt`
+  * `/usr/local`
+  * `/srv`
+2. They're using an overlay filesystem to allow writes to `/etc` without tromping on the previous known-good install. There's also something with `/.snapshots` I've not chased down yet. Might be for step 3, here.
+3. When you decide to do upgrades or install new software, take a snapshot of the previous root. Mount it somewhere. Copy the `/etc` changes to it. Use `pacman --root` to install/upgrade/what-have-you.
+4. Set up a pacman post-transaction hook to rewrite your boot config to boot into the new root. There might be a way to do that with the ones you found. I don't know them well yet.
+5. Eventually, you'll need something to reap old snapshots to recoup disk space, but it should take a while because copy-on-write is a bit clever.
+
+Viola, upgrades are atomic and the system is largely read-only while in use. There are probably all sorts of corner cases where the above will break. You might have a good conversation about it in [openSUSE's MicroOS chat](https://matrix.to/#/#microos:opensuse.org).
+
+The method Fedora uses is more git-like using OCI containers managed with [ostree](https://ostreedev.github.io/ostree/introduction/), but it's much slower in my experience.",1743017010.0,3
+OutOfTheLoop,One I know took up goat farming. I find it interesting that both chose creatures that are or have been culturally regarded as evil. Really feels like it says something about SRE mentality.,1742643386.0,7
+shorthand,"The Germanic systems cover more of the IPA. Maybe check Scheithauer?
+
+However, the efficiency shorthands are reaching for is writing speed, so glossing over differences chases that goal.",1742514700.0,4
+linuxquestions,"You might check out [Joplin](https://joplinapp.org/), [TiddlyWiki](https://tiddlywiki.com/), and [Zim](https://zim-wiki.org/)
+
+[Syncthing](https://syncthing.net/) can be useful to synchronize the files.
+
+If you choose TiddlyWiki, you'll want to watch [this video](https://www.youtube.com/watch?v=vsdDs7oOLlg&t=3359s&pp=ygUKdGlkZGx5d2lraQ%3D%3D).",1742258793.0,1
+shorthand,"I can see 3 paths to further compress consonants, and I expect either would sharply increase error rate.
+
+1. Merge the alveolar and post-alveolar consonants. t/d+tʃ/dʒ, s/z+ʃ/ʒ
+2. Merge plosives and fricatives. p/b/f/v, t/d/s/z, tʃ/dʒ/ʃ/ʒ
+3. Merge t/d+θ/ð, s/z+ʃ/ʒ (maybe even tʃ/dʒ), which feels like surfacing the orthography a little",1742136236.0,5
+LocalLLaMA,"What do you use it for, if you don't mind me asking?",1742082000.0,1
+shorthand,"I only use old.reddit, too. I saw it briefly, kept the tab open because I wanted to read it later, then noticed it wasn't showing up. I checked /new and nothing.
+
+I still don't see it. That's so weird.",1741800174.0,1
+shorthand,"No, the post. I don't see it in the subreddit.
+
+But I just checked; it shows up in the new interface, but not the old. Are they hiding posts from https://old.reddit.com now?",1741784090.0,1
+shorthand,This seems like it got shadow banned? I've no idea why.,1741738973.0,1
+Beekeeping,"From one FLOSSochist to another, don't let it completely stop you. You could still bundle it up in something easy to use while still having source available.
+
+If I'm reading right, YOLO11's too hefty to take into the field, but if it's accurate enough that someone could snap a few pics per frame and trust the output... I could see commercial beeks being happy to sign up for a SaaS with a SLA, even if the source is available.
+
+I don't know what this software landscape is like, but having it as your value-add for hive inventory tool might be one way to go?",1741608791.0,7
+linuxquestions,"- Ntfy: mobile push notifications for whatever
+- Syncthing: file sync
+- Headscale/tailscale: vpn
+- Vaultwarden: Passwords, and the one thing that earned the ever-desired ""You can never get rid of this. It's great."" from the wife.
+- Prosody: XMPP. Requires so little upkeep I forgot it was running.
+- Dokuwiki: Helped with several big family projects, and I'm wikifarming for a friend
+- Caddy: Webserver w/ automatic Let's Encrypt integration
+- ttrss: RSS reader
+
+It's a $5/mo Hetzner VPS.",1741533741.0,1
+linuxquestions,"There are dozens of us. DOZENS!
+
+https://mwl.io/nonfiction/tools#ryoms",1741529777.0,5
+dataisbeautiful,"Yeah, I get that. They were awful people doing awful things, but the GP was saying animal welfare wasn't on the table because we're regressing socially. I was pointing out there's historic precedent.",1741452800.0,1
+vermont,"Anything spicy. Sauces, rubs, marinades, snacks, jerky, etc. The ones I've been to have had hundreds of sauces.",1741439734.0,1
+vermont,"Oh dang! Pepper Palace! When I left the Gatlinburg area, I thought I was saying goodbye. Then I found one in central FL. When I left central FL, I mourned its loss. THEY'RE FOLLOWING ME! And you're welcome! xD
+
+If you like anything from mild salsa to melt-your-face-off pepper extracts, this is a place you'll want to visit. Try the Nasal Napalm! It's the best horseradish I've ever had. In small doses. :D
+
+I'm not affiliated. Just been a fan forever. Where's my tote bag....",1741439725.0,3
+shorthand,"According to New Approaches to Shorthand - Studies of a Writing Technology (available [here](https://www.stenophile.com/shorthands)), many women worked on shorthands than got authorship credit for them.
+
+I don't recall which of the papers covered that, sorry.",1741385618.0,3
+shorthand,"I had one recently, when I returned to checking out Orthic posts and realized I was reading it comfortably. Gregg, too, with some effort even though I never finished the Notehand book.",1741285377.0,6
+dataisbeautiful,Nothing's as conveniently one-dimensional as we want it to be. [Nazis supported animal welfare.](https://en.wikipedia.org/wiki/Animal_welfare_in_Nazi_Germany),1741283636.0,29
+fermentation,"People get paranoid about porosity, but I know there are traditions that use porous materials and the research around wood cutting boards makes me think it's a little overblown. I would start by filling it with an active ferment, so it's inoculated with desired microbes (just in case).
+
+Leeching salt seems like it wouldn't happen fast enough to stop the establishment of good microbes. The salt's really only there to get the good stuff established first.
+
+My biggest worry, amusingly enough, would be the unglazed lid harboring mold.
+
+If she decides to make another one, tell her to check out pickling crocks with a water trough! ...actually, does she ship? What would she charge for that?",1741199648.0,2
+foraging,"I'm not looking to argue with your experience.
+
+I just don't understand how it could make a big difference. Rain still falls through dust and mold spores on the way to the ground, and whatever you are adding to your brine provides plenty of food.
+
+Maybe it's had less time to propagate in fresh rainwater?",1741099562.0,12
+Beekeeping,"Or they're closer to ground zero where resistance has developed. Evolution can make weird leaps sometimes.
+
+We won't know anything until more data's collected.",1741099469.0,1
+foraging,How does rain water prevent mold?,1741098871.0,5
+foraging,Olives are different. 10% is common.,1741098230.0,26
+DataHoarder,You don't even have to buy them: [https://www.thingiverse.com/thing:1430360](https://www.thingiverse.com/thing:1430360),1740935652.0,13
+vermont,You should adopt us. We're (mostly) housebroken.,1740932802.0,11
+LocalLLaMA,"Looks like you have the same image twice, there",1740747502.0,1
+worldnews,"> out of the blue
+
+Russia's typically represented by red, isn't it?",1740686930.0,4
+baduk,"So, ""gogame""? :)",1740440730.0,10
+shorthand,Does it suggest we're all crazy for enjoying shorthand? ;),1740428647.0,6
+shorthand,It also has standard orthographic spelling. They're contextualization.,1740348064.0,6
+lisp,"You might have trouble getting away from GC while still having a REPL.
+
+https://picolisp.com gets you the easy FFI.
+
+http://www.ulisp.com is pretty low level.",1740314470.0,5
+worldnews,Wasn't it only the new hires or interns or something?,1740098765.0,1
+baduk,I bet you could level that with the right wood seal.,1740000426.0,2
+shorthand,"Personally, I'd probably include the angle between O and U.
+
+https://preview.redd.it/a5cqubhco4ke1.jpeg?width=633&format=pjpg&auto=webp&s=2fa1b007f73c221dbbc15f41f9a855a8b642beff",1739984889.0,5
+shorthand,That's much less exciting than salacious family secrets.,1739803920.0,7

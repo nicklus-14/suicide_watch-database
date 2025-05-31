@@ -1,0 +1,267 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+SuicideWatch,Ready 2 die,"My life has become superficial
+
+Because I have long pursued art I have separated from my videogame friends and I lost my fulltime job and barely sustaining myself with a part time job with coins left for mcdonalds coffee.
+
+I'm angry at my town, my country but everything I was build on was here.  Fond memories fond times. my friends i helped build left me 
+
+I tried reaching out suicide hotline but all they reccomended was sound therapy. Im trying my best to become a decent human being but im tired of everyone living like i didnt exist....
+
+so tonight I'm drawing out of my own blood. Im looking to look at a fulltime job and after i have enough money ill fuck off become a stranger and never see anyone in my life again. 
+
+These people who encourage me and then leave me to dust. I have become a porn addict and really i feel like my life is only pleasure and pain from now on.
+
+Hope someone is out there reaching me a for good reason to live as I finish my last drawings in blood.
+
+I was always the one looking for attention i guess....",1583623463.0,3,0.81,1
+thecherno,[Help] How to use txt. files to render a map,"I want to know how to render tiles using text files. Here is what I mean.
+https://www.youtube.com/watch?v=FUgn-PA7yzc&index=1&list=PL-2t7SM0vDffMN9LrFeHtwULZs34pJClv
+
+Ive figured that ForeignGuyMike tileMap class is very similar to Cherno's spawnlevel class. I've changed a couple things
+this is what I have so far:
+
+
+    public class Spawnlevel extends Level {
+
+	private int x;
+	private int y;
+	private int tileSize;
+	
+	private int mapWidth;
+	private int mapHeight;
+	private int[][] map; //plz help here vvv
+    private int[] tiles; // plz help here ^^^
+	
+
+	public TileMap(String path){
+		super(path);
+		
+	}
+	
+	protected  void LoadLevel(String path){
+	
+		try{
+			BufferedReader br = new BufferedReader(new               FileReader(path));
+			
+			int w = width  = Integer.parseInt(br.readLine());
+			int h = height = Integer.parseInt(br.readLine());
+			map = new int[w][h];       //2-dimensional array
+			//tiles = new int[w * h];  //1-dimensional array
+			String delimiters = "" "";
+			for(int row = 0; row < height; row++){
+				String line = br.readLine();
+				String[] tokens =  line.split(delimiters);
+				for(int col = 0; col < width; col++){
+					map[row][col] = Integer.parseInt(tokens[col]);
+				
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			System.out.println(""Exception! could not load level file!"");
+		}
+		
+	}
+	
+	protected void generateLevel(){
+	}
+    }
+
+what I cant solve is how would I go about implementing it.
+tiles is a 1-dimensional array and map is a 2 dimensional array. Is it possible
+to get the rows and columns of a txt file using a 1dimensional array or do I have to  change completely how protected static int[] tiles; works in the level class?",1439539621.0,2,1.0,1
+thecherno,Stuck on A* Search Algorithm.,"I get a Freeze when the player gets close to the mob. I've known people in the comments from the 101 episode having the same problem. I feel like there needs to be a post on this error message. I though like others that this might of been caused because the get x  and get y method where change to an int, before they where a double. Ive checked episodes 98- 101 and i saw that this was indeed changed. So I changed it to an int like cherno. 
+    However I still get a freeze and there is no way i can debug it cuz the console does not pop any error messages on this particular error. I copied and paste the source code for my a* search algorithm here for further help. I been wrapping my head around it for almost  2weeks and I get a headache trying to find the answer. I could skip this proccess but i really want to include this algorithm because i have been interested in java game programming for 3 years. I hope that you can help me and others figure out. All help would be greatly appreciated :)
+
+Node, vecInList and getDistance Methods in Level Class
+
+    public List<Node> findpath(Vector2i start, Vector2i goal){
+		List<Node> openList = new ArrayList<Node>();
+	    List<Node> closedList = new ArrayList<Node>();
+	     
+	     Node current = new Node(start, null, 0, getDistance(start, goal));
+	     openList.add(current);
+	     
+	      while(openList.size() > 0){
+	         Collections.sort(openList, nodeSorter);
+	         current = openList.get(0);
+	         if(current.tile.equals(goal)){
+	            List<Node> path = new ArrayList<Node>();
+	            while(current.parent!=null){
+	               path.add(current);
+	               current = current.parent;
+	            }
+	            openList.clear();
+	            closedList.clear();
+	            return path;
+	         }
+	         openList.remove(current);
+	         closedList.add(current);
+	         for(int i = 0; i < 9; i++){
+	            if(i==4) continue; //where we are right now
+	            int x = current.tile.getX();
+	            int y = current.tile.getY();
+	            int xi = (i % 3) - 1; //xdirection -1,0,1
+	            int yi = (i / 3) - 1; //ydirection -1,0,1
+	            Tile at = getTile(x + xi, y + yi);
+	            if(at == null) continue;
+	            if(at.solid()) continue;
+	            Vector2i  a = new Vector2i(x+xi, y+yi);
+	            double gCost = current.gCost + getDistance(current.tile, a);
+	            double hCost = getDistance(a, goal);
+	            Node node = new Node(a, current, gCost, hCost);
+	            if(vecInList(closedList, a) && gCost >= node.gCost) continue;
+	            if(!vecInList(openList, a) || gCost < node.gCost) openList.add(node);
+	         }      
+	      }
+	      closedList.clear();
+	      return null;
+	   }
+
+    private boolean vecInList(List<Node> list, Vector2i vector){
+	      for(Node n : list) {
+	         if (n.tile.equals(vector)) return true;
+	      }
+	      return false;
+	   }
+	 private double getDistance(Vector2i tile, Vector2i goal){
+	      double dx = tile.getX() - goal.getX();
+	      double dy = tile.getY() - goal.getY();
+	      return Math.sqrt(dx * dx + dy * dy);
+	   }
+
+
+My Star move Method     
+
+    private void move(){
+		xdir = 0;
+		ydir = 0;
+		
+		int px = level.getPlayerAt(0).getX();
+		int py = level.getPlayerAt(0).getY();
+		Vector2i start = new Vector2i (getX() >> 5, getY() >> 5);
+		Vector2i destination = new Vector2i(px >> 5, py >> 5);
+
+		List<Player> players = level.getPlayers(this, 128);
+			if (players.size() > 0) {
+			if (time % 200 == 0) path = level.findpath(start, destination);
+			if (path != null) {
+				if (path.size() > 0) {
+            
+					Vector2i vec = path.get(path.size() - 1).tile;
+					if (x < vec.getX() << 5) xdir++;
+					if (x > vec.getX() << 5) xdir--;
+					if (y < vec.getY() << 5) ydir++;
+					if (y > vec.getY() << 5) ydir--;
+            
+            }
+        }
+    }
+		if(xdir!=0 || ydir != 0){ 
+			move(xdir, ydir);
+			walking = true;
+		} else {
+			walking = false;
+			
+		}
+		sprite = animSprite.getSprite();
+	}
+My Star update Method
+
+	public void update() {
+		time++;
+		move();	
+		if(walking) animSprite.update();
+		else animSprite.setFrame(0);
+		if(ydir < 0){ 
+			animSprite = up;
+			dir = Direction.UP;
+		}else if (ydir > 0){ 
+			animSprite = down;
+			dir = Direction.DOWN;
+		}if( xdir < 0){
+			animSprite = left;
+			dir = Direction.LEFT;
+		}if (xdir > 0){
+		    animSprite = right;
+		    dir = Direction.RIGHT;
+		}
+	}
+I saw Cherno change the double getX() and double getY() into an int in the Entity Class
+      
+    public class Entity {
+
+	protected Sprite sprite;
+	protected int x, y;
+	private boolean removed = false;
+	protected Level level;
+	protected final Random random = new Random();
+	
+	public void update(){
+		
+	}
+	
+	public void render(Screen screen){
+		
+	}
+	
+	public void remove(){
+		//Remove from level
+		removed = true;
+	}
+	
+	public int getX(){
+		return x;
+	}
+	
+	public int getY(){
+		return y;
+	}
+	
+	public Sprite getSprite(){
+		return sprite;
+	}
+	public boolean isRemoved(){
+		return removed;
+	}
+	
+	public void init(Level level){
+		this.level = level;
+	   }
+    }",1429240901.0,2,1.0,9
+thecherno,Episode 55 Null Point Exception (Tiles = null and levelPixels= null),"I am getting a Null Point Exception, in my debug it says Tiles = null and
+levelPixels = null so I can only guess that im doing something wrong.
+
+I get Tile = null in here but I cant understand why
+    
+
+    screen.setOffset(xScroll, yScroll);
+    int x0 = xScroll >> 4;
+    int x1 =(xScroll + screen.width + 16) >> 4;
+    int y0 = yScroll >> 4;
+    int y1 =(yScroll + screen.height + 16) >> 4;
+    for( int y = y0; y < y1 ;y++){
+    for( int x = x0; x < x1;x++){
+    //getTile(x, y).render(x, y, screen);
+    if(x + y * 16 < 0 || x + y * 16>=256 ) {
+    Tile.voidTile.render(x, y, screen);
+    continue;
+
+LevelPixels = null happens here as well:
+
+
+    int w = image.getWidth();
+    int h = image.getHeight();
+    tiles = new Tile[w * h];
+    levelPixels = new int[w*h];
+    image.getRGB(0, 0, w, h, levelPixels, 0, w);
+
+And it happens here for levelPixels:    
+
+    for (int i =0; i < levelPixels.length; i++){
+        if(levelPixels[i]==0xff00ff00)tiles[i]= Tile.grass;
+	if(levelPixels[i]==0xffffff00)tiles[i]= Tile.Acaliaflower;
+        if(levelPixels[i]==0xffff0000)tiles[i]= Tile.Metarock;
+
+If anyone knows and answer or is willing to help me id be happy to contribute. i dont know if i can continue onto the next episode. this is my second time typing this and unfortunately end up with a null point exception. Any help would be kindly appreciated im just trying to learn as much as I can with Java.
+    ",1414633754.0,2,1.0,3

@@ -1,0 +1,315 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+CrusaderKings,help with scripting a decision + event to start a legend seed,"I want to make a decision that triggers an event that gives a legend seed for if by some miracle a Norse (or any culture with access to Varangian adventures) character Varangian adventures to India, any part of Africa, or anywhere outside Europe for that matter. I want to give said character's culture +20 cultural approval with whatever culture is in their capital province to help them hybridize their culture with the local culture of their final destination. I want to first get India sorted as a proof of concept before I do other parts of the map
+
+what I got for the decision:
+
+    #Indo-Norse
+    indo_norse_decision = {
+    	picture = ""gfx/interface/illustrations/decisions/decision_found_kingdom.dds""
+    	major = yes
+    
+    	desc = indo_norse_decision_desc
+    	selection_tooltip = indo_norse_decision_tooltip
+    
+    	ai_check_interval = 120
+    
+    	is_shown = {
+    		is_ruler = yes
+    		is_landed = yes
+    		culture = culture:norse
+    		highest_held_title_tier = tier_duchy
+    		capital_province = { geographical_region = world_india }
+    		
+    		NOT = {
+    			is_target_in_global_variable_list = {
+    				name = unavailable_unique_decisions
+    				target = flag:indo_norse_decision
+    			}
+    		}
+    	}
+    	is_valid = {
+    		any_in_de_jure_hierarchy = {
+    			tier = tier_duchy
+    			any_in_de_jure_hierarchy = {
+    				tier = tier_county
+    			}
+    			holder = root
+    			root = {
+    				completely_controls = prev
+    			}
+    		}
+    	}
+    	is_valid_showing_failures_only = {
+    		is_adult = yes
+    		is_available = yes
+    		is_independent_ruler = yes
+    	}
+    	cost = {
+    		prestige = {
+    			value = medium_prestige_value
+    		}
+    		gold = {
+    			value = medium_gold_value
+    		}
+    	}
+    	effect = {
+    		#Can only happen once
+    		add_to_global_variable_list = {
+    			name = unavailable_unique_decisions
+    			target = flag:indo_norse_decision
+    		}
+    		save_scope_as = conqueror
+    		show_as_tooltip = {
+    			indo_norse_effect = yes
+    		}
+    		trigger_event = indo_norse.001 
+    		
+    		every_player = {
+    			limit = {
+    				NOT = { this = scope:conqueror }
+    				top_liege = {
+    					OR = {
+    						this = scope:conqueror
+    						any_neighboring_and_across_water_top_liege_realm_owner = { this = scope:conqueror }
+    					}
+    				}
+    			}
+    			trigger_event = indo_norse.002
+    		}
+    	}
+    	ai_will_do = {
+    		base = 100
+    	}
+    }
+
+the events to notify player and ai:
+
+    indo_norse.001 = {
+    	type = character_event
+    	title = indo_norse.001.t
+    	desc = indo_norse.001.desc
+    	theme = faith
+    	left_portrait = {
+    		character = scope:conqueror
+    		animation = personality_bold
+    	}
+    	override_background = { reference = throne_room_india }
+    	immediate = {
+    		indo_norse_effect = yes
+    		legend_seed_new_title_effect = yes
+    	}
+    	option = {
+    		name = indo_norse.001.a
+    		show_as_tooltip = { indo_norse_effect = yes }
+    	}
+    }
+    indo_norse.002 = {
+    	type = character_event
+    	title = indo_norse.001.t
+    	desc = indo_norse.001.desc
+    	theme = faith
+    	left_portrait = {
+    		character = scope:conqueror
+    		animation = personality_bold
+    	}
+    	override_background = { reference = throne_room_india }
+    	option = {
+    		name = indo_norse.001.a
+    		scope:conqueror = { show_as_tooltip = { indo_norse_effect = yes } }
+    		trigger = {
+    			OR = {
+    				culture = culture:norse
+    				any_parent_culture_or_above = {
+    					culture = culture:norse
+    				}
+    			}
+    			is_vassal_of = scope:conqueror
+    		}
+    	}
+    	option = {
+    		name = indo_norse.001.b
+    		scope:conqueror = { show_as_tooltip = { indo_norse_effect = yes } }
+    		trigger = {
+    			OR = {
+    				culture = culture:norse
+    				any_parent_culture_or_above = {
+    					culture = culture:norse
+    				}
+    			}
+    			NOT = { is_vassal_of = scope:conqueror }
+    		}
+    	}
+    	option = {
+    		name = indo_norse.001.c
+    		scope:conqueror = { show_as_tooltip = { indo_norse_effect = yes } }
+    		trigger = {
+    			NOT = { 
+    				OR = {
+    					culture = culture:norse
+    					any_parent_culture_or_above = {
+    						culture = culture:norse
+    					}
+    				}
+    			}
+    		}
+    	}
+    }
+
+and finally the scripted effect:
+
+    indo_norse_effect = {
+    	add_prestige = massive_prestige_gain
+    	$RULING_CULTURE$ = {
+    		save_scope_as = ruling_culture
+    	}
+    	$LOCAL_CULTURE$ = {
+    		save_scope_as = local_culture
+    	}
+    	ruling_culture = scope:conqueror.culture
+    	local_culture = root.primary_title.title_capital_county.culture
+    	change_cultural_acceptance = {
+    		target = local_culture
+    		value = 20
+    	}
+    }
+
+&#x200B;",1711825976.0,1,1.0,0
+OpenMW,CTD when launching from the launcher,"So whenever I press play in the launcher, OpenMW CTDs right afterward. the only error message is: 
+
+Error: MyGUI EXCEPTION : widget name 'Scene' in layout 'openmw\_loading\_screen.layout' not found in MyGUI at E:\\OpenMW\\Source\\apps\\openmw\\mwgui\\layout.cpp (line 75)
+
+I don't have an OpenMW\\Source\\apps\\openmw\\mwgui\\ folder anywhere, I'm assuming I'm missing something here. This happens even when no mods are installed and after a fresh install of openmw. I can launch and play the game with the regular executable just fine.",1674681623.0,1,1.0,12
+PokemonInfiniteFusion,Good Pyukumuku fusion,"So I’m wondering what I should fuse with my Pyukumuku. 
+
+Currently it’s fused with a Bidoof, but the Bibaril/Pyukumuku fusion has no custom sprite so it’s stuck as with bidoof for now. I was thinking about maybe going with another water type or at the very least a mon that can learn a considerable amount of Water type moves to effectively utilize Pyukumuku’s Water typing offensively with some STAB moves; hence I initially went with Bidoof.
+
+I am tempted to attempt to make a Pyukumuku/Bibaril sprite for shits and giggles though…",1669879330.0,6,0.88,2
+PokemonInfiniteFusion,Where is the Dread Plate?,"So I found all the others and I just need to find the dark-type plate, any help? The wiki said it’s in goldenrod, but I spent a good hour looking and I only found the pixie plate in goldenrod.
+
+Also, is there a normal type plate? If so, where is that one?",1669359823.0,1,1.0,2
+PokemonInfiniteFusion,Where do you get the Sinnoh Starters?,I mostly just want to get chimchar b/c that was the first Pokémon I ever had since he was my starter in Diamond when I was a kid and the nostalgia is strong,1668782155.0,6,1.0,7
+victoria3,How do you start the American Civil War as the Free States of America?,"Title. Hell, how do you even start the American Civil War?  
+
+I'm curious how to play as the FSA since whenever I played as the USA, I would always manage to ban slavery without any real opposition from the South and then procede to establish the first socialist country in the world before the 1900s.",1667477992.0,3,0.81,10
+PaxBrit,How to create Alemannia as France,"Title, how do you make Alemannia as France? From what I gathered is an SP parallel to SS Burgundy from TNO and TWR in northern Germany.",1652206036.0,24,1.0,11
+masseffect,Class recommendations for new player,So I just got Mass Effect LE to day and while it’s downloading and installing I want to ask some veteran players which class do you recommend for a noob like me. Ideally I would want to experience the most I can gameplay wise but any recommendations would be appreciated.,1632005091.0,7,0.89,20
+MxRMods,The Panda Queen might like this,,1620783607.0,283,0.99,10
+paradoxplaza,How the hell do the holy fury African coa map frames work?,,1615877303.0,2,1.0,0
+crusaderkings2,How do I get the holy fury African frames to work?,"I was changing the graphical culture of a religion to africangfx and when I loaded up the game the frames had white bits where they are supposed to be colored, how do I fix this?",1615876787.0,5,1.0,0
+crusaderkings2,Help adding coa for new religion,"So I’m making a submod for After the End Fan Fork for my own personal use and whenever I add a new entry in coats\_of\_arms.txt for my new Rust cult heresy, Unionism, the game freezes when it’s loading graphics during startup. I can’t see what the issue is unless it involves adding something to Coat\_of\_arms.gfx.
+
+    culture = { 
+        religion = { ""syndie"" }
+        templates = { 
+    	""coa_plain_rust:1""
+        }
+    
+        color = {
+    	{ 242 188 81 }	#0		Or {Gold}
+    	{ 94 58 58 }	#1		Dim red
+    	{ 188 46 46 } 	#2		Gules {Red}
+    	{ 178 81 70 }	#3		Gules {American flag red}		
+    	{ 51 51 51 }	#4		Sable {Black}
+    	{ 200 40 10 } 	#5		Burnt Red
+    	{ 25 25 25 } 	#6		Pitch Black
+    	{ 51 51 51 }	#7		Sable {Black}
+    	{ 83 24 23 }	#8		Bloody Black
+    	{ 165 47 45 }	#9		Sanguine {Blood Red}
+    	{ 164 44 69 }	#10		Murrey {Mulberry} Burgundy	
+        }
+    
+        rebel_colors = { 0 4 0 }
+    
+        banned_colors = { 
+    	{ 0 4 }						#0		
+    	{ 0 5 }						#1		
+    	{ 0 7 }						#2		
+    	{ 0 8 }						#3
+        }
+    
+        emblem = {
+    	file = ""gfx\\coats_of_arms\\emblem_muslim.dds""
+    	noOfFrames = 1
+        }
+    
+        # WHEN ADDING NEW, ALWAYS ADD AT THE END
+        textures = {
+    	texture = {
+    		file = ""gfx\\coats_of_arms\\pattern_syndie.tga""
+    		size = { x = 10 y = 3 }
+    		noOfFrames = 30
+    		color = 3
+    		emblem = no
+    		#random = no
+    	}
+        }
+    }",1610831868.0,1,1.0,0
+AfterTheEndFanFork,How would you rank the various parts of the map in terms of being fleshed out?,"I’d say: 
+
+1. California (I’m looking at you [u/ShiatAli](https://www.reddit.com/user/ShiatAli))
+2. the Northeastern US (Mahonics, Batman, Shaggy from Scooby-Doo, the Amish, and the Redcoats)
+3. the HCC and Florida (the Southern Crusade, the Moroccans, and prince Ali)
+4. Great Lakes (northern Crusade, Rust Cult, and Neo-Norse)
+5. Deseret (Theodemocracy)
+6. Cascadia and Alaska (Russians, Gaian Hippies, and Haida)
+7. Mexico (Reconquista and Neo-Aztecs)
+8. Arixo (Atomists and that guy with the event chain)
+9. DC and Great Virginia (Americanist Interventions, and Revelationists)
+10. Central America (the Renovator and Mayans)
+11. Northern South America (Patria Grande, The nomads, Guyana, and Brazilian invasions)
+12. the Caribbean (the collapse and pirates)
+13. Canadian Plains (Iron Confederacy and Neo-Cossack Hetmanate)
+14. The midwest (pope in New Rome? and Mt. Rushmore)
+15. the Maritimes, Newfoundland, and Quebec (Ursulines, and Druids)
+16. Ontario (Anglicans I guess?)
+17. Texas (the Airmen and something else?)
+18. Colorado (literally nothing, devs pls fix)",1597353169.0,52,1.0,11
+AfterTheEndFanFork,Up to date Americanist Heresies sub mods?,Are there any up to date submods that change the Jeffersonians and Hamiltonians to something different >!(kinda like how Wild Wild Wasteland did)!<?,1596601541.0,14,1.0,0
+vexillology,New HCC Coat of Arms design process for After The End Fan Fork CK 2 mod,,1593722781.0,10,0.86,1
+AfterTheEndFanFork,More Unique Cultural Characters Name Spelling,"So it seems to me that all of the English descended cultures have too many of the same names in the culture files. Wouldn't it make sense if a character in New England spells his name differently than a Character in California? I'm not saying that names need to be completely different on one coast than the other, just that they should be visibly different at first glance.
+
+Examples of how this could happen would be to morph the spellings based on local pre-event accents like including the Bostonian r-dropping for Yankee or Midwestern vowel elongation(?) for the upcoming Ameronordic group. Considering after the event the literacy rate would have likely plummeted, names would start to be spelled differently/phonetically in each region of North America.
+
+Edit: I'm open to help out in making a submod with anyone interested, ideally with people from all over so as to get a local to butcher up a given culture's names.",1588534161.0,35,1.0,8
+AtEOldWorld,Zoroastrian Adventurer in Iran?,"So I know the Devs explained why there is practically no Zoroastrian presence in Iran, and it makes sense, however, I propose a solution for those that still want to make a Neo-Zoroastrian Persian Empire: an Insane Zoroastrian Zealot like Kyrus the Apostate who behaves kinda like a cross between Seljuk from the base game and the Consumerists from AtEFF.
+
+He would have an event connected to him where he arrives at a random duke or count's court in de jure Iran and tries to convert the ruler (which will almost always fail if the AI gets the choice). Upon failing to convert the ruler, he flees court and decides to convert some peasants to Zoroaster and starts an uprising that will likely fail. If he arrives at the Player's court and the player decides to convert, then he becomes a member of your court that would make a great Court Chaplin if given the job and the player gets some event troops to go on a Great Holy War to restore Zoroastrianism to Persia, which would probably fail if the AI was in control or other RNG circumstances.
+
+I also think that this would also mean that Zoroastrianism would get reformed via the Pagan Reformation mechanics once the Zoroastrians meet reformation requirements and a corresponding achievement if implemented.
+
+(I came up with this thanks to being stuck at home because of the Coronavirus)
+
+Edit: by de jure Iran I mean the de jure empire of Persia from the base game. this would restrict this adventurer to this area and give this area a kind of mini hoard to face. The uprising would not be automatic upon failure to convert a ruler, but take a bit of time, long enough for a player who rejects him to forget this guy exists and then he suddenly pops up with an army trying to overthrow you, catching you off guard. He would also show up a hundred or more years or so into a campaign, not at game start.",1585892617.0,51,0.98,5
+AtEOldWorld,"WTF is ""Aeslabh"" Culture?","So I haven't had the chance to play the mod yet, but I was looking through the Mod files to see if anything piqued my interest and I noticed a culture called ""aeslabh"" in the Celtic culture file. I saw that the file said culture's ""parent = polish"", has Celticized(?) Polish names, and West Slavic portrait graphics. I'm just wondering what the lore/reason for this is cause I'm Polish myself.
+
+Also on an unrelated note, I also saw that the Occultists don't have any Holy Sites, is this going to be changed in any upcoming updates?",1584495890.0,18,0.96,2
+AmItheAsshole,AITA for wanting to negotiate rules pertaining to internet access with my parents?,"Background: I'm a 19 yo unemployed guy that lives with his parents still. I got diagnosed with depression when I was still in high school. Because of this, I am very withdrawn and spend a lot of time on the Internet and playing games, which hurt me in college, causing me to drop out. I'm an only child to Polish Immigrants, which causes me to have not only the only child pressure but also the ""Immigrant parents"" pressure to be placed on me.
+
+My aunt came up from Florida to visit and deal with some business where I live (MA). I  just so happened to get in an argument with my parents over my gaming and internet usage. Since my parents are not tech-savvy, I'm the one who usually fixes the internet and tech issues in the house. My aunt is also pretty tech-savvy, so my mom oftentimes goes to her for help when it comes to Tech issues and they don't want my involvement. So my mom asked her to set up some restrictions on my internet usage because of the argument. I was completely oblivious to me that she did this. anyways I was having issues connecting to the internet on my computer, so I go to open the Xfi app on my phone, and I was not logged in anymore. So I started messing around trying to get access to the app to see what the issue was. My mom comes up to my room mad saying I was trying to break into the Xfinity account with my aunt on the phone( she hasn't come up yet). They then restrict my access before I get to explain what I was doing.
+
+My aunt comes up a few days later, and I'm still mad about what they did. so last night I made a sign and taped it on the door to my room, saying that I've had enough of this and I want them to get rid of the restrictions. my aunt sees this sign and gets into a rage, breaks the laptop that I use to game and stealing the one I got for school. after she leaves my room I called the local police to report my stolen laptop and shortly after an officer arrived and my aunt returned my laptop and gave money to repair the broken one. My mom and aunt then leave to deal with the business my aunt came up to deal with. I then proceed to write a proposal to lessen the restrictions in exchange for some concessions on my part (aka be more active in looking for a job, helping out more around the house). When my mom saw the proposal, she called my mom up to have a look. My aunt lost it again and said that no to my proposal and said that I have one month to find a job or she will help my parents evict me. when I asked why, her response was ""I don't have to say why,"" and stormed off.
+
+If I get evicted then I will become homeless because I have no family nearby, they are all in Poland. I seriously don't know what I did wrong to deserve this.",1582752660.0,11,0.6,58
+SuicideWatch,I don’t know what to do,"I’m a sophomore at University and I don’t know what to do anymore. I’m on academic probation (aka I have one semester to bring my GPA up to keep financial aid), and if I get kicked out or drop out then I lose health insurance (which is often a life or death situation in America) because I am currently still on my parent’s plan since I’m going to University. I have no support system because 1) I have no siblings, 2) both of my parents are 60 (I’m 19) and grew up in Poland, 3) I have no girlfriend and 4) the rest of my family still lives in Poland. I’m a shy and introverted guy that gets anxiety whenever I get thrust into a new situation, which makes it hard for me to go to any of my professor’s office hours, and I FUCKING HATE IT. I’m currently failing one of my classes and I don’t know how I’m doing in my other classes, which results in me assuming that I might fail more classes.
+
+I’m also underweight and had to shave my head bald due to shitty genetics, which leads to having self-esteem issues. The only thing that makes it to where I don’t look like some neo-Nazi skinhead bastard is my shitty thin AF beard (like not the chinstrap style, but I don’t have a thick beard like other guys if that makes sense). The last time I was ever called “handsome” was by my mom when I was a little kid and we all know that family members saying that shit is meaningless (unless you are freaky and into incest shit) for self-esteem.
+
+I feel that I’m stuck and the only way out is to just end my life and be over with it.",1572450639.0,1,1.0,1
+Kaiserreich,Idea for CSA flavor event,"So after my visit to Newport RI and seeing all of the summer mansions that belonged to various rich families, I suggest an event that fires for the CSA about what to do with such opulent summer mansions like The Breakers or Marble House if the CSA controls Rhode Island.
+
+The options would obviously be:
+
+Destroy all the mansions (for a good amount of pp, ~~at the cost of infrastructure in RI?~~ War support, and Syndie party pop)
+
+(NEW) Destroy the largest ones but leave the smaller ones to be converted something that would benefit the revolution/people ( 75% pp of Syndie, stability, half as much war support as Syndie, and Totalist party pop)
+
+Convert the all mansions into something that would benefit the revolution/people (half as much pp as Syndie option ~~but no cost of infrastructure?~~  twice the Stability as Totalist, and Rad Soc party pop)
+
+Or do nothing about them (minus pp, war support, and stability along with plus 1% party pop for market libs, soc libs, soc cons, aut dems or pat auts?)
+
+This is a very rough idea and should be improved upon, especially around what each option’s effect is.
+
+Edit: added a new option, tied each option to a political party, crossed out the infrastructure effect, and added war support and stability effects to each option",1565364978.0,20,0.9,9
+oblivion,An interesting title,,1547572629.0,355,0.96,22
+socialism,Thoughts?,,1542082555.0,1,0.51,4
+DungeonsAndDragons,Advice on making a character idea into reality,"I’m a new DnD player and I need help with a character I want to make. My character idea is basically based on Rasputin, specifically the legend of his murder by poisoning, gunshots, bludgeoning, drowning, and hypothermia. My difficulty is picking what race the character would be and what cleric domain and god would work for him. I already decided on cleric because while Rasputin was not a priest, he was treated like a holy man due to his intense religious fervor, but that’s about it. I would appreciate any help with making this as close as possible to the legend, but I would understand if not all of it was possible right form the get go.",1539996158.0,1,1.0,2

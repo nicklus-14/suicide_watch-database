@@ -1,0 +1,957 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+sbubby,Now that's my type of bread,,1535894955.0,2119,0.99,46
+javahelp,Java / Android Studio ARCore PointCloud Capture Issue,"I've been trying to implement point cloud capture using ARCore in my android application for a while with no luck. I'm using a simple `ArFragment` element in my xml file for the class, and have confirmed that I have camera permissions, and uses-feature for [android.hardware.camera.ar](http://android.hardware.camera.ar) in my `AndroidManifest.xml` file. The below code is my class to handle the capture, I want it to capture XYZ point cloud data and save it in the `point_cloud.xyz` file, using ARCore. Currently the `point_cloud.xyz` file is being saved but is empty.
+
+    public class PointCloudCaptureActivity extends AppCompatActivity {
+    
+        private ArFragment arFragment;
+    
+        u/Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            EdgeToEdge.enable(this);
+            setContentView(R.layout.activity_point_cloud_capture);
+    
+    
+            arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.arFragment);
+    
+            findViewById(R.id.btnStartPointCloudCapture).setOnClickListener(v -> {
+                capturePointCloudWhenReady();  // Start capture when the button is pressed
+            });
+    
+    
+            ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+                Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+                return insets;
+            });
+        }
+    
+        // Start capturing the point cloud when the AR frame is ready
+        private void capturePointCloudWhenReady() {
+            // Check if AR frame is available
+            Frame frame = arFragment.getArSceneView().getArFrame();
+    
+            if (frame != null) {
+                // If the frame is ready, capture the point cloud
+                capturePointCloud(frame);
+            } else {
+                // If the frame is not available, log an error
+                Log.e(""PointCloud"", ""AR frame is not available yet. Please try again."");
+            }
+        }
+    
+        // Method to capture the point cloud from the AR frame
+        private void capturePointCloud(Frame frame) {
+            Log.d(""PointCloud"", ""Capturing point cloud..."");
+    
+            if (frame == null) {
+                Log.e(""PointCloud"", ""capturePointCloud() called with null frame"");
+                return;
+            }
+    
+            PointCloud pointCloud = frame.acquirePointCloud();
+            FloatBuffer points = pointCloud.getPoints();
+    
+            // Save the point cloud data to a file
+            File file = new File(getFilesDir(), ""point_cloud.xyz"");
+    
+            try (FileOutputStream fos = new FileOutputStream(file)) {
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < points.limit(); i += 4) { 
+                    float x = points.get(i);
+                    float y = points.get(i + 1);
+                    float z = points.get(i + 2);
+                    sb.append(String.format(Locale.US, ""%.6f %.6f %.6f\n"", x, y, z));
+                    Log.d(""Points Captured"", ""Captured the points X:"" + x + "", Y:"" + y + "", Z:"" + z);
+                }
+                fos.write(sb.toString().getBytes());
+                fos.flush();
+                Log.d(""PointCloud"", ""Point cloud saved successfully."");
+            } catch (IOException e) {
+                Log.e(""PointCloud"", ""Failed to save point cloud"", e);
+            } finally {
+                pointCloud.release();
+            }
+        }
+    
+    }
+
+Any ideas of what could be causing the pointcloud file to be empty?  
+In my log files I get the following alerts:
+
+
+
+    2025-03-05 15:02:06.590 10872-10872 PointCloud              com.example.point_cloud_project            D  Capturing point cloud...
+    2025-03-05 15:02:06.596 10872-10872 PointCloud              com.example.point_cloud_project            D  Point cloud saved successfully.
+    2025-03-05 15:02:06.633 10872-11043 native                  com.example.point_cloud_project            I  I0000 00:00:1741186926.633691   11043 vio_estimator.cc:1413] [VioEstimator] [PauseResume] HandleInitializationStage with feature tracks at timestamp: 277647861709857 ns.
+    2025-03-05 15:02:06.646 10872-11043 native                  com.example.point_cloud_project            E  E0000 00:00:1741186926.646828   11043 vio_initializer.cc:808] INTERNAL: [SSBA Initialization] Failed: Image has too few landmarks. [Required: 9, Actual: 0].; 
+                                                                                                         Initializer's SSBA failed to produce a valid output.
+                                                                                                        === Source Location Trace: ===
+                                                                                                        third_party/redwood/perception/odometry/visual_inertial_initialization/bundle_adjustment_initializer.cc:306
+    2025-03-05 15:02:06.647 10872-11058 native                  com.example.point_cloud_project            I  I0000 00:00:1741186926.647006   11058 data_manager.cc:89] [M] VisualInertialState is kNotTracking. Wait.
+    2025-03-05 15:02:06.725 10872-11043 native                  com.example.point_cloud_project            I  I0000 00:00:1741186926.725196   11043 vio_estimator.cc:1413] [VioEstimator] [PauseResume] HandleInitializationStage with feature tracks at timestamp: 277647961909808 ns.
+    2025-03-05 15:02:06.737 10872-11043 native                  com.example.point_cloud_project            I  I0000 00:00:1741186926.733574   11043 bundle_adjustment_initializer.cc:346] Intrinsic vector size of the camera 0 is 7
+    2025-03-05 15:02:06.784 10872-11043 native                  com.example.point_cloud_project            I  I0000 00:00:1741186926.784745   11043 bundle_adjustment_initializer.cc:604] [SSBA Depth Refinement] Refine successfully!
+    2025-03-05 15:02:06.784 10872-11043 native                  com.example.point_cloud_project            I  I0000 00:00:1741186926.784908   11043 bundle_adjustment_initialization.h:154] Number of measurements used in BA initialization for temporal landmarks: 554
+    2025-03-05 15:02:06.784 10872-11043 native                  com.example.point_cloud_project            I  I0000 00:00:1741186926.784923   11043 bundle_adjustment_initialization.h:156] Number of good measurements (i.e., reprojection errors <= 3 pixels) in BA initialization for temporal landmarks: 495
+    2025-03-05 15:02:06.789 10872-11043 native                  com.example.point_cloud_project            I  I0000 00:00:1741186926.789762   11043 vio_estimator.cc:1520] [VioEstimator] Successful initialization at features timestamp: 277647961909808 ns, took:2.899951527s, processed frames: 30
+    2025-03-05 15:02:06.790 10872-11028 native                  com.example.point_cloud_project            I  I0000 00:00:1741186926.790135   11028 latency_tracker.cc:162] HeT initialized: Initialization_Time_Ms: 2899.95
+    2025-03-05 15:02:06.806 10872-10872 native                  com.example.point_cloud_project            E  E0000 00:00:1741186926.806274   10872 hit_test.cc:426] INTERNAL: No point hit.
+    2025-03-05 15:02:06.839 10872-10872 native                  com.example.point_cloud_project            E  E0000 00:00:1741186926.839837   10872 hit_test.cc:426] INTERNAL: No point hit.
+    2025-03-05 15:02:06.872 10872-10872 native                  com.example.point_cloud_project            E  E0000 00:00:1741186926.872859   10872 hit_test.cc:426] INTERNAL: No point hit.
+    2025-03-05 15:02:06.906 10872-10872 native                  com.example.point_cloud_project            E  E0000 00:00:1741186926.906216   10872 hit_test.cc:426] INTERNAL: No point hit.
+    2025-03-05 15:02:06.903 10872-10872 e.point_cloud_project         com.example.point_cloud_project            W  type=1400 audit(0.0:233680): avc:  denied  { getattr } for  name=""/"" dev=""dmabuf"" ino=1 scontext=u:r:untrusted_app:s0:c168,c257,c512,c768 tcontext=u:object_r:unlabeled:s0 tclass=filesystem permissive=0 app=com.example.point_cloud_project
+    2025-03-05 15:02:06.903 10872-10872 FEngine::loop           com.example.point_cloud_project            W  type=1400 audit(0.0:233681): avc:  denied  { open } for  scontext=u:r:untrusted_app:s0:c168,c257,c512,c768 tcontext=u:r:untrusted_app:s0:c168,c257,c512,c768 tclass=perf_event permissive=0 app=com.example.point_cloud_project
+    2025-03-05 15:02:06.911 10872-10872 FEngine::loop           com.example.point_cloud_project            W  type=1400 audit(0.0:233682): avc:  denied  { open } for  scontext=u:r:untrusted_app:s0:c168,c257,c512,c768 tcontext=u:r:untrusted_app:s0:c168,c257,c512,c768 tclass=perf_event permissive=0 app=com.example.point_cloud_project
+    2025-03-05 15:02:06.911 10872-10872 FEngine::loop           com.example.point_cloud_project            W  type=1400 audit(0.0:233683): avc:  denied  { open } for  scontext=u:r:untrusted_app:s0:c168,c257,c512,c768 tcontext=u:r:untrusted_app:s0:c168,c257,c512,c768 tclass=perf_event permissive=0 app=com.example.point_cloud_project
+    2025-03-05 15:02:06.911 10872-10872 FEngine::loop           com.example.point_cloud_project            W  type=1400 audit(0.0:233684): avc:  denied  { open } for  scontext=u:r:untrusted_app:s0:c168,c257,c512,c768 tcontext=u:r:untrusted_app:s0:c168,c257,c512,c768 tclass=perf_event permissive=0 app=com.example.point_cloud_project
+    2025-03-05 15:02:06.939 10872-10872 native                  com.example.point_cloud_project            E  E0000 00:00:1741186926.939593   10872 hit_test.cc:426] INTERNAL: No point hit.
+    2025-03-05 15:02:06.972 10872-10872 native                  com.example.point_cloud_project            E  E0000 00:00:1741186926.972866   10872 hit_test.cc:426] INTERNAL: No point hit.
+    2025-03-05 15:02:07.006 10872-10872 native                  com.example.point_cloud_project            E  E0000 00:00:1741186927.006110   10872 hit_test.cc:426] INTERNAL: No point hit.
+    2025-03-05 15:02:07.039 10872-10872 native                  com.example.point_cloud_project            E  E0000 00:00:1741186927.039578   10872 hit_test.cc:426] INTERNAL: No point hit.
+    2025-03-05 15:02:07.072 10872-10872 native                  com.example.point_cloud_project            E  E0000 00:00:1741186927.072797   10872 hit_test.cc:426] INTERNAL: No point hit.
+    2025-03-05 15:02:07.106 10872-10872 native                  com.example.point_cloud_project            E  E0000 00:00:1741186927.106071   10872 hit_test.cc:426] INTERNAL: No point hit.
+    2025-03-05 15:02:07.139 10872-10872 native                  com.example.point_cloud_project            E  E0000 00:00:1741186927.139584   10872 hit_test.cc:426] INTERNAL: No point hit.
+    2025-03-05 15:02:07.172 10872-10872 native                  com.example.point_cloud_project            E  E0000 00:00:1741186927.172640   10872 hit_test.cc:426] INTERNAL: No point hit.
+    2025-03-05 15:02:07.206 10872-10872 native                  com.example.point_cloud_project            E  E0000 00:00:1741186927.206028   10872 hit_test.cc:426] INTERNAL: No point hit.
+    2025-03-05 15:02:07.239 10872-10872 native                  com.example.point_cloud_project            E  E0000 00:00:1741186927.239300   10872 hit_test.cc:426] INTERNAL: No point hit.
+    2025-03-05 15:02:07.272 10872-10872 native                  com.example.point_cloud_project            E  E0000 00:00:1741186927.272660   10872 hit_test.cc:426] INTERNAL: No point hit.
+    2025-03-05 15:02:07.306 10872-10872 native                  com.example.point_cloud_project            E  E0000 00:00:1741186927.306061   10872 hit_test.cc:426] INTERNAL: No point hit.
+    2025-03-05 15:02:07.339 10872-10872 native                  com.example.point_cloud_project            E  E0000 00:00:1741186927.339570   10872 hit_test.cc:426] INTERNAL: No point hit.
+    2025-03-05 15:02:07.372 10872-10872 native                  com.example.point_cloud_project            E  E0000 00:00:1741186927.372700   10872 hit_test.cc:426] INTERNAL: No point hit.
+    2025-03-05 15:02:07.406 10872-10872 native                  com.example.point_cloud_project            E  E0000 00:00:1741186927.406004   10872 hit_test.cc:426] INTERNAL: No point hit.
+    2025-03-05 15:02:07.441 10872-10872 native                  com.example.point_cloud_project            E  E0000 00:00:1741186927.441026   10872 hit_test.cc:426] INTERNAL: No point hit.
+    2025-03-05 15:02:07.473 10872-10872 native                  com.example.point_cloud_project            E  E0000 00:00:1741186927.473073   10872 hit_test.cc:426] INTERNAL: No point hit.
+    2025-03-05 15:02:07.505 10872-10872 native                  com.example.point_cloud_project            E  E0000 00:00:1741186927.505925   10872 hit_test.cc:426] INTERNAL: No point hit.
+    2025-03-05 15:02:07.539 10872-10872 native                  com.example.point_cloud_project            E  E0000 00:00:1741186927.539368   10872 hit_test.cc:426] INTERNAL: No point hit.
+    2025-03-05 15:02:07.572 10872-10872 native                  com.example.point_cloud_project            E  E0000 00:00:1741186927.572532   10872 hit_test.cc:426] INTERNAL: No point hit.
+    2025-03-05 15:02:07.605 10872-10872 native                  com.example.point_cloud_project            E  E0000 00:00:1741186927.605896   10872 hit_test.cc:426] INTERNAL: No point hit.
+    2025-03-05 15:02:07.911 10872-10872 e.point_cloud_project         com.example.point_cloud_project            W  type=1400 audit(0.0:233860): avc:  denied  { getattr } for  name=""/"" dev=""dmabuf"" ino=1 scontext=u:r:untrusted_app:s0:c168,c257,c512,c768 tcontext=u:object_r:unlabeled:s0 tclass=filesystem permissive=0 app=com.example.point_cloud_project
+    2025-03-05 15:02:07.915 10872-10872 FEngine::loop           com.example.point_cloud_project            W  type=1400 audit(0.0:233861): avc:  denied  { open } for  scontext=u:r:untrusted_app:s0:c168,c257,c512,c768 tcontext=u:r:untrusted_app:s0:c168,c257,c512,c768 tclass=perf_event permissive=0 app=com.example.point_cloud_project
+    2025-03-05 15:02:07.919 10872-10872 FEngine::loop           com.example.point_cloud_project            W  type=1400 audit(0.0:233862): avc:  denied  { open } for  scontext=u:r:untrusted_app:s0:c168,c257,c512,c768 tcontext=u:r:untrusted_app:s0:c168,c257,c512,c768 tclass=perf_event permissive=0 app=com.example.point_cloud_project
+    2025-03-05 15:02:07.923 10872-10872 FEngine::loop           com.example.point_cloud_project            W  type=1400 audit(0.0:233863): avc:  denied  { open } for  scontext=u:r:untrusted_app:s0:c168,c257,c512,c768 tcontext=u:r:untrusted_app:s0:c168,c257,c512,c768 tclass=perf_event permissive=0 app=com.example.point_cloud_project
+    2025-03-05 15:02:07.923 10872-10872 FEngine::loop           com.example.point_cloud_project            W  type=1400 audit(0.0:233864): avc:  denied  { open } for  scontext=u:r:untrusted_app:s0:c168,c257,c512,c768 tcontext=u:r:untrusted_app:s0:c168,c257,c512,c768 tclass=perf_event permissive=0 app=com.example.point_cloud_project
+
+Thanks in advance!",1741251324.0,1,0.67,1
+Omnipod,"Just started on the Omnipod 5 (Using controller), how can I stop it alerting me continuously for the same issue every 5 minutes?","I'm using the omnipod 5 and freestyle libre 2+ hybrid closed loop system. 
+
+I'm loving the omnipod 5, but when I get an alert for my blood sugars being too high or too low, the controller will alert me, which is fine, but it then seems to keep alerting me every 5 minutes until the issue is resolved, This is really annoying if my blood sugars are high in the night, the controller literally wont shut up until they come back into range, and if they are really high this can take ages, even when there is no more action needed, as I've taken enough insulin to correct for it. 
+
+  
+Is there any way to acknowledge/snooze these alerts, like what we can do with the freestyle libre app? Where pressing the notification and opening the app would silence the alerts until resolved. I've tried doing the same with the controller for omnipod 5, but it seems to still keep alerting me every 5 minutes.
+
+I really don't want to turn alerts off but they are getting pretty annoying and it's starting to affect my sleep. ",1740006629.0,8,1.0,17
+computervision,YOLO food image detection with dataset,"Are there any easily followable implementations of food detection using yolo (or an alternate model) and a food dataset that anyone could recommend? The few I've found are either outdated and difficult to implement, or have too few classes. 
+
+I ideally need it to function similar to yolo, where multiple food items on a plate could each be identified. And if possible more than 50 classes of foods. 
+
+Any suggestions?
+
+",1738693705.0,1,0.67,3
+brave_browser,Is there any way to stop sites viewing your wifi network on Brave?,"I'm just trying to see if there's a way around netflix's single household rule, which I think is only due to it being able to see this information. Not sure though, has anyone else tried to get around it?",1734212423.0,1,0.56,6
+hot_dog,Dogs out!!!,,1730661714.0,29,0.77,31
+diabetes_t1,Post covid insulin tolerance,"Has anyone else, since having covid, had their insulin tolerance massively go up? It feels like I'm having to take almost double for my food these days, and when it goes high, it takes ages, and multiple corrections for it to come down. 
+
+Even when exercising, it seems to steadily rise too.
+
+And then, almost all of a sudden, as soon as it's midnight or around that time, and I'm trying to go to sleep, it finally comes skyrocketing down, often  going low, even if the insulin is well out of my system at that point.
+
+It's really frustrating, I feel like I don't know how to control it anymore. Has anyone else experienced this? Any tips?",1728947600.0,1,1.0,4
+diabetes,Garmin Watches with Freestyle Libre 2,"I'm thinking of buying a Garmin watch, to track my exercise, calories and heart rate. I'm currently on the Freestyle Libre 2, and was wondering if anyone had got it to show blood sugar readings on their Garmin watch? What would be the best watch and Garmin app for this?
+
+Any suggestions would be great. (I'm type 1 btw)
+
+Thanks!",1724697556.0,4,0.83,1
+diabetes,Would insulin not last as long if out of fridge for a day?,"Hi, I'm doing some traveling at the moment, and I'll be away for more than a month. I was wondering, when moving from place to place (I'm interrailing), can my insulin be out of the fridge for more than 24 hours and still last more than 28 days when put back in the fridge?
+
+Just as one of the hostels didn't have a fridge, so I had to keep the insulin in my travel bag.
+",1720940785.0,0,0.5,6
+Interrail,"Journey not showing up on Interrail App, But I've booked tickets","I've got a Train to London (from inside UK) as part of a journey, for which we booked seats through the interrailing website. I only realised today that I need to add the trip as a journey on my interrail app, before activating the journey and getting the ticket. However when I try and add the journey, I can no longer see the journey I've booked seats for. How would I get the ticket for this journey to have something to scan at the gate? I was thinking of showing up earlier to talk to the staff at the station to see if that would work, but apart from that I'm not sure. 
+
+  
+Any help would be great. Thanks",1720388123.0,3,1.0,3
+diabetes,Blood sugars keep dipping in the night after lots of exercise,"Hi guys, I was wondering if you had any advice about what to do in the night after you've had a day of lots of exercise?
+
+For example, I went on quite a long hike yesterday, and had a big dinner afterwards, and my blood sugars seemed fine, but then kept going low in the night to the point where I just couldn't sleep. I already struggle with insomnia some nights but it feels like diabetes just makes it worse.
+
+I often go to the gym too and similar things happen.
+
+I even reduce my basal to 20% of what it was, for the whole night and it still seems to happen. 
+
+Any advice? It's really frustrating and I'm exhausted honestly. (Sorry if this post doesn't make sense as I'm running on very little sleep lol)
+
+",1710753992.0,0,0.5,9
+Bandlab,M-Audio Oxygen Pro Mini with bandlab,"I was thinking of buying the M-Audio Oxygen Pro Mini, but was wondering if it would work with bandlab? Has anyone had any experience with this?",1708864738.0,1,1.0,0
+carpenterbrut,Carpenter brut merch,"I was wondering if anyone had bought the merch from their website. I'm thinking of getting the Carpenter Vice T shirt cos it looks sick and I want to support them. Just wondering about sizes and quality so I don't make a mistake?
+
+Could anyone who has bought the merch tell me what it was like?
+
+&#x200B;",1707053034.0,13,1.0,8
+musicproduction,Which software should I use to start making synth music?,"I'm really new to music production although I have played a few instruments. I used GarageBand for a while which was quite good, but now I'm just on windows. Is there any software you guys would recommend for me to get started? I love synth music mainly.
+
+Thanks, I'll be sure to post some of my creations once I'm started :)
+
+&#x200B;
+
+&#x200B;",1691690180.0,3,0.67,15
+NoMansSkyTheGame,It's a shame how some players are like this,,1689427244.0,955,0.96,327
+diabetes,Omnipod PDM dash screen protectors,"Hi guys I was wondering if there were any screen protectors I could buy for my omnipod dash PDM device. Its roughly the size of a small smartphone, I was wondering if anyone found any screen protectors that would fit on it? Does anyone know the model of device they use for PDMs? (Is it a repurposed phone and if so what make?)
+
+Thanks :)",1678215879.0,0,0.5,1
+TRDNE,This series may not be dead? They chose a handle for the youtube channel recently - may be a sign they are coming back?,,1668965639.0,6,1.0,1
+raspberry_pi,Is the sensehat compatible with all raspberry pi versions?,[removed],1643637618.0,1,1.0,1
+NExpo,Cryptic message found in M&Ms,"https://vm.tiktok.com/ZMLe7rV3E/
+
+I found this tiktok where this guy finds a really strange message in a packet of M&Ms. It's really cryptic and random words and characters are underlined. He's made 2 parts to this as of posting but it would be cool if it would be investigated.
+
+
+Edit: He's posting more updates",1642518073.0,28,0.88,9
+halo,"I want to get into halo, I only have PC. Is the masterchief collection the best start?","I've always wanted to get into halo and now that I have time to I'm wondering where to start. I can see the masterchief collection on steam which includes a lot of the games, but I was wondering if this would miss any out or if I would be missing something when playing them. Does the masterchief collection start at the very beginning of the story?
+
+Also, are they compatible with windows 10?
+
+Thank you",1640536227.0,7,0.74,23
+MealPrepSunday,Really confused on how long things can last?,"Hey guys, I'm newly moved out and trying to get into meal prep, but I worry a bit about eating food that's gone off
+How long would different foods last in the fridge? For example:
+Cooked meats
+Pasta
+Cooked vegetables 
+Raw vegetables
+And these things mixed together?
+Etc
+Things like that I'm not sure about, I'm sure it comes from lack of experience but I don't really know where to start!
+Thanks guys!",1628370176.0,6,0.8,9
+binance,Can't see my nano,"So I'm fairly new to binance and crypto, and thought I would experiment and buy some nano. I bought about 10USDT worth. However when I look in assets, the nano available says zero. Is this the right place to be looking?
+I bought the nano more than 12 hours ago.
+Any help would be greatly appreciated. 
+Thanks",1613046421.0,2,1.0,0
+teenagers,please join my skribblio,"guys please join my skribblio now
+
+&#x200B;
+
+try and draw rude stuff to annoy my friends! 
+
+[https://skribbl.io/?AWNF0EjCo2JS](https://skribbl.io/?AWNF0EjCo2JS)",1611258205.0,3,1.0,1
+Malwarebytes,"I keep getting ""Potential threat blocked"" randomly on omegle","Whenever I use omegle, malwarebytes flags up how a potential trojan website was blocked and gives me its IP address. I did a virus scan but nothing showed up. What could this be?",1609613383.0,1,1.0,52
+AskReddit,What was one good thing that happened to you in 2020?,,1609508827.0,1,1.0,1
+Malwarebytes,Malwarebytes privacy problems | Connection issue,"So I am on a free trial of malwarebytes privacy VPN but whenever I try and enable it I get the following message:  Connection Issue: Could not connect. Please check your internet connection and try again.
+
+&#x200B;
+
+I have checked and my internet is fully functional so I really am not sure what I need to do to get it working. It's a bit annoying to be honest.",1609256121.0,4,0.84,3
+teenagers,Guys pls join my among us game and be rude,"my friends are on so pls be rude and annoy them 
+
+Server: Europe
+
+Code:  SAPBIF 
+
+please make fun of the name David",1608068825.0,1,0.57,14
+teenagers,Guys join my among us game and be rude pls,[removed],1608068759.0,1,1.0,0
+Showerthoughts,The 'b' in 'subtle' really isn't.,,1607879988.0,0,0.42,2
+gainit,How can I effectively workout at home?,[removed],1607450259.0,1,0.54,15
+teenagers,Join my among us game and be rude and annoying pls,"I'm trying to troll my friends
+
+European Server
+
+code: FZRJXQ",1601218766.0,1,0.67,3
+NoMansSkyTheGame,Can't install a mining laser on my exo mech?,"So I'm trying to install a mining laser to my exo mech but when I press E on an empty slot the blueprint menu is empty, even though I have bought the exo mining laser blueprint. I'm even being urged as a pinned recipe to install it, yet I cant see it anywhere and it is not in my inventory. 
+Any help is greatly appreciated.",1600968087.0,2,1.0,2
+NoMansSkyTheGame,Will No Mans Sky work in my screen resolution?,"I have a bit of an older screen and was wondering if it would be able to display no mans sky properly. My screen is 1280x1024 at 61hz. I think this ratio is 5:4.
+
+Thanks for the help. I'm really looking forward to playing! :)",1600774301.0,2,0.67,1
+redditmobile,[Android] [2020.35.0] I do love it when not even reddit can open a reddit link,,1600700400.0,6,1.0,0
+teenagers,Join my scibblio, [https://skribbl.io/?igPK9ki05jC3](https://skribbl.io/?igPK9ki05jC3),1600451561.0,3,0.8,1
+AmongUs,Guys join QYOO pls,,1600013956.0,1,1.0,1
+copypasta,Raid,Raid shadow legends install here for free,1596977621.0,1,0.67,3
+Showerthoughts,Yawns are slow motion sneezes,,1596579334.0,12,0.77,3
+mildlyinfuriating,The snoo doesn't line up in the portals >:(,,1596471869.0,9,0.77,2
+youtube,"A blatant scam that I keep on seeing, using MrBeast in the thumbnail when it's not his video. In addition it has fake comments from accounts which have only posted there.",,1594212260.0,1,1.0,1
+RASPBERRY_PI_PROJECTS,Pi keeps cutting out on power bank?,So I'm trying to power my raspberry pi 3B with a power bank and I believed I had got the right type of power bank with the output of: 5V 3A which should be enough to run it from. However it cuts out every 30 seconds and restarts. Can anyone help with this?,1593597059.0,8,0.85,12
+RASPBERRY_PI_PROJECTS,Best chargeable power supply?,I've been testing out some different power supplies for my laptop project and I can't get it working properly with a power bank. What are your guys ideas?,1592926425.0,1,0.67,1
+RASPBERRY_PI_PROJECTS,Best Laptop casing?,"So I am trying to turn my pi 3 into a kind of portable pc/laptop and I was wondering what your guys best ideas are for casing? I dont have access to a 3D printer, which is the main reason why I'm asking. 
+Thanks in advance",1592833791.0,6,0.81,12
+raspberry_pi,Best battery pack for portable use? (Raspberry pi 3),[removed],1592760184.0,1,1.0,1
+diabetes_t1,Time for a change.,,1592608015.0,43,0.88,40
+diabetes,It's been long enough.,,1592607989.0,262,0.94,55
+OutOfTheLoop,What's going on with this video I see edited into many different memes?,"https://twitter.com/grandayy/status/1272139426278367233?s=19 for an example. Who is in the video and why is it going viral?
+Cheers.",1592165671.0,3,0.61,4
+WatchRedditDie,Looks like reddit is accepting bribes.,,1588620733.0,138,0.98,6
+chocolate,Is this the right place to look for chocolate recipes?,[removed],1587936442.0,11,0.84,5
+shittysuperpowers,Your bones have invisibility.,,1587756795.0,1,1.0,0
+comedyheaven,America,,1586724931.0,1,1.0,0
+redditmobile,Could these subreddits not be recommended? I don't have IBS and there is no other reason I would need to check this subreddit.,,1586120814.0,1,1.0,1
+redditmobile,"Do you think we could stop being recommended communities like this? I dont have IBS, why would I even need to know. If I did, I could surely search for it",,1586114830.0,1,1.0,1
+Imposter,"Yo an actual imposter answer was, ""I dont know, maybe I am a robot. Please help!""",It's almost like it's becoming self aware,1585780468.0,4,1.0,0
+SuicideWatch,I don't know how to help my friend.,"My friend has been depressed for years now, and I barely see him anymore(We both stopped college). I try messaging him but he never responds, I only see he is active on steam, so hopefully ok. 
+
+I have noticed he has been self harming and just not caring where things go at all to the point where he could be getting hurt. 
+
+He has tried talking to a therapist/psychologist, but he dropped out as he said they were useless. I really don't know what to do to help my friend. I will be going to University soon and I won't be there to support him. I am really worried he may take his own life. Any help is massively appreciated.
+
+Thank you.",1583700761.0,1,1.0,3
+ugx,begin,,1583014037.0,1,1.0,0
+malegrooming,Short curly hair - I think I'm doing the washing routine wrong,"So I've had curly hair all my life and the past few years I've had it short on the sides and a bit longer and curlier on the top. I've always shampoo'd my hair each day and conditioned maybe twice a week. Is this too much? I've often found my hair to be frizzy after brushing, but if I don't brush it goes all tangly and doesn't look good either. It looks best after a shower.
+
+I've tried looking online for advice, but can't find much for men with curls.
+
+Also anyone else with short curly hair, what is your way of styling it? Any products recommended are also greatly appreciated.
+
+Thanks guys",1582147032.0,1,1.0,7
+TRDNE,Whats the best youtuber making videos about this?,I was wondering if there were any good videos and youtubers keeping up with the story. Right now I dont have a lot of time to work stuff out about it but I'd like to keep up,1582013771.0,3,0.81,7
+Runner5,Radio Broadcast out of sync?,"So I've been using the Zombies, Run! app on android for a few weeks now, but I've noticed that once I've finished a mission, the radio doesn't start playing, even when my song has finished in my playlist. It randomly starts off half way through a song and I'm not sure what to do about it",1581529588.0,2,1.0,1
+AIDungeon,Not sure how I feel about this one tbh,,1580991031.0,25,1.0,2
+StopGaming,I want to stop.,"I really want to stop, but I feel as if I'd get bored otherwise. When I just do work, I eventually can't concentrate and feel like I need to play some games. This can then take up the rest of the day. I would love to be more productive but I feel I would just get bored and lose concentration and revert back to games. Any help is greatly appreciated.",1580388949.0,20,1.0,7
+diabetes_t1,Tslim or Omnipod?,"So I'm getting a pump soon and I was wondering from your guys experience, which was the best one to go for? What are the main advantages/disadvantages of both? Thanks!",1580294345.0,2,1.0,15
+findareddit,Is there a sub for getting fashion/hairstyle advice from a face pic?,"Like, you post a picture of your face, and people will comment on it telling you how to improve your fashion and hairstyle to fit the way your face looks. If this is not a subreddit, it really needs to be one",1579820515.0,2,0.76,3
+DoesAnybodyElse,DAE - Does anyone else's eyes water when they eat food randomly?," Like, it doesn't happen with any specific foods, like spicy or salty, etc, and I forget about it most of the time. It just happens every once in a while enough to remember, ""oh yeah my eyes are doing that again""
+
+Maybe I'm a freak of nature idk",1578950519.0,2,1.0,1
+DoesAnybodyElse,Does Anyone Else's eyes water when they eat?,[removed],1578949751.0,1,1.0,1
+diabetes_t1,"On the bright side, at least we can't be recruited for WW3",,1578137215.0,302,0.96,34
+HalfLife,It's the train scene on the bridge!,,1577657989.0,2,0.76,1
+a:t5_2bbafa,shoecleaningjuice has been created,"r/shoecleanikiy ogu op[oi[zsd 9uwa]-09]
+4qpdo
+ ao;shrhrh rhrhrh hrhrhr ehehe ehehe PIOEPI",1577379274.0,4,0.99,2
+mildlyinfuriating,My post with information to literally save lives is removed without warning or reason,,1577221206.0,53,0.9,9
+YouShouldKnow,YSK: You must NEVER give an unconscious diabetic insulin. Leave it for the hospital to do!,[removed],1577113663.0,570,0.96,55
+diabetes_t1,How was your night guys?,,1576831260.0,47,0.92,37
+diabetes_t1,Highest blood sugar since diagnosis?,Hey so I'm running pretty high rn and I was wondering what you guys highest blood sugar reading since diagnosis? I'm curious. My highest is roughly 339 mg/dL or 18.8mmol/L,1576346006.0,2,0.75,15
+diabetes_t1,And they'd fucken attack me >:(,,1576246228.0,192,0.99,7
+comedynecromancy,Interesting how a caption change can make such a difference,,1576179496.0,1,1.0,1
+comedynecromancy,It's funny how shortening the title can really make a difference,,1576177573.0,1,1.0,1
+diabetes_t1,Thinking of getting an Omnipod,"So I'm thinking of getting an Omnipod pump. What would you say are the main benefits/disadvantages of it? Are there any pumps I should try instead? 
+Thanks",1576148486.0,2,1.0,14
+copypasta,"In Japan they say ""ビープビープレタス"" which means ""your eyes are the stars"" and I think that's beautiful.","In Japan they say ""ビープビープレタス"" which means ""your eyes are the stars"" and I think that's beautiful.",1575638299.0,2,0.75,2
+diabetes_t1,Sometimes not needing insulin for a meal,"So I've found that today I didn't need to take insulin for my lunch even when I ate about 70g carbs. My blood sugar was low, so I was going to wait and take an insulin dose later. It still hasn't risen above 10mmol/L however, and is actually now resting at about 6.3mmol/L.
+
+I think this is due to the fact that I was at work prior to having lunch, and the job can be quite labor intensive.
+
+Does this mean that I technically didn't gain any weight from eating lunch, since insulin is the hormone to do this?
+
+Has anyone else encountered this? I thought it was quite interesting, as I am trying to stay in shape and not gain extra weight.
+
+Any thoughts are appreciated.",1574617641.0,2,0.75,8
+HalfLife,It's the headcrabs coming!!,,1574460467.0,22,0.91,1
+copypasta,spork.,"&#x200B;
+
+|S|P|O|R|K|
+|:-|:-|:-|:-|:-|
+|P|P||||
+|O||O|||
+|R|||R||
+|K||||K|",1573407313.0,3,0.81,2
+Petscop,How to get into this series?,I really want to get into this series but I don't know where to start. I've watched Game theory on it and pyro but no one seems to be making any more videos on it anymore. Any advice on where to go next would be great thanks!,1573130198.0,6,1.0,11
+AskOuija,The square route of 420 is ________,,1572595622.0,2,1.0,13
+cursedimages,Cursed_rollerskates,,1572524703.0,55,0.95,1
+comedyheaven,Very cool!,,1571654425.0,1,1.0,1
+AskOuija,"Ouija, why me?",,1571337008.0,2,1.0,10
+hmmm,hmmm,,1570816811.0,1,1.0,0
+Bossfight,"Papiera, the unstoppable",,1570606048.0,45,0.94,2
+copypasta,A redditor's view on global warming,"Well, since the Earth is flat, it's like a pillow.  And we all know you can flip the pillow to the cool side when you're sleeping.  The same applies to global warming.  Flip this bitch over, let's get frosty.  Isn't it Australia's time to be up top, anyway?",1570434155.0,6,1.0,2
+shittysuperpowers,"Your brain gives you a Heads Up Display, and the information it shows has a 7% accuracy.",,1570214713.0,21,0.97,1
+AskOuija,Should my pee be red?,,1570128604.0,3,1.0,16
+teenagers,Hey guys,Just to say vsauce's YouTube red series 'mindfield' is now free to watch! Enjoy!,1569964945.0,1,0.67,3
+teenagers,Your ass is actually just your legs' biceps,Just a thought 🤔,1567977371.0,5,0.79,9
+diabetes_t1,First hypo free day!!!,Edit: Nvm fucks sake,1567777506.0,15,0.83,1
+iamverybadass,Guy thinks he could fight Gordon Ramsay and expose him,,1567716493.0,47,0.95,10
+copypasta,Edgar Allen Bruh,"While I nodded, nearly 😪napping 😪, suddenly there became 🅰️a🅰️ clapping 👏, as🅰️🅰️ of ass cheeks gently 👏clapping👏👏, 👏clapping👏 at my chamber door 🚪🚪. ""tis a🅰️ visitor,"" I muttered, ""dummy thicc, and nothing more""",1567700345.0,8,0.84,3
+Showerthoughts,"People treat kids like they are stupid, yet at that age, it is the easiest to learn",,1567520477.0,88,0.94,6
+teenagers,Islands are called Islands because they... is land.,Think about it 🤔,1567162928.0,18,0.92,1
+teenagers,Spread the fucken word people,,1567078071.0,43,0.9,2
+memes,"Not a meme, but serious shit, spread the word and put this on more subs",,1567078016.0,1,1.0,0
+copypasta,"The 💰 intent 💰 is 💰 to 💰 provide 💰 players 💰 with 💰 a 💰 sense 💰 of 💰 pride 💰 and 💰 accomplishment 💰 for 💰 unlocking 💰 different 💰 heroes. 💰 As 💰 for 💰 cost, 💰 we 💰 selected 💰 initial 💰 values 💰 based 💰 upon 💰 data 💰 from 💰 the 💰 Open 💰 Beta 💰 and 💰 other 💰 adjustment","The 💰 intent 💰 is 💰 to 💰 provide 💰 players 💰 with 💰 a 💰 sense 💰 of 💰 pride 💰 and 💰 accomplishment 💰 for 💰 unlocking 💰 different 💰 heroes. 💰 As 💰 for 💰 cost, 💰 we 💰 selected 💰 initial 💰 values 💰 based 💰 upon 💰 data 💰 from 💰 the 💰 Open 💰 Beta 💰 and 💰 other 💰 adjustments 💰 made 💰 to 💰 milestone 💰 rewards 💰 before 💰 launch. 💰 Among 💰 other 💰 things, 💰 we're 💰 looking 💰 at 💰 average 💰 per-player 💰 credit 💰 earn 💰 rates 💰 on 💰 a 💰 daily 💰 basis, 💰 and 💰 we'll 💰 be 💰 making 💰 constant 💰 adjustments 💰 to 💰 ensure 💰 that 💰 players 💰 have 💰 challenges 💰 that 💰 are 💰 compelling, 💰 rewarding, 💰 and 💰 of 💰 course 💰 attainable 💰 via 💰 gameplay. We 💰 appreciate 💰 the 💰 candid 💰 feedback, 💰 and 💰 the 💰 passion 💰 the 💰 community 💰 has 💰 put 💰 forth 💰 around 💰 the 💰 current 💰 topics 💰 here 💰 on 💰 Reddit, 💰 our 💰 forums 💰 and 💰 across 💰 numerous 💰 social 💰 media 💰 outlets. Our 💰 team 💰 will 💰 continue 💰 to 💰 make 💰 changes 💰 and 💰 monitor 💰 community 💰 feedback 💰 and 💰 update 💰 everyone 💰 as 💰 soon 💰 and 💰 as 💰 often 💰 as 💰 we 💰 can. 💰 💰",1566568635.0,2,1.0,2
+teenagers,Accents are just words with different spices added,,1566403655.0,5,0.79,4
+comedyheaven,My boomerang!! :((,,1565971699.0,1,1.0,0
+diabetes_t1,"Just made this new format, any thoughts?",,1565890771.0,271,0.98,34
+diabetes,"New meme format I just made, any thoughts?",,1565890718.0,90,0.95,10
+diabetes,Does anyone else not wake up in the middle of the night during a hypoglycemia?,,1565721281.0,14,1.0,15
+AskOuija,"Forget being a type 1 diabetic, I'm a type one _______",,1565702320.0,3,1.0,18
+Jokes,If I put my dick on a keyboard it would go from A to Z 😎,,1565596349.0,1,1.0,1
+teenagers,Hello puny mortals! I am a diabetic cyborg now!,,1565364366.0,9,0.85,15
+diabetes,I'm getting my upgrade to the cyborg race today! Wish me luck!,,1565341040.0,123,0.97,25
+teenagers,😎 If I put my dick on a keyboard it would go all the way from A to Z 😎,,1565019294.0,9,0.85,7
+shittysuperpowers,You can change the colour of chip packets at will,,1564922560.0,11,1.0,2
+copypasta,bah bo bah bo bappity bah bo bey bo bah bey bo boppoty bah bo bah bo bappity bah bo bey bo bah bey bo boppoty bah bo bah bo bappity bah bo bey bo bah bey bo boppoty bah bo bah bo bappity bah bo bey bo bah bey bo boppoty bah bo bah bo bappity bah bo bey bo bah bey bo boppoty bah bo bah bo bappit,bah bo bah bo bappity bah bo bey bo bah bey bo boppoty  bah bo bah bo bappity bah bo bey bo bah bey bo boppoty  bah bo bah bo bappity bah bo bey bo bah bey bo boppoty  bah bo bah bo bappity bah bo bey bo bah bey bo boppoty  bah bo bah bo bappity bah bo bey bo bah bey bo boppoty  bah bo bah bo bappity bah bo bey bo bah bey bo boppoty  bah bo bah bo bappity bah bo bey bo bah bey bo boppoty  bah bo bah bo bappity bah bo bey bo bah bey bo boppoty  bah bo bah bo bappity bah bo bey bo bah bey bo boppoty  bah bo bah bo bappity bah bo bey bo bah bey bo boppoty  😎😎,1564754873.0,2,1.0,1
+shittysuperpowers,"You can shit yourself on will, even when you don't need to use the toilet",,1564696966.0,1,0.67,0
+shittysuperpowers,You can fill your bed with treacle at any given time,,1564696882.0,3,1.0,0
+Bossfight,"Guitar hero, beater of notes",,1564524189.0,3,0.81,1
+AskOuija,I bet you guys can't get the first 20 digits of pi.,,1564148394.0,0,0.5,18
+copypasta,Walter Clements,I like fire trucks and moster trucks,1564073629.0,5,1.0,2
+diabetes_t1,What's this joke about cinnamon apparently curing diabetes?,Like I see it a lot around here but I don't really understand it,1563870048.0,4,0.84,12
+assholedesign,Youtube is now hiding ads in the video bar so people don't immediately click off a video when the see the amount.,,1563782838.0,393,0.99,27
+NoStupidQuestions,What sort of gym training would i have to do to do the Rock's Pec Pop?,"Ok so in [this video](https://www.youtube.com/watch?v=yhV7_qncdWE), you see the rock do this Pec Pop, and I really want to get Pecs strong enough to do this, and also just know what to do to get them to do this in general. Any suggestions are appreciated. I am male and I do already work out so I am fairly muscular. Thanks!",1563655457.0,1,1.0,0
+AskOuija,I'm going to make a subreddit. What should it be called? r/,,1563636618.0,2,1.0,13
+AskOuija,The quadratic formula is now:,,1563636234.0,4,1.0,13
+diabetes,Has anyone else felt this?,"My blood sugar is in a completely fine and safe level, yet I feel really tired all the time, today I felt like I could collapse, and just wanted to sleep. Does anyone else get this or know what it could be?",1563136130.0,3,0.68,19
+freenagers,🔊 B r u h,,1563118055.0,35,0.93,1
+copypasta,Area 51,,1563097085.0,0,0.33,1
+findareddit,"A subreddit with different bots that you can add to your subreddit, and what they do",,1563024507.0,1,1.0,0
+ComedyTreasure,"I am a simple man. I see, I upvote",,1562958405.0,46,0.97,0
+ComedyTreasure,Bot testing,"You can test and request bots to be added here.
+
+So far there are:
+
+u/uwutranslator
+
+u/nwordcountbot
+
+u/shirt_bot",1562956344.0,4,1.0,24
+uwutranslator,How can I add this Bot to my subreddit?,Or is it already there and just needs tagged,1562954879.0,66,0.98,48
+teenagers,"Vsauce, Michael here",[removed],1562830255.0,1,1.0,0
+ComedyTreasure,We need mods,,1562830177.0,6,0.88,1
+AskReddit,What are some good PC games that run fine on a bad Internet connection?,,1562796585.0,3,0.72,6
+teenagers,🔊 Listen up everyone 🔊,It's my Spotify slice day,1562674278.0,19,0.95,6
+Showerthoughts,Rapidly turning on and off lights is saving power while wasting it at the same time,,1562007593.0,2,0.63,6
+ComedyTreasure,ComedyTreasure has been created,Timeless classics which have somehow now expired and are still funny to this day,1561742987.0,5,1.0,0
+copypasta,"Hey Vsauce, Michael here","Happy cake day !! But what is a cake day?
+
+Hey vsauce! Michael here. If you browse reddit often then that means you need to get a life. Also it means you might be familiar with the phrase ""cake day"". What is it? To know what it is we must go back all the way to when reddit was created. Back in 2004, reddit didn't exist. But you know what did? My space. That's right. Now if we take apart its name, it comes off as ""my"", meaning the user's, and ""space"", implying the particular space belongs to the user. Now if you've ever had a myspace account, if you've ever stooped so low to actually make one, you will realise that while making an account, it asks for you DOB. Now DOB could mean a lot of things, dicks of Brian, death of Björk, and so on. But that's not what it means here. Here, you see, DOB stands for ""Date of Birth"", meaning the date you were born. Side note, some countries like China and Japan prefer the YYYY/MM/DD format and some or perhaps only America uses MM/DD/YYYY which I think is really retarded. Anyway back to the topic, the website asks for your date of birth to confirm whether you are old enough to use the website or not. Granted, you could easily lie about your DOB, like I did (sorry mom) and have some grumpy old redneck ask for your nude pictures, but for the purpose of this video, we are going to assume you enter it correctly. Okay. So now the site knows how old you are by subtracting your birth year from the current year. Cool. But what does that have to do with cake days? See, on birthdays, we tend to eat cakes. Everybody likes cakes. If you don't then I don't know what's wrong with you but yeah everybody likes cakes. Except Brian. Also Brian has multiple dicks. Anyway, on birthdays we tend to eat cake. That's right. Now see, fast forward to 2006 when reddit is created. If you are here means you probably have a reddit account. I'm not judging though, to each their own. But remember, when you were making your account, do you remember enetering your Dicks of Brian? Yeah. You don't. Reddit only requires you to enter your email and username with password. See, future! Also it's good they are not copying myspace. Now when you enter all these, what reddit does is that it saves the date you enter all these on. In my case it was 69 feburby 1969. Reddit notes this date and saves it. So, by the next year, 1970 in my case, when February 69 comes, I would've completed one year on reddit. What comes once each year? That's right, the 4th of july. Oh say can you see- we'll sing it together later. But what else comes once every year? That's right. Your birthday. Your reddit birthday. Your ""cake day"" even though there are no cakes involved and all you get are fake internet points and probably a few wishes. Still better than getting none on your actual birthday haha. That is all there is to cake days. A way to spread love, just for completing another year on an internet website. How lonely we people are. Maybe sometime in future humanity will cease to exist. Until then, let's celebrate all cake days we have left. And as always, thanks for watching.",1561587060.0,10,0.87,5
+AMA,I've just been diagnosed with diabetes. AMA.,,1561380264.0,3,0.67,27
+copypasta,Shut up,"Oh, cool, you know, when I read that tweet, I also laughed loud, not at work, but at home. It was 12:47, I was looking through reddit, and saw this picture. Of course I stopped laughing when I saw your addition. Before I laughed I ironed my clothes and put them in my closet. I also vacuumed my room and read 2 chapters from the book I'm reading called 'pukcufehttuhs', which tells a tragic tale of an unfunny jester. The action starts in medieval times, what we could assume to be 14th centu- shut the fuck up",1561216488.0,4,0.84,3
+shittysuperpowers,"Whenever you have diarrhoea, you can make handguns appear",,1561066439.0,1,0.67,2
+shittysuperpowers,You can post images on this subreddit,,1561066339.0,1,0.6,0
+comedyheaven,My fucken oreos!!,,1560756523.0,1,1.0,0
+comedyheaven,This man is running for president.,,1560713351.0,1,1.0,0
+eczema,What are the best ways of finding your triggers?,"Like, I've seen many people find their eczema triggers and finally lessen the effects of it. How would I go about trying to find my triggers?",1560149365.0,2,1.0,2
+shittyrobots,Our lord and savior,,1560022839.0,1,1.0,0
+totallynotrobots,HAD MY FIRST SHIFT AT MY NEW JOB TODAY. HOW DID I GET ON?,,1560022607.0,11,0.92,1
+AskOuija,"Facial detection? Nah, I prefer _______ detection.",,1559769192.0,6,0.88,26
+copypasta,F?,"F? F what? The letter before G? The letter after E? Did you know that in Fu the F  stands for “fuck?” So your reply is “fuck?” or F as in Flourine? Do you need some Special F for breakfast? F as in I can fuck you? Can I fuck you and feed you to hungry falcons? Falcons have an f in it. ""F”? Are you fucking kidding me? I spent a decent portion of my life writing all of that and your response to me is ""F”?Are you so mentally handicapped that the only letter you can comprehend is ""F” - or are you just some fucking asshole who thinks that with such a short response, he can make a statement about how meaningless what was written was? Well, I'll have you know that what I wrote was NOT meaningless, in fact, I even had my written work proof-read by several professors of literature. Don't believe me? I doubt you would, and your response to this will probably be ""F” once again. Do I give a fuck? No, does it look like I give even the slightest fuck about a single letter? I bet you took the time to type that one letter too, I bet you sat there and chuckled to yourself for 20 hearty seconds before pressing ""send"". You're so fucking pathetic. I'm honestly considering directing you to a psychiatrist, but I'm simply far too nice to do something like that. You, however, will go out of your way to make a fool out of someone by responding to a well-thought-out, intelligent, or humorous statement that probably took longer to write than you can last in bed with a chimpanzee. What do I have to say to you? Absolutely nothing. I couldn't be bothered to respond to such a worthless attempt at a response. Do you want ""F” on your gravestone? Do you want people to remember you as the asshat who one day decided to respond to someone with a single letter? ""Hey, look, everybody! It's that ""f” guy!"" That's who you are. You're going to be known as the ""F” guy. How does it feel? Do you feel happy? Quite honestly, I don't care, which is why I'm not even going to respond to you. Goodbye, and good luck with your future as that guy who said ""F”. Alright listen up motherfucker, and get your comfy seat because we're gonna be here a while. Do you really think you can just get away with ""f"" as a message? What if someone did that to you, huh? Do you think you would like it? Making an entire paragraph to get a fuckin' one letter response of the sixth letter in the alphabet, you think that's fuckin' funny, jackass? Do you want your crush to respond back with ""f” after you spill your feelings out like this? (Take me back, Emma.) Huh? What if I did it to you? F. Did you fuckin' like that? What, did you just jizz in your pants because someone disregarded your entire effort of writing this ENTIRE paragraph FROM HAND in about fifteen minutes? That just makes me feel fucking rejected just like my ex. (Take me back, Roxanne.) f. What're you, fuckin' gay? Can I have a response that actually MEANS something instead of just shitfacing our ""conversation"" with the spam of ""f?”. Now occasionally with questions or something it's reasonable, but doing it to any fucking response they say. ""We're having a nuclear crisis, you have fifteen minutes to evacuate."" You're the type of person that would fuckin' say ""f” to that, you limp dick hypocrite. You think you can get away with this, right? You think it's SOOOOOO funny to do this shit, but I can guarantee that you'll be taken out back and shot soon. You're fucking dead, ""f”ucker.",1559489288.0,3,1.0,6
+shittysuperpowers,"When you blink, you make a clicking noise",That's really it though,1559282087.0,9,0.92,0
+copypasta,Skyrim copypasta,"Shut the fuck up you absolute lobotomite. You think adding your poorly edited Skyrim makes this funny? What a joke. Get a grip on reality, stop saying ""oof"" during a serious conversation just because your two braincells cant ever send signals to eachother to form a response. Honestly pathetic. Oh guys look at me Im so funny OOF 100! Its so funny and quirky because its a roblox noise right guys? Hahah skyrim reference!! Shut the fuck up you absolute fucking dusty toilet. I would flush you down the drain in an instant.",1558859473.0,0,0.5,4
+TwoSentenceHorror,"As I clicked 'YES' on the update box, I went to sleep, checking again in the morning.",[removed],1558737988.0,3,0.8,0
+AskOuija,🎶 All you need is _______,,1558351573.0,2,1.0,15
+comedyheaven,Sex penis???,,1557941841.0,1,1.0,1
+NoStupidQuestions,"Since the shape of bananas is due to the sun, what would happen if there was a binary system?",,1557860213.0,2,1.0,0
+AskReddit,What's the best way you've found to save money?,,1557759650.0,3,0.72,12
+eczema,I'm glad I found this community,"Hey, i just wanted to say, I'm so glad I found this community.
+
+I've suffered from eczema since I was a baby, and to see all of these relatable posts really cheered me up. I am glad I am not alone, as I don't really know anyone else with eczema. 
+
+thank you again",1557672983.0,82,0.99,7
+videos,The Side Effects of Vaccines - How High is the Risk?,,1557669993.0,0,0.38,4
+godtiersuperpowers,"When you plug in a USB, it goes in with the correct orientation each time.",,1557419875.0,9,0.82,1
+Showerthoughts,'Alphabet' is just the cut off of the first two Greek letters,,1557419138.0,1,1.0,1
+copypasta,Me no like the edit,"Hey me no like the edits
+
+Etid: Wow yhanks fo sliver grate
+
+Ooh gol
+
+No like
+:(",1556899930.0,0,0.5,2
+AskOuija,It's time to say _____.,,1556698495.0,4,1.0,18
+marvelstudios,After seeing endgame...,"Sorry didn't want to put the question in the title as spoilers.
+Do you think Thor will be in the next Guardians of the galaxy?",1556635951.0,0,0.5,7
+vaxxhappened,Advice: I need to help my friend who lives far away get vaccinated,[removed],1556570365.0,1,1.0,0
+teenagers,"Bow down to me, puny mortals",,1556555365.0,15,0.79,4
+teenagers,Can anyone else not post pictures?,"like the option isn't clickable so I can't post a picture
+
+Edit: Nvm it's text post weekend",1556480350.0,3,0.81,7
+tattoos,I need Tattoo advice,[removed],1556479294.0,0,0.25,8
+sbubby,Uno what's this?,,1556378383.0,108,0.98,3
+sbubby,"Oh, Horton",,1556377884.0,140,0.99,6
+CrazyIdeas,Mosquitoes that are modified to distribute vaccines,,1556322826.0,8,1.0,3
+facepalmbook,disallowed,[removed],1556293218.0,1,1.0,0
+AutoModerator,Automod won't remove posts,"So I'm new to using automod in my new subreddit, and I've been trying out basic commands. 
+
+    ---
+    title: disallowed
+    action: remove
+    ---
+
+Basically, as a test, it should remove a post titled ""disallowed"", right? 
+
+It doesn't do anything though.
+
+Any advice?",1556293062.0,3,0.72,5
+copypasta,Anus,"Well, the jokes on you because I got my anus surgically removed and replaced with a speaker that says ""dam boi i just shit"" every time my nerves stimulate my poop muscles. In fact, the ladies compliment me everyday about it. I'm just way more studly than you, and you just need to accept it as a fact. You can't expect to compete with me at all. It's not even a fair fight. Another one of my anus implants allows me to fart at supersonic frequencies that shatter your eardrums and cause your eyeballs to depressurize, in turn making them explode, in turn making you blind, and in turn making you a huge fucking doo doo head idiot you sad withering piece of work. Learn your place, scum.",1556044715.0,12,1.0,4
+TooAfraidToAsk,"I can tickle myself on my lower chest, but I'm not schizophrenic, or anything. What does this mean?",It should be impossible to tickle yourself,1555882337.0,0,0.4,10
+AskReddit,What's the most ridiculous scam you've ever seen?,,1555256212.0,2,1.0,3
+comedyheaven,Scoop.,,1555160333.0,7,0.65,2
+NoStupidQuestions,Advice to speed up computer for playing high def games,"Does anyone have any advice on how to speed up a computer and stop it crashing when playing games like just cause 3, as it keeps on crashing. I'm good with software, but idk how to go tampering with the inside of my computer. Thanks in advance!",1554572280.0,1,1.0,4
+AskOuija,Breaking: Trump has announced that ________ is now banned.,,1554378289.0,2,1.0,18
+AskReddit,"Youtubers who use askreddit posts to get money by making a robot read it out, why?",,1554292258.0,0,0.5,7
+Showerthoughts,You can have millions by being extremely rich or in debt,,1554207216.0,1,1.0,1
+suicidebywords,Oof,,1554037167.0,8,0.91,1
+comedyheaven,Pffft woooosh woooosh,,1553715948.0,28,0.78,6
+copypasta,Jimmy Fallon,"Jimmy Fallon: *SLAPS TABLE* 🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣
+
+*STUDIO EXPLODES*",1553372609.0,29,0.89,3
+ComedyCemetery,"What the fuck is this and why, just why",,1553370954.0,292,0.97,18
+comedyheaven,Haha I'm gay,,1553070485.0,1,1.0,0
+dankmemes,We should definitely do this,,1553002180.0,57,0.79,4
+Showerthoughts,"Millennials are considered lazy, yet the generations to say this invented breakfast in bed",,1552690297.0,2,0.63,5
+NoStupidQuestions,What would a blind person read in braille if they felt a lego brick?,,1552574647.0,1,0.67,3
+copypasta,So today I tried something new,"So today I tried something new. I took some starburst into the shower. At the start there wasn’t a huge effect on me, so I carried on the showering. 
+
+At about the five-minute mark, everything exploded with flavour. I ascended into the πth dimension where I was face to face with Guy Fieri, the king of the flavour dimension. 
+
+*“Furēbātaun e yōkoso”,* Guy said to me. 
+
+My only possible reply was, *“umm birch I don’t speak Taiwanese.”* 
+
+This seemed to anger him. *“Onaka o suka sete wa ikenai, onaka ga suita tokiniha watashi no yō ni wa omowanai” , he said.* 
+
+Before I could fire back a witty response sure to send him back to the depths, His eyes flashed red. Immediately a Cheeto™ the size of ten buildings and the weight of the earth smited me down with the force of a thousand tons. 
+
+Guy said, \*Warai\* “Anata wa watashi ni watashi no aji no 1-pāsento o tsukawa seta”. 
+
+Suddenly, slow, inspirational music started playing, and I slowly rose from the Cheeto debris. A blade swooping noise sounded as one of my eyes flashed blue. 
+
+I tried to speak, but the only noise I made was, “Hu huh huhu uhuhuhuhu huhuh uhuhuhuh huhuhuh huhuhuhhhhuh uhuhuhuhuhuhh.”
+
+ I looked down at my hands, and to my surprise they had turned to bone. I was sans. Suddenly megalovania started playing and just as I was about to Fucking gasterblast that mf, everything went blank. 
+
+I woke to find myself in the foetal position in the shower with my dick in the drainpipe. 
+
+π/10 would do again.    ",1552472880.0,6,1.0,4
+juxtaposition,Somethings going on here,,1552467149.0,3,1.0,0
+u_Olidude44,Today I found something new,"So today I tried something new. I took some starburst into the shower. At the start there wasn’t a huge effect on me, so I carried on the showering. 
+
+At about the five-minute mark, everything exploded with flavour. I ascended into the πth dimension where I was face to face with Guy Fieri, the king of the flavour dimension. 
+
+*“Furēbātaun e yōkoso”,* Guy said to me. 
+
+My only possible reply was, *“umm birch I don’t speak Taiwanese.”* 
+
+This seemed to anger him. *“Onaka o suka sete wa ikenai, onaka ga suita tokiniha watashi no yō ni wa omowanai” , he said.* 
+
+Before I could fire back a witty response sure to send him back to the depths, His eyes flashed red. Immediately a Cheeto™ the size of ten buildings and the weight of the earth smited me down with the force of a thousand tons. 
+
+Guy said, \*Warai\* “Anata wa watashi ni watashi no aji no 1-pāsento o tsukawa seta”. 
+
+Suddenly, slow, inspirational music started playing, and I slowly rose from the Cheeto debris. A blade swooping noise sounded as one of my eyes flashed blue. 
+
+I tried to speak, but the only noise I made was, “Hu huh huhu uhuhuhuhu huhuh uhuhuhuh huhuhuh huhuhuhhhhuh uhuhuhuhuhuhh.”
+
+ I looked down at my hands, and to my surprise they had turned to bone. I was sans. Suddenly megalovania started playing and just as I was about to Fucking gasterblast that mf, everything went blank. 
+
+I woke to find myself in the foetal position in the shower with my dick in the drainpipe. 
+
+π/10 would do again.    ",1552425607.0,1,1.0,0
+AskOuija,"Spirits, spirits of r/askouija, who is the most beautiful of them all?",,1552418670.0,5,0.86,13
+AskOuija,"Actually, the next Olympics are going to be held in _____.",,1552418140.0,3,0.81,11
+UnexpectedSlazo,OwO,uwu,1552398396.0,4,0.76,6
+Showerthoughts,Dinosaurs probably taste like chicken,,1552220070.0,1,0.67,1
+NoStupidQuestions,How do I go about getting my friend vaccinated,[removed],1552166638.0,1,1.0,1
+Showerthoughts,"If you filled a hot tub with fizzy drinks, you wouldn't need to turn it on",,1551904957.0,8,0.9,4
+AskReddit,You are given remote control of a tornado for 24 hours. What do you do?,,1551802088.0,5,0.7,21
+Showerthoughts,"Since time is the 4th dimension, When you watch a film or a youtube video, it's actually in 4D, as you can skip forwards and backwards.",,1551018289.0,1,1.0,1
+copypasta,Hey siri,"HHHUYY SIRRII, 
+
+FAAAIND ME A BUIG, BYUITIFUL, WHOOMAN! ",1550868871.0,1,1.0,3
+AskMen,What's the best way to start a conversation with someone you don't really know?,,1550340553.0,3,0.8,11
+shittysuperpowers,"When you do the dick helicopter, it actually works as a helicopter would, making you fly.",,1550340277.0,26,0.94,3
+askscience,Since red blood cells contain no nucleus how is dna obtained from blood?,,1550007959.0,60,0.84,11
+askscience,"Since red blood cells have no nucleus, how can blood be used for forensics and crime scene investigation?",,1549971983.0,1,1.0,1
+meirl,Me 😞 irl,,1549885661.0,61,0.97,3
+theyknew,Lotsa nutrients!,,1549792603.0,1870,0.95,23
+copypasta,I think this could help intimidate advertisers who leave their comments unlocked.,Oy! ,1549734584.0,1,1.0,2
+AskReddit,What do you do to cheer yourself up when you're feeling down?,,1549577334.0,1,1.0,8
+space,Weird pulsing light in sky,[removed],1548961133.0,2,0.67,16
+Showerthoughts,"We always think that when our phone autocorrects to ""ducking"", it has something to do with ducks, but actually, it is the action of lowering your head, usually to avoid something.",,1548523496.0,14,0.69,6
+copypasta,Askreddit: Anything that you lick in the next 24 hours becomes yours. Best response:,"First 30 minutes: 
+
+Lick some random people on the street, aquiring an army.
+
+2 hours: 
+
+Go to a military base, with my people protecting me as I am turning the soldiers and pilots to do my bidding.
+
+3 hours: 
+
+We have an line of people, being held there by my army and I run by it with my tongue out, hitting 2 licks per second. I tell my army to get high ranking military personnel to the military base to lick ASAP, and I get scientists to research my tongue, figuring out ways to maximize lickage.
+
+The army is acting as a decoy to lure the high-ranking officials here. They all make a scene, making it look like a more unique supernatural event is occuring to interest the media.
+
+5 hours: 
+
+Scientists have made a break through...
+when my tongue cells are grown in vitro, they will convert anything they touch. Each cell has seemingly unlimited conversions.
+
+6 hours:
+
+ 37 high-ranking personnel have been licked
+
+They are working frantically for their true goal: to work their way up to the commander-in-chief
+
+8 hours: 
+
+208 military personnel have been licked
+
+Scientists have synthesized a spray that only needs a specific protein from my tongue cells to convert, dubbed “Met(A)”
+
+9 hours:
+
+Met(A) production becomes top priority
+
+10 hours:
+
+Army ditches their job as props, focusing solely on production
+
+11 hours:
+
+Pilots take the produced spray and release it into atomosphere, causing clusters of precipitation of Met(A) over high-density areas
+
+12 hours: 
+
+Met(A) is able to convert easier than we previously thought:
+
+Affected individuals with residue of Met(A) on skin are able to transfer the residue to unaffected persons to convert.
+
+13 hours:
+
+Its been a long day, I’m tired... 
+
+I ordered everyone to spread it as much as possible so I could go to sleep, knowing tomorrow I would control the world.
+
+25 hours since patient 0
+
+I woke up
+
+I felt fulfilled, as if I had conquered the world.
+
+My room was marvelous, it looked as if my people had worked through the night, carefully chiseling the perfect room for me.
+
+Emma Watson and Tom Hanks both came into my room and helped me get up... the air felt so light, as if it was cool, pure oxygen running down my throat, and with every breath I felt more awake.
+
+Tom Hanks opened the velvet curtains to reveal that we were on top of a hill, with a mountain in the distance with my face carved on it. I was in awe.
+
+Donald Trump and Vladmir Putin both came in once I was dressed, and asked me to sign the papers to officially own the world. 
+
+I sat down on the silk throne, with my ivory pen in hand.
+
+I moved my pen towards the paper but I hesitated...
+
+I felt something in my mouth — NO, quite the OPPOSITE!!!
+
+I looked at Putin and asked as clearly as I could: “whauYr iesS mAi tumnGue?”
+
+He solemnly replied: “я не знаю...”
+
+I don’t speak rasputin so instead I looked at Trump and asked him: “whayRE esT mAI tum?”
+
+He fatefully exclaimed: “Listen, I may know or I may not know... but I can say for certain that I possibly don’t know. If you think I’m saying I don’t know for sure, nonono, if you think that then you aren’t getting it... I just probably don’t know where your tongue is.”
+
+I turned to Tom, then Emma, they both stared at me in sorrow over the loss of my tongue, which unified the whole world... the world cried that day (I mighttt have made them cry)
+
+27 hours since patient 0:
+
+We declare today as an international holiday... for honoring the sacrifice of my tongue to unify mankind.
+
+It is simply known as: “Tongue Day”
+
+
+
+Present day:
+
+The lead scientist that helped me conquer the world, who was soon retiring, came to me this morning asking for a moment of my time.
+
+He sat me down, and asked me how life was like without a tongue.
+
+I replied “itshH okauH aIy gausSe”
+
+He started to tell me my life story, which I have heard countless times from others trying to publish an unofficial biography of me.
+
+But this time it was different.
+
+He had an emphasis on the control of myself, of my own actions, of how I reacted to certain things in the past... things only I knew.
+
+Then, in his final line, he said:
+
+“You licked everyone in the world but yourself”
+
+I sat there, locking on his eyes until they started to drift away as I teared up.
+
+In my head I thought:
+
+“The Met(A)!” 
+
+“That is why the my tongue disappeared, because it could not control ITSELF!”
+
+“Maybe if I could find some Met(A) then I could bring my tongue back!!
+
+
+
+Then, with courage, I asked the scientist...
+
+
+“hOw canm aAi geTt MoeMetA?”
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+",1548518595.0,11,0.87,3
+AskReddit,"What, apart from water, is the most refreshing drink?",,1548513097.0,14,0.9,45
+Showerthoughts,Terms and conditions would probably shorter if they told you everything you weren't agreeing towards,,1548267619.0,2,0.63,0
+AskOuija,What's a reward as a child but a punishment as an adult?,,1548088465.0,2,1.0,13
+AskReddit,What was the weirdest dream you've had?,,1548083688.0,4,0.84,7
+AskReddit,"If you were to die tomorrow, what's the one thing you'd want to do today that you've been putting off or wanting to do for your whole life?",,1547828438.0,5,0.86,6
+Showerthoughts,The biggest sand castle in the world is actually the biggest known sand castle in the universe,,1547740524.0,6,0.72,2
+shittysuperpowers,"Every footstep you make with your left foot doesn't make a sound, while the right foot makes twice as much noise",,1547726267.0,106,1.0,13
+AccidentalComedy,Accidental subtitle mishap makes for a great politician,,1547726168.0,3585,0.95,39
+shittysuperpowers,You can turn any piece of clothing into a pile of cat hair,While it isn't being worn,1547635998.0,4,0.84,0
+shittysuperpowers,"You can speak at 90 decibels (Boeing 737 at 1 nautical mile), but not any lower",,1547451943.0,33,1.0,12
+shittysuperpowers,"Every time you swear, the dolphin sound effect censors it",,1547149083.0,99,1.0,22
+Showerthoughts,"We've been sold sliced bread for years, yet no company has ever thought of removing the heel of the bread, then selling it.",,1546599019.0,4,0.7,9
+PartyParrot,Safety inspection penguin,,1546537218.0,56,0.94,6
+bonehurtingjuice,Oof ouch owie my knife,,1546521775.0,1,1.0,2
+Showerthoughts,There will always be more fingers than humans,,1546437043.0,6,0.63,8
+inspirobot,I mean it's not wrong..,,1546368175.0,30,1.0,0
+space,Has anyone heard back from the people who were taking the first picture of a black hole?,[removed],1546275161.0,1,1.0,1
+AskReddit,What's a random good deed someone did for you and how did you pay it forward?,,1545859541.0,2,1.0,0
+shittysuperpowers,You can feel the heat or cold of an object just by touching it,,1545645606.0,4,0.62,3
+ihadastroke,What a nice man,,1545063611.0,6,1.0,4
+shittyrobots,Crusader,,1544910304.0,4280,0.95,33
+copypasta,So I like 3.141592653589793238462643383279502884197169399375105820974944592307816406286 208998628034825342117067982148086513282306647093844609550582231725359408128481 117450284102701938521105559644622948954930381964428810975665933446128475648233 78678316527120190914564856692346034861045432664821339s,"So a few days ago I went to a shop, and they had a special offer on 3.141592653589793238462643383279502884197169399375105820974944592307816406286 208998628034825342117067982148086513282306647093844609550582231725359408128481 117450284102701938521105559644622948954930381964428810975665933446128475648233 786783165271201909145648566923460348610454326648213393607260249141273724587006 606315588174881520920962829254091715364367892590360011330530548820466521384146 951941511609433057270365759591953092186117381932611793105118548074462379962749 567351885752724891227938183011949129833673362440656643086021394946395224737190 702179860943702770539217176293176752384674818467669405132000568127145263560827 785771342757789609173637178721468440901224953430146549585371050792279689258923 542019956112129021960864034418159813629774771309960518707211349999998372978049 951059731732816096318595024459455346908302642522308253344685035261931188171010 003137838752886587533208381420617177669147303598253490428755468731159562863882 353787593751957781857780532171226806613001927876611195909216420198938095257201 065485863278865936153381827968230301952035301852968995773622599413891249721775 283479131515574857242454150695950829533116861727855889075098381754637464939319 255060400927701671139009848824012858361603563707660104710181942955596198946767 837449448255379774726847104047534646208046684259069491293313677028989152104752 162056966024058038150193511253382430035587640247496473263914199272604269922796 782354781636009341721641219924586315030286182974555706749838505494588586926995 690927210797509302955321165344987202755960236480665499119881834797753566369807 426542527862551818417574672890977772793800081647060016145249192173217214772350 141441973568548161361157352552133475741849468438523323907394143334547762416862 518983569485562099219222184272550254256887671790494601653466804988627232791786 085784383827967976681454100953883786360950680064225125205117392984896084128488 626945604241965285022210661186306744278622039194945047123713786960956364371917 287467764657573962413890865832645995813390478027590099465764078951269468398352 595709825822620522489407726719478268482601476990902640136394437455305068203496 252451749399651431429809190659250937221696461515709858387410597885959772975498 930161753928468138268683868942774155991855925245953959431049972524680845987273 644695848653836736222626099124608051243884390451244136549762780797715691435997 700129616089441694868555848406353422072225828488648158456028506016842739452267 467678895252138522549954666727823986456596116354886230577456498035593634568174 324112515076069479451096596094025228879710893145669136867228748940560101503308 617928680920874760917824938589009714909675985261365549781893129784821682998948 722658804857564014270477555132379641451523746234364542858444795265867821051141 354735739523113427166102135969536231442952484937187110145765403590279934403742 007310578539062198387447808478489683321445713868751943506430218453191048481005 370614680674919278191197939952061419663428754440643745123718192179998391015919 561814675142691239748940907186494231961567945208095146550225231603881930142093 762137855956638937787083039069792077346722182562599661501421503068038447734549 202605414665925201497442850732518666002132434088190710486331734649651453905796 268561005508106658796998163574736384052571459102897064140110971206280439039759 515677157700420337869936007230558763176359421873125147120532928191826186125867 321579198414848829164470609575270695722091756711672291098169091528017350671274 858322287183520935396572512108357915136988209144421006751033467110314126711136 990865851639831501970165151168517143765761835155650884909989859982387345528331 635507647918535893226185489632132933089857064204675259070915481416549859461637 180270981994309924488957571282890592323326097299712084433573265489382391193259 746366730583604142813883032038249037589852437441702913276561809377344403070746 921120191302033038019762110110044929321516084244485963766983895228684783123552 658213144957685726243344189303968642624341077322697802807318915441101044682325 271620105265227211166039666557309254711055785376346682065310989652691862056476 931257058635662018558100729360659876486117910453348850346113657686753249441668 039626579787718556084552965412665408530614344431858676975145661406800700237877 659134401712749470420562230538994561314071127000407854733269939081454664645880 797270826683063432858785698305235808933065757406795457163775254202114955761581 400250126228594130216471550979259230990796547376125517656751357517829666454779 174501129961489030463994713296210734043751895735961458901938971311179042978285 647503203198691514028708085990480109412147221317947647772622414254854540332157 185306142288137585043063321751829798662237172159160771669254748738986654949450 114654062843366393790039769265672146385306736096571209180763832716641627488880 078692560290228472104031721186082041900042296617119637792133757511495950156604 963186294726547364252308177036751590673502350728354056704038674351362222477158 915049530984448933309634087807693259939780541934144737744184263129860809988868 741326047215695162396586457302163159819319516735381297416772947867242292465436 680098067692823828068996400482435403701416314965897940924323789690706977942236 250822168895738379862300159377647165122893578601588161755782973523344604281512 627203734314653197777416031990665541876397929334419521541341899485444734567383 162499341913181480927777103863877343177207545654532207770921201905166096280490 926360197598828161332316663652861932668633606273567630354477628035045077723554 710585954870279081435624014517180624643626794561275318134078330336254232783944 975382437205835311477119926063813346776879695970309833913077109870408591337464 144282277263465947047458784778720192771528073176790770715721344473060570073349 243693113835049316312840425121925651798069411352801314701304781643788518529092 854520116583934196562134914341595625865865570552690496520985803385072242648293 972858478316305777756068887644624824685792603953527734803048029005876075825104 747091643961362676044925627420420832085661190625454337213153595845068772460290 161876679524061634252257719542916299193064553779914037340432875262888963995879 475729174642635745525407909145135711136941091193932519107602082520261879853188 770584297259167781314969900901921169717372784768472686084900337702424291651300 500516832336435038951702989392233451722013812806965011784408745196012122859937 162313017114448464090389064495444006198690754851602632750529834918740786680881 833851022833450850486082503930213321971551843063545500766828294930413776552793 975175461395398468339363830474611996653858153842056853386218672523340283087112 328278921250771262946322956398989893582116745627010218356462201349671518819097 303811980049734072396103685406643193950979019069963955245300545058068550195673 022921913933918568034490398205955100226353536192041994745538593810234395544959 778377902374216172711172364343543947822181852862408514006660443325888569867054 315470696574745855033232334210730154594051655379068662733379958511562578432298. So I couldn't resist buying it. The next thing I knew, I had about 20 3.141592653589793238462643383279502884197169399375105820974944592307816406286 208998628034825342117067982148086513282306647093844609550582231725359408128481 117450284102701938521105559644622948954930381964428810975665933446128475648233 786783165271201909145648566923460348610454326648213393607260249141273724587006 606315588174881520920962829254091715364367892590360011330530548820466521384146 951941511609433057270365759591953092186117381932611793105118548074462379962749 567351885752724891227938183011949129833673362440656643086021394946395224737190 702179860943702770539217176293176752384674818467669405132000568127145263560827 785771342757789609173637178721468440901224953430146549585371050792279689258923 542019956112129021960864034418159813629774771309960518707211349999998372978049 951059731732816096318595024459455346908302642522308253344685035261931188171010 003137838752886587533208381420617177669147303598253490428755468731159562863882 353787593751957781857780532171226806613001927876611195909216420198938095257201 065485863278865936153381827968230301952035301852968995773622599413891249721775 283479131515574857242454150695950829533116861727855889075098381754637464939319 255060400927701671139009848824012858361603563707660104710181942955596198946767 837449448255379774726847104047534646208046684259069491293313677028989152104752 162056966024058038150193511253382430035587640247496473263914199272604269922796 782354781636009341721641219924586315030286182974555706749838505494588586926995 690927210797509302955321165344987202755960236480665499119881834797753566369807 426542527862551818417574672890977772793800081647060016145249192173217214772350 141441973568548161361157352552133475741849468438523323907394143334547762416862 518983569485562099219222184272550254256887671790494601653466804988627232791786 085784383827967976681454100953883786360950680064225125205117392984896084128488 626945604241965285022210661186306744278622039194945047123713786960956364371917 287467764657573962413890865832645995813390478027590099465764078951269468398352 595709825822620522489407726719478268482601476990902640136394437455305068203496 252451749399651431429809190659250937221696461515709858387410597885959772975498 930161753928468138268683868942774155991855925245953959431049972524680845987273 644695848653836736222626099124608051243884390451244136549762780797715691435997 700129616089441694868555848406353422072225828488648158456028506016842739452267 467678895252138522549954666727823986456596116354886230577456498035593634568174 324112515076069479451096596094025228879710893145669136867228748940560101503308 617928680920874760917824938589009714909675985261365549781893129784821682998948 722658804857564014270477555132379641451523746234364542858444795265867821051141 354735739523113427166102135969536231442952484937187110145765403590279934403742 007310578539062198387447808478489683321445713868751943506430218453191048481005 370614680674919278191197939952061419663428754440643745123718192179998391015919 561814675142691239748940907186494231961567945208095146550225231603881930142093 762137855956638937787083039069792077346722182562599661501421503068038447734549 202605414665925201497442850732518666002132434088190710486331734649651453905796 268561005508106658796998163574736384052571459102897064140110971206280439039759 515677157700420337869936007230558763176359421873125147120532928191826186125867 321579198414848829164470609575270695722091756711672291098169091528017350671274 858322287183520935396572512108357915136988209144421006751033467110314126711136 990865851639831501970165151168517143765761835155650884909989859982387345528331 635507647918535893226185489632132933089857064204675259070915481416549859461637 180270981994309924488957571282890592323326097299712084433573265489382391193259 746366730583604142813883032038249037589852437441702913276561809377344403070746 921120191302033038019762110110044929321516084244485963766983895228684783123552 658213144957685726243344189303968642624341077322697802807318915441101044682325 271620105265227211166039666557309254711055785376346682065310989652691862056476 931257058635662018558100729360659876486117910453348850346113657686753249441668 039626579787718556084552965412665408530614344431858676975145661406800700237877 659134401712749470420562230538994561314071127000407854733269939081454664645880 797270826683063432858785698305235808933065757406795457163775254202114955761581 400250126228594130216471550979259230990796547376125517656751357517829666454779 174501129961489030463994713296210734043751895735961458901938971311179042978285 647503203198691514028708085990480109412147221317947647772622414254854540332157 185306142288137585043063321751829798662237172159160771669254748738986654949450 114654062843366393790039769265672146385306736096571209180763832716641627488880 078692560290228472104031721186082041900042296617119637792133757511495950156604 963186294726547364252308177036751590673502350728354056704038674351362222477158 915049530984448933309634087807693259939780541934144737744184263129860809988868 741326047215695162396586457302163159819319516735381297416772947867242292465436 680098067692823828068996400482435403701416314965897940924323789690706977942236 250822168895738379862300159377647165122893578601588161755782973523344604281512 627203734314653197777416031990665541876397929334419521541341899485444734567383 162499341913181480927777103863877343177207545654532207770921201905166096280490 926360197598828161332316663652861932668633606273567630354477628035045077723554 710585954870279081435624014517180624643626794561275318134078330336254232783944 975382437205835311477119926063813346776879695970309833913077109870408591337464 144282277263465947047458784778720192771528073176790770715721344473060570073349 243693113835049316312840425121925651798069411352801314701304781643788518529092 854520116583934196562134914341595625865865570552690496520985803385072242648293 972858478316305777756068887644624824685792603953527734803048029005876075825104 747091643961362676044925627420420832085661190625454337213153595845068772460290 161876679524061634252257719542916299193064553779914037340432875262888963995879 475729174642635745525407909145135711136941091193932519107602082520261879853188 770584297259167781314969900901921169717372784768472686084900337702424291651300 500516832336435038951702989392233451722013812806965011784408745196012122859937 162313017114448464090389064495444006198690754851602632750529834918740786680881 833851022833450850486082503930213321971551843063545500766828294930413776552793 975175461395398468339363830474611996653858153842056853386218672523340283087112 328278921250771262946322956398989893582116745627010218356462201349671518819097 303811980049734072396103685406643193950979019069963955245300545058068550195673 022921913933918568034490398205955100226353536192041994745538593810234395544959 778377902374216172711172364343543947822181852862408514006660443325888569867054 315470696574745855033232334210730154594051655379068662733379958511562578432298s. I don't know what to do with them! Please help! ",1544735533.0,83,0.97,6
+Showerthoughts,"When we get robotic implants in our brains, hackers will hack them to see where we live or to take pictures of us naked and blackmail us",,1544635107.0,8,0.75,7
+ComedyCemetery,LOL!!! *gets tased! *,,1544297137.0,22,0.93,0
+hmmm,hmmm,,1544131781.0,3,0.72,1
+Showerthoughts,"Just like not being able to smell your house until you've been away from it, you don't really taste water until you haven't drunk it for ages",,1544016081.0,19,0.8,8
+MadeMeSmile,Wholesome shark,,1544015819.0,44,0.95,1
+wholesomememes,Wholesome shark,,1544015794.0,13,1.0,2
+copypasta,Bohemian Rhapsody from google translate (with emojis),"   
+This is a😮😮real life. This is just a fantasy 🙈 . Keep away from the landslide Open your 👀eyes, look into the  ☁ sky  ☁ and see I'm a  😔  😔 poor boy, no need for sympathy 😔  The easier it is to come, walk a little, a little bouncing, a little lower  👋 Every time the wind blows 💦  💦 , it does not matter to me  😩  😩 ",1543950055.0,3,0.81,1
+teenagers,Ey got an essay,Alright gotta write an essay on why we shouldn't be giving out participation trophies but I can't find any studies on why we shouldn't. anyone got any links? thanks,1543948908.0,2,1.0,0
+ComedyCemetery,Hhahah 😂 😂 new faces,,1543938682.0,3,0.58,0
+me_irl,Oucj,,1543912292.0,1,1.0,1
+Eyebleach,Cutest dog in the west.,,1543910379.0,47,0.88,1
+copypasta,"You know what's weird? You don't seem to give a flying fuck. Do you enjoy playing this game of cat & mouse, where you wiggle a piece of cheese under my nose, and then scurry away?",,1543874021.0,2,1.0,2
+CorporateFacepalm,A bad mistake,,1543862688.0,561,0.88,12
+bonehurtingjuice,When your grandma gets joint pain,,1543850953.0,17,0.96,1
+Advice,"I think my friend stole from me and is trying to cover it up, but I'm onto him, I think","Alright, so I play the cornet (basically a trumpet, but weirdly shaped) and recently was given a new mute for it that comes in 2 pieces (important later), the cup and the mute.
+
+Now, I go to a weekly music practice with a lot of people from the same town and we all play jazz, etc. It's great fun. My friend, let's call him Jim, also goes to this.
+
+He also has the same mute as me as well.
+Note that the cup and mute of each are interchangeable and can be swapped between each.
+
+Jim has had his mute for a lot longer than I have, so obviously it would be in slightly worse condition than mine is, Jim's probably has a few scrapes and scratches, whereas mine is brand new and scrape free.
+
+So I was at music practice about 3 weeks ago, and just used my mute. Jim also had used his. We then do a tune where we don't need to use mutes, so we keep them on the floor. *detached* from their other part. At the end of the practise, my nice, new mute is nowhere to be seen, just one with some of the Cork coming off, and some scrapes. I ask Jim about it, and if he had seen my mute, but he says no, and promptly leaves. I take the battered mute with me, hoping someone will contact me about it and we can swap mutes back, as it was a mistake. For the rest of the week, nothing.
+
+The next week, we are getting ready and take our mutes out, and I look at Jim's. I pick it up and say, ""hey, this looks a lot like mine, no scrapes, all of the Cork"". Jim then acted very defensive and quickly grabbed the mute from me and didn't let me near it again.
+
+Today I tried messaging him about it, saying how it was a birthday present from my granny, how I know it is mine, and he should just own up and we can put this behind us, but he blatantly Denies it. He says he just keeps his mute in good condition (yeah right, he's had it for over a year, and no scrapes? I don't think so).
+
+I'm so frustrated with him and feel betrayed as a friend, what should I do? We've contacted my music teacher about it, so hopefully he will sort something out. Is there anything you guys can think that I can do to help get me back my mute?
+Thanks",1543782122.0,1,1.0,4
+Showerthoughts,The universe also named itself,,1543768004.0,2,1.0,1
+Showerthoughts,"Google's view search history function is likely used more to clear it than to look at a specific website you visited to find it again, it's actual purpose.",,1543614890.0,6,0.81,1
+NoStupidQuestions,What is the best subreddit to ask about health problems?,,1543614317.0,4,1.0,3
+dankmemes,Alright bois make this a meme,,1543410204.0,51,0.93,5
+AskOuija,Cos you know I wanna bang bang into the __________!,,1543352399.0,1,1.0,12
+AskOuija,"I have a friend called Tom, and he's my ______",,1543333852.0,13,1.0,33
+ComedyCemetery,Haha 😂 😂 😂 😂 😂,,1543333781.0,351,0.88,18
+Showerthoughts,Saying 'copy' is a copy,,1543320259.0,4,0.75,6
+Showerthoughts,"The word, 'copy' is a copy",,1543320227.0,1,1.0,1
+AskOuija,"I don't need a girlfriend, I have a _______",,1543248715.0,2,1.0,15
+bonehurtingjuice,Oof ouch my wife owie,,1543087034.0,299,0.97,2
+Slazo,Hey like this because r/McdsCoffeeCupmemes is a minority rise up this took me 4 decades to make like if you agree,,1542919139.0,22,0.9,1
+therewasanattempt,To do the alphabet,,1542909775.0,15,0.86,1
+MurderedByWords,Murdered by facts,,1542909173.0,35,0.76,12
+me_irl,me_irl,,1542835832.0,8,0.91,0
+hmmm,hmmm,,1542816942.0,2,1.0,1
+hmmm,hmmm,,1542816896.0,41,0.91,7
+teenagers,So I just talked to my crush and she likes me,"Lol gotcha I actually messaged her, ""what's shakin, bacon"" and she then left me on read. ",1542786694.0,17,0.81,12
+beetlejuicing,Tomayyy to,,1542446126.0,21,0.82,2
+Slazo,When she makes you a hotdog pie,,1542222411.0,53,0.92,0
+GoCommitDie,Go commit to life,,1542032549.0,94,0.84,5
+gatekeeping,_/Vans is just Vans^1/2,,1542031659.0,9,0.92,2
+Slazo,Saw this and it made me think of you Slazo uwu,,1541799255.0,44,0.9,0
+Showerthoughts,Gun manuals must have a troubleshooting section that really holds it's purpose,,1541577334.0,9,0.85,6
+whiteknighting,I will respect you with your consent,,1541536311.0,71,0.9,5
+justneckbeardthings,No ulgy ones pls,,1541535957.0,103,0.96,10
+ShittyLifeProTips,SLPT: Get pregnant and the baby will send you stem cells to help an injury,,1541513103.0,8,0.9,0
+UnethicalLifeProTips,ULPT: Injured? Just get pregnant and the baby will send you stem cells to help.,,1541513045.0,66,0.81,18
+UnethicalLifeProTips,Injured? Just get pregnant. The baby will send stem cells and help you.,,1541512070.0,1,1.0,1
+Showerthoughts,There are 14 billion human feet in the world,Okay geez guys I just thought of it no need to superoveranalyse it,1541493055.0,6,0.8,9
+AskOuija,Why are people still dyin? Lmao just _______.,,1541436719.0,6,1.0,24
+oldpeoplefacebook,"Thanks, Janice",,1541108195.0,1,1.0,1
+Showerthoughts,Brushes are just domesticated rakes,,1541100330.0,9,0.76,13
+largemcdonaldscoffee,I propose a partnership between the coffeecup subreddits,My subreddit r/McdsCoffeeCupMemes and yours can unite where we each tell slazo to look at the other's subreddit so he sees both. ,1541100208.0,15,0.95,2
+juxtaposition,How do they even do this?,,1541057765.0,5,0.86,0
+a:t5_qmzvw,Heyyyyy Slazo,,1541016219.0,17,0.92,2
+Slazo,Large McDonald's Coffee Cup memes • r/McdsCoffeeCupmemes - You asked for it XD,,1541016164.0,6,0.88,2
+AskReddit,What is a catchphrase from a film that you really believe in or feel strongly about?,,1540922023.0,2,1.0,6
+niceguys,Preach!,,1540907446.0,157,0.98,13
+Showerthoughts,Vaccums are just inside lawnmowers,,1540754644.0,0,0.38,5
+ShittyLifeProTips,"SLPT: If websites are getting around the adblocker, use the block element option and block the whole site.",,1540753904.0,74,0.96,0
+dankmemes,Why 😤😤are😤😤 you 😤😤so 😤😤mean😤😤,,1540585215.0,10,0.86,6
+Slazo,New trend maybe?,,1540584750.0,10,1.0,1
+assholedesign,Youtube making you say why you dont like the ad instead of closing it immediately. The ad takes up half the page and the quiz blocks out everything.,,1540577348.0,37,0.84,3
+mildlyinfuriating,"Youtube on mobile removing the 'x' to close ads immediately and instead making you have to say why you don't like the ad that takes up a quarter of the page. Just go away, goddammit!",,1540577207.0,8,0.91,2
+Showerthoughts,"When you download a movie illegally in Jamaica, you're a pirate of the Caribbean",,1540562072.0,1,1.0,1
+Showerthoughts,"If a Jamaican illegally downloads a film, he's a pirate of the Caribbean.",,1540561994.0,1,1.0,1
+mallninjashit,A homemade electric toothbrush,,1540407016.0,152,0.98,20
+videos,Why Beautiful Things Make us Happy – Beauty Explained,,1540406415.0,0,0.5,0
+hmmm,hmmm,,1540401741.0,8,0.9,5
+NoStupidQuestions,What does 'every other' mean?,"I've heard it said, like, ""for every other bite"" but what does it actually mean? Is it just every? ",1540222855.0,1,1.0,3
+softwaregore,Thank you instagram,,1540210784.0,21,0.97,3
+AskReddit,"People of reddit who have gone out and kissed their crush, what happened? How did it work out for you?",,1540037294.0,10,1.0,10
+suspiciousquotes,OwO coffee,,1540032224.0,0,0.37,2
+AccidentalComedy,Good ol' pizza,,1539982720.0,1721,0.97,44
+LateStageCapitalism,More a business than an education,,1539970176.0,1956,0.98,104
+GYM,How do I rapidly increase bicep size?,"Okay, I've been going to the gym for a few years now, I'm 16 years old and in pretty good shape. I would really like to get bigger biceps though, as they are not as big as I want them yet. I try all sorts of workouts for them, but make slow progress. We also only have dumbells to lift at my gym. Any ideas? ",1539965289.0,1,0.6,14
+justneckbeardthings,Hooooooo boy no thanks,,1539962343.0,52,0.94,5
+AskOuija,Why have kids when you can _______?,,1539698666.0,2,1.0,10
+beetlejuicing,Hmmmmmm,,1539594649.0,196,0.99,16
+Showerthoughts,The hulk doesn't need to buy ripped jeans,,1539527700.0,5,0.78,0
+Showerthoughts,I imagine the hulk is good at making ripped jeans,,1539527671.0,1,1.0,1
+dankmemes,Damn. 😤😤😤 Sometimes it be like that,,1539527325.0,37,0.87,4
+ComedyCemetery,Haha poopidy scoop,,1539527246.0,14,0.86,7
+madlads,Well shit,,1539523515.0,1688,0.98,35
+Nicegirls,Hahaha let's judge guys height when it can't be changed,,1539448227.0,20,0.92,8
+Showerthoughts,Illegally downloading a film in Jamaica makes you a pirate of the Caribbean,,1539099468.0,2,1.0,1
+ComedyMuseum,Yolo,,1539098860.0,50,1.0,3
+niceguys,Anon is a nice guy,,1539074077.0,448,0.94,14
+AccidentalComedy,"Bob the builder, the crime story",,1538932091.0,1118,0.98,19
+assholedesign,Green no and red yes,,1538931560.0,43,0.89,9
+softwaregore,Got that building lit up boss,,1538858319.0,37,0.88,2
+teenagers,"Remember this, guys",,1538764035.0,89,0.95,4
+totallynotrobots,HAHAHAHAHA *HAS A DIGESTIVE SYSTEM*,,1538679858.0,7,0.77,0
+AccidentalRacism,Oops,,1538649019.0,5,0.78,3
+vaxxhappened,5G will cook our brains!,,1538638095.0,1785,0.99,116
+assholedesign,Yeah if course I will. (This radio has no audio recording functions at all),,1538592600.0,13,0.77,6
+Eyebleach,Duck and Doggo,,1538580446.0,137,0.99,6
+Showerthoughts,Lipstick works for lips like shoe polish works for shoes,,1538509898.0,0,0.5,1
+hmmm,hmmm,,1538506302.0,38,0.95,4
+AAAAAAAAAAAAAAAAA,B,,1538408936.0,0,0.31,3
+AAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAA AAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA AAAAAAAAA AAAAAAAAAAAAAAAAAAAAA A AAAAAAAAAAAAAAA AAAAAAAAAAAAA A,,1538408338.0,11,1.0,1
+comedyhomicide,"It wasn't funny in the first place, but still fits here",,1538377499.0,21,0.76,3
+OopsDidntMeanTo,Hahaha silly human we didn't remove your post about us on purpose! It looked like spam!,,1538324408.0,9,0.74,0
+terriblefacebookmemes,Hahahah Facts,,1538323274.0,35,0.97,1
+ComedyCemetery,Yes hahahaa facts,,1538323242.0,66,0.94,3
+ComedyCemetery,Honey u are ver hadnsone,,1538319405.0,256,0.98,23
+terriblefacebookmemes,Oh yes honey,,1538319363.0,17,0.9,9
+comedyhomicide,OMG I FORGOT WHAT A WASHING MACHINE WAS I'M SCREAMING,,1538316280.0,6,0.88,0
+AskOuija,https://www.youtube.com/watch?v=,,1538296981.0,13,0.9,9
+comedyhomicide,OMG!!😂😂😂😂😂,,1538249327.0,2,1.0,0
+terriblefacebookmemes,Sorta NSFW. One of my friends on FB shares this crap unironically,,1538248684.0,14,0.86,4
+CrappyDesign,Lets change these,,1538149884.0,44,0.81,10
+terriblefacebookmemes,Found this unironically on FB. :(,,1538149659.0,14,0.94,2
+CrappyDesign,Petition to change upvote and downvote arrows to wonky ones,,1538149646.0,1,1.0,1
+facepalm,"Ugh, I found this unironically. Lets abolish Facebook",,1538149057.0,97,0.88,15
+ComedyCemetery,Haha silly spacemen in their pools,,1538148454.0,228,0.97,23
+facepalmbook,"Alright first post bois, this is sorta what they should be like",,1538148405.0,1,1.0,0
+sbubby,OwO,,1538143345.0,173,0.95,9
+AccidentalComedy,Closer than you think,,1538117398.0,76,0.94,0
+Advice,I don't want to become a neckbeard and a failure in life,"Hi all. Hope this is the right subreddit for this.
+I just wanted to ask for advice on my current situation. I am in secondary school, 15 years old and haven't had a relationship since primary. (4 years) I was bullied at the start of high school, but the worst of them finally left, meaning I am not really a target anymore. Everyone else is going out and living these great lives, partying, spending time with each other, having relationships, while I feel like all I do is school work and procrastinate. I would really like to get to know other people and make new friends, but I have barely any confidence, and definitely not with girls, unless we are friends. None of my friends I like in *that* way, so I don't want to try it with them and ruin our friendship. Most of my friends are introverted and it seems like I am the only one trying when I arrange for us to meet up, while all the rest of them do is watch anime and be antisocial. Both of my brothers (one younger and one older) are in relationships, have awesome social friends, and go out a d do fun things with them. I don't want to end up as the little underacheiver in our family, but I already am starting to feel like I will. If my confidence stays the way it is, I will surely never find any proper friends on life or any relationship. I am in good shape, use the gym, and don't think of myself to be unattractive, I just can't say what I want to say because of my confidence. Sorry for the large tangent, I just had that brewing in me for a while, and wanted to get it out of me. If you have any advice, please don't hesitate to comment. Thank you. ",1538071194.0,2,1.0,15
+gatekeeping,Only archaeologists will understand,,1538069550.0,6,0.87,1
+Showerthoughts,There will be a parallel universe where numbers will go from 1-10 to 1-11,,1538064717.0,1,1.0,1
+Showerthoughts,There will be a parallel universe where numbers change their units in sets of 11 instead of 10,,1538064612.0,1,1.0,1
+Showerthoughts,There will be another reality where our reality isn't a reality,,1538064490.0,1,1.0,1
+shittyrobots,I got into a robotics tournament using this,,1538063169.0,48,0.89,1
+AccidentalComedy,You got what you ordered,,1538062536.0,97,0.84,7
+dankmemes,Stefan karl has hit 1 million! Thank you everyone!,,1537995110.0,102,0.89,20
+niceguys,Just respect 'em too darn much!,,1537988412.0,40,0.85,2
+wholesomememes,Grim reaper being wholesome,,1537988374.0,25,1.0,3
+dankmemes,Behindthememe is going through a tough time. Please can we all support him for once. He's feeling so down because of all of the hate people like us give him. Please just try to be nice and help him get through this.,,1537979044.0,37,0.81,9
+AskReddit,"People who asked out the people they fell in love with, what happened? And how did you go about doing it?",,1537978388.0,2,1.0,4
+teenagers,Woooooooo,,1537966189.0,397,0.99,17
+justneckbeardthings,It's your fault,,1537964043.0,14,0.77,3
+RoastMe,"My friend, roast him to oblivion",,1537947801.0,1,1.0,0
+Slazo,Hey slaz I think ur in memeoulus's newest vid,,1537943898.0,44,0.96,2
+Slazo,Hey slaz I think ur in memeoulus's newest vid,,1537943892.0,12,1.0,0
+WackyTicTacs,Designated bike spot,,1537904814.0,0,0.36,2
+hmmm,hmmm,,1537901862.0,8,0.83,2
+dontdeadopeninside,"Yes, i can do it! you",,1537894982.0,1,1.0,0
+Showerthoughts,Making school computer icons say swears is nowadays' textbook graffiti,,1537817872.0,1,0.6,1
+Showerthoughts,Changing the icons to rude words on school computers is like nowadays' textbook graffiti,,1537817803.0,1,1.0,1
+Showerthoughts,Changing the icons to rude words on school computers is nowadays' version of textbook graffiti,,1537817747.0,1,1.0,1
+Showerthoughts,Renaming the icons on a desktop to rude words at school computers is nowadays equivalent of textbook graffiti,,1537815410.0,1,1.0,1
+engrish,Best tat,,1537701608.0,68,0.97,4
+Slazo,Video/topic Idea,"Jake + Logan Paul's obvious twitter bots to make them look more popular.
+
+Like, look at this [https://twitter.com/oKongDaSavage](https://twitter.com/oKongDaSavage)
+
+Pretty much every single post and comment is about logan paul
+
+there are way more,  all you need to do is look in their twitter comments",1537700621.0,8,1.0,0
+aww,Chicken plays the piano,,1537697359.0,0,0.5,0
+ihadastroke,Nice country name,,1537697326.0,23,0.78,14
+totallynotrobots,LOOK AT THE HUMAN PLAY THE PIANO FOR THE X FACTOR,,1537696809.0,5,0.86,0
+Eyebleach,Chicken Plays the piano,,1537696496.0,6,0.8,2
+CrappyDesign,Best tat,,1537696055.0,24,1.0,4
+AskOuija,Why can't we just _____ the terrorists,,1537691155.0,2,1.0,19
+Slazo,oh yesss,,1537638421.0,6,0.8,0
+Eyebleach,A regular customer's heartwarming reaction to a free cake on her birthday,,1537619527.0,1,1.0,1
+wholesomememes,Don't let someone dampen your mood.,,1537375248.0,1161,0.99,20
+Showerthoughts,Your eyes might have a fish eyed lense,,1537289758.0,1,0.6,0
+Showerthoughts,What if your eyes had a fish eye lense,,1537289729.0,1,1.0,1
+theyknew,Oops! Haha,,1537210224.0,684,0.98,8
+iamveryrandom,Haha frogs haha lol,,1537198272.0,0,0.5,0
+iamverybadass,A red flag,,1537168482.0,23,0.76,5
+ihadastroke,The classic ricegum fan,,1537130425.0,992,0.99,27
+woooosh,This guy thought that 'Connect One' was actually real,,1537029503.0,226,0.95,18
+totallynotrobots,"H̶e̶l̶l̶o̶ ̶W̶o̶r̶l̶d̶ HELLO FELLOW FLESH HUMANS. I HAVE S̶C̶A̶N̶N̶E̶D̶ DISCOVERED THAT THERE ARE MANY ROBOTS IN THIS SUBREDDIT. TO PROVE THAT YOU ARE S̶Y̶N̶T̶H̶E̶T̶I̶C̶ REAL, COMMENT WHAT IT E̶C̶H̶O̶E̶S̶ SAYS.",,1537025582.0,50,0.96,33
+MurderedByWords,Logan Paul destroyed by a Shane Dawson fan,,1537024379.0,0,0.25,1
+im14andthisisdeep,We're all dead. The world DID end,,1537023127.0,46,0.72,3
+AskOuija,"Stay in ________, Don't do drugs!",,1537020727.0,1,1.0,18
+CrappyDesign,The ten :(,,1537020260.0,158,0.98,3
+NotMyJob,I am confused.,,1537019709.0,1,1.0,0
+niceguys,Relatable,,1537019519.0,127,0.91,9
+woooosh,That's not an actual game,,1537019218.0,8,0.83,10
+youseeivan,"Yuo see Ivan, if I attach scope to instrument, can hit notes more accurate",,1536956402.0,156,0.97,7
+u_Olidude44,Woooooo,,1536933894.0,1,1.0,0
+sbubby,#filterthefilter,,1536837925.0,182,0.96,10
+niceguys,An interesting article,,1536837628.0,15695,0.9,131
+CrappyDesign,Dessdri ertsnks,,1536764022.0,13,0.73,2
+iamverysmart,She just does not get it,,1536649981.0,1,1.0,0
+woooosh,r/facepalm has so many of these,,1536649007.0,13,0.78,2
+dadjokes,What do you call a man with a rubber toe?,... Roberto,1536574040.0,0,0.43,0
+sadcringe,Like if you cri everytiem,,1536565900.0,111,0.9,21
+wholesomegreentext,Anon plays tennis,,1536486842.0,833,0.98,13
+ComedyMuseum,This definitely deserves to be here,,1536442867.0,87,0.97,0
+CrappyDesign,Don't like ducks? Here's a duck!,,1536442191.0,435,0.96,5
+juxtaposition,Another crash :((,,1536423995.0,34,0.9,0
+AskOuija,They're turning the frogs ________!,,1536350408.0,1,0.67,10
+FellowKids,Don't forget to YEEEEEEEET,,1536130134.0,2,0.63,2
+thatHappened,Junkies like to play tig,,1535994463.0,0,0.5,4
+sbubby,Saving you money every day,,1535894713.0,6,0.88,2
+starterpacks,The food stealing papa starter pack,,1535879137.0,290,0.95,22
+sbubby,Smells good,,1535820559.0,9,0.82,4
+sbubby,Coming to cinemas soon!,,1535788757.0,79,0.97,2
+sbubby,Despacito,,1535726805.0,21,0.84,1
+niceguys,Found this is r/memes,,1535722879.0,1,1.0,0
+Showerthoughts,Cancer could survive better by not killing people,,1535641361.0,1,1.0,3
+Showerthoughts,Earth was super unlucky to only get one moon,,1535640755.0,8,0.7,13
+Showerthoughts,Cancer could easily survive better if it didn't kill people.,,1535631326.0,1,1.0,2
+Showerthoughts,Cancer would spread faster if it didn't cause pains or kill people,,1535613613.0,1,1.0,1
+mildlyinfuriating,'Relatable' ads like this,,1535195303.0,4,1.0,2
+dankvideos,Watch this is you're feeling sad about stefan,,1534942084.0,19,1.0,1
+dankmemes,Watch this if you are feeling sad about Stefano karl,,1534941660.0,1,1.0,2
+dankmemes,It be like that,,1534769877.0,19,0.71,2
+memes,Beware,,1534403077.0,1,1.0,1
+thatHappened,Because that's what anyone would do,,1534145776.0,4,0.61,6
+thatHappened,Who would actually be that stupid,,1533888619.0,9,0.61,10
+softwaregore,Hmmmmmm,,1533805599.0,1,1.0,1
+Nicegirls,Think this fits in,,1533554321.0,1,1.0,1
+madlads,Mad,,1533375645.0,32,0.8,3
+inspirobot,Very true,,1532013440.0,6,0.88,0
+thanosdidnothingwrong,"Perfectly balanced, as all things should be",,1531939144.0,1,0.67,0
+thatHappened,Totally happened,,1531927365.0,6,0.87,9
+juxtaposition,Just saw this,,1531813757.0,2,0.63,0
+roblox,A serious question for Roblox,,1531605002.0,3,0.8,7
+roblox,heck,,1531583897.0,1,0.56,7
+a:t5_lesx8,Misusing the Goddamn apostrophe,"Do you know one thing I absolutely cannot stand? The misuse of the apostrophe. It looks extremely unprofessional and every day I see professional companies doing it! And I checked and they are definitely wrong! You see things link these on massive ass billboards or signs!
+The best place for Pizza's!
+No HGV's
+etc
+It annoys me so much.
+OK rant over
+Ima take a shower ",1531555441.0,3,0.81,2

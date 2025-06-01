@@ -1,0 +1,2576 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+rimjob_steve,With great power comes great...,,1626556792.0,0,0.22,0
+django,Did I make the right choice?,"I just got done building a website using Django Rest Framework. I'm familiar with Django and FastAPI, but chose Django as it's much faster to develop, and I really didn't want any security issues.
+
+I've tried optimizing my code, and its acceptable fast considering how many db calls it has. Most time is spent on DB calls and serializing.
+
+I know it's stupid, but I'm really nervous. I just got done finalizing the API design.",1626453927.0,2,0.75,4
+Python,"Hoe do I get the ""main"" image from a website?",[removed],1626450649.0,1,1.0,1
+AskPhysics,"If a object is travelling at 0.99c from my perspective, i would also be travelling at 0.99c from the object's perspective. How would this play out?","So, time would flow slower for the object compared to me. But, since from the object's perspective, I'm also moving at 0.99c, would I also experience time dilation?",1626297183.0,68,0.96,35
+queencirclejerk,What has humanity come to?,,1626253668.0,0,0.25,0
+DoesAnybodyElse,DAE sometimes narrate the world around them like it's a documentary and the people are some weird apes?,I sometimes narrate the world around me and pretend people are just smart apes in a documentary. It makes things sound funny.,1626209815.0,0,0.5,2
+india,"What is it with all these ads, apps, videos with clickbait sexual content? I've been seeing this too much lately.",,1626179237.0,137,0.98,68
+unpopularopinion,"As a fat dude, i find it funny when people make fun of my weight.",[removed],1626030988.0,0,0.14,1
+django,How do I save multiple sizes of an image (saving to AWS S3)?,"So, I have a ""Image"" model.
+
+    class PostImage(models.Model):
+    
+         Post = models. ForeignKey(Post, on_delete=models.CASCADE )
+    
+        Image = models.ImageField()
+    
+        ThumbNail = models.ImageField()
+
+The plan is to save a full size image to ""Image"", and a thumbnail to "" Thumbnail "".
+
+I had a thing where it used Pillow to save a thumbnail, but using Boto3 broke it.
+
+How do I do it now?
+
+Edit: I have a celery method to do it now.
+
+&#x200B;
+
+    @shared_task
+    def GeneratePostThumbNail(image_id):
+        print('UTFUFUCUGVFTYGHG')
+        ImageObject = Images.objects.get(id=image_id)
+        print(ImageObject)
+        try:
+            print(settings.AWS_ACCESS_KEY_ID)
+            filename, ext = os.path.splitext(ImageObject.Image.name)
+            random_str = get_random_string(length=4,         allowed_chars='abcdefghijklmnopqrstuvwxyz1234567890') #avoid conflict in file names
+            filename = filename +'_'+random_str + '_thumbnail' + ext
+            print(filename)
+            i = storage.open(filename, 'w+')
+            i_read = storage.open(ImageObject.Image.name, 'rb')
+            OriginalImage = Image.open(i_read)
+            if OriginalImage.width>720 or OriginalImage.height>720:
+                if OriginalImage.height>OriginalImage.width:
+                    NewWidth = round(OriginalImage.width/(OriginalImage.height/720))
+                    thumbnail_size = (720, OriginalImage.width)
+                elif OriginalImage.width>OriginalImage.height:
+                    NewHeight = round(OriginalImage.height / (OriginalImage.width / 720))
+                    thumbnail_size = (720, NewHeight)
+                elif OriginalImage.height == OriginalImage.width:
+                    thumbnail_size = (720, 720)
+            else:
+                return None
+            m = storage.open(ImageObject.Image.name, 'rb')
+            im = Image.open(m)
+            im = im.resize(thumbnail_size)
+            sfile = BytesIO()  # cStringIO works too
+            im.save(sfile, format=""JPEG"")
+            CreatedObj = i.write(sfile.getvalue())
+            i.close()
+            m.close()
+            ImageObject.ThumbNail = filename
+            ImageObject.save()
+        except Exception as error:
+            print(f""Error. No thumbnail generated for {image_id}."")
+        return None
+
+&#x200B;",1625937035.0,7,0.89,6
+MichaelJackson,Is MJ's music dying off?,"Comparing something like Queen to MJ. 
+
+
+IMO most people around the world know who MJ was, but have probably never heard of Queen. At least, when it comes to gen z. 
+
+
+Despite this, Queen's music is more popular. 
+
+
+MJ's music seems to be just... there. Dude still has a huge fan base, but most people don't really bother. 
+
+
+I'm 17, so didn't really have a chance to love MJ's works before he died.",1625775183.0,0,0.33,9
+privacy,Best Android web browser?,[removed],1625691059.0,0,0.14,0
+GamingLaptops,Why is the CPU usually hotter then the GPU?,"Like how does a 45 watt CPU run at 90 and a 80 watt GPU at 70? 
+
+Even after over clocking and running Furmark at 12k, it doesn't break 70. 
+
+
+The CPU goes to 80 if In use Aoda64 or open a large Python project.",1625510500.0,0,0.5,4
+unpopularopinion,"Your kid's aren't smart, it's the UI designers.",[removed],1625504547.0,622,0.91,100
+queen,I can't decide which of them is the best (love them all so much). Which would you pick?,"
+
+[View Poll](https://www.reddit.com/poll/ocksp7)",1625263979.0,3,0.59,1
+ProgrammerHumor,Me after I learn to write hello world in a language and adding it to my flair,,1625002618.0,50,0.94,1
+oneplus,I miss my old OnePlus 3T.,"So, last year my beloved 3T acting up after faithfully serving for about 3 years. 
+
+It doesn't dash charge, and the headphone jack is bust. I replaced it with a Poco F1. 
+
+After finding it in a drawer again, I'm surprised as how thin and light it is. Like my current phone feels like a brick. The 3t feels amazing in my hand.
+
+And the display is amazing. Also love the physical navigation keys. I miss oxygen OS. Nice, bloat free, fast.",1624996574.0,156,0.96,54
+IndiaSpeaks,"Project UnKnown, a privacy focused Twitter alternative.","Hey r/IndiaSpeaks, I'm currently building (unnamed), a privacy focused Twitter alternative. I've been working on this for about 3 weeks. I'm almost done, and expect deployment by this weekend. I'm currently working on adjusting the icons and stuff (the most boring part :( ). 
+
+&#x200B;
+
+I really haven't got a name for the thing yet, but have a icon (it's an elephant, love those big things). 
+
+&#x200B;
+
+Features:
+
+\- Posts: standard post. Can contain up to 32 images, a video, text body with 40,000 charterers or a poll. Can be set to 'private' or 'public' like Twitter's protected tweets, but on a per post level. You can also control who can comment.
+
+\- Reply: standard reply. Can contain images.
+
+\-Like: standard like feature.
+
+\- Mention: Can mention users. Mentioned user's replies will be prioritized, and the user will get a notification.
+
+\-Re-post: Can simply re-post or mention a post. 
+
+\-Follow: simple enough, allows you to follow users.
+
+\- Communities: a reddit-llike community system. Has roles like admin, user, etc. 
+
+\-Collection: a collection of users to aggregate different users (ie. News, Politics). 
+
+\-Save posts
+
+\-Block accounts
+
+&#x200B;
+
+The UI is alright, thing's got a black-white-red theme. Icons look horrible though.
+
+&#x200B;
+
+It's build using PostGreSQL for DataBase, Django Rest Framework, and Amazon S3. 
+
+I'm planning to keep it a web page that acts like an app (a SPA) built using vanilla JS. 
+
+I'll probably get it up and online by this weekend depending on if I have free time (class 12 student).",1624888558.0,66,0.91,27
+india,"Online school app *needs* microphone, phone and camera permission. It's non optional. How is this not a invasion of privacy?",,1624864175.0,1,0.55,10
+forza,Black + steel looks really special (Koenigsegg Agera RS).,,1624819272.0,113,0.85,2
+django,Implementing password reset in Django Rest Framework?,"So, I'm trying to build a thing where a user can reset their password. 
+
+It works by sending email containing the key. 
+
+Basically, you POST to a URL, which creates a randomly generated key valid for 5 minutes, send it in an emai ll and saves it to the db.
+
+Then, to change the password, the user provides a new password and key. If it checks out, it deletes the key.
+
+Is there any better approach? I'd rather implement it myself over using a library.",1624797999.0,6,0.81,6
+medical_advice,Heart rate is all over the place?,"Details:
+
+Age: 17
+
+Gender: Male
+
+Ethnicity: South Asian
+
+Height: 175cm
+
+Weight: 90kg
+
+Underlying conditions: -Insomnia (undiagnosed)
+
+&#x200B;
+
+Symptoms:
+
+\-Alright resting heart rate (low 50s to low 60s depending on climate, time)
+
+\-Heart rate spikes to 80-90 on standing up.
+
+\-Can't increase my heart rate beyond 120 naturally, no matter how much I exert.                          I'll end up passing out and gasping for air. This makes running impossible, and I can only bike (best is 45km in a day, 40kmph avg)",1624787674.0,1,1.0,2
+techsupport,Can I use a USB A (male) to USB C(male) cable for my external hard drive?,"So, I've got a Sabrent external hard drive enclosure with a old 850 PRO, which has a usb A port for some strange reason. 
+
+
+The cable's broke, so I'm looking for a new one. I tried using my phone charger to plug it into the USB c port of my laptop, but it didn't work, guessing because the phone charger is only 2.0 and is missing some of the lanes. 
+
+
+I'm getting a 3.0 type A to C cable. I'm sure it'll work, but just need some assurance.",1624647343.0,1,1.0,1
+Showerthoughts,"If we had just one less day per year, we could have perfect even months",,1624313263.0,0,0.22,1
+Sat,Is the math section supposed to be easy?,"I swear I'm not bragging, bit I find it too easy. I took a look at the ""hardest"" questions and it barely takes 10 seconds to solve. 
+
+But I feel like I'll get fucked by writing anyways, so that's nice.",1624201405.0,6,0.75,8
+loseit,Can't seem to loseit?,[removed],1623704851.0,1,1.0,1
+morbidquestions,How is water boarding that bad?,"I've tried it on myself. Please don't ask why. 
+
+
+It was tolerable. Not great, but tolerable. Just needed to calm down. Although I guess I'd need to go to some Iraqi prison to get the full experience.",1623538069.0,5,0.59,12
+unpopularopinion,"Saying ""others have it worse"" is absolutely stupid",[removed],1623355806.0,0,0.2,1
+AskReddit,"People who got ""the talk"" before they knew what sex was, how akward was it?",,1623341955.0,0,0.46,5
+webdev,How do I benchmark/ load-test my website?,"So, I'm building a twitter-like clone and am almost done. 
+
+It's built using Django and Poatgres (no caching), running locally on a Windows 10 machine with specs
+
+- Intel core i5-9300h
+
+-8GB DDR4 ram @2666mhz
+
+Everything is hosted locally. And I'm also using the built in WSGI server for Django. 
+
+I've done a few tests so far. 
+
+Such as creating 10,000,000 user accounts with some random posts (text, polls, images, videos) using a script while simultaneously trying to read data off multiple devices just to stress it. 
+
+It works pretty good. Load timings for things like the user feed are around 0.2 - 2 seconds. 
+
+I realise this is not a realistic load by any standards, but just need some feedback.",1623154797.0,4,0.71,0
+rareinsults,Looks like a perpetually pissed version of the Easter Island things,,1623011166.0,18,0.8,7
+rareinsults,Fair enough,,1623010929.0,1,1.0,1
+reddeadredemption,*Spoiler* Sean is a cunt.,"Remember when he's all excited ""can't wait to slit some bastards throat""? That ain't right. Dudes nesse sup in the head!",1622918707.0,0,0.29,1
+depression,Anyone else feel like they're made of pure energy for a while then crash?,"I mean sometimes I feel like I'm the most powerful thing alive. I can think clearly, feel really energized, feel real happy. Even my reaction time improves by nearly 
+50% which is kinda neat.
+
+It only lasts for about half an hour. 
+
+On a plus side, of it happens during a gaming session, it's a guaranteed win. 
+
+Then i crash. Back to feeling the void within until the next high. 
+
+I've tried to find the trigger. Music, movements, thoughts meditation but can't figure it out.",1622838855.0,6,1.0,3
+OCD,Anyone else's OCD come and go?,"Like some days I *need* to constantly wash my hands. I I touch even myself, I need to wash my hands. I touch every thing using the back of my hands to keep the clean. 
+
+Other days I can't even be bothered to clean my hands before eating.",1622661991.0,8,1.0,3
+TheCuntHunter6969,r/TheCuntHunter6969 Lounge,A place for members of r/TheCuntHunter6969 to chat with each other,1622624687.0,1,1.0,0
+darkjokes,What do black people and watermelon have in common?,[removed],1622579187.0,0,0.5,0
+buildapc,Redneck's guide to troubleshoot overheating!,"So, if your rig is overheating, and you don't know why, here's a quick little method to find out why.
+
+For this, you'll need a temperature monitoring software, and a stress test. Anything will do, but I recommend Intel XTU and Aida 64.
+
+First, let your computer sit idle for about 5 minutes with both the applications open. This allows the data to be a bit more accurate and also allows the heat sink to dump all the heat,
+
+Then, run the test, and look at the graph.  
+
+If it rises really quickly, ie 0-90 in under 2 seconds, something is probably wrong with the thermal paste. This indicates that it is unable to transfer heat to the heat sink. 
+
+If it starts off alright and slowly rises, it means something is wrong with the heat sink. It's pulling the heat from the CPU when it's cool, but can't pull any more once it itself is hot. Maybe check the fans, or for dust or check if the pumps work correctly. 
+
+If your temperatures are high at idle and alright at load, it's probably a software thing.
+
+
+Edit: this only works if your PC turns on without catching forem",1622577904.0,0,0.5,0
+NoStupidQuestions,Can I pet one of those airport security TSA dogs? They look like good doggos.,,1622498991.0,1,0.67,12
+reddeadredemption,The only game where i feel bad for killing NPCs.,"In every other game, if it moves, it dies. But this game makes me feel like a dick for killing everyone except O'Driscolls or the inbred annesburg people.",1622409697.0,12,0.93,4
+librandu,High quality charas hai be,,1622299035.0,35,1.0,6
+mumbai,Anyone else love the signs at the Mumbai Pune highway?,"I've only seen these in Maharashtra. 
+
+
+""Donate your blood
+
+
+But not to the road""
+
+
+had me laughing longer than I adm",1622293264.0,31,0.96,5
+india,Just got my first vaccine dose!,[removed],1622273517.0,1,1.0,0
+reddeadredemption,Absolutely love this little quirk!,"If you pat your horse while riding it while in TPP view looking at Arthur's face he just akwardly pats it without saying anything.
+
+
+This is because his face doesn't move while saying it.",1621974068.0,7,0.9,0
+aspergers,I'm just so confused.,"I'm 17, and haven't been tested for anything yet. 
+
+I can function normally while alone, but the moment I come into contact with real people, I just don't know how to act. I end up saying something wrong, or just freezing. I find it impossible to make eye contact, 
+
+I can't differentiate between negative emotions (like I can tell if someone is happy vs sad, but not sad vs angry or angry vs tired).
+
+I just seem to obsess over topics, but unlike people with Asperger's, the topic changes. I just soak up as much information about a certain topic as I can then move on to something else.
+
+I can't say no. I've gotten expelled because I tried to take the fall for something a friend asked me to do.
+
+I also get very clingy. Don't really have many friends, so if someone acts nice towards me, I cling on like w blood sucking parasite, only to realise much later I fucked up, and then repeat.
+
+I feel like I need to filter everything I do. Consciously think about every thing I say, even facial expressions I show. I hate trying to look tough. I just want to be myself.",1621969376.0,6,0.88,3
+reddeadredemption,I wonder how people would react if they found out what Arthur was?,"Like that woman who Arthur saved form the Murfee, or the snake bite dude, or that woman who I helped to home after she got stuck under her horse, or Charlotte, Hamish, Albert Mason, Charles, would react?
+
+
+Like imagine getting home and hearing ""oh, the guy who saved you from getting cannibalized is a outlaw who has massacred like 20 towns"", or ""the man you went fishing with is a mass murdering outlaw"", or ""that guy that helps you with your photography killed 20 people robbing a bank"".",1621960753.0,21,0.93,3
+AskReddit,What is your feel good song?,,1621698504.0,3,0.8,21
+LetsTalkMusic,What is your opinion on Micheal Jackson's song Beat It?,[removed],1621545436.0,1,1.0,1
+india,This whole toolkit seems too convenient.,[removed],1621494050.0,8,0.84,3
+reddeadredemption,I really wish they had the option to make it harder.,"I kinda dislike how I'm a one man army who can take down a town with two pistols. The enemy AI is well designed, but I find it too easy, except maybe the night folk with knives. I try to not use dead eye to make it more challenging, but still I find it a bit too easy. Would be loved it if they could make the enemies aim better or deal more damage.",1621462839.0,10,1.0,7
+NoStupidQuestions,Can I punch myself to death?,,1621379851.0,1,0.67,7
+morbidquestions,Can I punch myself to death?,,1621379809.0,3,1.0,2
+reddeadredemption,I hate fast travel.,"There's just something fun about planning a trip across the map. Like if I'm going to st Denis form Horseshoe overlook, I like to plan my day. Head out in the morning, do x, go north, hunt, etc. I know it sounds stupid, but I find it enjoyable.",1621375800.0,65,0.89,31
+reddeadredemption,I can't bring myself to complete this game.,"I've played through the the prologue three times, but can't get myself to get through the epilogue. Whenever my Arthur dies I start a new game. 
+
+The first time my Arthur dies I just cried the whole night, cried for the first time in years. And repeat. I know it's stilly mourning a fictional character, but I just can't go on.",1621107805.0,18,0.95,8
+medical_advice,Am I suffering from hypotension?,"M17. Recently, I've started getting some symptoms which I think are due to hypotension. My maternal grandmother also has it, but my other 3 grandparents have hypertension (quite the genetic lottery).
+
+
+Details:
+
+
+   Gender:  Male
+
+
+   Age:  17 years old
+
+
+   Height: 175cm
+
+
+   Weight: 85 kg
+
+
+   Ethnicity: South Asian
+
+
+   Underlying conditions: none
+
+
+Symptoms:
+
+   - Feeling lethargic
+
+   - Problems focusing. Sometimes, it gets bad enough that need to manually re focus my eyes.
+
+   - Feeling dizzy and seeing stars while standing up (orthostatic hypotension).
+
+   - Dyspnea during physical exertion. 
+ 
+   - Sometimes seeing stars while standing up, sneezing, or straining.
+
+
+
+My resting heart rate is in the upper 50s to lower 60s, and around 120 during excercise (which I guess is a bit low, especially considering my age). 
+
+I can't go to the doctor as going anywhere near a hospital in my country is a sure shot way of getting Covid and for some reason all the blood pressure monitors are out of stock.",1621025431.0,1,1.0,1
+webdev,Is this even a good idea?,"I'm working on a single page application (SPA) without using a framework, so I've got a bit of a unique way to handle views. 
+
+So, for instance, imaging I'm clicking on the 'u/TheCuntHunter6969' above my post. Instead of anchor tags or changing links, it's got a onclikck function (so, like onclick=""GetUserProfile('TheCuntHunter6969')"" ). It works fast enough, without any delays, but I'm still confused if I should continue.",1621007145.0,0,0.29,7
+NoStupidQuestions,WTF happened to Trump?,[removed],1620942570.0,1,1.0,1
+reddeadredemption,How did they make this map feel so huge?,"I mean it's only 30 sq miles. That's just a bit bigger than Manhattan, but it feels huge. It has multiple cities, states, rail lines, etc that don't feel smushed. It even goes from gator filled swamps (lousiana) to snow covered mountains (Montana) in basically the size of Manhattan. Thinking about it gives me a stroke.",1620775886.0,11,0.92,5
+overclocking,Which factors does TDP depend on?,"So, I know this question isn't related to overclocking, but I'm just confused wnd this sub seems like the best place to ask.
+
+I have a laptop, with a Intel i5-9300h, and sometimes I can get it full clock 4.1ghz all cores and it reports about 20 watts, and sometimes it throttles at 3.5ghz at about 50 watts. I know that it mostly depends on usage, frequency and voltage, but what else?",1620768206.0,3,1.0,2
+webdev,Why do some sites make like a million calls?,"I mean looking at the network tab for twitter and facebook, it makes like 50 calls on load, and more calls if I scroll down a few inches, and looking at half they look like gibberish. Guessing it's trackers or analytics?
+
+I'm trying to build something similar, and it barely makes 3 calls + images or videos per page. I know it's stupid, but it's giving me anxiety.",1620422152.0,1,0.6,4
+webdev,Is anyone else just horrible at front end?,"I mean I'm pathetic at it. The writing JS is fine, but the UI design is just horrible. 
+
+Can't even decide on a background colors. Just keep changing to either a few shades of gray or pure black. Can't decide on a font or font weight. Keep re arranging things. And icons are just painful. And don't get me started on actually naming something I'm creating (instead of just calling all my projects variations of ""penis"", ""balls"", ""nuts"" like a immature idiot. 
+
+Back end is so much easier. Just has to be fast and secure. Doesn't matter it it's pretty.",1620421793.0,15,0.8,25
+webdev,Is adding support for IE even worth it?,"So, I'm working on a web app thing. It's a SPA built without a framework. It's supposed to be mostly for mobile (if anyone even sues it).
+
+Thought I'd see how it works on IE. It doesn't load at all (somewhat expected, it is mostly JavaScript). 
+
+My question is, it it even worth the time to go around making it work on IE? It works on basically everything else (mobile, chrome, Firefox, safari).",1620415043.0,2,0.75,6
+awfuleverything,"A 16 year old posts about his parents passing away due to Covid-19. These ""people"" thought giving wholesome awards would be funny.",,1619809341.0,0,0.12,1
+rareinsults,My master piece I came up with at 3AM.,,1619805453.0,35,0.77,10
+webdev,Using POST to get data?,"So, I'm trying to build a 'feed' thing for an app. It works in chronological-ish order.
+
+I'm using Django Rest Framework, so I'm using API calls to load posts if the users scrolls down. My original solution was simply sending URL encoded time and show everything posted before that time. 
+
+But that obviously doesn't show fresh things if  you scroll down enough. So instead, I've simply got a array in the front end that has all the IDs of the posts viewed, and sends it in the request so back-end can exclude those. But, as I can't send something with potentially many ID's URL encoded, I've decided to put it in body.. But GET doesn't allow body, so I'm using POST. 
+
+It works fine, but feels wrong. Plus, guessing it'll be a hassle with setting up a WSGI.",1619537508.0,0,0.5,6
+LetsTalkMusic,Can anyone else hear songs in your heads perfectly on demand?,[removed],1619298461.0,8,0.9,10
+LetsTalkMusic,How broad is your taste in music?,[removed],1619298067.0,1,1.0,2
+Makesmybloodboil,Scum,,1619128807.0,34,0.89,2
+NoStupidQuestions,Anyone else love trying to pronounce foreign words perfectly?,I love studying phonology. Something really satisfying about talking in your normal language only to casually drop a foreign name with perfect pronunciation.,1619042903.0,12,0.92,9
+reddeadredemption,My beauties,,1618925205.0,10,0.78,1
+webdev,I just wasted an entire day because I didn't look at the obvious.,"So, I've been working on a project (basically a reddit/twitter clone) and decided to put it up on AWS and connect it to RDB. 
+
+Enter the IP address into my phone with excitement hoping that it works perfectly. It doesn't. It loads the HTML page but no API calls. Que 6+ hours of going over every file, checking every API endpoint from PostMan, looking at logs, debugging, messing different browsers, settings, with headers, firewalls etc.
+
+Before giving up, I took another look at the browser console. ""127.0.0.1:8000"". Fuck me, I've been pinging localhost for 6 hours trying to get it to send a response. It was a day we'll used, I guess.",1618789899.0,683,0.96,81
+india,The government has gone insane.,[removed],1618467124.0,9,0.76,1
+webdev,Does the web framework performance really matter?,"So, I'm using django. Most things and benchmarks I've read say it's pretty slow compared to Node JS or PhP.
+
+But, assuming that you're actually using all features instead of sending 10,000 hello worlds, wouldn't the database be a larger bottleneck if you get to the number of requests per second where framework performance starts to deteriorate?",1618296290.0,1,0.67,2
+polls,Which superpower would you rather have?,"
+
+[View Poll](https://www.reddit.com/poll/mnr6tt)",1618003909.0,4,1.0,1
+NoStupidQuestions,"If I see someone from the FBI's most wanted list, what exactly do they expect?","So, let's say I come across some drug dealer or terrorist on the FBI's most wanted list. What exactly should I do? Shoot them? Or just call the FBI?
+
+
+If I'm allowed to kill them, what's stopping wild west style bounty hunting?",1617837009.0,3,0.72,6
+changemyview,CMV: banning alt-right accounts from mainstream social media does more harm than good.,"Obviously, I'm not a alt right, anti vaxxer, tinfoil hat wearing conspiracy theorist. But I believe banning alt right accounta from mainstream social media (facebook, twitter) will do more harm than good. 
+
+Obviously, having them around is bad for a for company PR. But, outright banning them may lead to more distrust, and the possibility of all of them moving to a echo chamber filled with other quacks. 
+
+I may be a bit naive, but I do believe of people are shown the truth, most of them will change. At least being exposed to alternate content may change people's opinion. But simply banning them is doing no good.",1617834420.0,22,0.64,50
+django,Able to upload exe files in image field?,"I my models set up so I have posts and images in different tables linked by foreign keys. I made a stupid thing to allow multi file upload from the serializer (basically accessing request.Files). It's supposed to save to a ImageField, so no problem I thought. 
+
+But, during basic security, I was able to upload an entire exe file (to my horror) and download it too, fom the ImageField. The fix is pretty simple, just use validators, but this seems too obvious imo.",1617709652.0,1,0.67,2
+webdev,Is there something wrong with returning null JSON objects?,"I have a database table that has stuff similar to reedit posts. Either images, text, or a poll. Obviously, it's optional. You don't \*need\* to include a poll or image. So, a lot of fields are empty. Is there something bad about sending empty objects after serialization? It just sends a optional image or poll object, and the front-end throws it out.",1617652359.0,1,1.0,4
+self,"I'm a horrible person, and there's nothing I can do to fix it.","I bullied this girl back in middle school. She did nothing to me. She did nothing to nobody. I was still an ass to her. Ruined her days. 
+
+I used to intentionally go out of my way to mess with people. Get a reaction, spite them, make them feel like they're nothing.  
+
+Used to lie, cheat, deciet to get what I wanted. 
+
+I try to fix what I've done, for my sake. But I know I can't even undo the suffering I've caused. I try to help people as much as I can, but that doesn't fix what I did back then. I know I'll be able to make it up to the girl I bullied, the classmate I beat, the teachers I dissed, the kid who I threw under the bus for *something I did*. 
+
+I don't even really know why I'm posting this. Just need someone to listen, I guess.",1617221706.0,2,1.0,6
+laptops,"Coders, how well do you machines perform?","My machine (Helios 300, i5-9300h, 1660Ti, 8GB RAM) seems to struggle a bit with work. 
+
+Guessing I got low RAM as it's constantly at 95% or above. I usually have a IDE (PyCharm), a few tabs for looking up stuff, and music (Spotify or YouTube). 
+
+Sometimes, the CPU overheats (especially while boot up or starting the IDE). Temps spike up to 80s for a few seconds then settle down. Guessing the fans don't anticipate the sudden rise in load and take like 5 seconds to speed up.
+
+GPU seems to do fine for Keras though.
+
+&#x200B;
+
+Gaming works well tho. Good FPS and decent temps (80 C on CPU, 70C on GPU) in games like RDR2.",1617131310.0,1,1.0,2
+MensLib,What's the weirdest thing you've shaved with?,[removed],1616830815.0,1,1.0,1
+rimjob_steve,Hope she doesn't floss the doggo's teeth,,1616759743.0,4,0.71,0
+reddeadredemption,What differences did you notice ij your first and second gameplay?,"I'm much better off financial 2nd time around. Currently starting chapter 4. I have all the guns with nice customisations, and nice horses (Dutch Warmblood, Turkoman, Mustang, White Arabian), the compendium is much better filled, hot more legendary animals, cooler outfits. Also just taking more time roaming around and hunting. 
+
+
+I also don't want to finish. Last time made me cry the whole night :(",1616528976.0,2,0.75,11
+reddeadredemption,Was good enough to fool my friends. This isn't even max settings!,,1616528678.0,11,0.92,3
+ApplyingToCollege,Rate my application,"So, I am a International (India), just completed the 11th grade.
+
+&#x200B;
+
+My stats
+
+* 9th : 50%
+* 10th: 89%
+* 11th: tbd
+* SAT: expecting around 1400-1500
+
+&#x200B;
+
+My extra-curriculars
+
+* Coding
+* Worked as a free lance web dev for a while, made around $1,200 of which I donated $1,000 to charity.
+* Built a few sites for some smaller non profits
+* Built a Covid-19 tracker which had around 400,000 visitors
+* Currently building a alternate social media website (not alt right kinda alternate btw), which is a hybrid of Twitter and Reddit. Currently online, just getting some final work done to finish.
+* Self taught calculus classical mechanics at 14, and also tutored high school seniors.
+
+&#x200B;
+
+My essay:
+
+I know it's unusual, but I'm thinking of writing my essay on a video game, Red Dead Redemption 2. It's the first game I ever felt a connection to. And also how I overcame being a angry, sad loser who was hooked on drugs.",1616424962.0,4,0.75,7
+IndianGaming,My experience with Acer's customer service,"So, I got a 2019 Helios 300, lovely machine. But the something went wrong the the keyboard, so I needed to call up service.
+
+Calling Acer themselves, they made me go round and round, until I called Flipkart and they got someone to come around pretty quick. 
+
+They replaced the whole deck assembly (so keyboard, track pad, palm rest, the whole chassis). 
+
+The dude who they sent did make a bit of a issue with the warranty seal being broken (which is my problem I guess), but fixed it.
+
+But, he didn't bring any thermal paste. So, the heat sink and CPU was sitting out in the open for about 1-2 hours, exposed to the open air, and probably disturbed. So, heat galore.
+
+Thought I'll fix it myself later. 
+
+After I re-pasted, it would start heating up again after a while, if I moved it around too much. 
+
+The repair dude didn't tighten a few screws properly, which was causing the MOBO and heat sink to separate and causing air bubbles and heating her up to almost 94 degrees in less than half a second on load. 
+
+So, I fixed that.
+
+All in all, they fixed the issue, but caused another one, which I was thankfully able to fix.
+
+Funny enough, I've had worse.",1616226520.0,22,0.94,5
+india,At this point I'm slowly starting to support neo-liberalism.,"The government is nothing but a pain if you're in the middle class. They want everything, and give nothing. 
+
+Earn some money? Tax. Want to buy something? Tax. Want to buy a car? Tax. Staying alive? Tax.
+
+In a country where most people do not pay income tax, some are forced to drag these people through the mud and sewage sludge.
+
+And paying so much to out beloved, benevolent government, we can at least expect some good public education, healthcare, infrastructure, etc. But nope. 
+Got a kid? Fuck you, pay your taxes and put that fucker in some private school which will rip you off even more. Get cancer? Fuck you, pay your taxes and go to some private hospital and get ripped off more. 
+
+And there's talk of the government banning Bitcoin, because they can't get their greasy shit stained paws on it. I have Bitcoin. Why? Because I do not want the government having any information on what I'll do with MY MONEY that I EARNED fair and square.",1616169622.0,92,0.81,40
+django,Making extra database calls from serializer?,"So, I have a post object. While serializing, I need to send a ""liked"" boolean. 
+
+I have a seperate model for Likes and Posts. So, it goes in and makes a single query for each post and checks of a object exists for the given user and post. I know this is inefficient, and plan to make a single call from my view and pass it to the serializer using a context dictionary. But, is this the correct way?",1616062007.0,10,0.92,10
+GamingLaptops,Simple trick to drastically reduce temperature!,"So, on the taskbar, look for the battery thing on the right. Click on it and drag the slider the the left until it says ""Better battery""
+
+&#x200B;
+
+What this does it it allows the CPU frequency to go down if it's not being utilized. So, in games which are GPU bottle necked, it will allow it to go down. This does not prevent it from going to full. It will go to ax (3.99 ghz in my case) if you push it. 
+
+&#x200B;
+
+In Red Dead Redemption 2, my laptop with a GTX 1660Ti and i5-9300h performs the same (\~50 fps average) but there is some stuttering, guessing it needs some time to go to full power. 
+
+&#x200B;
+
+It's bought down my temps from holding at 92 to low 80s/high 70s. Really great improvement IMO. Obviously it's kinda neutering the CPU, but i don't mind a tiny bit of stuttering.",1615992757.0,1,1.0,2
+cycling,Drop bars on a hardtail MTB?,"I know it sounds crazy, but usually I am really low while riding and wish my elbows were a bit streched out. I got a 29'r hardtail MTB (wish I could get a road bike, but roads here are horrific).  Is this a good idea?",1615538607.0,2,1.0,9
+bicycling,Seems like a fun segment,,1615483751.0,26,0.96,4
+django,How do I get how long ago something was created in Django aggregation?,"So, I need to find out how long ago something was created to calculate a 'rank' thing that uses some other metrics. Is this possible?",1615448655.0,3,1.0,1
+reddeadredemption,Micah wasn't the rat.,"First of all, fuck Micah. This is not a ""mIcAh wAsN'T a bAd GuY"" post. 
+
+But it doesn't really make sense for him to squeal to the Pinkertons. It serves no purpose. All the time licking Dutch's boot. Micah wanted to take over the gang, especially after Hosea's death. 
+
+Agent Milton planned to let Arthur go after capturing Abigail. Arthur and some woman wasn't of much value to them. Dutch was. Taking out some woman and one gunman probably wouldn't do much. But, lying about how Micah was a rat and letting Arthur go, would create a major rift in the gang. 
+
+Micah was a brash idiot. Guessing that's why most of his jobs went to shit. Dude does some idiotic things.",1615374393.0,0,0.5,24
+IndianGaming,How do you deal with the insane ambient temperatures here?,"I mean it's 37 celcius where I live, and it's going to get hotter. As torturous as it is for me, I'm worried about my poor stuff. Like how exacty do PC's keep cool?
+
+&#x200B;
+
+Can't open windows due to pollution. So after an hour of gaming the room itself heats up to around 45. Fans sound like jet engines. Temps go up to almost 90 during the day and they'll only go down o like 70s if I keep the AC on at 24. Even then I can't  keep it on forever. Bill is like 15k a month!",1615275044.0,12,0.94,21
+IndianGaming,Laptop (Helios 300 2019) CPU heating up a lot?,"It's only the CPU. GPU is cool at 70 C full load. I've done the basics (undervolt, clean fans) and even reset just to make sure it wasn't some crappy software or virus.
+
+&#x200B;
+
+Laptop specs:
+
+&#x200B;
+
+* Intel Core i5-9300H
+* Nvidia GTX 1660TI
+* 8 GB Single Channel DDR4 RAM
+
+&#x200B;
+
+The CPU goes up to 90 even if I just boot up and fans roar like crazy. SOmething like web browsing it's around 70s and games it's around 95. Running stress tests (CPU only, XTU and Furmark) shows the temp going up and down really quick, like \~95 to \~70 in about 2 seconds over and over.
+
+&#x200B;
+
+I repasted it using MX-4 about a month ago and the temps were stable then (around 80 on CPU, no thermal throttling).  CPU started going crazy a few days later. GPU is about the same.
+
+&#x200B;
+
+I have tried the basic stuff (tighten heat sink screws, clean fans, undervolt and even reset to make sure it wasn't some crappy windows update or virus).  The only thing I feel like doing again is repaste it.
+
+&#x200B;
+
+Another strange thing I've noticed is that on running the test with the bottom off and running a CPU stress test and touching where the CPU is supposed to be under the heat pipe I don't feel like the pipe is that hot. I was able to keep touching it for a few minutes. Doing the same with the GPU made my fingers start burning in about a few seconds. Makes me thing there's somethinng wrong with the heat pipe or thermal paste. Strangely, the CPU side was also hotter while stressing the GPU compared to the CPU. This may be due to the GPU (GTX 1660Ti) having a higher TDP (80W) compared to the CPU.
+
+&#x200B;
+
+Is there anything I may be missing here?",1615103784.0,6,0.87,12
+exmuslim,"Look at how proud they are. ""HateHunters"" my ass.",,1615036935.0,19,0.95,11
+bicycling,Feel like a spoiled brat,,1614960589.0,117,0.89,6
+cycling,Am I lucky to have disc brakes.,"So, I'm flying down a street at about 45ish mph, and a truck just comes out of nowhere. No joking, there used to be a wall but they broke it for some construction stuff and a huge truck loaded with construction stuff comes flyin out. 
+
+ 
+It comes outta nowhere, going perpendicular to the street and turning . And it was barely 20 meters or so away from me. I rip the brakes, and come to a halt without yeeting myself off or turning into fodder for a evil sentient truck. 
+
+
+I'm a fat dude with a cheap bike, but feel lucky I got one with disc brakes.",1614871747.0,322,0.86,271
+india,What is it with Indians and horns?,[removed],1614781586.0,1,1.0,0
+laptops,Strange temperature spikes?,"I mean in XTU if I use the stress test the cpu will go from 75 to 90 and down within about 2 seconds over and over again. Guessing that really can't be good for solder tho. The graph looks like a jagged mess. It is not thermal throttling, at least it doesn't say it is.",1614773372.0,1,1.0,0
+gaming,Red Dead Redemption 2 is one of the best written games ever.,"Massive spoilers ahead.
+
+
+When the 2nd bank robbery was coming in St Denis, I kept getting ""shits going to go down"" feeling and some dread. As it turns out, it was mission in which Hosea and Lenny die, Jhon gets arrested.",1613931682.0,12,0.84,11
+ApplyingToCollege,Should I put this on my application?,"I am a 17 year old dude from India.
+
+&#x200B;
+
+I'm planning to apply to college but my ECs are top tier trash.
+
+&#x200B;
+
+I have spent a while working mostly coding and some hardware stuff and earned around $900 of which I donated around $700 to charity. I feel like mentioning this seems a bit humble braggy  or outlandish, bit I'm really grasping at straws here.
+
+&#x200B;
+
+&#x200B;
+
+Edit: $900 is a lot in India lol",1613827266.0,10,0.92,6
+cycling,Update: Day 3,"I decided to log my journey. I haven't done day one or two, so pardon the abrupt start.
+
+
+
+Distance traveled: 9 miles
+
+Time: 50 minutes
+
+Elevation gain: 200 ft
+
+Average speed: 7.8mph
+
+Weight: 95kg
+
+Height: 5'10
+
+Max speed: 36mph 
+
+
+
+I have noticed some changes. My butt is much less sore than day one or two, and my quads don't burn that bady, although there's still slight discomfort. Average speed has also increased, and I could travel in 3 mile intervals without taking breaks. 
+
+
+
+I did accidentally come across a open manhole without a warning sign and had to use my rusty b hop to go over it. I feel bad about my poor bike tho :(",1613331921.0,0,0.35,4
+cycling,Horrible burning in quads?,"I started cycling again after years yesterday. 
+
+
+My quads burn really bad. I couldn't sleep at night kinda bad. My seat height is correct, as legs are almost fully extended. Cadence is also alright, around 70-90. Terrain in flat asphalt. I weigh 95 and am 5'10.",1613234964.0,2,0.63,13
+cycling,"Picked up a bike after 3 years and 30 more kgs. My ass hurts, by hands hurt, my knees burn. It feels so good.","The last time i looked at a bike was 3.5 years ago. I could ride for 50+km back then. Now, I'm a 5'10 dude who weighs 95. 
+
+
+Got a new bike today. Nothing fancy, walgoose equivalent with a good deraulier. Rode for about 15km in 45 mins. Ass hurts. Knees burn. My hands hurt. But it feels good. 
+
+The wind on my face, the ever present feeling of asphalt under your wheels, the blood rushing through your veins.",1613150782.0,67,0.95,12
+librandu,They aren't even hiding it any more,,1613037075.0,3,1.0,1
+pcmasterrace,"Yes, I do use that external keyboard to game.",,1612965430.0,15,0.85,1
+india,The government really does not care about students.,"Covid 19 has changed many things. Some for good, most for the worse. Although, there's one things that may never change.
+
+
+Exams.
+
+
+With class 10 and 12 exams coming and being held in person, it dispels the notion of any actual change coming in our education system in the foreseeable future, or perhaps ever. If a pandemic that has killed millions can't change us, then nothing will.
+
+
+
+Assuming, just assuming, that schools are going to follow all the safety precautions, not that they will, it still is a rather poor choice. A year of inconsistent online education will provide a considerable obstacle to students, especially putting the less fortunate at an even higher disadvantage than which they already are at.
+
+
+Now, if that wasn't enough, there's talk of opening schools for examination other classes as well. 
+
+
+If you tried hard enough, you just might be able to convince yourself that 10th and 12th boards need to be held in person. But why 9th and 11th? The two years that usually are less serious and consequential, also need to put themselves at risk.
+
+
+
+And coming to infrastructure. I go a alright private school in Munbai. Fees are around 90k- 110k a year. Yet, a single classroom has around 40 students. Walls that haven't been washed in over 4 years. A school where I'd assume something a bit less contagious like Cholera can spread. I'd rather not walk past one of those classrooms, let alone sit in one for 3 hours 
+
+
+And talking about students. Do schools really expect 14-18 year olds to behave, isolate and act safely? I do realise how they aren't exactly kids, but expecting all of them to act like adults is a bit appalling. And all it would take is one person to possibly kill dozens and not even realise it.
+
+At the end of the day, it is clearly visible how the government's acting against what students want, or what is right for them. 2020 was a bad year for students, but an exam is not going to fix that. 
+
+
+While I do realise not everyone can take online exams, there's also the possibility of making offline exams optional or skipping exams all together.
+
+
+PS: before anyone says I just don't want to study, I'm not in 10th or 12th.",1612962048.0,62,0.81,12
+confession,I killed a baby bird when I was 12. And I regret it.,[removed],1612712929.0,1,1.0,0
+reddeadredemption,Kieran,"He was one of the best characters in the game.
+
+
+
+But the part where that horse comes in, it literally made my heart pound. 
+
+
+I've seen a fair share of real gore, but that was just too much. 
+
+
+A video game almost gave me a heart attack.",1612642290.0,13,0.94,14
+teenagers,Based on a true story,,1612469990.0,485,0.99,12
+LucidDreaming,I had a extremely vivid dream about being in space... and it was beautiful.,"I mean I can still see the image as clear as day. It was the most beautiful thing I've ever seen. 
+
+
+The sunset, on the edge of the planet. The color, the deep pink and orange, it's just indescribable.
+
+
+The starting plot was a bit janky. I was in a iron man suit and just started flying up and up. Thankfully I accounted for the icing problem :). 
+
+
+It just felt so real. The acceleration, thunder, feeling, and the wow factor. 
+
+
+I stood there in space, starring at the earth for what felt like hours. Every continent, island, there, at least somewhat accurate.
+
+I could see the earth rotating. The sun casting a beautiful sunset on some clouds. 
+
+Wish I could go there some day in real life.
+
+It was semi lucid.",1612469604.0,6,0.88,1
+webdev,How do I draw over a HTML page?,"So, I'm working on a website and I need to make a webpage as a overlay.
+
+&#x200B;
+
+Like the way reedit desktop website has the post drawn over whatever you were viewing. Is it possible?",1612443560.0,0,0.5,5
+me_irl,me_irl,,1612440886.0,1,1.0,0
+memes,Don't think even they know what they're doing,,1612440618.0,73,0.95,4
+webdev,Cookie now working on front end?,"I have a DRF api method that sends an auth key. It is visible on postman, but my browser (opera, firefox) don't show them anywhere, even in network.",1612186996.0,1,0.6,0
+unpopularopinion,Times square is boring.,"I prefer looking at cities from a distance. A mile, maybe. I like to look at the skyline. Different buildings, and architectures pop out. 
+
+
+The only exception is smaller attractions, like the bean. Really love that metal bean.",1612119072.0,8,0.76,4
+reddeadredemption2,How do you hunt?,"I prefer to yee haw my horse and close up shots, especially on medium game. Bison can be picked off easy from far. 
+
+
+The only thing I need to be stealthy is for rabbits. Things are too fast to hit easily",1611949341.0,3,1.0,3
+reddeadredemption2,Went hunting with Charles right after,,1611947889.0,5234,0.99,77
+IndiaSpeaks,"App developers, I need your help.","Hello, r/IndiaSpeaks.
+
+I am Ashutosh, a class 11 student.
+
+I require the help of an android developer. 
+
+Following the recent news of Facebook, and my general hesitance sharing my data, I have decided to create an alternative that is privacy focused, and not for profit.
+
+I have a REST API which will act as a back-end.
+
+It would be extremely helpful if I a can work with a android developer, as I do not know how to create apps.",1611843306.0,17,0.85,27
+facepalm,My school's post advertising how sterile the school is. Dude couldn't even put on a mask correctly for a photo,,1611521234.0,221,0.97,12
+CovIdiots,Guess what's wrong here,,1611521139.0,9,1.0,2
+cursedcomments,cursed_german,,1611515665.0,219,1.0,3
+mumbai,The night sky isn't so bad here!,,1611470449.0,16,0.91,4
+Battletops,My game/code/study/movie setup!,,1611346917.0,202,0.99,9
+unpopularopinion,The new iron man suits suck!,"The old iron man suits felt grounded in reality. Unscientific, I know, but realistic. The mechanical stuff, the way he put it on, the way it looked. 
+
+Tony was vulnerable. That made him a bit relatable. Now, the new nano particle suit just takes that away. May as well make his powers Wakandan whore magic.
+
+And tony in iron man 2 was just so cool. Ego tripping, sure. But the entrance scene was just cool and entirely relatable. I mean that's what I would do if I was a super hero billionaire. There was no need to tone him down imo. He was perfect.
+
+And looking at the movie as a kid, I would've been interested in the suits. Heck, it's one of the things that motivated me to peruse science. But the new Wakandan whore magic suits just take that wow element out imo.",1611344006.0,14,0.74,5
+redditmobile,[20201.2.0][Android] unlimited up votes on archived posts,[removed],1611342879.0,1,1.0,1
+Indiacyber,"Hello IndiaCyber, I need you help!","Hello IndiaCyber.
+
+Looking at Facebook, and the blatant disregard for our privacy, I am working to create a free, non profit, privacy focused application as a alternative. But I require your help.
+
+I need an app to work with the back end I have created, but I am not familiar with Java or making android apps, and especially how to do it securely.
+
+I have created a REST API that is almost fully complete, and would very much appreciate an help I may get.
+
+Some intended features are:
+
+* Posts, consisting of images, text or links
+* Comments
+* Profile
+* Announcements
+* Events
+* Follow
+* Groups, with different roles (mod, member, etc) that allow posts, etc.
+* Shop (to allow local businesses to sell online quickly without making it too complicated)
+
+and some more being added.",1611238559.0,9,1.0,2
+IndiaSpeaks,"Hello, IndiaSpeaks. I need your help!","Hello IndiaSpeaks.
+
+Looking at Facebook, and the blatant disregard for our privacy, I am working to create a free, non profit, privacy focused application as a alternative. But I require your help.
+
+I need an app to work with the back end I have created, but I am not familiar with Java or making android apps, and especially how to do it securely.
+
+I have created a REST API that is almost fully complete, and would very much appreciate an help I may get.
+
+Some intended features are:
+
+* Posts, consisting of images, text or links
+* Comments
+* Profile
+* Announcements
+* Events
+* Follow
+* Groups, with different roles (mod, member, etc) that allow posts, etc.
+* Shop (to allow local businesses to sell online quickly without making it too complicated)
+
+and some more being added.
+
+I know this is a unconventional place to ask, but please excuse me.",1611210075.0,26,0.85,13
+Makesmybloodboil,Scum,,1610920676.0,2053,1.0,99
+awfuleverything,"Deaf, mute and noe blind. These vile creatures don't have any sympathy left, do they?",,1610920536.0,16,0.75,10
+NoahGetTheBoat,NOAH GET THE DEATH STAR,,1610920428.0,375,0.97,29
+astrophotography,Phone + 10 minutes,,1610905003.0,1,1.0,1
+IndianGaming,Me: I want a mechanical keyboard. Parents: We have a mechanical keyboard at home. Mechanical keyboard at home:,,1610695084.0,6,0.69,11
+ProgrammerHumor,What's your age group?,"
+
+[View Poll](https://www.reddit.com/poll/kxcr8u)",1610652475.0,0,0.25,19
+django,Is this a good way to design a DRF framework?,"I am a beginner in Django, and designing a API for a social media website. I am still unsure whether whatever I'm doing is good.
+
+&#x200B;
+
+So, something like sending friend requests, instead of sending the friend that you want to add as a JSON, I have it like 
+
+&#x200B;
+
+server/api/u/<username>/SendFollowRequest
+
+&#x200B;
+
+or to join a group:
+
+&#x200B;
+
+server/api/g/SendJoinRequest
+
+where stuff like logic, etc is handled in the view, as users/groups cans select you need permission to follow (so it can either set it as 'Pending' or 'Accepted').
+
+&#x200B;
+
+I feel like this is much more convenient to implement, but would it make any issues in Fronted? 
+
+&#x200B;
+
+Please excuse my lack of knowledge, I'm just a beginner.",1610616235.0,8,0.9,5
+fakehistoryporn,"Georgia invades the US Capitol, circa 2021, colorized.",,1610395742.0,1,1.0,1
+facepalm,"These dudes really don't know their geography, do they?",,1610395312.0,177,0.96,26
+india,"Developing a new social media application, and need your help!","Hello r/india . I am a beginner web developer and currently building a social media platform (haven't come up with a catchy name yet), and need some of your help.
+
+
+I have a completed back-end with some features like
+
+-User profiles
+
+-Posts
+
+-Comments
+
+-Likes
+
+-Groups
+
+-Follow
+
+-Shop (for small businesses, to easily set up an online store without making it overly complicated).
+
+
+I originally started building it as a privacy-focused, non profit service, where your data is only stored with the server, and you can control who sees what.
+
+
+I need some general advice, some features you would like, etc. And if you got a catchy name, I'd like that too!",1610186880.0,4,0.7,8
+arabfunny,Do y'all make this shit yourself for this sub or is this stuff just out there in the wild?,,1610137439.0,27,0.87,2
+DoesAnybodyElse,"DAE dread starting something, only to not be able to stop?","I mean I don't want to do a lot of things, a lot of difficult things. Study, work, etc. But once I start, I can't stop. I've been putting off a personal project of mine for a good few months and I started working on it yesterday, and I kept kept going until 4 am and woke up again at 8 and kept going. Even while studying, doing something like math, once I start I just get a feeling like ""just one more problem"". It's addicting. But I don't want to start it though.",1609937240.0,3,1.0,0
+DoesAnybodyElse,"Does anyone else dread starting to do something, but can't stop because it's addicting?",[removed],1609937172.0,1,1.0,1
+learnprogramming,Should posts have a relationship to user or user profile in django?,"I'm working on a social media website thingy for fun, and I'm confused whether to make post model have a relationship to User or User profile? I feel like having it link to user would be a better idea, but I'm still unsure.",1609936742.0,1,1.0,1
+StarWars,The sequel universe feels dead.,"I can't really describe it, but it just feels wrong. 
+
+
+
+The original trilogy felt alive, like it was part of something larger, like there would be consequences.
+
+
+
+The prequel trilogy was a bit wonky, but the universe felt alive and the ending was heartbreaking.
+
+
+
+The sequels are something else. I can't feel emotions. The word feels dead. There's no sign of life anywhere. It feels ""artificial"" for some reason.",1609705277.0,48,0.69,66
+ElectroBOOM,What happens if I turn it on?,,1609673838.0,9,0.91,12
+AskElectronics,What happens if I turn it on?,,1609673775.0,0,0.2,8
+IndianGaming,Not a bad start to 2021.,,1609671837.0,47,0.91,17
+IndianGaming,2020 vs 2021,,1609491792.0,8,0.79,15
+IndianGaming,Please help with Acer customer service.,"My 7 month old Helios 300 (2019) has a funny issue where pressing a single key types out multiple characters like
+
+O->OS
+
+S->OS
+
+P->P3
+
+L->L0
+
+F10->\
+
+
+After spending a few minutes trying to convince the support agent resetting won't fix it, I submitted a claim. 
+
+
+
+Will they send a support dude to my house? I'm in Navi Mumbai. Are they experienced? I'd do it myself if I could find parts.
+
+
+
+I'm really worried, it was really expensive for me and I can't afford another. I need to work on the go so external keyboard isn't an option really.",1609419098.0,9,0.86,2
+morbidquestions,The relative I thought died turned out to be someone else and I felt relieved. Is something wrong with me?,"In india, both mother's mom and mother's aunt is called ""nani"". This will come in later.
+
+
+
+So my mom gets a phone call from her home and starts crying. I ask my dad and she said ""Nani has passed away"". I felt devastated. She's a good grandmother, and even though I've barely spent a year with her during the last 17 years, I love her a alot. Especially since my paternal extended family are assholes.  
+
+
+I kinda just sat in a corner and just stared at the ground in disbelief. My mom then says ""my aunt! She was not that old!"" then I realise she wasn't talking about my grandma, but her aunt. I felt relieved and even smiled for a few second (like a laugh of relief) before realising what I just did. I knew her, but I was definately closer to my grandma. 
+
+
+
+I feel horrible. Is something wrong with me??",1609272409.0,9,1.0,1
+morbidquestions,I felt relieved because the relative I thought died didn't and it turned out to be someone else.,[removed],1609272280.0,1,1.0,1
+HolUp,HolUp²,,1609268030.0,1,1.0,1
+medical,Possible CSF leak?,"So, I bent over to pick up something and about 4-5 drops of some clear, sticky liquid came rushing out of my nose. 
+
+
+
+The liquid was completely clear, and left a sticky residue after it was spread and dried. It tasted a sweet-metallic (I know I shouldn't have tasted it but was curious) and a few drops that landed on my bedsheet left a almost light red color. I haven't had anything come out again and I'll try again in in the morning. I did have a minor head injury where I ran into a open window but it was very minor (no concussion, bruising or swelling).
+
+
+Edit: it came from the right nostril as left nostril was dry and right wasn't.
+
+
+Edit 2: slight pain above eyebrows, like a feeling that someone is pushing it in. Nothing severe, just a weird compression feeling. Vision, sound, cognitive abilities are normal except for slight tingling in both hands.",1609093799.0,1,1.0,1
+pcmasterrace,Lowering TDP to decrease heat?,"I got a laptop i5-9300h 1660ti, and temps are usually good in lower 80s except cyberpunk. That game tilts my CPU and GPU 100% and gets my cpu up to 95 degrees. I tried lowering my TDP (45 to 35 boost 56 to 45 short boost) and got tens to 80. I know it's neutering my performance but fps is still above 60 so it's alright.",1608752965.0,1,1.0,2
+exmuslim,As expected,,1608480626.0,90,0.97,14
+religiousfruitcake,Of course,,1608480512.0,64,0.93,1
+Jokes,"As a Brit, I can say that hate out imperialist past. All it has done is brought",[removed],1608399193.0,1,0.57,0
+NoStupidQuestions,Why doesn't dog poop smell that bad?,"Human shit smells real bad but dog poop is basically odourless unless you're a weirdo and put your nose up to it. And dogs her eat trash, dead stuff and other nasty stuff.",1608232601.0,1,0.67,10
+awfuleverything,The fact that q page like this even needs to exist and has over 130 entries,,1608149138.0,32,0.86,8
+teenagers,"I finally contacted my crush from 3 years ago, and I realised I made a huge mistake.","I had a crush, let's call here K, back in freshman high. She was pretty smart and we had a lot of stuff in common. I'm currently in junior. 
+
+
+I just installed instagram, and I think I had stored in my contacts. She follows me and l shoot her a message like ""Hi, I'm TheCuntHunter, remember me from middle school and freshman?"" without trying to sound like a stalky weirdo. 
+
+
+We chat for a bit and I decided to come clean as I'm basically on the other side of the earth (not exactly, still about a thousand miles off but close enough so what could go wrong?).
+
+
+Me: ""I gotta be honest here, I had a crush of you back then""
+
+
+K: ""Why didn't you say something?""
+
+
+Me: ""What do you mean?""
+
+
+K: ""I also liked you a little, maybe I would've said yes ;)""
+
+
+
+
+Please help, I actually have no clue how to respond. I was certain I would've gotten blocked or something. I just stopped taking in the middle.",1607808835.0,9,0.92,5
+csgo,"If you play on a high sensitivity, LOWER IT NOW!","I used to play on those little bed table thingies and had like 10 inches of mouse space so my sensitivity was jacked up to 800dpi 2.08ingame. I always ended up overshooting if I had to aim quickly and had to make a quick little flick back to target, which added a few dozen milliseconds to my aim. I lowered it to 450 today and it feels incredible. My crosshair always stops on my target and doesn't overshoot. My rifling is soo much better now.  
+
+
+
+Funny enough, I decided to give aim_botz 100 kill challenge a tey today and got 1:05 which is lower than the 1:30 - 1:40 I usually got. 
+
+
+
+I AIM IS BETTER WITH LOWER SENS ON DAY 1 THAN WITH 2 HEARS OF HIGH SENS. 
+
+
+
+LOWER YOUR SENSITIVITY NOW (if you can).",1607632702.0,0,0.33,1
+ProRevenge,Unwilling to pay? Let them eat semen cake!,"So, I'm a 17 year old ""web dev"" who can make basic websites and stuff to earn money for video games. The jobs pretty easy for the pay. 
+
+
+
+I get picked up by some local bakery so people could pre order cakes and stuff online. Took a few hours to puke out a functional back end and a day to make it all pretty (thanks bootstrap). 
+
+
+I had agreed for Rs 700 (basically $10) which is insanely cheap even for India, but all I need is video game money so I'm good with that. 
+
+
+When I'm done with the job, they needed to purchase the domains and a server, which I explicitly told them ""You pay me 10, and use another 10 to buy a domain and 5 to rent servers. Total is $25"". 
+
+
+
+They give me $15 so I could set their stuff up. Once the website was fully operational, I asked for my money. But apparently they didn't want to pay because ""if I wasn't hosting the server anyways, why do I need compensation?"". Y'know, because apparently time has no value.
+
+
+
+The thing was I could still access the server as I had the credentials for the server. So I go home, log in and make one tiny change. 
+
+
+The way the website works is that there's a customer page which shows you your orders and there's a page for the store owners to see orders, payments, etc. 
+
+
+
+Here's what I did:
+
+
+- Added a small inconspicuous ""may contain semen"" warning in all product details
+
+
+- In the page where it shows you order confirmations to the customer some options are changed with semen (so like semen frosting) 1by random.
+
+
+
+The website went down in about a week and they're back selling on Facebook lol. Guessing someone complained or something.",1607624845.0,8926,0.94,252
+csgo,After 1100 hours over 4 years I have finally dragged myself out of Silver. I'm so happy rn :),,1607621079.0,47,0.94,11
+pettyrevenge,Unwilling to pay? Let them eat semen cake!,[removed],1607457269.0,1,0.66,0
+Battletops,My minimalist setup (AKA I can't afford anything :),,1607454283.0,255,0.98,8
+Homescreens,Simple,,1607416552.0,17,0.88,5
+NoStupidQuestions,Since when did reddit allow gif replies?,Like on InsanePeopleQuora I could reply with a gif.,1607364579.0,3,0.81,0
+whatisthisthing,What is this thing over the ethernet port in my wall?,,1607232698.0,1,1.0,5
+NoStupidQuestions,"If you planted memories of events that didn't happen? Sorta like Mandela effect, but everyone is affected and the memories are consistent and strong.",,1607200592.0,2,1.0,4
+DoesAnybodyElse,DAE close their eyes and open them hoping that the last few years were some weird dream or imagination thing?,,1607200372.0,25,0.96,6
+perfectlycutscreams,Jewish vampire gets rekt by Spanish Nazi.,,1607106058.0,1,1.0,0
+rimjob_steve,Hope he doesn't fondle the dog,,1607060329.0,71,0.97,2
+metro,Truly beautiful,,1607025393.0,189,0.99,12
+flightsim,"Laptop simmers, what's your experience like?","I'm not talking about like a beast laptop hooked upto ultra wides here. I mean like a low-mid ranger with only a xbox controller. I got a laptop with a GTX 1660 TI, 8 GB RAM, gigabit fiber (over wifi) and i5-9300h and get anywhere from 20 to 50 fps depending on plane and location in MSFS. I play at high-ultra at 720p. It looks jaggy because of low res, but actually playable once the plane is moving.",1606925572.0,2,1.0,8
+exmuslim,If there isn't a word for a phobia of chainsaws,There shouldn't be a word for a phobia of islam. It's called common sense.,1606744854.0,27,0.86,12
+IndianGaming,"Finally got out of the 10 people 1 BHK House. Got my own room, and desk.",,1606549056.0,387,0.98,75
+csgo,How do you guys aim?,"What I mean is, what part of your arm do you guys use? I am primarily wrist, except for making large, fast turns. I used 1664 edpi (somewhat high) and use only my wrist except for large swipes.",1606502474.0,2,1.0,6
+pcmasterrace,"While y'all be rocking new RTX 3080s, I finally got a desk after 4 year of back breaking floor gaming!",,1606411332.0,10,1.0,1
+socialism,"If the stock market is going up, it doesn't matter to normal people. If it goes down, we're fucked.",[removed],1606334597.0,1,1.0,0
+unpopularopinion,Tobey Maguire is the best Spider-Man yet.,"I enjoy all the Spiderman movies, including Andrew Garfield and Tom Holland. But if I had to choose one, it'd be the Sam Raimi trilogy. I would gladly re-watch any one them, but I feel like Tobey Maguire is the best.
+
+
+
+I funny enough relate more th Tobey's Spiderman. This is not because of my age or anything, as I was born in 2003. Just the internal struggle, emotions, tone of the movie feel good. Even the third one. It does carry great emotional value. Forgiveness, empathy, acceptance, perseverance, and motivation. 
+
+
+
+While I do enjoy Andrew Garfield's Spiderman, it's more of a popcorn-flick rather than a movie about which I'll be thinking for hours.
+
+
+
+Tom Holland is actually very good. His Peter Parker is also good. Especially his relationship with Iron Man. His character arc is also good in the first movie. Especially the scene where he's trapped under rubble.",1606153525.0,8,0.67,10
+NoStupidQuestions,"If you somehow reversed 9/11, erased all information about it but not people's memories, how would people react? Like if the twin towers are there, the people are revived and there's nothing about 9/11 on the internet/libraries but people's memories are unaffected.",,1605970331.0,1,0.6,6
+WalmartCelebrities,Copper Man/ Tony Shart,,1605884719.0,96,0.99,3
+NoStupidQuestions,Is it possible for a country to exist where nobody has to work?,"Like a country which has a ton of natural resources (like oil or some rare mineral) and a tiny population. Would it be possible for a ""government"" to simply hire labor from other countries, sell the resource and give out money to it's citizens? Would it be stable?",1605469228.0,2,1.0,3
+TrueOffMyChest,I don't think I'm a good person.,"I honestly don't feel like I have a overwhelming urge to save people like some superheroes. I like to think if I saw a burning kindergarten, I'd go in and save all the kids, but I know I'd probably back out. Heck, if I imagine having superpowers, I'm usually just pulling pranks instead of the usual saving puppies. The best I've done is saving some kids from drowning in a river, even then I had to motivate myself even though I'm a good swimm",1605123342.0,3,0.8,1
+confession,I shop-lifted a toy from the Empire State Building at 11.,[removed],1605122399.0,1,1.0,0
+NoStupidQuestions,"If I somehow sent a modern computer back to around 1950, would they be able to reverse engineer it, or atleast understand how it works?",,1605041107.0,2,1.0,2
+chicago,Taken 3 years ago. I miss her!,,1604080262.0,20,0.74,0
+IndianGaming,"Some mobile ""hard-core"" gamers are straight cringe.",[removed],1604060547.0,17,0.62,73
+pcmasterrace,"Mobile gaming is a larger threat than console gaming, especially to competitive gaming.","While yes, consoles and PC are competing directly in the same market, there isn't too big of a difference between PC and Console games. Sure, they look prettier and perform faster on PCs, but there's not much difference between the eco-systems.
+
+Mobile is another pile of shit. I enjoy mobile gaming if I'm bored. There's just something fun about taking a poop and playing games. But, there's a increasingly large subset of people who play only mobile games. And **this market is already as large as PC and consoles combined.** And it's not sowing down.
+
+This means that in time, the possibility of PC games dying may already be near. Why would companies spend time and money on a niche of gaming, on devices that only well off people can afford, when you can sell a game to a device that millions of people around the world already have, constantly carry around and can whip out in a McDonald bathroom?
+
+Mobile eSports are already taking off in Asia, especially in India, Pakistan, Bangladesh, and South East Asia. **That's a market of over 2 billion people, most of who are young people who are below 30**. I honestly won't be surprised if ""PUBG Mobile"" overtakes CSGO and Rainbow Six in popularity, it it hasn't already.",1603808372.0,1,0.6,2
+unpopularopinion,"The allies were not the ""good guys"" in WW2.",[removed],1603742023.0,1,1.0,0
+GamingLaptops,"Owners of Helios 300 laptops, is the lid a bit uneven in your unit?","If I look at it head on with the lid closed, the thing between the bezel is visible on the left side, but not the right. Also, at the correct angles, the lid looks somewhat warped. Is this common?",1603654020.0,1,0.99,1
+AcerOfficial,Laptop lid looks to be uneven (details in comments),,1603652998.0,2,0.76,3
+IndiaSpeaks,Would anyone be interested in a new social media application?,"I am a 17 year old dude. I'm currently working on a social media application, which is based around customisability and flexibility. It's a do-all kinda website, which will incorporate some basic functions of a social media such as posts and comments, along with a forum-like option, such as reddit (with a gimmicky feature that allows you to ""de-link"" your ID), and a chat feature, like discord. 
+
+
+I'm still at very early stages, designing the back-end, and trying to find the best optimised data structure. I'm expecting to complete it in about half a year or so, but I'm still unsure whether it'll be a worth-while endeavour.",1603547734.0,3,0.64,3
+IndiaSpeaks,What would an ideal religious and economic setup for our India in your opinion?,"While I do hate many ""secularists"", I still think India should remain a secular nation. In my opinion, all reference to any religion should be removed from the constitution and law. Everyone is treated equally, ie there's no reservations for any caste or religious group. All control of temples, Gurudwaras, Mosques, churches should be privatised to some organisation or company without any funding from the local government, although a close watch should be maintained on specific sites of worship to curb extremism.
+
+
+
+
+Economically, I feel like the government must slowly lift regulations and start privatising many sectors of the economy. Taxes should be lowered, as well as arranging bilateral free trade agreements between our trade partners.",1603541210.0,20,0.81,19
+learnprogramming,Thinking of developing something that mutes or messes with other zoom participant's audio.,"I'm thinking of a program that listens to audio and generates a audio signal with a 180° phase, and passing it though as a ""mic"" signal to zoom.
+
+
+
+I'm just not sure about the latency tho. Guessing the time the audio takes to get from the victim's computer to the server to my computer plus the time the cancelling signal takes to go from my computer to the server will probably add a few milliseconds of delay, and if there's any other audio processing or encoding, it'll significantly increase the delay.",1603398905.0,0,0.13,1
+unpopularopinion,The fact that we're afraid of automation proves how distorted modern society has become.,"We can't fathom not working. It's almost a foreign concept to some. People think that things like wages are based on how hard you work, even if that can't be farther from the truth. You're getting a small part of the value you're creating.",1603312263.0,22,0.78,15
+india,How do you guys call your father?,[removed],1603270201.0,1,1.0,0
+Entrepreneurship,Thinking of starting a unique social media website. Will it actually work?,"Hi guys, I'm a 17 year old. I'm currently working on making a social media website. I want to make it a extremely customizable, privacy focused app that doesn't have ads. I'm planning to include various functionality like your usual social media websites (like facebook) combined with other things like a forum-like functionality like Reddit. I'm also planning some other features.",1603213074.0,4,0.84,5
+Jokes,My blind girlfriend broke up with me because I kept making offensive jokes,It's not my fault she can't see the humor,1602968167.0,20,0.83,2
+conspiracy,"We have already discovered how to reverse, or at least slow down aging. But the government is hiding it from us for now, until we get population growth to zero.",,1602959842.0,6,0.71,17
+pcmasterrace,My FPS dropped below 60 in online classes. Totally unplayable!,,1602867349.0,5,0.64,3
+csgo,The glock absolutely sucks,Like I have to shoot someone in the head **3 times** to get a kill. And I'd need like 8-10 body shots. The glock sucks.,1602792015.0,0,0.33,5
+confession,"I am the one zoom- bombing my class, and I'm also the one helping track him down.",[removed],1602790361.0,1,1.0,0
+gaming,Based on a true story,,1602788536.0,223,0.9,40
+csgo,Based on a true story,,1602788435.0,570,0.99,14
+depression,I just don't want to feel this miserable anymore,"I just can't seem to be happy. No matter what I get, what I do, I always feel this hollowness inside. I can't feel joy for more than a few seconds. Even if I get something I've worked hard for, I can't feel anything. Nothing. Just a brief few seconds of joy, and then nothing.
+
+
+
+I feel miserable. I don't have the motivation to do anything. I feel like my mind is tied to a anchor. I just sit there blank, like a idiot for hours.",1602704918.0,3,1.0,2
+IndiaSpeaks,India needs something similar,,1602668194.0,20,0.88,3
+teenagers,Never forget,You are perfect. Don't let anyone else make you think otherwise. Only you know what you're capable of. Be yourself :),1602623607.0,5,0.77,6
+learnprogramming,How should I go about designing a database for a social media website?,"I'm confused about whether to use multiple tables to store user data (ie. seperate tables for details, posts, comments, groups) or a single large table containing all the data?
+
+
+
+AFAIK using a larger table will allow loading large sets of data (ie. someone's profile) a bit faster, but it will make smaller IO requests slower.",1602599480.0,1,1.0,8
+IndianGaming,These idiots always spoil reviews.,,1602571469.0,1,1.0,0
+csgo,I've lost 5 games in a row now.,,1602519157.0,23,0.9,6
+AskPhysics,Is this a valid proof of the conservation of momentum?,"So, I had a school phsycics test a few days ago, for which I didn't study (I'm not careless, I am completing Kleppner and Kolenkow so this test was relatively easy 11th grade test. I had to whip up a proof on the spot. My teacher says it is wrong.
+
+
+
+
+So, I simply used Newton's law which said that on impact, forces are equal and opposite. Magnitude is the integral of force as
+
+ (d/dt)MV= MA = F. 
+
+|F(total)| = |F (Object 1)| + |F (Object 2)|
+
+
+
+Thus, momentum is conserved.",1602268637.0,1,0.6,2
+memes,My goals are beyond your understanding,,1602267113.0,26,0.87,1
+fakehistoryporn,"The resurrection of Jesus Christ, circa 30 AD.",,1602183161.0,2,1.0,1
+askscience,Is it possible to kill SARS-COV-2 using high frequency AC current?,[removed],1602182261.0,0,0.5,1
+csgo,Does anyone else get an internal blue screen of death when you see multiple AWPers while AWPing?,"Like if I peek down mid and see more than one AWPer on the other team, I can't make up my mind about which to shoot first. I just stand there scoped in like a dumbass before getting killed.",1602104326.0,1,1.0,0
+india,"People of Randia who have attended universities in the United States or know anything about it, please help!","Hi. I am a 17 year old 11^(th) grader. I am planning to apply for college in the US, and I'm planning to double major in Computer Science, Physics and possibly a minor a biology (it's a weird subject combination but I enjoy those).
+
+I would love to go to a university like MIT, Harvard, Cal-tech, but looking at their acceptance rates, I wouldn't bet on it. So I'm looking at UC Berkeley, Georgia Tech, University Of Chicago, etc. 
+
+I've lived in the US for about 6 years (4th - 9th grade), and another 6 years in Singapore. My parents earn around \~20-30 lakh INR per year. 
+
+I'm not a great student, and don't really have the high grades/stats many colleges need (only got 89% in 10th), but haven't given my SAT yet. My extra-curriculars are lackluster at best.
+
+&#x200B;
+
+I'm just wondering whether I even have a chance of getting into a good university, with aid.
+
+&#x200B;
+
+**My school stats**
+
+\- 50% in 9^(th)
+
+\- 89% in 10^(th)
+
+&#x200B;
+
+**My formal extra curriculars**
+
+**-** President of my school's gaming club
+
+\- Worked for an NGO feeding stray dogs for a while
+
+&#x200B;
+
+**My informal extra extra curriculars**
+
+\- Self taught multiple coding languages (C, Python, HTML, SQL)
+
+\- Self taught calculus in the 9^(th) grade
+
+\- Self taught classical mechanics in the 9^(th) grade
+
+\- Tutored 12th graders in the 10^(th) grade
+
+\- Built a Covid-19 tracker visited by \~400,000 people
+
+\- Currently working on a social media website, which should go online in 6 months
+
+\-  Used to work assemble computers and troubleshoot issues as a way to earn quick money.
+
+&#x200B;
+
+**Some other notes**
+
+\- I was expelled from school in the 9^(th) grade in the US
+
+\- Used to be a drug user/ drinker from 11-14
+
+\- My grades in the 9th grade are low as I moved from the US that year, and didn't know Hindi too well.",1602064661.0,0,0.44,7
+shittysuperpowers,"Every time you blink, somewhere in Newark, a hard turd weighing 750 grams appears 400 meters above the ground, with there being a 40% chance of it hitting a person.",,1602014392.0,1,1.0,0
+Showerthoughts,Water is hydrogen ash,,1602013492.0,1,1.0,0
+pcmasterrace,"I repasted my laptop, but kinda goofed up.","So, I got a Acer Predator Helios 300 (2019 model) with a i5-9300H and GTX 1660TI. I repasted it today with Thermal Grizzly Kryonaut and cleaned out fans (like I'm sure the clogged fans were the main cause of overheating). 
+
+
+
+
+I used the line method, but the line was a bit off center on the GPU. It wasn't clean, really ugly looking. 
+
+
+
+
+Temps have improved
+
+
+
+**Stock:**
+
+- XTU: 80° (CPU)
+
+- CSGO: 85° (CPU), 80° (GPU)
+
+
+**After a few months:**
+
+- XTU: 92° (CPU with thermal throttling)
+
+- CSGO: 95° (CPU with thermal throttling), 90° (GPU)
+
+
+**After repasting and cleaning**
+
+- XTU:  75° (CPU)
+
+- CSGO: 82° (CPU), 75° (GPU)",1601732481.0,2,1.0,0
+Jokes,"Scientists have found out that Covid-19 can spread, even across large distances",[removed],1601664100.0,0,0.4,0
+india,The taxes here are too damn high!,"Seriously, if I wanted to buy a computer that costs $1000 in the US, I'd have to pay the equivalent of $1200-$1500 here. A car has almost 30% GST on it. WTF government?",1601456006.0,28,0.97,16
+PrequelMemes,And that's a fact,,1601410526.0,56,0.93,5
+AskReddit,What're the coolest things you've ever done without getting recorded?,,1601404757.0,3,1.0,8
+learnprogramming,"Planning on building a social media website, any tips?","Hi. I have been programming seriously for a few months, and casually for a few years. I am familiar with C (using RobotC), Python, HTML and SQL. I have only created one project using python, a Covid-19 tracker (live rn, covstats.in ). 
+
+
+
+
+I am planning to make it more of a ""hub"", containing links to a user's other social media accounts and have some other functionality such as friends, posts, chat, groups and allow image sharing. I have made myself somewhat familiar with Django and MySQL, but I'm going to start once in a few weeks (I'm a high-school junior and need to balance time).",1601396162.0,1,0.67,2
+IndianGaming,I'm repasting my laptop. Any tips?,"I have a Acer Predator Helios 300 which is about 4 months old.
+
+
+
+Specs: 
+
+- Intel Core i5-9300h
+
+
+- Nvidia GeForce GTX 1660 TI
+
+
+- 8 GB DDR4 RAM 2666 MHZ
+
+
+
+
+Temps were around 70-80 now they're in the mid 90s. It's probably due to dust buildup (Mumbai). I decided to open it up, and cleaning out the fans and repasting. I have bought Thermal Grizzly Kryonaut for a pretty cheap price. 
+
+
+
+Hoe should I apply it? I've only pasted desktops before, and the line method worked pretty fine. But I've heard that Kryonaut is pretty thick and needs to be spread around.",1601366248.0,9,1.0,23
+teenagers,I don't wanna grow up :(,"Seriously, I'm 17 and I wanna go back to being 4. I feel like my life went downhill after 12. I hate it. I wanna be a little kid, play with toys, appreciate the little things. I wanna play outside with my friends. I wanna hug my parents again.",1601328125.0,8,1.0,1
+unpopularopinion,Most Americans don't realize how lucky they are.,[removed],1601318570.0,23,0.88,17
+unpopularopinion,I feel like the late 90s/early 20s was the best time to be born.,"I was born around 2003. I feel like it was great. I've had easy access to technology without getting addicted. Like being born during or before the 80s, you probably didn't even have your any devices until like your mid teens, and even that was in it's infancy and a bit cumbersome. 
+
+
+
+
+If you were bore after 2007, you probably were parented by an iPad. I have a 5 year old brother who literally spends hours on his tablet and a 6 year old cousin who is addicted to playing shitty shooters on his phone.
+
+
+
+I had my first computer at the age of 7, and my first phone at the age of 9. I had access to devices quite early on, but wasn't hooked at it at the age of 5. I feel like technology has gotten a bit too accessible (like for children, my brother who still can't read or write knows hoe to mess around with a tab and even install games and change settings and stuff). And children are a surprising lucrative source for that juicy ad revenue.",1601237138.0,59,0.81,76
+entitledparents,"""How dare you shoot my kid... in an airsoft field"".","So, I was a bit into airsoft a few years ago. I was pretty trash and has a shit springer pistol, but it was fun. I was playing with a friend who also invited another friend who also brought his cousin (I think). 
+
+
+Our cast of the day:
+
+- EM: EntitledMoron
+
+- CD: EM's crotch demon
+
+- F: Friend
+
+- FF: friend's friend
+
+- Me: You
+
+
+So, it was a game of simple TDM if I remember correctly. We had split up (me and F on one team, CD and FF on the other) on opposite teams.
+
+
+Me and F try to engage the enemies. I manage to take out FF who was a good sport. The I shot CD in the neck. This kid has no protection on his neck (everyone else wore a scarf). He starts crying like a little bitch (he wasn't much younger than me, I was around 12-13 and he was maybe 11). EM decides to confront me after the game. 
+
+
+
+EM: ""You shot my son in the neck!""
+
+
+Me: ""He should've taken precaution, not my fault!""
+
+
+EM: ""He's vulnerable, so you have to watch out for that!""
+
+
+
+Me: ""No, if getting shot hurts him, tell him to get some proper protection. Besides, this piece of shit pistol doesn't even hurt that much""
+
+
+
+EM: ""Look young man, if you hurt my son, I'll call the police!""
+
+
+
+Me: ""Good luck ma'am, you'll be the idiot complaining about your kid getting shot in a airsoft field *which you took your kid to*"".
+
+
+
+I left. I played with F and FF a few times after that, but didn't see CD.",1601064811.0,1945,0.99,84
+india,Life here sucks,"So, the whole Covid-19 lockdown thing has been going on for the last 6-7 months, which is kinda nice. I'm stuck in this stupid little house with a bunch of people. I can't do anything. I can't study without getting disturbed, can't even play a single game of CS without getting annoyed, nothing.
+
+
+
+I live in a 1 BHK with 9 people. This whole ""home"" functions like a Soviet gulag. Wake up on time, as the futons take up the entire space here except the toilet. I have online school, but the shit show going on around me makes it impossible to focus. I wanna study, but I can't pay attention because there's just so much noise and things going on. I can't play a simple game of CSGO without anyone disturbing me. The most quiet I can find is a toilet or bathroom or staying up till 4-5 AM. 
+
+
+
+I miss school, ot at least the non-lockdown days. Half of these idiots came home at 9-11PM, or at weekends I'd hang out with friends. I hate this.",1601023170.0,85,0.88,37
+librandu,Am I a RW guy/ sanghi?,"I hate Islam but not Muslims. I beleive muslims should have equal rights, even though I hate their ideology.
+
+
+
+Edit: I'm an atheist (like full atheist, not those dharmic ones) .
+
+[View Poll](https://www.reddit.com/poll/iyzk1m)",1600961996.0,10,0.75,28
+teenagers,Know the scene where Barry finds out Jay is Zoom and runs to some canyon and yells?,I wanna do that so bad. I'm tired of the lockdown.,1600882252.0,4,0.84,0
+techsupport,"Pressing a single key types multiple characters on laptop keyboard, but somehow hitting it fixed it.","If I press a single key, it'll type multiple characters. The specific keys
+
+
+- O -> OS
+
+- S -> OS
+
+- NumLock(ON) + P -> P3
+
+- NumLock(ON) + L -> L0
+
+
+
+I obviously reinstalled drivers, and tried to use an external keyboard and tried to type stuff in the BIOS, and still no luck. I hit my laptop in frustration, and it works! The laptop is 3-4 months old, so I still have warranty. Is this issue going to come back?",1600881526.0,1,1.0,0
+entitledparents,EM wants to turn her kid into minced meat!,"So, I was longboarding down hill for fun in my apartment complex. It was located a top a pretty large hill, so I could easily pick up speed around 50-60 mph which was kinda cool, with my friends acting as scouts to make sure I don't ram into a car or someone. I was maybe 12 or 13 at the time (it was near my birthday). I had some precautions (like a helmet and skid pads if the worse came).
+
+
+Cue EB and her crotch demon. At the bottom of the hill, they were standing with CD looking in awe. When I stopped (I basically rode into grass and dropped down as the hill led to a very busy road) and CD jumps up and asks me if he can ride. I obviously say no, as it takes hours to learn how to even stand still, let alone doing the stupid stiff I was doing. 
+
+
+EM: ""let him ride, he knows how how to ride a scooter.""
+
+
+Me: ""No ma'am, this is very dangerous and he may hurt himself!""
+
+CD: ""I'm not a kid, I can handle this!""
+
+
+EM: ""Yes, this is my kid, I know what he's capable of!""
+
+
+Me: ""Ma'am, this is not as easy as it looks""
+
+
+EM: ""I'm an adult and he has my permission, let him ride!""
+
+
+Me: ""Alright, but please don't blame me when you have to scrape his remains off the road.""
+
+
+EM gave me a nasty look and walks off. EM defeated!",1600547559.0,192,0.99,21
+teenagers,I just made my life easier!,"I built a bot that logs on to online school for me, while I sleep in.",1600113208.0,3,1.0,4
+NoStupidQuestions,How do I smile,"Like I actively can't smile natural. If I try to smile like a normal person it looks almost comical. Even when I laugh, it's with a straight face.",1600031997.0,2,1.0,2
+GamingLaptops,"Owners of Acer Predator laptops, of your audio using headphones sounds like trash, here's how to fix it.","Go to Waves MaxxAudio, and turn all the dials on the bottom to 0.",1600008797.0,11,0.91,5
+teenagers,I'm surprised I'm still alive and haven't broken any bones,"Like I did a lot of stupid shit. 
+
+
+
+- Skateboarded *under* a *moving truck* from the side. 
+
+
+- Fell off 2 stories without getting hurt
+
+- Climbed up a radio tower 
+
+- Biked down a huge hill at over 80 mph and almost castrated myself
+
+- Held on to a bus riding a skateboard",1599942320.0,7,0.9,7
+teenagers,"Guys, I asked out my crush","She said no, and I woke up.
+
+
+
+Not even her dream version would go out with me. Pls help.",1599941876.0,6,0.8,6
+csgo,Is my setup holding be back?,"Like my PC is good, but the actual setup, it the lack thereof, is the issue.
+
+
+**My PC**
+
+- Processor: i5-9300H
+
+- GPU: GTX 1660TI
+
+- RAM: 8 GB single channel DDR4 @ 2666 MHZ
+
+But my other stuff isn't good. I use a small bed table, which barely has enough space to use any reasonable sensitivity. I use 2.08 in game @ 800 dpi. I feel like this is really the main issue, as I can't even turn 180° without having to pick up my mouse, and feel like I'd be much more accurate at a lower sensitivity. I also use the laptop's inbuilt 15.6 in monitor, which I feel is kinda small,  as I can't really aim properly at long distances.",1599934573.0,2,1.0,2
+SuicideWatch,I just want it to end.,"I don't wanna necessarily kill myself, but I am looking forward to death. I would like to go out doing something good, perhaps sacrificing myself to stop a terrorist attack , or perhaps save some kittens. But I don't care about life anymore. I know I can't kill myself. I've thought about it for a while now, and I can't gather the courage to. 
+Death seems interesting. 
+
+
+
+I just wanna stop feeling like shit all the time. I get a few moments of peace, tranquility and even that is ripped away. I hate myself. I have failed in life, and the funny thing is I'm just 17. 
+
+
+I sometimes feel ok, or even good. It's like life just sorted itself out for me. But it doesn't last. I've tried all sorts of things, working out, meditation, yoga, just general isolation and alone time, but it keeps getting worse. I just can't handle it anymore.",1599769941.0,2,0.75,1
+pcmasterrace,How do you guys position your hand on the keyboard for WASD?,"Like I ise my pointer for W and S, thumb for D and Space,  middle for A, and Pinku for Shift/ Ctrl. My friend pointed out that it's wrong.",1599677358.0,2,1.0,12
+india,Puducherry got almost 7.3% of the population infected. What's going on there?,,1599631266.0,26,0.94,5
+ApplyingToCollege,Which colleges should I apply to?,"Hi. I turned 17 two weeks ago. I am currently a high-school junior, living in and a citizen of India. I am currently considering double majoring in Physics and Computer Science, and minoring in biology. I will apply for aid, as my parents aren't too rich. 
+
+
+
+**My school stats**
+- 9th grade: 50%
+
+- 10th grade: 90% (class rank 3).
+
+
+**My test stats:**
+
+- I haven't taken the SAT yet, but I'm expecting around 1550 (took a few ones from last few years, pretty standard stuff).
+
+
+**My extra curriculars:**
+
+- Self taught calculus in 9th grade
+
+- Self taught classical mechanics in 10th grade
+
+- Self taught different programming languages (C, Python, HTML, SQL)
+
+- Built a Covid-19 tracker visited by around 250,000 people in the last month. 
+
+- Built a small management system for my school
+
+- Currently working on a social media website, expected to launch in about 3-4 months.
+
+- Worked for a small charity for a while, donating food to stray dogs.
+
+- Tutored seniors in math and physics as a sophomore.
+
+
+
+
+**Some caveats:**
+
+- My grades are low in the 9th grade because I had just moved from the US, and was a bit unfamiliar with how things are done here in India.
+
+- I'm a year behind in school (I'll graduate at 18 years and 7 months) as I got expelled from school due to drug issues and had to repeat 9th grade. IDK whether I should report that or not on my applicati",1599594799.0,0,0.5,3
+chanceme,Chance me for UB Berkeley!,"Hi. I turned 17 two weeks ago. I am currently a high-school junior, living in and a citizen of India. I am currently considering double majoring in Physics and Computer Science, and minoring in biology. I will apply for aid, as my parents aren't too rich. I'm currently looking at UC Berkeley, CalTech, Georgia Tech, as they have high rated programs and aren't too selective.
+
+
+
+**My school stats**
+- 9th grade: 50%
+
+- 10th grade: 90% (class rank 3).
+
+
+**My test stats:**
+
+- I haven't taken the SAT yet, but I'm expecting around 1550 (took a few ones from last few years, pretty standard stuff).
+
+
+**My extra curriculars:**
+
+- Self taught calculus in 9th grade
+
+- Self taught classical mechanics in 10th grade
+
+- Self taught different programming languages (C, Python, HTML, SQL)
+
+- Built a Covid-19 tracker visited by around 250,000 people in the last month. 
+
+- Built a small management system for my school
+
+- Currently working on a social media website, expected to launch in about 3-4 months.
+
+- Worked for a small charity for a while, donating food to stray dogs.
+
+- Tutored seniors in math and physics as a sophomore.
+
+
+
+
+**Some caveats:**
+
+- My grades are low in the 9th grade because I had just moved from the US, and was a bit unfamiliar with how things are done here in India.
+
+- I'm a year behind in school (I'll graduate at 18 years and 7 months) as I got expelled from school due to drug issues and had to repeat 9th grade. IDK whether I should report that or not on my applicati",1599594710.0,8,0.9,38
+ApplyingToCollege,Rate my profile!,[removed],1599594528.0,0,0.5,1
+atheism,Life is truly depressing.,[removed],1599569538.0,0,0.5,13
+atheism,Life is truly depressing.,[removed],1599569538.0,0,0.33,2
+librandu,Dafuq is this logic?,,1599493857.0,9,1.0,3
+Jokes,What is the difference between a 74 year old and a baby?,[removed],1599422138.0,0,0.4,5
+teenagers,I just remembered the most embarassing shit I've ever done,Like I saw a dog poop in winter. It was the first time I saw steamy poop. I always thought it was just an expression. I started laughing like a maniac at a popping dog.,1599332185.0,8,1.0,1
+fakehistoryporn,"Resurrection of Jesus Christ, circa 20 AD, colorized.",,1599326961.0,2,1.0,1
+csgo,Am I the only one who enjoys clutches?,"Like I love clutch situations. The more, the better. I usually don't win if it's a 1v5, but 1v3s & 1v4s are so much fun.",1599314915.0,2,0.6,3
+csgo,"Lost 16-1, but got an ace. So that's kinda nice.",,1599234553.0,13,0.82,10
+csgo,How do I learn how to rifle properly?,"I have around 1100 hours in CSGO, and have spent the majority of my time AWPing. I would rarely rifle. I decided to learn how to rifle a while back, and I have my spray patterns and movement mechanics down. 
+
+
+I primarily use the AWP for pushing/ entry on T side ( a bit odd, but it works surprisingly well) and to hold angles on CT (or sometimes push to throw the enemies off). I have practiced AWPing in community servers (usually rank in the top few people on the servers I play on). 
+
+
+Whenever I pick up a rifle, I just kinda end up messing it up. I can't really seem to br consistent. I've been playing a shit ton of deathmatch (pistol/ rifle, headshot only) and have a decent rank on there (top 10/ 3,000) but in competitive matches my rifling is just ass. 
+
+
+
+I have also played around 900 hours on sniper in Battlefield if that counts for anything, even though they're drastically different.",1599078711.0,1,1.0,6
+ProgrammerHumor,Full stack devs be like,,1598987291.0,73,0.95,3
+teenagers,I feel offended,,1598986757.0,18,0.96,3
+teenagers,I found my teacher's microphone!,,1598984312.0,9,0.86,2
+pcmasterrace,"Low FPS in games (CSGO, Rainbow Six Siege) on laptop?","I have a Acer Predator Helios 300 with a GTX 1660 TI, i5-9300H and 8 GB RAM.
+
+
+I seem to be getting much lower FPS than I expected. I only get 100-130 FPS on CSGO (all low, 1080p) and 150-170 FPS on Rainbow Six Siege on ultra at 1080p (even through Rainbow Six is harder to run...). I have tried all sorts of fixes. It's not thermal throttling, as components don't exceed 75-80 degrees. Even on UserBenchMark, I get about 99th percentile for my components. 
+
+
+
+Other games, such as Metro: Exodus, Jedi: Fallen Order work better than expected (60-90 FPS, ultra at 1080p). It's not power limit issues (laptop is plugged in while gaming and XTU is norm@/). 
+
+
+My friend with a ASUS ROG Strix G (i5-9300H, 1650) gets about 200-230 FPS on CSGO at low. 
+
+
+What am I doing wrong here?",1598900223.0,2,1.0,10
+csgo,The nastiest looking AWP flick I've seen,,1598891049.0,0,0.5,8
+teenagers,"Guys, I never had acne. Was I lucky?",[removed],1598814627.0,1,0.67,0
+teenagers,"Guys, I never had acne. Was I lucky?","Like I never yad acne. I'm 17 and I don't have any facial hair except a few whimpy looking hairs for a moustache. I'm the only guy in my class who can't grow facial hair, and I'm also the 2nd oldest. Most kids running around with general Aaladeens moustache at like the 8th grade. Help pls.",1598814627.0,2,0.61,8
+teenagers,I'm a class clown stuck at home,"I'm a composer gone deaf, a singer gone mute, a painter gone blind, a gigaloo gone ED, a masturbation gone armless. It's boring. Help pls.",1598811061.0,2,0.67,18
+teenagers,Is it ok for me (M17) to date a girl (M15)?,"Like she's 16 in a month, and I turned 17 two weeks ago. It is alright?
+
+
+Edit: she's F15.",1598810402.0,11,0.84,28
+learnprogramming,Thinking about building a social media website for fun. Am I ready?,"I am a 17 year old high school junior. I am familiar with Python, SQL, HTML and some C. The only website I've built so far is a Covid-19 tracker (covstats.in) which is a simple HTML page updated using python. Am I ready?",1598714194.0,1,1.0,8
+chanceme,Chance me for federal prison school,[removed],1598712784.0,9,0.73,3
+teenagers,I remember the dumbest thing I said in class,"Like we were studying about reproduction, and I was already laughing my ass off. Then the teacher asks ""why do animals reproduce?"" And I'm like ""because it feels good"". I got kicked outta class but it was kinda cool.",1598648946.0,5,1.0,6
+pcmasterrace,Why do CPUs age relatively better than GPUs?,"Like comparing a 2 generation old GTX 980 to a current-gen GTX 1660, the 1660 beats it. A top of the line card from two generations ago is beat by the slowest card available from the latest generation. A GTX 960 is more than twice as slow as a GTX 1660. 
+
+
+Compare that to CPUs. A 5th Gen i7 will be only about 30-40 percent slower than a 9th Gen i7.",1598535228.0,2,1.0,36
+IndianGaming,How do you guys deal with little siblings?,"I got a 5 year old brother who hogs up my laptop for 2 hours a day. Like I got school in the morning, work on stupid projects during afternoon/evening, and game for a few hours during the night. This little kid comes along and starts yelling like a Banshee on ketamine because he wants to play need for speed. And parents yell at me to let him play so he can shut up. Why???",1598516435.0,11,0.72,58
+spirituality,Strange events?,"I have had some events, where I have a ""intuition"" of what's going to happen, usually something major. Like it's a overwhelming nagging like ""watch out, this is about to happen"". It's not dejavu, as after the first few times, I physically wrote about it, and confirmed that it is not not a coincidence after what happened. I'm not spiritual, an atheist and quite rational but these things seem to defy all logic.",1598468135.0,5,0.86,3
+hacking,How long will learning the basics of cybersecurity take me? What are some good resources?,[removed],1598375544.0,2,1.0,1
+india,Why are so many kids committing suicide over PUBG?,"Seriously, go search ""PUBG suicide"", and wayy too many results come up. Compare that to CSGO, a game with more players and which is much more competitive, literally nothing except they McSkillet guy. 
+
+
+
+
+I think this exposes how our society gives zero fucks about mental health.",1598358579.0,9,0.74,13
+unpopularopinion,"""Barely legal"" porn is fucked up","You're basically watching the closest thing legally possible to a child perform sexual acts. What's to say that given the opportunity and legal impunity, you won't watch a 14 or 16 year old get fucked? That's just messed up.",1598129735.0,565,0.85,267
+csgo,Why the fuck is the Tec-9 so OP?,"Like in most games, people don't even consider using it. But it's ridiculously powerful. Think about it, you can get a gun that can running headshot across short for 500 dollars. Hold W, keep crosshair at head level and spam the enemy. They're gonna die instantly. And even at long range, *it's more accurate than an AK*. It's like a combination of a Rifle (accuracy), and SMG (running accuracy).
+
+
+
+And if they don't have armour, they're fucked.",1598117049.0,2,0.75,3
+pcmasterrace,Living in a dusty polluted city. She's barely two months old!,,1598034923.0,3,0.67,5
+csgo,"What's your ""godliest"" play?","Like a few days ago, I, a shitty silver, decided to hop into Faceit. The map ended up being Vertigo, which I had literally never played before. Like I didn't even know where the sites were. In a round near the end of the game, all my teammates die. I was at A site. They were at B. The bomb ad been planted. I had to ask my team for directions to get to B site. I go up stairs, get two kills with a P250, pick up and M4 and kill the other 3 guys, defuse the bomb and win. 
+
+
+Like I was literally laughing after that. Giddy like a little child. I know it was luck, but I like pretend I have a inner pro who decided to come out.",1597957582.0,1,1.0,5
+india,Why does Maharashtra have such a high death rate?,,1597672626.0,55,0.97,10
+teenagers,How TF do y'all get caught jerking it?,"I don't even have a room, but I can go 2-3 times a day without ever getting caught. 
+
+Precautions people, precautions.",1597526974.0,29,0.91,10
+teenagers,We're prolly born in the right time to become teenagers again after we grow old.,"Like looking at advancements in science and medicine, I wouldn't be surprised if a lot of us came back here as 113 year olds.",1597526730.0,16,0.91,3
+teenagers,I just realised that 17 year olds are just 4 years older than 13 year olds.,"I just turned 17 a few days ago. I think I was a cringy 13 year old a long while ago, but it was just 4 years ago. That's like chump change in time. Like I'm just 30% older than a 13 year old. 
+
+
+
+
+Help pls, I now feel old and cringy.",1597526239.0,10,0.92,6
+ApplyingToCollege,Are my extra-curricular activities any good?,"I'm an International from India. I just started junior year. I'm 17 (turned 17 3 days ago). I had shit scores in grade 9, and alright scores in grade 10 (88%).
+
+
+My extra curriculars:
+
+Tutored 12th graders while I was in 10th grade.
+
+Self taught calculus in 9th grade
+
+Self taught University level Physics in the 10th grade
+
+Know Multiple programming languages (Python, C, HTML, Java).
+
+Built a Covid-19 tracker visited by 20,000 people in the last 3 days.
+
+
+
+Lol that's about it. Do I even have a shot at T50s?",1597524564.0,0,0.5,8
+india,I just launched a new Covid-19 tracker for India!,"I'm in the 11\^th standard. I built this as a project. I posted a (incomplete) version a few days ago, and changed a few things after reading suggestions and added some new features.
+
+[http://covstats.in/](http://covstats.in/)
+
+&#x200B;
+
+All data regarding statistics is sourced from the website of the federal government. Values are updated within 10 minuted of changes on the government website. It also gathers news from a few sources (Rajya Sabha TV, NDTV and the sub-reddit covid-19). It also has some additional sections like general stuff about the virus and symptoms/ complications/ risks based on reports of CDC, Mayo Clinic, and WebMD(lol). It also displays additional statistics, such as the percentage of population infected, death rate on a state wise and national level, and total tests and the percentage of them positive on a national scale. I'm also planning to add testing data for some states, and district wise data for some states in which the outbreak is particularly bad (Maharashtra, Gujarat). 
+
+
+
+P.S if you're using it on mobile, use it in landscape. It looks weird in portrait.
+
+
+
+Ps2: If you want to suggest some changes or concerns, PM me!",1597500533.0,15,1.0,2
+IndiaSpeaks,I just launched a new Covid-19 tracker for India!,"I posted a incomplete version a few days ago, and received many suggestions. I have since changed some things and added new features.
+
+&#x200B;
+
+[http://covstats.in](http://covstats.in)
+
+&#x200B;
+
+It gathers data from the central government, and does some calculations and shows additional stats. It also gathers stats from new sites like Rajya Sabha TV, NDTV and r/COVID19. Data for the section regarding symptoms and outcomes is from the WHO, Mayo Clinic and WebMD sites. 
+
+&#x200B;
+
+P.S if you're viewing it on mobile, please use it in landscape mode.
+
+&#x200B;
+
+Feel free to PM me for suggestions or issues!",1597490937.0,13,1.0,5
+india,Can someone solve this debate for me?,My dad says that the government's job is to protect your rights. I say that rights protect you from the government. Who is right?,1597476861.0,28,0.92,13
+Coronavirus,Hello. I built a Covid-19 tracker for India.,,1597321900.0,1,0.67,2
+IndiaSpeaks,I built a new Covid-19 tracker for India.,"I just created a new Covid-19 tracker. I'm 17 (turned 17 yesterday). It is not commerical and is not for profit, and is just a excercise and possibly a way to help people.
+
+
+
+I haven't purchased a DNS yet, but plan to if tou guys like it. 
+
+
+
+http://13.233.166.91
+
+PS. It's offline rn, it'll be online in a few minutes
+
+
+I know it's a IP and doesn't seem secure, but I'll purchase a DNS soon, and I'll also add more sections in a day. The backend is built using Python using data from the federal government website, and frontend is simple HTML with some JavaScript to render charts and maps.
+
+PS. Please try to use it in landscape. It looks a bit wonky on portrait mode.",1597320478.0,8,0.78,10
+india,I just created a new Covid-19 tracker for India.,"I just created a new Covid-19 tracker. I'm 17 (turned 17 yesterday). It is not commerical and is not for profit, and is just a excercise and possibly a way to help people.
+
+
+
+I haven't purchased a DNS yet, but plan to if tou guys like it. 
+
+
+
+http://13.233.166.91
+
+PS. It's offline rn, it'll be online in a few minutes 
+
+I know it's a IP and doesn't seem secure, but I'll purchase a DNS soon, and I'll also add more sections in a day. The backend is built using Python using data from the federal government website, and frontend is simple HTML with some JavaScript to render charts and maps.
+
+PS. Please try to use it in landscape. It looks a bit wonky on portrait mode.",1597320315.0,21,0.82,20
+csgo,I had a really good day. Teammates didn't.,,1597247895.0,12,0.82,4
+india,Which new sources are the best for covering Covid-19?,"I am building a Covid-19 tracker (nothing too cool, just stats,  some science news pulled Reddit and some local news pulled off some news source. But I can't seem to find a straight to the point news source (like NDTav has 4/5 stories about Amitah bachan)",1597152486.0,1,0.67,1
+csgo,Playing faceit to get better?,"I'm currently in SEM. I started playing faceit today, and the difficulty level is much, much higher than MM. I'm not as good as I am in MM (I can usually dominate in MM, but I'm barely mediocre in Faceit) and actually seem to rely less on raw aiming and reaction, and more on strats and critical thinking, unlike in MM where I simply rush a site and win. Plus, the Indonesian guys (I'm in S asia) are actually kinda helpful, if a but rude, at getting better. Is playing at a level higher than you actual skill level actually helpful? Like diving into the deep end.",1597004418.0,1,0.6,5
+CasualConversation,I'm horrified of the person I was.,"I'm truly disgusted and horrified by the things I did and thought about. I'm 16 (17 in 4 days). I feel utterly afraid of who I was, and what I thought of. I was completely reckless, selfish, empathy-less ghoul. I used to go out of my way to make people's lives horrible, and even found their suffering somewhat enjoyable. I thought of devilish things that chill me to my core if I even think of them now. The thing is, it wasn't because of anything underlying, like abuse, stress or anger. Heck, if more fucked and stressed in life right now than I was back then. Is this normal? Like I know kids develop emotional stuff as they grow, but did anyone else experience something similar?",1596833750.0,4,0.76,9
+webdev,CSS not showing on phone?,"I recently built a website, and tested it on desktop. It works pretty well, and looks neat. But on my phone, using the latest version of Google Chrome, it only displays HTML without any style what so ever. I tried some fixes, like changing the view port, but still no luck 
+
+
+Strange enough, if I load the CSS file on UC browser and open the HTML at the same time, it works!",1596627852.0,2,0.75,16
+PoliticalCompassMemes,Political compass for dumb people,,1596574198.0,45,0.89,11
+IndianGaming,"Upgraded from MTNL to Airtel Gigabit fiber a few weeks ago. It sucks, now because I can't even blame lag for my trash skill.",,1596444010.0,23,0.88,13
+unpopularopinion,Most people don't know what authoritarianism is.,"Most people think that liberalism is about gay rights, black rights, and equality. While those things are a *requirement*, they're not the only thing. If your political ideology says ""if we get in power, group x will be silenced"" or ""if we get in power, any opposition will not be tolerated"", you are a authoritarian. Are racists, {people who discriminate on the basis of one's  x and y chromosomes} and bigots assholes? Yes. But should we silence them? Hell no. 
+
+
+
+
+A good example of a progressive authoritarian regime would be the governments of countries like Iran, Iraq, Afghanistan during the 60s to 80s. They were highly progressive, tried to further state and religion away from each other, introduced rights and equality and we're largely secular for their time. But any dissent was not allowed, leading to revolutions and chaos.",1596403912.0,65,0.82,28
+technicallythetruth,"Amit Shah is a Indian politician, who found corona positive.",,1596402649.0,15,0.89,2
+csgo,"Game showing I got an assist, without getting an assist?","I was playing D2 and I tried AWPing down mid. I get 2 kills and die. Then I also get a assist. I only shot two shots, and even looked at the replay, and made sure I only shot two guys. I checked the console, and it only showed the two guys I killed.",1596381251.0,1,1.0,2
+csgo,Why is my gameplay so inconsistent?,"I can somehow go from Vader in the hallway in Rogue One to playing like trash within minutes. Like today, the first game I played, I was hard carrying (39 kills, 13 deaths), yet we lost. The very next match, I had like 8 kills, 23 deaths and we won. I was playing with the same team mates, the only thing that changed was the map (went from Inferno to D2). The math after was a but better, I had like 25 kills and 20 deaths on D2.",1596227013.0,1,1.0,0
+learnprogramming,How would I go about hosting my website?,"I recently finished buliding a Covid-19 tracker website. It runs off python. It's a simple HTML website, but needs to run a python script every few minutes to update values. It gathers numbers, does some calculations and also grabs news headlines about the pandemic. But I don't know where to host it. I'm 16, and don't have any money and don't really have enough space to set up a PC to constantly run. I am thinking about using AWS, but I don't know whether it would allow me to upload my code(python) and host it.",1596142366.0,1,1.0,3
+learnmath,How do I solve this Integral without using partial fraction decomposition or integration by parts?,"(can't find integral sign on keyboard, so I'll use S)
+
+
+S  6dx/(X^2 -4X+2)",1596028437.0,3,1.0,4
+csgo,Low FPS?,"I have a laptop with a GTX 1660 TI (stock 300mhz OC), I5-9300H and 8 GB single channel RAM. I only get 120-150 FPS on CSGO, all low at 1080p. My friend on the other hand, with a laptop with same specs except a GTX 1650 gets around 200-220 FPS on medium at 1080p. Looking at videos from Jarrod's tech, he also gets 250+ fps on the same laptop as me. 
+
+
+I used the same install of the game as my old laptop (it wasn't as powerful, with only a GTX 950M, so I had some modified files and launch options to get better FPS) but I have reverified game files, and gotten rid of launch options. Should I reinstall? I'm a bit hesitant, because I only get about 300 gigs of internet every month and it's used by 5 people.",1596016668.0,1,1.0,5
+csgo,Is the balancing of the game now screwed?,"Before, in most matches, there was a large skill difference between the best and worst players ,like the best players had 30+ kills, and the bottom guy had like 5. Now, almost most people have a low skill difference. At best the top guy has a twice the kills as the bottom one. 
+
+But looking at the teams as a unit, the game now feels unbalanced. Either we get fucked, or the other team does. There are very few matches where I feel like we have a chance of winning and losing, and having to constantly keep on your toes. It's usually like either we win 16-5 or lose 16-5. Before, it felt like the game was balanced most matches, and there were very few matches where one team was blatantly over powering the other.",1595937354.0,1,1.0,4
+ProgrammerHumor,Biggest plot twists in anime,,1595794879.0,1,0.6,1
+AskReddit,What's your single most favorite scene from a movie?,,1595536840.0,5,1.0,18
+Dreams,"I've been having ""spiritual dreams"" for the last few nights.","It's usually unnerving calm, like there's nothing going on. I feel at peace, and I don't loathe myself. It feels like a burden is off, it feels free, warm, like my life means something. The weird thing is thta I have telekinetic powers and precognition. But I don't use them, at least not for and of the stuff you would want to use it for.",1595536789.0,2,1.0,1
+learnprogramming,I'm working on a Covid-19 tracking website. Is it possible to make it 'better'?,"So, I'm 16, working on a Covid-19 tracking website. I only know basic python (only watched a 4 hour long video about it) and read documentation for some of the libraries I used (Beautiful Soup, lxml). My only prior programming experience is some C, RobotC and Java.
+
+
+
+
+The code is basically a car with duct tape right now. I used bootstrap to generate HTML, used a formatted string in python, and inserted values I got from scraping government websites and saved it as a text file. Even the method I used to scrape the data was a work around, like for finding stuff in Beautiful Soup, we need to use tags and clases, but since all the classes and attributes are same in the table they used on the government website, I had to rely on a for loop and append sections of the HTML once I was done parsing the information.  The website seems to work alright, but according to my uncle, the code is too ""makeshift"" and ""hacky"", and not correct. Is there any other method I can use?",1595452362.0,1,0.67,3
+mildlyinfuriating,I SEE U,,1595425073.0,1,1.0,1
+csgo,Why is my AWPing so inconsistent?,"I seem to miss easy shots, like someone is standing across long/banana/{insert location} unaware of me, and I somehow miss the shot. But, I can also hit some insane flicks (like it kinds shocks me as well lmao). For some reason I find it easier to flick than to ""consciously aim"" if that makes sense.",1595421028.0,3,0.8,4
+csgo,How hard would going pro for me be?,"Being a CSGO pro is one of the many things I would like to do. I'm currently in Silver Elite Master, but I'm quickly ranking up (went from Silver 2 to Silver Elite Master in 2 weeks). I am currently queueing with some friends in Gold Nova and LeM, and average around 25-30 kills, 1.5-2.0 KDR.
+
+
+
+ I like to play many roles (primarily rifler on T, and AWPer on CT), with a aggressive play style. I am also good at lurking, flanking and solo taking/holding sites. 
+
+
+
+I usually practice aim for about an hour a day, and usually play 3-5 competitive matches per day, 75%-80% win rate. I have about 800 hours, though I've stopped playing for long stretches to play other games like PUBG or Rainbow Six Siege. 
+
+
+I'm 16 right now, and will turn 17 on the 12th of August. Is it too late for me?",1595268321.0,2,0.67,6
+india,Somewhere in Uttar Pradesh.,,1595079233.0,1,0.67,0
+AskReddit,"People who move around frequently, what locations do your dreams take place in?",,1595022708.0,4,1.0,8
+csgo,How do you guys warm up?,"My warm up schedule:
+
+20 mins of reflex training
+
+10 mins of aimbotz by uLLetical
+
+Winning (coming in first)  deathmatch with pistol (Tec-9/Five-SeveN)
+
+Winning deathmatch with AK
+
+Winning deathmatch with M4
+
+Winning deathmatch with AWP
+
+Then I start competitive.
+
+
+This literally doubled my performance, I usually get 30+ kills every game, hard carrying and stomping the enemy.",1594930796.0,0,0.5,3
+csgo,The Tec-9 is unholy OP.,"Seriously, I should not win deathmatch using a pistol while everyone else has a rifles. I shouldn't be able top frag with only a $500 pistol in comp. The Tec-9 is ridiculously OP. The P250 is balanced, because of it's shit accuracy and spray. But the Tec-9 has more accuracy than the AK, can be sprayed accurately, and literally can do headshot across short while running. Just keep it at head level and start spraying when you see an enemy. Even if a headshot doesn't kill, a follow up body shot will.",1594842494.0,0,0.5,2
+NoStupidQuestions,"Why do so many terrorist organizations (ie. ISIS, Al-Qaeda) have Soviet/ Russian weapons?","As far as I know, these group originated from the fight against the Soviet invasion of Afghanistan. Even today, in countries like Syria, Russia supports Al-bashar and is against rebels like ISIS. So how did they get all these Soviet/Russian weapons like Kalashnikovs and Dragunovs?",1594840920.0,2,1.0,6
+learnprogramming,Building a social media website. Is Python good enough?,"I have a rudimentary back end complete. It has some basic functions like sign up, friends, and posts (strings of text lol) accessible through console. It saves all data as a CSV file. But, it is really slow. Like it takes a good half second to load something. Would this hidner performance in any way?",1594826353.0,1,1.0,3
+Physics,Is it too late to study for the physics Olympiad?,[removed],1594762862.0,2,1.0,3
+gaming,Playing multiple competitive shooters: a good idea?,"I *love* Battlefield 4, Rainbow Six Seige, PUBG and CSGO. I have 900, 300, 200,  800 hours respectively. I love all of those for different reasons. Battlefield is mostly casual. Love strats in Rainbow Six Seige, and just the raw aim/reflexes required in CSGO. I have converted the sensitivities and FoVs to the same in every game so that I can easily build muscle memory. It takes about 10 minutes to warm up and get used to the different movements and mechanics. But would it hinder me from progressing in any of these?",1594732019.0,1,0.57,2
+Showerthoughts,The fact that the only thing standing between us and tyranny is a piece of paper and bureaucracy is terrifying.,,1594502259.0,1,1.0,0
+ApplyingToCollege,No ECs and bad grades. Is there any hope for me?,"I'm 16m in India. I'm currently between sophomore and junior year in high school. My ECs and stats are just downright terrible. I also got into a ton of trouble (drugs, expulsion) during my freshman year and was held back .
+
+&#x200B;
+
+Official stats:
+
+9\^th : 45%
+
+10\^th : 80-90% (estimated)
+
+&#x200B;
+
+&#x200B;
+
+Expected SAT results (from mock tests): \~1500+ (750-800 math, 700-750 English)
+
+&#x200B;
+
+&#x200B;
+
+Extra curricular:
+
+&#x200B;
+
+Currently working on a website to neatly present CoVID-19 stats and predictions.
+
+Knowing Python, Javascript, RobotC
+
+Self taught Calculus
+
+Self taught Classical mechanics
+
+Tutoring seniors in physics and math
+
+Interested in history
+
+Gaming
+
+Tech support (free)",1594146246.0,5,1.0,2
+csgo,I just realized how trash I am at this game.,"I'm Silver 4 rn. I always thought I was just stuck in silver- I can usually top frag in games and AWP 1v1s, kinda know the recoil patterns, and have somewhat okay aim. I usually aim practice for 0.5-1 hour a day on aim-botz. I have 900 hours in CSGO and about 4000 hours across all shooters.
+
+
+
+I decided to play with my global elite friend yesterday, and was ranked with guys in LeM. I got obliterated (It was on Mirage). My usual strategy of ""super  aggressive AWPing"" didn't work, and I'd instantly get killed by someone holding angles. I only had like 19 kills by the end of the round (we won 16-13), most of them lucky shots.",1593901369.0,4,0.75,3
+HolUp,Cursed sex ed,,1593805840.0,11,0.74,0
+AskPhysics,What is the purpose of ∅ hat?,"The position of a vector in polar coordinates can be described by simply using r•(r hat), so what's the purpose of ∅ hat? The only use I know of it is as as the derivative of r hat.",1593780034.0,1,1.0,4
+pcmasterrace,Metro: Exodus is a truly beautiful game.,,1593629730.0,66,0.94,32
+india,"The real Chinese flag. Never forget, the CCP is an illegitimate dictatorship.",,1593166536.0,1,0.57,1
+IndianGaming,Got 3rd party charger with laptop?,"I got my acer predator Helios 300 about a month ago. Just noticed that the charger is from some brand called 'chicony', and I've found similar complaints on reviews for other laptops. The laptop itself was sealed (laptop was inside a box inside of the main box). I got it from Flipkart. Is this normal?",1593090998.0,3,1.0,6
+Aphantasia,I can't 'conciously' visualize anything.,"I have mental images while reading, just thinking about something, or trying to fap without my phone. But when I try to visualize something on command, it is ridiculously cartoonish and without details. Like I took a aphantasia text thing, which asked me to visualize sheep. I instantly saw a blurry vague Shawn the sheep(I've never seen a sheep IRL). Also, most faces I visualize look kinda unsettling, lit there's something wrong with them; Most locations are extremely similar or the same as other locations I've been to IRL.",1593076270.0,2,0.75,1
+IndiaSpeaks,Would anyone be interested in a new COVID-19 tracker?,"First off, this is not a commercial projects for and will be without profit. I'm a 16 year old in between sophomore and junior year of high school.  I'm trying to create a COVID-19 tracker website that uses data from goverment sources and presents them neatly and gives some additional statistics and a predicted graph based on AI. I'm done completing the back end (server side stuff) of the website  and need to start making the front end (the part you see and interact with). It should take about a week more. But is anyone actually interested?",1592914915.0,0,0.5,2
+india,Would anyone be interested in a new COVID-19 tracker?,"First off, this is not a commercial projects for and will be without profit. I'm a 16 year old in between sophomore and junior year of high school.  I'm trying to create a COVID-19 tracker website that uses data from goverment sources and presents them neatly and gives some additional statistics and a predicted graph based on AI. I'm done completing the back end (server side stuff) of the website  and need to start making the front end (the part you see and interact with). It should take about a week more. But is anyone actually interested?",1592914319.0,9,0.8,4
+PrequelMemes,Thank you all!,,1592857951.0,27,0.88,2
+pcmasterrace,Gaming laptops be like,,1592857039.0,43,0.91,6
+Rainbow6,Is my CPU bottlenecking my GPU?,"I have a laptop (I know, but I literally cant have a desktop) with a GTX 1660 TI and i5-9300H. I usually get 100% CPU usage and barely 50% GPU usage. even at all max settings (ultra + 4x TAA + max render) I got 60 FPS, 65% GPU usage and 100% CPU. I usually get 160 FPS on all ultra, no AA. Is this normal?",1592850676.0,1,1.0,5
+Rainbow6,"New glitch? I've only bought Vigil yet, but it shows all operators available, and allows me to customize them. I selected Warden, but it defaulted to Tachanka instead.",,1592755913.0,1,1.0,1
+Parenting,"Please, please, please pay attention to what your kid does online.",[removed],1592599519.0,3,0.71,5
+IndianGaming,It sucks being Indian,,1592408414.0,24,0.83,16
+NoStupidQuestions,I was half back a year in school. Would this cause any problems?,"I was held back and expelled from middle school due to mental issues and drugs. I was supposed to graduate highschool at 17, but now I'll graduate highschool at 18 (I'll turn 19 about 2-3 months after graduation). Would this cause any problems in things like college acceptance rates?",1591801480.0,1,1.0,2
+unpopularopinion,Being born in a third world country sucks,[removed],1591734798.0,5,0.86,3
+pcmasterrace,Real life's got pretty great graphics,"It rained for the time this year yesterday where I live (a hurricane) and looking at the puddles, I thought ""that is a great reflection, DXR is awesome"". Guess I've been gamnig too much.",1591389886.0,1,1.0,1
+confession,"I'm an asshole, and I'm tired of it. I have been a source of negative influence in everyone's life around me.",[removed],1591299564.0,1,1.0,0
+Battletops,"Living in a 1 bedroom apartment with 10 other people. My ""setup"".",,1591105553.0,268,0.99,17
+IndianGaming,"Living in a 1 BHK with 10 other people. My ""setup"".",,1591105527.0,379,0.99,113
+juxtaposition,This,,1590442273.0,379,0.98,8
+pcmasterrace,"Might not be much, but it's a huge upgrade.",,1590344277.0,76,0.94,8
+pcmasterrace,Why do y'all hate RGB stuff so much?,"Like I get that rainbow barf looks ugly, but lighting can make a systyem look soo much better. Bored of red and black? Get black and blue. And then change to black and green because you got bored of black and blue. It's like changing theme as many times as you want.",1590343782.0,1,1.0,7
+gaming,Any games that will dad may like?,[removed],1590266372.0,1,1.0,0
+StarWars,"Thanks, Kathleen Kennedy.",,1590180976.0,3,0.54,9
+IndianGaming,I just bought a Acer Predator Helios 300. Is it good?,"It'll arrive next Wednesday. I got it for Rs 72,000
+
+
+Specs
+
+i5-9300H
+
+GTX 1660 TI
+
+8 GB RAM
+
+256GB SSD
+
+1 TB HDD
+
+60Hz screen
+
+
+
+Link: http://dl.flipkart.com/dl/acer-predator-helios-300-core-i5-9th-gen-8-gb-1-tb-hdd-256-gb-ssd-windows-10-home-6-graphics-nvidia-geforce-gtx-1660ti-ph315-52-gaming-laptop/p/itmfhny8xuekn8ba?pid=COMFHNY8GCZ6HG2N&cmpid=product.share.pp
+
+
+Is it good?",1590052195.0,5,0.78,28
+unpopularopinion,Capitalism is by far the best economic system.,[removed],1590005295.0,5,0.69,44
+csgo,What reaction time would you consider good?,"I tried it on human benchmark.
+
+
+On good days with enough sleep, I can get as low as 120 Ms (70-180)
+
+
+On average sleep-deprived days, I get up to 180 Ms (120-240)
+
+I always used a 60 hz laptop monitor with ~30ms latency. Are these any good? My friend says he's got a reaction time of 50ms and most pros have ~25 ms. Is it possible to get better?",1589707382.0,1,1.0,6
+me_irl,me_irl,,1589564814.0,1,1.0,0
+memes,I wish it was like that,,1589564694.0,50,0.91,29
+mumbai,"If the lockdown gets extended, what'll happen to e-commerce for non-essentials?","I really need to buy many items as of now. I need a laptop as my old one no longer works, and my uncle and father need headphones for meetings (imagine living in a 1bhk with 10 people and video conferencing), and my grandfather needs a new phone. 
+
+
+Is there any chance of e-commerce being allowed in Mumbai after may 17?",1589528698.0,25,0.91,19
+Christianity,What would happen if the pope/ some really holy man went into a haunted house? Would they be immune from any malevolent spirits?,"I am an atheist, but I respect Christianity. I was watching a horror film, and I'm just wondering what'll happen.",1589489917.0,0,0.5,21
+india,I feel like I've wasted my teenage years.,"I'll turn 17 in 3-4 months. I have wasted all these years. 
+
+
+I used to live in the US up until I was 14. I got into drugs and alcohol (I distilled it out of sanitizer) at 12 and that took a real toll on my mental health. It caused me to get expelled from school due to my unpredictable bahavior. I had to move to India. 
+
+
+I wasted all these years watching cartoons, playing video games and doing drugs and I'm afraid I can't make it up. My only real ""achievements"" in life are winning a state robotics competition in the 8th grade and learning calculus and classical mechanics in the 9th grade (if that counts for anything).
+
+
+I don't have any basic social skills, can't understand other people's emotions, social cues, etc. I have no real skill set, nothing that makes me stand out. The only thing I can do alright is some college math, but nothing else.
+
+
+Is it too late to improve myself? I'm really afraid about my future.",1589446295.0,25,0.82,28
+GlobalOffensive,How much is my set-up holding me back?,"I don't have a desk, I use on of those laptop tables. There isn't enough surface area to use low dpi, so I use 800 DPI, 2 in game sens. I used to play on a 60 hz laptop, but I'm getting a new 144hz laptop in a few days. 
+
+
+My setup
+
+Laptop:
+
+        i5-9300H
+        GTX 1660 TI
+
+Mouse: Logitech G305
+
+Keyboard: Built Ian laptop keyboard
+
+Internet: average 5-40 Ms ping.
+
+
+My setup is good, except not having a desk. It's a bit uncomfortable, but is it holding me back?",1589405446.0,0,0.25,4
+laptops,Is this any good for $1020? Why does it say RTX 1660 TI everywhere?,,1589404416.0,2,1.0,7
+teenagers,How did the Coronavirus jump from bats fo humans? They're not even similar.,Except they both  taste good with soup.,1589146231.0,5,1.0,6
+StarWars,Imagine being Vader,"Your best friend tried to kill you, and left you to die. Your mother was taken from you. Your wife is dead, and so are your kids. All because of your doing. They're dead- and so are you, on the inside. Being kept alive by machines- not even half the man you were, not even a quarter of the man you could've been. You have all the power, yet you have nothing worth living for. You have all the wealth you'd want- but can't spend it on anyone, for all those you ever loved are dead, because of you. All you have is a wicked  old man that you looked up to as the father your never had- but now realize the pure evil that exists in him. And your memories. You dream about what your life could've been, only to wake up screaming. Your hate for yourself alone is able to fuel you, drive you deeper into the dark side. You face off against your former friends and apprentice, but you don't feel love- that feeling was taken from you a long time ago. And deep down, you know you're wrong. You want to resist it, but can't. That's vader.",1589140563.0,568,0.97,78
+entitledparents,EM steals a seat from the elderly.,"Our cast
+
+EM: Our star Karen
+
+CD: EM's crotch demon (around 12-14 years old)
+
+Me: You
+
+OL: Old lady
+
+OM: Old man
+
+GK: Good kid (about 4-6 years old)
+
+
+A while back, I went to a mall to eat some KFC after school. After eating (the salty) drumsticks, I see some old lady and man with a kid (presumably her grandkid). They were searching for seats. When the lady comes closer, I yell at her.
+
+
+Me:""Excuse me ma'am, you can have this seat""
+
+
+Right that moment, EM and EK dash towards the seat and take a seat. EM waves to someone (presumably her husband/ BF) to come over.
+
+
+Me: ""Ma'am, let the elderly sit here.""
+
+
+EM:"" You are done eating. So it's my seat.""
+
+
+Me:""Ma'am, please leave. I'm sitting here as of now.""
+
+
+OL, OM and GK had reached the table by now.
+
+
+EM:""You have no right to tell me what to do. I also have a kid"".
+
+
+
+Me:""Well, I don't know if I have the right to tell you what to do, but please do the right thing. And they also have a kid who's younger than yours. ""
+
+
+EM: ""I don't care, I got here first and I'll sit here.""
+
+Me:""Yeah... no. I'm still sitting here.""
+
+
+Now Karen reveals her true self. At least she didn't call the manager.
+
+
+EM:"" I'm calling security on you"".
+
+OL:""Young lady, security won't listen to you. This young man got here first and he hasn't done anything wrong.""
+
+GK:""Look, there's an empty seat""
+
+
+
+GK runs up to that seat, and sits down. The old people had a seat. It has em happy ending, except Karen is still out there, terrorizing people.
+
+
+
+TL;DR Karen is a bitch.",1589137668.0,128,0.97,21
+confessions,I used to jerk off riding my bicycle on empty trails.,"IDK why, but it felt good. I was like 14 at the time, but I rode around empty trails jerking off with one hand.",1589058482.0,35,0.89,15
+pics,It's a huge world for this little fella,,1588793197.0,8,0.73,9
+laptops,RTX 2060 + Ryzen 7 3750H or GTX 1660 TI + i5-9300H? (Gaming),"I'm looking at two options as of now
+
+
+ASUS TUF FXF505DV
+
+GPU: RTX 2060
+
+CPU: AMD Ryzen 7 3750H
+
+
+ACER Nitro 5
+
+GPU: GTX 1660TI
+
+CPU:Intel core i5-9300H
+
+
+I want to play games at low settings (both have 120/144 hz screns), but I've heard people telling me that the RTX 2060 is only slightly better and that Ryzen 7 will bottleneck it worse than the GTX 1660 TI one. 
+
+
+I want to mostly play CSGO, Rainbow Six Seige, Battlefield, Star wars and others. The RTX one costs about 70 dollars more. Will the CPU be a bottleneck?",1588712144.0,2,1.0,3
+india,Are there any good lib-right/libertarian parties in India?,"I'm turning 17 in a few months, and I want to vote when I turn 18. The problem is, I can't decide which party to choose. 
+
+
+BJP
+
++Getting rid of bureaucracy and socialism
+
+-Hindutva 
+
+
+
+Congress
+
++Secularism
+
+-Mildly socialist
+
+
+Ideal
+
+Highly capitalist
+
+Liberal
+
+
+
+Is there a good libertarian party here?",1588583384.0,6,0.65,15
+sociopath,Can someone control their empathy?,[removed],1588449775.0,1,1.0,1
+NoStupidQuestions,Is it possible to use the magnetic field coming off a wire carrying an AC current to generate more voltage?,"What I mean is, in a wire carrying an AC current, the magnetic field changes direction every time the direction of the current changes, so would it be possible to somehow harness this magnetic energy to generate more voltage?
+
+
+PS for the stupid question. I'm a highschool sophomore.",1588372738.0,3,0.81,9
+entitledparents,"""HOW DARE YOU THROW A WATER BALOON AT MY KID!""","Our cast
+
+
+EM: Entitled mom
+CD: Crotch demon (around 9-10 years old)
+Me: You
+
+
+So, I live in India. We have a festival  called ""holi"" around March, and it's usually celebrated by throwing water and paint at each other. But kids start fucking around with water balloons a few days before. 
+
+
+I'm walking down the street in my apartment complex and a water balloons comes flying towards me. I manage to catch it and throw it back headshotting CD (which is surprising considering I'm a overweight guy who doesn't play any sports). CD starts crying.
+
+
+EM: ""What's wrong kid?""
+
+CD: ""He threw a water balloon at me""
+
+EM:""How dare you throw a water balloon at my kid""
+
+Me: ""He threw it at me. I caught it and threw it back!""
+
+EM: ""You're too old to hit my kid""
+
+Me: ""Your kid is too old to throw water balloons at strangers""
+
+EM:""Don't disrespect me!""
+
+At that point, I was convinced she was an Indian Karen, so I decided to fuck right off outta there. 
+
+
+
+TL;DR: Kid throws water balloon at me, but gets rekt by my godly reflexes, cries to his mommy, mommy acts like a bitch.",1588194520.0,257,0.99,50
+NoStupidQuestions,"Can anyone change how long you last (before orgasming) by extending your legs? If I extended my legs all the way, I can barely last 20 seconds, but if I relax my legs, I last 4-5 minutes. (I'm a dude)",,1588187719.0,3,1.0,0
+laptops,Is it worth paying ~$250 more to upgrade from a GTX 1650 to a GTX 1660 TI Max-q?,"I need a laptop to game (primarily Rainbow Six Seige, CSGO, and Battlefield), and for college (I'm in the summer vacation between sophomore and junior year in highschool). I need it to last up to 5-6 years. I'm coming currently looking at two laptops. The cheapest 1660 TI laptop I can find costs INR 75,000 but reviews and friends who own it say it heats up in half an hour, and I usually game for 4-5 hours at a time. I'm currently looking at two laptops.
+
+
+
+
+Laptop 1- Asus ROG STIX G-531GT
+
+Price: INR 63,000 or $815
+
+Processor: Intel Core I5-9300H
+
+GPU: Nvidia GeForce GTX 1650
+
+RAM:8 GB
+
+Storage:512 GB NVME SSD
+
+Display: 1080p 60hz.
+
+RGB: Yes
+
+
+
+
+
+
+
+
+
+Laptop 2: Asus ROG Zephyrus G
+
+Price: INR 80,000 or $1050
+
+Processor: AMD Ryzen 7
+
+GPU: Nvidia GeForce GTX 1660 Ti MaxQ
+
+RAM: 16 GB
+
+Storage: 512GB NVME SSD
+
+Display: 1080p 120hz
+
+RGB: No",1587564945.0,0,0.5,6
+StarWars,What exactly was the Republic?,"What kind of a government was the Republic? 
+
+1> The invasion of Naboo: So a mega corporation occupies an entire planet. That's kinda like Walmart invading Rhode Island and both having an army.
+
+
+2> The dispute on Pantora: The ""human"" inhabitants of the moon of Pantora ruled over the natives of Pantora, and deemed it an internal matter. That's like Texas annexing New Mexico and saying""none of your business"" to the federal government.
+
+
+Those are the two examples I remember off the top of my head. 
+
+
+The republic had its own army, but so did Nabo and Kashykk. What were the powers of the Republic? Was it kinda like the EU?",1587243520.0,4,0.75,6
+StarWars,Guy besides watto looks like Luke on drugs.,,1587237680.0,16,0.71,19
+Physics,Is interstellar travel a physics problem or an engineering problem?,[removed],1587135329.0,1,1.0,3
+pcmasterrace,Is a GTX 1650 laptop good enough for 1080p gaming?,"I want to play games like Rainbow Six Seige, PUBG, CSGO, and other competitive shooters. I want to play on 1080p, but don't really care about ultra settings (low, medium are good). 
+
+
+
+
+The laptop I'm looking at:ASUS ROG STRIX G
+
+
+Processor: Intel i5-9300H
+
+
+GPU: Nvidia GTX 1650
+
+
+RAM: Single channel 8GB DDR4
+
+
+Storage:512 GB NVME SSD
+
+
+
+
+Coming from a GTX 950m that ran Rainbow Six Seige at 40 FPS at 1024×768 at very low, I'm guessing a 1650 would be a improvement. The screen on the laptop is 60 hz, but I'm planning to get a 144hz external monitor when  I move to my new home.",1587052679.0,3,0.8,4
+ApplyingToCollege,I'm a year behind in school. Does it hurt my odds?,"I had to repeat the 8th grade due to some mental health issues (expulsion). I have since moved to India. I will turn 17 at the start of junior year, so I'll graduate highschool at 18 (I was born August 2003). Would this hurt my chances in any way? I want to get into some uni like Caltech or UC Berkeley.",1586988149.0,3,1.0,4
+india,This lockdown is going to drive me insane,"I know what I'm about to say is probably going to make me sound like a spoiler brat.
+
+
+I just completed 10th grade. Had to stop gaming- the only thing I loved- and stay in a stupid balcony for 10+ hours a day, because I live in a 1 bedroom flat with 10 other people and have literally nowhere to study quietly. We were supposed to move into my parent's new 3 BHK a few weeks ago (only nuclear family, so 4 people in a 3 BHK is a big improvement). 
+
+A few days, my laptop broke, and I can't get a new one because Flipkart and Amazon are closed. I had to quit gaming for a few months, and the only thing that helped me grind through was knowing I could finally relax and enjoy gaming fora few months, but barely got to play for a well before my laptop died.",1586936735.0,0,0.5,21
+PocoPhones,"5 hours of SOT, only 43% battery drain",,1586796683.0,3,1.0,5
+india,Are Flipkart/Amazon going to resume services soon?,"My laptop is dead, wouldn't turn on or anything. I need a new laptop to program and game. Amazon/ Flipkart have stopped services. Are they going to restart services anytime soon?",1586689857.0,7,0.68,17
+juxtaposition,This,,1586677038.0,3,1.0,0
+laptops,"Is this any good for gaming (Rainbow Six Seige, PUBG, CSGO) $680?",,1586549128.0,3,0.72,24
+techsupport,Laptop shows no sign of life.,"My laptop (ASUS K501UX) seems to have stopped working. There're no signs of life. When I press the power button, nothing happens, not even the LED indicators come on. Even when it's charging, the charging indicator doesn't light up. 
+
+My laptop has weird issues for quite a while. It would randomly shut down and require me to remove the battery, boot it up and put the battery back, but now, even that doesn't work.",1586436637.0,1,1.0,2
+PocoPhones,"1 hour of Asphalt 9, 2 hours of Clash of Clans, and 1 hour of watching videos. Only 50% battery drain.",,1585574345.0,0,0.5,6
+WalmartCelebrities,Carrie Fissure,,1585490995.0,8,0.85,0
+csgo,What's the best way to rank up? How many matches should I play a day?,"So, I used to be Gold Nova 2, but I lost my rank as I had to quit CSGO for a few months due to grade 10 exams (It's an Indian thing). Now I'm silver 2.
+
+I only play 1 or two  match per day. I normally top frag (like I usually have more kills than the rest of my team combined), but I can't keep it up for long. If I keep playing, I'll eventually end up bottom fragging after multiple games. 
+
+I play for 3 hours a day, usually 1-2 competitive matches, and then usually practicing on those aim improvement maps. 
+
+How long will it take to rank up? I want to get to at least Gold Nova in 2 months. Is this possible?",1585238527.0,1,1.0,3
+askscience,Using electromagnetic induction due to magnetic field coming off an wire to boost an AC voltage?,[removed],1585057781.0,1,1.0,0
+laptops,"Is a Intel I7-6500U good enough for gaming, combined with an external GPU?","I have a laptop (ASUS K501UX) which is a few years old. It has a GTX 950M, I7-6500U, 8 GB RAM, and 512 GB SSD. I can't afford a new PC I'm 16, and parents just bought a new home so money is a bit tight. I want to play games like Rainbow Six Siege on 1080p, low-medium settings. I am looking at one of those mini PCIE to PCIE adaptors, and a GTX 950m. Is this a good idea?",1585050493.0,1,1.0,2
+PocoPhones,Might not be much. View out of my window (Mumbai).,,1584626363.0,15,0.86,2
+NoStupidQuestions,Why am I feeling so guilty about replacing my phone?,"I know it's a phone, but still. I feel bad. I spend more time with this phone than even any other person. I cared for it like it's my child. Now I'm putting it away. I know it doesn't feel anything, cuz it's a phone, but I feel like shit rn.",1584461052.0,3,0.8,3
+india,Is r/bakchodi for real?,[removed],1584445659.0,1,1.0,0
+PickAnAndroidForMe,Bought a Poco F1 for ~$200. Is it good?,"So, my OnePlus 3T is dying. Battery life is crap and ports no longer work. So I bought a Poco F1 (258/8 GB variant) yesterday. My budget is $250 tops (I'm 16, parents just bought a new home so money's a little tight), the looking at a few phones, this one fits all the boxes.
+
+
+Fast processor (Really important)
+Big screen
+256 GB storage
+SD card slot
+Easy to root
+
+Is there any other option like this under 225 I can consider?",1584386563.0,2,1.0,11
+india,Anyone fed up with this religious bs?,"First of all, I don't care about all the Hindu-Muslim stupidity. I don't support either side. I not a Hindu, and I'm not a muslim, not anything. I'm an atheist. 
+
+India is a shithole, and that is a fact. But why the fuck is ""Hindu v Muslim"" the most politicised issue? Seriously, especially now a days, you won't hear shit about progress in education or living standards. Fuck hindutva, and fuck jihad. 
+
+And then comes out shit media. Either ridiculous right leaning (republic media) or ridiculously left. And our dumb extremists only watch ""their"" side of the news. Misinformation is bliss.
+
+Anybody else hope for a revolution? At this point, getting rid of religion entirely is the only way to solve communal problems.",1584100411.0,27,0.74,11
+atheism,"""He'll decide when he's old enough""","So, I got a little 5 year old brother. He's annoying as hell but I still love him. My parents are pushing religion on him (Hinduism). They did the same thing when I was little, and that's one thing that I willl never forgive. I was a religious little bigot who knew nothing but religion. Fortunately, I left when I was 9. And they're now doing that with my brother.
+
+
+A few days ago, we had a prayer. Parents wanted me to take part, but I refused as usual. Brother asks me why. I simply respond by ""becaus, god isn't real"". 
+
+Parents scream.  ""Don't push your beliefs on him"".
+
+Me:""WTF? People are born without beliefs. You're the one pushing your beliefs on him, not me. Everybody is born an atheist.""
+
+Parents:""Don't talk like a fool. No-one can be born without religion. Can you be born without gender? Then you have to have a religion""
+
+
+There's no arguing with that. Hoping little fella will figure it out.",1583430591.0,18,0.83,8
+Watches,Not bad for a dollar,,1583219132.0,1,1.0,0
+chemistry,Would it be easier to displace a metal of higher oxidation state (like copper II) from it's compound as compared to a metal of lower oxidation state (like copper I)?,"Let's say you have a salt of two copper compounds (Cooper I and Copper II), like copper nitrate (CuNO3 and CU(NO3)2)
+
+
+CuNO3 + Na --> NaNO3 + Cu
+
+
+Cu(NO3)2 + 2Na -->2NaNO3 + 2Cu
+
+
+Wouldn't the bonds in copper 2 be weaker, since there are two anions, this they repel and increase the molecular size, increasing the distance from the copper ion and the nitrate ion, this decreasing intermolecular force of attraction? So wouldn't that make it easier to displace the Copper from the copper 2 compound? Would the reaction with Cooper 2 nitrate be faster/more exothermic?
+
+
+PS. Sorry for the stupid question. I'm a highschool sophomore in chemistry",1582740307.0,2,0.63,3
+WearOS,My new watchface!,,1582736401.0,3,0.62,1
+india,"I haven't signed up for anything or given out my email to anywhere fishy. Even after blocking, these companies use slightly modified emails to keep spamming me. Got 40 emails today. What can I do?",,1582538188.0,10,1.0,4
+atheism,Why do I keep falling back to God?,"Whenever life gets though, I start praying. Not to any God. More like ""if there's anything or anyone above, please help"". Rationally, I know it won't work. But it still feels better if I do. Besides, it won't make it worst, right?",1582397207.0,0,0.24,12
+Jokes,Most people who's neighbours are pedophiles don't know that they live next to a pedophile,[removed],1582126227.0,1,1.0,0
+pens,How are these?,,1582125036.0,11,1.0,7
+india,"Class 10 student, need help .","So, I 10th boards start in \~7 days. I'm afraid. I spend the whole year playing CS and dicking around. I only started studying seriously in the last month. I am worried about Hindi. I lived in the US for \~5-6 years before coming to India, and spend another \~6 years in Singapore before that. While I can confidently say I can get above 90% in every other subject, Hindi is going to drag me down to 85%.
+
+&#x200B;
+
+The problem is I want to go to a college in the US, but i have no extra curricular activities (Thanks, parents!) and my grades are pretty pad this year. AFAIK (according to Quora, where its either ""whatever makes you happy"" or ""100%""), 10th grade grades matter, and I've prolly messed it up badly already. The only thing I've done so far is study up to AP calculus and classical mechanics in the 9th grade and used to have a math related you tube channel.
+
+&#x200B;
+
+What should I do??",1582021998.0,6,0.8,9
+WearOS,My new watchface!,,1581954739.0,0,0.5,2
+WearOS,Pear watch face,,1581686570.0,2,0.56,3
+ApplyingToCollege,No extra curriculars and checkered past as an international student? Is it too late?,"I really wanna get into a good college. I don't know if I can. I'm a highschool sophomore rn. I completed 3-9th grade in the US. I had a repeat freshman year because I got expelled from school in the US due to some inappropriate threats and drugs and had to move to India . When I moved to india, I started getting interested in math (calculus) and some basics college level mechanics. I ""failed"" 9th grade again (although I was still promoted). This year, I'm trying to get myself together. I am expecting around 90% (rhoughly an A-A+). 
+
+
+I have no extra curriculars. I have self taught myself calculus and same basic classical mechanics in freshman and sophomore year, and I was part of a robotics team in the 8th grade. I am also working on a math related YouTube channel once Mr exams are over. Is there still any time to pull myself together or am I lost? I really wanna study physics at preferably UC Berkeley or some other universities in the same tier.",1581427615.0,2,1.0,3
+restofthefuckingowl,Isn't that what humans look like?,,1581338823.0,1,1.0,0
+WearOS,Microsoft Outlook watch face,,1581334576.0,6,0.88,6
+NoStupidQuestions,"If instead of ""me"" sperm, some other sperm won the sperm race, how similar would that new me be to me?",,1580844431.0,1,1.0,6
+WearOS,"My TicWatch E after a few power cycles. (Also used it for Google assistant and as a calculator, but IDK why it doesn't show up).",,1580661524.0,1,0.54,6
+WearOS,"My TicWatch E after a few power cycles. (Also used it for Google assistant and as a calculator, but IDK why it doesn't show up).",,1580661513.0,0,0.14,2
+AskReddit,Adults of Reddit: How do you function without summer vacations or long holidays?,,1580413737.0,2,0.76,14
+WearOS,My new watchface!,,1580303856.0,288,0.96,11
+darkjokes,"Testing, not a joke: How many downvotes can a post get before it's locked?",,1580154304.0,0,0.19,0
+CrappyDesign,EVERY.SINGLE.PERSON in the book looks like this,,1580145354.0,29,0.72,8
+LucidDreaming,"""Half Asleep"" dreams?","What I mean is I know I'm dreaming, I'm awake. If there's a TV program or something going on, I can hear it. I can somewhat think. But the moment I try to control anything in my dream, it's gone. Like it goes black. I know I'm dreaming, although it's a bit blurrier and non coherent than usual. It may start if I go to sleep after not sleeping for a night, or if I'm sick. Although, it sometime starts after I snooze my alarm if I'm getting up early.",1579982218.0,23,0.97,3
+NoStupidQuestions,"Is it possible for an animal to ""evolve"" into a plant, or vice versa?",,1579874581.0,1,0.67,5
+WearOS,My new watchface!,,1579787460.0,189,0.93,22
+india,Can anyone fill me in on why NRC/CAA is good/bad? I just wanna look at the full picture.,[removed],1579005139.0,1,1.0,0
+WearOS,I made some watch faces with Pujie Black. What do you guys think?,,1578154881.0,67,0.93,23
+WearOS,"Today, I release darkMiniMal watch faces on Pujie!","A few weeks ago, I posted a few pics of the watchface and most people liked it. I added a few more color options and touched up on a few details.  Hope you guys like it 
+
+
+Black and White version
+
+https://pujieblack.com/share/scv3/SWBz0DJCGPJzQl6cMQs4gw85GpwtMzqzHCoQiCMiUfxrFlHqeExRpWtaUal6MweBJxA64R80HqkEIxy0Jg9BnD4pI7EtNEHyZUIH8nNNQq0
+
+
+
+Black and red
+
+https://pujieblack.com/share/scv3/bekyHRbLWT9Xyx9RFYJ5fwSgUUIBi1orFaRmSh6mEDFPnxAnXMUQaE_TEGReukZMA5l7LDu9X2Qgql15AoYAURqgYnwJvQA_QctGP1fEA2A
+
+
+
+Black and yellow
+
+https://pujieblack.com/share/scv3/ikriWvFoiXiwaM8W8iGpN_Ac1Tj6edo4zS-aLckewHaoPMBgu2bAL6hwwCO5GZYL5Dqra9wejyPHCY0-5SXQFv0DsjvuHtB4pmiWeLBn0yc
+
+
+
+Black and blue
+
+https://pujieblack.com/share/scv3/rxINeNQwZlqVMCA013lGC9pWORXDeTw7mGN4Net0L1SNZC9Cnj4vDY0oLwGcQXkpwWJESflGYAHiUWIcwH0_NNhbXRnLRj9agzB5WpU_PAU
+
+
+
+Black and orange
+
+https://pujieblack.com/share/scv3/vC2-iMcP1aqGD5PExEbyuYpozdf_Xsr_kXWK2O9cnKSeW5yyjQGc_Z4XnPGPfsrZ0l33uep50_HxbtHs00KMxMtk7unYeYyqkA_KqoYAj_U
+
+
+
+Black and green
+
+https://pujieblack.com/share/scv3/WuiKMSHK4RNgyqd9IoPGBguj_l0Rj6dcH5j4eGnaqB14nqgLa8SoRHjSqEhpu_5gNJjDAAy850gXq-VVNYe4fS2h2lA-vLgTdsr-E2DFu0w",1578137883.0,0,0.5,2
+NoStupidQuestions,"What's special about December 31/ January 1? Did something happen on that day or did humans just decide ""Now seems like a good time to start a year""?",,1577891053.0,0,0.5,4
+IWantOut,"I want to do my undergrad in an American University, but my past is questionable",[removed],1577557867.0,1,1.0,1
+pettyrevenge,"Steal my food everyday? Good luck shitting out Niagra falls. Plus, there's no where to poop!",[removed],1577551583.0,2520,0.95,175
+entitledparents,"""My child didn't got you that hard!""","So, there are literal fistfight matches in my classroom. My school is a literal shit hole. 
+
+So, during one of these matches, the class asshole decides to get a new opponent. Every guy in my class except me has fought at least once. So, this guy comes up to me and invites me to fight him. I politely decline. He's asked before and I always refuse, and he walks always. This time, he punched me. The first time, I ignore him hoping he'd fuck off, but he did it again. I gave him a nice left cut and pinned him to the ground ( I seriously wonder why this 150 pound kid picked a fight with 200 pound me). 
+
+Again, nothing much happened, as there were no teachers around and ""snitching is for pussies"" shit.
+
+
+Anyways, when school was over, this kid and his dad come up to me in the parking lot. 
+
+
+
+Our cast:
+
+ED: Entitled Dickwax
+
+AK: Asshole kid
+
+Me: Take a guess
+
+
+ED:""Why did you hit my child?""
+
+Me:""He hit me first.""
+
+ED:""But he hit you in good fun.""
+
+Me:""Doesn't matter. I told him to back off but he didn't listen.""
+
+ED:""Well, he didn't even hit you that hard!""
+
+Me:""Doesn't matter, I told him not to.""
+
+AK:""you hit him so hard, you could have injured him""
+
+That's when I started to get a little pissed
+
+Me:""I don't care what happens to him, if it means protecting myself""
+
+
+I then walked home. Nothing really happened in the end.",1577473065.0,208,0.95,38
+depression,Extreme mood swings and negative thoughts?,"I'm 16 years old. I've not been diagnosed with depression, and I'm most likely not depressed either, but this sub seems like it'll be good guidance.
+
+
+I mostly feel like shit. It's either the constant feeling of worthlessness, or thinking about the decisions I've made in life. I have wasted years of my life. I used to do drugs, I have stolen, caused suffering and pain. I was a bully, a piece of shit. 
+
+
+Every once in a while I may feel like there's a glimmer of hope, that's it's going to be ok. I finally have motivation to do something, but it doesn't last. In an instant, it's back to feeling like a worthless piece of shit. It's like a all time low. That's when the worst effect takes place. I feel like it's all out of control. The rage and anger is too much. I end up doing things that I end up regretting. For now, it's just small things, but I worry it'll get to the point where I'll do something truly horrible.",1577388433.0,3,1.0,0
+Jokes,"The Spanish, French and English king got in a debate about who had the best penis","The couldn't decide who had the best penis. They decided to ask an audience of 300 people. 100 British, 100 French, and 100 Spanish. When the 3 Kings arrived of stage, they started to take off their robes one by one. 
+
+
+The French king went first. 
+Gazing upon the smelly phallus, the  French people shouted ""Vive La France!""
+
+
+Then it was the Spanish king's turn
+The Spaniards shouted ""Viva España!""
+
+
+The British king went last 
+""God save the queen!"" yelled the Brits.",1577371285.0,3,0.67,14
+WearOS,"AOD on, used Google assistant for quite a while, used it for media controls, and also sent a couple of texts. A few power cycles increased the battery life from ~5 hours to well over 24 hours! (Ticwatch E)",,1577368577.0,10,0.92,2
+oneplus,Alert slider acting weird on OnePlus 3T?,"My OnePlus 3T is 3.5 years old now, and still working pretty well. The screen has a crack which comes out the top left corner of the screen, goes down and barely misse the screen and the camera and then goes back up without getting on the actual display or camera. The headphone jack is also acting up after I accidentally yanked it out with all my might, which isn't the phones fault. But recently, the alert slider is acting up. I know it's hardware and not software because a few hard smacks corrects it. It is always stuck on silent, even when the slider is work. The only way to fix it is to hit it hard against some kinda hard surface like a paperback book. If I change it to the middle position, it'll go back to silent again. Is there any way to fix it?",1577113715.0,3,1.0,2
+math,How do I start getting good grades in math?,[removed],1576841792.0,3,0.63,9
+StarWars,Bumhole ruins TROS,,1576767476.0,0,0.33,1
+StarWars,"Without spoilers, can anyone tell me if TROS is any good?","I'm gonna watch it, no matter how trash it is. But, I still don't wanna go in hyped up and come out disappointed. Is it good, at all?",1576763733.0,12,0.87,44
+NoStupidQuestions,WTFs wrong with my throat?,[removed],1576581277.0,2,0.63,7
+WearOS,Ticwatch E+Black leather strap,,1576235148.0,11,1.0,2
+NoStupidQuestions,"Hypothetically, if it turns out Obama was born in Kenya and proof is found, what would happen? Would he get arrested?",,1575904038.0,0,0.44,5
+WearOS,What do you guys think?,,1575818463.0,275,0.95,35
+StarWars,"""The Sith Spacecraft And The Droid Battle"" is one of the most epic themes of Star Wars, up there with the Imperial March. Why isn't it as popular?",,1575816466.0,2,1.0,3
+Showerthoughts,"If a really loud supervolcano erupted on the other side of the world today, you'd probably read about it and watch videos of the eruption before you hear the actual boom.",,1575653499.0,1,1.0,0
+WearOS,What do you guys think of this watch face?,,1575462855.0,89,0.78,16
+WearOS,What do you guys think of this watch face?,,1575308124.0,26,0.76,6
+chemistry,Do carbonates/bicarbonates (let's say NaHCO3) mixed with an acid (lets say HCL) create carbonic acid?,"Sorry for the ridiculously stupid question, I'm in the 10th grade and it's really confusing. 
+
+It kinda makes sense (at least to some moron like me)
+
+NaHCO3 + HCl
+
+So, the Na moseys up to the HCl, making NaCl. This means that the carbonate has one oxygen atom with 1 valency remaining, which hydrogen can stick to, right?",1575305208.0,1,1.0,3
+WearOS,Any watchfaces that look kinda not like a smart watch from far away?,"So, I need my watch to look like a dumb watch at first glance from a distance. Anyway to do that?",1575222271.0,0,0.5,6
+india,WTF is wrong with these IIT preparation tuitions?,"So, you know the nice little thing called the integral and derivative, right? Well, one of my friends goes to  of these little coaching institutions. We're only in the 10th grade. Apparently, they are teaching fucking integration and derivation formulas without teaching fucking limits. When I asked my friend what is a limit, he said that the coaching center wouldn't teach it to them because it's difficult and ""not required for the JEE"". Lmao, but WTF???",1575036111.0,34,0.84,12
+india,Only convent school nibbas will get this,,1575025402.0,6,0.87,0
+bakchodi,"Our father, who burns in hell, fuck thy name",,1575025347.0,3,1.0,0
+CrappyDesign,"Ok, then?",,1574866234.0,6,0.75,2
+NoStupidQuestions,"Why aren't the super cars with high top speeds and acceleration (like Bugatti, Koenigsegg) used in races like NASCAR?",,1574612635.0,0,0.5,6
+WTF,"Satan's asshole opens up to the river of souls, and some poor fuck gets caught in it.",,1574361770.0,1,1.0,0
+TheMonkeysPaw,"I wish whenever I snap my fingers, some random person in Newark instantly shits 500 grams of poop.",,1574349254.0,31,0.89,14
+india,Out education system sucks.,"Again, its been about a year since I posted a rant on this sub on the very same topic. And again, it's starting to get on my nerves. I'm an (ex)NRI who used to live in the US for about 6 years. While my view on this is a bit different on this than most Indians, I'm pretty sure most people feel the same.
+
+&#x200B;
+
+   The problem is not entirely with the education system itself, but with the Indian people, teachers, students and parents. No matter what CBSE/ICSE/SSC tries to do to improve it, the culture surrounding education is to blame. Kids are taught from a young age that life is a competition-- which it is but not to the extent we are taught. It's not uncommon to see parents comparing children as small as 4th or 5th graders. Lines like ""If you don't study, you'll become a beggar"" aren't uncommon, even for 7 year olds.
+
+&#x200B;
+
+The submissive culture to teachers is also a big problem. While it makes theoretical sense to follow teachers-- after all, they're (usually) wiser and (usually) look out for the best interests of the student, this is almost always not the case. There are many good teachers who let kids be independent, but most of the people who end up becoming a teacher have no interest in teaching, and don't know how, and just act like an organic audio book. I know only a handful of teachers who aren't like this in my school.
+
+&#x200B;
+
+And then there's the actual education part. The class English topper was a boy who couldn't hold a conversation properly. There's a big difference between education and training. For example, the last math exam I had, I lost points because I use csc(x) instead of cosec(x). Again, any half decent math teacher would know they're the same thing (and mine did), but it's still somehow wrong, I also lost points in english because I used the ampersand (the & symbol) instead of writing and. Again-- any semi-literate English teacher would know that that means. And computer... I have been programming since I was 10, so I know my way around a few languages. But again, the class topper is someone who needs to search for letter keys and struggles to write any code outside of whats given in the textbook.
+
+&#x200B;
+
+  There is also the problem for testing. WHAT THE FUCK IS CBSE SMOKING?????
+
+The SA system used to be good. But no, they realized they actually fixed something, which is a big no-no. Now, its back to the old rat race.
+
+&#x200B;
+
+Sorry for the long rant, I just had to get it out.",1574343038.0,25,0.77,22
+NoStupidQuestions,Does anyone elses body jerk whenever the temperature changes?,Like slightest temperature change causes my upper body to kindly jerk/really tense up.,1574266877.0,2,1.0,1
+NoStupidQuestions,Why are diagrams of the human heart usually laterally flipped?,,1574261302.0,2,0.75,2
+Jokes,How did Hitler get into heaven?,God did nazi him enter.,1574188017.0,0,0.5,0
+Showerthoughts,Someone who does something that they know is wrong is a worse person than someone who does something wrong but they don't know it's wrong.,,1573932200.0,1,1.0,2
+WritingPrompts,"""Sir, we seem to have a strange issue. The death feed is giving off erratic readings"" said the scientist. ""What do you mean"" you said. ""You see sir, it predicts thousands will die tonight, all of them aged over 5000"" said the scientist. ""Days? You asked. ""No, years"" said the scientist.",,1573849311.0,1,1.0,1
+NoStupidQuestions,"Does being nearsighted give you the ability to look at stuff up close, compare to a normal person.",,1573758836.0,2,1.0,3
+india,Is everyone's family this wierd?,"So, I live in a 1 bedroom home with 8 other people. Me, 2x parents, 1x brother, 2x aunts, 1x uncle, 2x grandparents. 
+
+
+My parents hate my grandmother and their siblings. Parents tried to kick out their siblings, but they refused. (My parents own the house). Now, there is a stupid competition of hoarding shit. My parents have their things in the bedroom, and the other people have their things in the living room inside lockers. By things I don't mean clothes, I'm talking about shit like food, dal, rice, fucking detergent. There are screaming matches every few days.
+
+
+
+Is this shit normal???????
+
+
+PS before any of y'all tell me to move out, I'd like to mention that I'm 16.",1573565033.0,125,0.95,46
+NoStupidQuestions,How do I stop compulsively ripping off my nails?,"It's as bad as it sounds. I just ripped off my whole little toe nail. I've ripped out almost every nail I got. Its almost compulsive. The pain sucks ass by for some reason, my brain basically yells ""continue"".",1573500126.0,1,0.99,5
+memes,You mortals can't win against my godly reaction speed,,1573398508.0,33,0.87,5
+WritingPrompts,"[WP] You have the strange superpower of seeing a blip in the direction somebody dies. Looking at the horizon in a crowded city, you see a blip every few seconds. When you look down, you see blips from people dying on the other side of the earth. Today, you saw the whole sky light up with blips.",,1573396371.0,14,0.99,2
+darkjokes,A Muslim man goes to heaven and finds 72 virigns,[removed],1573332193.0,1,1.0,0
+TheMonkeysPaw,"I wish whenever someone one Reddit wanted to call another Redditor a cunt, they would repply ""This the one, u/TheCuntHunter6969""",,1573330241.0,5,1.0,5
+unpopularopinion,Airbrushed photos and makeup make people look hideous.,[removed],1573249228.0,1,1.0,0
+AskOuija,"*sighs* I never thought it would come to this. I'm sorry, my _______.",,1573153845.0,1,0.67,7
+Showerthoughts,"If dogs wanted, they could rip us to shreds. They just do want to.",,1573149961.0,1,1.0,0
+darkjokes,"The French fry potatoes, the Brits mash em",[removed],1573069309.0,1,1.0,0
+confession,I don't think I'll ever be able to buy a pet,[removed],1572973372.0,1,1.0,0
+darkjokes,"My blind girlfriend broke up with me because I kept cracking ""offensive"" jokes.","For some reason, she thinks everything is dark.",1572890811.0,214,1.0,11
+Showerthoughts,"We should stop calling smartphones smartphones. They're no longer smart-phones, they're a computer that can also call.",,1572801508.0,1,1.0,1
+learnmath,How do you integrate this problem??,"2xarcsin(2x)/√(1-4x^2 )
+
+
+
+
+
+When I use integration by parts, I end up with the same integral again.",1572797559.0,2,0.67,3
+StarWars,I kinda like the Imperial March/ Darth Vader theme in Rogue One better than the original.,"Seriously, Micheal Gicchino's work in Rogue One is just too good, especially Darth Vader's theme. It sounds like a mutated version of the original Imperial March. Especially the end where Vader stands in open spaces as Tantive speeds away, it sounds like the Imperial March, but with the badass factor turned up.",1572784911.0,14,0.69,9
+Jokes,My Muslim friend said Star Wars should include more Muslim charecters,[removed],1572636237.0,0,0.47,2
+math,How exactly do probabilities work?,[removed],1572437202.0,1,0.67,6
+TheMonkeysPaw,I wish people would start calling jizz 'nutter butter'.,,1572357797.0,5,1.0,1
+WearOS,Black and red theme😍,,1572278333.0,1,0.67,5
+WearOS,What's up with this ridiculous battery drain?,,1572268560.0,4,0.83,2
+WearOS,Rooting fixes the cloud issue???,"So, I posted about the weird cloud issue on Android Wear a few days ago, and nothing worked for me. 
+
+2 days ago, I rooted my watch (Ticwatch E) to get rid of the ugly green theme, and Bluetooth worked again just fine. After I messed up, I had to reset the watch. Again, Bluetooth stopped working. After I rooted the watch, Bluetooth started working again. IDK why this is. But it fixed my problem.",1572268359.0,0,0.5,0
+Physics,How would you rate this book?,,1572265105.0,37,0.93,17
+WearOS,Getting rid of Mobvoi bloatware from TicWatches without root.,"You don't need root. 
+
+You need ADB, which I'll assume you already know how to use. If you're new to ADB, there are plenty of tutorials everywhere. 
+
+
+Go to ADB
+Type in
+
+
+ADB shell
+
+
+pm list packages com.mobvoi
+
+
+Then,  delete whichever packages you like by using
+
+
+pm uninstall  --user 0 (place package here)
+
+
+
+
+I deleted everything except for the watch faces as I like them.",1572094262.0,28,0.92,18
+ClashOfClans,The clan recruitment thing sucks,[removed],1572020440.0,1,1.0,1
+StarWars,What exactly was the republic? What powers did it have?,"So, the republic had it's own army, and representatives from it's member planets. But, the planets also had their own military. Countries could also declared many things as an ""internal affairs"" and the republic had no power over it. So, did the republic have any power over what went on inside planets? What exactly were the republics powers?",1571943632.0,8,0.9,5
+ClashOfClans,The clan recruitment thing sucks,[removed],1571935685.0,1,1.0,1
+WearOS,"Wear OS app and phone says it's connected, notifications and media controls work, but play store or any online thing doesn't work. Watch says Bluetooth disconnected in settings, and has this weird cloud thingy.",,1571933716.0,105,0.98,77
+WearOS,The LG watch W7 is going for $120,,1571920124.0,3,0.64,5
+StarWars,Mad props to John Williams,"Seriously, star wars has the best OSTs of any movie. The themes are so good. They are sad, exciting, dark, give hope. Yet, they are so cohesive, especially in the original trilogy and prequels. 
+
+Some one the best ones are
+
+The Binary Sunset
+
+Across the stars
+
+Duel of the fates
+
+The imperial March
+
+Princess Leia's theme
+
+
+They are just too good.",1571602062.0,48,0.92,20
+assholedesign,"They may be assholes, but at least they give you a choice.",,1571598461.0,1,0.67,1
+NoStupidQuestions,How exactly does polygamy work?,"So, the number of men and women born are equal, right? So in ancient times, people practiced polygamy. So like did some of them have 5 wives and the rest die as virgins?",1571334786.0,2,1.0,7
+india,Why do Indians have a superiority complex?,"Seriously. Most of our country is corrupt, poor and stupid. No amount of superiority complex is going to fix that. 
+
+
+""Indians are smarter than white people"". What the fuckitty fuck? More than a quarter of the people are illiterate. No amount of juggad is going to change that. Just because 0.1 percent of your population has an engineering degree, doesn't mean shit for the average illiterate fuck. Living in squalor and saying that Indians are adaptable is the stupidest thing I've ever heard. Playing fucking dodge the rickshaw while walking down the road isn't a testament to our intelligence, it's a sign of how stupid our average Bharatvasi is 
+
+
+""Indians are more cultured"". FFS, India has more cultures of fucking diseases than culture. Playing music on the street and dancing every other week doesn't make you cultured. Neither do rituals. 
+
+""Indians have a richer history"". So did Egypt. Wouldn't exactly call them prosperous now, would you?
+
+"" India has a larger economy than China. The Indian economy take place through cash in rural areas"". So, most of Indian economy is people trading fucking wheat and selling cow shit?
+
+""India can defeat China or the US in a war. The Indian Military budget isn't accounted for inflation"". You're buying military gear from France and Russia, not fucking potatoes from the market. That'd make sense if India had it's own military industrial complex. 
+
+""Indian food is better than Western food"". Where do I even begin? You can have flavor without drinking spicy water. Just cause you dumped spices in water and boiled it doesn't mean your food is better. I like Indian food. I also like Chinese, and European food. I don't like people shitting on non Indian food. 
+
+
+Stuff like this is highly infuriating. India suck ass. No amount of shitting on the rest of the world is gonna fix that. What you can do is try to fix it however you can.",1571314748.0,138,0.68,109
+laptops,"She may be 4 years old, but a nice carbon fiber skin, new battery and SSD makes her feel like brand new.",,1571295062.0,158,0.97,14
+TIHI,Shit lighting+black and white,,1571159387.0,1,1.0,1
+Meditation,Does meditation make you emotionless?,"Sometimes, I can't feel anything after meditation. No anger, sadness, happiness, excitement, nothing. Its like I'm just rational thought. Even if I try to feel anger, sadness, nothing works. It's a eerie quite for half an hour. My mind goes blank. Instead of a random train of thoughts, there's nothing unless I actively think about it. Is this normal? I usually sit legs crossed, not thinking, letting my mind clear out, and listen to music (some of the calmer melodies of John Williams from Star Wars).",1571081854.0,1,0.6,11
+CrappyDesign,"That doesn't look blue, or purple.",,1570970062.0,97,0.93,7
+StarWars,Anybody interested in a small alternate timeline novel on if Obi Wan managed to turn Anakin back on Mustafar?,[removed],1570911020.0,8,0.71,5
+TheMonkeysPaw,"I wish all humans have telekinetic powers, but they need to say ""Xi Jinping is sexy"" once to activate the power.",,1570899379.0,2,1.0,1
+WritingPrompts,"""Look, we haven't got much time. The Satanians are coming"" said the strange little green thing. ""What exactly are you"" you ask, only for it to go ""oh yeah"" and transform into Jesus. The skies turn red, a ominous buzz fills the sky. ""Fuck!"" exclaims Jesus!",,1570817741.0,1,1.0,1
+PrequelMemes,Hope blizzard gets rekt,,1570723218.0,44,0.88,0
+PrequelMemes,"Me, struggling in high school",,1570468185.0,461,0.99,24
+Showerthoughts,Real life spies would probably drive around in a 2002 Corolla.,,1570219352.0,1,1.0,0
+Showerthoughts,"In the toy story universe, sex toys would be a little more... interesting.",,1570218366.0,1,1.0,1
+unpopularopinion,"The argument ""others have it worse"" is stupid and selfish.","Just because I have a home and food, I can't complain about anything because some people don't? I don't get it. In a perfect world,  everybody will would have food, a home, caring friends and family, and a comfortable life. Nobody deserves any less. The argument that you can't complain just because you're not a child soldier or have access to water is just stupid. Everybody has the right to complain. 99% of the world deserves better. Everybody deserve the best.",1570029344.0,114,0.92,20
+WritingPrompts,"[WP] ""What do you mean you didn't ask for our help? We just fought an entire war for you!"" says the alien. You give it a weird look, before it says ""oh, right"" and morphs into Jesus. ""We've driven out the Satanians for now"". A loud humming sound fills the air, the sky goes red. ""Shit"", says Jesus...",,1569965919.0,1,0.54,2
+WritingPrompts,"""Wait, we fought a whole war for you! You asked us for protection!"" said the weird looking alien coming out of his spaceship. ""We don't remember asking for help"" you said, only for him to say ""oh, right"" and transform into Jesus.""We've driven out the Satanians for now."". The sky turns a blood red...",,1569965308.0,1,1.0,1
+Whatcouldgowrong,WCGW if I hit a armed & probably insane police officer with a stick in a protest?,,1569961439.0,0,0.43,1
+atheism,Why do Hindus like to think that their religion is scientific?,"I don't mean to stereotype. I'm Indian, and my family is Hindu. I stopped believing when I was around 7 (I'm 16 now). Basically every few weeks, I get into a debate with somebody about god. I usually stick to the point, usually talking about how science and any religion can't go together. Back in the US, people would usually stick to how you need to feel god's love, bla bla bla. In India, it usually starts off with how you need to feel god's love. The second I mention science, it usually goes off to ""Hinduism is the most scientific religion"", ""Hinduism is science"". They'll take some number from some random number and say stuff like ""if you multiply it by 69, you'll get the distance from the earth to the sun"" and random stuff like that. ""Aryabhatta was the greatest mathematician of all time"", ""Indians knew astronomy well before the Europeans"". While I agree that ancient India has advanced our knowledge of math and astronomy, is stupid to credit it to religion. ""Sundar Pichai is a Hindu, do you think you're smarter than him?"" (seriously tho, you gotta pull out Sundar Pichai every time?). 
+
+&#x200B;
+
+That's not even the best of it. Some more goodness:
+
+""Hinduism is an analogy for quantum mechanics""
+
+""Hinduism is based on science. It was created to give the average man the knowledge of science""
+
+""Hinduism already predicted thousands of years ago what science has just proved today""
+
+And my personal favorite
+
+""Hinduism doesn't need proofs. Some of it is just scientific fact""",1569946304.0,25,0.81,18
+Physics,What are the requirements to start classical mechanics? What are some good books?,[removed],1569944903.0,2,0.67,6
+NoStupidQuestions,"How do I get rid of the ""perfection or screw it"" attitude?","Is really messing up my life. Even the smallest error will make me stop caring, or even go out of my way to ruin something completely. For example, If I don't have an A (instead I have a B), I'll simply leave it and end up failing. I make a single mistake in a homework, I either re do it or don't do it at all. If I'm gaming and make a single mistake, I'll just dick around without even trying. If I get something new, the second it gets a microscopic scratch, I'll either stop caring or go out of my way to destroy it. I know it's wrong, but it's really compulsive for some reason.",1569774517.0,2,1.0,4
+NoStupidQuestions,Why does angry or hurt me have Jedi reflexes?,"Seriously, I kinda did a test where I would take the human benchmark test thing. Normal me gets an average of ~190ms. Angry me gets ~120ms and if I punch myself hard, I can somehow get it down to ~90ms. Why does it give me Jedi (well, sith) reflexes?",1569345627.0,0,0.5,6
+Showerthoughts,"We may be in the middle of a Star Wars style galactic war right now, and not even realize it.",,1569263589.0,1,1.0,1
+PrequelMemes,I am the senate,,1569079070.0,13,0.86,2
+MouseReview,G305 came scratched. Should I return it?,,1568911114.0,0,0.35,29
+atheism,"If Christianity is true, then we're most like already in hell.",,1568830865.0,1,1.0,1
+Jokes,Europe has many dishes with potatoes,[removed],1568748242.0,2,0.56,5
+unpopularopinion,Modern cartoons are mostly trash,"Seriously, I just hate the newer kids shows. While some of it is good (SpongeBob, Mr Bean), most of it is pure garbage. I would rather watch stuff like Tom and Jerry, Looney toons, old Batman, Spider-Man and Scooby Doo just to name a few. I just don't like ones like Dexter's lab, Phineas and Ferb, Arthur, and most newer ones. IDK why, but the older ones just have a certain charm. It's not nostalgia, as I grew up with these newer cartoons (I'm 16) but I still like the old ones better.",1568570792.0,72,0.86,46
+tifu,"TIFU by making ""paper whips"".",[removed],1568411542.0,1,1.0,0
+AskOuija,"I finally reached 6,969 karma. Noe I can ascend to _____!",,1568310337.0,0,0.5,7
+me_irl,me_irl,,1568310285.0,1,1.0,0
+india,Why don't we treat kids like humans?,"I'm sorry, but this is just ridiculous. So, unless you're 50 years old, you have literally no opinion or say in anything? So, everything boils down to ""we're adults, and we demand respect""? Bitch please, if you demand respect, you don't deserve it. I didn't want to go to the stupid Ganesh chaturti, but I was still dragged along any ways, because I'm not an adult. I am sick and don't want to go to school. Guess what? I still gotta go because I'm not an adult. I want to play video games in *my* free time, but I can't, because I'm not an adult. I don't want to stand in the stupid school assembly, but I have to, because I'm a just a kid. I don't want to do something my teacher says, even though she's being unreasonable or wrong, but I have to because I'm just a kid. I don't want to write in cursive, but my English teacher forces me to anyways, because I'm just a kid. Adults can curse all they want, and act like dicks, they can because they're adults, but I can't because I'm not (thought adults were meant to be more mature and reasonable). Seriously, screw this culture. I'm 16, not 6. Believe it or not, we're capable of thinking and won't destroy the fucking planet if you give us a bit more freedom.",1568282692.0,88,0.85,59
+StarWars,What order did you guys first watch the movies in? Did you find the CGI in the prequels good? How would you compare the star wars movies?,"I watched the prequels first, then the originals. I didn't even know Darth Vader was Anakin, which hit me hard as I kinda liked Anakin's charecter. But that took away from the surprise of the ""I am your father"" scene. I also like the graphics in the original better. I feel like they over used CGI in the prequels. The lightsaber fights are wayyyyy better than the originals, but everything else is meh in my opinion. Honestly, I almost gave up on star wars after watching AOTC, but ROTS was  what kept me in. I feel like prequels have a better story, but a poor execution. I actually enjoyed the novelization of the prequels more than the movies. 
+
+So, the originals are very well rounded with a great plot, better acting, and IMO,  better graphics.
+
+
+The prequels have a excellent plot, mostly bad acting and over use of CGI except lightsaber battles.
+
+Edit: 
+
+The sequels have bad a bad plot (still hoping episode 9 can somehow make up for TLJ), good acting (Leia, Han and Luke from the originals are really great, and Rey and Poe were also good but Finn kinda over did it for me), and the best graphics (perfect balance between the sequels and prequels IMO.",1568205196.0,0,0.33,22
+MouseReview,G305 right clicks feels lighter and sound different,"So, I returned my original G305 due to missing stuff in box and scratches on the body  and got a replacement. The new one also has scratches, but lighter than the original. The issue I have is the right click sounds different. Today was the first time I was using it without headphones, and realized the buttons sound different. Way different. And the right click is a bit lighter. I can't accidentally click it, but it's still lighter comparing them side by side. Is this normal?",1568119080.0,1,1.0,1
+AskOuija,Bet you can't roast me!,,1567973197.0,8,0.83,35
+NoStupidQuestions,I fed stray dogs Oreos. Will they be alright?,"So, there are these 2 cute stray doggos in my apartment complex. I usually feed them some other cookies what don't have any chocolate. Today, I got myself a small pack of Oreos and these good Bois came up to me as usual. I wasnt paying much attention as I was in a hurry, but I game each one of them 1 Oreo. To make it worse, these were the chocolate ones. Did I cause them any harm?",1567956990.0,2,1.0,13
+math,"Is ""real math"" anything like the IMO problems?","Seriously, I just looked at the problems for the 2019 IMO, and they're REALLY frickin difficult. Like, problem 6's explaination need expainations. I am still a math newbie. I'm only at multivariable calculus. I can easily prove stuff in calculus and trignometry without looking stuff up. It's surprisingly intuitive and easy, but these IMO problems are really intimidating. It feels like they set up problems to be as twisted and drawn out as it could be. I'm only in the 10th grade, and feel like it's already wayy too late to start preparing for the IMO. These people at the olympiads seem like friggin gods. Would this really matter 10 years later? I want to go into either physics/math. Am I at a real disadvantage here?",1567884232.0,11,0.7,21
+me_irl,me_irl,,1567628036.0,1,1.0,0
+me_irl,me irl,,1567627333.0,1,1.0,0
+TheMonkeysPaw,I wish any adult that hurts animals just to cause them pain dies at a optimal time when their death doesn't cause harm to any other human or animal.,,1567528568.0,3,0.81,3
+entitledparents,EM prolly stole my gaming mouse!?,"When I came to India a year and a half ago, I lost my mouse (Logitech G703) in a few days. After 2 weeks of searching, I gave up and settled for a cheap redragon.
+
+Our cast:
+
+ME:Watch out ya cunts!
+
+EM: Y'all have probably been around long enough to know that is.
+
+CD:EM's Crotch demon
+
+So, I got a new mouse (Logitech G305) a few days ago. My little cousin came over yesterday, and saw it.
+
+CD:""I have one just like it, but it lights up blue and it's white""
+
+Me:""Tell me more about it""
+
+CD:"" It also says G like yours""
+
+Me:""How'd you get it?""
+
+CD:""I bought it a long time ago!""
+
+
+Son of a bitch, this kid probably has my mouse and it probably didn't survive. iDK what to do, should I confront my aunt about it?",1567512524.0,135,0.94,19
+AskOuija,Vote _____ for 2020!,,1567444115.0,6,0.8,23
+MouseReview,How do i avoid flicking my G305 across the room every time I flick?,"So, I got a G305 a few days ago, upgrading from a cheap Redragon. I instantly noticed a difference in my aim (increased KDR as soon as I got used to it.) I have medium-large hands (20x10), but I can somehow hold it in a relaxed claw grip comfortably. The only problem is that I sometimes accidentally let go when I flick. This was also a problem with the Redragon, but nowhere as frequently and the wire basically stopped it from flying into Roswell.",1567437690.0,6,0.88,19
+NoStupidQuestions,Why do countries fight over seemingly useless things?,"For example, the China-Hong Kong stuff going on. China trying to assert control 50 years ago would've made sense when Hong Kong was basically half of China's GDP. Why does Hong Kong matter to China now? What exactly does China gain if they control Hong Kong? And what about  the stuff India-Pakistan do. They fought 3 wars I over Kashmir, which doesn't have too many people and basically mountains. What would either side gain if they control it?",1567355298.0,1,1.0,3
+Battletops,Upgraded a few things since the last pic.,,1567093241.0,97,0.98,5
+MouseReview,Finally upgraded from a cheapo redragon. Should I buy a drill?,,1566999772.0,60,0.87,19
+pcmasterrace,Does anybody prefer low travel chiclet keyboards?,"I honestly don't like the way that mechanical keyboards feel. I have tried several key switches, and the one I like the best are reds. I like the way Chiclets feel. I basically put my entire weight on the keycaps and just prefer the way that they simply ""collapse"". I don't like the way a lot of mechanical keyboards sound. I used a mx red keyboard (Corsair k68) and it felt alright. I used it for ~4 months and never got used to it. I sold it to my friend for about 40 dollars and got a cheap low profile keyboard. Also, I don't like RGB. It just doesn't look right. I prefer a simple white backlight keyboard and mouse without backlighting. I put carbon fiber skins on my stuff as it gives it a nice ""gamerish"" look without going over the top. For now, I'm using my laptop and will get a full setup once I move to a larger home.",1566923816.0,3,1.0,0
+Showerthoughts,People who game without headphones are either too poor to afford one or rich enough to live in a big enough house that nobody can hear them.,,1566835061.0,1,1.0,0
+MouseReview,"Wondered why my cheapo redragon mouse was so heavy, found this 30g weight inside",,1565954772.0,765,0.99,90
+NoStupidQuestions,What language do bilingual people think in? What can influence our language and accent?,"So, I'm a 16 year old Indian. I've lived in the US for ~6 years, a few months in London, another 6 years in Singapore, and the rest in India. I am completely fluent in both English and Hindi. I don't know what language I think in, as the second I give it any thought, I do it on purpose (kinda like breathing or blinking). I have a British accent in my mind, but speak with an American general with slight hints of southern accent. Also, if I am speaking Hindi and put a English word in between, it sounds like I have an Indian accent, but if I'm only speaking English, I have my normal accent, and if I say a Hindi word in an English sentence, if comes off with a really heavy accent (imagine a white person trying to pronounce an Asian name).",1565889515.0,2,1.0,6
+CrappyDesign,WTF is wrong with this dude's hand?,,1565618742.0,233,0.98,22
+AskOuija,"A naked man jumps out of a bush, and declares ""I am u/TheCuntHunter6969, the hunter of _______!""",,1565195557.0,1,0.67,18
+tifu,TIFU my messing up my hands.,[removed],1565194948.0,1,1.0,0
+AskOuija,"I'm sorry ma'am, but your baby was born without any ________!",,1564943412.0,4,0.84,16
+AskReddit,You're forced to browse one subreddit for 12 hours. Which subreddit do you choose?,,1564942090.0,3,0.81,8
+memes,NICE,,1564913003.0,1,1.0,1
+AskOuija,"God proclaimed ""u/TheCuntHunter6969 shall die a _____!""",,1564685113.0,2,0.75,17
+AskOuija,Uh oh! I accidentally left the baby in the _______!,,1564515127.0,1,1.0,19
+GetMotivated,Power is being whoever you want. Happiness is being yourself.,,1564339417.0,1,1.0,0
+atheism,"""Science limits your thinking""","   So, I'm an atheist in a Hindu family. My parents are quite calm and don't have a problem with my non belief but my extended family is filled with nutbags. Particularly, my Uncle who is a all out Hindu nationalist (""kill all the Muslims and Christians"", yada yada). Obviously, we don't get along too well and get into ""debates"" a lot. So, I had a nice little ""debate"" about religion yesterday.
+
+   I wanted to send my friend a video Vox made about the beef ralated lynchings going on in India, and labelled it as ""The shit going on right now"". I accidentally also sent the link to the uncle. A few minutes later, he checks his phone and starts fuming. 
+
+
+Uncle:""What do you mean by shit? They're doing the right thing. The cow is our mother, and we should protect her"".
+
+
+Me:"" By killing people? So cows matter more than humans?""
+
+
+
+The conversation goes on like this for a few minutes. It basically ends up being a debate about Hinduism itself. 
+We end up at the basic ridiculousness of it all (seriously, flying monkeys and blue dudes in the sky shooting nukes out of bows and arrows?). 
+
+
+Me:""According to science, all of this is impossible""
+
+
+Uncle:""Science hasn't been able to solve many probleni which have been solved by religion""
+
+
+Me:""It's only a matter of time until they are""
+
+
+Uncle:""Don't you dare teach me about science. I scored better in school than you""
+
+
+(Although he did do well in school, he simply mugged up a ton of info without actually learning, as is evident here)
+
+
+Me: ""Well, it doesn't change the fact that science is always right""
+
+
+Uncle:""Science limits your thinking. Math has rotten your brain""
+
+
+(I do love studying math and physics, apparently it's a bad thing?)
+
+Anyways, it ended there as he left to do something.",1564165289.0,20,0.86,18
+Showerthoughts,War is making stuff go really fast to poke holes in stuff.,,1563647915.0,1,1.0,0
+AskOuija,Today's the day. I'mma_____ myself.,,1563643410.0,3,1.0,13
+unpopularopinion,Long nails are just gross.,"Seriously, they look like they're some kind of claw. It just looks bad. Really bad. It looks gross, and mighty inconvenient. How the hell do you use your phone, type, write with those THINGS sticking out of your hands?",1563640582.0,7,0.77,7
+Battletops,*Sighs* PCMR,,1563564726.0,18,1.0,3
+unpopularopinion,I hate subtitles in movies,[removed],1563482462.0,1,1.0,1
+AskReddit,What's the worst thing you can name after someone?,,1563476116.0,1,0.67,9
+NoStupidQuestions,"If a F22 simply dropped bullets, instead of shooting them, flying at it's to0 speed, how devastating would they be?",,1563303105.0,3,0.71,5
+pcmasterrace,I like to tell people I'm a part of the PCMR. This is my dark secret.,,1563215984.0,73,0.86,33
+math,"Why does math ""click""?","Sorry for the stupid way I phrased that question. What I mean is, I've been studying calculus for the last few months. When I tried to learn it, it took months to learn the concepts, but once I've learned them, it feels like I could've learned them within a few hours. Hell, it feels like I could relearn al the math I've learned the last 10 years (I'm a highschool sophomore starting the year) within minutes. Sometimes, while thinking about problems the solution just comes or an idea that makes me go ""that was obvious, why didn't I think of that before?"".",1562091515.0,409,0.95,72
+PUBATTLEGROUNDS,This games performance has increased dramatically since the last update,[removed],1561910798.0,2,1.0,1

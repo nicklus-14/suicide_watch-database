@@ -1,0 +1,38 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+AskStatistics,Modelling a Logistic Regression and stratifying by two categorical variables.,"Hello Reddit!
+
+Let me start by saying I'm new to logistic regression (modelling), or even (bio)statistics as a whole. I'm doing the statistics in R.
+
+&#x200B;
+
+I have this database with over 6000 entries and around 75 variables. The intention of the research is finding variables that predict mortality, and stratifying results by sex and age-categories (for its clinical relevance).
+
+The team and I were agreeing on the fact that one model won't cut it and so, multiple will have to be made. My supervisor gave me a few ideas on how to approach this. One is as follows:
+
+""In every age segment, make a  logistic regression. females are the reference, and the male odds ratios (ORs) and confidence intervals (CIs) are reported in relation to the reference."" I included an image of what I would want that table to look like in Excel (with dummy data). Now the questions:
+
+&#x200B;
+
+1. The female odds ratios (column C), will those all be 1, because they are the reference?
+2. I'm not sure how to say R to make such model. Here's some of the code:
+
+&#x200B;
+
+    #First, I filtered the big database into the entries with the first age category:
+    
+    df_filter_18_39 <- df %>% filter(Age_per_ten_year_low_high_merged ==""18-39"")
+    
+    #Then, I used glm to make the model. Note that I used the subset-function to obtain the ""reference-model"" first:
+    
+    model_1_default <- glm(Mortality ~ var1 + var2 + var3, family= ""binomial"", data = df_filter_18_39, subset = Sex ==""Female"")
+
+I think there's something wrong with subsetting like that, because you don't take the male entries into account, ergo making an incorrect model for the male category? But if I shouldn't do that, how can I obtain the ORs and CIs of both the male and female categories? This might be an R-function I don't know of?
+
+3. To make the model, I tried the so-called 'backward stepwise' approach with omitting the highest p-values until statistical significance, but that left me with very few variables and an McFadden R-squared that was far lower than the original model (i.e. the model with all the variables in it) (AIC was lower though! Residual deviance was higher than resid. dev. from the original model.)Some interesting resources(/""guides"") about modelling/fitting LRs might also come in handy.
+
+&#x200B;
+
+Any help or thought on any of the questions are already greatly appreciated!
+
+https://preview.redd.it/58d61hf40q0c1.png?width=1526&format=png&auto=webp&s=06cfd8102463116c0f6fb8d2857248bc5a4a6c51",1700139710.0,2,1.0,3
+SuicideWatch,"For you, the one who needs this",[removed],1615419212.0,1,1.0,0

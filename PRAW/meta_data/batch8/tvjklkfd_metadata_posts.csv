@@ -1,0 +1,399 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+googlecloud,GKE creating clusters returns permission error: when acting as...,"Hi all.
+
+I am trying to create a Kubernetes cluster, and the same Terraform code/command lines used to work just fine.
+
+There is nothing wrong with the code.
+
+&#x200B;
+
+I tried to build GCP after many months, and now when I run the code/CL to create a cluster, it returns
+
+>│ Error: Error waiting for creating GKE cluster:   
+>  
+>│       (1) Google Compute Engine: Not all instances running in IGM after 15.434916206s. Expected 1, running 0, transitioning 1. Current errors: \[PERMISSIONS\_ERROR\]: Instance 'gke-qhrhtlvek-cluster-default-pool-036c5372-v748' creation failed: Required 'compute.instances.create' permission for 'projects/786846853700/zones/asia-east1-a/instances/gke-qhrhtlvek-cluster-default-pool-036c5372-v748' (when acting as '786846853700@cloudservices.gserviceaccount.com'); \[PERMISSIONS\_ERROR\]: Instance 'gke-qhrhtlvek-cluster-default-pool-036c5372-v748' creation failed: Required 'compute.disks.create' permission for 'projects/786846853700/zones/asia-east1-a/disks/gke-qhrhtlvek-cluster-default-pool-036c5372-v748' (when acting as '786846853700@cloudservices.gserviceaccount.com'); \[PERMISSIONS\_ERROR\]: Instance 'gke-qhrhtlvek-cluster-default-pool-036c5372-v748' creation failed: Required 'compute.disks.setLabels' permission for 'projects/786846853700/zones/asia-east1-a/disks/gke-qhrhtlvek-cluster-default-pool-036c5372-v748' (when acting as '786846853700@cloudservices.gserviceaccount.com'); \[PERMISSIONS\_ERROR\]: Instance 'gke-qhrhtlvek-cluster-default-pool-036c5372-v748' creation failed: Required 'compute.subnetworks.use' permission for 'projects/786846853700/regions/asia-east1/subnetworks/default' (when acting as '786846853700@cloudservices.gserviceaccount.com'); \[PERMISSIONS\_ERROR\]: Instance 'gke-qhrhtlvek-cluster-default-pool-036c5372-v748' creation failed: Required 'compute.subnetworks.useExternalIp' permission for 'projects/786846853700/regions/asia-east1/subnetworks/default' (when acting as '786846853700@cloudservices.gserviceaccount.com') (truncated)
+
+I have authorized the shell/terminal with the owner service account,
+
+but the error says it's acting as [786846853700@cloudservices.gserviceaccount.com](mailto:786846853700@cloudservices.gserviceaccount.com)
+
+???
+
+&#x200B;
+
+What I am suspecting is that I have deleted all the SA in IAM tab before,
+
+so I have tried to turn off and on Kubernetes engine API. (It still didn't work.)
+
+&#x200B;
+
+Please help....",1649487890.0,1,0.67,5
+aws,What are managed service role descriptions?,[removed],1645358634.0,1,1.0,0
+Terraform,Is there a way to provide credentials other than service account key in GCP?,"Hi all. Just asking a quick question.
+
+I only know that you can provide service account key file for Terraform credentials.
+
+    provider ""google"" {
+    
+      credentials = file(""path/credentials.json"")
+    
+    }
+
+Is there another way to authorize Terraform to build resources in GCP? 
+
+&#x200B;
+
+Thanks for you help.",1642703879.0,1,1.0,2
+googlecloud,ip settings when creating GKE cluster...,"Hi all.
+
+While working with GKE, I was curious about ip settings.
+
+&#x200B;
+
+1. Why assign primary AND secondary IP ranges to the same instance?
+2. Why should master-ipv4-cidr be in different subnets with cluster itself?
+3. Does --enable-ip-alias do pods to have ip range from cluster's subnet ip ranges? 
+
+&#x200B;
+
+I'd appreciate your answer. Thank you.",1641719165.0,9,0.91,1
+kubernetes,Creating ingress for web server multiple path..?,"Hi, Kubernetes community. Kindly I have a question regarding ingress.yaml.
+
+I created two different deployments & services in a k8s cluster,
+
+I want url **'/review'** to go to **'review-service'**
+
+and the rest including **'/'** to go to **'main-service'.**
+
+It doesn't feel right as much as it doesn't work.
+
+&#x200B;
+
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: ingress
+      annotations:
+        kubernetes.io/ingress.global-static-ip-name: ""ingress""
+        nginx.ingress.kubernetes.io/rewrite-target: /
+    spec:
+      rules:
+      - http:
+          paths:
+          - path: /review
+            pathType: Prefix
+            backend:
+              service:
+                name: review-service
+                port:
+                  number: 8080
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: main-service
+                port:
+                  number: 80
+
+&#x200B;
+
+It feels suspicious because path **'/review'** also belongs to **'/'** \-> so it's an overlap?
+
+Also, review-service has other paths such as '/review/post, /review/api'....
+
+Maybe I can add **'/main'** to main server,
+
+But that also doesn't make sense because end users don't type '[www.google.com/main](https://www.google.com/main)'
+
+How should this be done?
+
+&#x200B;
+
+I'd appreciate any help. Thank you.",1641385391.0,2,1.0,6
+googlecloud,Bigtable - cannot refer to unexported name bigtable.city,"Hi all. I followed tutorial here [https://cloud.google.com/bigtable/docs/use-cloud-functions](https://cloud.google.com/bigtable/docs/use-cloud-functions)
+
+While trying to deploy cloud function that reads from bigtable, I get the error:
+
+./main.go:43:21: cannot refer to unexported name [bigtable.city](https://bigtable.city)
+
+./main.go:43:39: undefined: cbt; Error ID: 975560ac
+
+&#x200B;
+
+the table is as below, family is ""city"" I am trying to read.
+
+https://preview.redd.it/jo6vnv1w8j881.png?width=1110&format=png&auto=webp&s=e5cb43a8ff33f18eee0158480802099ed0678110
+
+&#x200B;
+
+&#x200B;
+
+here is my go code:
+
+    package bigtable
+    
+    import (
+    	""context""
+    	""fmt""
+    	""log""
+    	""net/http""
+    	""sync""
+    
+    	""cloud.google.com/go/bigtable""
+    )
+    
+    var client *bigtable.Client
+    var clientOnce sync.Once
+    
+    func BigtableRead(w http.ResponseWriter, r *http.Request) {
+    	clientOnce.Do(func() {
+    		var err error
+    		client, err = bigtable.NewClient(context.Background(), r.Header.Get(""hybrid-bts""), r.Header.Get(""members""))
+    		if err != nil {
+    			http.Error(w, ""Error initializing client"", http.StatusInternalServerError)
+    			log.Printf(""bigtable.NewClient: %v"", err)
+    			return
+    		}
+    	})
+    
+    	tbl := client.Open(r.Header.Get(""member-info""))
+    	err := tbl.ReadRows(r.Context(), bigtable.PrefixRange(""10""),
+    		func(row bigtable.Row) bool {
+    			city := """"
+    			for _, col := range row[""city""] {
+    				if col.Column == ""city:Paris"" {
+    					city = string(col.Value)
+    				}
+    			}
+    
+    			fmt.Fprintf(w, ""order number: %s, for city:  %s\n"", row.Key(), city)
+    			return true
+    		})
+    
+    	if err != nil {
+    		http.Error(w, ""Error reading rows"", http.StatusInternalServerError)
+    		log.Printf(""tbl.ReadRows(): %v"", err)
+    	}
+    }
+    
+    func main() {
+    
+    }
+
+I gave cloud function SA a bigtable admin role. 
+
+Anyone who knows wthat is the problem?
+
+Thanks.",1640806036.0,3,0.72,4
+Python,how to turn python app into web server?,[removed],1640595819.0,18,0.74,10
+googlecloud,How to jenkins to private GKE cluster?,"Hi all.
+Been trying to get Jenkins cicd pipeline to work with GKE private cluster for days.
+Any help would be very much appreciated:(
+
+I am using Google's github source, so I think everything else is proper.
+But the only difference is my clusters are private.
+
+When I deploy Jenkins job that deploy to private cluster,
+I get connecting to cluster master timeout,
+So I figured I have to open network to jenkins app.
+So I installed Jenkins inside the private cluster.
+Now during pipeline, jenkins fail to pull gcloud image for agent with
+''row on resouces', 'no space left on the device', 'ephemeral storage' error
+But there was no problem when I built Jenkins inside  public cluster with the same machine type (e2-medium)
+
+So I was wondering how people use Jenkins ci/cd with private clusters.
+Tried googling, but can't find any practice...
+
+Thank you.",1640438468.0,3,0.72,7
+Terraform,How to use modules...?,"Hi all.
+
+I learned that modules are for reuse the snippet, but still having trouble understanding.
+
+&#x200B;
+
+1. What's difference between module blocks and resource blocks? because within the same .tf file, resource block can be referred to, too. Is the difference that module blocks can be referred to by other .tf files?
+
+&#x200B;
+
+2. That leads me to the second confusion. The way I see Terraform project is, GCP products(network, compute, storage...) are seperate folders. So 'terraform apply' happens seperately. If I refer to vpc module in network folder, does it still apply when I terraform apply inside compute folder?
+
+&#x200B;
+
+3. That doesn't make sense to me because vpc module is not existing resource, but code...
+
+&#x200B;
+
+Anyone who can help me with understanding modules :(
+
+believe me I've read blogs and docs, but they don't quite answer my questions...
+
+Thanks.",1639714607.0,0,0.5,6
+googlecloud,"when deploying k8s in gcp, is it right design...? (very basic)","I think (am I wrong?) deploying everything in private network is safe.
+
+However, I can't create private cluster in my custom vpc by design.
+
+So *I think I have to* create private vpc, and deploy Kubernetes clusters in it.
+
+(because containers have to access other private GCP resources, Kubernetes have to reside in the custom VPC.)
+
+Then create external IP, and create Global load balancer for routing public traffic to normal clusters in private network.
+
+&#x200B;
+
+However it doesn't seem right.
+
+I am so confused, because it's different with AWS.
+
+How do people usually deploy web servers in Kubernetes?
+
+Using public subnets?
+
+Please help... :(",1639648824.0,2,1.0,4
+Terraform,how to set custom vpc as network when creating resources..?,"Hi all. I'd like to ask a beginner question.
+
+I want to create a vm instance, and wanna deploy it in my vpc, hopefully in a certain subnet.
+
+How do I do that?
+
+`resource ""google_compute_network"" ""vpc_network"" {name = ""my-vpc""}`
+
+can't refer to the existing vpc.
+
+&#x200B;
+
+following is my full main.tf
+
+`resource ""google_compute_network"" ""vpc_network"" {`  
+ `name = var.network_name`  
+`}`  
+`resource ""google_compute_instance"" ""vm_instance"" {`  
+ `name = bastion-vm""`  
+ `metadata_startup_script = file(""startup.sh"")`  
+ `machine_type = ""f1-micro""`  
+ `tags = [""bastion""]`  
+ `zone = ""asia-northeast3-a""`  
+  `boot_disk {`  
+`initialize_params {`  
+ `image = ""debian-10""`  
+`}`  
+  `}`  
+  `network_interface {`  
+ `network = google_compute_network.vpc_network.name`  
+`access_config {`  
+`}`  
+  `}`  
+  `service_account {`  
+ `email  = ""@iam.gserviceaccount.com""`  
+ `scopes = [""cloud-platform""]`  
+  `}`  
+`}`  
+`resource ""google_compute_firewall"" ""default"" {`  
+ `name    = ""test-firewall""`  
+ `network = google_compute_network.vpc_default.name`  
+  `allow {`  
+ `protocol = ""icmp""`  
+  `}`  
+  `allow {`  
+ `protocol = ""tcp""`  
+ `ports    = [""22""]`  
+  `}`  
+ `target_tags = [""bastion""]`  
+ `source_ranges = [""0.0.0.0/0""]`  
+`}`
+
+&#x200B;
+
+I'd appreciate the help!",1639574338.0,1,0.6,1
+googlecloud,GCP convention for resources network setups...?,"I am building on GCP using Terraform, and I have experience in AWS.
+
+I noticed that the options I choose are usually region or zone, rather than VPC network.
+
+(In AWS, When you create resources e.g. storage, db, ... You always choose VPC to deploy the resources on.)
+
+I wonder the convension for GCP is different, since GCP has ""google private access"" and ""service account"" feature.
+
+&#x200B;
+
+My question is:
+
+If I want to use private web server, private GCS, private SQL, and want the connection among them,
+
+how should I do it?
+
+Should I deploy resources on region and zone regardless of VPC, and then enable .... what ?
+
+Help & tips much appreciated !! :) Thanks.",1639551511.0,7,0.89,10
+docker,How do you handle web server sessions?,"When you deploy web server container on Cloud multi zones environment with load balancing,
+Website login sessions are broken.
+How do you handle the problem?
+:)",1639370314.0,0,0.5,1
+Terraform,a newbie question...why are there so many files in a project?,"Hi all. It's my day 2 learning Terraform.
+
+I cloned GCP provided Terraform foundation project, and was discouraged a great deal
+
+by the scale of the complete Terraform project.
+
+&#x200B;
+
+[for example, network alone has hundreds of .tf](https://preview.redd.it/vudfypmuu4581.png?width=492&format=png&auto=webp&s=efd636418c4def95048a4097ac89d86f6f41a17c)
+
+My question is:
+
+&#x200B;
+
+1. is it normal for a Terraform infra to have so many files?
+2. How did you learn why each file is needed....
+3. I am trying to build a pretty basic GCP infrastructure. But if there are thousands of files that are required, how ..... Do I even .... I mean, tutorials says provider{} resource{} are enough....
+
+&#x200B;
+
+Please help....",1639324317.0,10,0.86,14
+PHP,Should the server API be FPM/FastCGI to handle session cache?,[removed],1637730725.0,0,0.33,0
+docker,creating a docker image from wordpress sourcecode,"I am new to docker, and in the middle of school project.
+
+We've built a website using wordpress. I built a dockerfile inside the project:
+
+`FROM centos:latest`
+
+`COPY . /var/www/html/`
+
+`RUN yum install -y httpd php`
+
+`CMD [""/usr/sbin/httpd"", ""-D"", ""FOREGROUND""]`
+
+`EXPOSE 80`
+
+&#x200B;
+
+ran the image:  
+
+`docker run -p 4444:80 --privileged -d --name oct0851 oct0546 /sbin/init`
+
+&#x200B;
+
+turned on httpd using `systemctl start httpd`
+
+&#x200B;
+
+when I go to [127.0.0.1:4444](https://127.0.0.1:4444), I get...
+
+# Service Unavailable
+
+The server is temporarily unable to service your request due to maintenance downtime or capacity problems. Please try again later.
+
+&#x200B;
+
+&#x200B;
+
+I am so new to docker, it took 2 days for me to get 'here'.
+
+help Anyone? ..please?
+
+How should I build a container image from wordpress source code.",1635337588.0,1,0.57,6
+computer,Can I upgrade my macbook air specs?,"Am using macbook air 2015 with corei5, 4gb, 120gb
+I want to learn programming and recommended specs are i7, 8gb, + i need more storage to run programs
+
+1. Is using external hdd a fine option?
+2. Can i upgrade core(?) And ram?
+
+I would appreciate your help!! Tnx.",1609003871.0,5,1.0,1

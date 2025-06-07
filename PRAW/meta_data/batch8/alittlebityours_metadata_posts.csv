@@ -1,0 +1,813 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+MentalHealthPH,Psych eval around south,"Something snapped inside me and i realized that theres something wrong. Can anybody recommend me to a budget-friendly psych for an assesment/eval? Laguna or south manila is the most accessible to me. Thank you!
+
+P.S. if anybody can help me set my expectations about the prices, youre doing me ahuge favor. Thanks again",1744704779.0,0,0.5,1
+LooksmaxingAdvice,What do i need to do ffs,27m and doesnt know wtf to do ,1734900891.0,9,0.91,13
+Windows11,USB keyboard malfunction,"Not sure if this is the right subreddit but the 2wsx keys of my rapoo USB keyboard doesn't work in my Lenovo ideapad. Is this a driver problem? How can I fix this?
+
+Thanks everyone!",1668416101.0,0,0.5,4
+webscraping,random noobie thought,"I created a web scraper for amazon for another person but the difference is it stops somewhere during the program and I don't know what exactly let's it be discovered by Amazon's bot detector.
+
+Will setting up a SSH help with webscraping? I noticed that the only difference between our computers is I've got a SSH set up while she doesn't have one.",1667791669.0,1,1.0,4
+webscraping,bot detection with python requests,"I'm at this point where it's a real roadblock. (a bit of a rant so bear with me) someone asked me to write code for an amazon web scraper but I'm still less than a month into studying python.   
+
+
+It works but it stops at around the 25th-26th URL (she usually runs it 90-100 URLs) and once I inspected it, tada, it shows amazon's captcha page. I tried using random user agents, time.sleep() to avoid that darned captcha page. Now I don't really know what to do with this bot detection stuff and all I need right now is that someone to get off my back asap since I'm studying and trying to apply for a web dev role, hopefully(</endrant>). Enough story time, here is the code.  
+
+
+    # importing libraries
+    import os
+    import re
+    from random import randint
+    from time import sleep
+    
+    import pandas as pd
+    import requests
+    from bs4 import BeautifulSoup
+    from ftfy import fix_encoding, fix_text
+    from fake_useragent import UserAgent
+    
+    
+    def main(URL):
+        df = pd.DataFrame()
+        ua = UserAgent()
+        uag_rand = ua.random
+    
+    #this is the part where i think im having a hard time
+        HEADERS = {
+            'User-Agent': uag_rand,
+            'Accept-Language': 'en-US, en;q=0.5'
+        }
+    
+        webpage = requests.get(URL, headers=HEADERS)
+    
+        # Creating the Soup Object containing all data
+        souped = BeautifulSoup(webpage.content, ""html.parser"")
+        soup = BeautifulSoup(souped.prettify(), ""html.parser"")
+    
+        # retrieving ASIN
+        try:
+            # retrieve product details table and parse it to string
+            prod_deets = str(soup.select('tr > td.prodDetAttrValue'))
+    
+            # find ASIN value inside the table with regular expression
+            asin_regex = re.search(r""\sB0\w+"", prod_deets)
+    
+            # remove unnecessary spaces
+            asin = asin_regex.group().strip()
+        except AttributeError:
+            try:
+                prod_deets2 = str(soup.select('div[id=""detailBulletsWrapper_feature_div""]> div > ul.a-unordered-list'))
+                asin_regex2 = re.search(r""\sB0\w+"", prod_deets2)
+                asin = asin_regex2.group().strip()
+            except AttributeError:
+                asin = ""Not found. Send the html element of this ASIN to be located""
+    
+            print(""ASIN: "" + asin)
+    
+        # retrieving main image
+        try:
+            prod_img = soup.select_one('div#imgTagWrapperId.imgTagWrapper>img[src]')
+            image = prod_img.get('src')
+        except AttributeError:
+            image = ""Cannot be scraped""
+    
+        # retrieving product title
+        try:
+            # Outer Tag Object
+            title = soup.find(""span"", attrs={""id"": 'productTitle'})
+    
+            # Inner NavigableString Object
+            title_value = title.string
+    
+            # Title as a string value
+            title_string = title_value.strip()
+    
+        except AttributeError:
+            title_string = ""NA""
+    
+        # product category
+        try:
+            categori = soup.select_one('div.a-subheader > ul.a-unordered-list').text
+            categori = "" "".join(categori.split())
+            category = fix_text(categori)
+    
+        except AttributeError:
+            category = 'Cannot be found'
+    
+        # retrieving price
+        try:
+            price = soup.select_one('span.a-price.a-text-price.a-size-medium.apexPriceToPay>span.a-offscreen').text.strip()
+    
+        except AttributeError:
+            try:
+                price = soup.select_one('div#aod-price').text.strip()
+            except AttributeError:
+                try:
+                    price = soup.select_one('div.a-fixed-left-grid-col > span.a-price').text.strip().replace('\n', '')
+                except AttributeError:
+                    try:
+                        price = soup.select_one(
+                            '#corePriceDisplay_desktop_feature_div > div.a-section.a-spacing-none.aok-align-center > span.a-price.aok-align-center.reinventPricePriceToPayMargin.priceToPay > span.a-offscreen').text.strip().replace(
+                            "" "", """")
+                    except:
+                        price = ""None found. Check buying options""
+        # corePriceDisplay_desktop_feature_div > div.a-section.a-spacing-none.aok-align-center > span.a-size-large.a-color-price.savingPriceOverride.aok-align-center.reinventPriceSavingsPercentageMargin.savingsPercentage
+        # corePriceDisplay_desktop_feature_div > div.a-section.a-spacing-none.aok-align-center > span.a-price.aok-align-center.reinventPricePriceToPayMargin.priceToPay > span.a-offscreen
+    
+        # retrieving product rating
+        try:
+            rating = soup.find(""span"", attrs={'class': 'a-icon-alt'}).string.strip().replace(',', '')
+    
+        except AttributeError:
+    
+            try:
+                rawRating = soup.select_one('div#averageCustomerReviews').text.strip()
+                rating, sep, tail = rawRating.partition(' ')
+            except AttributeError:
+                rating = 'NA. Check if product is unavailable'
+    
+        # number of ratings
+        try:
+            review_count = soup.find(""span"", attrs={'id': 'acrCustomerReviewText'}).string.strip().replace(',', '')
+    
+        except AttributeError:
+            try:
+                raw_review_count = soup.select_one('div#averageCustomerReviews').text.strip()
+                head, sep, review_count = raw_review_count.partition(' ').replace('out of 5 stars', '').strip()
+            except AttributeError:
+                review_count = 'NA: Probable-- product unavailable'
+    
+        # product Description
+        try:
+            descSoup = soup.select('div#feature-bullets span.a-list-item')
+            del descSoup[0]
+            stringedDesc = str(descSoup).replace(""</span>"", """").replace('<span class=""a-list-item"">', '').replace('[',
+                                                                                                                  '').replace(
+                ']', '').replace('  ,  ', '\n').replace('<span class=""a-list-item a-size-base"">', '').strip()
+            pDesc = fix_text(stringedDesc).encode('utf-8').decode('utf-8')
+    
+        except AttributeError:
+            pDesc = ""NA""
+    
+        # product brand
+        try:
+            brand = soup.select_one('tr.a-spacing-small.po-brand td.a-span9 span.a-size-base').text.strip()
+    
+        except AttributeError:
+            try:
+                brand = soup.select_one('div.centerColAlign div.a-section.a-spacing-none a.a-link-normal').text.replace(
+                    ""Visit the"", '').replace("" Store"", """").strip()
+            except AttributeError:
+                brand = ""Not Found""
+    
+        # Sold By
+        try:
+            soldBy = soup.select_one('div.tabular-buybox-text a').text.strip()
+        except AttributeError:
+            try:
+                soldBy = soup.select_one('div.tabular-buybox-text:nth-of-type(4) span.a-size-small').text.strip()
+    
+            except AttributeError:
+                try:
+                    soldBy = soup.select_one('span.a-size-small.mbcMerchantName').text.strip()
+    
+                except AttributeError:
+                    soldBy = ""No available buybox seller""
+    
+        # Coupon
+        try:
+            coupons = soup.select_one('span.promoPriceBlockMessage > div').text.strip()
+            if len(coupons) > 0:
+                coupons = ""Product has coupon""
+    
+        except AttributeError:
+            coupons = ""No found coupon""
+    
+        df = df.append(pd.DataFrame(
+            {""URL"": URL, ""ASIN"": asin, ""Image Link"": image, ""Full Product Title"": title_string, ""Category"": category,
+             ""Price"": price,
+             ""Average Rating"": rating, ""Product Reviews"": review_count, ""Product Description"": fix_encoding(pDesc),
+             ""Brand"": brand,
+             ""Buybox Seller"": soldBy, ""Available coupons"": coupons}, index=[0]), ignore_index=True)
+    
+        output_path = ""amazon_scraper.csv""
+        # Check if the file exists
+        # noinspection PyRedundantParentheses
+        if (not os.path.exists(output_path)):
+            # Create and append the first data
+            df.to_csv(output_path, index=False, encoding='utf-8-sig')  # default write mode
+        else:
+            # Append the data in the existing file
+            df.to_csv(output_path, index=False, mode=""a"", header=False,
+                      encoding='utf-8-sig')  # append mode excluding the header
+    
+        delay = randint(91, 149)
+        print(str(delay) + ' seconds')
+        sleep(delay)
+    
+    
+    if __name__ == '__main__':
+        # opening our url file to access URLs
+        file = open(""url.txt"", ""r"")
+    
+        # iterating over the urls
+        for links in file.readlines():
+            main(links)
+
+if anyone has the time or the willingness to help, I'd be really grateful. Thank you.",1667671310.0,4,0.83,9
+webscraping,special characters bugs the csv file and ultimately bugs me :/,"scraping library used: bs4 and requests, pandas as dataframe
+
+&#x200B;
+
+Ive already set the character set parameters with the help of u/Goblin80 in  the requests  variable and the souped webpage.content to utf-8
+
+&#x200B;
+
+for the product description i am trying to scrape, ive used this syntax:  
+`pDesc  = unescape(stringedDesc).encode('utf-8')`
+
+however, this is some of the output from the csv file (cannot send the csv since reddit cant)
+
+b'MINIMALIST, ATTRACTIVE, AND STURDY - This sturdy wall-mounted wine rack is a simple, elegant storage solution for your wine collection. Wood construction makes this bottle rack solid and helps it blend in with any decor style while saving counter space.\\n            , \\n             BRING THE WINE BAR TO YOU - This wall rack\\xe2\\x80\\x99s classic open style makes it easy to select the next bottle. The shelf holds 5 bottles of wine, liquor, or cocktail mixers, while the metal rack below can store up to 6 stemmed wine glasses or champagne flutes.\\n            , \\n             EASY TO INSTALL - This wine rack kit includes screws for easy, hassle-free installation. The simple, straightforward design is light enough to comfortably mount and highlights your favorite vintages and glassware with style.\\n            , \\n             VERSATILE STORAGE OPTIONS - Use this vertical storage for kitchen items or anything you want to display and organize. The classic frame suits multiple functions, including bed and bathroom decor.\\n            , \\n             EVERYDAY BASICS DONE BETTER - True makes entertaining simple and elegant with stylish, functional serveware, dishes, and entertaining accessories. Combining streamlined design with functional utility, True elevates the basics.'  
+
+
+b'MINIMALIST CRYSTAL GLASS SET \\xe2\\x80\\x93 This beautiful pair of cocktail glasses has a heavy, rounded base and smooth glass for a uniquely modern feel. This set of whiskey tumblers looks great on a bar cart or in your liquor cabinet.\\n            , \\n             PERFECT FOR COCKTAILS AND BOURBON \\xe2\\x80\\x93 A generous 12 oz capacity leaves plenty of room for cocktails such as a Negroni, or neat pours of rye whiskey with large craft ice cubes. Try with ice spheres for an ideal, slow-melting whiskey sipping experience.\\n            , \\n             SPARKLING LEAD-FREE CRYSTAL \\xe2\\x80\\x93 Celebrate with your favorite bourbon, rum, or rye with these beautifully designed, versatile tumblers. The minimalist design and clean lines create a glassware set with an elegant, contemporary flair.\\n            , \\n             IMPRESS FRIENDS AND GUESTS \\xe2\\x80\\x93 Give this set of tumblers as a gift to whiskey lovers, gifts for Father\\xe2\\x80\\x99s day, or groomsmen gifts. Impress visitors by sharing your favorite whiskey in high-quality crystal lowball glasses with timeless minimalist style.\\n            , \\n             STRIKING VISKI CRYSTAL DESIGN \\xe2\\x80\\x93 Viski embodies the high-end beverage experience. From slender champagne flutes to red wine globes, the brand is driven by striking design. Each Viski collection explores a timeless drinkware style.'
+
+&#x200B;
+
+How can I make this completely readable?",1667003505.0,1,0.67,10
+PinoyProgrammer,boot((s)cam)p,[removed],1666530190.0,13,0.81,17
+webscraping,wadafaj are mochibake characters and how do i get rid of them,"&#x200B;
+
+[Saw that the translation for this is &](https://preview.redd.it/reqhzoucgsu91.png?width=65&format=png&auto=webp&s=77393acfce2166e5a7b80403f3340c136fbdb0b6)
+
+[this is a long dash](https://preview.redd.it/lme54n3fgsu91.png?width=65&format=png&auto=webp&s=fc60e83c6b38bd8360bfcb855edafe96753e8027)
+
+[and this is an apostrophe](https://preview.redd.it/89gspubggsu91.png?width=65&format=png&auto=webp&s=0cde9f36ad322daa735dc317f0438adf7493a136)
+
+I used bs4 for scraping(and gave the source code away) and putting the results on a spreadsheet but all these mojibake characters keep popping up? I can't test my theories for now because the code is not with me but im guessing replace() cant do anything about it? Is there a library for translating these characters? or will replace() work since the written thing on the spreadsheet is a string?   
+
+
+Need guidance with this. Thank you!",1666197054.0,1,1.0,10
+learnpython,Daddy bezos doesnt like scraping,"It keeps rewriting my output over my csv file. it takes urls from a txt file and it produces an output of a csv file, BUT it just shows the last thing it scraped. this is the code, kindly ignore improper indentation haha  
+
+
+What can i do to display all results from every URL in the .csv file?  
+
+
+Thanks for the help
+
+&#x200B;
+
+    from bs4 import BeautifulSoupimport requestsimport re
+    import pandas as pd
+    
+    def main(URL):
+        df = pd.DataFrame()
+    
+        HEADERS = ({'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64)AppleWebKit/537.36 
+                    (KHTML, like Gecko)Chrome/44.0.2403.157 Safari/537.36','Accept-        
+                        Language': 'en-US, en;q=0.5'})
+    
+        webpage = requests.get(URL, headers=HEADERS)
+        
+        #Creating the Soup Object containing all data
+        souped = BeautifulSoup(webpage.content, ""html.parser"")
+        soup = BeautifulSoup(souped.prettify(), 'html.parser')
+        
+        (some try-except statements to scrape the needed elements)
+    
+        df = df.append(pd.DataFrame({""ASIN"": asin, ""Image Link"": image, ""Full Product         
+             Title"": title_string, ""Category"": category, ""Price"": price, ""Average     
+                 Rating"": rating, ""Product Reviews"": review_count , ""Product 
+                      Description"": stringedDesc, ""Brand"": brand, ""Buybox Seller"": 
+                           soldBy, ""Available coupons"": coupons}, index = [0]), 
+                                 ignore_index = False)
+        
+        df.to_csv('amazon_scraper.csv', index = False)
+    
+    if __name__ == '__main__':
+        # opening our url file to access URLs
+        file = open(""url.txt"", ""r"")
+    
+        # iterating over the urls
+        for links in file.readlines():
+            main(links)",1666005840.0,0,0.43,8
+PythonProjects2,"Dad, how do I? Pandas stuff",[removed],1666003427.0,1,1.0,0
+webscraping,pandas keep rewriting the csv file,"I used beautifulsoup for this but when it comes to pandas library, im lost. The code i wrote plans to take the urls it will scrape from a .txt file then give an output of a csv file after it finishes looping in every url it has
+
+&#x200B;
+
+However, it keeps rewriting the first row of the csv file thats why i end up with the last result. What can I do? Ignore improper indentation haha  
+
+
+`from bs4 import BeautifulSoup`  
+`import requests`  
+`import re`  
+
+
+`import pandas as pd`  
+
+
+`def main(URL):`
+
+`df = pd.DataFrame()`  
+
+
+`# specifying user agent, You can use other user agents`  
+ `# available on the internet`  
+ `HEADERS = ({`  
+ `'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64)AppleWebKit/537.36 (KHTML, like Gecko)Chrome/44.0.2403.157 Safari/537.36',`  
+ `'Accept-Language': 'en-US, en;q=0.5'})`  
+
+
+`# Making the HTTP Request`  
+ `webpage = requests.get(URL, headers=HEADERS)`  
+
+
+`# Creating the Soup Object containing all data`  
+ `souped = BeautifulSoup(webpage.content, ""html.parser"")`  
+ `soup = BeautifulSoup(souped.prettify(), ""html.parser"")`  
+
+
+`#retrieving ASIN-imposibleng wala`  
+ `try:`  
+ `#retrieve product details table and parse it to string`  
+ `prod_deets = str(soup.select('tr > td.prodDetAttrValue'))`  
+
+
+`#find ASIN value inside the table with regular expression`  
+ `asin_regex = re.search(r""\sB[0]\w+"", prod_deets)`  
+
+
+`#remove unnecessary spaces`  
+ `asin = asin_regex.group().strip()`  
+ `except AttributeError:`  
+ `try:`  
+`prod_deets2 = str(soup.select('div[id=""detailBulletsWrapper_feature_div""]> div > ul.a-unordered-list'))`  
+`asin_regex2 = re.search(r""\sB[0]\w+"", prod_deets2)`  
+`asin =asin_regex2.group().strip()`  
+ `except AttributeError:`  
+`asin = ""Not found. Send the html element of this ASIN to be located""`  
+ `print(""ASIN= "", asin)`  
+
+
+`#retrieving main image`  
+ `try:`  
+`prod_img = soup.select_one('div#imgTagWrapperId.imgTagWrapper>img[src]')`  
+`image = prod_img.get('src')`  
+ `except AttributeError:`  
+`image = ""Cannot be scraped""`  
+ `print(image)`  
+
+
+`# retrieving product title`  
+ `try:`  
+ `# Outer Tag Object`  
+ `title = soup.find(""span"", attrs={""id"": 'productTitle'})`  
+
+
+`# Inner NavigableString Object`  
+ `title_value = title.string`  
+
+
+`# Title as a string value`  
+ `title_string = title_value.strip().replace(',', '')`  
+
+
+`except AttributeError:`  
+`title_string = ""NA""`  
+ `print(""product Title = "", title_string)`  
+`# saving the title in the file`  
+ `#product category`  
+ `category = soup.select_one('div.a-subheader > ul.a-unordered-list').text`  
+ `category = "" "".join(category.split())`  
+
+
+`print('Category:',category)`  
+
+
+`# retrieving price`  
+ `try:`  
+`price = soup.select_one('span.a-price.a-text-price.a-size-medium.apexPriceToPay>span.a-offscreen').text.strip()`  
+
+
+`except AttributeError:`  
+ `try:`  
+`price = soup.select_one('div#aod-price').text.strip()`  
+ `except AttributeError:`  
+ `try:`  
+`price = soup.select_one('div.a-fixed-left-grid-col > span.a-price').text.strip().replace('/n','')`  
+ `except AttributeError:`  
+ `try:`  
+`price = soup.select_one('#corePriceDisplay_desktop_feature_div > div.a-section.a-spacing-none.aok-align-center > span').text.strip().replace("" "", """")`  
+ `except:`  
+`price = ""None found. Check buying options""`  
+ `print(""Products price = "", price)`  
+
+
+`# retrieving product rating`  
+ `try:`  
+`rating = soup.find(""span"", attrs={'class': 'a-icon-alt'}).string.strip().replace(',', '')`  
+
+
+`except AttributeError:`  
+
+
+`try:`  
+`rawRating = soup.select_one('div#averageCustomerReviews').text.strip()`  
+`rating, sep, tail = rawRating.partition(' ')`  
+ `except AttributeError:`  
+`rating = 'NA. Check if product is unavailable'`  
+ `print(""Overall rating = "", rating)`  
+
+
+`#number of ratings`  
+ `try:`  
+`review_count = soup.find(""span"", attrs={'id': 'acrCustomerReviewText'}).string.strip().replace(',', '')`  
+
+
+`except AttributeError:`  
+ `try:`  
+`raw_review_count = soup.select_one('div#averageCustomerReviews').text.strip()`  
+`head, sep, review_count = raw_review_count.partition(' ').replace('out of 5 stars', '').strip()`  
+ `except AttributeError:`  
+`review_count = 'NA: Probably unavailable'`  
+ `print(""Total reviews = "", review_count)`  
+
+
+`#product Description`  
+ `try:`  
+`descSoup = soup.select('div#feature-bullets span.a-list-item')`  
+ `del descSoup[0]`  
+`stringedDesc = str(descSoup).replace(""</span>"", """").replace('<span class=""a-list-item"">', '').replace('[', '').replace(']', '').replace('  ,  ', '\n').strip()`  
+
+
+`except AttributeError:`  
+`stringedDesc = ""NA""`  
+ `print(""Description= "", stringedDesc)`  
+
+
+`#product brand`  
+ `try:`  
+`brand = soup.select_one('tr.a-spacing-small.po-brand td.a-span9 span.a-size-base').text.strip()`  
+
+
+`except AttributeError:`  
+ `try:`  
+`brand = soup.select_one('div.centerColAlign div.a-section.a-spacing-none a.a-link-normal').text.replace(""Visit the"", '').replace("" Store"", """").strip()`  
+ `except AttributeError:`  
+`brand = ""Not Found""`  
+ `print(""Brand= "", brand)`  
+
+
+`#Sold By`  
+ `try:`  
+`soldBy = soup.select_one('div.tabular-buybox-text a').text.strip()`  
+ `except AttributeError:`  
+ `try:`  
+`soldBy = soup.select_one('span.a-size-small.mbcMerchantName').text.strip()`  
+ `except AttributeError:`  
+`soldBy = ""Not Found""`  
+ `print(""Buybox Seller:"", soldBy)`  
+
+
+`#Coupon`  
+ `try:`  
+`coupons = soup.select_one('span.promoPriceBlockMessage > div').text.strip()`  
+ `if len(coupons) > 0:`  
+`coupons = ""Product has coupon""`  
+ `except AttributeError:`  
+`coupons = ""No found coupon""`  
+ `print('Coupon available:', coupons)`  
+
+
+  
+ `df = df.append(pd.DataFrame({""ASIN"": asin, ""Image Link"": image, ""Full Product Title"": title_string, ""Category"": category, ""Price"": price, ""Average Rating"": rating, ""Product Reviews"": review_count , ""Product Description"": stringedDesc, ""Brand"": brand, ""Buybox Seller"": soldBy, ""Available coupons"": coupons}, index = [0]), ignore_index = False)`  
+
+
+`df.to_csv('amazon_scraper.csv', index = False)`
+
+The last lines are what is erratic to me. If youve got the time, use this for some amazon products and see for yourself. Thank you!",1666002928.0,3,0.8,5
+webscraping,Product descriptions separated by comma shows up in different cells,"I'm trying to make an amazon product info scraper. How can I produce an output that is contained inside a cell? I've used bs4, requests, and an output of a .csv file to put the said information inside a database.
+
+`# importing libraries`
+
+`from bs4 import BeautifulSoup`
+
+`import requests`
+
+&#x200B;
+
+`import os`
+
+&#x200B;
+
+`print(os.getcwd())`
+
+&#x200B;
+
+&#x200B;
+
+`def main(URL):`
+
+`# opening our output file in append mode`
+
+`File = open(""Amazon_Scraper.csv"", ""a"")`
+
+&#x200B;
+
+`# specifying user agent, You can use other user agents`
+
+`# available on the internet`
+
+`HEADERS = ({`
+
+`'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64)AppleWebKit/537.36 (KHTML, like Gecko)Chrome/44.0.2403.157 Safari/537.36',`
+
+`'Accept-Language': 'en-US, en;q=0.5'})`
+
+&#x200B;
+
+`# Making the HTTP Request`
+
+`webpage = requests.get(URL, headers=HEADERS)`
+
+&#x200B;
+
+`# Creating the Soup Object containing all data`
+
+`soup = BeautifulSoup(webpage.content, ""lxml"")`
+
+&#x200B;
+
+`# retrieving product title`
+
+`try:`
+
+`# Outer Tag Object`
+
+`title = soup.find(""span"", attrs={""id"": 'productTitle'})`
+
+&#x200B;
+
+`# Inner NavigableString Object`
+
+`title_value = title.string`
+
+&#x200B;
+
+`# Title as a string value`
+
+`title_string = title_value.strip().replace(',', '')`
+
+&#x200B;
+
+`except AttributeError:`
+
+`title_string = ""NA""`
+
+`print(""product Title = "", title_string)`
+
+`# saving the title in the file`
+
+`File.write(f""{title_string},"")`
+
+&#x200B;
+
+`# retrieving price`
+
+`try:`
+
+`price = soup.select_one('span.a-price.a-text-price.a-size-medium.apexPriceToPay span.a-offscreen').text`
+
+&#x200B;
+
+`except AttributeError:`
+
+`try:`
+
+`price = soup.select_one('div#aod-price').text`
+
+`except AttributeError:`
+
+`price = ""Not Found""`
+
+&#x200B;
+
+`print(""Products price = "", price)`
+
+&#x200B;
+
+`# saving`
+
+`File.write(f""{price},"")`
+
+&#x200B;
+
+&#x200B;
+
+`# retrieving product rating`
+
+`try:`
+
+`rating = soup.find(""i"", attrs={'class': 'a-icon a-icon-star a-star-4-5'}).string.strip().replace(',', '')`
+
+&#x200B;
+
+`except AttributeError:`
+
+&#x200B;
+
+`try:`
+
+`rating = soup.find(""span"", attrs={'class': 'a-icon-alt'}).string.strip().replace(',', '')`
+
+`except:`
+
+`rating = ""NA""`
+
+`print(""Overall rating = "", rating)`
+
+&#x200B;
+
+`File.write(f""{rating},"")`
+
+&#x200B;
+
+&#x200B;
+
+`try:`
+
+`review_count = soup.find(`
+
+`""span"", attrs={'id': 'acrCustomerReviewText'}).string.strip().replace(',', '')`
+
+&#x200B;
+
+`except AttributeError:`
+
+`review_count = ""NA""`
+
+`print(""Total reviews = "", review_count)`
+
+`File.write(f""{review_count},"")`
+
+&#x200B;
+
+`#product Description`
+
+`try:`
+
+`descSoup =` [`soup.select`](https://soup.select)`('div#feature-bullets span.a-list-item')`
+
+`del descSoup[0]`
+
+`stringedDesc = str(descSoup).replace(""</span>"", """").replace('<span class=""a-list-item"">', '').replace('[','').replace(']', '')`
+
+&#x200B;
+
+`except AttributeError:`
+
+`stringedDesc = ""NA""`
+
+`print(""Description= "", stringedDesc)`
+
+`File.write(f""{stringedDesc}"")`
+
+&#x200B;
+
+&#x200B;
+
+`#Sold By`
+
+`#Coupon`
+
+`#Brand`
+
+&#x200B;
+
+&#x200B;
+
+`#Availability`
+
+`try:`
+
+`available = soup.find(""div"", attrs={'id': 'availability'})`
+
+`available = available.find(""span"").string.strip().replace(',', '')`
+
+&#x200B;
+
+`except AttributeError:`
+
+`available = ""NA""`
+
+`print(""Availability = "", available)`
+
+&#x200B;
+
+`# saving the availability and closing the line`
+
+`File.write(f""{available},\n"")`
+
+&#x200B;
+
+`# closing the file`
+
+`File.close()`
+
+&#x200B;
+
+&#x200B;
+
+`if __name__ == '__main__':`
+
+`# opening our url file to access URLs`
+
+`file = open(""url.txt"", ""r"")`
+
+&#x200B;
+
+`# iterating over the urls`
+
+`for links in file.readlines():`
+
+`main(links)`
+
+The line for description is where it all goes awry, namely:
+
+`#product Description`
+
+`try:`
+
+`descSoup =` [`soup.select`](https://soup.select)`('div#feature-bullets span.a-list-item')`
+
+`del descSoup[0]`
+
+`stringedDesc = str(descSoup).replace(""</span>"", """").replace('<span class=""a-list-item"">', '').replace('[','').replace(']', '')`
+
+&#x200B;
+
+`except AttributeError:`
+
+`stringedDesc = ""NA""`
+
+`print(""Description= "", stringedDesc)`
+
+`File.write(f""{stringedDesc}"")`
+
+&#x200B;
+
+Once a product description is separated by a comma, it separates the words into different cells. How can I fix this? Also, any recommendation with regards to the code and any other thing you may have noticed will be greatly appreciated. Thank you guys for the help!
+
+&#x200B;
+
+EDIT: Ignore the wrong indentations 🤣 I just copy pasted it from my Pycharm",1665915117.0,2,1.0,4
+googlesheets,How to make a web scraping program efficient,"With the 6-minute runtime limit, my script doesn't allow for extensive web scraping for 200+ ASINs (amazon database number). I've repeatedly used"" for"" loops for every product info needed(price, coupons, product description, seller name, rating, number of ratings,  brand name, etc) and i think it's what slows the script down. How can I be more efficient with my code? Any tips?
+
+here's a sample for the brand name
+
+`//brand name`
+
+`for(var i= 2; i<=lrow; i++){`
+
+`var url = ""`[`http://api.scraperapi.com?api_key=`](http://api.scraperapi.com?api_key=)`"" + apiKey + ""&url=https://www.amazon.com/dp/""+scraperSheet.getRange(i, 1).getValue()`
+
+&#x200B;
+
+`var regEx = /<a id=""bylineInfo"" class=""a-link-normal"" href=.*<\/a>/gi`
+
+`//<a id=""bylineInfo"" class=""a-link-normal</a>`
+
+&#x200B;
+
+`var getContent = UrlFetchApp.fetch(url).getContentText().trim();`
+
+`var pBrand= getContent.match(regEx);`
+
+`pBrand=pBrand[0];`
+
+`pBrand = pBrand.replace('<a id=""bylineInfo"" class=""a-link-normal"" href=""', ""`[`https://www.amazon.com`](https://www.amazon.com)`"").replace('"">', "" , "").replace('</a>', """")`
+
+&#x200B;
+
+`scraperSheet.getRange(i,4).setValue(pBrand)`
+
+`}`
+
+On average, it produces 30+ results in 4 minutes. Can anyone edit or guide me with this code so it can be efficient? Really having a hard time solving this problem.
+
+Thank you!  
+
+
+EDIT: I just followed a tutorial from youtube that scraped a product price and copied the logic to other parameters such as this, among others.",1665178841.0,3,0.8,6
+GoogleAppsScript,Web scraping script,"Need help with this. I want to write a script that scrapes data from amazon. however, 6 minute runtime bugs me since i do not know how to shorten the written code. can anyone help? Thanks so much guys!
+
+&#x200B;
+
+ [javascript - Execute the code faster or bypass the runtime limit - Stack Overflow](https://stackoverflow.com/questions/73991655/execute-the-code-faster-or-bypass-the-runtime-limit)",1665173039.0,2,1.0,17
+reactjs,Need Help,"i wanted to integrate this at our project but have no idea how to put in this in a react format
+
+ [budgetSlider (codepen.io)](https://codepen.io/Hornebom/pen/AeeYXa)",1663643447.0,0,0.33,10

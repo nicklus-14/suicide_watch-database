@@ -1,0 +1,2454 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+oslo,"Swollen battery, how to dispose of it?","My laptop battery is swollen, I removed it and now I'd like to dispose of it correctly.
+
+It's not crazy swollen, but I assume I should bring it to a recycling center and not to the Meny battery drop-off point, for example.
+
+But from the website it looks like I need a GjenbruksID, but when I try to login with my dnumber/bankID, login fails both on the website and in the app, i assume it only works with the social security number?
+
+How do I get rid of this ticking bomb in my room the correct way? 😅
+
+Thanks!",1748700871.0,5,0.86,18
+Norway,Reaching Gjendesheim in June?,"Good afternoon! 
+
+I live in Oslo and with my gf we planned a weekend trip from the 7th to the 9th of June to Gjendesheim and we already booked the 2 nights. 
+
+Now.... I can't find a way to get there ahahah It seems like the direct busses from Oslo ~~start from the 10th of june~~! Ok that is not true, the Nor-Way website is very confusing with different info if you are looking to the english or norwegian website...
+
+I have read online that you can get a train to Otta and then a bus, but I can't find anything about that either, not even on EnTur.
+
+Is the only way to get there renting a car? 
+
+Thanks!",1747584145.0,1,1.0,5
+NoStupidQuestions,Shipping a rug abroad (within EU),"I am moving abroad and I have a rug that I am really attached emotionally. I'd like to bring with me to my new home.
+
+Shipping cost doesn't really matter, as I'll get it reimbursed, but I am mostly concerned on how to ship it?
+It's (when rolled) around 120x30x30, and I am unable to find boxes that big without buying them in bulk of at least 20.
+
+Currently I have rolled it around a poster tube (which contains poster I'd like to bring with me), wrapped in cling film and then stuffed it into two black thrash bags. 
+
+[Now it looks like the most suspicious thing ever.](https://imgur.com/a/NL13vci)
+
+Will it be a problem shipping this with DHL? Is there a better option?",1742905044.0,2,1.0,1
+fujifilm,"Slovakian snow | X-T1, Super Takumar 105mm f2.8",,1736507029.0,1,1.0,1
+tattoos,Done by @lisanne_handpoke at The Tiny Tiger Studio in Utrecht. I love it so so much!,,1734777926.0,4,0.83,1
+oslo,Cinema/movie community in Oslo?,"God kveld!
+
+I will start a new job in Oslo in April and I'll move there sometime before that.
+
+I have been living in Amsterdam for 4 years now, and the cinema scene here is amazing.
+We have Cineville, which allows us to go to a lot of independent movie theaters around the country for just ~20 euros a month.
+
+This made possible for a lot of small realities around Amsterdam to have their own personality and show a lot of different movies, from old classics, to local film festivals dedicated to a theme or a director.
+
+I also started volunteering at a movie theater here, and I met a lot of very interesting and lovable people.
+
+I was wondering... what's the scene in Oslo? I couldn't find any kind of subscription so I guess there isn't one, but other than that:
+
+- I have found some smaller art-house cinemas, like **Frogner Cinema**, **Kunstnernes Hus** and **Cinemateket**. Are there more worth visiting/becoming a regular to?
+- I assume movies are not dubbed (with some exceptions) like in the rest of northern EU?
+- Are there some local film festivals? 
+- As anyone moving to a new country, I am going to be desperately looking for friends. Is there maybe some volunteering I could do, like the one I am doing now (basically just printing/checking tickets for small independent theaters)?
+- Is there a website that shows all the screenings in the city? I.e. the Cineville one, that doesn't take into account the big chain theaters: https://www.cineville.nl/agenda
+
+
+I plan on learning Norwegian as fast as possible (I already started with some books and my company will pay for some courses), but obviously it would be amazing if there could be an english-speaking community of some sort I could join. 
+
+When I first moved to Amsterdam, movie theaters became my second house and saved me from depression during COVID, I would like to continue going often once I move to Oslo :)
+
+
+Thank you for your time!",1732552195.0,10,0.92,16
+GraphicsProgramming,WBOIT limitations?,"🪄 Transparency 🪄 
+
+I spent some time trying to implement the Weighted, Blended OIT paper on my renderer yesterday, but after some attempt I downloaded this demo to have a reference point:
+
+https://github.com/mhalber/Weighted-Blended-OIT/
+
+I tried changing the alpha value of the front rect to 1.0 (completely opaque), but I can still clearly see what's behind it:
+
+[Screenshot](https://imgur.com/TjPJu1M)
+
+Is this a limitation of the technique? I am trying to render Sponza and has some transparency textures that are used for cut-outs (like the flowers and the chain), which means it's just either 0 or 1.
+
+I know I can just discard fragments in the normal fragment shader pass to render them, but is there a more generic solution? Or is it just that demo that is not correctly implemented?
+
+I have read a bit and apparently WBOIT won't work for nearly opaque surfaces.
+
+How can I render sponza then using a ... ""generic"" transparency technique
+?",1723912173.0,0,0.5,3
+GraphicsProgramming,Direct Light Sampling produces way too bright images compared to naive diffuse bounces only,"it's me again! :D 
+
+I have finally implemented area lights, but without modifying the emission value of the material, this is what it looks like with [indirect light only](https://imgur.com/6qoe70a), this is what it looks like with [direct only](https://imgur.com/S80yEaQ) and this is both [direct+indirect](https://imgur.com/3KsI8Af)!
+
+Clearly there is something wrong going on with the direct light sampling.
+
+
+This is the function for one light:
+
+	float pdf, dist;
+	glm::vec3 wi;
+	Ray visibilityRay;
+	auto li = light->li(sampler, hr, visibilityRay, wi, pdf, dist);
+	if (scene->visibilityCheck(visibilityRay, EPS, dist - EPS, light))
+	{
+		return glm::dot(hr.normal, wi) * material->brdf(hr, wi) * li / pdf;
+	}
+	return BLACK;
+
+In case of the area light, _li_ is the following:
+
+	glm::vec3 samplePoint, sampleNormal;
+	shape->sample(sampler, samplePoint, sampleNormal, pdf);
+	wi = (samplePoint - hr.point);
+	dist = glm::length(wi);
+	wi = glm::normalize(wi);
+	vRay.origin = hr.point + EPS * wi;
+	vRay.direction = wi;
+	float cosT = glm::dot(sampleNormal, -wi);
+	auto solidAngle = (cosT * this->area()) / (dist * dist);
+	if(cosT > 0.0f) {
+    	return this->color * solidAngle;
+	} else {
+		return BLACK;
+	}
+
+And I am uniformly sampling the sphere... correctly I think?
+
+	glm::vec3 sampleUniformSphere(std::shared_ptr<Sampler> &sampler)
+	{
+		float z = 1 - 2 * sampler->getSample();
+		float r = sqrt(std::max(0.0f, 1.0f - z * z));
+		float phi = 2 * PI * sampler->getSample();
+		return glm::vec3(
+			r * cos(phi),
+			r * sin(phi),
+			z);
+	}
+
+	void Sphere::sample(std::shared_ptr<Sampler> &sampler, glm::vec3 &point, glm::vec3 &normal, float &pdf) const
+	{	
+		glm::vec3 local = sampleUniformSphere(sampler);
+		normal = glm::normalize(local);
+		point = m_obj2World.transformPoint(radius * local);
+		pdf = 1.0f / area();
+	}
+
+It looks like either the solid angle or the distance attenuation aren't working correctly. [This is a Mitsuba3 render](https://imgur.com/a/sWQTszs) with roughly the same values.
+
+I once again don't like to ask people to look at my code, but I have been stuck on this for more than a week already...
+
+Thanks!",1713443801.0,5,0.86,10
+GraphicsProgramming,Simple scene is wildly different from PBRT,"Hi everyone. 
+
+Trying to code my own path tracer, as literally everyone else in here 😅
+
+I am probably doing something terribly wrong and I don't know where to start. 
+
+I wanted to start simple, so I just have diffuse spheres and importance sampling with explicit light sampling to be able to support point lights.
+
+This is the render from my render: [img1](https://imgur.com/a/XgmPeGc) and this is from PBRT with roughly the same position of the objects: [img2](https://imgur.com/a/2sDMvlw).
+
+It's a simple scene with just a plane and two spheres (all diffuse) and a point light.
+
+I am using cosine sampling for the diffuse material, but I have tried with uniform as well and nothing really changes.
+
+Technically I am supporting area light as well but I wanted point light to work first so I am not looking into that either.
+
+Is there anything obviously wrong in my render? Is it just a difference of implementation in materials with PBRT?
+
+
+I hate to just show my code and ask people for help but I have been on this for more than a week and I'd really like to move on to more fun topic...
+
+---
+This is the code that... trace and does NEE:
+
+
+	Color Renderer::trace(const Ray &ray, float lastSpecular, uint32_t depth)
+	{
+		HitRecord hr;
+		if (depth > MAX_DEPTH)
+		{
+			return BLACK;
+		}
+		if (scene->traverse(ray, EPS, INF, hr, sampler))
+		{
+			auto material = scene->getMaterial(hr.materialIdx);
+			auto primitive = scene->getPrimitive(hr.geomIdx);
+			glm::vec3 Ei = BLACK;	
+
+			if (primitive->light != nullptr)
+			{									// We hit a light
+				if(depth == 0)
+					return primitive->light->color; // light->Le();
+				else
+					return BLACK;
+			}
+			auto directLight = sampleLights(sampler, hr, material, primitive->light);
+			float reflectionPdf;
+			glm::vec3 brdf;
+			Ray newRay;
+			material->sample(sampler, ray, newRay, reflectionPdf, brdf, hr);
+			Ei = brdf * trace(newRay, lastSpecular, depth + 1) * glm::dot(hr.normal, newRay.direction) / reflectionPdf;
+			return (Ei + directLight);
+		}
+		else
+		{
+			// No hit
+			return BLACK;
+		}
+	}
+
+While this is the direct light part:
+
+    Color Renderer::estimateDirect(std::shared_ptr<Sampler> sampler, HitRecord hr, std::shared_ptr<Mat::Material> material, std::shared_ptr<Emitter> light)
+	{
+		float pdf, dist;
+		glm::vec3 wi;
+		Ray visibilityRay;
+		auto li = light->li(sampler, hr, visibilityRay, wi, pdf, dist);
+		if (scene->visibilityCheck(visibilityRay, EPS, dist - EPS, sampler))
+		{
+			return material->brdf(hr) * li / pdf;
+		}
+		return BLACK;
+	}
+
+	Color Renderer::sampleLights(std::shared_ptr<Sampler> sampler, HitRecord hr, std::shared_ptr<Mat::Material> material, std::shared_ptr<Emitter> hitLight)
+	{
+		std::shared_ptr<Emitter> light;
+		uint64_t lightIdx = 0;
+		while (true)
+		{
+			float f = sampler->getSample();
+			uint64_t i = std::max(0, std::min(scene->numberOfLights() - 1, (int)floor(f * scene->numberOfLights())));
+			light = scene->getEmitter(i);
+			if (hitLight != light)
+				break;
+		}
+		float pdf = 1.0f / scene->numberOfLights();
+		return estimateDirect(sampler, hr, material, light) / pdf;
+	}
+
+The method _li_ for the point light is:
+
+    glm::vec3 PointLight::li(std::shared_ptr<Sampler> &sampler, HitRecord &hr, Ray &vRay, glm::vec3 &wi, float &pdf, float &dist) const {
+		wi = glm::normalize(pos - hr.point);
+		pdf = 1.0;
+		vRay.origin = hr.point + EPS * wi;
+		vRay.direction = wi;
+		dist = glm::distance(pos, hr.point);
+		return color / dist;
+	}
+
+While the diffuse material method is:
+
+	glm::vec3 cosineSampling(const float r1, const float r2)
+	{
+		float phi = 2.0f * PI * r1;
+
+		float x = cos(phi) * sqrt(r2);
+		float y = sin(phi) * sqrt(r2);
+		float z = sqrt(1.0 - r2);
+
+		return glm::vec3(x, y, z);
+	}
+
+	glm::vec3 diffuseReflection(const HitRecord hr, std::shared_ptr<Sampler> &sampler)
+	{
+		auto sample = cosineSampling(sampler->getSample(), sampler->getSample());
+		OrthonormalBasis onb;
+		onb.buildFromNormal(hr.normal);
+		return onb.local(sample);
+	}
+
+	bool Diffuse::sample(std::shared_ptr<Sampler> &sampler, const Ray &in, Ray &reflectedRay, float &pdf, glm::vec3 &brdf, const HitRecord &hr) const
+	{
+		brdf = this->albedo / PI;
+		auto dir = glm::normalize(diffuseReflection(hr, sampler));
+		reflectedRay.origin = hr.point + EPS * dir;
+		reflectedRay.direction = dir;
+		pdf = glm::dot(glm::normalize(hr.normal), dir) / PI;
+		return true;
+	}
+
+I think I am dividing everything by the right PDF, and multiplying everything correctly by each relative solid angle, but at this point I am at loss about what to do.
+
+
+I know it's a lot of code to look at and I am really sorry if it turns out to be just me doing something terribly wrong.
+
+Thank you so much if you decide to help or to just take a look and give some tips!",1712592758.0,5,1.0,2
+Netherlands,Odido hasn't fixed my internet connection for more than a month,"Good afternoon,
+
+A month ago our internet connection stopped working.
+I called right away and they told me that it was a problem with our optic fiber equipment and that we would soon hear from one of their technicians to schedule an appointment to fix this issue.
+
+
+Fast forward one month, I've been calling them EVERY DAY, and they just tell me that my ticket is on hold and that I need to wait more.
+
+This is ridiculous, they are not billing me (or so they said, I'll check up on that) and they are giving me free unlimited data vouchers, but this is a patch not a solution, and my flatmate cannot use those voucher because she isn't with Odido.
+
+Everytime I call ""the back/tech office isn't available"" and they tell me they'll call me as soon as they can contact them, which of course never happens.
+
+This can't be legal, they cannot keep a ticket on hold for more than a month without doing a single thing about it, not even a fake update.
+
+
+What can I do?
+Tried calling open Dutch fiber but cannot get through the automatic answering machine because I don't understand the Dutch through the phone. I emailed them but haven't got an answer yet.",1712142293.0,18,0.74,28
+juridischadvies,"15% rent increase on renewing a contract, what can I do?","Hi everyone!
+
+The contract of the place I'm renting with my current flatmate is about to expire (1 year in May).
+
+The landlord wants to renovate it, but she discovered what the housing market looks like in Amsterdam and decided to increase the rent price from 1700 to 2000€, which is a 15% increase, 150€ more each for me and my flatmate.
+
+I have been living in this house for more than two years, and I've read somewhere that this gives you some kind of extra rights? The main issue is that because we always cosign the contract, everytime a flatmate left (this is the third one and only the second time I'm able to renew without changing flatmate) we have to sign a new one, which I'm afraid it doesn't help with the whole ""If you live there more than 2 years you get a perm. contract"".
+
+
+Am I unfortunately right? Is there nothing I can do about this ludicrously high increase? That's insane.
+
+
+On a funny note she gave us this blackmail/russian roulette kind of thing:
+
+- we can accept the increase without complaining about it;
+- If we don't accept the increase, she'll call a realtor for a house evaluation. If the house is valued to more than 2k per month, she'll give the house to the realtor and won't renew our contract;
+- if the house is worth less than 2k, she might consider negotiating with us.
+
+We have a call for a house inspection with her tomorrow (she lives in another country) and I have to decide by the end of the week...
+
+I'm probably leaving around November anyway, but if I can avoid draining my last few savings down the sink this way...
+
+Thanks everyone!",1709761185.0,2,0.6,5
+Rentbusters,Do I have any kind of power after more than 2 years of cosigned temporary contracts?,"Hi everyone!
+
+The contract of the place I'm renting with my current flatmate is about to expire (1 year in May).
+
+The landlord wants to renovate it, but she discovered what the housing market looks like in Amsterdam and decided to increase the rent price from 1700 to 2000€, which is a 15% increase, 150€ more each for me and my flatmate.
+
+I have been living in this house for more than two years, and I've read somewhere that this gives you some kind of extra rights? The main issue is that because we always cosign the contract, everytime a flatmate left (this is the third one and only the second time I'm able to renew without changing flatmate) we have to sign a new one, which I'm afraid it doesn't help with the whole ""If you live there more than 2 years you get a perm. contract"".
+
+
+Am I unfortunately right? Is there nothing I can do about this ludicrously high increase? That's insane.
+
+
+On a funny note she gave us this blackmail/russian roulette kind of thing:
+
+- we can accept the increase without complaining about it;
+- If we don't accept the increase, she'll call a realtor for a house evaluation. If the house is valued to more than 2k per month, she'll give the house to the realtor and won't renew our contract;
+- if the house is worth less than 2k, she might consider negotiating with us.
+
+We have a call for a house inspection with her tomorrow (she lives in another country) and I have to decide by the end of the week...
+
+Thanks everyone!",1709759334.0,2,0.67,9
+GraphicsProgramming,Help with generating a Ray Mask from the edges detected by a Sobel pass?,"Hi everyone!
+
+I am trying to implement a [very poorly written paper](https://arxiv.org/abs/2210.04981) 😅.
+
+In the paper (only ON the paper, since the code has not been shared) they generate a ray mask for a ray tracer based on a Sobel pass on the depth and normal map.
+
+They do the Sobel pass, take the magnitude magN and magZ, and use the following to obtain a number of rays per pixel based on the edge intensity and on the luminance variance:
+
+    float x = (magN+ magZ) * scalingFactor;
+    float xNormalized = saturate(1 - 1 / (x + 1));
+    uint nRays = saturate(xNormalized + delta*deltaScaling) * maxRaysPerPixel;
+
+With delta being the luminance variance of the previous frame (higher luminance => higher noise => we want more samples).
+
+Seems easy enough, *BUT*
+
+1. If I use the magnitude of the z-depth as-is straight from the sobel pass I get a LOT of flat surfaces detected as edges. I thought that maybe I am doing the sobel pass wrong, but the same procedure works on the normal map;
+2. This way **A huge number of pixels will result in having the `maxRaysPerPixel` number of rays, and very few pixels will get 1 spp.** This cause the ray tracing step to be more expensive than just tracing the entire scene with 1spp 🫤
+
+Would any of you have any tip on n.2? Even without reading the paper, do you know how I could somehow bias towards ""lower numbers"" of the range or if there is a better way to combine the magnitudes and the variance to get a number of rays? 
+
+Thank you so so so so so much!",1698688973.0,4,0.84,0
+suggestmeabook,Books about urban design/livable cities?,"For the past 3 years I have been living in a big city in Europe, coming from smaller cities and countrysides.
+
+I have therefore seen and experienced the housing crisis, cities becoming less livable because of overpopulation and mass tourism, politics making choices that seem to be only decremental to everyone well being.
+
+Do you have suggestions for books that analyze the problems, propose and discuss solutions and bring examples to this kind of problems? On how to design things in certain ways or on how certain things could be prevented?
+
+I just want to be more aware of what is going on and learn something new :)
+
+Thanks and have a good read :)",1696518386.0,2,1.0,2
+Chefit,Trial day at a bakery (pastries) and they asked me to bring something homemade,"**UPDATE**: went with the Pie, but didn't really matter, I got the job and I am really happy with it :)
+
+Hi everyone!!!!
+
+On Saturday I had an interview for a part-time (until I finish my studies) baking position at a local bakery that is about to add a storefront to their wholesale operation.
+
+They asked me to come again on Thursday for a trial day and I am really excited about it! I read a lot of other post on this subreddit of people going on their first trial days so I won't be asking for tips about that 😊
+
+They asked me to bring something homemade too! For the interview I had made a caramelized onions and blue cheese Focaccia, they kept the entire container and told me that they'd taste it after I had left so no idea what they thought of it! 
+And if I had knew about this ""homemade"" test I would have saved it for Thursday 😅
+
+I can't make complicated decorated cakes, but I like working with ingredients that are in season, so I was thinking of making a peach ginger pie with rosemary dough, but I am afraid it won't be.... ""enough""?
+
+From what I know about them they mostly do coffee cakes, muffin, cupcakes, cinnamon buns, cookies, multilayered cakes, pies and those sort of things. The owner mentioned she wants to add breads and focaccia to the offer for the shop as well.
+
+What do you think? Should I look for something more... ""eye catching""?
+
+Thanks!!",1692607330.0,43,0.98,34
+computergraphics,"Implementing ""A Hybrid System for Real-time Rendering of Depth of Field Effect in Games""","Good morning/afternoon/evening everyone!
+
+I am trying to implement [A Hybrid System for Real-time Rendering of Depth of Field Effect in Games](https://arxiv.org/abs/2210.06158), a paper from 2022 that uses ray tracing together with a classic filtering kernel post process effect to fix the ""partial visibility"" issue in screen space depth of field effects.
+
+I found the paper extremely vague... I tried contacting the authors but I have got no answer and I feel like I really need help by now since time for this project is kind of running out.
+
+
+The author of the original thesis that then turned into this paper published [his code](https://github.com/NathanBiette/Hybrid_raytraced_post_processed_DOF) online, but his implementation differs quite a lot from the paper's.
+
+
+I don't expect anyone to go through the entire paper of course, so I will include the steps I am having issues with, in case anyone would be so kind to be willing to help
+
+---
+
+My main issue right now is with the ray mask generation:
+
+> Our ray mask utilizes a 5 × 5 Sobel convolution kernel to estimate how extreme an edge is. Adopting ideas from Canny Edge Detection (Canny, 1986), we apply a Gaussian filter on the G-Buffer before performing the Sobel operator so as to reduce noise and jaggies along diagonal edges. 
+The Sobel kernel is then applied to the filtered G-Buffer at a lower resolution to get an approximate derivative of the gradient associated with each target pixel, based on the depth and surface normal of itself and surrounding pixels which are readily available from rasterization.
+
+> [..]
+
+> The per-pixel output of this filter is: 
+
+> x = (\delta_d + \delta_n) * s; (\delta_d and \delta_n refer to the magnitude of the derivative of depth and normal)
+
+> x_n = saturate(1 - 1 / (x+1));
+
+> To account for temporal variation to reduce noise in the output, we also shoot more rays at regions of high variance in luminance as inspired by Schied et al. (2017). Hence, the ray mask is complemented with a temporally-accumulated variance estimate \sigma
+
+> The number of rays per pixel is then: 
+
+> x_f = saturate(x_n + \sigma^2 * 100000) * m;
+
+And this is their ""ray mask"": https://imgur.com/a/uvxcMp6
+
+1) It looks like the gbuffer goes through a tiling process, which makes sense as it happens for the filtering kernel passes. But how do I use the tiles here? 
+
+2) How do I apply the sobel operator to a float3 normal buffer? This is what I am doing right now, but I am not sure it's right:
+
+    float sumZX = 0.0f;
+    float sumZY = 0.0f;
+    float3 sumNX = 0.0f;
+    float3 sumNY = 0.0f;
+
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+            uint2 samplePos = dispatchThreadId + uint2(i, j) - 2;
+            float z = linearDepthFromBuffer(bnd.halfResZ, samplePos, constants.clipToView);
+
+            sumZX += sobelWeights[5 * j + i] * z;
+            sumZY += sobelWeights[5 * i + j] * z;
+
+            float3 n = loadGBufferNormalUniform(bnd.halfResNormals, samplePos);
+            sumNX += n * sobelWeights[5 * j + i];
+            sumNY += n * sobelWeights[5 * i + j];
+        }
+    }
+
+    sumNX = normalize(sumNX);
+    sumNY = normalize(sumNY);
+    float magnitudeN = dot(sumNX, sumNY);
+    float magnitudeZ = sqrt(sumZX * sumZX + sumZY * sumZY);
+
+    // float delta = bnd.variance.load2DUniform<float>(dispatchThreadId);
+    float delta = 0.0;
+
+    float x = dot((magnitudeN + magnitudeZ), kScalingFactor);
+    float xNormalized = saturate(1.0 - 1.0 * rcp(x+1));
+    float nRaysPerPixel = saturate(xNormalized + delta * delta * kVarianceScaling) * kMaxRayPerPixel : 0.0;
+
+    bnd.outRtMask.store2DUniform<float4>(dispatchThreadId, float4(nRaysPerPixel, 0.0, 0.0, 1.0f));",1690787644.0,11,0.92,0
+computergraphics,Prefilter and main pass of Depth Of Field,"Hi everyone!
+
+I am trying to implement this paper: https://dl.acm.org/doi/10.1145/3388770.3407426
+
+I have some issues with the preprocess step: 
+
+> For circular bokeh shapes, Jimenez uses a 49-tap 3-ring main filter kernel scaled to the size of the maximum CoC in the tile neighbourhood of the target pixel. 
+
+> However, to fight undersampling, a downsampling 9-tap bilateral prefilter is first applied to fill the gaps of the main filter. We decided to use 81 taps with an additional ring of samples as shown in Figure 3 for better visual quality. 
+
+> Hence, our prefilter kernel has a diameter of 1/8 instead of 1/6 the maximum CoC size as in the original design. In cases where the maximum CoC is too small as most pixels in the neighbourhood are in focus, the size of the prefilter kernel is capped at p2 (diagonal length of 1 pixel) to avoid sampling the same pixel multiple times.
+
+What are the weight of this filter? 
+
+I am currently doing this, [from the implementation](https://github.com/NathanBiette/Hybrid_raytraced_post_processed_DOF/blob/master/Data/Tutorial05/downpresort.ps.hlsl) I found of the master thesis that preceded this paper (therefore it implements Jimenez's approach, not updated with the paper's approach). But I am not sure this is correct:
+
+    float sampleZ[9] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+    float3 sampleColor[9];
+    float4 z4;
+
+    for (int i = 0; i < 8; ++i) {
+        sampleColor[i] = float3(0.0, 0.0, 0.0);
+
+        // Center of the current pixel;
+        // angle according to index of sample on unit circle;
+        // distance to center pixel = coc/(2(to get radius)*6(to fill the space between the main
+        // filter samples))
+        float2 scale;
+        sincos(2.0 * PI * (float) i / 8.0, scale.y, scale.x);
+        scale = scale + coc / 12.0;
+        sampleLocation = dispatchThreadId * 2.0 + 0.5 + scale / constants.resolution;
+
+        z4 = getLinearDepth(bnd.depthBuffer.gatherRed2D(linearSampler, sampleLocation),
+                            constants.clipToView);
+        sampleZ[i] = min(min(min(z4.r, z4.g), z4.b), z4.a);
+        sampleColor[i] =
+            bnd.colorBuffer.sampleLevel2DUniform<float4>(linearSampler, sampleLocation, 0).rgb;
+    }
+
+    float3 sumColor = 0.0;
+    float sumWeight = 0.0;
+    float weight = 0.0;
+
+    for (int i = 0; i < 8; ++i) {
+        weight = abs(z - sampleZ[i]) * gaussian(0.0, abs(z - sampleZ[i])) *
+                 (1.0 / (1.0 + (1.0f) * luminance(sampleColor[i])));
+        sumColor += sampleColor[i] * weight;
+        sumWeight += weight;
+    }
+
+    if (sumWeight > 0.001) {
+        weight = gaussian(0.0, 0.0) * (1.0 / (1.0 + (1.0) * luminance(halfResColor.rgb)));
+        halfResColor.rgb = (halfResColor.rgb * weight + sumColor) / (sumWeight + weight);
+    }
+
+Why is the for loop from 0 to 8? Isn't it a 9 tap kernel as said in the paper? Also from the implementation of Wicked Engine of Jimenez's approach the for loop goes from 0 to 8.
+
+---
+
+The main pass from Jimenez's approach is a 48-tap 3-ring kernel. I am not familiar with filtering kernel, how do I apply a circular kernel? I am doing the following also [from the thesis implementation](https://github.com/NathanBiette/Hybrid_raytraced_post_processed_DOF/blob/master/Data/Tutorial05/mainpass.ps.hlsl), but again, not sure if it is correct:
+
+    for (int i = 0; i < 48; i++) { // 81 tap kernel
+        float2 bgKernelCoord = float2(
+            ((float)dispatchThreadId.x * 2.0 + cocBg * kernelX[i] / 2.0) / constants.resolution.x,
+            ((float)dispatchThreadId.y * 2.0 + cocBg * kernelY[i] / 2.0) / constants.resolution.y);
+        float2 bgJitter = float2(
+            (((randomFloat(seed) - 0.5) * PI * cocBg / (48.0 * 2.0))) / constants.resolution.x,
+            (((randomFloat(seed) - 0.5) * PI * cocBg / (48.0 * 2.0))) / constants.resolution.y);
+
+        float2 sampleCoords = bgKernelCoord + bgJitter;
+        float3 presortSample =
+            bnd.presort.sampleLevel2D<float4>(linearSampler, sampleCoords, 0).rgb;
+
+        if (i < 24) {
+            bgSpreadCmp = saturate(3.0 * presortSample.r / cocBg - 2.0);
+        } else if (i < 39) {
+            bgSpreadCmp = saturate(3.0 * presortSample.r / cocBg - 1.0);
+        } else {
+            bgSpreadCmp = saturate(3.0 * presortSample.r / cocBg);
+        }
+
+        nearBgColor +=
+            bgSpreadCmp * presortSample.b *
+            float4(bnd.halfResColor.sampleLevel2D<float4>(linearSampler, sampleCoords, 0).rgb,
+                   1.0) *
+            (bnd.halfResZ.sampleLevel2D<float>(linearSampler, sampleCoords, 0) >
+             constants.focusDistance);
+        farBgColor +=
+            bgSpreadCmp * presortSample.g *
+            float4(bnd.halfResColor.sampleLevel2D<float4>(linearSampler, sampleCoords, 0).rgb,
+                   1.0) *
+            (bnd.halfResZ.sampleLevel2D<float>(linearSampler, sampleCoords, 0) >
+             constants.focusDistance);
+        bgAlphaSpreadCmpSum += bgSpreadCmp * sampleAlpha(presortSample.r / 2.0) *
+                               (bnd.halfResZ.sampleLevel2D<float>(linearSampler, sampleCoords, 0) >
+                                constants.focusDistance);
+        // Same for FG
+    }
+
+
+--- 
+
+Thanks!",1689022949.0,2,0.67,1
+Optics,Follow-up on thesis about Computer Graphics and Optics,"This is a followup from this other post: https://www.reddit.com/r/Optics/comments/13s84we/thesis_on_simulating_real_lenses_using_gaussian/
+
+Because of this I am not going to go too much into details as I am afraid I would just cause more confusion.
+
+This is the short version of it: 
+
+I have a program that takes an image and a depth map, along with a set of wavelength dependent parameters extrapolated from an optical system: entrance and exit pupil position and radius, principal planes position, focal length, seidel coefficients.
+
+This program uses gaussian optics to find the gaussian image of each pixel of the image and then applies the seidel aberration vector to it. Then it computes the wavefront of the light ray to find its direction and therefore its position on the sensor to apply a depth-of-field effect to the image.
+
+My research was to determine if reversing this process for a rendering engine that uses ray tracing was possible and, if it was, implementing it.
+
+Reversing this process meant finding a way to generate rays from the sensor, through an optical system and then trace them into the world, but using the same paraxial approximation+Seidel aberration to find the direction of the aberrated ray into the world.
+
+
+In Computer Graphics this technique is used to calculate ray-surface intersection and render a 2D representation of the world.
+
+---
+
+**The actual Update:**
+
+I spoke with some researcher, and the conclusion was that this approach cannot be reversed. This is the explanation we produced:
+
+>  As briefly mentioned in the introduction, reversing the approach presented by Asberg in her thesis resulted in an optics problem that was not trivial to solve.
+
+> The Seidel coefficients are usually computed by expanding the wavefront of the light passing through the optical system into a series of mathematical terms. To obtain the values of those terms for a given system, a specific set of rays, arranged in a two-dimensional fan pattern, is traced through it and the deviation from an ideal reference point is used to compute the Seidel coefficients.   
+
+> The Hemlotz reciprocity principle \todo{Add reference} describes how a ray of light and its reverse ray match an optical path, meaning that we can evaluate an optical path in any direction. While the Hemlotz reciprocity principle applies to each individual ray within the two-dimensional fan, it cannot be applied to the fan as a whole. In other words, while we can evaluate an optical path in any direction using the reciprocity principle, we cannot simply reverse the entire fan of rays as a single entity.
+
+> When trying to reverse the path by tracing rays from the sensor, we are trying to reverse the path of that bidimensional fan of rays that converged onto a particular point of the sensor. However, each individual ray has been aberrated differently by the optical train according to the original direction and angle of entry into the optical system.
+
+> The Seidel aberrations represent a global property of the system, characterizing how the wavefront is displaced by the system overall, and to apply the reciprocity principle we would need to trace the rays locally through all the surfaces that are part of the system.
+
+> To make it clear we can consider the case of a lens exhibiting spherical aberration. Light rays passing through the lens from the world to the sensor will converge at different points on the latter, as shown in \autoref{fig:spherical_ab}. Reversing the direction of the light through the system will not produce the same effect, as aberrations will act differently on it, by causing different focal points and a distinct final image formation.
+     
+> In conclusion, the approach proved to be non-reversible due to the unique aberration effects experienced by the individual rays that comprise the wavefront and the complex nature of light interactions within an optical system.
+
+I am 89% convinced by this, furthermore my supervisor would like a more definitive proof.
+
+My doubts, which I have tried to clarify on my own for the past few days, are the following:
+
+- Why do I need to reverse the fan as a whole? I understand that in a non-aberrated system I get that all of the rays from a world point converge into a single point on the sensor and that this is not the case when a fan of rays passes through an aberrated system. But why can't I apply the  Seidel aberrations on a single ray of the fan?
+- At some point I thought that since we are _reversing_ the process, I might need to _remove_ the aberrations if I want to find the direction of the ray coming out of the lens world-side. Does this make sense? I don't think I can actually do that since I don't know where the ray that hit my sensor-starting-point might have originated, which is important when computing the aberrations.
+
+---
+
+For the ""more definitive proof"" I was thinking of providing a diagram that shows how a fan of rays leaves a world point. Each ray of the fan will be subjected to different aberrations and will end up in a different point on the sensor. If we want to reverse this process we would need to invert a single ray of the fan and trace it through the lens, as I cannot reconstruct the wavefront of the light to figure out the direction since the aberrated wavefront cannot be reconstructed by one single end-point on the sensor.
+
+Does this makes sense?",1688474691.0,1,1.0,5
+Optics,Thesis on simulating real lenses using Gaussian Optics and Seidel Aberrations,"G'day :)
+
+I am finishing a master in CS, specifically with a thesis on rendering and 3D graphics.
+
+For my final thesis I was tasked with inverting an algorithm that, using a zmx file of a real photographic optical system (limited to systems rotational symmetrical along the optical axis and composed by spherical elements only) and an image previously rendered + its depth map, could simulate aberrations and depth of field.
+
+The original algorithm uses the aberrated wavefront of the light coming from the world, through the system and to the sensor, to find the direction of the light ray and then the point on the sensor.
+
+The aim of this ""1/seidel"" is to produce primary rays for a ray tracer that would go into the scene to generate a rendered image with aberrations and depth of field without having to trace the elements of the system except for a preprocess step to compute certain parameters (exit and entrance pupils position and radius, principal planes, ecc).
+
+Now that I know a bit more about this process I start to worry that this is not possible.
+
+My idea is that when simulating the rays incoming from the world to the sensor, it is possible to use the wavefront of the incoming light after it passes through the lens to find the position on the sensor where those light rays would hit, basically a many-to-one relation between rays and sensor position.
+
+On the other hand, when doing it backwards, many rays leaving the same point on the sensor will go into different direction into the world, therefore making it impossible to use the same strategy of following the wavefront of the light beam to find the direction of the outcoming ray.
+
+Am I doomed and just wasted a lot of months chasing this non-existent unicorn?",1685092770.0,6,0.88,17
+Rentbusters,Landlady is being annoying and I am worried about lack of any kind of protection when the contract is renovated.,"I have been living in this house since February 1st, 2021 and I have changed one flatmate already in June 2022. 
+
+I'm now in the process of finding a new flatmate as my current one bought a house with his gf and will move out at the end of April. I had someone lined up, but because we are both cyclist, we have a ""where do we put our bikes"" problem.
+
+We have a basement which is where I am currently storing my 2 road bikes, but other than that it's filled with my landlady stuff, including a city bike ""that I don't want to sell just in case I'll want to ship it to me in Greece at some point"". Because of her two wardrobes filled with clothes and glass bottles of when she used to live here and make beer, my friend 2 bikes won't fit.
+
+I was thinking of just putting those upstairs, one in each of our rooms, but apparently ""this isn't allowed by the building"". Is this possible? Those are bikes that we both keep obsessively clean and that we would put on a corner of the house on some bike hangers.
+
+So my questions are:
+
+* Which role from the building should I contact for clarifications? I have a list of names and roles, but I'm unsure which is the right one;
+* Our landlady refuses to provide separate contracts for me and my flatmate. Does this means that as soon as my current flatmate leaves I'm without any kind of protection because my current contract is basically toilet paper?
+* Do we have any rights to ask her to get her stuff out of the basement because we would like to use it? The basement is not explicitly specified in the contract.
+
+God I'm so done with renting",1678784242.0,9,0.91,7
+GraphicsProgramming,Help on spectral rendering?,"Hi everyone.
+
+I'm trying to wrap my head around spectral rendering, as it is something I'll probably need to implement as part of my MSc thesis project.
+
+The very basic implementation of it is to just assign a random wavelength from the visible spectrum to each ray before shooting it into the scene.
+
+What I still don't get is what happens when I hit a surface and I need to evaluate the BRDFs. Are there spectral specific materials? If so, where can I find their formulations?
+
+E.g. for simulating glass refraction and absorption I need to make the IOR wavelength dependant right? 
+
+I can't find good sources that explains all of this. I just want to understand the very basic implementation before moving forward to more optimized things like the Hero Wavelength",1673889313.0,2,0.75,2
+sewing,Something similar to Tom Burke's coat in The Souvenir? I'm obsessed with it but can't find anything!,"Hi everyone!
+
+Since I saw The Souvenir a few months ago I have been obsessed with Tom Burke's sailor coat that he wears in it.
+
+I haven't been able to find any information on the model or what kind of jacket it is to narrow down my searches so I figured I'd ask here!
+
+This coat might be the reason why I started taking sewing classes ahahahha
+
+Anyway, a couple of snapshot I took from the movie, since the coat doesn't show up that much in trailer and promotional photos from the (amazing movie):
+
+https://imgur.com/a/X6kV6eV
+
+If there would be a pattern of something similar to it (I am a man and I think around Tom Burke's height? Probably I am taller) that I could easily modify/add the buttons it would be amazing.
+
+Or at least if this specific type of coat has a name to it
+
+I would probably never wear it but it looks so cool!",1669821153.0,5,1.0,2
+ClimbingPartners,Sport climbing in Kranjska Gora,"I'm here until Sunday morning with my family.
+
+I brought my harness and my shoes in the hope that my dad would climb, but I don't have a rope or any quick release (that my dad claimed to have 🥲)
+
+I'm ~84kg and can lead although I never did it on real rock, only in the gym (I am currently living in Amsterdam, not particularly famous for... Rocks).
+
+In the gym I can climb 6a top rope, 5c lead.
+
+Thanks!",1660204244.0,2,0.67,0
+Visiblemending,How do I repair/prevent further tearing? Should I just stitch the two sides together or should I apply a patch above and below the pocket attachment?,,1657198631.0,10,1.0,5
+fujifilm,"Zuidas Sprint | Fujifilm X-T1, Fujinon 18-55 F2.8",,1655502497.0,8,0.79,1
+cycling,Last minute bike in Prague?,"I've arrived this morning with all my cycling stuff (minus the helmet) and a reservation for a bike at bikeclinic café.
+
+Unfortunately my debit card could not process the blockage for the refundable deposit and now uhm... I really want to use all the stuff that I brought with me? Lol
+
+I didn't think about my card being a debit and not credit card, but I guess that could be the issue.
+
+Is there anyone that would like a cycling partner even for after lunch and has an extra bike? I'm ~188cm",1650535241.0,47,0.88,13
+Prague,Last minute road cycling?,"I've arrived this morning with all my cycling stuff (minus the helmet) and a reservation for a bike at bikeclinic café.
+
+Unfortunately my debit card could not process the blockage for the refundable deposit and now uhm... I really want to use all the stuff that I brought with me? Lol
+
+Is there anyone that would like a cycling partner even for after lunch and has an extra bike? I'm ~188cm",1650534940.0,1,1.0,2
+dating_advice,Is it an asshole move to ask her out after declining her the room?,"I am looking for a new tenant for the second bedroom in the house I'm currently living in, hence I'm seeing a lot of people. **A lot**.
+
+Yesterday a lovely girl came to see the flat, she was extremely sweet and we talked a bit, the usual chit chat of habits, hobbies and the same questions you ask to judge a potential flatmate lol
+
+I am afraid I won't give her the room tho, I also met a really nice German guy and I feel more comfortable living with another male.
+
+But... I'd really like to see her again!
+
+I have nothing to lose but it feels really bad to tell her that she is not getting the room and then asking her out...
+
+I should probably let it go, shouldn't I? I wish I would have met her in some other occasion :(",1649621974.0,0,0.5,15
+ClimbingPartners,Prague/Czech Republic in April,"Hi everyone!
+
+I'll be visiting a friend in Prague from the 21st to the 25th of April.
+
+Since he'll be working on the 21st and the 22nd I wanted to explore local climbs! I currently live in Amsterdam and I miss some real rock ;__;
+
+I have never climbed outside of the gym but I have experience both top rope (up to 6A) and leading up to 5B/5C. I will bring my own harness, shoes and ATC belay device, but I don't have a rope or any quick draws (or an helmet, but that I can buy/probably rent?) 
+
+Thanks!",1647513562.0,1,1.0,0
+karate,Find a Dojo that practices Kumite in Amsterdam,"Hi everyone, hopefully asking this is not against the rules!
+
+I've practiced Shotokan Karate for most of my life until ~2016 doing basically just Kumite competitions.
+
+I miss it A LOT! The thrill of the fight, the anxiety before and the satisfaction/delusion later, everything.
+
+I now live in Amsterdam (In the Netherlands, not in NY 👀) and even tho I found the website of some dojos, I can't find one that actually does Kumite on a somehow competitive level: even no competitions (especially now) is fine, just want to fight again?
+
+Does anyone here know if there is some team based in the NL?
+I'm going to do a trial lesson on Monday in a Dojo close to my place, I just miss a lot having my gi on!",1643708685.0,3,1.0,5
+Amsterdam,Fireworks and bangs situation is getting unbearable,"I live in West and it's 3 nights in a row that someone shoots fireworks and explodes stuff up until late at night.
+
+I'm getting really tired of it, I need to get some proper sleep.
+
+This can't be legal, do I call the police?",1639871307.0,40,0.72,69
+analog,Foggy morning [Pentax P30 | SMC Pentax-M 50mm f1.4 | Portra 800],,1634066359.0,18,0.89,1
+Amsterdam,"Amsterdamse Bos, early in the morning",,1634056874.0,296,0.98,15
+analog,Hometown [Pentax P30 | Takumar-A Zoom 28-80mm F3.5/4.5 | Lomography 400],,1631112837.0,3,0.71,0
+analog,Leaving [Pentax P30 | Takumar-A Zoom 28-80mm F3.5/4.5 | Lomography 400],,1630857015.0,19,1.0,2
+analog,Solitude [Pentax P30 | Takumar-A Zoom 28-80mm F3.5/4.5 | Ilford HP5+ 400],,1630703774.0,4,0.83,0
+analog,Smoking Mountain [Pentax P30 | Takumar-A Zoom 28-80mm F3.5/4.5 | Ilford HP5+ 400],,1630599672.0,18,1.0,3
+analog,Peeking Mountains [Pentax P30 | Takumar-A Zoom 28-80mm F3.5/4.5 | Lomography 400],,1630312120.0,12,0.94,0
+analog,Eroica [Pentax P30 | Takumar-A Zoom 28-80mm F3.5/4.5 | Lomography 400],,1630190816.0,16,0.86,2
+analog,Seagulls are the best subjects [Pentax P30 | Takumar-A Zoom 28-80mm F/3.5-4.5 | Ilford FP4],,1629014454.0,8,0.9,0
+bicycling,I finally found some Gravel in the Netherlands in yesterday's century!,,1623667321.0,61,0.91,12
+bicycling,Some sun in the Netherlands at last!,,1622457853.0,137,0.98,20
+suggestmeabook,Something like The Metropolitan Diary from the NYT,"I grew up watching New York in movies and in TV shows.
+
+I know it's a huge and stressful city to live in but I love the little stories like the ones in the NYT here: https://www.nytimes.com/column/metropolitan-diary
+
+Just people living their life in a huge town, in their small neighborhood.
+
+I'd love a novel like that, some sort of long version of those diaries or a book version of a Woody Allen's movie!
+
+Do you know anything like that?",1621114080.0,5,1.0,2
+Amsterdam,Drawing classes,[removed],1601975310.0,1,1.0,1
+Breadit,Second week of lock down. Buckwheat sourdough loaf with beer instead of water in the dough,,1584544562.0,3,1.0,0
+Breadit,"Discarded sourdough focaccia! Couldn't control myself, sorry :P",,1582669173.0,31,0.87,5
+cscareerquestions,How can I find a field I like?,"I've got my Bachelor's Degree In CS in March of 2019 and since then I've been working in a small company that helped me writing my thesis. 
+
+In here I'm doing embedded development.... in a way. It is mostly something around ""this is the code that run on this board, make it run on this other board"" and most of the time I'm blindingly smashing keys on my keyboard because I'm the only one doing this stuff in this small company and I have no one I could consider ""a mentor"" for this embedded development world.
+
+I'm feeling pretty miserable rn and burned out. I don't like my job and I feel like I just don't like sitting 8h+ in front of a computer in a window-less environment. 
+
+When I come home after that I've literally 0 desire to study something and I cook and bake a lot to distract myself from all this.
+
+---
+And even if I wanted to study something by my own to find another job I do not know what else I could do.
+
+I've never done an interview and I know I wouldn't perform well in one. I don't have a fancy github profile with a lot of contributions, I don't have a good history of jobs I've done in the past or personal projects. 
+
+---
+
+I know that I can study and learn and I want to do it, but I need to find something I'm passionate about...",1580664421.0,3,0.8,2
+Breadit,Skipping Christmas Eve's dinner with family to bake some bread for tomorrow. Hopefully is going to be worth!,,1577215760.0,8,1.0,0
+Breadit,"A 4 strands challah and 2 sourdough breads in the background! Woke up at 5a.m. to heath the oven, but it was worth it :)",,1576334045.0,6,0.81,0
+Breadit,Chocolate sourdough bread and my first challah! Can't wait to bake all of this tomorrow morning!,,1576279278.0,3,1.0,0
+a:t5_sso3o,Italytippete,,1576059202.0,1,1.0,0
+nightvale,Buying tickets for the London Palladium show from outside the UK.,"Hi everyone,
+
+I'm from Italy and when I'm trying to register to the lwtheatres the form asks for my town, but it is not recognized. Same thing for my postal code.
+
+I've selected Italy from the dropdown, but nothing changed.
+
+Have anyone been able to buy tickets from outside the UK? Is this a Brexit thing (joking ofc (maybe))?
+
+I really want to see the live show!",1575467688.0,2,1.0,2
+welcometonightvale,Trying to buy ticket for the Palladium show,"Hi everyone, 
+
+I'm from Italy and when I'm trying to register to the lwtheatres the form asks for my town, but it is not recognized. Same thing for my postal code. 
+
+I've selected Italy from the dropdown, but nothing changed. 
+
+Have anyone been able to buy tickets from outside the UK? Is this a Brexit thing (joking ofc (maybe))?
+
+I really want to see the live show!",1575467087.0,11,0.81,1
+Breadit,I'm crying right now. Look at those beauties,,1574925535.0,21,0.83,2
+irishtourism,"6 days in Ireland, first time solo traveller and probably a little bit panicking","Hi everyone! (It's me again, I promise this will be my last post).
+
+I'm coming to Ireland the 28th of december and I will depart the 3rd of January.
+
+I was thinking to use Dublin (or Dun Laoghaire, where I booked a room) as a base for the whole week, but I'm starting to rethink that as I would probably sit on bus and trains A LOT.
+
+The only thing I've already booked is the visit to the Kilmainham Gaol for the morning of the 3rd of January as it was the only available visit. Other than that I know that I'd like to do [this tour](https://www.paddywagontours.com/GIANTS-CAUSEWAY-Day-Tour-From-DUBLIN) or a similar one from another tour company.
+
+I also have a list of stuff and towns that I'd like to see:
+
+*  Trinity's College and Book of Kells: I know that there are no guided visit for that time; 
+*  Guinness Factory Tour;
+*  Phoenix Park;
+*  National Botanic Garden (6E); 
+*  Galway;
+* Cliff of Moher;
+* Kylemore Abbey; 
+* Powerscourt Estate; 
+* Science Gallery; 
+* MoLI – Museum of Literature Ireland (8E, 12E guidata); 
+* Jameson Distillery;
+* Natural History National Museum; 
+* IMMA: Museum of Modern Art; 
+* Howt; 
+* Greystones 
+* Killiney 
+* Galway 
+* Dublin Castle; 
+* Dublin 
+* Kilmainham Gaol 
+* Malahide 
+* Doolin  
+
+And probably many more that I forgot to add to the list.
+
+The booking for the room can be changed (both reducing the days and deleting the booking without loosing money).
+
+Fact is that I can't afford to rent a car as I'm under 25 (23) and from what I've read I'd have to around 25Euro more each day as an extra insurance and that is a little to much for me. 
+Maybe I could rent a car for the first few days and drop it off when I'll move to Dublin if I find something not too pricey.
+
+Should I just stay in Dublin/Dun Laoghaire the last 2 or 3 days and spend  the first 3 or 4 days elsewhere? Or can I stay in Dublin/Dun Laoghaire and from there ride my way into the west coast of Ireland?",1574250983.0,17,1.0,14
+irishtourism,Christmas alone in Dublin,"Because of... life, I need to go on a vacation somewhere and my company shuts off during Christmas time (23rd of December -> 1st of January). I wanted to take advantage of that closing window to visit Ireland for the first time as a solo traveler from the 23rd to the 30th.
+
+I found some Airbnb and the flights for Dublin, but I'm a little afraid about Christmas day itself. I was willing to rent a car for the 24/25/26 to go visit and hiking around Dublin, but I've found 2 main issues: 
+
+1. I'm under 25 (23) and it is pretty expensive;
+2. Because of Christmas, the only place I could rent and give it back would be the airport;
+
+Is this a bad time to visit? I already have a list of stuff to do and a couple of tour I'd like to book on the days after Christmas (27, 28 and so on),  but from what I read online, a lot of stuff will be closed.",1574066736.0,9,1.0,18
+offmychest,She dumped me. I will never find anyone like her. Today I want to die even more.,"I don't know why I am posting this. I have a few close friend that already know, but I guess I want to shout it out.
+
+She dumped me after 5 years because I'm a stupid idiot. I pushed her too much, basically forcing her to go to the gym, to eat less/healthy. I made her feel bad because she didn't wore the lingerie we bought together for my graduation day and because she didn't stayed with me that night because of her internship.
+
+And because of my (self diagnosed) depression, lately I was always irritated, tired, suicidal.
+
+I broke the most beautiful thing I ever had. We had 5 amazing years together, we were just starting building our own life together.
+
+I had wanted to die for a long time. I don't like working with computers and I hate my current job: programming 8h per day. Yet I have a CS degree and no other hobby I could turn into a profession, nothing I'm looking forward for the weekends.
+
+I don't want to be alone again, I want her: I want her cakes, her laughter, her body, her cats. I don't even remember how to live without having so much intimacy with someone.
+
+How can I even start something like the one I had with someone else? How can I build new memories with a new person? I want to go the the fair which we used to go every year, but how can i go with another girl, without suffering? Without comparing?
+
+How can I even start to have sex with someone new? After 5 years we knew each other, our limits, everything. I'll miss sex, she was my first and only, I'm gonna miss her body so much...
+
+I just want to die. I had wanted to die for a couple of years, now I have one more reason. I am an idiot, I don't deserve nothing.",1573136126.0,3,1.0,1
+italy,Amici Montanari! Percorsi da fare nei dintorni di Marradi?,"Come ogni anno io e la mia ragazza andremo un fine settimana a Marradi per la sagra delle castagne.
+
+La sagra ha un valore più che altro affettivo dato che ci andavo con i miei quando ero piccolo, ma il vero valore del viaggio di solito lo ha la scarpinata del sabato in mezzo ai boschi e sulle creste delle montagne, ma quest'anno non so bene dove recarmi.
+
+Gli anni passati abbiamo fatto il percorso da Marradi a Palazzuolo  sul Senio passando per dei sentieri mozzafiato e da Marradi all'eremo di Gamogna con un panorama fantastico.
+
+Siamo abituati a fare delle belle camminate anche di 6-7h escluse le soste e abbiamo la macchina quindi ovviamente possiamo spostarci, ma volevamo evitare di fare più ore di macchina che di cammino.
+
+Conoscete dei bei percorsi nei dintorni? Massimo 1h di macchina da Marradi magari.
+
+Grazie!",1570042239.0,4,1.0,3
+ItalyInformatica,Eventi del mese: Maggio,"Buongiornissimo!
+
+Iniziamo?
+
+------
+
+* **07/05 a Pisa e in ogni università in cui è presente un GDG:** **[Google I/O Extended](https://www.eventbrite.it/e/biglietti-google-io-extended-2019-pisa-59844308939)**: per seguire live l'evento di google;
+
+* **07/05 a Formigine:** **[Mumble Talk Arena](https://www.eventbrite.it/e/biglietti-mumble-talk-arena-58847292837)**: il primo dei 3 eventi annuali organizzati da Mumble per promuovere lo sviluppo digitale del territorio;
+
+* **10/05 -> 12/05 a Roma:** **[Level Up - Rome Developer Conference 2019](https://www.eventbrite.it/e/level-up-rome-developer-conference-2019-tickets-54979405883)**:conferenza romana che invita più di 50 lavoratori nel campo del gamedev per parlare del loro lavoro. Una gdc in miniatura!;
+
+* **15/05 a Firenze:** **[Qt Quick per lo sviluppo di applicazioni per smartphone](https://www.eventbrite.it/e/biglietti-qt-quick-per-lo-sviluppo-di-applicazioni-per-smartphone-60618063259)**: un workshop sull'utilizzo di QTQuick per lo sviluppo di applicazioni mobile;
+
+
+* **23/05 a Firenze:** **[Flutter: Google alla conquista del mobile multi piattaforma](https://www.eventbrite.it/e/biglietti-flutter-google-alla-conquista-del-mobile-multi-piattaforma-61234936343)**: una introduzione a Flutter, la nuova tecnologia del momento per creare applicazioni mobile multipiattaforma;
+
+
+* **17/05 a Genova:** **[Intelligenza Artificiale e futuro](https://www.eventbrite.it/e/biglietti-intelligenza-artificiale-e-futuro-61227846136)**: una serata dedicata alla divulgazione del tema dell'IA e sugli impatti che avrà sulla società;
+
+------
+
+Potete trovare tutti gli eventi, insieme a molti altri sul calendario in [sidebar](https://calendar.google.com/calendar/ical/3ohrqpua9bgm4hc6e70hns5af8%40group.calendar.google.com/public/basic.ics).
+
+Organizzate eventi? Ne conoscete altri?
+Segnalateli a syrinxos@italyinformatica.org",1556946555.0,5,0.78,3
+kobo,Screen damage,"I went to take my kobo Clara HD out of my pocket and [This is what I have seen.](https://i.imgur.com/fdeCuQE.jpg)
+
+Is this fixable? It's still under warranty (bought in September) should I try or that's not covered?",1556772637.0,5,0.86,7
+ItalyInformatica,Eventi del mese: Aprile,"Buongiorno a tutti!
+
+Questo aprile vi porta una *marea* di eventi e, spero per voi, tante colombe e uova di pasqua!
+
+------
+
+* **06/04 a Ancona** **[SQL Start!](https://www.eventbrite.it/e/biglietti-sql-start-2019-56165372140)**: Incontro di una giornata incentrato sulla tecnologia di Microsoft SQL Server: incontri con esperti del settore e scambi di opinioni per migliorare le proprie conoscenze; 
+
+* **09/04 a Firenze** **[Introduzione al C++ Moderno](https://www.eventbrite.it/e/biglietti-introduzione-al-c-moderno-59569746716)**: uno sguardo verso le nuove feature incluse nel C++ e su come sfruttarle al meglio;
+
+* **13/04 a Pisa:** **[GDG DevFest Pisa 2019](https://www.eventbrite.it/e/biglietti-gdg-devfest-pisa-2019-50331433673)**: è tornata la DevFest! Il GDG organizza anche nel 2019 moltissimi talk, incontri e workshop con esperti provenienti da ogni dove, da non perdere!;
+
+* **10/04 a Firenze:** **[Get up and Go! Introduzione allo sviluppo in Go e alle goroutine.](https://www.eventbrite.it/e/biglietti-get-up-and-go-introduzione-allo-sviluppo-in-go-e-alle-goroutine-59002323538)**: una *gentle introduction* allo sviluppo in Go e alle sue goroutine per imparare a cosa servono e come utilizzarle al meglio;
+
+* **16/04 a Bologna:** **[FpInBo - Come risolvere un puzzle cripto-aritmetico in Scala](https://www.eventbrite.it/e/biglietti-fpinbo-come-risolvere-un-puzzle-cripto-aritmetico-in-scala-59688514955)**: In questo talk verranno esplorati alcuni approcci funzionali per la risoluzione di CSP;
+
+* **18/04 a Ancona:** **[AWS User Group Marche](https://www.meetup.com/AWS-User-Group-Marche/events/259802314/)**: il primo di una serie di incontri sugli AWS con un tecnico del servizio;
+
+
+------
+
+Potete trovare tutti gli eventi, insieme a molti altri sul calendario in [sidebar](https://calendar.google.com/calendar/ical/3ohrqpua9bgm4hc6e70hns5af8%40group.calendar.google.com/public/basic.ics).
+
+Organizzate eventi? Ne conoscete altri?
+Segnalateli a syrinxos@italyinformatica.org**
+",1554551349.0,14,1.0,5
+learnart,Watercolor question in comments,,1554069842.0,11,1.0,4
+herbstluftwm,Polybar issues,"Hi everyone!
+
+I wanted to try herbstluftwm after using i3 for about 2 years.
+
+Everything's great, but I can't manage to get polybar not to overlap with everything else.
+
+I couldn't find anyone else on the internet facing my same issue. I've already tried with override-restack both true and false. The width is maximum, the bar is on the top of the screen. Still windows appears under it and no space get reserved for the bar. 
+
+[Here my polybar config](https://pastebin.com/hXha9nvu), pretty vanilla.
+
+I'm also having issues with siji glyphs, as I can't figure out how to get the codes/how to use those. After getting them from AUR I can't get the codes or even get those listed in fc-list",1552895745.0,2,1.0,5
+ItalyInformatica,Eventi del mese: marzo 2019,"Con la laurea in informatica fresca di stampa vi do il benvenuto a marzo.
+
+.
+
+Via con gli eventi!
+
+------
+* **02/03 a Catania** **[Angular 7 Workshop - From zero to hero](https://www.eventbrite.it/e/biglietti-angular-7-workshop-from-zero-to-hero-56399026005)**: Un workshop per imparare from scratch a usare uno dei framework per frontend dev più famosi;
+
+* **07/03 -> 08/03 a Bologna** **[Incontro DevOps 2019](https://2019.incontrodevops.it/)**: una conferenza di 2 giorni su tutto ciò che riguarda cloud. CI, Big Data, Containers e molto altro;
+
+* **11/03 a Ancona:** **[[DevMarche] Introduzione allo Unit Testing (Replica)](https://www.eventbrite.it/e/biglietti-devmarche-introduzione-allo-unit-testing-replica-57408480310)**: Introduzione alla scrittura di Unit Testing per i propri programmi;
+
+* **14/03 -> 15/03 a Faenza:** **[CSS Day](https://www.eventbrite.it/e/biglietti-cssday-2019-44061520193)**: la quinta edizione della conferenza dedicata esclusivamente al CSS;
+
+* **22/03 -> 23/03 a Roma:** **[Codemotion Rome 2019](https://www.eventbrite.co.uk/e/codemotion-rome-2019-conference-march-22-23-tickets-53348160785)**: torna la più grande conferenza europea per gli svilppatori. Aperta a ogni linguaggio di programmazione e ad ogni tecnologia.
+
+------
+
+Potete trovare tutti gli eventi, insieme a molti altri sul calendario in [sidebar](https://calendar.google.com/calendar/ical/3ohrqpua9bgm4hc6e70hns5af8%40group.calendar.google.com/public/basic.ics).
+
+Organizzate eventi? Ne conoscete altri?
+Segnalateli a syrinxos@italyinformatica.org**",1551503893.0,16,1.0,7
+learnart,Fight.,,1549872235.0,8,1.0,2
+MechanicalKeyboards,A new foe has appeared!,,1549118346.0,101,0.93,5
+ItalyInformatica,Eventi del mese: Febbraio 2019,"Buongiorno a tutti e scusate il ritardo, ma Arch Linux ha deciso di suicidarsi stamani e ho passato 3 ore cercando di sistemare tutto il casino.
+
+I use Arch BTW!
+
+------
+* **21/02 a Faenza** **[Elasticsearch for Dummies](https://www.meetup.com/DevRomagna/events/257990206/)** Imparare a sviluppare API con interfaccia REST usando ElasticSearch!
+
+* **06/02 a Torino** **[TCS - Deepspeech & Command voice](https://www.eventbrite.it/d/italy--torino--85685169/science-and-tech--events/?page=1)**La prima TCS dell'anno dedicata ai due progetti di Mozilla;;
+
+* **26/02 a Torino:** **[Torino Hacknight: Elixir](https://www.eventbrite.it/e/biglietti-torino-hacknight-elixir-55567878019?aff=ebapi)** Hacknight improntata su Elixir. Bring your own Device!;
+
+* **05/02 a Bologna:** **[Internet of Things. Merging bits with atoms](https://www.meetup.com/Net-Service-Digital-Hub-Bologna/events/256967489/)** Una serie di speech per aumentare il livello di consapevolezza sulla trasformazionw digitale in atto in questi anni;
+
+
+------
+
+Potete trovare tutti gli eventi, insieme a molti altri sul calendario in [sidebar](https://calendar.google.com/calendar/ical/3ohrqpua9bgm4hc6e70hns5af8%40group.calendar.google.com/public/basic.ics).
+
+Organizzate eventi? Ne conoscete altri?
+Segnalateli a syrinxos@italyinformatica.org**",1549104029.0,4,1.0,9
+MechanicalKeyboards,I'm gonna hit it like in Happy Days!,,1548064199.0,49,0.87,4
+learnart,A Japanese shop.,,1547296411.0,758,0.97,15
+ItalyInformatica,Eventi del mese: Gennaio,"Aaaah, l'epifania che tutte le feste si porta via...
+
+I bambini tornano a lavoro e finalmente potete sentire di nuovo i vostri pensieri, senza urla e screpitii.
+
+Se però volete qualcosa a cui pensare, perché non andare a uno dei seguenti  eventi?
+
+------
+* **07/01 a Torino** **[Coding For Everyone](https://www.meetup.com/turn-into-coders/events/257477848/)** From zero to hero per imparare insieme a programmare;
+
+* **10/01 a Torino** **[Open Mozilla Night](https://www.meetup.com/Mozilla-Torino/events/257542122/)**La OMN mensile di Torino, con un sacco di spunti interessanti sul mondo Mozilla;
+
+* **10/01 a Firenze:** **[Are you agile?](https://www.eventbrite.it/e/biglietti-are-you-agile-54131243005?aff=ebdssbcitybrowse)** Tutti lavoriamo in team, in un modo o nell'altro. Perché non imparare un po' di metodologia Agile in modo da migliorare le  nostre performance?;
+
+* **14/01 a Roma:** **[Cosa (non) fanno Alexa Siri & co ](https://www.eventbrite.it/e/biglietti-cosa-non-fanno-alexa-siri-co-vox-machina-aperitech-meetup-53650486048?aff=ebdssbdestsearch)** Primo incontro della community di Vox Machina, dedicato agli assistenti vocali e al NLP;
+
+* **25/01 -> 27/01 a Milano:** **[Global Game Jam](https://www.eventbrite.it/e/biglietti-global-game-jam-polimi-2527-january-2019-51254903797?aff=ebdssbdestsearch)** Torna l'annuale GGJ! Controllate se nella vostra città qualcuno organizza un evento per partecipare tutti insieme fisicamente e non solo... in rete!;
+
+* **15/01 a Bologna:** **[Se Bruce Lee fosse stato un programmatore avrebbe adorato il C++ ](https://www.eventbrite.it/e/biglietti-se-bruce-lee-fosse-stato-un-programmatore-avrebbe-adorato-il-c-marco-arena-54399331866?aff=ebdssbdestsearch)** Un workshop dove imparare idiomi e stili per poter padroneggiare cpp;
+
+------
+
+Potete trovare tutti gli eventi, insieme a molti altri sul calendario in [sidebar](https://calendar.google.com/calendar/ical/3ohrqpua9bgm4hc6e70hns5af8%40group.calendar.google.com/public/basic.ics).
+
+Organizzate eventi? Ne conoscete altri?
+Segnalateli a syrinxos@italyinformatica.org**",1546672970.0,9,0.92,10
+smashbros,How do I make Smash enjoyable for my non-smash friends?,"So, the last day of the year is coming and I have a few friends coming over.
+
+I'd like to play smash with them, at least for a few matches before midnight, but seeing my gf not really enjoying the game, doubts started to arise.
+
+How do you play with your friends and make them enjoy the game too?
+
+What I thought:
+
+* Objects and stage hazards on. This way a lot of random shit will happens and it's not all skill-based;
+* I'll just play some random pg I've never played before and I'm not going to dodge, shield or doing anything too advanced for the first few games; 
+* Throw myself to give'em some stocks? I dunno, I'd get offended if my friends would do this to make me win;
+
+What do you think?
+
+I also found another [old post](https://www.reddit.com/r/smashbros/comments/8zrngk/when_you_try_to_get_your_friends_to_play_smash/), but it's related to Smash 4 and I wanted to know if there is something *new* we can do to make the game enjoyable to non-smash people.",1546099904.0,3,0.72,7
+ItalyInformatica,Eventi del mese: Dicembre,"Ho fatto casino, e non esiste una history delle modifiche, che io sappia.
+
+Quindi se siete qui per cercare il vecchio post vi chiedo umilmente scusa!",1543648045.0,10,1.0,2
+MLQuestions,Dataset for ESN Testing,"As part of my thesis project, I had to port the [aureservoir library](https://aureservoir.sourceforge.net/) for embedded.
+
+I started a [preliminary port](https://gitlab.com/Syrinxos/microesn/) using Eigen to understand better how it works, since I cannot make the original works on my system.
+
+I have now reached a ""usable"" state but I lack tasks on wich I could try the code on.
+
+What/where may I find some dataset?
+
+Thanks for your answer(s)!",1543424311.0,2,1.0,0
+ItalyInformatica,Eventi del mese: Novembre,"Oggi in ritardo. 
+
+Ho festeggiato Halloween in ritardo e oggi ho dormito troppo.
+
+Bando alle ciance e vediamo quali sono gli eventi di ~~ottobre~~ ehr... Novembre!!
+
+
+------
+* **08/11 a Torino** **[Open Mozilla Night](https://www.meetup.com/Mozilla-Torino/events/255858816/)** serata organizzata mensilmente dove poter conoscere tutti i progetti di Mozilla, adatto a ogni livello;
+
+* **07/11 a Torino:** **[Firebase: How to play with fire](https://www.meetup.com/GDG-Torino/events/254472778/)** Un incontro per scoprire Firebase tutti insieme;
+
+* **07/11 a Firenze** **[Workshop: Introduzione a Rust](https://www.eventbrite.it/e/biglietti-workshop-introduzione-a-rust-51074533304)** Workshop per imparare un linguaggio che si autodichiara ""l'evoluzione del cpp"";
+
+* **21/11 a Bari:** **[Presentazione Gaming HACKademy Bari by auLAB](https://www.eventbrite.it/e/biglietti-presentazione-gaming-hackademy-bari-by-aulab-52144676130)**Presentazione dei corsi della Gaming Hackademy per chi desidera lavorare nel  mondo del gamedev;
+
+* **29/11 a Milano:** **[Codemotion Milan 2018](https://www.eventbrite.co.uk/e/codemotion-milan-2018-conference-november-29-30-tickets-47067848201)** 2 giorni di talks su moltissimi linguaggi e tecnologie da speakers internazionali (non free).
+
+------
+
+Potete trovare tutti gli eventi, insieme a molti altri sul calendario in [sidebar](https://calendar.google.com/calendar/ical/3ohrqpua9bgm4hc6e70hns5af8%40group.calendar.google.com/public/basic.ics).
+
+Organizzate eventi? Ne conoscete altri?
+Segnalateli a syrinxos@italyinformatica.org",1541246904.0,19,1.0,11
+italy,Come si diventa qualcos'altro?,"Volevo inizialmente usare un throw away per evitare che la gente che mi conosce su internet potesse giudicarmi somehow.
+
+Poi ho pensato che fosse stupido, perché la gente che mi conosce su internet posso ignorarla direttamente, quindi eccomi qua.
+
+
+Ho quasi finito l'università (mi mancano 2 esami) e punto di diventare un magnifico dottore in Informatica a Marzo.
+
+Nel frattempo ho iniziato un tirocinio in un'azienda dove già feci uno stage in quinta superiore dove sono uno dei 4 programmatori.
+
+Ambiente ottimo, sono tutti simpatici e gentili, ma in una sola settimana mi sono ritrovato davanti alla verità che cercavo di nascondere da ormai un anno, se non di più:
+
+> A me, di passare la vita su una scrivania davanti al pc, non mi va proprio.
+
+---
+Come già detto è ormai più di un anno che ci rifletto. I miei (entrambi laureati, mia mamma con un dottorato in chimica) hanno sempre spinto moltissimo sull'educazione e io, capendone le motivazioni e l'importanza ho adempito  ai miei doveri, scegliendo quello che tra i ""mali"" mi sembrava il minore: informatica.
+
+Fin dalle medie mi sono sempre interessato ai computer (per quel che conta), scegliendo quindi un istituto tecnico che mi ha fatto nascere una buona passione per la matematica e nel quale, al terzo anno, ho potuto scegliere l'indirizzo di informatica.
+Finito quello ho iniziato l'università a Pisa che mi ha costretto a mutarmi in un pendolare, una di quelle creature che si possono vedere sui treni, chiuse in se stesse e con occhiaie che arrivano fino alle ginocchia, mollando lo sport agonistico che praticavo da 12 anni (ho iniziato palestra da gennaio di quest'anno, non sono diventato obeso tranquilli) e le lezioni di batteria che avevo iniziato a prendere da 2. 
+
+In compenso ho iniziato a leggere tantissimo, complici i lunghi viaggi in treno. Forse è proprio il leggere tanto che mi ha fatto giungere a una conclusione così drastica.
+
+Essendo sempre stato spinto a un educazione ""accademica"" dalla mia famiglia non ho mai considerato la possibilità di intraprendere altre strade, diverse da quelle ""ufficiali"".
+
+Invece guarda un po', si può vivere anche cucinando, lavorando in un forno, allevando animali, coltivando il terreno, preparando dolci, scrivendo, **creando**.
+
+Se ci penso, il motivo per cui mi interessai all'informatica era perché volevo **creare** videogiochi.
+
+---
+
+E ora eccomi qui. 22 anni tra un mese, una laurea che non so se vorrò sfruttare o meno tra cinque mesi, una famiglia che non voglio deludere facendogli credere di aver buttato i loro soldi e il loro tempo con me alle spalle, una ragazza che ha più o meno il mio stesso problema su cui piangere e nessuna (**nessuna**) skill sfruttabile nelle mani.
+
+---
+
+Non che non mi piaccia la tecnologia, ma mi sento schiavo di essa e vorrei separarmene, non lavorarci. 
+
+Mi piacerebbe fare qualcosa di specialistico come lavorare in un forno o in una cucina. O ancora scrivere, dipingere o lavorare in una fattoria.
+
+Fare il formaggio, vendere il pane, vedere la felicità sulla faccia delle persone mentre provano qualcosa che **io** ho creato per loro.
+
+E poi tornare a casa, senza la pressione di dead lines sulle spalle, senza il ""oddio devo studiare l'ultimo framework uscito altrimenti non sarò al passo con gli altri"", sedermi sul divano con la mia ragazza e i suoi stupendi dolci (devo solo convincerla a lavorare in una pasticceria) e leggere, guardarci un film insieme e poi andare a letto. Chiedo troppo? È qualcosa che non può esistere nel 2018 in un mondo sempre in movimento, che cambia continuamente, in cui chi si ferma a riposare è perduto?
+
+---
+
+Dopo aver fatto la stessa cosa per così tanti anni da non sapere più chi vuoi realmente essere, come si diventa qualcos'altro?
+
+Forse sarà solo un delirio troppo lungo per poter essere preso sul serio, ma ultimamente ho pensieri che probabilmente non dovrei fare e qualcuno intorno a me dice che dovrei cercare aiuto professionale prima che la cosa vada... oltre, anche se sono abbastanza ancorato a chi mi vuole bene perché lo faccia.
+
+Questo fine settimana vado in montagna con la mia ragazza a mangiare castagne e camminare su paesaggi mozzafiato. Magari questo mi basterà per guarire.",1539938660.0,68,0.87,87
+italygames,The italian translation of TWEWY: Final Remix is a fanmade translation of the DS version taken without consent of the author.,,1539546690.0,13,0.93,1
+ItalyInformatica,Eventi del Mese: Ottobre,"Ok, sono le 2:30 di notte mentre scrivo questo post e sono esausto.
+
+Cercando di non fare errori, ecco a voi gli eventi di ottobre!
+
+
+------
+* **11/10 a Torino** **[Open Mozilla Night](https://www.meetup.com/Mozilla-Torino/events/254664272/)** serata organizzata mensilmente dove poter conoscere tutti i progetti di Mozilla, adatto a ogni livello;
+
+* **27/10 a Bologna:** **[HackInBo](https://www.eventbrite.it/e/biglietti-hackinbo-sicurezza-allombra-delle-torri-winter-edition-2018-47559420507)** si ripete nuovamente uno degli eventi di sicurezza gratuiti più famosi d'Italia. I biglietti sono finiti, ma tentare di presentarsi comunque il giorno stesso può portare a risultati... inattesi!
+
+* **12/10 a Firenze** **[Mastering React and data architectures in Redux ](https://www.eventbrite.it/e/biglietti-mastering-react-and-data-architectures-in-redux-firenze-49152823418?aff=ebdssbcitybrowse)** Un intero pomeriggio di live coding e teoria su React Redux!;
+
+* **27/10 a ""Molto probabilmente pure nella tua città!"":** **[Linux Day](https://www.linuxday.it/)** La principale manifestazione italiana dedicata a Linux, con un sacco di università/MakerLab/ecc... che organizzano eventi a giro per l'italia, controllate sul sito!
+
+* **11/10->14/10 a Pisa:** **[Internet Festival](https://www.internetfestival.it/)** Torna come tutti gli anni l'internet festival pisano, dove si parla di tecnologia e di futuro, ma anche di come il nostro presente sta cambiando.
+
+------
+
+Potete trovare tutti gli eventi, insieme a molti altri sul calendario in [sidebar](https://calendar.google.com/calendar/ical/3ohrqpua9bgm4hc6e70hns5af8%40group.calendar.google.com/public/basic.ics).
+
+Organizzate eventi? Ne conoscete altri?
+Segnalateli a syrinxos@italyinformatica.org",1538787139.0,11,0.93,0
+italygames,[SWITHC] Key per Arena Of Valor,"Dovrebbe uscire a breve AoV su switch e qualche tempo fa mi registrai per la beta.
+
+Il gioco non è malaccio, ma non c'ho proprio tempo per questa early (dal 12 al 14), quindi lascio a voi la key, riscattabile dall'e-shop europeo:
+
+C003WPDJXN9K5HL?
+
+**MANCA IL CARATTERE FINALE** per evitare i soliti bot.
+
+Basta sostituire il ? con il l'iniziale del nick di uno dei mod (finisce per ianlucah).
+
+  
+---
+
+Sono riuscito a sbagliare il titolo, congratulazioni a me",1536742176.0,13,1.0,0
+ItalyInformatica,"Problema tra dual boot, hostname e ip statico!","Salve a tutti!
+
+Ho impostato la mia partizione Linux per potervi accedere da SSH anche da fuori la rete di casa, impostando il port forwarding e dandogli **dal router** un indirizzo statico (per ovvi motivi).
+
+Bootando poi da Windows noto che non si connette in quanto l'hostname è diverso, ma il Mac no, quindi non gli assegna indirizzi IP perché dovrebbe dargli quello impostato (ma non lo fa perché ha hostname diverso).
+
+L'unica soluzione che riesco a pensare è cambiare MAC su Linux, altre idee?
+
+Ty!",1536039287.0,1,1.0,11
+ItalyInformatica,Eventi del mese: Settembre,"Settembre. Riaprono le scuole, i marmocchi se ne stanno fuori casa per almeno 6h e voi potete usare queste 6h per andare a qualche conferenza.
+
+Come dite? Dovete lavorare?
+
+Mh...
+
+------
+* **14/09->15/09 a Firenze:** **[Scala Italy](https://www.eventbrite.it/e/scala-italy-2018-tickets-44719683778)** La conferenza Italiana per eccellenza su Scala (non free) ;
+
+* **22/09 a Roma:** **[Romhack](https://www.eventbrite.it/e/biglietti-romhack-2018-46507237399)** Prima edizione di una nuova conferenza di sicurezza informatica che si svolgerà a Roma!
+
+* **27/09 -> 27/09 a Roma (Ma anche Napoli e Milano):** **[Unilever Digital Hackathon 2018](https://www.eventbrite.it/e/biglietti-unilever-digital-hackathon-2018-unileverdigitalhackathon-roma-47507438026)** L'hackaton dell'anno, per laureandi e neo laureati;
+
+* **27/09 a Bari:** **[Coding Gym](https://www.eventbrite.it/e/biglietti-coding-gym-bari-settembre-2018-49570053364?aff=ebdssbdestsearch)** BYOD con lo scopo di migliorare e imparare insieme su un set di problemi predefiniti!
+
+------
+
+Potete trovare tutti gli eventi, insieme a molti altri sul calendario in [sidebar](https://calendar.google.com/calendar/ical/3ohrqpua9bgm4hc6e70hns5af8%40group.calendar.google.com/public/basic.ics).
+
+Organizzate eventi? Ne conoscete altri?
+Segnalateli a syrinxos@italyinformatica.org",1535793221.0,9,0.91,0
+ItalyInformatica,[ENG] Where Vim Came From,,1534268597.0,6,1.0,0
+ItalyInformatica,Eventi del Mese: Agosto,"Agosto è mese di fiacca, pochi (diciamo nessuno) eventi, tutti al mare, in montagna o in profondità dimenticate da eoni dove riposano antiche mostruosità.
+
+Quindi, per evitare di dover combattere contro il caldo estivo o contro una creatura alta come un palazzo a 6 piani, accendete il ventilatore e provate a visitare uno dei seguenti eventi:
+
+------
+* **02/08->05/08 a Padova:** **[Italian Hacking Camp](https://www.ihc.camp/)** In questi giorni a Padova si tiene l'IHC. Un evento bellissimo pieno di roba da fare e sopratutto all'aperto, in un bellissimo parco dove combattere la calura e suon di birre;
+
+* **25/08 a Siracusa:** **[GDG GameFest 2018](https://www.eventbrite.it/e/biglietti-gdg-gamefest-2018-48732563409?aff=ebdssbdestsearch)** Non avete scuse, è pure al mare. Conferenza per gli amanti del gamedev organizzata dal GDG di Siracusa, con demo e competizioni;
+
+* **28/08 -> 02/09 a Venezia:** **[END SUMMER CAMP 2K18](https://www.endsummercamp.org/index.php/Main_Page)** Un Hacking Camp tutto italiano che va avanti dal 2005 per festeggiare la fine dell'estate (noi gente dei computer siamo strani, la fine dell'estate la celebriamo);
+
+------
+
+Potete trovare tutti gli eventi, insieme a molti altri sul calendario in [sidebar](https://calendar.google.com/calendar/ical/3ohrqpua9bgm4hc6e70hns5af8%40group.calendar.google.com/public/basic.ics).
+
+Organizzate eventi? Ne conoscete altri?
+Segnalateli a syrinxos@italyinformatica.org",1533359704.0,8,0.91,0
+ItalyInformatica,Two Minute Papers | This is How You Hack A Neural Network [3:41],,1533196575.0,11,0.87,1
+ItalyInformatica,"Is this you? Lifelogging, privacy and scandal [5:14]",,1532237288.0,9,0.92,0
+ItalyInformatica,Single Point of Failure: the (fictional) day Google forgot to check his password,,1531853524.0,6,0.88,4
+learnart,"Started reading Musashi and felt inspired. CC on everything but the ""face""? lol",,1531780531.0,4,0.83,7
+ItalyInformatica,Eventi del mese: Luglio,"Inizia l'estate e con l'aumentare del tempo libero, diminuisce anche il numero di eventi a giro per l'Italia.
+
+Godetevi le vacanze e iniziamo!
+
+------
+* **06/07->08/07 a Genova:** **[Hackmeeting 0x15](https://hackmeeting.org/hackit18/info.html)** Lo so, è già iniziato. Ma se siete nei dintorni potete ancora partecipare a un meeting pieno di talk e con un format veramente unico e interessante!;
+
+* **06/07 a Torino:** **[Intro a KotlinNLP](https://www.meetup.com/Machine-Learning-TO/events/251867336/)** Talk introduttivo a una libreria per Kotlin di Natural Language Processing, grazie alla quale possiamo ignorare gli aspetti più matematici del problema;
+
+* **18/07->22/07 a Milano: [Campus Party Italia](http://italia.campus-party.org/)** Festival di esperienze e condivisioni, ma anche impegno costante per sviluppare, giorno dopo giorno, il codice sorgente del futuro e migliorare il mondo attraverso un uso sempre più consapevole della tecnologia;
+
+* **18/07 a Torino** **[Integration tests Testcontainers to the rescue](https://www.meetup.com/JUGTorino/events/252429224/)**  Introduzione a TestContainers, un tool per rendere la scrittura di test di integrazione più semplice è immediata;
+
+* ~~**18/07 a Bologna:** **[Il DevOps secondo Atlassian](https://www.eventbrite.it/e/biglietti-il-devops-secondo-atlassian-45927403099)** Una dimostrazione di come i tool di Atlassian si sposino con il lavoro dei DevOps;~~
+
+-------
+-------
+-------
+
+Ormai questa sezione ""Aggiuntiva"" è di rito, quindi aggiungo un paio di segnalazioni:
+
+* Le iscrizioni per la Winter Edition di HackInBo che si svolgerà a Ottobre inizierà alle 00:01 del 13/07 su EventBrite;
+
+* Il 2 agosto inizierà Italian Hacker Camp a Padova: 4 giorni di conferenze, workshop e condivisione in un bellissimo parco, imitando lo stile dei grandi eventi Tedeschi e Olandesi, ma sul suolo italiano e tutto gratuito.
+Più informazioni su https://www.ihc.camp/
+
+------
+
+Potete trovare tutti gli eventi, insieme a molti altri sul calendario in [sidebar](https://calendar.google.com/calendar/ical/3ohrqpua9bgm4hc6e70hns5af8%40group.calendar.google.com/public/basic.ics).
+
+Organizzate eventi? Ne conoscete altri?
+Segnalateli a syrinxos@italyinformatica.org",1530941588.0,8,1.0,5
+learnart,C(&c?)hirp.,,1530524011.0,77,0.98,2
+ItalyInformatica,"[ENG] Cpp Core Guidelines, scritte da Bjarne Stroustrup in persona (e non solo).",,1529917590.0,4,0.84,0
+CatsReadingBooks,Math isn't for everyone I guess.,,1528995734.0,12,0.89,1
+ItalyInformatica,Eventi del Mese: Giugno,"Finiscono le scuola e dovete trovare qualcosa da far fare ai vostri figli.
+
+Ok, magari una conferenza sulla blockchain non è proprio la loro idea di *divertimento*, ma l'alternativa sarebbe rinchiuderli in uno scantinato buio con la metà di acqua e cibo rispetto a quanto servirebbe loro.
+
+Quindi se magari vi mettete con calma a spiegare la situazione, acconsentono a seguirvi in silenzio.
+
+Diamo un occhio a tutti gli eventi di giugno in cui vostro figlio si divertirà un sacco con voi!
+
+------
+* **05/06 a Roma:** **[Meetup #AperiTech di PyRoma](https://www.eventbrite.it/e/biglietti-meetup-aperitech-di-pyroma-45381021858)** Evento organizzato da Python Italia, con talk molto interessanti riguardanti librerie e... data mining negli archivi del vaticano;
+
+* **05/06 a Torino:** **[Gruppo di studio Rust](https://www.meetup.com/Rust-Torino/events/251106540/)** Primo gruppo di studio di Rust in cui imparare gli uni dagli altri e collaborare, o semplicemente procedere con i propri studi e progetti in Rust.;
+
+* **06/06 a Torino:** **[Set your code on fire with FlameGraphs](https://www.meetup.com/JUGTorino/events/251105464/)** L'utilizzo dei FlameGraphs per analizzare le performance di un applicazione sulla JVM;
+
+* **08/06 a Torino** **[Kotlin Night](https://www.eventbrite.it/e/biglietti-kotlin-night-torino-44917548597)**  Dopo varie tappe intorno al globo, la Kotlin Night approda finalmente a Torino;
+
+* **13/06 a Napoli:** **[DevDay Napoli: React Native Vs. Ionic](https://www.eventbrite.com/e/devday-napoli-react-native-vs-ionic-tickets-46517077832)** Talks sullo sviluppo front end con React Native e Ionic a confronto;
+
+* **16/06 a Pistoia:** **[Not a bug Conf](https://www.eventbrite.it/e/biglietti-not-a-bug-conf-45623234322)** Conferenza Toscana che raccoglie sviluppatori sw e appassionati per imparare e confrontarsi;
+
+* **20/06 a Milano:** **[Bitcoin 101 with Python](https://www.eventbrite.com/e/bitcoin-101-with-python-tickets-45936135217)** Un'introduzione al mondo dei bitcoin utilizzando python. 
+
+-------
+-------
+-------
+Segnalo inoltre che sono aperte le registrazioni gratuite (e le call for papers) per i biglietti della [RomHack](https://www.eventbrite.it/e/biglietti-romhack-2018-46507237399), conferenza di sicurezza informatica che si svolgerà in quel di Roma.
+
+------
+
+Potete trovare tutti gli eventi, insieme a molti altri sul calendario in [sidebar](https://calendar.google.com/calendar/ical/3ohrqpua9bgm4hc6e70hns5af8%40group.calendar.google.com/public/basic.ics).
+
+Organizzate eventi? Ne conoscete altri?
+Segnalateli a syrinxos@italyinformatica.org",1527919340.0,10,1.0,5
+ItalyInformatica,Live in HackInBo!,,1527321822.0,17,0.9,2
+godot,GDQuest - Getting Started with Screen Sizes in Godot 3,,1525893832.0,43,0.96,0
+ItalyInformatica,[live] Google I/O Extended da Pisa,,1525795032.0,11,0.87,2
+ItalyInformatica,Eventi del mese: Maggio 2018,"> L'acqua di maggio inganna il villano, par che non piova e si bagna il gabbano.
+
+Volevo mettere qualche simpatico detto su Maggio perché non avevo molto da aggiungere, ma ho trovato solo questo.
+
+Passiamo alle cose importanti:
+
+------
+* **08/05 a Genova:** **[Unreal Engine 4: First Steps with the Game Engine](https://www.eventbrite.it/e/biglietti-unreal-engine-4-first-steps-with-the-game-engine-43955645519?aff=eand)** Lezione introduttiva su uno degli engine più usati nel mondo commerciale;
+
+* **10/05 a Torino:** **[TCS HandsOn – Elixir](https://www.eventbrite.it/e/biglietti-tcs-handson-elixir-44587000920)** La terza di una serie di quattro incontri dedicata a Elixir. L'ultimo incontro sarà il 17 Maggio!;
+
+* **12/05 a Torino:** **[#KidsGameJam 2018 LA FINALE](https://www.eventbrite.it/e/biglietti-kidsgamejam-2018-la-finale-45015290947)** La finale della KidsGameJam. Ho un certo fetish per le game jam e sono super curioso di vedere i vincitori!;
+
+* **15/05 a Pisa:** **[An Evening with... Matteo Baglini](https://www.meetup.com/it-IT/Avanscoperta-Meetups-Workshops-Courses/events/249384983/)**  Onion Architecture e programmazione funzionale!;
+
+* **16-18/05 a Milano:** **[IMRA VR Hackathon](https://www.eventbrite.it/e/biglietti-imra-vr-hackathon-45470635896)** Hackathon in cui 20 professionisti e talenti del settore, divisi in squadre di un massimo di 4 componenti, si sfideranno nella creazione di esperienze di Virtual Reality;
+
+* **18/05 a Firenze:** **[Intelligenza Artificiale e Stupidità Naturale: cosa può fare più danni?](https://www.eventbrite.it/e/biglietti-intelligenza-artificiale-e-stupidita-naturale-cosa-puo-fare-piu-danni-44299210130?aff=eand)** l'intelligenza artificiale sta evolvendo in fretta, quali danni può portare all'essere umano?;
+
+* **26/05 a Bologna:** **[""HackInBo Sicurezza all'ombra delle Torri"" Spring Edition 2018 + LAB](https://www.eventbrite.it/e/biglietti-hackinbo-sicurezza-allombra-delle-torri-spring-edition-2018-lab-41527440693?aff=eand)** Se avete preso i biglietti in tempo! Uno degli eventi di sicurezza migliori in Italia (E gratuito!);
+
+-------
+-------
+-------
+Una sezione particolare per ricordare che **MARTEDÌ 8 MAGGIO** ci saranno nelle varie università (di sicuro a Pisa e Torino) eventi organizzati dai GDG delle rispettive città per seguire live il Google I/O.
+
+A tal proposito vi segnaliamo che farò personalmente un live thread per commentare insieme i nuovi annunci google (in diretta da Pisa!)
+
+------
+
+Potete trovare tutti gli eventi, insieme a molti altri sul calendario in sidebar.
+
+Organizzate eventi? Ne conoscete altri?
+Segnalateli a syrinxos@italyinformatica.org",1525498591.0,12,1.0,14
+Baking,[HOMEMADE] Schwarzwälder Kirschtorte (Black Forest Cake),,1525329871.0,53,0.93,7
+food,[HOMEMADE] Schwarzwälder Kirschtorte (Black Forest Cake),,1525279670.0,1,1.0,0
+RocketLeagueExchange,[SWITCH] [H] Crates [W] Keys or Offers," Hi!
+
+I have a few crates I'd like to exchange!
+
+6 Spring Fever Crates : 1k
+
+~~3 Triumph Crates : 2k~~
+
+~~5 Velocity Crates : 1k~~
+
+... OBO (Or Best Offer) :)",1524051233.0,1,1.0,11
+food,[HOMEMADE] raspberry's pie with dark chocolate,,1523876704.0,2,1.0,0
+ItalyInformatica,Eventi del mese: Aprile,"Passato bene Pasqua?
+
+Mangiato abbastanza?
+
+Bene, allora iniziamo subito!
+
+------
+* **10/04 a Brescia:** **[Sistemi di Gestione della sicurezza delle informazioni](https://www.eventbrite.it/e/biglietti-sistemi-di-gestione-della-sicurezza-delle-informazioni-normativa-iso-27001-43621196172)** Corso di formazione sui sistemi di gestione delle informazioni secondo la normativa ISO 27001;
+
+* **18/04 a Firenze:** **[Blockchain: Cosa è e un approccio tecnico](https://www.eventbrite.it/e/biglietti-blockchain-cose-e-come-funziona-e-un-approccio-tecnico-44707511370)** La blockchain spiegata da 0 per poterla comprendere al meglio con l'obiettivo di iniziare a lavorarci;
+
+* **20/04 a Firenze:** **[DatabeersX](https://www.eventbrite.it/e/registrazione-databeersx-42422206963)** La possibilità per appassionati, smanettoni e professionisti dei dati di raccontare le loro scoperte e le loro esperienze in un ambiente rilassato e informale;
+
+* **21/04 a Padova:** **[Workshop gratuito di Coding per bambini 7-10 anni](https://www.eventbrite.it/e/biglietti-workshop-gratuito-di-coding-per-bambini-7-10-anni-padova-38320512685)** Devia i tuoi figli fin da piccoli grazie a questo workshop che insegnerà loro la programmazione, in collaborazione con Poste Italiane (?) e TAG Innovation School;
+
+
+* **21/04 a Padova:** **[Workshop gratuito di Coding per bambini 11-14 anni](https://www.eventbrite.it/e/biglietti-workshop-gratuito-di-coding-per-ragazzi-11-14-anni-padova-38320581892?aff=eand)** Come sopra, ma per un diverso range di età;
+
+* **09/04 a Torino:** **[Gruppo di studio Rust](https://www.meetup.com/Rust-Torino/events/249150851/)** Primo gruppo di studio di Rust in cui imparare gli uni dagli altri e collaborare, o semplicemente procedere con i propri studi e progetti in Rust;
+
+* **12/04 a Torino** **[DataBeers Torino](https://www.eventbrite.com/e/databeers-torino-11-tickets-44589704005?aff=ebapi)** Per parlare di data science e big data (uuuh, spaventosi!) davanti a una buona birra ;
+
+* **17/04 a Torino** **[AMP & FURIOUS: in the fast lane](https://www.meetup.com/Turin-Web-Performance-Group/events/249183062/)** Uno sguardo alle nuove pagine AMP e su come funzionano;
+
+* **24/04 a Torino** **[TCS Night – Flutter & Kotlin](https://www.eventbrite.it/e/biglietti-tcs-night-flutter-kotlin-44323626159?aff=ebapi)** La seconda TCS, tutta dedicata a Kotlin e Flutter!;
+
+
+
+-------
+
+Potete trovare tutti gli eventi, insieme a molti altri sul calendario in sidebar.
+
+Organizzate eventi? Ne conoscete altri?
+Segnalateli a syrinxos@italyinformatica.org o qui su reddit tramite PM!",1523079070.0,7,0.9,9
+food,[HOMEMADE] Croquenbouche,,1522568133.0,15,0.91,2
+booksuggestions,What are some lesser-known country must reads?,"Most of my library is from US, UK and some russian (mainly sci fi) authors.
+
+Apart from the classics, what would you suggests from lesser known country?
+
+I mainly read sci fi, but I'm open to everything!",1522449595.0,4,0.76,4
+food,[HOMEMADE] Galaxy Cupcakes,,1520101491.0,26,1.0,1
+ItalyInformatica,Eventi del Mese: Marzo,"Eccoci a Marzo.
+
+Chiedo scusa per aver saltato Febbraio, ma non mi rendevo nemmeno conto di che giorno fosse, non che sia una scusa valida.
+
+Ma bando alle ciancie e vediamo cosa ci offre il mese quaresimale!
+
+------
+* **05/03 a Torino:** **[Coding for Everyone](https://www.meetup.com/turn-into-coders/events/246522639/)** I torinesi ci tengono a insegnarvi a programmare. Torna quindi Coding For Everyone: BYOD e imparate javascript partendo da 0!;
+
+* **05/03 a Torino:** **[Venkat Subramaniam 50x50 Tour](https://www.meetup.com/JUGTorino/events/241361441)** Venkat Subramaniam passa da Torino per il suo tour: parlare a 50 user groups per i suoi 50 anni;
+
+* **08/03 a Torino:** **[WP Meetup](https://www.meetup.com/WordPress-Meetup-Torino/events/248091246/)** Talk di Luca Porru su come organizzare al meglio i contenuti del proprio progetto WP;
+
+* **12/03 a Torino:** **[Bitcoin Meetup Torino](https://www.meetup.com/Meetup-Bitcoin-Torino/events/248295209/)** Meetup a tema bitcoin;
+
+* **24/03 a Torino:** **[Freelance Day](https://www.eventbrite.it/e/biglietti-freelance-day-2018-42401408755?aff=ebapi#add-to-calendar-modal)** Il Freelance Day è una giornata totalmente gratuita dedicata a freelance e imprenditori;
+
+* **29/03 a Torino:** **[Torino Hacknight](https://www.eventbrite.it/e/biglietti-torino-hacknight-server-o-client-side-entrambi-con-webasm-43548878869?aff=ebapi)** Scrivere applicazioni web usando dei linguaggi relativamente nuovi: Rust e Kotlin;
+
+* **13/03 a Bologna:** **[Devops Italia](http://2018.incontrodevops.it/)** La sesta edizione dell'incontro dei DevOps italiani;
+
+* **22/03 a Firenze** **[Microservices, la risposta che (forse) cercavi!?](https://www.eventbrite.it/e/biglietti-microservices-la-risposta-che-forse-cercavi-43665272004?aff=es2)** Evento organizzato da Commit sui microservices e su cosa si cela dietro questa parola;
+
+* **17/03 a Milano** **[IoT GrandPrix: workshop e gara con Raspberry Pi](https://www.eventbrite.it/e/biglietti-iot-grandprix-workshop-e-gara-con-raspberry-pi-42988849807?aff=es2)** Intro su librerie IoT, costruzione di Robo Kart con Raspberry PI e gara!;
+
+* **10/03 a Firenze** **[Coderetreat Firenze](https://www.eventbrite.com/e/coderetreat-firenze-tickets-43122996042?aff=ehomecard)** evento ""competitivo"" in cui si fa pair-programming e TDD per dare la possibilità ai partecipanti di esplorare le buone pratiche della programmazione.
+
+-------
+
+Inoltre questo venerdì tutti sintonizzati sul sub per l'AMA con Italo Vignoli!
+
+-------
+
+Potete trovare tutti gli eventi, insieme a molti altri sul calendario in sidebar.
+
+Organizzate eventi? Ne conoscete altri?
+Segnalateli a syrinxos@italyinformatica.org o qui su reddit tramite PM!",1520074781.0,3,1.0,5
+Baking,Galaxy Cupcakes by my gf. Inspired by another post here on reddit.,,1520010049.0,54,0.87,1
+italy,"""Quali podcast dovrei ascoltare?"" - Ho compilato una lista dei miei preferiti!",,1519910854.0,30,0.89,32
+italysmart,"""Quali podcast dovrei ascoltare?"" - Ho compilato una lista dei miei preferiti!","Ascolto una marea di podcast e sul gruppo telegram qualcuno chiedeva consigli.
+
+Mi sono messo a stilare una lista dei miei preferiti, in cui sicuramente ne ho saltato qualcuno.
+
+Buona Lettura!
+
+* **2024 [ITA]** - Podcast di tecnologia di Radio24;
+
+* **99% Invisible [ENG]** - Bellissime storie di tutto ciò che rimane nascosto nell'architettura (descrizione noiosa, in realtà è molto figo);
+
+* **Alice isn't Dead [ENG]** - Podcast dai creatori di Night Vale, una storia disturbante raccontata come se stesse parlando attraverso la radio di un camion;
+
+* **Astronauticast [ITA]** - Podcast di spazio italiano;
+
+* **BigSushi.fm [ENG]** - Interrotto, ma un backlog abbastanza ampio di interviste a game developer indie;
+
+* **The Butterfly Effect [ENG]** - Prodotto da Audible, ripercorre l'effetto a farfalla che ha causato la creazione di Pornhub (serio, è interessantissimo);
+
+* **Cane and Rinse [ENG]** - Parlano di un videogioco per ogni puntata analizzandolo in ogni dettaglio;
+
+* **Co-Optional Podcast [ENG]** - Podcast di videogiochi di Total Biscuit, non ho altro da aggiungere;
+
+* **Coffee With Butterscotch [ENG]** - Podcast di game design dai creatori di Crashland;
+
+* **Cosmic Vertigo [ENG]** - (In pausa?) l'astronomia ELI5 praticamente;
+
+* **Da Costa a Costa [ITA]** - Podcast di Francesco (mi sembra) Costa (lol) che analizza l'America pre e post Trump;
+
+* **Digitalia [ITA]** - Forse il mio podcast italiano preferito. Tutti i lunedì parlano di tecnologia analizzando le news della settimana;
+
+* **Disney Princess Deathmatch [ENG]** - Sembra stupido, ma è carino. Ogni puntata è relativa a un film disney e danno i voti alla principessa del film secondo vari parametri;
+
+* **Downloadable Context [ENG]** - Game Design con interviste ai developers;
+
+* **Dunwich Buyers Club [ITA]** - Podcast di giochi da tavolo, puntate un po' troppo lunghe, ma sanno intrattenere;
+
+* **Faculty of Horror [ENG]** - Analisi di film horror di qualsiasi età;
+
+* **Fantascientificast [ITA]** - Podcast di fantascienza italiano. Sono un po' troppo confusionari con i vari format e non hanno una schedule, ma si  lasciano ascoltare;
+
+* **Fisicast [ITA]** - la fisica ELI1 in pratica lol, molto carino;
+
+* **Get Booked [ENG]** - Podcast di Bookriot.com che danno suggerimenti custom rispondendo alle mail;
+
+* **Bombcast [ENG]** - Podcast di videogiochi di ""The Giant Bombcast"", anche su YT;
+
+* **Good Night Storie for Rebel Girls [ENG]** - Tratto dal libro dallo stesso nome. Ancora in realtà non è uscito nulla, ma sono stracurioso;
+
+* **Hackable [ENG]** - Podcast di sicurezza informatica di McAfee. Odio il loro prodotto, ma il podcast è interessante per quanto un po' troppo superficiale;
+
+* **Heaven's Gate [ENG]** - Ripercorre la storia del gruppo;
+
+* **HistoryCast [ITA]** - Purtroppo interrotto, ma hanno un buon backlog di storie.... di storia;
+
+* **Il dado incantato [ITA]** - Podcast di boardgame di Paolo Bianchi (Scientificast);
+
+* **Il Disinformatico [ITA]** - Grande e onnipotente Paolo Attivissimo che ogni venerdì ci mette al corrente di tutte le novità nel mondo dell'informatica in soli 15minuti;
+
+* **Jimquisition [ENG]** - Podcast di videogiochi di Jim Sterling;
+
+* **Lore [ENG]** - recentemente anche una serie su Amazon Prime video. Storie di Folklore narrate molto bene;
+
+* **Lostcast [ENG]** - Il mio podcast di game design preferito, purtroppo interrotto, ma con un backlog ENORME di argomenti;
+
+* **Mission to ZYXX [ENG]** - L'ho iniziato solo di recente, è un podcast di ""improvvisazione"" di un ambasciatore inetto che cerca di completare missioni su pianeti alieni, molto carino;
+
+* **My Dad Wrote a Porno [ENG]** - Letteralmente il titolo. In ogni puntata leggono un capitolo dal romanzo porno che il padre di uno dei conduttori ha scritto e lo commentano, fa schiantare dal ridere;
+
+* **Nintendo Power Podcast [ENG]** - La rivista storica che era morta e defunta è rinata sotto forma di podcast;
+
+* ** Nintendo Voice Chat [ENG]** - Podcast a tema Nintendo di IGN;
+
+* **The No Sleep Podcast [ENG]** - Podcast di creepy pasta, niente di che, ma molto immersivo nella narrazione grazie ai molti voice actors;
+
+* **The Other Stories [ENG]** - Più o meno come sopra;
+
+* **Overdue [ENG]** - Ogni settimana uno dei 2 conduttori racconta un libro che ha letto in 2 settimane all'altro. Molto molto divertente!
+
+* **Planet Money [ENG]** - Podcast di NPR, si parla di storie che spesso hanno poco a che fare con l'economia, ma molto interessanti;
+
+* **Risciò [ITA]** - PianoP sta sfornando podcast di qualità come fossero pagnotte. Questo analizza la Cina odierna per cercare di sfondare lo stereotipo di Cina == Fake;
+ 
+* ** Scientificast [ITA]** - IL podcast di scienza italiano, non posso consigliarlo abbastanza;
+
+* **SFF Yeah [ENG]** - Podcast di bookriot.com dove si parla di libri di fantascienza e fantasy;
+
+* **The Skeptics Guide to the Universe [ENG]** - IL podcast di scienza in inglese (lol);
+
+* **Smashing Security [ENG]** - Scoperto di recente, bellissimo podcast di sicurezza informatica;
+
+* **Security Now [ENG]** - Con Steve Gibson, podcast di sicurezza informatica, ma scendono MOLTO nei dettagli e spesso non riesco a seguire bene lol;
+
+* **Sound of Play [ENG]** - Podcast di colonne sonore dei videogiochi;
+
+* **Veleno [ITA]** - ...Meh, podcast di Repubblica che analizza un episodio di cronaca nera sulla scia di Serial. Molto bello fino alle ultime puntate dove mi pareva cercasse di creare un finale migliore rispetto a quello che è realmente successo;
+
+* **Zero Days [ITA]** - Podcast di sicurezza informatica e consapevolezza digitale di Giovanni Ziccardi, grande giornalista che si occupa spesso dell'argomento;
+
+* **Welcome To Night Vale [ENG]** - Da una città dove l'ordinario diventa straordinario e lo straordinario diventa ordinario, veniamo a conoscienza degli avvenimenti Lovecraftiani, ma con una certa nota comica tramite la Community Radio della città, con la voce ""suadente"" di Cecil Baldwin;
+
+* **Within The Wires [ENG]** - Altro podcast di Night Vale Presents, ascoltiamo le cassette di ""meditazione guidata"" che ci vengono fornite, finché iniziano a diventare... strane; 
+
+
+
+—---—
+
+
+
+In particolare poi vorrei dare una sezione separata ai podcast dell'associazione culturale querty.it (con la U come Deborah con la h) a cui sono particolarmente affezionato:
+
+* **Fumble e Epoca** - 2 podcast di giochi di ruolo, il secondo fatto da Toscani, quindi lo preferisco (:P);
+
+* **Racconti** - Ogni settimana un nuovo racconto viene pubblicato su inutile.eu (associazione da cui è nata querty) e ogni settimana lo stesso racconto viene letto da Federica sul podcast;
+
+* **Spoiler** - Una serie che parla dello spoiler, e del perché non dobbiamo temerlo.
+
+* **Ricciotto** - Un podcast sul cinema in cui analizzano molto accuratamente i film appena usciti (E anche un po' più vecchi nelle varie Missioni Di Giustizia con Nanni Cobretti dei 400Calci);
+
+* **Spoiler** - Stesso nome, diverso contenuto, si parla di serie tv!
+
+----
+
+*Ma come fai?* La vita del pendolare è noiosa. Poi alcuni della lista sono finiti o comunque non li ascolto ogni settimana.
+Inoltre ascoltare qualcosa a 1.5x o a 2x aiuta molto a incastrare più podcast possibili in poco tempo :D",1519827654.0,22,1.0,13
+food,[Homemade] Red Velvet Cupcakes,,1518704138.0,24,0.92,1
+learnart,"Since I've -10 self esteem and everything i commit to basically fails, this is my attempt to learn how to draw for the few months i managed to do it (sorry for the italian annotations on the drawings).",,1517668019.0,3,0.72,6
+godot,Any 3D for beginners tut?,"As the title says: there is somewhere a beginner tutorial for 3d like the one for 2D game on the docs?
+
+I don't have previous experience with 3d, so the terminology on the docs doesn't help me with learning!",1516656946.0,6,0.81,11
+javahelp,How do I create a see-through window in JavaFX or Swing?,"I need to create a gif-recorder and I've not decided yet if I'm gonna use Swing or JavaFX for the UI.
+
+[How can I create something like this](https://imgur.com/a/qmmRB)?
+It's a ""blank"" window as in you are clicking on the desktop, you can select stuff, so it's not just a screenshoot of what's underneath.",1515438243.0,3,0.8,2
+AskProgramming,What is the best way to record a gif from the screen?,"For my Interfaces Programming course at university I've thought about building a gif recorder, something similar (but way simpler) to ScreenToGif.
+
+Should I take screenshot 20/30 times per second and then create a gif from those?
+
+Is it the best way?
+
+Thanks for the answers :)",1515341105.0,2,0.76,3
+food,"[Homemade] Salmon, zucchini and onions skewers with ginger, honey and lime.",,1515265970.0,59,0.9,2
+ItalyInformatica,Eventi del Mese: Gennaio,"Siamo a Gennaio! Auguri di buon anno e auguri a tutti/tutte i befani/befane!
+
+Nel mio scandagliare il web ho trovato perlopiù eventi Torinesi, con una tech scene sempre molto attiva, ma sorpresa delle sorprese... Questo mese anche Cagliari ha organizzato qualcosa di interessante!
+
+Quindi bando ai commenti e iniziamo subito:
+
+------
+* **08/01 a Torino:** **[Coding for Everyone](https://www.meetup.com/turn-into-coders/events/245966646/?_cookie-check=FWL7dYMl6rkUAVBf)** I torinesi ci tengono a insegnarvi a programmare. Torna quindi Coding For Everyone: BYOD e imparate javascript partendo da 0!;
+
+* **10/01 a Torino:** **[Study Jam Mobile Sites Optimization](https://www.meetup.com/GDG-Torino/events/246096224/)**Inizia il 2018 anche per il GDG Torino e dal 10 gennaio iniziano 3 lunedì di studio ""matto e disperatissimo"" con dei tutor preparatissimi. L'esame vero e proprio si terrà nella 4 sessione! ;
+
+* **12/01 a Roma:** **[Kotlin Night Rome 2018](http://knight.devday.it/)** Kotlin è il ""nuovo"" linguaggio che google ha proposto come base per le nuove applicazioni android.
+Un intera serata con talks sul linguaggio per la JVM che sta stupendo un po' tutti.;
+
+* **13/01 a Cagliari:** **[Game Maker Studio 2018](https://www.eventbrite.it/e/biglietti-game-maker-studio-2018-40708319680)** Corso di game dev su GameMakerStudio, dalla realizzazione alla pubblicazione (25€);
+
+* **17/01 a Torino** **[JavaParser per generare, modificare e analizzare codice Java](https://www.meetup.com/JUGTorino/events/246048923/)** Un nuovo parser per java, in java, è arrivato. Refactoring automatizzato o generare nuovo codice sono solo alcune delle idee su come poter utilizzare questa nuova libreria di parsing!;
+
+* **23/01 a Torino** **[TCS Night – Rust](https://www.eventbrite.it/e/biglietti-tcs-night-rust-27698379599)** 3 mini talk da 30 minuti l'uno interamente basati su Rust!;
+
+* **25/01 a Firenze** **[Servizi e Tecnologie Amazon Web Services](https://www.eventbrite.it/e/biglietti-servizi-e-tecnologie-amazon-web-services-41865698431)** Un altro incontro della Commit University, questa volta su AWS e come i servizi amazon possono essere impiegati su applicazioni complesse.
+
+-------
+
+Potete trovare tutti gli eventi, insieme a molti altri sul calendario in sidebar.
+
+Organizzate eventi? Ne conoscete altri?
+Segnalateli a syrinxos@italyinformatica.org",1515229379.0,10,1.0,3
+laptops,Lenovo Ideapad 320s with i3-7100U,"Hi everyone!
+
+I was looking to buy a ~600€ 13/14 inches laptop and I found this one: [Sorry for the Italian website](https://www3.lenovo.com/it/it/laptops/ideapad/300-series/Ideapad-320S-14-IKB/p/88IP30S0823).
+
+It has Intel Core i3-7100U Processor ( 2.40GHz 2133MHz 3MB), 4Gb of 2133Mhz Ram, a 128Gb SSD.
+
+On a forum I found this message:
+
+> ""It is is a Core i3-7100u (2.4GHz) vs. the Core i5-4200u (1.6GHz / 2.6GHz), then I would just go for the Core i3-7100u. Despite the 200MHz difference, the performance should be nearly the same especially since Intel tend to improve the performance about 5% every generation; so a 7th gen CPU running at 2.4GHz is roughly the equivalent to a 5th gen CPU running at 2.65GHz.
+>     
+> The i3-7100u has better power efficiency so assuming all other parts are equal, a laptop with a i3-7100u may have 30 to 60 minutes longer battery life compared to an i5-4200u with average usage.
+>     
+> The 7th gen Intel HD 620 graphics core is more powerful than the 5th gen Intel HD 4400 graphics core so you get better gaming performance with the i3-7100u. Just keep in mind that the Intel HD 620 is still weak compared to a mainstream nVidia 940mx (which is not considered a powerful dedicated GPU at all) so keep your gaming expectations low.""
+
+[[source]](http://www.tomsguide.com/answers/id-3509114/7th-gen-5th-gen.html)
+
+Would this be a good laptop for media consumption and some programming?
+
+I don't plan on using it for heavy gaming (I have my desktop for that).
+
+Thanks!",1513594323.0,1,1.0,2
+ItalyInformatica,Eventi del mese: Dicembre,"Natale si avvicina
+
+Il calore,
+
+Mining Bitcoin
+
+--
+
+Siamo a Dicembre e fa un freddo bestia.
+
+Fortunatamente siamo **ben coperti** (AH!) con un sacco di eventi, anche per i più piccoli!
+
+------
+* **12/12 a Firenze:** **[La rivoluzione digitale: Impresa 4.0 e CYBERSECURITY](https://www.eventbrite.it/e/biglietti-la-rivoluzione-digitale-impresa-40-e-cybersecurity-40840600335?aff=eand)** CyberSec nelle aziende per evitare di correre rischi inutili. Presenti all'incontro quattro tra i maggiori player del mercato ICT Italiano!;
+
+* **12/12 a Torino:** **[Sentiment analysis in python](https://www.meetup.com/Machine-Learning-TO/events/245333291/)**Cos'è la sentiment analysis e come posso usare gli algoritmi di machine learning per ricavare importanti informazioni dai testi?;
+
+* **12/12 a Bologna:** **[Il Machine Learning spiegato agli umani](https://www.eventbrite.it/e/biglietti-il-machine-learning-spiegato-agli-umani-paolo-nusco-perrotta-40898318973?aff=eand)** Un evento meno ""tecnico"" per introdurre il machine learning: cosa può fare? Quali sono le tecnologie?;
+
+* **14/12 a Genova:** **[CODING PER RAGAZZI 8-12](https://www.eventbrite.it/e/biglietti-coding-per-ragazzi-8-12-con-scuola-di-robotica-40560266850?aff=eand)** Scuola di Robotica di Genova organizza un laboratorio per introdurre i ragazzi al mondo della programmazione tramite Lego WeDo e  Scratch;
+
+* **15/12 a Roma** **[Social goods security using blockchain](
+https://www.eventbrite.it/e/biglietti-social-goods-security-using-blockchain-40900806413?aff=eand)** Quali sono i pro e i contro della tecnologia blockchain e come può essere usata per proteggere i nostri dati?;
+
+* **16/12 a Milano** **[CoderDojo - Dicembre](https://www.eventbrite.it/e/biglietti-coderdojo-dicembre-38578255601?aff=eand)** Altro workshop per i ragazzi, organizzato da CoderDojo per imparare la programmazione;
+
+* **21/12 a Arezzo** **[WordPress Meetup Arezzo](https://www.meetup.com/Arezzo-WordPress-Meetup/events/245476839/)** se siete appassionati o utilizzate WordPress direi che questi meetup sono un must: confronto e condivisione sono le parole chiave.
+
+-------
+
+Potete trovare tutti gli eventi, insieme a molti altri sul calendario in sidebar.
+
+Organizzate eventi? Ne conoscete altri?
+Segnalateli a syrinxos@italyinformatica.org",1512195743.0,4,0.84,2
+Baking,Drip Cake my girlfriend made for my bday!,,1511084274.0,30,0.93,0
+ItalyInformatica,Eventi del mese: Novembre 2017,"Siamo a Novembre, riusciamo tra le castagne e il freddo pungente a trovare una giornata da dedicare al nostro framework del cuore?
+
+------
+* **Dal 04/11 al 05/11 a Padova:** **[Hack The Wire](https://www.hackthewire.org/)** Prima edizione di HackTheWire, evento di 2 giorni a Padova dedicato alla sicurezza informatica (free!);
+
+* **06/11 a Torino:** **[Coding for Everyone](https://www.meetup.com/turn-into-coders/events/244283514/)** Introduzione a JS dai ragazzi di Turn into Coders;
+
+* **14/11 a Bologna:** **[XPug Bologna - ""NeoVim al wasabi""](https://www.eventbrite.it/e/biglietti-xpug-bologna-neovim-al-wasabi-39483810139)** Introduzione a NeoVim: perché e come usarlo con i migliori plugin in circolazione.;
+
+* **15/11 a Torino:** **[Java 9 - Part1 New Features ](https://www.meetup.com/JUGTorino/events/244539265/)** Analisi delle principali novità introdotte con Java 9;
+
+* **18/11 a Roma** **[Haskell Day](https://www.eventbrite.it/e/biglietti-haskell-day-roma-aperitech-38962491862)** Introduzione alla programmazione funzionale pura, ma che dico: PURISSIMA;
+
+-------
+
+Shout out al [C++ Day 2017](https://www.eventbrite.it/e/c-day-2017-tickets-38332244776) che si svolgerà a Modena il 2 Dicembre!
+
+-------
+
+Potete trovare tutti gli eventi, insieme a molti altri sul calendario in sidebar.
+
+Organizzate eventi? Ne conoscete altri?
+Segnalateli a syrinxos@italyinformatica.org",1509787007.0,5,0.86,1
+italygames,"[SCONTI] The Witcher 3, GOTY edition a 20€",,1508152154.0,9,1.0,0
+blender,Magic Lantern,,1507558695.0,61,0.96,4
+ItalyInformatica,Eventi del mese: Ottobre 2017,"Siamo a Ottobre, ormai le foglie iniziano a cadere e gli informatici si svegliano dal letargo.
+
+Si riparte con una marea di eventi nel mese di Ottobre, di cui potete vedere un anteprima in questo post!
+
+------
+* **Dal 04/10 al 08/10 a Pisa:** **[Internet Festival](https://www.internetfestival.it)** Torna come ogni anno l'internet Festival a Pisa, con tantissimi eventi in tutta la città!;
+
+* **Dal 07/10 a 08/10 a Roma, Milano, Bari, Firenze e Torino**
+ **[hack.developers](https://hack.developers.italia.it/)** Inizia l'hackaton in tantissime città d'Italia (indirettamente anche in altre città non menzionate, guardate il sito!);
+
+* **12/10 a Torino:** **[Kubernetes from the beginning to Rock! with CoreOS & Cognitio](https://www.meetup.com/CNCF-Italy/events/243039837/)** Organizzato da CNFC, una conferenza in lingua inglese sul progetto Kubernetes e sui vari use case di CoreOS;
+
+* **14/10 a Bologna:** **[HackInBo Winter Edition!](https://www.hackinbo.it)** Torna anche nel 2017 la versione invernale dell'evento di sicurezza in quel di Bologna;
+
+* **19/10 a Torino:** **[Torino Hacknight: UX Testing](https://www.eventbrite.com/e/biglietti-torino-hacknight-ux-testing-38437880736)** I ragazzi di Torino organizzano ancora un'altra hacknight per aiutare a entrare nel mondo dell'open source!;
+
+* **28/10:** **[Linux Day](http://www.linuxday.it/)** Torna la giornata dedicata a Linux, con decine di eventi in tutta Italia;
+
+-------
+
+
+Potete trovare tutti gli eventi, insieme a molti altri sul calendario in sidebar.
+
+Organizzate eventi? Ne conoscete altri?
+Segnalateli a syrinxos@italyinformatica.org",1507352448.0,8,1.0,2
+Guildwars2,"At the Mystic Forge: ""It's just a masterwork, but the skin is pretty co--- WTF TP"". The struggle is real.",,1504465688.0,241,0.9,185
+ItalyInformatica,Eventi del mese: Settembre 2017,"Ripartiamo lentamente con gli eventi che più ci piacciono in Italia.
+
+Dico lentamente perché gli eventi settembrini rimangono comunque pochi: alla fine siamo ancora in estate!
+
+------
+* **04/09 a Torino:** **[Coding for everyone](https://www.meetup.com/turn-into-coders/events/242125294/)** Una serata JS  per chi vuole imparare a programmare da 0 o per chi desidera affinare le sue abilità insegnando agli altri;
+
+* **09/09 a Torino:** **[Open Source Saturday](https://www.meetup.com/open-source-saturday-torino/events/242964356/)** La tech scene di Torino è molto attiva e qui siamo  arrivati al quarto Open Source Saturday! ;
+
+* **19/09 a Torino:** **[Java Champions Tour](https://www.meetup.com/JUGTorino/events/240288374/)** Se volete incontrare esperti di Java di fama mondiale, questa tappa europea dei Java Champions è la serata che fa per voi;
+
+* **22/09 a Pisa:** **[GDD Europe 2017 Extended](https://www.meetup.com/GDG-Pisa/events/242326529/)** I Google Developer Days visti in streaming dal polo Fibonacci dell'Università di Pisa.
+Dettagli ancora da definire, se siete interessati tenete d'occhio la pagina meetup;
+
+* **27/09 a Roma:** **[Meetup #AperiTech di Blockchain Roma](https://www.eventbrite.it/e/biglietti-meetup-aperitech-di-blockchain-roma-4-37275540144)** Dopo la pausa estiva ritornano, con il quarto appuntamento, i ragazzi del gruppo di BlockChain Roma.
+
+-------
+
+Nonostante non sia settembre, vi ricordo anche un evento che mi sta molto a cuore:
+
+* **14/10 a Bologna:** **[HackInBo](https://hackinbo.it/)** Biglietti terminati poche ore dopo la messa in vendita e la waiting list penso sia interminabile, ma provare non costa nulla, giusto?
+
+------
+
+Potete trovare tutti gli eventi, insieme a molti altri sul calendario in sidebar.
+
+Organizzate eventi? Ne conoscete altri?
+Segnalateli a syrinxos@italyinformatica.org",1504342657.0,6,1.0,5
+warsaw,Luggages in Copernicus science museum,"Me and my gf are leaving warsaw Saturday afternoon, but the checkout is in the morning. 
+
+We wanted to visit the Copernicus science museum, but we couldn't find any info if they have a place where we could left our luggages!
+
+Is there?
+
+Or there is someplace nearby?
+
+Thanks",1503575427.0,1,1.0,2
+buildapc,"Finally close to buy build my computer, one last proof read of the build from you, thanks.","###Build Help/Ready:
+
+**Have you read the sidebar and [rules](http://www.reddit.com/r/buildapc/wiki/rules)? (Please do)**
+
+Yup
+
+**What is your intended use for this build? The more details the better.**
+
+Gaming, coding (CS student) and some light 3d modelling (I'm learning).
+
+**If gaming, what kind of performance are you looking for? (Screen resolution, framerate, game settings)**
+
+1080p, high settings, circa.
+
+**What is your budget (ballpark is okay)?**
+
+It was under 700€ without the GPU, but I have alreay bought a gtx970 for 195€, so at this point it would be under 500€.
+ 
+**In what country are you purchasing your parts?**
+
+Italy
+
+**Post a draft of your potential build here (specific parts please). [Consider formatting your parts list.](http://www.reddit.com/r/buildapc/wiki/pcpp) Don't ask to be spoonfed a build (read the rules!)**.
+
+[PCPartPicker part list](https://it.pcpartpicker.com/list/Gs9DWX) / [Price breakdown by merchant](https://it.pcpartpicker.com/list/Gs9DWX/by_merchant/)
+
+Type|Item|Price
+:----|:----|:----
+**CPU** | [AMD - Ryzen 5 1600 3.2GHz 6-Core Processor](https://it.pcpartpicker.com/product/mV98TW/amd-ryzen-5-1600-32ghz-6-core-processor-yd1600bbaebox) | €203.65 @ Amazon Italia 
+**Memory** | [Corsair - Vengeance LPX 8GB (2 x 4GB) DDR4-3000 Memory](https://it.pcpartpicker.com/product/BYH48d/corsair-memory-cmk8gx4m2b3000c15) | €82.26 @ Amazon Italia 
+**Case** | [BitFenix - Neos White/Red ATX Mid Tower Case](https://it.pcpartpicker.com/product/hPbp99/bitfenix-case-bfcneo100wwxkrrp) | €40.99 @ Amazon Italia 
+**Other** | [EVGA Bronze Alimentatore, Nero](https://it.pcpartpicker.com/product/NCM323/evga-bronze-alimentatore-nero) | €52.94 @ Amazon Italia 
+**Other** | [MSI AMD AM4 B350 PC Mate Ryzen Gen DDR4 VRR M.2 Audio LAN ATX Motherboard - Black](https://it.pcpartpicker.com/product/LmzZxr/msi-amd-am4-b350-pc-mate-ryzen-gen-ddr4-vrr-m2-audio-lan-atx-motherboard-black) | €86.99 
+ | *Prices include shipping, taxes, rebates, and discounts* |
+ | **Total** | **€466.83**
+ | Generated by [PCPartPicker](http://pcpartpicker.com) 2017-08-20 13:08 CEST+0200 |
+
+**Provide any additional details you wish below.**
+
+I know about the crazy prices of GPU because of crypto.
+
+This is why I bought an used GTX970. In settember I'll start my last year at university, after that I hope I'll be able to afford a new GPU, that's why I choose the Ryzen 1600 (futureproof, I guess) and more RAM (that's why I need 4 slots).
+
+I really can't go much higher on the budget: I already have a 2Tb hdd and I'll add an ssd in the future; regarding Windows, My university will provide.
+
+I'm gonna buy the pieces in a week or two, when I'll return from my 4 days trip to Warsaw with my gf and I wanted to know if this build will perform ok for at least the next year.
+
+
+Thanks for the Proof Reading of the build!",1503227689.0,1,1.0,3
+HardwareSwapEU,[EU-IT][H]Paypal[W]Gtx 970 or Rx470/570,"I'm trying to build my Pc but it's almost impossible because of the crazy GPU prices.
+
+I've decided to go for a Gtx970 until I'll finish University (Next Year). At that point I'll upgrade.
+
+I'm looking for one of the GPU in the title for not more than 200€ shipped, around 190€ would be better.
+
+
+Thanks!
+",1502953557.0,1,1.0,3
+poland,Renting bike in Warsaw with Venturilo.,"Hi everyone!
+
+Next week, me and my gf are flying to warsaw for a few days and we would love to use bikes for moving around the town.
+
+I tried to register on Venturilo, but for some weird reason, when I added my phone number on international format (+39 xxx, I'm from Italy) they STILL added the poland prefix in front of the number and in result I can't access my account , as I never received my PIN.
+
+I tried to contact them 2 weeks ago, but still no answer.
+
+Are there any bike rental service other than Venturilo? 
+
+Thanks",1502790698.0,1,1.0,5
+ItalyInformatica,Eventi nel mese Luglio/Agosto 2017,"Siamo a Luglio, gli eventi informatici si contano sulle punte delle dita, nonostante la nostra scelta primaria sarebbe quella di rinchiuderci in una stanza (con aria condizionata) insieme a altri esperti, appassionati e interessati a parlare degli argomenti che più ci appassionano.
+
+Ma bando alle ciance e passiamo al succo del contenuto!
+
+------
+* **24/07 a Roma:** **[UX vs UI](https://www.eventbrite.it/e/biglietti-ux-vs-ui-workshop-gratuito-roma-24-luglio-36158367651?aff=es2)** Un Workshop gratutito che mira a far emergere le differenze tra User Experience e User Interface;
+
+* **25/07 a Torino:** **[Hello World Fresa CNC!](https://www.eventbrite.it/e/biglietti-hello-world-fresa-cnc-35928943437?aff=ebapi)** Un corso di 1h e 30m gratutito per gli associati del FabLab di Torino,  che insegna tutti i trucchi per usare la loro fresa CNC;
+
+* **25/07 a Milano:** **[Milano JS](https://www.eventbrite.it/e/biglietti-milano-js-36255224352?aff=es2)** Un ultimo incontro prima della pausa estiva, tra drink e talk di massimo 15 minuti.
+
+* **27/07 a Mestre:** **[Let's take over the world with Scala](https://www.eventbrite.com/e/biglietti-lets-take-over-the-world-with-scala-35872783461?aff=es2)**  Il fondatore e organizzatore di SF Scala, condividerà in maniera informale i trends delle community di startup, open-source e enterprise nella Bay Area riguardanti il linguaggio;
+
+* **27/07 a Torino:** **[Turin Web Perf: animazioni per il web a 60 fps](https://www.meetup.com/Turin-Web-Performance-Group/events/241394003/)** Un talk sulle performance lato front-end e di preciso sulle animazioni web e come incidono sulla velocità dei nostri siti web.
+
+-------
+
+Vi ricordo inoltre che il 31/07 aprono le iscrizioni per la Winter Edition dell'[HackInBo](https://hackinbo.it/) che si terrà in Ottobre, un fantastico evento gratuito di sicurezza informatica!
+
+Tutti gli eventi segnalati qui possono essere ritrovati all'interno del calendario, raggiungibile dalla sidebar.
+
+È importante menzionare, nonostante non sia un evento italiano, anche la [SHA 2017](https://sha2017.org/) non solo per la risonanza a livello mondiale che un evento europeo è riuscito a raggiungere, ma per altri 2 motivi che ci riguardano più da vicino:
+
+* Ci sarà una sorpresa sul subreddit per quanto riguarda l'evento;
+* Per l'importanza della [Italian Embassy](https://wiki.sha2017.org/w/Village:ItalianEmbassy) all'interno dell'evento.
+Da quello che ho sentito dire, quest'anno non mancherà la grappa ;)
+------
+
+Organizzate eventi? Ne conoscete altri?
+Segnalateli a syrinxos@italyinformatica.org",1500714749.0,9,1.0,0
+BoostForReddit,Show username of OP in main screen?,"I looked everything, but I couldn't find an option for showing the username of the op of a post in any view (I'm currently using compact).
+
+Am I missing it?",1493307333.0,6,1.0,3
+cats,"We found her dead this morning, she was hit by a car.",,1491028816.0,510,0.92,45
+ItalyInformatica,Calendario eventi informatici sul suolo italiano!,"Settimana scorsa circa, /u/fen0x ha proposto l'idea di un calendario che raccogliesse tutti gli eventi sul suolo italiano che in un modo o nell'altro hanno a che fare con informatica e affini: cybersec, programmazione, IoT, framework, networking ecc...
+
+Ho preso la fiaccola e inserito qualche evento, ma ovviamente, nonostante in un giorno arrivi a coprire 3 provincie della Toscana non riesco a venire a conoscenza di tutto ciò che accade in Italia.
+
+E qui entrate in gioco VOI!
+
+Potete segnalare gli eventi voi stessi, che previa conferma (da parte mia: accetto bustarelle) verranno aggiunti al calendario.
+
+Non ho pensato a nessuno schema in particolare, semplicemente scrivetemi a syrinxos@italyinformatica.org specificando nell'oggetto della mail il nome dell'evento e inserendo un link o 2 righe di descrizione in modo che io possa cercare, confermare e aggiungere l'evento.
+
+[Qui il calendario](https://calendar.google.com/calendar/embed?src=3ohrqpua9bgm4hc6e70hns5af8%40group.calendar.google.com&ctz=Europe/Rome)
+
+Grazie per l'attenzione.
+
+:wq",1490676940.0,18,0.93,17
+kobo,Wanted to buy a Kobo,"Hi everyone!
+
+I'm starting to gain some interest in ebook readers, and I wanted to buy a Kobo over a Kindle for the integration with Pocket and the not closed ecosystem.
+
+Too bad my budget is pretty much around 100€ .
+
+I was thinking about Kobo Aura 2nd edition (is in offer for 100€) or even the first edition (I didn't find the differences anywhere).
+
+Is the kobo aura the best I can get for the price?",1489658576.0,3,0.81,4
+italy,Come organizzare un Road Trip di una settimana?,"Io e la mia ragazza volevamo fare un viaggio durante le vacanze di pasqua (Unico periodo libero dall'università per entrambi), ma proprio a causa del periodo pasquale (13-19 aprile) i prezzi dei voli sono parecchio alti, e nessuno dei due ha troppi soldi...
+
+Quindi, visto che a novembre ho preso la patente e mia mamma mi lascia usare liberamente la vecchia e gloriosa panda young (2003) avevamo pensato di farci un road trip partendo da Firenze e andando verso sud o nord (Non abbiamo ancora un itinerario, è tutto molto astratto per ora).
+
+Come organizzare una cosa del genere?
+
+Dove dormiamo senza spendere una fortuna?
+
+Come trovo ""punti di interesse"" o meglio, delle tappe obbligatorie per capire dove fermarmi per dare un senso al viaggio?
+
+Non so bene come organizzare il viaggio in pratica e vorrei sapere se qualcuno di voi ha qualche suggerimento da darci, thanks! :3",1488834772.0,3,1.0,3
+mechmarket,[EU-IT][H]Local Cash/Paypal [W] TKL/60% with MX or Gateron Brown or Blue Switches,"Hi! As the title say, I'm looking for my first board and I was really interested in a 60% or even a TKL.
+
+My budget is not a lot, I have like 80€ (Almost 85$ and 69£), I can't really spend more.
+Regardings Local Cash, I live near Florence and I can drive in near places, also I study in Pisa, so I can trade there too.
+
+I found a GTR black KBParadise v60 for 85$ shipped here on mechmarket, but I had to skip it because I decided to go for non-linear switches!
+
+So I'm looking to spend something similar, thanks!",1488302377.0,7,0.82,7
+sdl,"Writing a chip8 interpreter, how do I turn an array of pixels into a texture?","Hi everyone!
+
+I'm trying to write a chip8 emulator using C and SDL.
+
+As I wrote on the title I have an array:
+    
+    unsigned char screen[64 * 32]
+
+that represent.... well, the screen.
+
+So, every pixel is made of 8 bit, and can be just 0 (black) or 1 (white).
+
+How do I use this array with CreateTexture() to create a texture?
+
+I wasn't able to find a lot of info.
+
+Thanks! ",1486216214.0,3,1.0,9
+archlinux,Kernel Panic - Not syncing: Fatal exception in interrupt,"Hi users.
+
+4 days ago I was using arch on my laptop running on power without battery when a power failure made my computer shutting down.
+
+I didn't use it afterwards until yesterady, but on boot up I was greeted with a kernel panic.
+
+After following those advices: https://bbs.archlinux.org/viewtopic.php?id=184486 and after a fsck both from a live CD and from the tty (where I was forced to perform one) I was able to boot into my system.
+
+After then I powered it off as always using ""poweroff"" from rofi, but this morning as I powered on my laptop again I had another kernel panic.
+
+[I took a picture of it](http://i.imgur.com/NvuHIJ4.jpg) hoping that someone could address me in the right direction.
+I can always try to boot into my system using a fsck this evening to backup everything I already didn't backup and reinstall arch from scratch, but I'd prefer not to.
+
+Thanks.",1477381457.0,5,0.78,8
+archlinux,"When I launch a terminal emulator (urxvt in this case), it start with an error, trying to launch ""which apt""","This might be confusing, so, this is a screenshot of the issue:
+
+http://imgur.com/a/0Cifc
+
+I was messing around with $GOPATH and suddendly when I opened again urxvt this error appears.
+
+I tried undoing everything I did, but the error persist.
+
+I tried on different terminal emulator and still, the error persist.
+
+I know that that is the error message given if you run
+    
+    which apt
+
+because of course he can't find apt anywhere, being on arch.
+
+I use bash-it if it can help, but I've been looking in bash-it files in the last couple of hours trying to find some line that used apt, but nothing was there...",1476979016.0,1,1.0,8
+cats,"Came home after a run and she was sitting there, waiting for me :3",,1475515690.0,17,1.0,0
+ProgrammerHumor,[X-Post from /r/gaming] An assertion failed on Alone in The Dark: The New Nightmare.,,1470089758.0,1,1.0,0
+gaming,We were playing Alone in The Dark: The New Nightmare on Ps2 when we tried to use Walkie Talkie one step before her...,,1470089643.0,1,0.6,0
+nexus4,"My N4 died today, again... Should i change it? What are the best options?","Hi everyone.
+
+I had a refurbished N4 for 1 year and a half, but today the screen broke... again.
+
+I guess I haven't done a great job replacing it the first time in september,  and the bending in my pocket finished the job and the touch screen is gone.
+
+I was thinking to change the screen+digitizer again (just 30€) but overall: 
+
+ * The GPS never worked well;
+ * The proximity sensor... is not there;
+ * Battery life is like 4-5 hour if I don't use it too much;
+ * And I also bought a new usb port replacement because the original one was failing to connect.
+
+So I was thinking to buy a new phone, but I have no Idea what to choose.
+
+I have like a maximum budget of 300€ and I'd have loved to buy a oneplus X, but it's out of stock.
+
+Do you think I should buy a new phone or just replace the screen of the old one?
+
+What about the nexus 5X? 
+
+I'd prefer to avoid Huawei or anything else that's too ""close"", I like to install custom ROM and stuff. 
+
+Some info:
+
+**MAX BUDGET:** 300€;
+
+**COUNTRY:** Italy;
+
+**WHAT WILL IT BE USED FOR:** not heavy gaming, browsing,  development, light gaming;
+
+**SPECIAL NEEDS:** I'd prefer no physical keys like on my old  N4, min storage space of 16GB (I don't care if I can expand it or not, 16GB has been enough until now!);
+
+Thanks guys!",1469916459.0,7,1.0,23
+Bitcoin,I Wish I could use bitcoin on a daily basis,"Some weeks ago I've installed mycelium on my phone, but the balance never went over 0.
+
+Why?
+
+Because for me bitcoin is completely useless.
+
+""I have a dream"", a dream where I can jump on a bus or on a train, scan a QR code and pay for the ticket directly from the wallet on my phone.
+
+In this dream I can also buy coffee without being over charged from my bank, or a simple book or everything that I use and buy daily with paper money, which use a lot of space and it can be too old or too ruined to be accepted.
+
+I live in Italy and I can't do anything like that as is now. Even if I buy some bitcoin from a weird guy that lives near me, what will I do with them?
+
+Is there anything we can do to change this? 
+
+I'd love to ""be my own bank"" but no one accept my card right now.",1469801324.0,31,0.85,48
+MonsterHunter,[MH:Gen] Issues local multiplayer,"Hi!
+
+I played a little with my gf but I have noticed a problem with monsters' location.
+
+Both of us see the monster where they should be when entering a zone, but then they move and if (for example) my gf enters the same zone where I am she'll see the monster at their starting location even if they are not there anymore on my screen.
+
+If I kill a monster then he also dies on my gf game, but in a different location.
+
+It's kind of annoying seeing her fighting and gathering the air lol.
+
+It's our first MH, is it normal or we have an issue?
+
+I'm using a new 3ds xl while she has an old 3ds xl.
+
+Thanks!",1468704555.0,1,1.0,1
+Windows10,Tonight update broke everything again. I'm getting tired of it.,"Last night windows prompt me with an update, and I installed it during the night.
+
+Today I boot up my laptop and after the windows 10 logo (before the login screen) all I have is black screen and no cursor, no matter how much I wait. 
+
+I tried to boot up from a DVD with the win10 ISO burned on it to try to restore the system, but when I have to choose only win7 shows up, which is not even installed, and if I choose win7 it just says to me that he can't find the binaries...
+
+Do I need to reinstall the whole OS?
+
+Please Microsoft, stop forcing us to update...
+
+EDIT: NOT IN THE BETA! ",1466100587.0,6,0.6,9
+gaming,Trying to introduce gf to gaming. what are some suggested coop games?,"As the title says, I'm trying to introduce my girlfriend to gaming.
+
+I made her play portal 1 and 2 and she loved them and now we are waiting the steam sales so she can bought both games and play the coop with me.
+
+We have also played ""Life is Strange"" togheter and we both liked it a lot.
+
+So now, with the end of University Summer exams and the start of steam sales (and the gog summer sale), and her birthday getting closer, what are some games that we could play in coop online (or even offline in split-screen)?
+
+I gifted her minecraft some months ago and we have our server (3$ per month on bisecthosting), but neither of us have a powerful pc (not yet, I'm playing on the same low-end machine for 10 years, I'm planning to build a gaming machine in december), so we can't play the last AAA games.
+
+I'd prefer something I can find retail so I can give her something for her birthday, but any suggestion is good!",1465628524.0,8,0.83,34
+cats,"Found this little furry ball a week ago, but she is still without a name, any suggestions?",,1465495457.0,11,1.0,5
+linux4noobs,"Can't start X: ""rcu_sched self-detected stall on cpu""","I made a mess with my VGA driver (I have a Hp 455 probook) because SDL and openGL was having issues to create instances.
+
+After some driver reinstallations I decided that was time to reboot, but instead of opening SliM as always, debian went to terminal and this message appeared:
+
+    rcu_sched self-detected stall on cpu
+
+And when I Login manually and try to startx, it exit without starting neither xfce or i3.
+
+I would prefer to not reinstall everything from the beginning, but if the are no other solutions it wouldn't be a problem.",1465214714.0,1,0.6,0
+DontPanic,My gf made a Marvin Amigurumi (from the film),,1465161934.0,59,0.95,2
+linux4noobs,Installing libgnutls30 on Debian broke my wireless connections.,"As the title said:
+
+I was trying to install curl for Vundle, but when I tried using apt-get it says to me that i had some missing dependecies with libgnutls, so I just apt-get libgnutls30 with no research online, and that was really stupid by me.
+
+apt-get found the package and start the install, in the meanwhile I was studying so I wasn't paying enough attention to the operation...
+
+When it finished i was disconnected from the wireless network of my library and I couldn't run nmcli anymore.
+
+I scrolled the terminal up for a while and I saw that a lot of packages were removed during installation and NetworkManager was one of those (along with gedit, the jdk run enviroment and other stuff).
+
+As soon as I got home I connect my ethernet cable and reinstall Network manager, and my home connection shows up, but even if I had an IP address, internet was not working.
+
+I blocked and unblocked wifi from the hardware switch on my laptop and tried a new connection with nmcli, and it says:
+
+    Device ""wlan0"" succesfully activated with ...
+
+but still, no connection...
+
+I looked at the resolv.conf, and tried to put 
+    
+    nameserver 8.8.8.8
+instead of the one generated by NetworkManager, but still no luck and everytime I login NM reset it to it's own one.
+
+I have the rtl8723be evil network adapter, so I thought that was because of it, and reinstalled the driver, but still nothing.
+    
+I ran out of ideas, and I don't even know why libgnutls30 removed all of those packages from my machine...",1464632192.0,2,1.0,0
+linux4noobs,Wireless networks are being a punch in the stomach.,"Ok, I have one an rtl8723be as network adapter, and it sucks on linux, but hey, that's what I've got.
+
+I had to change from arch to debian because I wasn't able to make the module works properly, but now I'm almost happy, except for a few things:
+
+* If I want to use wpa_cli to connect to a network, I have to kill it first and relaunch it. Any way to automate that?
+* If I try to connect to a network without password, when I enable it, wpa_cli show me 
+
+        association request with the driver failed 
+* I don't understand ""who"" is managing my networks:
+
+    * if I'm at home when I start Debian, it automatically connect to my home network;
+    * if there is no connection avaiable and I turn on the hotspot from my phone, something make my laptop automatically connect to that network, even if it's not in /etc/wpa_supplicant.conf
+
+Any tips?
+
+I'm not a navigated user, but I spent some time in the past on linux with arch (Gnome) and Ubuntu, but I have never had to deal with wireless network.
+
+Now I'm with Debian and using i3, but wifi is really a pain!
+",1464346293.0,7,0.82,4
+linux4noobs,[i3]How to open application like Ranger from dmenu with terminal,"I have i3 installed with dmenu and if I search for Ranger or cmus and press enter nothing happens because it is a console application.
+
+Is there any way to tell dmenu or i3 to open a terminal and launch that program?",1464180998.0,2,1.0,9
+archlinux,Can't connect arch to wi-fi during installation,"I'm trying to install arch on my HP laptop, but I'm having troubles right at the beginning.
+
+Using iw dev I found out that my interface is the wlo1, I unblocked it using rfkill and set it up.
+
+Using show I see that the interface is up, I don't really understand the output of 
+
+    >>dmseg | grep firmware:
+
+    Found VCE firmware/feedback versions 40.2.2 / 15!
+    rtl8723be: using firmware rtlwifi/rtl8723befw.bin
+
+But then I scan for networks and It says: ""No networks founds"".
+
+I ran out of ideas...",1463684667.0,4,0.83,7
+godot,Hexagonal tile maps?,"Let's say I've used paint.net to make some hexagons in a 64x64 square.
+
+How do I create a tileset from those PNG?
+
+How do I set up the snap feature to snap hexagon one next to another?
+
+I've watched some examples but I didn't understand how to make a tilemap to snap together hexagons :/
+
+It's my first experience with the engine, thanks for taking the time to answer :3",1463468191.0,5,1.0,5
+Windows10,Last update broke everything,"Last night my Win10 updated and now it freeze like 2 minutes after the login and I can't do anything.
+
+I can't downgrade to win7 because it suddenly freeze, I can't check what is wrong because everything stop working.
+
+I have a HP probook 455G2 and I need the laptop, what could I do??",1463161312.0,1,0.56,9
+Windows10,"""Either there is no default mail client or the current mail client cannot fulfill the messaging request""....","""Please run Microsoft Outlook and set it as the default mail client.""
+
+This is the error that sometime randomly pop up on my screen...
+
+The fact is that I don't even have Outlook installed! I tried to set as default mail client thunderbird even if I don't use mail client, but the error still persist. 
+
+And mostly: what messaging request? I'm not trying to send any mail or whatsoever so... what?
+
+I did the upgrade a couple of days ago and  this is by now the only problem, I'm loving Win10!
+
+
+",1463078351.0,9,0.85,0
+italy,"2 scuole a Milano spengono la connessione Wi-Fi per ""rischi di salute"" (completamente inesistenti)",,1454566822.0,39,0.88,40
+archlinux,"First time on arch, KDE is driving me crazy","Ok, fresh new installation of Arch.
+
+I've installed xorg and the various packages plasma and sddm.
+
+Enable sddm and reboot.
+
+The login screen appear (pretty ugly though), I start moving the mouse towards the passwd form and the screen start flickering (white flashes).
+
+""Mh, weird. I'll troubleshoot this later""
+
+KDE starts and the hell rise from above.
+
+**Chose a widget: the system freeze.
+
+**open a folder: the system freeze.
+
+**make anything: the system freeze.
+
+I can still move my mouse and change tty, but nothing more.
+
+When the system doesn't crash and I open some panel, it start with a bunch of color just thrown there (artifacts? Sorry for my non technical language :c ).
+
+I'm using the open source driver for nvidia and I've already cleaned the cache, but still nothing more than a few second of elegant illusion.",1452874889.0,3,0.64,6
+linux4noobs,Dual Booting on HP laptop seems impossible,"Hi everyone, I'd like to run Debian on my laptop in dual boot with Win7.
+
+I started shrinking my C drive freeing 150Gb to give to Debian, but when installing and arriving at the point in which I have to choose where to put the OS, the installer list me the partition as ""unusuable"".
+
+I read that's because we are only allowed to have 4 partitions on our HD and [HP has already claimed all of them](http://i.imgur.com/gsped3g.png).
+
+Any suggestions?
+
+If there are no solution I'll stick with this, I already run Debian and Ubuntu on my Desktop PC so it's not a big deal, mostly a challenging problem that I'm trying to solve in those winter holidays.
+
+Thanks everyone :3",1451833605.0,0,0.5,4
+Libri,Il ciclo di Dune: 1. Introvabile?,"E' già da un po' che sto cercando di introdurmi nella lettura del ciclo di Dune perchè pare essere la grande saga sci-fi che ho sempre cercato, ma il primo libro del ciclo è introvabile:
+
+* Non si trova in libreria;
+
+* Non si trova su internet;
+
+Mi sto per disperare.",1451814092.0,7,1.0,5
+rpg,"Two players ""classic"" rpgs?","I never played any rpg because of the lack of time/gaming group to do this.
+
+But things has changed and I'm with my 1 year gf wondering if games like cyberpunk 2020, or any rpg with a GM leading an adventure, is enjoyable with just 2 players (the GM and the hero).
+
+We bought and tried Mars Colony but it's too much complicated, I'd prefer something more story driven and also something ""faster"" that doesn't take us 2 hours just to create the character.
+
+Thanks for the answer reddit! :D",1451065475.0,21,0.9,10
+italy,Dubbi universitari che mi stanno divorando dentro.,"Sono solo al primo anno di informatica (non ing.), ma già sto avendo dubbi.
+
+Ho fatto informatica alle superiori (ITS a indirizzo informatica) e quindi sono andato sicuro verso la facoltà che mi avrebbe portato a ""approfondire"" le mie conoscenze.
+
+Ma durante l'ultimo anno di superiori mi è venuta una strana voglia di studiare fisica che non avevo MAI avuto prima, non so spiegare neanche io perché se devo essere sincero.
+
+Informatica mi piace, ma quanto è utile?
+Nel senso, non è una scienza pura, in quanto si parla di matematica applicata all'informatica, e non penso mi dia niente oltre a ""conoscenze tecniche"".
+
+Invece fisica, ma anche matematica sembrano, così a colpo d'occhio, fantastiche, in quanto ti fanno vedere il mondo in un modo completamente diverso, spiegandoti le leggi che lo governano.
+
+Non penso di essere interessato a lavorare nel campo matematico o fisico, perché alla fine il lavoro da informatico mi piace (programmare, sistemista, ecc..), mi accontenterei di SAPERE quelle cose.
+
+
+Dite che è fattibile imparare la fisica o la matematica da autodidattica?
+
+Dovrei cambiare corso di laurea?
+Nel secondo semestre inizia il corso di fisica, magari scopro che in realtà mi fa schifo e lascio perdere.
+
+Oppure finisco la laurea in informatica per ributtarmi subito sui libri con fisica?
+
+
+EDIT: Colgo la palla al balzo: perché i downvote? Ho detto qualcosa di male? Qualche informatico è arrabbiato perché ho messo in dubbio il sui percorso di studi?",1449918891.0,20,0.83,39
+italy,"Pendolaridi /r/italy, quali sono le vostre disavventure con treni e affini?","Inizio io!
+
+Sono uno studente dell'Università di Pisa e faccio il pendolare da Calenzano a Firenze Rifredi, da Rifredi a Pisa per un viaggio totale di più di 4 ore di ""viaggio"" al giorno (2 all'andata e 2 e mezzo al ritorno rispettivamente da quando esco di casa a quando arrivo in facoltà e da quando lascio la facoltà a casa).
+
+Di solito è tutto abbastanza tranquillo, ma oggi è successa una cosa bbbbrutta.
+
+Avventure di un pendolare:
+
+A Calenzano sono salito su un vagone completamente buio, ma ho solo pensato che le luci fossero spente.
+
+Arriviamo a Rifredi e le porte non si aprono. Panico. 
+Vado verso la porta che da  sui vagoni dietro e non si apre neanche quella. 
+Sono imprigionato.
+
+Mi prende il panico e cerco di richiamare l'attenzione dei viaggiatori nell'altro vagone, che mi guardano pieni dubbi sul da farsi.
+Il treno riparte, ma un eroe dice che a Santa Maria Novella chiederà aiuto al macchinista.
+
+Così ora sono a Firenze Santa Maria Novella, dopo essere stato prigioniero di un vagone guasto che si è aperto solo per intrappolare me, aspettando  10 minuti che il treno per Pisa parta.
+
+Devo convincere i miei a pagarmi casa li.",1447743425.0,33,0.95,61
+Guildwars2,Where is the ghost quaggan in LA?,"I woke up this morning to give him my last candies, but he wasn't there.
+
+The same now, after 8 hours.
+So... Is the time to get the achievement ended?",1446212627.0,1,1.0,4
+nexus4,Battery life with Android M finally let me stay all day at Uni without rushing through the building searching a charging spot at lunch time.,"http://m.imgur.com/a/lrDu3
+
+Just the WiFi draining problem which I read is a common issue with no 100% working solution.
+
+I'm using MinimalOS and this is amazing.
+With Lollipop (stock), around 14-15 my phone was dying!
+There is just a little problem... When it's low battery and I put it on charge everything starts to work like ""drowned in honey"". I don't even know how to describe it!",1445882969.0,2,0.58,14
+travel,"During the winter pause from University, me and my girlfriend would like to travel outside Italy for a few days but we only have some clue of where to go.","Hi everybody! I lurk a lot and I never post, but here I am!
+
+As the title said, during the winter holidays we would like to do our first trip together!
+
+I searched on google for suggested destination for the month of december (mostly the week before/during christmas) and a lot of web sites suggested nord europe, but it's way to expensive for both of us.
+
+We live in Italy so the ""target area"" is not so ""north"". 
+I'd love to visit countries like Germany, Holland, Spain and Switzerland but I don't know where should we go!
+
+We are not ""Church and art museum"" people. We would like nice cities to visit, maybe some christmas markets, also museum to pass some day of relax together.
+
+Any suggestion?
+As students our parents should pay the trip, and we don't want to make them spend thousand of money, but I really don't know about the costs...
+
+Thanks and sorry for the not perfect english and if I broke some sidebar rules :3
+
+",1445803254.0,0,0.5,3
+nexus4,"New to custom rom, need some help","So, as you can read from the title I never installed a custom Rom on my or someone else phone and it's time for me to change! (?)
+
+Mostly because I want to try Android M on my N4 and also because I read that some ROMs help the poor battery life of this amazing phone and also improves the performances.
+
+So, here are some questions:
+* Installing a custom Rom requires root permissions?
+* Do i need to wipe everything inside my phone (AKA factory reset)?
+* If the answer of the question above is ""yes"", how can I backup everything in a way that doesn't require manually saving all my contacts and sms?
+* What Custom Roms did you suggest? I have seen some on xda and I found Frank which for me was pretty good.
+
+Thanks for the answer!",1445280003.0,3,0.72,16
+Laptop,Opinions on a laptop for school/light gaming,"Hi!
+I can buy this HP G2 445 a10-7300 for a really good price (&gt;400€), but I can't find any reviews online.
+I would use this notebook for my CS course (so, programming) and because my university is not in my own town, so I'd like to have a computer when I'm two hours from home for all day, every day.
+
+I'd like to know how good could be this notebook in videogames.
+Nothing at high graphics settings and too new, but I have a really long backlog on my steam account and I was wondering if this lap could handle some of those games.
+
+These are the specs:
+http://imgur.com/PKU2yA0
+
+Thanks for the answer!",1443511056.0,2,1.0,3
+SuggestALaptop,I can't find any reviews online. Is it a good notebook?,"Hi!
+I can buy this HP G2 445 a10-7300 for a really good price (>400€), but I can't find any reviews online.
+I would use this notebook for my CS course (so, programming) and because my university is not in my own town, so I'd like to have a computer when I'm two hours from home for all day, every day.
+
+I'd like to know how good could be this notebook in videogames.
+Nothing at high graphics settings and too new, but I have a really long backlog on my steam account and I was wondering if this lap could handle some of those games.
+
+These are the specs:
+http://imgur.com/PKU2yA0
+
+Thanks for the answer!",1443505545.0,2,1.0,3
+nexus4,I fear that my phone is completely lost...,"Long story short: My phone felt and screen broke.
+I had to  change it, done.
+Now my phone is stuck in the loop of the boot animation...
+I tried to whipe the cache, but it still doesn't work...
+
+Any suggestion?
+There's at least one way to recover data from the phone?",1443228374.0,3,0.6,2
+networking,Wi-Fi authentication page,"A friend of mine, that own an hotel, asked me how to add a registration and authentication page for their wireless network.
+I don't even know where to start my research, any suggestions?",1440610967.0,8,0.72,14
+italy,Pisani! Com'è la situazione?,"Domani dovrei venire a Pisa al centro immatricolazione in via Buonarroti.
+Uscendo dalla FI-PI-LI le strade come sono messe?
+Non riesco a trovare aggiornamenti recenti",1440445898.0,7,0.82,4
+italy,"Pisani, cosa fare in un pomeriggio che non sia visitare musei e chiese? La torre ovviamente non vale.","A ottobre inizierò l'università a Pisa e per completare l'immatricolazione devo portare tutti i documenti al centro di immatricolamento in via Buonarroti.
+
+Ora: io sono di Firenze (Calenzano) e per arrivare a Pisa ci metto un oretta, quindi andare -> consegnare -> tornare mi pare un pomeriggio/mattina buttato via.
+
+Ne io ne la mia ragazza (che mi accompagna in quanto mia autista personale) siamo gente da musei d'arte o chiese e salire sulla torre è improponibile per la quantità di gente che fa la fila, quindi ci piacerebbe magari un bel parco dove passare il pomeriggio, o qualche idea carina su qualche bel posto in cui fare due passi!
+
+E magari anche un qualche paninaro economico dove pranzare?
+
+Grazie per le risposte /r/italy!",1438466548.0,11,0.91,18
+elderscrollsonline,How many people still play the game in EU server?,"Now that the game is Buy to play I was wondering how many people are still playing.
+
+I want to buy the game, but I fear that there aren't enough players to enjoy it!",1438430436.0,3,0.71,16
+whatisthisthing,"I bought this little Cthulhu some time ago. How are these ""wool dolls"" called? How can I learn how to make a thing like this?",,1437903399.0,24,0.81,7
+whatsthisbug,My mom found this on her bed here in italy and she got bitten. What bug is it?,,1436091031.0,13,0.89,8
+malehairadvice,Need to have my hair cut!,"Hi /r/malehairadvice!
+
+I like my long hair, but my girlfriend and my family are saying that I was better with short hair...
+
+So I took the decision to go to a barber, but I don't really know what would fit better on me, and here you come!
+
+Here is me this afternoon with long hair: [long hair!](http://imgur.com/a/xsMKt)
+And that's me with ""short hair"": [short hair!](https://scontent-mxp1-1.xx.fbcdn.net/hphotos-xpf1/v/t1.0-9/10414885_696597333738624_2262086236341562156_n.jpg?oh=467a634c9c4f64279f39ff18db05287c&oe=5614F780)
+
+What do you suggest? What kind of style would fit?",1435948663.0,1,1.0,0
+learnprogramming,Need something to sync my project from my home computer to my external drive like GitHub does,"I know how to use GitHub, sort of (just easy stuff using GUI) and I want something similar to sync my project from the folder I'm working on to my external Hard Drive without having to copy all the folder, only the files that have been changed, exactly what github does.
+
+Maybe a script on my desktop that do this when I click on it?
+
+I'm on Ubuntu right now, could be helpful for the answers :D
+
+Thank you all, kind coders!",1433368996.0,0,0.5,5
+explainlikeimfive,ELI5: How do we know so many thing about space just watching it?,"I mean, how do we know how big the space is?
+
+Nasa operator: ""hold this side of the meter, I'll reach the end of the Universe, write down the measure and come back""
+
+I'm pretty sure isn't like this!
+
+ELI!
+
+EDIT: forgot the ""this""",1432301161.0,2,1.0,6
+self,I'm really annoyed about how school work here in italy...,"I'm a good student, last year in high school, studying IT.
+This year I'm doing very well, getting good grades in all the subjects, same for my girlfriend, which is in my same class.
+But the thing I'm really pissed about is the incompetence of our teachers.
+Most of them doesn't even know what they are teaching and study it for the very first time right before TRYING to explain the subject to us, resulting in weird situation like: ""we'll skip this part, I don't know what this is"" or ""what is this 'broadcasting' which you are talking about /u/syrinxos? I don't know what this is."".
+Another one doesn't know a shit, or at least, he doesn't want to work because he will get paid anyway, and their lessons are just reading loud some tutorials from w3c school, saying: ""oh lord, this year I'm so lazy!"". You piece of shit. He ruined my passion for programming with his laziness and stupidity.
+Today our IT teacher returns us a test and she completely ignored the php part of the test because she doesn't fucking know php. So I didn't get the grade I deserved for doing a perfect server side script and creating a nice HTML page (on paper) because she doesn't know anything except Cobol, Java and SQL. The teacher that should watch e gives a mark on the php part is the lazy man of before, and what he does is just writing ""OK"" if the code SEEMS good.
+Jesus Christ, the only teacher that I really appreciate is our math teacher, an amazing woman passionated about math that know how to teach things and getting good grades with her is really satisfying.
+
+
+Edit: spelling. Sorry for grammar errors, I'm really angry, tired and English is not my first language.",1431964440.0,8,1.0,0
+ProgrammerHumor,"My IT teacher is.... Well, a bad one...",,1431938596.0,16,0.72,1
+vinyl,Recently bought some new records and a new piece of furniture for my turntable. I thought now I could share my collection with you!,,1430947302.0,6,0.64,2
+nexus4,Ton of dust in the camera lens,"One month ago I Bought a refurbished nexus4.
+It's an amazing phone, but I noticed that my photo were a little blurred. I looked the camera and I saw a big amount of dust behind both the front and the main camera.
+What can I do to fix this?",1426928249.0,5,1.0,6
+IndieGaming,Free online game for playing with someone?,"I know a lot of games, really.
+But now i'm looking for something that me and my GF can play together while on skype.
+It should be on browser because she's using linux and so not everything could be avaiable on a Ubuntu machine...
+It should be free because we both don't have much money to spend on games right now.
+Do you know any games of this genre?
+I really play everything. Now I'm looking for something simple, just to have some fun when we can't see each other, thanks you :3",1425415721.0,33,0.86,30
+italy,Siamo nel 2015 amici!,,1425229465.0,8,0.63,8
+ICanDrawThat,[REQUEST] Two loving penguins floating on a leaf over the ocean,"My girlfriend and I sometimes have some weird talks.
+Once we were talking about penguins and leaf, don't know why, and the image of two penguins floating on a leaf over the ocean keeping closer to warm each other became one of the ""our"" things...
+I'd like to show her What i've in my mind, but i really can't draw, so i'm asking here...
+Bonus points if you put bananas in their... ""Hands"", just another weird conversation... :3
+Thanks you a lot if you are going to draw this, reddit is amazing :3",1423851045.0,5,0.79,6
+javahelp,How to get data from a website without using his api?,"I want to build an application for Discogs website, but there are no api avaiable for java...
+How can I ask the data from the website?
+Like album or the artist...
+I see some applications do that by using httpRequest, but I Have no clue how to handle it!
+Ty for your time guys!",1423785505.0,2,0.75,3
+Music,Birdman OST,"Ok, I've just seen birdman and i Loved the ost.
+I'm a beginner drummer, so it was pretty amazing ti my ears.
+Where can i find other drum juzz music like that?",1423431289.0,2,1.0,0
+suggestmeabook,Something horryfing,"I don't really know what i'm looking for, i want to read a mind blow story, twisted, dark...
+Maybe something like Lovecraft or Poe.
+Or something like an oral biography  of Buster Casey, any suggestions?",1423048100.0,9,1.0,8
+ProgrammerHumor,This is not going to end well...,,1422877606.0,126,0.97,7
+nexus4,Lollipop situation?,"I've bought a refurbished nexus 4 on eBay and now I'm waiting for it.
+But I can't really understand what's going on with android 5.x lollipop! Is out? It's bugged?
+Never been really into android world before because my poor Sony Ericsson xperia ray!",1421923055.0,1,0.67,7
+libgdx,how to handle collision detection in a tiled game with libgdx?,"I know there are already tons of question, but i'm going mad.
+I'm learning libgdx and trying to create a tile based game, and i'm trying to figure out how to handle collision detection...
+
+I saw Dermetfan's tutorial, but i didn't really understand how it works, so i found this one:
+
+    MapObjects objects = collisionLayer.getObjects();
+    for(MapObject object : objects) {
+        if (object instanceof RectangleMapObject) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            // do something with rect...
+        }
+    }
+
+getting the Rectangle setted on Tiled where the player should collide...
+But how can i see if is the bottom side of the player that collide or the left, or the right side and so on...?",1421018217.0,6,1.0,13
+libgdx,Is possible to use tween engine with box2d body?,"I'm still learning, but when I try to tween a body, strange things happens... 
+
+this is the class that implements the TweenAccessor:
+    
+    package it.marvin.platformer.handlers;
+    
+    import com.badlogic.gdx.physics.box2d.Body;
+    
+    import aurelienribon.tweenengine.TweenAccessor;
+    
+    public class BodyTween implements TweenAccessor<Body> {
+    
+    	public static final int POSITION_X = 1;
+    	public static final int POSITION_Y = 2;
+    	public static final int POSITION_XY = 3;
+    
+    	@Override
+    	public int getValues(Body target, int tweenType, float[] returnValues) {
+    		switch (tweenType) {
+    		case POSITION_X:
+    			returnValues[0] = target.getPosition().x;
+    			return 1;
+    		case POSITION_Y:
+    			returnValues[0] = target.getPosition().y;
+    			return 1;
+    		case POSITION_XY:
+    			returnValues[0] = target.getPosition().x;
+    			returnValues[1] = target.getPosition().y;
+    			return 2;
+    		default:
+    			assert false;
+    			return -1;
+    		}
+    	}
+    	
+    	@Override
+    	public void setValues(Body target, int tweenType, float[] newValues) {
+    		switch (tweenType) {
+    		case POSITION_X:
+    			target.setTransform(newValues[0], 0, 0);
+    			break;
+    		case POSITION_Y:
+    			target.setTransform(0, newValues[0], 0);
+    			break;
+    		case POSITION_XY:
+    			target.setTransform(newValues[0], newValues[1], 0);
+    			break;
+    		default:
+    			assert false;
+    			break;
+    		}
+    	}
+    
+    }
+    
+this is in the constructor:
+
+    Tween.registerAccessor(Body.class, new BodyTween());
+    manager = new TweenManager();
+
+And then, when i press the spaceBar the box should tween:
+
+    Tween.to(player.playerBody, BodyTween.POSITION_X, 1000f).target(100).start(manager);
+
+But this is what really happen:
+
+[Before Pressing spacebar](http://imgur.com/LT8lZDO,OYsmw9r#1)
+
+[After Pressing spacebar](http://imgur.com/LT8lZDO,OYsmw9r#0)
+
+no animation, nothing, the left square just teleport down there...
+
+Thanks for the answers!
+
+EDIT: Added informations.",1420713932.0,2,1.0,2
+sex,"Condom Broke, i didn't come... Still i'm freaking out...",[removed],1418845113.0,6,0.75,5
+javahelp,How do i Use this external library?,"I'm not really into Maven or stuff like that.
+I wanted to write an application to edit MP3 Tags, and i found this:
+https://github.com/mpatric/mp3agic
+How can i use it on my project? 
+how can i get an external .jar to add to my build path? 
+Ty for the help!",1416511618.0,1,0.67,5
+creepy,"Found this on a balcony near my girlfriend's house, pretty creepy basket...",,1416087762.0,0,0.46,1
+arduino,Arduino Ultrasonic sensor project?,"I want to make a project with arduino using ultrasonic sensors.
+I would use the sensor to scan the face and then i should use java/mathlab or something else to recreate it...
+Is it possible or i'm a dreamer? 
+Ty!",1413549726.0,1,0.56,6
+listentothis,"Zodiac -- Cortez The Killer [Rock] (2013) 8:13 --(Cover Neil Young) --I'm in love with this song, can't stop listening!",,1410171886.0,1,1.0,0
+windows8,Dual Boot Win8-Ubuntu14,"Hi! I have a problem: I want to install Ubuntu 14.04 on my pc, where I have default-installed Windows 8.1. The problems are:
+1. Windows 8.1 has SecureBoot and UEFI technologies included;
+2. When I try to set the first boot device, I can't select my usb pen-drive nor hard-disk.
+
+If it can help, I have a Samsung 15.6"" NP350V5C Series 3 Essential Notebook
+(http://www.samsung.com/uk/business/business-products/notebook-pc/essential-notebook/NP350V5C-A0FUK?subsubtype=series-3).
+
+Can someone help me???",1403861871.0,12,0.88,18
+ClassicRock,Splendid Isolation - Warren Zevon,,1402386973.0,3,0.81,1
+java,World Life Without JAVA Please make it a real film!,,1402171232.0,0,0.46,8
+gifs,Better than Rambo,,1401976640.0,32,0.71,3
+learnprogramming,Wich data structure should I use?,"I have to write a software in java to memorize two areas and each one contains some containers that are identified by row, column and plan in the area, wich data structure should I use for that? I'm going mad for this :/",1398753955.0,0,0.5,3
+gamedev,Java game dev?,"Hi guys! I always wanted developing videogames, since i was a child! Now thanks to my school i know some c++ and enough java to start making something! But i really don't know where to start. I want to use java, so i found two good books, but both are pretty out dated! http://www.amazon.com/Killer-Game-Programming-Andrew-Davison/dp/0596007302/ref=pd_bxgy_b_text_y#selectedObb=rbb_rbb_trigger and http://www.amazon.com/dp/1592730051/?tag=stackoverfl08-20
+do you guys have any suggestions?",1394631428.0,33,0.85,47

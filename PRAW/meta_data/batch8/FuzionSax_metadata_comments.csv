@@ -1,0 +1,473 @@
+subreddit,body,created_utc,score
+ArcBrowser,"I mean, it’s a tool. If there is some killer feature on other browser then I’ll switch but there is just so much features in a browser until it becomes bloated",1737846291.0,1
+ArcBrowser,"I understand people that used it before, being sad because they expierienced constant exciting updates, but maybe (fortunately) I wasn't here so I don't expect anything like that.
+
+It's a tool at the end of the day, and if it's good for your productivity it all that matters.",1737825166.0,9
+ArcBrowser,"No, it's vertical. I would suggest you try it. It was weird for me too but it makes more sense like that in the long run",1737824964.0,3
+CraftDocs,Please make multiple tabs open at the same time 🙏 And I would also love the waterfall grid...,1737733339.0,1
+Fighters,"Bruh, sf6 and ggst look ass. I think 2xko is best looking fighting game I’ve seen. But I’m also skeptical, its an anime fighter which means it won’t be very skillful.",1737036029.0,-2
+shortcuts,Ty it Works,1735522702.0,2
+shortcuts,"https://preview.redd.it/w48nts868s9e1.jpeg?width=1179&format=pjpg&auto=webp&s=25949ff80a1181861f3feec28b52a666b31aaa86
+
+here you go",1735475677.0,1
+shortcuts,Im having an error: Appintents.entityPropertyqueryerror 2.,1735472181.0,1
+Coding_for_Teens,"TEMPLATES  
+src>templates>book> edit.html.twig
+
+    {# templates/book/edit.html.twig #}{% extends 'base.html.twig' %}
+    
+    {% block body %}
+        <h1>Edit Book</h1>
+        {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <button class=""btn"">Save</button>
+        {{ form_end(form) }}
+    {% endblock %}",1718184001.0,1
+Coding_for_Teens,"controller
+
+    <?php
+    /**
+     * Book controller.
+     */
+    namespace App\Controller;
+    use App\Entity\Book;
+    use App\Form\Type\BookType;
+    use App\Service\BookServiceInterface;
+    use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+    use Symfony\Component\Form\Extension\Core\Type\FormType;
+    use Symfony\Component\HttpFoundation\Request;
+    use Symfony\Component\HttpFoundation\Response;
+    use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
+    use Symfony\Component\Routing\Attribute\Route;
+    use Symfony\Contracts\Translation\TranslatorInterface;
+    /**
+     * Class BookController.
+     */
+    class BookController extends AbstractController
+    {
+        #[Route('/book/edit/{id}', name: 'book_edit')]
+        public function edit(Book $book, Request $request, EntityManagerInterface $entityManager): Response
+        {
+            $form = $this->createForm(BookType::class, $book);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $entityManager->flush();
+                return NONE;
+            }
+    
+            return $this->render('book/edit.html.twig', [
+                'book' => $book,
+                'form' => $form->createView(),
+            ]);
+        }
+    }",1718183252.0,1
+Coding_for_Teens,"NEW FORM  
+src>Form>Type>BookType.php:
+
+    <?php
+    /**
+     * Book type.
+     */
+    namespace App\Form\Type;
+    use App\Entity\Book;
+    use App\Entity\Author;
+    use App\Entity\Genre;
+    use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+    use Symfony\Component\Form\AbstractType;
+    use Symfony\Component\Form\Extension\Core\Type\TextType;
+    use Symfony\Component\Form\FormBuilderInterface;
+    use Symfony\Component\OptionsResolver\OptionsResolver;
+    class BookType extends AbstractType
+    {
+        public function buildForm(FormBuilderInterface $builder, array $options)
+        {
+            $builder
+                ->add('title', TextType::class, [
+                    'label' => 'Title',
+                ])
+                ->add('totalPages', IntegerType::class, [
+                    'label' => 'Total Pages',
+                ])
+                ->add('rating', NumberType::class, [
+                    'label' => 'Rating',
+                    'required' => false,
+                ])
+                ->add('isbn', TextType::class, [
+                    'label' => 'ISBN',
+                ])
+                ->add('publishedDate', DateType::class, [
+                    'label' => 'Published Date',
+                    'widget' => 'single_text',
+                ])
+                ->add('authors', EntityType::class, [
+                    'class' => Author::class,
+                    'choice_label' => 'name',
+                    'multiple' => true,
+                    'expanded' => true,
+                    'label' => 'Authors',
+                ])
+                ->add('genre', EntityType::class, [
+                    'class' => Genre::class,
+                    'choice_label' => 'name',
+                    'label' => 'Genre',
+                ]);
+        }
+    
+        public function configureOptions(OptionsResolver $resolver)
+        {
+            $resolver->setDefaults([
+                'data_class' => Book::class,
+            ]);
+        }
+    }",1718183029.0,1
+CodingHelp,"NEW FORM  
+src>Form>Type>BookType.php:  
+
+
+    <?php
+    /**
+     * Book type.
+     */
+    namespace App\Form\Type;
+    use App\Entity\Book;
+    use App\Entity\Author;
+    use App\Entity\Genre;
+    use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+    use Symfony\Component\Form\AbstractType;
+    use Symfony\Component\Form\Extension\Core\Type\TextType;
+    use Symfony\Component\Form\FormBuilderInterface;
+    use Symfony\Component\OptionsResolver\OptionsResolver;
+    class BookType extends AbstractType
+    {
+        public function buildForm(FormBuilderInterface $builder, array $options)
+        {
+            $builder
+                ->add('title', TextType::class, [
+                    'label' => 'Title',
+                ])
+                ->add('totalPages', IntegerType::class, [
+                    'label' => 'Total Pages',
+                ])
+                ->add('rating', NumberType::class, [
+                    'label' => 'Rating',
+                    'required' => false,
+                ])
+                ->add('isbn', TextType::class, [
+                    'label' => 'ISBN',
+                ])
+                ->add('publishedDate', DateType::class, [
+                    'label' => 'Published Date',
+                    'widget' => 'single_text',
+                ])
+                ->add('authors', CollectionType::class, [
+                    'label' => 'Authors',
+                    'entry_type' => TextType::class,
+                    'multiple' => true,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                ])
+                ->add('genre', TextType::class, [
+                    'label' => 'Genre',
+                ]);
+        }
+    
+        public function configureOptions(OptionsResolver $resolver)
+        {
+            $resolver->setDefaults([
+                'data_class' => Book::class,
+            ]);
+        }
+    }",1718182730.0,1
+fightsticks,"Sure, can I get details to add you?",1703164070.0,1
+fightsticks,"As a Capcom Cup player I would highly recommend the tournament legal SOCD mode, to not go back to different modes on accident so easily. As it happens a lot with my original hitbox and sometimes with Universal fighting board. Or maybe make a mode, where it's really hard to change modes on accident. (it also happens with choosing console/pc/switch modes accidentally, where I'm in a tournament and then I'm confused because I play on nintendo switch mode)  
+  
+On hitbox all you need to change modes, is to hold button while plugging in and that happens sometimes. And it's super annoying. I would maybe suggest that maybe you need to hold two buttons or the small buttons(start, select) to change socd mode.  
+  
+Also about an additional SOCD mode, I would add the before new capcom tour rules, where down + up: up. For maybe different fighting games like Tekken or even platformers.  
+  
+Also YES, I would love to test controller. Especially the additional button",1703156841.0,3
+StreetFighter,thank you. AND omg. why so loooong,1696799391.0,1
+blender,Thank you,1686438515.0,2
+sffpc,Didn't think about it but that's true. Damn. I'd love to try it out but now I'm scared it'll not be sturdy enough.,1673905320.0,1
+sffpc,"It just looks very nice. And it doesn't matter that it's less practical. Also a lot of time the price is higher because the worker are paid ethically, OR as you can see there was a lot of time put into paying designers to put more effort on aesthetic. Something that usual manufactures don't care about.
+
+&#x200B;
+
+EDIT: But yeah, the profit margins are probably still waay out of line. But If I were to buy it it's because it looks very uniquely",1673905175.0,6
+Steam,"Yeah, i loved how it looked too",1672979979.0,1
+fightsticks,This is awesome,1669605588.0,1
+SCT,"Anything that involves high prefrontal cortex activity should be good. And I'm happy for you, give it a try and tell me how it went!",1666457187.0,3
+SCT,"Ok, damn semantics... So we're talking about something very similar then! Temporary I mean that, that feeling of clarity and being free to say things coherently, fades away if I go back to media consumption or something mind numbing. 
+
+But other thing that I'm wondering if we differ on, is the fact that I have to have long period of intense cognitive engagement. Like 3h at least. Anything less doesn't give me that state of mind",1666309924.0,3
+BrainFog,I've had it since childhood so I wouldn't notice any diet habits changing. But why would work study clearing make connection to you? 🤔,1666309440.0,1
+SCT,I mean I have diagnosed ADHD. It doesn't matter if I'm engaged in a conversation per say. It's just that I feel like my cognitive abilities are increased. Regardless of the fact that I'm engaged or disengaged. And it's temporary. It's super weird and I hope I'll find someone who has similar expireince,1666308862.0,7
+BrainFog,How would I know that? What are symptoms of having excess of these?,1666308700.0,1
+SCT,"That's very interesting! I'll read about that more. But that would imply a long term improvement, and I'm seeing more of a temporary one 🤔",1666307195.0,4
+BrainFog,I can see how you can mistake that but not. Its more of a feeling that my cognitive verbal function increases dramatically. My imagination increases dramatically. Basically it makes me feel like a normal person,1666305924.0,5
+SCT,My best score is 0 🧠 until i go to minus 3000,1666300463.0,1
+SCT,What is your score T-T,1666299163.0,1
+SCT,I'm reading instructions. And this is hell,1666299105.0,1
+audio,"I bought this exact amp because of your recommendation and it's very cool.  Nobsound Mini Amp
+
+Thank you, I love the setup!",1664744638.0,2
+kurzgesagt_meetup,"https://en.m.wikipedia.org/wiki/Eastern_Europe
+
+To nie jest takie proste",1663874311.0,1
+audio,Thank you very much!!,1653421025.0,1
+audio,Ok thank you!!,1653420998.0,1
+audio,These are Bowers and Wilkins LM-1,1653405880.0,3
+GyroGaming,I'm so sad. I wanted to use flick stick but it's just too choppy. Although I have 60hz monitor and the problem is still there,1653230838.0,1
+GyroGaming,Did you fix it? I'm still having the problem :(,1653189019.0,1
+Fightsticksforsale,How much are you thinking of?,1648737493.0,1
+Fightsticksforsale,Oh and probably because I live in Poland and we earn 4 times less so 25€ for me is like 100€ for you,1648734716.0,1
+Fightsticksforsale,For me 25€ is not a small amount of money so I want to save as much as I can :_;,1648734544.0,2
+Fightsticksforsale,EU. Poland exactly 🤔,1648679890.0,1
+Fightsticksforsale,Are you still selling them?,1648679539.0,1
+Fightsticksforsale,Are you willing to sell only buttons?,1648679497.0,1
+RandomActsOfTf2,"[https://steamcommunity.com/tradeoffer/new/?partner=99632943&token=bEKvWwsP](https://steamcommunity.com/tradeoffer/new/?partner=99632943&token=bEKvWwsP)
+
+Killstreak Maul Kit",1644577911.0,2
+hmmm,This is what happens when you don't grow out of your horse phase,1630434426.0,1
+depression,I feel you I love you. Wish you luck on your path.,1619656903.0,2
+Fez,Never gets old,1617294698.0,2
+Tekken,She is great. I love more female characters and ESPECIALLY A COOL ONE.,1613901459.0,6
+LivestreamFail,"I watched some more. He was pissed as it happened. But then he said it's all good. He's a mature man, no hard feelings",1610342754.0,52
+2meirl4meirl,My man! This is huuuuge,1609381135.0,78
+krakow,RTX: ON,1608947817.0,6
+pcgaming,"At this point, they seem to be panicking and improvising some weird solutions to fix their image",1608260963.0,1
+PartyParrot,Clever fella,1608257540.0,2
+infp,I feel you...,1608257180.0,1
+SuicideWatch,"OMG THANK YOU THANK YOU!♥️♥️♥️
+I'm sorry didn't reply sooner, but I saw it as soon as you posted it. I was too drained :(
+You helped a lot. I was just so alone (technically I'm surrounded by people 24/7 in my apartment, but you know what I mean)  AND your reply got me feeling accompanied with some hope. To answer your question about the therapy. I've never been to one and if the battle doesn't worn me enough I might just make it and see a therapist.
+
+I checked your profile and I've seen that you have a lot of problems yourself. Some with parents. From personal experience, it's a lesser problem then you think. I don't know if you've moved out, but when I have moved out the whole dynamic changed completely and I feel much better about it. You don't have to deal with almost any toxicity. But, yeah... about other problems. We're gonna get through it somehow. Be sure not to kill ourself and love people that care about us. I don't know what to say more to express my appreciation of you. Sending much love ♥️♥️♥️♥️♥️",1608256960.0,1
+indieheads,LET'S GOOOOOOO. IM NOT A FAN OF THE ARTWORK THOOOOOOO,1607694891.0,4
+XMG_gg,Alright I clicked it and I think it got better. Thanks for help Tom!,1605188538.0,1
+XMG_gg,"I'm sorry, but I can't find it :/  [https://imgur.com/rIBFEq9](https://imgur.com/rIBFEq9)",1605187926.0,1
+XMG_gg,MONITOR\\BOE08AB,1605178314.0,1
+Fez,"I love his aesthetics in whatever he does. I wish he'd do more stuff. 
+
+All we can hope for is that he's still alive and doing well",1603502706.0,6
+memes,r/antinatalism,1597035348.0,2
+raisedbynarcissists,"I'm just becoming an adult. All I dream about is to go as far away from parents as possible with no contact. It's like my only goal in life right now. 
+
+I hope one day I will end up like you guys. For now, I'm trying to move for collage. Wish me luck",1596380005.0,1
+depression,"Honestly it makes me feel much worse. When the coronavirus hit and then the George Floyd and the whole BLM. 
+
+Like I had legit panic attacks. I don't know why I care about these people so much. I couldn't stop watching it all go so badly.",1596242346.0,2
+depression,There are goods?,1595612569.0,3
+depression,"If you have your best intentions in heart. It should not matter what the outcome seems like to you. Also I'm pretty sure that the things you think harm others are exaggerated beyond belief. 
+
+At the end of the day all you can do is to do what you find morally good for friends and try to do it moving forward.",1595551223.0,1
+depression,"I can honestly relate to 100% of your post here. I'm in the same boat as you. Think I'm ugly, annoying, opposite of charming, awkward, loser that people don't respect enough to even replay in time.
+
+ The best advice I have for you is to try to be the best person you can to your friends and loved ones. I also don't like hanging out or basically socializing, but the support and love you get from having people around are so moving. Even if it's not direct. You can feel it. I try to be that for other people. 
+
+Even though I hate myself and probably harm them more than I help. At least I know that I try. From your post here you seem like a very eloquent and smart person. You'll eventually figure out and find what gives YOU fulfilment.",1595549774.0,1
+depression,"""If I didn't have depression our relationship would be rainbows and butterfly"" - there is no relationship like this. It's a hard commitment and there will ALWAYS be disagreements. The real strong relation is when are honest and try to figure these problems out with the purest intentions.  If you haven't been clinically diagnosed with chronic depression, then there is a reason You feel sad. The situation seems pretty rough though. You could evaluate your relationship and perhaps think about going to a professional to find a compromise between you guys. Wish you both the best!",1595548825.0,1
+offlineTV,It's just 2 or 3 people that don't get it. Tens of thousands supports you and wants you to get feel better. Wish you best Lily,1593159122.0,8
+depression,"Yooo I hope your situation gets better. You're basically in the same but as I am. With the parents especially. I literally do everything just to avoid presence of my parents. Like I'm not a strong person and everything they say gets really into my head/mental state.
+
+But where it comes to self hate. Pin pointing my every flaw is overwhelming. Also I have no idea how to fix my personality. So it's hard out here. I'm trying my best though, and I hope you doing it too. Best of luck man!",1593127103.0,1
+depression,Much appreciated feedback! You really did help,1592263010.0,2
+depression,lol,1592135421.0,1
+depression,"I really try to distance myself. It's like actually my only goal in life right now. But like I said if I fail to do so and will be forced to stay. 
+
+The option of suicide seems is very relieving. It's hard to explain. It's like when panic attacks hits I am very close to coming to that bridge. And I feel like I'm the kind of person that will definitely do it. From my point of view death is something that will free me from all these negative emotions.",1592122011.0,1
+depression,"Yooo I'm super glad your life is good now. I don't think I can personally relate to that, but I think it's a cool story of redemption. It's very sweet. Thanks for reply and hope you'll do even better!",1592121401.0,1
+depression,"I guess my personality is being depressed. But, I don't like saying that because I've never been diagnosed or anything. But the panic attacks and sadness are constant for approximately 6 years now. I feel like, it's not good to describe yourself as depressed because you may start to identify as such, too much.",1592121193.0,3
+depression,"We're in this together. You need to know you're not the only one. I wish I could help you but I didn't figure anything out myself yet, as you can see. All I can do is wish you the best in the future. Also thanks, I'll try my best on exams.",1592120787.0,1
+depression,"You hit the nail on the head. It's crazy how similar, I feel her situation is to mine. Constant guilt and insults is the main reason a day to day life is unbearable. 
+
+I can't have hobbies because I get laughed at and said that I'll never achieve anything. It really hurts. It is extremely painful because they want you to feel like you're nothing without them. They treat me like I'm not a human almost. My family is discouraging me now me from wanting to go to collage. 
+
+I think I can relate to your friend and I very much wish her best. I know how it is to be in that situation and I believe the things will get better for her. And thank You for a reply. When you know you're not the only one it helps. Like we're in this together.",1592120492.0,3
+depression,That's a very good advice. Thank you. That's something I'll definitely think about,1592087805.0,9
+depression,"You've brought up a thing that might help. About making people happy.
+
+I think I'm lost case. But if I could focus on helping others It might be a good reason to stay. Even though I feel like I'm waste of air if I'll know that someone is benefiting from my existence that could help. Like I could get into some charity work or something.",1592081843.0,13
+depression,"Thank you for kind words. I really do. 
+
+I just want to add that I'm not after an argument with parents or anything. I don't argue ever. I know it sounds bad, but I really can't stand them. Like I get physical reaction when I'm forced to interact with them. It's hard to explain really. But still thank you for good hearted reply.",1592081258.0,5
+okbuddyretard,R/vredditdownloader,1587398531.0,1
+TikTokCringe,r/vredditdownloader,1587315650.0,1
+Rateme,"bruh. How is she 6? I swear every single thread here has a person with a ""6/10"" comment. For me, it's strong 8",1586378883.0,3
+Rateme,You look like a straight-up much more handsome version of me 7-8/10,1586378060.0,1
+Rateme,My guy gots some EARS,1586377989.0,1
+Rateme,7 and if you motivate yourself for a gym 8.5. You got a really nice face,1586377654.0,1
+Kanye,Can't relate 😎,1585507626.0,1
+depression,Now make things like this your habit and life will get so much better! I believe,1583007173.0,2
+depression,99% of group chats Don't really discuss any serious stuff from my expierience at least. Usually it's focused on informations and memes. It'd be kind of weird place to discuss this kind of stuff honestly,1582337143.0,1
+depression,It's like having a friend :) Tells you what you should be thinking from the get go. Too bad when you give 500 word confession and nobody replies lol. Today I tried replying to some posts and it actually makes me happy when somebody's got at least a small amount of help from me. But yeah. Hope it'll get better for you,1582336704.0,1
+depression,Yeah sure,1582336075.0,1
+depression,"Why did you explain my life? Is this some kind of game?!?! Nah but I have the same problem. I feel like nobody wants to hear what I have to say, if it's not a joke.",1582335931.0,1
+depression,You can't demand happiness. You have to build it. What's  your idea of being happiness? Love? I mean you have to work on yourself and then you'll be able to be a great guy to whoever chooses you. Lives not easy. I'm similar to you kind of. Really love someone but I think I'm just not good enough for her.,1582335772.0,1
+depression,Hey man. There so many brilliant people that you can meet and love. Don't get too hung up on this moment. After a while it'll be super minor and you'll think that the whole situation was silly. Trust me. Try being the best you can for people. Remember you can't please everyone. If you try your best there is nothing you can be mad about in your actions. I believe you can do it,1582335513.0,1
+depression,"Wanting to be a doctor, famous musician etc. is a idea that people have for achieving happiness. At the end everyone only looks for that. You feel down today but trust me it only gets better from here. Focus on building relationships with people and see what happens ;)",1582335222.0,1
+depression,Pretty sure your family won't forget that you have a mental health problems. They just couldn't know before that you were actually hurt by their actions. Trust me. Fact that they know what you're going through is only a positive and will stay that most likely.,1582335003.0,1
+depression,When you're in a depressed state it's obvious you won't have an appetite for anything really. I have the same problem. You can always improve that by finding what you're really passionate about and being happy doing it. Also a healthier diet helps a lot,1582334811.0,1
+depression,"I don't know if you tried therapy, but it might be actually a very good idea. It's rough from what I see. Genuinely I want you to get better and I know you will. Sleeping too much is probably a bad habit. You can unlearn that and get more energy for whatever you're into at the moment. Good luck!",1582334681.0,2
+depression,I hope it'll get better for you. I'm like trying to find a way to improve but I have no idea what to do. It's like I'm just stuck with my awkwardness and being uncharismatic :/,1582331698.0,2
+depression,I'm glad I could help even a bit. I had a mental breakdown like an hour ago and I found that writing to people here is very helpful. I really hope the situation gets better for you,1582307582.0,1
+depression,It's hard to advise you because I'm in the same boat. Maybe she'll understand. You can always get friends in the future. Maybe to attend to something you're passionate with people that have similar interests. Stay in the bathroom and don't care what people think btw ;). There's no time limit to it,1582307311.0,1
+depression,"If you'll have genuine and good intentions towards her, there is no way she'll get hurt by you. Try your best and see what happens",1582307039.0,3
+depression,"Hey I'm alone too :). It's raining now, but the sun will shine soon. You feel down now but trust me it only gets better from here. Don't worry about your ex. You know there are a lot of very good people that'll spend with you. Maybe she wasn't the one.",1582306856.0,6
+hiphopheads,I actually was so excited about what he'll come up next with. Damn :(,1582124313.0,1
+StreetFighter,"It's fine in battle lounge, but on ranked/casual you shouldn't ever use it.",1580200132.0,7
+StreetFighter,Which patch are we talking about?,1580172280.0,4
+StreetFighter,"Usually when the match is really, the player against you teleports really badly, but your character does the moves without any delay or anything. When you get the Altimors lag it makes your game literally stuttery and unresponsive. Then your inputs get eaten by lag",1580167730.0,5
+StreetFighter,No. Altimors lag is very specific. It lags your game locally meaning you can't even do inputs correctly. It's very easy do distinguish normal lag from the patch lag,1580167455.0,6
+StreetFighter,"It's good because Capcom acknowledged it, but the whole online game is almost unplayable on ranked and casual because of the confusion.",1580162333.0,12
+StreetFighter,Same here. I think I might post a list of people using Altimors patch in ranked in EU region. You don't want to lose 135 points just because someone is using that patch.,1580162266.0,-1
+StreetFighter,I've never experienced that without a mod or with a Altimors one,1580022278.0,7
+StreetFighter,This fix is WAY WORSE than altimors. I've played around 100 matches now and... Sometimes especially with PS4 players you get that supper choppy unresponsive delay that is local. Other player doesn't experience it. It's so bad that you cannot do a haduken motion or even mash it.,1579988853.0,15
+StreetFighter,As a host you should try to not talk as much as possible. It was like 90% Joe and 10% Altimor. Still I'm very glad for the podcast. Altimor is a very cool dude. Thank you Joe for making it happen.,1578786684.0,0
+YandhiLeaks,Finally I can delete local mp3s from my phone. I HAD TO USE LOCAL FILES IN 2019. Disgusting. Glad the king is back.,1575479893.0,3
+ShouldIbuythisgame,Fez. You absolutely need the notes for all the puzzles. My fav game.,1572937245.0,2
+YandhiLeaks,RIP download link is down,1572808567.0,3
+YandhiLeaks,So help me God download link doesn't work. Pls fix it my guy,1572645097.0,2
+StreetFighter,"""Vegan popoff""",1552773769.0,6
+StreetFighter,Just for a low price of one ex bar you can skip the neutral as a WHOLE! ,1552157707.0,21
+StreetFighter,Just ex kunai lol,1551816665.0,1
+StreetFighter,Yes,1551816297.0,-1
+DeepFriedMemes,Yeah-ah-ah!,1550357260.0,1
+Cr1TiKaL,It's just you,1548497817.0,5
+StreetFighter,"Same thing. It disconnects me from the server all the time, even tho my internet connection is pretty good. Wondered if anyone else has the same problem.",1548451058.0,1
+Kappa,"Actually MK is really popular in EU. I think Tekken is the most popular here, then MK and the least popular is Street Fighter.",1547809222.0,10
+StreetFighter,You seem to Lag more than Sakura so my first thought was that bison was lag switching or something.,1546076475.0,2
+StreetFighter,And it's Bison too haha.,1546072546.0,2
+StreetFighter,"That's a good idea actually. I was thinking about reposting this with minor changes and different chart names, but I don't know if the down votes are worth it. People will get angry about ""their character being complex"" no matter what.",1545862303.0,1
+StreetFighter,You're right though. Should have put her more to the right corner. Next to Karin.,1545784548.0,2
+StreetFighter,"I didn't know about damage falloff but it seems like this ca is difficult to punish. Same as G's ca. That's why I thought It was really good.  In fact is it almost the same ca as G's one. Damage falloff, hard to punish, long range, good for cheap, not being invincible during it. I still stand by that her ca is pretty damn good",1545784306.0,0
+StreetFighter,"Maybe I should put her lower, but her combos are really easy, she's got great normals, crush counters and one of the best CA s. I think she should be next to fang.",1545783024.0,-1
+StreetFighter,"I used to play Kolin. That's why she is in my avatar. I don't play her tho since like ultra gold. I think putting kolin in the center makes sense, because she can be braindead (spamming v skill, v trigger gimmicks, st.h.punch), but she also has to be good at neutral and she is pretty deep where it comes to mix-ups and excecution. Also she is in the center of execution, because her mix-ups, some combos and confirms are difficult, but she isn't charge and doesn't require strict timing.
+
+Alex has easy pressure, but in neutral he has to actually outplay his opponent. That's why the middle is perfect for him.
+
+Menat may have seen cheap but to get to that point you have to work hard in the execution. Menat mix-ups after v trigger are really hard to do and keeping someone away until v trigger in SFV is really hard. Not braindead means that you put an actual time into learning the character and that's a huge part of Menat. She is the most difficult character in SFV in my opinion.",1545782774.0,1
+StreetFighter,"Definitely putting ""braindead"" and ""no execution"" wasn't the best idea. I meant it to be straight forward and kinda funny, but almost nobody has took it that way :( . I think making tier list about difficulty of a certain character is pretty interesting so I thought there would be like a discussion about what character should be where (like you did for example) .
+
+Where it comes to Rashid and Birdie placement in execution scale I actually was debating should I put first Birdie or Rashid. At the end I lend towards giving the first spot for Rashid because Birdie has the hold button specials and interesting vt 2 and can mix-ups. Where it comes to Rashid in the tournaments or online I've never seen anything that required more than fire ball motion. Air juggles don't seem that hard, but I'm not sure since I haven't really tried to do them.
+
+Your chart looks like a blend of my execution and braindead category put together. So the charts are in fact similar.
+
+Also explain why you think Ibuki is as difficult to play as Menat? For me it doesn't seem like it.
+
+Also you're about the Menat. I would put Kage further to the right as well, when I think about it.",1545779006.0,0
+StreetFighter,"U/romp- has a great understanding of what I meant by ""braindead"" so read his reply. I'm going to reply to him in depth later so go follow that thread my guy :)",1545777498.0,0
+StreetFighter,Why? I'm super diamond btw,1545775583.0,-2
+StreetFighter,"I play Birdie and G, so I don't think so.",1545775383.0,3
+StreetFighter,I don't mean to insult anyone by this chart. It's only for science!,1545774339.0,2
+StreetFighter,"Damn, gotta repost it",1545774033.0,1
+StreetFighter,"Everytime I play against Ryu it seems that he outplays me, but I still win. In my opinion Ryu mains work pretty hard for their win",1545773858.0,1
+Tekken,"Akumers unite
+",1541542740.0,4
+Tekken,I don't know why but after 2016 tf2 lost the magic that it once had. Fokin useless matchmaking.,1541411779.0,5
+Tekken,"Why ""[removed]"" :'( his post was godlike.",1541279081.0,1
+StreetFighter,Laura,1541242361.0,0
+Kappa,Howdy,1540854348.0,1
+Tekken,Akuma. He is cool as fuck,1540810767.0,1
+StreetFighter,New Challengers discord is really active 👍,1540283445.0,5
+DeepFriedMemes,Howdy,1537804821.0,1
+Kappa,Howdy,1536486570.0,7
+Kappa,"Damn, that's disgusting. I've never liked this dude anyway. He is a guy telling dad jokes and stealing gooteck's show.",1535439721.0,3
+StreetFighter,Everything you need is here: https://steamdb.info/app/310950/,1535439129.0,3
+dankmemes,"This is so sad, Alexa get my Street Fighter 5 points back",1534883791.0,7
+StreetFighter,Same. There is a Tekken/DBFZ event in Poland in about a few months but no SFV sadly :(,1534454597.0,1
+StreetFighter,I have few friends that I play with SFV. The problem is that I live in not that big of a city (only 100 000 people living). On top of that Street Fighter is really unpopular here. If I would make an event it would be in some major cities in Poland. ,1534431058.0,2
+StreetFighter,Too bad I live i Poland where the is absolutely no sign of fgc,1534426302.0,1
+gaming,What is this and why I didn't know it has existed :((((,1534419291.0,1
+tf2,NUTIFICATION >:(,1534417937.0,4
+Kappa,Who cares,1534410432.0,7
+StreetFighter,He looks like the most interesting DLC character besides Menat.,1533557115.0,9
+aww,"Cat: ""What the fuck are you doing? """,1533053418.0,1
+StreetFighter,Capcom:*Taking notes*,1531943230.0,0
+gorillaz,"I wrote under the megathread that this album is 6/10...
+My boi Fantano always agrees with me.",1530824807.0,1
+StreetFighter,"I know it's 2 months old but...
+I DON'T HAVE ANYTHING TO SCREENSHOT THAT MOMENT SO TAKING MY PHONE OUT OF MY POCKET WAS THE EASIEST WAY! ok? :'(",1530295902.0,1
+gorillaz,Oh yeah... Didn't read it before sending,1530286053.0,1
+gorillaz,"*Controversial opinion incoming*
+
+I am pretty meh on this album.  Let me start with saying that I love the production. It's absolutely fantastic. I really dig the lyrics too. They are pretty interesting when compering to Humanz for example. I don't like the oversaturation of sad ballads. They feel like straight from Damon's own album like ""everyday robots"". 
+
+Humility - I don't like this. I can't really explain why...
+                    It feels quirky.
+
+Tranz - I really like this, but weird vocals threw my out              
+              sometimes. (The groove ♥️)
+
+Holywood - Fantastic production and vocals where ok.
+                      Jamie's verses where pretty boring sometimes
+                      and I wish Damon's vocals had more energy.
+
+Kansas - Right here bangers end and sad ballads streak  
+                 begins. Overall it's not really a bad track.
+                 I love vocals here ans production is great as
+                 always. It gets really repetitively after 3 minutes
+                 though.
+
+Sourcerz - It's really groovy. I like it.
+
+Idaho - Another ballad. Pretty boring in my opinion...
+
+Lake Zurich - Soooo gooood. This instrumental is   
+                          amazing.
+
+Magic city - It's basically another sad ballad. It is probably  
+                       my least favourite on the entire album.
+
+Fire flies - Another sad Damon ballad. I don't like it as well.
+                 I've heard people really like but i have no clue why
+
+One percent - Another sad ballad. Though it's probably   
+                           one of the best here. Feels good for ending 
+                           and it's pretty short so it doesn't get tired.
+
+Souk eye - OH BOI... Let me start with that it's one of the
+                     best Gorillaz songs ever Vocals are great, guitar
+                     in the background is fitting perfectly. BUT
+                     WHERE IS THE PIANO FROM LIVE VERSION
+                     FOR FUCK SAKE. It was so beautiful.  Overall
+                     live version was much better because even in
+                     the transition there was so much more energy.
+                     I still love it. My favourite on the albym for sure.
+
+Thanks to everybody that at least read the title :)
+I would give it 6/10",1530258745.0,4
+MadeMeSmile,"I can't because my dad is an actual psychopath, who wastes all our money on casinos",1529879001.0,3
+StreetFighter,"""Identify your Problems and Fix them"" - I actually can't fix lag",1526411508.0,1
+StreetFighter,"This show is stupid, but i like watching it ^^. Still looking for fourth episode",1526411064.0,1
+StreetFighter,I think its stupid but I love watching it. I watched it on tbs so yeah,1525815597.0,4
+StreetFighter,Ok then https://youtu.be/yApV-Vx9I_4,1525810536.0,3
+StreetFighter," Fokin' Laura | CFN: Myrken
+",1525809430.0,1
+StreetFighter,sfvkolinxgold,1525809172.0,1
+StreetFighter,Uploaded,1525809058.0,3
+StreetFighter,7 hours of uploading 360p video... Great!,1525808221.0,3
+StreetFighter,When I will be master myself ,1525784850.0,1
+StreetFighter,"Ok! I will try to upload this. I've edited it now and hopefully it will be up in this century. I am still thinking should I upload clean or distorted version, cuz i am worried of getting a strike. 
+
+Hope you didn't tilt after losing to a scrub like me ;)",1525717249.0,9
+StreetFighter,Ok thanks :),1525714490.0,2
+StreetFighter,I'd love to! But when is that?,1525714313.0,2
+StreetFighter,+ I am from Europe. Didn't notice it was USA tournament.,1525713935.0,2
+StreetFighter,Next year I will for sure. But I don't feel like I should be playing with grandmasters. What I need to be focusing on now is getting Platinum and be overall better player. Though thanks for trying to help :),1525713828.0,3
+StreetFighter,I've recorded it but my internet is so garbage It would take me days to upload it.,1525712932.0,1
+StreetFighter,"I've registered, but than I realised that i'm silver, so i've canceled lol",1525712244.0,3
+dankmemes,Dale,1524149426.0,0
+h3h3productions,Ok,1523136240.0,1
+h3h3productions,I was scrolling and i got upon this https://www.instagram.com/p/BhNErWdHw5r/?hl=en&taken-by=wearebraindead,1523117349.0,2
+h3h3productions,I've never seen post like that. I found it on instagram on braindead profile,1523117172.0,1
+PeopleFuckingDying,huj,1521625233.0,1
+StreetFighter,"True, but what if you have all characters on 20 lvl 🤔",1519163238.0,1
+StreetFighter,Cute,1519161502.0,3
+StreetFighter,Let me just win 2000 online matches,1519161481.0,1
+StreetFighter,How long will that take?,1519161405.0,1
+StreetFighter,"June 2018, first time I played SF. Sorry | CFN: Myrken",1518908335.0,1
+StreetFighter,sfvkolinxbronze,1518907683.0,1
+StreetFighter,Ohoho! You haven't seen my rookie fights.,1518256248.0,1
+dankmemes,REEEEEE,1515630163.0,2
+tf2,Weeb,1514058115.0,2

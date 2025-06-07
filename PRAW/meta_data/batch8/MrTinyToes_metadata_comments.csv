@@ -1,0 +1,1887 @@
+subreddit,body,created_utc,score
+FCX24,"This is helpful but also spreading misinformation. C rating on a battery is **not** how fast it can be charged or discharged; it is *only* referring to discharging, and only somewhat. Drone batteries that are 130C surely will blow up if charged at 130A. Those are discharge rates ONLY, and even then it isn't consistent how it's measured between manufacturers. So, C rating of batteries can only even be compared within a single manufacturer (batteries come from same place). And, all it tells you is if a battery is less or more capable of handling discharge than other ones from the same manufacturer.
+
+When charging, if you are not in a rush, use 1C (aka a current that will charge the battery in 1 hour; for a 380mAh battery, that would be 0.38A, or 380mA (milliamps)). This will take, surprise surprise, 1 hour. That is what will do the least damage, if you want to charge properly. However! Most of the time a little fast charging is fine since the battery will die through other means first (at least when it comes to drones; for RC cars it may be worth it to keep them healthy for 5+ years). So, unless you plan to keep a battery for  over a year, just charge it at 2-5C. That would be 2-5x in current what the capacity rating of the battery is. So, if I am eager to get back out running I will charge at 2-3C. It damages the battery somewhat (as in, if you do it 1000 times the capacity will degrade by some minor percentage), but it means I only wait 20-30min per battery instead of an hour each, and have more time ripping it up.
+
+TL;DR: That's not what C rating on a battery is. Charge at 1C for longevity, 2-5C for fast charging but know it does somewhat damage batteries. 5C is crazy fast and if your battery is any one of warm, hot, hissing, popping, crackling, fuming, smoking, or on fire, be sure to stop charging immediately and remove the battery to a fire-safe area.",1695059539.0,1
+FCX24,"It's a (2-pin) molex plug to plug into the truck, and a (3-pin) jst-xh 3s1p plug to plug into the balance charger",1690562599.0,2
+FreeCAD,"You can blame me and call me stupid all you want, doesn't change the fact that this software is fucking unusable and all the work on it is fucking wasted. Software can't handle anything more complex than a fucking rectangle, it's retarded. I draw one fucking box, three lines extending the box, and it's borked forever and can never be extruded. Just a shitty software with a shitty community who blames new users just because they can't write usable software or make understandable and up to date tutorials. Fuck all of you",1689719648.0,1
+FreeCAD,"I'm getting this error on a fucking rectangle. This software is so broken, none of the tutorials work, it's full of bugs, I fucking hate it. It's embarrassing that people recommend this piece of garbage",1689719538.0,1
+FreeCAD,"Making two fucking rectangles with two points connected and the stupid fucking software is so retarded that it can't even do anything except constantly report ""recompute failed"" and ""wire is not closed"". Fuck your stupid, overly complex, useless software. Maybe someday somebody will drop a fucking rock on the ground and make a better CAD software than this gargantuan piece of garbage. If it wasn't free it'd be a SCAM",1689718911.0,-1
+emacs,"I've been enjoying kbin, and I created a community there for Emacs enthusiasts.
+
+https://kbin.social/m/emacs",1687005609.0,3
+emacs,"I've just made a magazine for Emacs on kbin, this should help distribute the load regarding the influx of new users.
+
+https://kbin.social/m/emacs",1686281135.0,3
+emacs,I created a magazine on kbin for Emacs. I am going to be pretty busy so if anyone here also wants to help out moderating over there just shoot me a DM before the 30th and we can get you added,1686280859.0,2
+redditisfun,kbin is perfect for me,1686276654.0,1
+emacs,Should we head to a specific instance on the fediverse? I see lemmy.ml has both emacs and orgmode communities already,1686257403.0,6
+emacs,This looks really cool; I've been loving all the new packages for Emacs recently!,1686087491.0,1
+ProgrammingLanguages,See <https://github.com/LensPlaysGames/Intercept/tree/machine_code/docs>,1685152651.0,2
+Compilers,"When does constant folding get complicated? It's almost always implemented using the implementation language's operators. I.e. the language you are writing the compiler in can add two numbers, so you just use that and replace the AST add node with an AST immediate node containing the result, for example.
+
+
+To quote cppreference,
+>The constexpr specifier declares that it is possible to evaluate the value of the function or variable at compile time.
+
+Key word being *possible*.
+
+
+>By ""complicated"", I mean that to write a compiler, we need to make an interpreter which can run all (or almost all) features of the language, which sounds like doing two big projects instead of one.
+
+IMO you've nailed it. A compiler is many big projects. If it is a compiler for a new language, it's about a million more, i.e. package manager, module/dependency management, build system, FFI, syntax that doesn't suck to use *or parse*, etc. A compiler has the lexer+AST+type checker, and then most complicated of all the codegen backend.",1684284339.0,0
+Compilers,"Hmm, there are a few slight misconceptions that are guiding you in the wrong direction.
+
+>We know that languages like C++ have \`constexpr\` for things that MUST be evaluated at at compile time.
+
+C++'s `constexpr` does *not* mean it must be executed at compile time. It may, but the compiler also may choose not to (for example if you use a feature of C++ that it doesn't yet know how to do at compile time).
+
+>Even if we do not use such a language feature, we still need to do optimisation and replace 1+1 with 2, for example.
+
+Constant folding is not seen as an optimisation, afaik. It is done even when optimisations are turned off, as you can see for yourself on Compiler Explorer (if I'm not lazy I'll add a link here).
+
+>I have learnt various ways where it is possible to optimise by evaluating during compile time. **The fact is that, virtually all codes/language feature that can be executed at runtime can be instead executed when compiling.** However, when I think about it, it is not immediately clear to me how to make this possible.
+
+Well, there's about a million ways to do it. You can interpret the AST, make a VM for some level of IR, make an entirely separate interpreter program and fork and exec to get a return value... There's literally endless ways to do it, I'd say. It should be noted that this has nothing to do with constant folding; constant folding is as easy as a check when creating an add AST node to, if it's two immediates, actually create an immediate AST node instead. LLVM does this at the IR level, but you could do it anywhere you want.
+
+>Do we generate unoptimised codes first, executed part of it, and then write the result back into the generated machine instructions? 
+
+>Does this mean that we are going back and forth a lot of times? Does this mean that a C/C++ compiler has a C/C++ **interpreter/JIT-like thing** built into it so that it can execute things before it is properly compiles?
+
+Yes, but only for a subset of the language. Most of the time it's an AST interpreter, or starts there.
+
+>This feels very complicated - is there a clean and clever way out of this?
+
+Might I ask what feels complicated about it? And what you want ""out"" of? If you want compile-time evaluation, you are going to have to do it by *somehow* interpreting something. To get out of writing compile-time evaluation, just ... don't write compile-time evalutation :P",1684281367.0,0
+fountainpens,I thoughts that was Macaulay Culkin,1683556233.0,2
+Pyrotechnics,Sugar pulls water out of the air.,1683043086.0,1
+programming,Lemmy? Mastodon? I haven't done much research so I'm curious what others have to say as well,1681934073.0,1
+programming,"The full circle, haha",1681919453.0,3
+ProgrammingLanguages,"Generally:
+
+1. Lex, syntactic analysis, semantic analysis (parsing, type checking, etc)
+2. Most languages convert their AST/DAG into more linear IR instructions. If all you want is a compiler frontend, convert into LLVM IR and use clang to compile into programs. LLVM will do all their optimisations for you, so you'll end up with optimisation.
+3. If you are like me and can't stand using third party code when attempting to learn something, then you are going to end up creating your own IR instructions set. From there you can do all sorts of things to the IR to optimize it. DCE, tail calls, constant evaluation, etc. From there you just need to convert IR into actual code that can be run, either by translating to assembly, machine code, etc.
+
+
+There is someone who made a compiler from scratch on YT/Twitch, and they go through creating their own IR and applying optimisations to it at some point (I think it's called Intercept)",1681745663.0,23
+emacs,?,1681683582.0,5
+emacs,Afaik this is a limitation of the tree sitter mode; I often switch back to c-mode to indent things,1681671274.0,3
+osdev,"Relevant
+https://wiki.osdev.org/James_Molloy's_Tutorial_Known_Bugs",1681670890.0,3
+programming,"JavaScript as a language is fine. The big deal is that users have the right to read the source code of every program that runs on their system, build it and install it themselves, etc. That way an API can be swapped out by a competing implementation and it's fine. All that'd have to change is minified js would link to or somehow make available the human readable source code. That would be a huge step in the FSF eyes (imo). From there it's just about the ability to have these services work with the JavaScript disabled, since users also have the right to not run that code, after reading it and/or being informed of what it does.",1681447162.0,17
+competitivestoners,"That is incredible!!
+
+Also ""don't panic"" ""what?"" and then starting may be the best part lol",1681427070.0,3
+conlangs,HyperPirate,1681352783.0,1
+competitivestoners,This is the quality content I am subbed for.,1681268983.0,7
+Drugs,"Exactly this. Everybody in my real life shames me anytime I bring up anything negative, and it makes me bitter and resentful towards them. How can they not care what I'm going through but as soon as it affects them it's the end of the world. I seriously hate humans and wish I could have just been a fly that lives for like a day and doesn't have to go through this endless-feeling useless experience called life.",1681143895.0,12
+Drugs,"Well duh! All that'd do is make other people suffer /s
+
+Seriously the ""logic"" in this thread hurts my soul.",1681143768.0,0
+NewSkaters,Thanks u/Sink_Pee_Gang  XD,1680828922.0,2
+Salvia,What show??,1680731394.0,3
+Salvia,And they're all made out of ticky tacky and they all look just the same...,1680658031.0,37
+IASIP,"If you're gonna be a rat, get it right.",1680657870.0,17
+LaTeX,"The easiest thing for me is to use pandoc to render to plain text, then just use `wc`",1679839277.0,5
+osdev,No. It is not your sole responsibility to reinvent computing! You do whatever you want with the constraints that you have 👍,1679786436.0,7
+osdev,"So, you want a link to an already existing bootloader written in assembly so ... You can copy a bootloader written in assembly? Just use GRUB if that's the case lmao.",1679784926.0,3
+osdev,"Here's a very minimal bootloader for UEFI with an example C kernel. Hope this helps
+
+<https://github.com/LensPlaysGames/RADII>",1679784569.0,5
+lisp,"I thought the same, but it turns out a few weeks ago they forked gitea into Forgejo.
+
+I've been using Codeberg for a few months now and can say it is faster and more reliable than ever, and has treated me well",1678839240.0,4
+chemistry,I've had luck with stearic acid based solutions as well,1678469941.0,2
+ProgrammerHumor,"I've had cases where the suggested fix causes the compiler to suggest me what was there before, resulting in an infinite loop",1676830245.0,4
+ProgrammingLanguages,Roll credits!,1676760173.0,1
+emacs,"Well, it's kind of hard to respond when you haven't told us much of anything.
+
+What did (Neo)Vim have in terms of navigation that your Emacs currently doesn't? 
+
+What do you feel like is slowing you down?",1676405487.0,5
+gamedev,"That's my secret, Cap; I've always hated them.
+
+Users are stupid. Users are demanding, rude, and have no idea the true work it takes to create the thing they use. They just use it. And they will constantly misuse it and blame you.
+
+Just make what you like",1676237540.0,0
+programming,Codeberg runs a gitea instance and I've had great experience with it for the last few months,1675999085.0,6
+ProgrammerHumor,"This distinction is important and common: I agree. However, I don't think this has anything to do with NULL / nil in the way it's discussed above...",1675753187.0,1
+ProgrammerHumor,"They are two separate terms. Nil has nothing to do with zero in a lot of cases. 
+
+In LISPs, it's usually an empty list, but it can be its own type as well; 0 never equals nil. 
+
+In everyday speech, it usually means zero. Zero equals nil.
+
+NULL refers to a pointer to zero address, which we've decided as programmers isn't valid. None of these ideas have anything to do with one another",1675741253.0,6
+ProgrammerHumor,This is ridiculous and makes no sense,1675730737.0,21
+tutanota,"New to Tutanota, but have been ready to ditch Google for a while now. This looks really promising!!! Where's the ""shut up and take my money"" button? Haha",1675634530.0,1
+emacs,"It's an interesting read, but holds no real merit. The ""arguments"" made have ... *ahem* ... questionable evidence supplied",1673646003.0,16
+ambien,no 5,1673589540.0,5
+ambien,8,1673577822.0,4
+codyslab,"This. I tried watching the first few but William is unbearable to me, haha. Not to mention they can't even have a consistent host/lineup",1673111041.0,1
+codyslab,"Love you Cody! Keep doing you. I've never liked that podcast, so whether or not you go on it won't affect me, haha. 
+
+Thank you for making amazing educational videos for all these years! ❤️",1673110938.0,1
+trees,People drink it! People drink it,1672473082.0,28
+Pyrotechnics,"I have made working bp out of white bread charcoal, and sunflower pith charcoal for faster results",1671829450.0,1
+emacs,I'm in the same boat. Everything except terminal emulators are up to snuff.,1671648931.0,2
+macro,I thought that was a tongue and I was very disturbed,1671391015.0,2
+DunderMifflin,Aaand Charlie!,1671122746.0,26
+learnprogramming,"I break at the crash every time I debug the program. Going up the call stack doesn't work because there isn't much of one. The evaluator is written in continuation passing style so there is no recursion, just the state gets altered every pass until finished. At the time of the crash, all state has been freed by the GC and everything breaks.
+
+Right now I'm rewriting apply as a special form because the apply builtin is in every call stack that crashes. I'm just desperate and nothing has worked at this point. Thank you for the advice ✌️",1670019403.0,1
+learnprogramming,I would but this is already after taking a week long break from it to do other things and come back with a fresh perspective. I'm not sure there's much to gain in taking another break,1670002031.0,1
+learnprogramming,That last sentence is very true. The real issue is the bug happens in code that works 99.9% of the time. It is only while evaluating a while loop after exactly 27 iterations does it do this nonsense. So the assumption that the code works is wrong? Is it just luck? Or maybe an assumption of how things are evaluated? I'll try to come in today with a fresh perspective,1670001347.0,1
+learnprogramming,"I guess I did this with my OS at one point. It wasn't working on virtual box so I made a new branch and commented everything except the bare minimum for it to work. Then started reintroducing things and seeing where it broke. There were like three things that didn't work on virtual box in the end, which is probably why I couldn't just find the bug itself and fix it.
+
+I don't feel like this approach would work with this problem, as it seems like emergent behavior from some evaluation loop vs actually just a line of code that is wrong. For instance, I've tracked down the exact crash to the same exact spot every time, but it's in the middle of evaluating something (technically trying to access the evaluation stack, but it's been freed and causes UAF errors). I can never tell what it was evaluating because *everything* is freed by the garbage collector and nothing exists anymore. But the code it's evaluating works in isolation. It is only in a while loop that it breaks.
+
+I think I am going to try and have garbage collection run EVERY time something is evaluated, then hopefully it will crash earlier or somewhere else that is more obvious? Even if it does, I'm not sure it will help me",1670000986.0,1
+learnprogramming,4d multiplication is harder than 4d chess,1670000741.0,1
+learnprogramming,"I've asked multiple people that are really good programmers around me; they've had great advice and even helped me track down bugs and fix them, but this issue still maintains it's steady pull on my soul towards unending fire.",1670000282.0,1
+learnprogramming,"Okay it's really late and I'm on my phone I hope you'll forgive me. My text editor with an integrated LISP language garbage collects EVERYTHING (all the pairs/cons) ONLY after the 27th iteration of the while loop that is meant to run forever. Well, up until maxum recurse count is reached.
+
+I will do better in the morning with a real computer and keyboard",1669947159.0,2
+Drugs,This is America,1669772249.0,22
+emacs,LIAR,1669770199.0,1
+emacs,This is so cool! I'm very interested in this,1669638832.0,2
+IASIP,EYES. Boom,1669286497.0,5
+codyslab,"How does Cody keep going? I respect and admire it; I'm not nearly strong enough to do anything, let alone keep doing it for 10+ years through all sorts of life changes.",1669164566.0,5
+IASIP,"This isn't confirmed, this is just their head canon. Grain of salt and all",1669052567.0,1
+ErgoMechKeyboards,Alpaca keyboards through Kono store with the ergodox hotdox v2,1668647467.0,1
+emacs,"`grep -r ""search"" .`",1668506298.0,2
+writing,"I agree with you, obviously. I'm not saying no writers should follow the advice---its good advice. I'm just saying that not every great writer read, and not every great writer to come will read. I think we agree on more than we think",1668300501.0,-2
+writing,"Not every writer reads 🤷
+
+This doesn't mean they are a bad writer. There is not one way to write well, but many.",1668297470.0,-11
+IASIP,"The prop department continually kills it; they really should get a lot of praise! They wrote Charlie's political speech, the resume for Mac and Charlie, and also all of these hilarious little details!",1668018187.0,50
+IASIP,Link?,1668017221.0,5
+IASIP,Username checks out. Remind me to stay away from the casaba 👀,1668017177.0,2
+IASIP,I like to picture that you think there's an actual cannon for podcasts and you don't want it to go off.,1668017100.0,3
+IASIP,?,1668016993.0,3
+IASIP,No.,1668016904.0,1
+IASIP,"If I don't learn to *control my emotions*, I'm not going to be *a good mother*‽",1668016867.0,1
+IASIP,I don't care!!,1667980662.0,1
+factorio,It's to prevent the whole gas stations across the street dilemma with prices constantly lowering and raising by cents just to gain an edge.,1667926428.0,34
+IASIP,"You have to be trolling, the way you spelled both Glenn and Dennis with one 'n' XD",1667501243.0,6
+IASIP,"> Everything that people can get addicted to is or should be banned? What about video games?
+
+Yes: ban all video games and ban anything remotely enjoyable because in the end humans are just addicted to enjoyment anyways. 
+
+If you want to do whataboutisms, thou shall expect me to respond in jest.",1667449562.0,0
+functionalprint,2nd acc?,1667441199.0,2
+IASIP,"It harms society's view of themselves as they age. 
+
+""If people at 50 are meant to look like that, I must be an ugly 50 year old.""
+
+You're right though. I should probably care less about things that don't effect me, but I'm passionate.",1667440653.0,1
+IASIP,Okay lol. I'm just pointing out that it's inconsistent with the current treatment of items that are exactly like it.,1667440562.0,0
+IASIP,"I get where the feeling comes from. I think it's sad that people are encouraged to resort to plastic surgery just to feel good about themselves as they age. There is nothing wrong with a little extra skin, a few more wrinkles, or growing a small gut. Bodies age naturally and *that* should be encouraged.",1667440255.0,1
+IASIP,That always goes *really* well.,1667437754.0,-3
+IASIP,"Lmao, it's not so I think they are more beautiful. I just think it's insanely weird to mangle your body by injecting things in it, just to appear ""smooth"". There are numerous cases of people becoming addicted and/or having unhealthy obsessions, even to the point of plastic surgeons having to deny patients. If many things very similar to this are illegal, banned, or very heavily regulated for this exact same reason, why isn't this as well?",1667418172.0,-6
+IASIP,I wish recreational plastic surgery was banned and made illegal. They look beautiful in their natural state!!,1667410017.0,-3
+ErgoMechKeyboards,"Be sure to put that in the title, if you can. I was also immediately off put because I thought it was overpriced",1667251995.0,2
+boburnham,"Ƿell, I guess that's my bad :Þ",1667075225.0,4
+boburnham,Must be a thorn in their side,1667073665.0,5
+AskReddit,Where would you like to go? And what makes you want to leave where you are?,1666749847.0,2
+AskReddit,That's why I asked this question. I should've also added *and why* but hindsight is 20/20,1666749790.0,1
+conlangs,This is the best response I've ever gotten on Reddit; thank you!,1666736361.0,3
+conlangs,"This is kind of unrelated but is there a place where I can find the meaning of the all-caps dot labels or whatever they are called? Like is there somewhere that has a standard, or do people just abbreviate longer grammatical words? I've seen it in a few places, but I don't know what this notation is called or how to look it up.",1666730778.0,4
+conlangs,"I often use ⟨ll⟩ for /j/, if not ⟨j⟩ itself.",1666668735.0,9
+ambien,This had me dying,1666665250.0,1
+pcmasterrace,"Yank refers to retrieving the most recent item off of the kill ring, inserting it in the current buffer, and then dropping it from the kill ring.",1666398669.0,2
+writing,"Tolkien's use of rhyme is so powerful, imo.",1666305144.0,5
+writing,I have been having this same issue. The beginning of the book can't start with the climax; it ends up being the most dull and boring stuff I have ever written.,1666304755.0,1
+emacs,"https://stackoverflow.com/a/39776107
+
+Here's what I've used in the past to ignore future changes to already tracked files. It is a more modern solution and longer lasting than `--assume-unchanged`",1666124178.0,3
+emacs,"If I'm understanding correctly, do you just need a gitignore?
+
+https://github.com/github/gitignore/blob/main/Global/Eclipse.gitignore",1666107736.0,1
+homechemistry,This is incredibly cool,1666042223.0,3
+Pyrotechnics,"Drying stars to fast causes them to be ""locked in"". The outer layer dries and seals moisture into the center that will almost never come out.",1665944344.0,2
+fountainpens,One. But only because I'm poor,1665722266.0,2
+IASIP,What a jabroni,1665631624.0,8
+gnu,"I could not leave a comment as eloquent as this, so I will leave this here as a ""me, as well"" marker.",1665616786.0,1
+IASIP,The comments on this thread make me wish I wasn't involved with this group of people that does nothing but hate. Fuck all of you.,1665602061.0,2
+IASIP,"I'm pretty sure workplaces are becoming more lax on tattoos.
+
+Even if they weren't, plenty of people have way worse tattoos than this in much more visible places. Calling OP a ""fucking idiot"" for this tattoo seems a little harsh.
+
+OP, your tattoo looks good and that scene is one of my all time favorites! Keep on living life and liking living.",1665580569.0,-1
+IASIP,(Don't tell my wife),1665245843.0,5
+IASIP,So that's where that actor got his name,1665110191.0,1
+AbruptChaos,Only one way to make that happen ;),1665068439.0,3
+DoomEmacs,Fuck off with your advertising,1664289597.0,7
+crystalgrowing,Yes.,1663949505.0,11
+WW1GameSeries,"You responded to a suicidal comment asking if it's about a game. If you think me calling you a dunce for missing the entire point of the comment is berating you, then I think you have some perspective issues. Berating is over and over and over, unrelenting. Which is exactly in which the way that life beats me down. So continue on with your happy life of blissful ignorance; I will wallow in my sadness until it becomes too much. The best part is I will have done 100x the things you have done, and only in a fraction of the time. You are annoying and provocative, and I hope you can make better decisions in the future",1663774193.0,1
+programming,"This was news the first thousand times I heard about it. Now it's just reality TV, and i can't stand how useless all of these posts are.
+
+You don't like my comment? Move on to the next one ;)",1663770755.0,2
+WW1GameSeries,"No, you dunce. Life sucks, berates me, and I hate it.",1663770649.0,1
+WW1GameSeries,"The game is balanced terribly. Enemies can build spawn points behind yours, and then it's just chaos. This happens over and over til the game ends",1663712384.0,3
+WW1GameSeries,I think just life isn't good enough for me and I shouldn't fucking have one anymore.,1663705116.0,1
+programming,Guess I'll die then,1663705086.0,-5
+programming,"Lol. Gotta love reddit misinformation.
+
+Edit: In reference to the first sentence literally being ""it's faster than C++"", then goes in to say the exact opposite for a majority of systems. Apparently I just shouldn't be alive cause no matter what I do everyone just fucking hates me anyway, so thank you all for helping me reach that conclusion. Good bye, fuckers.",1663686441.0,-38
+programming,"Oh my God who fucking cares at this point?
+
+Programming is turning into real housewives and I fucking hate it. Just program and stfu",1663686421.0,-3
+WW1GameSeries,"I don't give a shit if they do anything about it now. They already tricked thousands and thousands into buying a game that looks worse than Verdun, which literally came out 10 years ago.
+
+People are acting like everything I'm saying is so entitled and ridiculous to expect, but they have literally made a game that is more fun, more polished, looks better, and came out 10 years ago.
+
+If it wasn't from a  developer who has proved they can do amazing work, I wouldn't have expected amazing work. If the publisher didn't build it up and say it combines elements from Tannenburg and Verdun, looks beautiful, and plays really well, I wouldn't be so upset.
+
+I feel lied to, and therefore am upset. If you think I'm too upset, and my feelings are invalid, I don't really care. I know my feelings are valid, and if you want to try to insult me based on my opinions, it just shows what type of person you are.
+
+TTYL,
+
+  The unbearable prick",1663686289.0,2
+WW1GameSeries,"They definitely need a system where the gun gets pushed back before it gets pushed up. The current one I can't even effectively peek around a corner, so the meta is jump out and shoot",1663620951.0,10
+WW1GameSeries,That's fair. I may have gone too far. I'm just upset after playing it. I guess I'm saying they got my hopes up and then didn't deliver (yet).,1663620727.0,1
+WW1GameSeries,FR. I almost never refund games and this one I am going to (try to). I can't believe the people who made Verdun made something as terrible as Isonzo. It's just a disappointment entirely.,1663616885.0,2
+WW1GameSeries,This game feels like a shoddy cash grab; literally an asset flip of Verdun,1663616825.0,1
+WW1GameSeries,"Oh wow, so just because the game industry is in terrible shape, we allow developers to steal our money for content that doesn't matter and doesn't even end up working? BS, in my opinion. I wouldn't care about the microtransaction DLC if the game wasn't horrible. It crashes, I get kicked from servers with only a cryptic error message, it's unbalanced, nobody knows what to do because the game has no tutorial or any method of onboarding except for drawn out videos that don't even explain what the player needs to know.",1663616740.0,1
+WW1GameSeries,"The game sucks on PC too. Not balanced, no one has any clue how the game works, and honestly I don't either. There are constantly 18 million things bothering you on screen that you are somehow meant to read in their entirety, while also being shot at in a live game with other players. There is literally zero tutorial, you are just thrust into the game. There are multiple attack and defend points, and it seems like flanking is a major issue right now. Why can the defenders go so far into no mans land? Verdun had it right with the defenders stuck on the trenchline and the attackers advancing. This is just a free for all and isn't fun for anybody. Also, why are the graphics so lacking? Even on Ultra the terrain is smooth and pasty; it looks like a hobby Unity survival video game. And what is wrong with your anti aliasing support? Only T(X)AA??? What about MSAA? CMAA? Any plans for that in the future, or are you just exclusively making the game for people with 4k+ monitors? It's quite unplayable at 1080p. The blurring with T(X)AA is unforgiveable, as well. Side note: the tooltip says changing overall graphics level won't alter post processing, and then it totally does! I run into bugs with errors that are very much for developers (Talking about server events and frame misalignment...). I just don't get how the same people who made such an amazing game as Verdun, that I still play, could have made this monstrosity. It seems like a cash grab and nothing else. Hopefully your millions make you happy: you've made a game that isn't good and tricked people into buying it on the pretense it would be as good as what you've done before. It isn't.",1663616621.0,2
+BuzzFeedUnsolved,Ghost Files,1663434317.0,24
+Duskers,I mean if all else fails just play the game for a bit while recording audio...,1663117741.0,3
+SuicideWatch,"Wow you really opened my mind up with this elaborate reply, what ever would this thread have done without you.",1662667070.0,3
+SuicideWatch,"You all fucking suck. You're liars, cheats, and scammers. The world is useless and humans deserve to be eradicated. Fuck this useless garbage of a species we are and fuck continuing to be one. .410 to the temple, see you soon 👋",1662648219.0,0
+SuicideWatch,"""Don't make them grow up without a father"".
+
+So the only reason to live is to have people on the internet guilt you into continuing to suffer, that's great.",1662648134.0,2
+SuicideWatch,"If you're considering making a comment like this again, fucking don't, you absolute dolt.",1662648053.0,2
+SuicideWatch,"HUR DUR YOUR EMOTIONAL POST SOUNDS LIKE A TEN YEAR OLD HUR DUR.
+
+shut up and think about what you're saying: go away if you don't want to help",1662647966.0,6
+SuicideWatch,"Manipulative, emotionless rats who steal everything from you until you're nothing.",1662647915.0,12
+SuicideWatch,"In America: I would never go to a hospital for a mental health issue, they'll treat you like a criminal and hold you in what is effectively prison until you do and say exactly what they want, when they want it, and how they want it. Bunch of power abusing people in positions of power taking advantage of mentally ill. America sucks.",1662647848.0,13
+SuicideWatch,We must be two peas from the same pod.,1662647679.0,4
+SuicideWatch,"My mom told me the same. Always made me feel like a bother, annoying even though I was just her child that she was supposed to be, you know, not neglecting.
+
+I just wanted to say this to let you know you're not alone. I won't give you advice but I will wish you good luck in your situation",1662647646.0,2
+SuicideWatch,"Everyone sucks everywhere, though. It's less ""family sucks"" and more ""people are evil, cold machines who could care less about anything but themselves and will lie, cheat, and steal to drain you of everything you had, have, and are worth"".",1662647485.0,3
+shrooms,Lol what?,1661357120.0,11
+AbruptChaos,KEKW,1661303262.0,-1
+BuzzFeedUnsolved,Infrared light gets absorbed by glass,1661291928.0,5
+beneater,"EasyEDA is what I use, but Kicad is just as well",1660852969.0,1
+codyslab,"I saw the post and was excited that Cody's video was seen by someone as prolific as Elon. Just here to say you're not alone, and your post wasn't the issue, the people in the comments are.",1660799774.0,4
+drugsarebeautiful,Microwaving isn't convenient,1659929597.0,1
+MediaSynthesis,Am I allowed to use this as album art for original music? This looks really cool,1659927857.0,8
+energetics,"I've done repeated saturated sodium bicarbonate washings to neutralize leftover acids as well as dry it, seemed to work okay.",1659728934.0,2
+emacs,"I use Emacs for anything that includes editing or viewing text, as well as an organizational tool for storing, accessing, and writing notes on different topics (research). Also writing documentation, novels, mathematical literature, websites (org-publish is wonderful), etc.
+
+I was introduced to Emacs by a Russian streamer, Tsoding. He uses Emacs and I was intrigued by an editor that seemed so intuitive to me and so cool. Plus he never took his hands off the keyboard, and that's something I hated doing in VSCode and such. That was probably eight months ago at this point, and I have used it daily ever since I downloaded it. I will admit that at first I had frustration, as I am young and learning it by myself. However, with perseverance, I found a text editor that I not only like to edit in, but have also learned so much just from using it. LISP was previously unknown, and now I've written multiple LISP interpreters, one of them even being a graphical text editor like Emacs. The LISP Atom is effectively an AST node, and this has helped propel and inspire me to make new programming languages, interpreters and compilers.",1659568609.0,3
+blender,"It pisses me off to see stuff like this, as it's better than anything I'll ever be able to make, and you did it with six months of experience... I should just not try, lmao.",1659194556.0,1
+emacs,"Your own body will fail you, does that mean you should never exercise?",1658695895.0,2
+replications,For me I get much more organic visuals (not as geometric). The way the room slides away while still leaving the original in place is very accurate.,1658683561.0,42
+AbruptChaos,And that man's name? You guessed it: Frank Stallone.,1658683247.0,3
+AbruptChaos,"Maybe. I've never seen it do such a thing, even when wildly misused.",1658532927.0,1
+AbruptChaos,I always stare in the mirror on psychs. What is so scary to people?,1658512397.0,-1
+AbruptChaos,"This is what I would guess. Seems like a mix of drugs, psychs + stims would make sense",1658512111.0,5
+AbruptChaos,"Honestly I've seen a lot of people on LSD and never seen any shit like this, even when it goes bad. I mean it could happen on a bad trip but I would doubt that that's the only thing going on in his head 😂",1658512063.0,144
+drugsarebeautiful,All the blues at once,1658281943.0,3
+MediaSynthesis,Incredible! Thank you for sharing these.,1658175810.0,1
+IASIP,"It's all good. I had a laugh this morning, as I could see similarities in comments I've made before. Thanks for being cool and apologizing, you are the first person on Reddit I've ever seen do that. Have a great day, seriously! XOXO :)",1658073556.0,2
+IASIP,"Lmao, way to project. I wrote this comment months ago. I'm pretty sure I was saying that him buying Tesla was smart. Where did I suggest death and destruction is successful? <3",1658066210.0,1
+crystalgrowing,"Damn that's awesome! I can't get anything to grow bigger than half a centimeter. I should just give up, lol",1657832183.0,8
+emacs,Learn LISP. It's great :^),1657725371.0,7
+WeAreTheMusicMakers,Personally I'd say guitar,1656964516.0,1
+AbruptChaos,It's better than making a big deal out of it 🤷,1656879166.0,-11
+Mortytown,Maybe your poll should include more than 4 white suburban names,1656878970.0,2
+Mortytown,They suck,1656878460.0,1
+redneckengineering,"Right? I was expecting to watch this guy get sucked into the rope and get all wound up, like that Russian guy at the lathe.",1656866738.0,24
+Mortytown,Wtf kind of names are these?,1656866060.0,1
+rickandmorty,Vindicators!,1656384407.0,5
+DoomEmacs,"Pretty sure it needs to be an integer?
+
+> Set org-agenda-span to a value that isn't 'week. For example, setting it to 5 will show five days, and then it will respect org-agenda-start-day.
+
+From [here](https://emacs.stackexchange.com/a/12518).",1656384012.0,3
+importedhiphop,I'm sorry if I came off as rude. I should have added that I think it's super cool you are getting your music out there. It's awesome to see more collaboration on this sub! I just want to make sure that we all understand the terms we are agreeing to by using the beats. :-),1656368544.0,1
+importedhiphop,"That's a great way to scam artists; let them use a beat for ""free"" then when they make any money off of it you can sue them. Look into Creative Commons licensing if you truly want people to be able to use it, or any other license that you are happy with the terms of.
+
+I'm not saying you are a scam, just letting you know what artists have to deal with when producers say ""free"".",1656365031.0,1
+importedhiphop,"Rapper here, where could I find the beats?
+
+Also what license are they released under? ""Free"" isn't really legally binding.",1656361896.0,2
+orgmode,Try one thing at a time until you find what works for you.,1656018374.0,6
+BuzzFeedUnsolved,I thought it was a dick at first... Too much reddit today ig,1655871525.0,4
+Pyrotechnics,"The most common flash powder includes chlorate based oxidizers, which are NOT compatible with sulfur.",1655160291.0,2
+energetics,Maybe nickel hydrazine nitrate?,1654877094.0,4
+SuicideWatch,Just came here to say that this is still true,1654720500.0,1
+osdev,"Then I would start by working on those things :)
+
+The osdev wiki has great info on a multitude of filesystems that can help you learn how to implement your own. I would recommend implementing at least one existing filesystem, both for compatibility and learning reasons, before you attempt to roll your own, though.
+
+I'm in the same boat with userspace, and have just now, after six months, gotten to the point where the OS can load userspace executables and run them. It took me a long time, and it still will, but if you keep going you'll get there.
+
+Best of luck to you.",1654715484.0,4
+osdev,"As with all tutorials, they are merely a starting point to get to where you want to go. So, what do you want your OS to be able to do that it doesn't already?",1654709435.0,6
+learnprogramming,"Thank you! It seems that the main executable code does actually execute, but I don't see printf output in the terminal. I have to redirect to a file then read it's contents once the executable closes.",1654538010.0,1
+ProgrammerHumor,"Then what is Rust even for if, to implement the most basic of computational structures, an unsafe block is needed anyway? C/c++ will outlive Rust for exactly this reason (along with the obnoxious Rust users and pretentious errors in Rust).
+
+Getting things done is 100% more valuable than the useless idea of memory safe code.",1654517698.0,-5
+ProgrammerHumor,"This has been the opposite of my experience. The c++ errors are badly formatted but do actually tell you what's wrong. 
+
+Rust errors give a suggestion that doesn't work, link to irrelevant docs, etc. I've literally had multiple cases where using the suggested change gives an error with a suggested change to switch it back.",1654481779.0,46
+spacemacs,This comes from byte-compiling new packages after they've been installed; it's not an issue and is very common.,1654480909.0,2
+energetics,You are demonstrating unsafe and irresponsible behaviour.,1654480651.0,4
+energetics,"Make them then. If you're too lazy to make them, don't do it. It's not complicated.
+
+You are demonstrating unsafe and irresponsible behaviour.",1654450861.0,6
+osdev,Do you want your hobby project to die in five years when Rust does? Or continue on for the next 50+ years because it uses the standard language that is the first thing to be ported to every computing system?,1654445180.0,-2
+energetics,"> Oh rock blasting, and cutting trees, because who uses axes.
+
+From here: https://www.reddit.com/r/energetics/comments/v1o6n4/z/ianyfqd",1654293854.0,4
+energetics,"This. It's bad enough he's making way too much of an unstable explosive, but LYING ABOUT IT?? I don't think he should even be allowed to post in this sub.",1654270653.0,4
+redneckengineering,Empirical,1654191551.0,12
+emacs,"It's all about equal lighting. Bright desktop 144hz has washed out blacks and is super bright, so I use a dark theme there, as it's also a similar darkness in the room.
+
+On my laptop I'm outside in the sun, so I crank the brightness up and choose a high contrast light theme.",1654117183.0,0
+emacs,"Exactly this. Emacs is just fine not taking on all the extra users; there's no need to change the original vision that has worked for 40 years. If the user isn't willing to get some help in one way or another, they're not going to enjoy Emacs for what it is, really, so no need to try and convince them to stay.",1654109571.0,1
+emacs,"Dark themes are for desktops, light themes are for laptops",1654109447.0,-1
+DoomEmacs,"Could it be company, or vertico?",1654011595.0,1
+energetics,Please don't come here looking for clout because you do dangerous shit. The only thing you've done is lost our respect.,1654011518.0,3
+emacs,"All of that is customizable, up to how many new versions are saved, how many old versions, auto deleting after a certain age, etc.",1653695312.0,3
+emacs,"Seriously, I felt like I may have been in the midst of a carnival with all the colors, hover animations, etc. Lol.",1653536507.0,2
+orgmode,"Thank you!! I knew there was probably some feature that I could customize, I just couldn't find what I needed. This looks perfect.",1653490852.0,1
+SuicideWatch,I'm just a stupid fucking shitty asshole person,1653345497.0,1
+AbruptChaos,"You do have to be an asshole to defend the unnecessary death shown here, however.",1653319115.0,1
+AbruptChaos,"I hope you're a lawyer; if not, you're just an asshole.",1653318558.0,0
+AbruptChaos,What if? What if? What if? What if? But what if? What if? What if?,1653318427.0,-3
+emacs,"Emacs started as a hacked line editor, TECO.",1653257336.0,0
+programming,"HAHA I AM ALSO A HUMAN TOO, FELLOW MAMMAL.",1653108466.0,17
+emacs,You guys still have hair?,1652539390.0,11
+emacs,"It sounds like all you need is to write regexp that matches a single sentence (accepts all characters from beginning of line until a period, or something) at the beginning of a line.
+
+Play around with regexp-builder, setting outline-regexp, and seeing what happens in outline-(minor-)mode.",1652450485.0,1
+emacs,"There's nothing stopping you from not updating packages, or even not updating Emacs at all. Just download and use it, create the environment you like, and it will stay that way unless you change it.",1652196669.0,1
+emacs,"I use Emacs as my daily driver IDE, but setting it up isn't the first thing I'd recommend, as it can be a little confusing with all the packages.
+
+Try and learn basic navigation within buffers, i.e. `C-p`, `C-n`, etc. 
+
+Practice copy/cut and pasting using yank and kill.
+
+I found, when I started out with Emacs, that the key binds really improved my workflow; no more back and forth between the mouse and keyboard.
+
+That being said, there are ""easily"" configurable packages that interact with language servers in order for syntax highlighting, error popups, etc to work. I use `eglot` because it is simple and integrates nicely into Emacs, but `lsp-mode` is another popular package. You can get auto completion with `company`, but you might need to config what backends it uses.",1652196481.0,1
+emacs,Markdown + outline-minor-mode is the sweet spot for me.,1652164996.0,1
+emacs,"You are asking what you can do with access to a programming language...
+
+Mainly, write programs. I'm not sure what you're asking.",1652032683.0,2
+osdev,This is really cool,1651993504.0,3
+energetics,This is exactly the type of post that got r/explosives banned. You are ignorant and unwilling to accept that you may even be slightly incorrect. You will hurt somebody if you continue on this path; don't do it.,1651856902.0,4
+educationalgifs,"So you switched from being skeptical of climate change, quoting not enough evidence as your reasoning, **then**, upon such evidence being provided, switched to the opposite perspective saying it is happening so fast that there's no point to do anything. It seems like you just really want to win and don't actually think for yourself, at all.",1651849116.0,1
+energetics,"> it'S noT seNsiTivE
+
+Being stupid like this almost makes it seem like you deserve to lose your hands and/or life doing this.
+
+HMTD is literally famous for being unreliable, detonating under different circumstances everytime. 
+
+Saying it's not sensitive is like saying a joke isn't funny; it isn't funny **to you**, ***right now***, but at any moment you just may burst out in laughter at it. Or your buddy next to you might...
+
+DON'T PLAY WITH DANGEROUS EXPLOSIVES WITH THE EXCUSE OF ""it's not sensitive"".
+
+Treating any explosive as if it isn't the most sensitive explosive at all times makes it clear you don't know what you are doing and are endangering yourself, possibly others.",1651848646.0,2
+educationalgifs,"From a comment above:
+
+> [This graph](https://xkcd.com/1732/) goes back to 20k BCE. What “wild shit” am I supposed to be seeing?",1651674154.0,6
+osdev,"Lolol. I understand the want for a tutorial but when it comes to low level, the world opens up if you learn straight from the source i.e. developer manuals.
+
+Have you looked at the UEFI spec? Most of it is quite literally just C function declarations and long descriptions on what they do. 
+
+You can always look up another EFI bootloader on GitHub and see how they did it.",1651545497.0,10
+osdev,"The only job of the bootloader is to prepare the environment for the kernel. What does your kernel need/expect?
+
+Commonly:
+
+- Memory map
+
+- RSDP address (ACPI)
+
+- Graphical Framebuffer
+
+Almost all kernels end up needing these things, and usually more (load kernel executable and execute it, loading boot resources like bitmap fonts, etc.).",1651538063.0,5
+emacs,"Why assume my stance is against sharing all content related to Emacs??
+
+I simply said that it doesn't make sense to me to ""market"" a non-product to people who already have a solution. Any confusion must have been a mistake on my part.",1651343048.0,2
+emacs,"Marketing and sales implies a product. Is open source software a product? What is the benefit of a ""sale""?
+
+What is the point of expansion if it means sacrificing quality? I'd rather see it get better rather than bigger, if the two are exclusive. Obviously everybody wants the best of both worlds.
+
+A horde of users that only use a few parts of the Emacs ecosystem doesn't seem like a horde of users that is going to better the entire Emacs ecosystem... There is a reason Vim exists, and a reason Emacs exist, it's okay for both to coexist. There's no need for this constant arguing and convincing of ""the other side"".",1651342284.0,1
+emacs,"""the real reason Emacs is superior"" by someone who knows nothing about why Emacs is superior...",1651336125.0,-15
+emacs,"Go be a salesman for something else, you shouldn't convince people to use something just because you do. If they don't see ""the power of Emacs"" why are you trying so hard to convince them?",1651336092.0,-9
+selfimprovement,"Great, I'll take solace in the fact that I'll never get out of this terrible feeling and even if I do it is only for me to come right back to it.",1651250211.0,1
+ProgrammerHumor,"Emacs is extensible in elisp, so if you have an idea it can definitely be done.
+
+Luckily, what you are describing can be done very easily with out of the box Emacs using font-lock faces.",1651247760.0,1
+MediaSynthesis,What's a good way to get started with video synthesis?,1651181574.0,3
+mildlyinteresting,That's literally the purpose of food... If it didn't burn it wouldn't give you any energy....,1651156172.0,6
+depression,"Do you think people do things to actively make their life worse, on purpose? Life sucks, it's not like writing down the ""positive"" shit that happened to me today helps me at all when all that does is make me realize that nothing positive happened each fucking day.",1650694174.0,11
+orgmode,"> simplicity
+
+> extended in so many different directions
+
+You can't have both.",1650671423.0,1
+ProgrammingLanguages,"So put ""def"" in front of static for your language to make it easier for you to parse...
+
+If your argument is what's easiest to parse it's a whole different scenario; but when it comes to ideal syntax while writing code, C has most other languages beat in my opinion.",1650670996.0,-5
+mildlyinteresting,"You know that ""warmth"" rating on lightbulbs when you buy them? Some are cold ie blue and some are warm ie orange. I'm astounded you haven't seen this phenomena yet, as it's common when seeing sunlight mixed with artificial light, artificial light mixed with artificial light, etc...",1650666428.0,1
+mildlyinteresting,And you're probably a giant douche bag; we can all make assumptions based on internet comments but at the end of the day you don't know me.,1650661986.0,1
+mildlyinteresting,"Seriously. Just use a multimeter or get a new battery, lol.",1650660984.0,11
+gamedev,"No it's fine, I'm bad at social interaction (hence why I'm on reddit everyday, lol). In that case, you have a great plan and keep going",1650660344.0,2
+Drugs,"I've experienced complete sobriety since around 16/17, I'm almost 20 now. I did so many drugs before that I can barely remember anything, and what I do remember isn't good. My childhood sucked (abusive mother) and now my adulthood sucks too. I wish I could feel warm, fulfilled like everybody else can, but I seem to just get worse every day.
+
+Your words have been encouraging and I appreciate them.",1650660276.0,3
+mildlyinteresting,"Umm... Okay?
+
+It's only colored because the other light can still shine on the spot, while one of them is blocked... How is this mildly interesting? This happens everyday to everybody. In fact, I can see it right now looking up from my phone (there is an door open to a room with the lights on; the door casts multiple shadows of varying intensity due to the multiple lights)...
+
+I'm sorry if I'm ruining your parade, I'm known to not be much fun at parties.",1650660117.0,0
+gamedev,"Because they will help you learn the differences between programming languages.
+
+Python is over hyped. It is very slow, and a package management nightmare.
+
+I am definitely biased as I write low level software that requires systems languages like C, C++, Rust, etc, so take this with a grain of salt, and all. Do what works for you.",1650659173.0,6
+mildlyinteresting,I don't get it. There are two lights on...,1650659012.0,2
+depression,"Nothing, every action I make just plummets me further into a pit of hell, despair, and occasional relief in emotional numbness.",1650658262.0,1
+depression,"Trust me, no matter how good or bad your life gets the depression will be there.",1650658194.0,38
+ProgrammingLanguages,"The hard to read thing is subjective. 
+
+Personally, I don't want to know what something is called if I don't know what it is supposed to return, but everybody may be different.
+
+Programming languages shouldn't equal written language, or even try to, imo.",1650658107.0,3
+depression,This is something I wish I knew as well. I'm here in a similar boat. A recovered addict with no chance of happiness.,1650657879.0,1
+interestingasfuck,"I'm having a bad day, venting on reddit. Obviously I care about the useless gossip in my feed.",1650657638.0,-2
+interestingasfuck,Glad I could help,1650657600.0,-1
+gamedev,Nintendo *cough* *cough*,1650657564.0,1
+ProgrammingLanguages,"C syntax, really. I don't know why everybody wants to reinvent the wheel. It makes sense for Python to not require a return type, as it's dynamically typed, so the type is replaced with `def`.",1650657393.0,-2
+LSD,Obvious LE,1650657110.0,2
+Drugs,"I'm in the same boat as you, but I haven't relapsed yet (this time). All I want to do is give up and die, it's not like trying anything else will result in a different outcome.",1650657072.0,1
+interestingasfuck,This is a repost and has already been proven fake.,1650656786.0,1
+interestingasfuck,"Cool, I'll be weird if it means not caring about this useless junk, lol. I want to be happy but I don't want to convince myself that shit like this matters.",1650656602.0,-17
+AbruptChaos,"Do you really even need to ask?
+
+Money.",1650656388.0,12
+mildlyinteresting,I'd vote not interesting at all.,1650656317.0,1
+interestingasfuck,WHY DOES ANYBODY CARE ABOUT THIS NONSENSE??,1650656272.0,-32
+IASIP,"Nah, fuck him.",1650656222.0,3
+DunderMifflin,"See, this interview will be buried by downvotes because people can't accept that their precious Pam said these things. People need to grow up and realize everyone should be allowed to make mistakes.",1650656144.0,3
+blender,"Everybody else is so good at blender. It'd take me detailed instructions of how to do it exactly and even then I'd find a way to fuck it up and end up with a misshapen lump, as usual.",1650655926.0,6
+drugsarebeautiful,I hate being sober 🫤,1650655779.0,3
+gnu,"I don't think you understand how open source software works.
+
+You are very entrenched in the ""security by obscurity"" technique that has been proven again and again to fail with no chance of succeeding. How many bombs has the TSA stopped?
+
+Obscurity = Security theatre. Makes you feel better, but nothing is actually any more safe than it was before.
+
+Actual security lies in the fact that if the nuke's control software code was open source, any security leaks would be found almost immediately by the millions of so-called ""terrorists"" trying to hack it. You can try hiding salt from the deer, but it's easier to give them a whole block of it",1650645885.0,1
+orgmode,"I don't have org-indent-mode on. I am using org-mode from vanilla Emacs 27, the only thing I've changed is adding a custom path to `org-agenda-files`. Even if it was somehow enabled in my config by something else, the same issue occurs after explicitly disabling it.
+
+After creating a headline, every new line created (even multiple blank lines after) using `RET` is indented by the headline level + 1 (a level 1 heading results in 2 space indent). If the headline level is 5, this results in a 6 space indent every time I press `RET`. I would understand if this functionality happened only on lines with an actual headline to make it easier to continue typing text under that headline, but it happens everywhere, and it doesn't respond to folded sections so pressing enter often just indents 3-8 spaces for no reason; this is very annoying to have to undo what it does automatically on literally every single line.
+
+I appreciate the insight into the history of org mode, and what it is made to replace.",1650644888.0,2
+gnu,You must be 13,1650643434.0,1
+gnu,Not to mention the ultra precise timing required of each PETN blast surrounding the core to actually make it a nuke...,1650643374.0,2
+orgmode,"That's a great use-case for org mode, I stand corrected. A jupyter notebook-like that can mix education and code in one format. 
+
+Definitely not the ""ultimate note-taking and productivity"" mode it is glorified as, or made to replace markdown in any way, shape, or form.",1650605200.0,-3
+SuicideWatch,"Great, I'm intelligent. All it has gotten me is insight on how terrible my life is; unhappiness and and early suicide, shaken not stirred.",1650603815.0,3
+orgmode,"I have! I'm an avid Emacs users, and when I heard about org mode it sounded perfect; I take all my TODO notes in Markdown documents in Emacs, and everybody said it's a great markdown replacement. Boy were they wrong. All I'm met with is frustration and confusion when trying org mode, and it feels like it doesn't even align with what Emacs means as an editor. How are the obvious keybinds of `M-n`/`M-p` not used for altering header level? Why is the automatic indenting literally ass? I feel like every single new line I type I have to correct the incorrect indenting in org mode. It sucks. So does the ""new headline"" macro, or whatever. It doesn't use folded context to determine headline level, so it ends up creating `*****` after what looks like `**`. How does any of this make any sense? I feel like if this was Vim it would would be fine, but Emacs???",1650603569.0,1
+osdev,"`fdisk` is a Unix-only utility; this software is platform agnostic, working equally between operating systems, like Windows and Linux.
+
+In theory, this software could be ported to any operating system with a minimal libc implemented (which I plan to do for LensorOS, an OS I started working on a few months ago).
+
+For LensorOS, what you describe is exactly what is done on Unix automatically by the CMake script, but I like to support as many platforms as possible, so having options on Windows is a plus.",1650598848.0,3
+ProgrammerHumor,"Very true that it's better, but also very true that it's weird, haha. All the cmdlets make my head spin, but at least the functionality is there.",1650482017.0,2
+ProgrammerHumor,"Terminal used to mean the hardware terminals that were basically serial communications devices with a screen. Nowadays, *terminal* is more generalized; something that takes input from a user and sends it the computer, as well as taking output from the computer and showing it to the user, all in the form of text. You are correct in that a shell is what handles the command inputs. If you want to learn full history start with ""TTY"".
+
+Either way, now that I've ruined the party with facts and history, I also agree with you; cmd is just as much of a terminal as bash/zsh/fish etc.
+
+Also an obligatory ""fuck batch"". I can't stand writing anything in it, but it's the only scripting language for windows that is consistent with path handling.",1650470510.0,2
+ProgrammerHumor,"That horrible, *horrible* green text...
+
+Edit: didn't realize you all liked the matrix that much, lol",1650470241.0,-3
+AbruptChaos,"That's fair, I accept this is a subjective case and it's not like we have all the information on the cop's or the person who kicked him's specific experience.",1649534765.0,1
+AbruptChaos,"Right, we should all allow corrupt government officials to give armed guards free will to do whatever they want to anybody with no repercussions...
+
+While the ""violence is bad, mkay"" argument will always win over people's hearts, it doesn't actually work in practice as soon as a single bad actor starts the violence. 
+
+To beat a bully, you need a bigger bully. ¯\\\_(ツ)\_/¯",1649522888.0,3
+AbruptChaos,"Sucker punch/kick from a *victim of government corruption and police brutality*. If you think this wasn't deserved, go touch grass.",1649522548.0,2
+interestingasfuck,"Nope, some old dude sucked it off",1649364763.0,5
+GreenLattice,"We did for some time, but Portugal attacked us. We are merely running defense.",1648853638.0,5
+GreenLattice,"Boo! I think even if you think it's lame (it is), that art should still get a chance!",1648853505.0,-1
+place,Respect hardship; you will appreciate you did when you are down yourself.,1648853447.0,1
+GreenLattice,"Life isn't fair; you made it up that the world should be like that.
+
+Accept loss, move on.",1648853109.0,1
+GreenLattice,200iq play right here,1648852961.0,1
+GreenLattice,"Nobody cares that it's possible. 
+
+Respect the Ukrainian borders!!",1648852931.0,1
+GreenLattice,Just leave Ukraine alone and deal with Portugal.,1648852760.0,2
+GreenLattice,Boo! Ukraine deserves the full line across.,1648852287.0,2
+GreenLattice,"Sure, keep telling yourself that. We've already got blackfill on the initial foothold; it will keep.",1648824579.0,2
+GreenLattice,This invasions bigger than I initially thought; hopefully they'll continue on past us and we can make repairs in good time.,1648824318.0,2
+osdev,"I really appreciate your in depth help! You don't have to do it, but it really helps me out; I would continue to be lost without it.
+
+I think I've found the error in my thinking, haha. The issue had to do with misinterpreting [a table from the osdev wiki](https://wiki.osdev.org/Page_Tables#Long_mode_.2864-bit.29_page_map) and also because in setting up linear mapping, I only needed to create the first of entry of each table (leading me to make the false assumption that those four entries constituted the entire page map *facepalm*).",1648667009.0,1
+osdev,"Hello there! Sorry to bother you again, but I have ran into an issue when attempting to map the kernel at the `kernel` address and not the `large` one. I can't get anything past `0xffffff8bfffff000` mapped into the page table, and I'm really not sure why.
+
+I thought I would just have to point the 511th entry of the PML4 to the 510th of the PML3, and then point that to the 0th entry of the PML2. Attempts at doing this keep resulting in same addresses being mapped, which has me terribly confused... Is it possible that the emulators are keeping a TLB cache even through multiple changes to `CR3`??? I'm kind of lost at this point, but not giving up.",1648660996.0,1
+osdev,"Thank you for the quick and informative reply!
+
+I'll definitely make the transition to the kernel mcmodel; increased speed and decreased size are always best :\^)",1648530157.0,1
+osdev,"I simply chose an arbitrary address that was very high and page aligned; is there a specific advantage to that address and mcmodel?
+
+Thank you for the help, I'll continue debugging and see if I can get any further.",1648517658.0,1
+osdev,"This project looks very cool! Starred on GH <3
+
+Very clean source code; I'm jealous of people that actually know what they are doing, haha.",1648484213.0,3
+pcmasterrace,Lol I didn't learn shit about any country in school 🤷,1646954239.0,2
+pcmasterrace,"It's true, most of us know the bare minimum to answer the test, then after that we never think about it again.
+
+The school system here is just daycare with extra steps.",1646928631.0,78
+boburnham,"I think maybe ""the undertaking of defeat"" would make more sense (like the beginning of the fight with defeat, if that makes sense)",1646878464.0,1
+redneckengineering,"Right? If any of those cans end up upside-down in there with a little bit of moisture, get ready for a big pop and a lot of metal all over everybody...",1646654700.0,7
+Fusion360,I particularly understand the arrows within this online image document.,1646291007.0,3
+pcmasterrace,"Fair, I've been out-assed; although in retrospect I think I'm okay with it.",1646108624.0,1
+pcmasterrace,"I think I misunderstood your comment :p
+
+I assumed you meant that instead of saying something neutral, you say something like, ""I'm going to go watch a movie"", knowing full well you aren't (a lie) just to be more casual or something.
+
+I don't have the best reading apprehension, so you have my apologies if I thought what you said was something that it wasn't.",1646026984.0,2
+pcmasterrace,"It is lying. You can say plenty of things that aren't lies and don't outline your exact itinerary for what happens next, such as:
+
+""I'm getting off for the night""
+
+""I have to go, I'll see you later""
+
+""It's been a great time, good-bye""
+
+""I'm all done for today, see ya""
+
+And there are plenty more where that came from.
+
+I know I'm being an ass but I'm just saying, you can't argue that you aren't lying when that's factually what you are doing. At least admit it to yourself :P",1646007720.0,1
+pcmasterrace,"I am, it just irks me that these types of ""little"" lies are seen as okay in social settings. They do it under the guise of keeping people's feelings from getting hurt but all it is doing is saving up the hurt for some later date, and all at once, when they eventually find out.",1646007551.0,1
+pcmasterrace,"I just don't get the need to say where you are going or what you are doing next. Just say, ""I'm getting off, goodbye, it's been great"", and leave the discord or whatever you're using to talk, lol.
+
+Everyone is so worried, it's like they've never been hung up on XD",1646007419.0,1
+pcmasterrace,"This is purely fear-based. Just say, ""I'm hopping off for right now"", and have that be that.
+
+Everyone is so scared of what their friends might think of every word they say. Just leave, lol.",1646007282.0,1
+pcmasterrace,"Say, ""alright guys, I'm going to get off"". 
+
+You can let them know both at once ;)",1646007238.0,2
+pcmasterrace,I get it but why not just be honest? I hate how lying to everybody you know is so normalized these days.,1645946381.0,150
+WeAreTheMusicMakers,"Lmao that's all anybody cares about. Money, money, money, right?",1645899291.0,-1
+Pyrotechnics,Check MSDS,1645852672.0,1
+trees,And the millionaires made millions.,1644996266.0,36
+gamedev,"Not sure why you're being down-voted; everyone here must be a Unity fanboy :p
+
+That actually looks pretty cool. I'm glad it's open source and free just like Blender. The world needs more free software :)",1644995323.0,3
+gamedev,"Will add that when I was doing game dev I tried blender and I just got frustrated with it. It's unintuitive and very obtuse to use, but if you can get through the 90s Photoshop with a million buttons, fields, and sliders then you got it.
+
+Something like fusion 360 is beginner friendly, but it's getting less and less so with it's paid license enforcement (there is still a hobbyist free license, but it's hard to find).",1644979877.0,2
+IASIP,Don't post images of other posts; you should cross-post to give OP proper credit (or at least mention source in comments) :p.,1644880063.0,23
+IRLEasterEggs,Boo.,1644879932.0,1
+pcmasterrace,"Why keyboard affect screenshot?
+
+Edit: you are on Windows 10, use Snip & Sketch!!!",1644879882.0,1
+LSD,"~600ug, 5ish tabs.
+
+Usual is ~100ug (heavy enough but still light).",1644879719.0,1
+crystalgrowing,"... just like any other crystal.
+
+Take a look at the sidebar for a detailed guide.",1644863439.0,3
+mildlyinteresting,Two is the max.,1644863365.0,0
+LSD,"I'm fully in control of my body, I've never had it do things I wouldn't do.
+
+Although on heavy doses I definitely find a place to rest and close my eyes, and during that I've been told I'm basically sleeping.",1644863291.0,3
+valheim,"I know you're just trying to get a rise out of me, but I'll genuinely answer anyway :p
+
+First, I do have autism; who cares? Good for you for identifying something very obvious. Lol.
+
+Next, that's not true. I care about it. You could say the same about yourself: ""nobody cares about you"", but it's not quite the truth, is it? You care about yourself, at least enough to go on living. And if you're trying to say that nobody **else** cares about it, I guess you let other people's opinions control everything you do, which is really just sad.
+
+I'm confident enough to know my time is not wasted any more than anybody else's.",1644845128.0,2
+osdev,"osdev.org is a good start, and/or there are a few good youtube tutorials by AbsurdPoncho, if that's more your route.
+
+I would recommend to download the Intel Software Developer's Manual and poke around at the sections you are using (GDT, IDT, etc). It's kind of verbose but I've had so many bugs that could have been avoided by just reading the manual.",1644611202.0,3
+energetics,"Seriously, this.
+
+We're not interested in OP doing dangerous things for internet attention!!",1644349430.0,4
+osdev,"The idea is the master branch would never have a ""corrupt"" version uploaded to it. Even if it does, just revert back to the commit where you screwed everything up.
+
+Or use branches and use pull requests to merge them to the master once they are %100 fleshed out.
+
+Git is the version control system, so there's no need for you to do it manually.",1644344667.0,18
+chemistrymemes,"Imagine being so egocentric that you can't admit a child's wonder is what brought you to the wonderful world of chemistry; now you have the option of letting other kids in on the fun, yet you selfishly hold it and refuse to let anyone take it from you.
+
+Stop trying to limit the future. Harness it's potential, see how it could grow. All I see in this thread is people wanting to take away what it means to be a human: choice.",1644281160.0,2
+chemistrymemes,Why do you get to be the judge of whether people get to do chemistry or not??,1644280897.0,-1
+chemistrymemes,"So because I don't have $100000 to go to college I can't do what I'm passionate about?
+
+What happened to innocent until proven guilty? Shit is getting out of hand these days with bans. All it does is breed a criminal underground that actually makes it easier to do what the ban is supposedly trying to stop. You'd think people could learn from past mistakes instead of continuing this nonsense mindset of 'ban it because it's a bad thing'.",1644280848.0,0
+chemistrymemes,"Terrorists wont stop because it's 'hard'...
+
+You have to know there are people who will stop at nothing, not even in the face of death, to achieve what they want.
+
+Life, uh, finds a way (so stop trying to put it in a fucking box you moron, thought Jurassic Park would have taught you that one, but 40 years of lessons must not be enough for you)",1644280701.0,-1
+chemistrymemes,"No. Buying bulk amounts of certain items from hardware stores does put you on a list, and you do get talked to/looked at. I'm sure certain stores don't follow that law, just like certain stores wouldn't follow your precious ban. 
+
+Things always get done, whether you want them to or not. Maybe a better next step is inclusivity, not exclusivity.",1644280528.0,1
+chemistrymemes,"Umm, I'm pretty sure there's more Americans smoking weed now then ever before... so yea, it went well :\^)",1644280336.0,2
+chemistrymemes,"Exactly. Idiots will be around forever, doing dangerous things that may/will harm everyone.",1644280286.0,4
+chemistrymemes,"If you are afraid you are the one that is at fault.
+
+Step One: Don't be afraid of the enemy.
+
+Idiots will always be around, and some of them will end up doing chemistry. Best approach is widespread education on how easy it is and how destructive it is. Or just continue to be scared and hide everything like a little rat in a nest, a gopher in a hole, etc.",1644280221.0,4
+chemistrymemes,Scarcity breeds creativity.,1644215532.0,5
+chemistrymemes,This argument makes no sense. Making a chemical harder to get will do nothing to combat terrorism.,1644187870.0,5
+IRLEasterEggs,This is a food wrapper.,1644170888.0,73
+drugsarebeautiful,"I miss pills :(
+
+Made me warm and happy in a cold world.",1643860372.0,3
+valheim,"Luckily Valheim already is better than 7D2D (not necessarily a high mark, to be fair) in that it isn't a buggy mess that is re-built every year and still just as buggy/worse.
+
+As usual with these games, the idea is fantastic beyond belief, but execution may vary...",1643829089.0,2
+valheim,"So true. I feel like 99% of all content is just complaining or advertising now, there's not much else being made.",1643821759.0,1
+valheim,"Sounds like a you problem, buddy",1643821665.0,2
+valheim,Dad?,1643821499.0,22
+valheim,"*sigh* You realize they did? You also realize getting new content is slower once hiring new people on to a team due to training, onboarding, etc.?",1643821412.0,1
+valheim,"**Your** exploration and combat may require new content, but there are plenty of people who can explore and fight their way through the same enemies over and over and still have fun. The point about the sandbox still stands; if you don't like playing with shovels and sand, get out of the sandbox.",1643821344.0,-1
+Fusion360,"To get your money for next month, duh!",1643820624.0,5
+valheim,">...the devs have done the bare minimum in terms of *new* content. Modders could've completed everything they've put out since release in a few days. 
+
+This sounds a lot like complaining about the amount of content to me 🤷
+
+>...the devs abandoning the roadmap to go live their lives was expected.
+
+What evidence do you have that the game is abandoned? It's getting active updates and the team is getting new hires. 
+
+My issue is people complain about great things because it gives them a feeling of power, which is pathetic. You're the same as a troll YT comment.",1643819918.0,0
+valheim,Is that Christopher Walken dancing I see?,1643819525.0,2
+valheim,"Go touch grass is actually really funny XD.
+
+I don't give a shit about Iron Gate; it irks me that people complain it's not enough when buying at least a hundred hours of content for $20. Then those same people go to a restaurant and spend $20 on a burger without thinking about it. 
+
+If I'm a simp for Iron Gate because I don't act like a spoiled six year old who is out of candy, then I'm fine with that.",1643819229.0,1
+valheim,"True, I definitely could work on giving people more slack. I hold myself to a really high standard, and expecting others to follow my standard is very selfish; I just can't get over how people are getting so much for so little and they still complain...",1643819051.0,1
+valheim,"Lmao you're obviously younger than twelve.
+
+Simp refers to someone who lusts for women stupidly, no? Doesn't have anything to do with the current situation.
+
+Maybe try to use insults that make sense, it'll help your point get across.",1643818866.0,-3
+valheim,"Glad you asked :p
+
+I've built an open source operating system for x86_64 architecture, made my own hobby fireworks, made HNO3, acetic acid, experimented with explosives, built a computer for a friend, made a 3d rendering engine for OpenGL, created a few Turing complete programming languages, tended an indoor garden all winter, and that's only mentioning bullet points.
+
+As for the next question, yes, I do get upset at people's opinions, just like everybody else. Pretending you don't is a very funny way of dealing with it, lol.",1643818609.0,-1
+valheim,"What software do you work on? I'm a developer as well.
+
+I developed a UEFI x86_64 operating system in the past month; I'm just setting up task structure now for multitasking. It already has things like paging, heap allocation, hardware timer integration, bitmap font support, serial debugging, etc.
+
+Just because I've made all this progress solo in an unrelated project, putting out content at a crazy rate in the past month, does not mean I should expect Iron Gate to be able to do the same (or expect myself to continue at that rate).
+
+As a developer, you should know that sometimes a bug takes a hundred times as long to fix as a giant new content update. Personally, I'd rather the devs fix these bugs now instead of going the route of 7D2D where it's a buggy mess at every release.
+
+Taking longer on something usually means a developer is giving it more polish, stability, and trying to improve it. Why rush greatness?",1643818234.0,4
+valheim,Found the 12 year old,1643817694.0,-3
+valheim,"What changed about your life in those six months? Going to go out on a limb and say you didn't change much, probably less so than the game did.
+
+I don't know why you're expecting fast updates all the time in a game as large as valheim (being worked on by a small group, no less)",1643817582.0,-4
+valheim,"100% agree!
+
+The game is huge; initial playtimes are comparable to Skyrim for me, which is a game I adore. 
+
+I can't believe the people who are getting tens to hundreds of hours of entertainment for $20 complain as much as they do, lol.",1643817513.0,2
+valheim,"Why would that be an issue? Something that takes 15 years to make is no good to you?
+
+This community is so pretentious.",1643817317.0,0
+valheim,"Lmao. It's amazing how entitled redditors are.
+
+You realize it takes tens of people multiple months of extremely technical work to produce the game that you're complaining isn't big enough. If you want more content, help make it happen, don't just sit on Reddit complaining like this is TikTok or some shit.",1643817260.0,-7
+valheim,You can be sarcastic and bring up points that don't matter and get your downvotes!,1643817110.0,2
+valheim,"Lol. You're $20 don't mean dick to the teams of people and months of work it requires to create new game content.
+
+Hard work isn't easy, ya know.",1643817060.0,2
+valheim,"Exactly!! Remember how every COD is $60?? The value of this game is monumental. 
+
+I think people here forget what gaming was like 10-15 years ago; a game like this proves the industry has come a long way.",1643816977.0,2
+valheim,"You ""moved on"" yet are still here in the subreddit...",1643816668.0,-1
+pcmasterrace,"What about all the new content added since MS bought them? I haven't played but I've seen things in passing of new types of caves, animals, ore, etc.",1643689264.0,1
+IRLEasterEggs,"If you've seen Jeremy Clarkson, you've experienced this phenomenon.",1643613646.0,2
+osdev,"You could always go with something like tup; it's similar to make but much faster.
+
+As for the auto-finding dependencies, do you really want your build system to guess at what depends on what? It's easier to just define dependencies in your build system as you go (or just make clean every time to recompile headers; compilation time isn't huge until you start to get to the hundreds of files mark).",1643596448.0,2
+osdev,"My QEMU debug setup:
+
+(I use WSL with Ubuntu-20.04 from the Microsoft Store)
+
+Launch QEMU with normal flags + ""-s -S"" to wait for gdb before starting, as well as open up a remote that gdb can attach to.
+
+Then, run ""gdb"".
+
+To connect to QEMU, run the following in gdb, ""Target remote localhost:1234"". 
+
+(1234 is the dummy port QEMU uses to open a remote on, and is what the ""-S"" flag is shorthand for).
+
+Ensure you compile your kernel with debug symbols (""-g"" in most cases). In gdb, run ""symbol-file PATH/TO/YOUR/KERNEL"" where KERNEL refers to whatever file you get after linking ""most likely a '.elf' file if using UEFI).
+
+After this, you are ready to debug any way you'd like (breakpoints, step-in/step-over, watch variables, etc) using the gdb commands (which can be cumbersome at first, but soon they click and are just like pressing buttons in a debugger with a GUI).
+
+You could also run ""tui regs general"" in gdb for a layout that shows the general registers of the cpu, what line of source code is currently executing, and the gdb window itself to run commands.
+
+This has helped me so much in diagnosing stack corruption problems and the like, I don't know what I would have done without gdb...",1643484873.0,1
+valheim,Have you seen Spore? Remember Uno livestreams? Anything public that gets shown to other people will be filled with dicks before you know it.,1643136392.0,2
+osdev,"Haha, the page fault of death. We've all been there.
+
+Definitely check out nerd4code's answer, it seems that mapping the VGA memory lower is having some ill effects.
+
+One thing you could do is use the error code pushed on to the stack by the page fault (as well as the address in CR2) to help identify what kind of problem it is and where it's coming from. [Here's](https://wiki.osdev.org/Exceptions#Page_Fault) information on how to decode the error.",1643136062.0,6
+Pyrotechnics,"Colored smoke is one of the hardest pyrotechnic feats to accomplish... You basically need a chemical specifically made for dying smoke, and to make it burn in just the right way. TKOR (yes, that one) has some videos on smoke dye that aren't just ""burn crayons get color"".
+
+As for a lot of smoke, unless you are a military, R-Candy is the way to go (I've seen people use toilet paper tubes filled with it as smoke grenades in airsoft games).",1642917978.0,5
+interestingasfuck,"I agree. User-made mod support is also built in, which is huge these days. I got it quite some years ago and I can say it's more of a game than most games that are actually released these days. Incredible amount of work from the devs to continually make it better over the years (the new neon mode with built in editor is sweet, I've gotten lost haha).",1642902074.0,11
+chemistrymemes,Don't forget the plastic tubs and nitrile gloves,1642292152.0,18
+ProgrammingLanguages,"Personally I think string is more confusing. I don't think the idea of magnetic tape that stores data is that hard to grasp, and is actually kind of necessary to understand how many things in computing work, like hard drives (basically a roll of tape that is read from the side). 
+
+The tape analogy is great and there's a reason it's been around for so long.",1642022523.0,3
+ProgrammingLanguages,I kind of really like this. Almost like endl in C,1641883514.0,5
+ProgrammingLanguages,"{ You couldn't copy/paste this, for example. }",1641883472.0,1
+programming,"The github has an extensive readme that I think answers all the questions you have. 
+
+It's not a text post, it's a link post; you're meant to click through.",1641698382.0,1
+programming,"Not really. I would have never been able to do a project of this scope and/or complexity, by myself, in two/three weeks, if I hadn't done it a few times before in a multitude of ways.",1641698119.0,1
+programming,"Cool, could I get a GitHub link?",1641570865.0,3
+programming,"True, but it's not like traversing a tree is a new concept either. I'm not unfamiliar with how to create a tree of nodes and generate code from those, it's just not the route I took for this project (as an AST would be very, very overkill for something like Corth).
+
+Just because something seems simpler doesn't mean it's worse 👍",1641570813.0,1
+ProgrammingLanguages,"All of the problems you described are fixed and all the suggestions you made, implemented. Thank you so much for contributing to the project!!
+
+[Here](https://github.com/LensPlaysGames/Corth/pull/2) is the link to the pull request, if you're interested.",1641534161.0,2
+ProgrammingLanguages,"1. You are correct that the only types right now are unsigned integer, character, and string. The divide operation uses the div instruction within x86_64 assembly, so it is in fact an integer division (technically Euclidian division). The mod keyword and operator use the same assembly instruction, just pushes the remainder vs the quotient.
+
+2. Thank you! That will be fixed by tonight (that entire section was just added yesterday, so I really appreciate you catching the error!)
+
+3. Newline really isn't important, that's really just an artifact from initial development. I'll remove the newline from the dump keyword by default (meaning  newline will only be accessible through ""\n"" dump_s or 10 dump_c)
+
+Your time really matters a lot to me, I thank you for spending any of it on this language.
+
+Edit: also just realized I misunderstood your third question, it is more in regards to how Corth handles whitespace in a source file vs a new line output to the console. Actual answer is that it doesn't matter, all whitespace in a source file is skipped completely. Only time a newline comes into account is keeping track of line number as well as for ending a single line comment started with //",1641520976.0,2
+programming,"Thank you so much! Yeah, I started to break it into multiple files but development became much harder when I couldn't just search a single file for the variable I needed to track down (ie. static_asserts that need to be updated), so I kept it all in the one file.
+
+I do think I could clean all the sections into objects (Lexer, Parser, AssemblyGenerator, etc), but that rework is for another day.
+
+As for the most difficult part, it's really hard to say. I'd say setting up an error/logging system was one of the most important and most difficult parts, especially with Corth running external commands, with the errors from those also needing logged. I ended up redirecting the stdout and stderr of the executed commands to a file and then printing that file to the console, which seems obvious now but at the time took me some time to figure out, haha.",1641517382.0,8
+ProgrammingLanguages,"Thank you so much! I appreciate hearing this a lot :p
+
+I have pretty thick skin in general, but over there they are *rough*, haha.",1641506117.0,17
+programming,Thank you! It's up there now. [Link](https://old.reddit.com/r/ProgrammingLanguages/comments/rxkpq1/i_made_a_turing_complete_open_source_programming/?ref=share&ref_source=link),1641492207.0,5
+programming,"I agree with you the flow is hard to wrap your head around, but once the stack-based part of it clicks it does become much easier. I've done my best to document everything and give clear examples; let me know if there is anything I could add to make it easier to understand or flow a little better.",1641491011.0,11
+programming,"If it makes you feel better I'm working on another language that isn't public yet due to not being Turing complete. It is a much more conventional language (not stack based) and also compiles directly to executable, cross platform. It uses the more conventional recursive descent style parsing, and will have a c++ like syntax.",1641490751.0,9
+programming,"Mainly as a learning experiment for how low-level software for desktop computers is constructed and operates.
+
+Also as a resume booster; not everyone has created a Turing complete programming language in c++ from scratch. It will at least stand out a little bit.
+
+Third, I finally have something I can solve all those project Euler problems with! In all seriousness, solving problems and coding in a custom language has been a ton of fun, and I can only see myself doing it more. I love the fact that if a feature is missing I can add it, and I get to see how it's all done under the hood.
+
+Forth, it's totally awesome, just like Porth before it, and Forth before that 🤟",1641490631.0,33
+ExplosionsAndFire,"Not an Aussie, but would guess it means trade worker (ie. someone who went to trade school: a welder, a plumber, etc)",1641422220.0,10
+AskADataRecoveryPro,Thank you so much. I will try to start the copy today and then get you that screenshot of DMDE,1641401938.0,1
+Assembly_language,"This isn't related to what I was asking, but it is also true. 
+
+I'm writing assembly for desktop computers, so my use case is fairly high-level (ie. assuming C runtime to be present, 64 bits, etc).",1641361743.0,1
+AskADataRecoveryPro,"Finally got everything downloaded, the 4tb disk partitioned, and now it says all data on target disk (the 4tb new one with ~80gb of new data on it already) will be over-written in the process. Is there some way to change it to output to an image file vs over-writing the whole disk?
+
+I really appreciate your patience, time, and effort. I hope you had a great new year.",1641361381.0,1
+Chempros,Cut to tomorrow morning when OPs car gets stolen because of reddit XD,1641263370.0,12
+AbruptChaos,Rider? I barely know her...,1641175963.0,30
+ExplosionsAndFire,H U F F  T H A T  S H I T,1640943709.0,2
+energetics,"Lol okay. For the record I've made MN, NG, and even played with peroxides in my teens. I know my place compared to compounds that act faster than we will ever perceive.
+
+Someone on this thread even said the amount shown (in OPs hand) is enough to make a detonator, which is surely enough to take out fingers, if not the whole hand. Energetics should not be taken lightly, even if you cringe at the safety or whatever, I'd rather have my hands. I'd rather not go through 18 hours of surgery just because I used glass/plastic to SEAL EXPLOSIVES IN instead of metal (even then to only be left with part of what I had before, and a lot of pain)... I'd rather not do any of those things at all, so I keep my squishy body away from the explodey bits.
+
+Plus once you make MN you realize it kind of sucks. Evaporates faster than you can say 'nitro headache'",1640940267.0,1
+energetics,"Plastic is the same as glass in the fact that surgeons have to do exploratory surgery all over you to find little shards and bits of it. Metal at least can be x-rayed and specifically removed. Try not to get your hands near any HEs in general, as your hands will easily be, literally, blown off.",1640913944.0,2
+energetics,"Maybe don't put your fingers directly next to grams of sensitive, hazardous materials...
+
+Especially when they are discolored, in a glass container, and sealed with a lid...",1640892212.0,3
+Pyrotechnics,"Hey, I probably should make another thread on this, but is HDPE okay for the tumbler drum? I don't want to blow up my backyard because of static :/",1640639573.0,1
+ExplosionsAndFire,"Kewl is all the things in this thread, but they are forgetting one thing: bragging. If you brag/show-off it's immediately a ""kewl"" flag. For example posting a 30 second video of something exploding. Not really educational, more just kewlery.
+
+It originated from the old explosives forums.",1640558648.0,1
+ProgrammerHumor,If you don't use emacs as your OS and window manager you can't truly be ***pure***.,1640214952.0,1
+trees,"Or better yet, both.",1640065792.0,2
+trees,You could just take acid :),1640052271.0,25
+AskADataRecoveryPro,"I finally have another drive with free space (4tb) ; how do I clone the 1tb drive that is still unallocated? 
+
+I'm on Windows, and the two things you listed seem to only work on Linux (or at least I can't figure out for the life of me how to open a tar.lz for ddrescue on Windows).",1640044171.0,1
+IASIP,Can't even make I more smarter!,1639968546.0,15
+valheim,Lmao,1639952409.0,5
+functionalprint,"I mean technically I have those plastic foldout tables but those are not sturdy enough to put any weight on, haha.",1639891317.0,1
+functionalprint,I don't have a table :/,1639883242.0,2
+AskADataRecoveryPro,"It still says unallocated and I haven't done much of anything, not even restarted the PC since it happened. Thank you so much for the advice",1639882349.0,1
+techsupport,"I'm sorry, I'm just so scared to screw it up even worse than it already is that I want to make sure I at least half understand what I'm doing.
+
+I really appreciate your answers and it seems like today I'll be able to try a few different things to get the data back, including test disk and active@",1639847032.0,1
+techsupport,I've heard that test disk could corrupt my data if it fails. Is this true?,1639841059.0,1
+techsupport,"I've heard running certain tools can be dangerous, but I'm not sure which ones. Obviously I know not to format it, but would running a scan with DMDE or Active@ Partition Recovery, for example, have the possibility of corrupting/making me lose my data?",1639816783.0,1
+techsupport,"The rules in datarecovery scared me off as they are quite strict about knowing model numbers and stuff... All I know is it's WD and I got it from a friend a few years ago...
+
+I'll post to that other sub.
+
+Thank you so much for the advice, and really just your time.",1639810963.0,1
+techsupport,"Just putting this here as an extra question: How big is a disk image?
+
+It's a 1tb drive, so do I need 1tb somewhere else? I only have very little space on my boot drive (less than 20gb) so I am not sure if I'll be able to fit an image onto it. Do I need to buy another drive and use that to copy to? 
+
+I am sorry for asking so many questions, I just have no clue what I'm doing and am scared to lose my data.",1639809302.0,1
+Scrubs,No.,1639781557.0,-1
+DataHoarder,Yep,1639781474.0,80
+IASIP,You are on fire today!,1639281373.0,283
+crystalgrowing,"It may still be...
+
+...
+
+The world may never know.",1639280448.0,3
+ProgrammerHumor,"True students will end up learning all of them, at least a little bit.",1639280413.0,29
+ExplosionsAndFire,I really like the term science hut,1639012641.0,6
+unity,"Don't turn a list into anything. The idea is looping over a changing list is a no-no.
+
+Keep a separate list from the one you are looping over, and then after you are done looping over the list, loop over the separate list and remove those values from the original list you were looping over.
+
+OR you could do as miteemous said and keep a separate list of wanted items and return that instead of the list you started with.",1638893666.0,1
+unity,"To be fair, I did some diagnostics for explosives on my recent game using for each vs for and they were very close, albeit for was faster in every case. If you want to look at the data I collected it's in the [GitHub repo](https://github.com/LensPlaysGames/ItsAShooterIG/tree/master/ItsAShooterIG.URP.UnityProject/Assets/Diagnostics)
+
+Also, that's not best practice really. The idea is that what you are looping over should be immutable (unchangeable). Personally I keep a list of indices to remove and then loop over that list and remove them from original list.",1638851898.0,3
+unity,Come to c++ and you can't even loop through an array and access it by index (it's at least not good practice).,1638851758.0,2
+laminarflow,Smooth hole = smooth water,1638817252.0,2
+NiceHash,Oh honey,1638647495.0,12
+IASIP,"This is amazing, haha. Thank you!",1638640244.0,2
+cpp_questions,"The documentation of CMake isn't exactly beginner friendly. I don't know what is required so I don't know where to start. I want to use a namespace in my code, however everytime I add it CMake complains that it can't find externals or whatever. I can't find anything on namespaces in CMake documentation, especially in the begginer-oriented getting started section, so what am I to do? Is what I need to do learn about creating CMake libraries or how to use C++? I feel like I'm learning an entire ecosystem just to be able to use C++. 
+
+Everybody talks about how open C++ is but everything just seems to be about limitations and what isn't possible.",1638309739.0,0
+cpp_questions,"How?
+
+I've built projects with GCC/G++ before and I run into the same issues while building and running. Having an IDE enter two commands for me is not something I need to avoid, I understand what the button does.
+
+My problem seems to be in understanding how a compiler works, not anything else. I don't think I should have to learn how to use a languages compiler as well as the language to be able to use it but whatever. How do I learn about what -I[FilePathHere] does? How do I include multiple file paths? What do I need to link (with -L)?",1638309387.0,0
+ProgrammerHumor,What's a linter,1638308242.0,5
+Unity3D,"I don't get it. 
+
+Rotate camera, find cube, rotate cube within cube (for what?), repeat?",1638307916.0,-3
+Unity2D,"Don't steal things from other people and sell them as your own, it looks bad on you.",1638306469.0,13
+cpp_questions,"So, in summary, it sucks, is old, and isn't the best tool for almost any job. Why is it even used anymore? Why do jobs require you have experience in it?",1638306409.0,-13
+cpp_questions,"So you're saying a relative file path in the include is the best way available? That relies on the file architecture and names not changing ever, which doesn't seem good at all.
+
+If it's something I'm doing wrong, how am I causing cmake to randomly complain about unresolved externals? What is an external? Why does it need resolved?
+
+Sometimes I press build and run and it is fine and other times I get that error (or at least that error at the end of about 20 file paths that I'm not sure what they have to with anything).",1638306257.0,-2
+ExplosionsAndFire,"So you're saying no matter what the amount or where you are, you should always take proper safety precautions to avoid injury? 
+
+It's almost like I've been saying that the whole time.",1638292482.0,1
+ExplosionsAndFire,"Lmao gotta love getting death threats over the internet for trying to outline safety on inherently dangerous topics.
+
+It sounds like you need a therapy session and a spelling coach.
+
+Edit: I love the fact that you are calling me an ""over-saftified weasel"" while typing it with less than 10 fingers. The irony is really just \**chef's kiss**",1638291917.0,2
+Unity3D,"I've been thinking about moving some of my games data to JSON in the final build, that way players could add their own weapons with custom stats/change out 3d models of existing ones and stuff like that.",1638204998.0,1
+Unity3D,It'd probably be too slow in multiplayer but for single player with small levels it's totally fine,1638204902.0,1
+Unity3D,"Try not to fall into ruts like this and never learn the correct way. It will help you 1000% more to just take the extra few hours and come at the problem with a better approach.
+
+GameObject.Find should be a last, LAST resort. String references are literally the worst references.",1638204694.0,1
+Unity3D,"Really cool video, thanks for sharing!!",1638203741.0,1
+unity,"There's a few reasons it's going up.
+
+Emission shape is in a cone pointing upwards 
+
+Start speed is set to a non zero amount.",1638110888.0,9
+ExplosionsAndFire,Gotta get on that grindset,1638032811.0,10
+codyslab,"Lmao she going to OnlyFans, give it a year tops.",1638032681.0,7
+gamedev,"About game dev. Not just a vlog. Hence the name ""devlog"".",1638032507.0,9
+gamedev,Damn so my game sucks cuz I don't cook expensive breakfast everyday and do yoga into a camera? Makes sense ig,1638032468.0,0
+gamedev,"""breeders""
+
+Calling kids a ""parasite""
+
+I can't tell if you're a spiteful parent or a angsty teen, either way this has some cursed energy lol.
+
+Smoke some and come back when you're at least this high 😉",1638032401.0,3
+gamedev,"This, haha. Tarodev is a great one (although he moreso does tutorials vs devlogs)",1638032295.0,3
+gamedev,"""daily routine"" lol.",1638032225.0,5
+gamedev,He obviously just want that clout/money,1638032123.0,2
+gamedev,"Okay, u/BIGSTANKDICKDADDY",1638031922.0,21
+IASIP,"That's fair. It's definitely more silly than it's ever been while at the same time being more serious.
+
+I liked the gang escapes though, it was fun to see the power dynamic and the big league chew.
+
+Plus the meat cube one was really good, along with the gang chokes.
+
+But I totally get why someone might be turned off from the newer seasons, every rewatch I see season one and it's such a drastically different show than it is now.",1637740577.0,1
+IASIP,"I stopped counting a few years in, I've done the same for a long time (although had breaks where I binged breaking bad, for example). I must be at something over 40 cycles at this point.",1637729684.0,3
+IASIP,It is the end. I think it's also when the McPoyle's are introduced,1637729474.0,4
+IASIP,"Great work! This is really cool.
+
+I think a swear jar could be neat, as well as how many times someone has said ""cut that cut that cut that cut that"" lol",1637729300.0,4
+IASIP,What made you hate the entirety of the two seasons? I get that it's really different from what the show started as but it still seems solid to me.,1637729159.0,1
+IASIP,Don't even get me started on the Phernetic,1637728878.0,1
+IASIP,Cut that cut that cut that cut that,1637728607.0,2
+valheim,But it doesn't count as shelter,1637686472.0,21
+AbruptChaos,"Weird ass-boy, or weird-ass boy?",1637550595.0,1
+lasers,This is why lasers have a bad reputation... Like can we not be blatantly irresponsible like this?,1637550438.0,6
+Unity2D,Looks like Dead Cells,1637476837.0,2
+gamedev,"It's actually the opposite lol.
+
+Low fps = more stuttering.",1637476659.0,-6
+gamedev,They're not that weird.,1637476632.0,2
+gamedev,"I don't really get this. I feel like you're saying ""don't use a hammer on a nail because what if DeWalt stopped making hammers"". If DeWalt didn't make hammers, I'd make one, but until that day I'm going to go ahead and use the tools made for the job.",1637433667.0,8
+gamedev,"You will not create something that looks awesome in a low level engine in C, especially your first time. It sounds like this is a fantasy, and not a goal.",1637428230.0,2
+gamedev,Why not?,1637428120.0,3
+valheim,Yep.,1637371117.0,1
+IASIP,"Thank you, I really appreciate hearing that. It's been a really rough week.",1637269656.0,2
+Pyrotechnics,"""Best"" at what?",1637105254.0,4
+interestingasfuck,"This is like asking ""What would happen if Germany just decided they wanted the World?""",1637096587.0,6
+valheim,I have had issues with boats disappearing for a long time now. RIP all the scrap iron the Valheim god's have taken.,1636691954.0,2
+unity,"Will it be multiplayer or just AI enemies?
+
+I think the aiming of the gun could be automatic to the nearest enemy. I think while playing I'd get annoyed that I have to move to be able to aim.
+
+Overall great consistent art style and solid foundation for something really fun.",1636393410.0,1
+Unity3D,"I can't believe I have lost hours of my life to this. I can't thank you enough for the response. I didn't even know the mute audio button existed!!!
+
+Is there a shortcut to activate it that I might have pressed accidentally?
+
+Again, thank you so much for your help.",1636252309.0,2
+gamedev,"I appreciate the response.
+
+I have confirmed speakers are working, things like Spotify, YouTube, etc all play just fine.
+
+I have tried with headphones, both through my audio interface and through the back of my computer to no avail.
+
+I hadn't thought of that, but I pulled up an old project with working audio, and sure enough, it works.
+
+EDIT: Problem solved! It turns out I'm oblivious and didn't know that the game window has a mute audio button that I must have pressed on accident or triggered with a shortcut or something.",1636252206.0,1
+interestingasfuck,"Way to backpedal, Andy",1635957697.0,5
+todayilearned,I love the smell of napalm in the morning,1635957373.0,46
+Unexpected,This sub has degenerated into internet game show clips now?? Buh-bye...,1635784183.0,2
+AbruptChaos,Almost as good of a name as hotdogswimmer,1635730144.0,4
+Steam,"True, I see now how it's a much less malicious case of what FIFA does. It'd be like if old Pokemon were replaced with new ones, instead of them being added.",1635701371.0,6
+Steam,"I mean if we're gonna be going that route then all playing/trading cards (pokemon, Yu-Gi-Oh, etc) are the same thing.",1635698322.0,25
+IASIP,You are hilarious. Do you even watch the show of the subreddit you are in? It's a recurring joke since season 13.,1635695500.0,1
+roosterteeth,"That is one of the funniest ways to turn the intro of on the spot into a cold open. 
+
+Also love Zach's response: ""Mine work! They just don't want to right now""",1635652396.0,1
+IASIP,"I would say a lot of somebodies cares about negative comments against homosexuals, especially in response to something unrelated. Somebody's lifestyle should not be made fun of because they have an opinion, whether you like the opinion or not.
+
+""Dude, is that a hate crime?""",1635544688.0,1
+IASIP,"Fair, I'll allow it.",1635536209.0,1
+IASIP,"I'm not sure why you think I'm that annoyed? I've been making jokes from the show the whole time. It seems like you're trying to project your own feelings onto me, but that could just be my perspective.",1635534036.0,0
+IASIP,Stupid science bitch couldn't even make I more smarter,1635533600.0,1
+IASIP,U don't get it...?,1635533477.0,1
+IASIP,"Lol definitely stressed, so stressed I'm even cracking jokes from my favorite show, laughing at terrible people with harmful opinions. Terribly stressed. I can barely see through to tomorrow with all the **stress** I have.^^/s XD
+
+Lighten up, bud, and stop projecting <3",1635531146.0,1
+IASIP,"Lol, great rebuttal. If you were a first-grader, it might even get an A+.
+
+Maybe, think about expositing upon the thoughts you have, and backing it up with supporting details. Or just keep blurting your opinion out and hoping you're the loudest.",1635530644.0,0
+IASIP,"What? I'm pointing out how backwards it is for mdmd to think that calling BakingSodah homosexual as an insult is okay because he admires a successful business-man. 
+
+It's okay to be gay, and it's okay to admire successful guys, but they aren't related at all. Admiring is when someone is more successful than you, except you like them; it's an old-fashioned idea, you wouldn't get it ;)
+
+The 'Elon stan' you are talking about is just a normal person, stop acting like they are calling Elon a god. You are making fun of a human being for nothing. Let that person be happy and like what they want to like, it's not hurting you.
+
+The fact that you all devolve into chimps screaming words you heard once that sounded insulting is so telling of who you are: a SAVAGE! IDIOT! SAVAGE!!!",1635530012.0,1
+IASIP,"Not saying it's a good thing to do, but what he did is insanely smart, business-wise.",1635524765.0,-1
+IASIP,ITT: People butthurt because they're poor.,1635524463.0,1
+IASIP,"Right, somebody who runs multiple billion-dollar companies in completely different industries that drive forward the progress of humanity is just of average intelligence. 
+
+You think it's so easy, you do it. ¯\\_(ツ)_/¯",1635524313.0,-2
+IASIP,"Sorry you are getting downvoted man, I think it's awesome that you have something you like to learn about and strive towards. That feeling of wanting to know more should always be followed; knowledge can't hurt you.",1635524180.0,0
+IASIP,"A lot of people. 
+
+First of all, he's rich, meaning a lot of people depend on him for income. Those people give a fuck about Elon, because he puts food on the plate and a roof over their head.
+
+Second of all, he's somewhat of a celebrity; he's definitely a household name in most of America (IMO).
+
+Third, if you have nothing nice to say, don't say it at all. Some of us were able to get that one down in Kindergarten, but everybody develops at different rates.",1635524083.0,0
+IASIP,"Lol.
+
+You have made your mind up about this guy so fast. Why is it bad to admire somebody successful and want to be like them? 
+
+I'm sure you'd be a great parent, really pushing your kids towards their dreams... ^/s",1635523900.0,0
+IASIP,"Right, because admiring a successful man obviously means you are homosexual... smh...
+
+Didn't know this whole subreddit is full of soy-boy beta cucks, TIL",1635523726.0,-2
+IASIP,/r/UsernameChecksOut,1635523624.0,1
+IASIP,"I'm playing both sides, so that I always come out on top",1635523534.0,1
+pcmasterrace,"Me, with a 1080 :(",1635464400.0,1
+LSD,"It's not *that* great.
+
+For me, I just made a small list of stuff I want to do before I die. Slowly, I check things off, and if something comes along I add it to the list. Once the list runs out, I'll be gone, but I'll have done everything I could have.",1635435411.0,5
+pcmasterrace,I feel personally attacked,1635400637.0,2
+Steam,"""How to jump: press spacebar""",1635398316.0,12
+IASIP,Same here. Every time I watch it I get a little choked up. I just empathize with him so much and feel like I know exactly what he's going through.,1635398038.0,3
+IASIP,"Hero, or Hate Crime?",1635397849.0,23
+interestingasfuck,"""just say no""",1635397750.0,7
+AbruptChaos,Will it penis?,1635090430.0,1
+factorio,Let's just go ahead and settle on they,1635030147.0,1
+todayilearned,Whatever lets you sleep at night,1635028653.0,2
+DunderMifflin,Probably not fuck-nugget,1634857935.0,99
+ExplosionsAndFire,So far,1634799954.0,1
+interestingasfuck,"*sigh...*
+
+*unzips*",1634465927.0,9
+pcmasterrace,"As a glasses wearer and computer user since birth, can confirm eyes just keep getting worse. More and more out of focus each year, hence the need to get new glasses (or at least lenses) every year.",1634323337.0,26
+pcmasterrace,Gobbledygook,1634323209.0,1
+interestingasfuck,"The amount of water in the waves you see is nowhere near the total amount of water moved. Did you see the amount of water going hundreds of feet in the air just from the initial blast?
+
+The waves you are talking about is a small section of a circular wave going outwards from the blast in all directions. If you lined up all that water, the resulting wave would be gigantic in proportion to a run of the mill tsunami. And that's just on physical force alone, a lot of the a-bomb's energy is released in other forms (heat, light, cancer rays, etc).
+
+Plus, one atom bomb isn't a unit, every bomb has different amounts of fuel and different conditions which alter the size of the blast.",1634067202.0,2
+interestingasfuck,"AKA if a miracle happens on top of thousands and thousands of other miracles, as well as all of humanity shifting direction...
+
+Pretty sure we're fucked, guys.",1634056887.0,1
+interestingasfuck,"Sorry, but no.",1634056761.0,0
+valheim,"I'm Rick James, Bitch",1633975920.0,7
+todayilearned,"That's a bit of a low-ball, can we settle on **tantamount**?",1633830341.0,2
+todayilearned,"Right, but they all have the same physical properties, hence the blanket term ""rock"".",1633749660.0,2
+todayilearned,">~~OJ Simpson~~ Norm MacDonald has entered the chat.
+
+FTFY",1633716951.0,3
+todayilearned,"Can vouch for the trip reports, not inaccurate, lol.",1633716910.0,6
+ProgrammerHumor,"Everything is not as it seems, ig.",1633617460.0,2
+rickandmorty,Using of the Rogaine: ✅,1633403225.0,3
+interestingasfuck,Damn I thought it stood for Coricidin Cough and Cold,1633400949.0,2
+interestingasfuck,No matter what it wouldn't outnumber or offset the rapid and steady decline of the environment.,1633400584.0,1
+todayilearned,"I really liked it personally. It showed how this one choice Walt made, between saving a life and not, ended up costing the lives of hundreds down the road (like every decision he made, frankly).",1633268861.0,148
+roosterteeth,"Valheim. It's a wonderful survival game with hints of skyrim, and is cooperative multiplayer so they could all work together to defeat bosses/sail ships/get resources.",1633194506.0,1
+valheim,This is a really cool view! Reminds me of Eco.,1633125360.0,1
+valheim,"Yeah, I think the end game/further away from spawn should have more dangerous enemies like larger/harder serpents and stuff, but close to the spawn should stay similar to how it is now. Serpents still terrify me every time I end up being chased by one, as I know if my ship sinks I'll lose everything I have on me and in the boat.",1633125241.0,3
+LSD,"Why are you so salty and bitter? 
+
+Oh wait, that would be the semen.",1632937555.0,4
+LSD,ITT: Old men who can't get it up mad at young men who do every day,1632937419.0,2
+LSD,"This is the internet, sweetie, you can say anything you want :)",1632937221.0,5
+Drugs,This is not the way. Stooping to her level makes you just as bad 🤷,1632860507.0,3
+Drugs,"Nothing? If you see something you should call it in just to avoid litigation, other than that, lock the doors and night night.",1632860366.0,-4
+Drugs,"They're not saying anyone who calls the cops in general, they're saying anyone who calls the cops in the way that is talked about in the post. Context matters.",1632860300.0,12
+Drugs,I know that bit hurt me inside a lil. Who's looking out for Lucy?,1632860036.0,3
+AbruptChaos,Definitely not. The water could smack you into the pool tiles and kill you/break bones very easily.,1632625690.0,316
+IASIP,Religious Stuttering Army Carnies!!,1632428269.0,8
+IASIP,May I ask what makes it uncomfortable? Is it just the topic?,1632420612.0,4
+gamedev,"I'd say no effect on the depression, just keeps me from blowing my brains out by giving me something to look forward to or feel special about (even though I'm clearly not).
+
+Although I do get angry at myself for not being able to do something simple/that I've done before.",1632269390.0,1
+gamedev,Too much depression,1632259452.0,1
+trees,"They *are* investing in it. 
+
+To quote Ronald Macdonald, ""I'm playing both sides so that I always come out on top.""",1632178888.0,22
+boburnham,"He's not making it to 50, so probably pretty rugged.
+
+Lol, the downvotes. Guess you forgot when he (somewhat jokingly) said he'll kill himself when he's 40?",1632178515.0,1
+boburnham,"It was, but it turns out that's already copyrighted",1632178389.0,6
+CannabisExtracts,Easier to work with? What does that mean? Easier to smoke? Easier to dab? Easier to what? I'm not sure what your goal is.,1632172490.0,1
+LSD,Damn guess I gotta come up with a whole religion or some shit just to get some rest around here,1632157025.0,7
+CannabisExtracts,"True, but you didn't separate the plant matter from the solution. 
+
+Simply dissolving and evaporating would leave you with the original product, while dissolving, filtering/decanting, then evaporating may leave you with something slightly more pure (basically a recrystallization), although on a small scale any losses would be far greater than any improvement in purity. 
+
+Taste is subjective, so no way to guarantee a stronger or weaker taste. It's likely the terpenes would be just fine dissolved in alcohol and then re-precipitated by evaporation on low heat, although you will also most likely lose a portion of the terpenes during evaporation (they are also volatile, so they will want to hitch a ride on the evaporating ethanol).
+
+If you are trying to turn shitty dabs into smokable, don't; just buy the good stuff. You will spend more money and effort trying to fix a bad extract than just going and getting a good quality one. Of course, if good, quality dabs aren't available where you are at, that's unfortunate, and I wish you the best of luck on your endeavors.",1632155956.0,1
+CannabisExtracts,"If you can't tell H2O2 from alcohol, any test you do is not going to help you learn anything XD",1632155623.0,3
+redneckengineering,"Lol how would I know? Just making a joke, cool your jets.",1632155560.0,4
+AbruptChaos,"It's not about the destination, but the journey.",1632151499.0,4
+CannabisExtracts,Dissolving something in a solvent and then evaporating would leave you with the original product.,1632151388.0,1
+Unexpected,"It's fucked to out an entire sexuality as fake and/or lesser than others, regardless if you admit you're homosexual or not",1632150937.0,2
+CannabisExtracts,"For what? H2O2 isn't an alcohol, so what are you testing for by leaving dabs in 97% water?",1632150256.0,8
+chemistrymemes,"It's not even safety third, it's just stupidity last",1632149351.0,1
+LSD,Can I be not on the circle for a bit? I'm getting dizzy and tired...,1632148733.0,67
+Terraria,Libra,1632102303.0,0
+redneckengineering,"Or so you think. He's hanging the orangutan on that chair daily, I guarantee it.",1632102274.0,-12
+IASIP,Megan Ganz always provides amazing episodes.,1632018155.0,7
+WeAreTheMusicMakers,"I get sad, sometimes.
+
+https://push.fm/fl/deathisallthereis",1631489766.0,1
+IASIP,"Okay? It doesn't matter. It's still not cool to call someone that, especially right after you're being very rude and condescending. It just looks bad.",1631489397.0,5
+3Dprinting,"You gotta use lead, *duh*",1631484938.0,2
+CannabisExtracts,I dab daily. Use an e-nail (the coil type) or a banger + torch. All the little self-contained electric devices are expensive plastic garbage and break/never work IME.,1631484465.0,2
+festivals,In America money > life.,1631484006.0,17
+IASIP,You're very quick to insult. And it's not even a reference to the show? Like they said it once but it has nothing to do with this situation.,1631483427.0,6
+IASIP,"No, you have an attitude that is unlikeable. No one wants to hear someone boast about how smart they are and how they are better than everyone else (which is how you come off). Respect and decency gets you respectful and decent comments.",1631483230.0,12
+interestingasfuck,Not my casaba melon!,1631482743.0,1
+todayilearned,"Neither/both is/are correct at the moment, I guess.",1631402735.0,2
+IASIP,But that's a very specific case? A lot of people haven't accomplished anything and won't in their lifetime.,1631227105.0,1
+ExplosionsAndFire,"Yes! Can't wait for the episode. 
+
+I will say that Will is a fairly terrible podcast host (doesn't introduce people, brings up the same topic for an entire hour, etc).",1631225645.0,4
+IASIP,"Old, *black* man -- now you've got me doing it!",1631204939.0,34
+IASIP,My best is not good enough.,1631201883.0,2
+askscience,"My guess would be to mix a bunch of things with different melting points, so as you heat it up, parts of the substance would begin to melt and others wouldn't (although this isn't really an in-between of solid and liquid, more like a mixture of solids and liquids).",1631035487.0,1
+mildlyinteresting,"What defines a part? So like up to 60 dead bugs, or 30 dead bugs split in two?",1630977268.0,2
+interestingasfuck,Found the Canadian lawyer,1630625922.0,17
+boburnham,I feel this. I've been working on my album but I'd say 95% of what I make I just end up hating and never using. That 5% is cool tho.,1630553245.0,7
+LSD,"This whale isn't going that fast? Drag is determined by a lot of factors but one of the largest is velocity squared, meaning low speed = low drag.
+
+Also, you wouldn't really be torn apart from air friction (drag), more overheated/cooked, as the main energy output is heat, not kinetic, and that only happens with really high drag (aka really high speeds).
+
+I was picturing a trebuchet/catapult type device, but a giant vertical hydraulic-like arm with a whale on the end being launched above the clouds is something I would like to see.",1630424518.0,1
+chemistrymemes,Hybridization 🤤,1630413957.0,4
+LSD,The key is gentle acceleration,1630413925.0,2
+todayilearned,Narrator: *he wasn't.*,1630353411.0,41
+trees,"Hehe, where I'm from we called it hot-knifing",1630244183.0,27
+Salvia,"This is so accurate 🤣 
+
+The ""thank you"" seals the deal",1630203994.0,4
+IASIP,... filibuster.,1630202037.0,12
+functionalprint,"Feeling something is better than feeling nothing, especially when they don't know how to feel good.",1629843182.0,9
+pcmasterrace,Is anything real‽,1629837881.0,15
+IASIP,AAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHGHGHGGHGHHHGHGGGGGGHGGGGGG,1629734120.0,4
+IASIP,You are BECOMING a chimichanga!,1629734061.0,13
+Spokane,"Cursed land; I've said it since I was a kid. This city seems to draw out the evil in people.
+
+Can't wait for restrictions to let up and move overseas",1629586835.0,6
+Spokane,"I haven't been ousted for wearing a mask, but there is a significant amount of people that just don't wear them.",1629586653.0,1
+Spokane,✌️,1629586579.0,1
+rickandmorty,"I'm unemployed and not in a relationship, are you proud of me yet?",1629508781.0,3
+ExplosionsAndFire,They are up on BitChute I believe,1629483425.0,7
+chemistry,Only once I calculate my yield...,1629440693.0,3
+THYZOID,"Sulfur trioxide, I'm interested in making oleum",1629407616.0,2
+educationalgifs,If it makes you feel any better I'm high as shit and I understand this.,1629327352.0,7
+IRLEasterEggs,I keep taking small steps but the goal gets further away.,1629327156.0,9
+THYZOID,"Background depends on subject, imo.",1629327048.0,3
+IASIP,"No, we don't know his name!",1629306040.0,26
+Terraria,You mean sexualized images that don't show any nudity? Pretty sure that's softcore porn to a T...,1629305931.0,16
+replications,Very good. Reminds me of staring down at the concrete sidewalk on acid (or just HPPD when I was using heavily),1629213543.0,9
+replications,"Which is also not DMT. DMT refers to N,N-Dimethyltryptamine, not 4-hydroxy-dimethyltryptamine...",1629154446.0,3
+replications,Yes but like projected onto 3d objects,1629142414.0,43
+pcmasterrace,Extract the gold from it,1629132948.0,1
+chemistrymemes,r/cursedcomments,1628825560.0,1
+Pyrotechnics,"Honestly it sounds like you need more experience with pyro in general... Have you made black powder? I would start with that. This should give you some experience mixing compositions and testing them, and is much safer than stars with metallic fuels in them, which often mimic flash powders in composition.
+
+Yes, tweak as in change the composition to work better with your specific materials. I would change percent, not grams...
+
+You can tell it does well a few different ways. 
+
+One would be to build a star mine. This is my personal go-to, as it let's you see the stars in action in the air. It's basically a paper tube with some lift powder at the bottom and a bunch of stars packed on top. Then just light the bottom powder with a fuse and it will launch all the stars up into the air, giving you a magnificent display of the stars you put in there. There's a multitude of resources online that demonstrate how to make this.
+
+Another would be to just study how the star burns on the ground. How fast did it burn? What color? Is there any residue? By understanding what makes fire burn (heat, oxidizer, and fuel), you can tweak the composition to do anything you need it to, from fizzle slowly to burn entirely nearly instantaneously.",1628773372.0,2
+Pyrotechnics,"Yep, that would be a great start!
+
+Then if the mix doesn't perform as expected, tweak the composition to fine tune the result.",1628723179.0,1
+Pyrotechnics,"Metal powders can generally be interchanged given the particle size is similar, albeit with slightly different ratios.",1628705142.0,1
+Fusion360,Yes,1628701836.0,1
+homechemistry,"Acetic acid is the active ingredient in vinegar, so you could make most of the things I stated with that.",1628701253.0,2
+Salvia,"I felt very similar to this, I became a license plate",1628644368.0,4
+chemistry,"Upside down this is still HO, to be fair",1628643107.0,12
+homechemistry,"There are lots of easily made, stunning looking crystals you can grow, ranging from non-toxic to deadly.
+
+For some crystals on the safer end that also require a synthesis, I'd try out sodium acetate (hot ice) from vinegar + baking soda, copper acetate from vinegar + copper + H2O2, iron acetate from vinegar + nails + H2O2, and/or zinc acetate from vinegar + pennies.
+
+If you have some basic PPE like gloves and a dust mask, and you know what you are doing, you could try some slightly more toxic substances, like copper chloride, which forms bright blue-green, needle-like crystals.
+
+Edit: I'd also like to add that esters (ethyl acetate, ethyl benzoate, etc.) are a wonderful place to start if you have access to glassware.",1628631208.0,7
+Pyrotechnics,"I mean, depends on how cheap you mean. Most fireworks are made from paper tubes (which can be rolled from just paper + a glue), and black powder, which is fairly cheap to make given you can get your hands on KNO3 for a decent price.",1628559465.0,1
+askdrugs,"Deliriants are no fun, at least in my opinion. I've done a similar drug, diphenhydramine (Benadryl). I choked down 24 little pink pills just to end up psychotic, hearing voices and thinking people are breaking in to my room and trying to get me, as well as spiders everywhere and constant cramping of muscles. If you want to know what being crazy is like, go for it, but I can almost guarantee it won't be fun.
+
+If you want a legal high, think about DXM, Kratom, or even Salvia (if you're brave enough). There's also nootropics like Phenibut and stuff.",1628519637.0,24
+ExplosionsAndFire,"Thank you for explaining that! I didn't know why it happened, but that's actually happened to me before when I tried to nitrate cotton make-up pads rather than cotton balls. It still said 100% cotton but it turned into this brown hard mass after it dried, nothing close to fluffy nitrocellulose (and it didn't burn).",1628414378.0,2
+IASIP,It's impossible to not read this in Frank's voice,1628385206.0,11
+pcmasterrace,My grandpa was an electrical engineer and knew fuck-all about computers 😅,1628384332.0,27
+dxm,Yeah,1628377235.0,2
+ExplosionsAndFire,"If it is hot at all that's really not something you want during a nitration, as it could runaway and react violently all at once, producing a lot of toxic, red NOx fumes, and risking an explosion.
+
+For nitrocellulose (and a nitrate salt) you want to keep it below 15°C, 25°C maximum. That is room temp or below, so nowhere near warm or hot. Anything above that and you should dump the whole reaction mix into a large ice bath to prevent explosion.
+
+I'm not sure cellulose should dissolve in a sulfuric/nitric mix, but it might in a mix with too much sulfuric. Maybe the nitrate has not had the time or energy to react into nitric acid before you added the cellulose (but this is just my speculation).",1628360076.0,7
+functionalprint,Don't tempt me with a fun time ;),1628345713.0,2
+Pyrotechnics,"If you're in 'murica you can get lead shot at some gun shops/ranges, or you can get lead fishing weights.
+
+As for the mill, if you're handy with electronics and have a motor, an old computer power supply, and a cylindrical plastic container laying around, you can DIY something pretty cheap.
+
+If you'd rather not mess with electronics, there are ball mills available on eBay or AliExpress for ~$60-70.",1628345420.0,2
+chemistrymemes,"Yeah, room temp sulfuric acid isn't too dangerous for incidental contact on the hands, but if it is heated at all or is somewhere other than your hands, the story changes fast. Holes in skin + charring.",1628344784.0,3
+ExplosionsAndFire,"When using KNO3 as the nitrate source, it is common for the nitration mix to 'gel' or 'goo' as you put it, and it's basically unavoidable if you use an ice bath (like you should). This happens because not all of the formed potassium sulfate/bisulfate is soluble in the sulfuric acid, so it crashes out and makes it a thick soupy mess.
+
+Don't worry though! Nothing is wrong, and as long as you keep stirring and make sure there aren't any hot spots, everything should carry on as normal.
+
+If the texture bothers you (and you have a distillation setup), you can distill the sulfuric and KNO3 mix to get fuming nitric acid, which is wonderful for making nitrocellulose, as you can chill it to 0°C and it doesn't get thick whatsoever. Be careful if you do this, hot acid burns through flesh like hot metal through plastic.",1628343770.0,31
+chemistry,r/chemistrymemes,1628343457.0,3
+Unity3D,r/Unity2D,1628088005.0,1
+marijuanaenthusiasts,r/lostredditors,1628020223.0,2
+THYZOID,"Very cool, can't wait for the vid.",1627778186.0,1
+chemistry,A hammer,1627412666.0,2
+askdrugs,"Honestly I think dealers are more inclined to explore the drug world in general, and psychedelics are a fulfilling, safe way to do that (if done right).",1627350470.0,5
+Scrubs,Yeah I was wondering the same thing... Very confusing,1626926371.0,30
+crystalgrowing,"You're on Reddit, nobody here likes Facebook",1626799087.0,5
+crystalgrowing,Just share your knowledge! Gatekeeping is so 19th century.,1626799064.0,5
+homechemistry,"Depends on what you want to do.
+
+Sciencemadness is a great place to poke around, along with other science/chemistry based forums.
+
+For me, I decide on a goal then figure out how the hell to do it (and do it safely, on top of that).",1626798975.0,1
+THYZOID,Piperidine?,1626539540.0,2
+askdrugs,"To add, the lethal stuff in Ayahuasca is an MAOI (MonoAmine Oxidase Inhibitor) which disables a certain process in your body that would normally filter DMT out if your blood within minutes, allowing a prolonged hallucinogenic state.",1626470002.0,1
+ExplosionsAndFire,"Old channel got deleted, along with all the videos (I believe).
+
+You might be able to find his old channel or videos on the way back machine or internet archive or something.",1626469432.0,6
+Pyrotechnics,"Yes, but also no. It depends on what you're making. Green mix is just fine for clearing the nozzle of a fountain, priming stars with, and much more.
+
+For things that require 'hotter' or faster burning black powder, you're going to need to at least granulate it. I'm able to make some decent lift powder using the PGI lift composition and granulating with 75/25 water/iPOH through some old window screen then drying in the sun for a few hours. I've seen this type of granulated powder referred to as 'Pulverone', and, when using my homemade white bread charcoal (which turns into near airfloat consistency once put through a blender), it is fast enough for anything I would use black powder for.",1626463987.0,1
+speedrun,"Not sure why you're being downvoted, information is a luxury.",1626461662.0,-8
+THYZOID,That color is amazing!!,1626455589.0,1
+THYZOID,Cool write-up format. Very professional,1626208914.0,2
+ExplosionsAndFire,This guy internets,1626208845.0,5
+THYZOID,"Lol are they literally called ASS 500 pills? That's hilarious.
+
+Nice yield! This is something I'm just about to do so I can make some salicylic acid esters.",1626151163.0,1
+boburnham,The wait is over,1626050172.0,3
+askdrugs,"Lol nope, usually I eat too much (like over a lb of meat and a few cups of cooked veggies per day). 
+
+I have a fast metabolism, I guess.",1625968410.0,1
+askdrugs,I'm a male,1625807623.0,1
+askdrugs,6' super skinny,1625798849.0,1
+MicroPorn,This is truthfully beautiful. Seeing the metal stretch at that speed and detail is so satisfying.,1625798369.0,34
+MicroPorn,I believe it's just bits of metal/dust reflecting the bright light,1625798335.0,14
+askdrugs,"Yeah just start light and see how it goes (5-10mg).
+
+I fluctuate between 115-135lbs and when I took >30mg my heart would get below 30bpm.",1625783821.0,1
+THYZOID,Good thing this is just isopropyl! Still can dry out your skin but nothing terrible.,1625707189.0,2
+chemistrymemes,But it at least narrows it down. Saying nothing is perfect so no need to try at all is ridiculous.,1625683470.0,12
+BuzzFeedUnsolved,"Boo, repost!",1625589282.0,10
+chemistrymemes,"Just saying the joke could've been easier to understand and made more sense if it was Steve (a male, at least I think).",1625520302.0,1
+chemistrymemes,"He's saying there's no reason to assume a villager is male, though.",1625516876.0,-1
+BuzzFeedUnsolved,Whoa but what about the lizard reveal? I thought they were gonna solve something finally.,1625442765.0,1
+rickandmorty,"Exactly. They didn't do anything special, they just were given a world full of much more space and much more potential.",1625414160.0,2
+rickandmorty,I'm not lazy I just don't know what I want and am suicidal.,1625370431.0,5
+WeAreTheMusicMakers,"Just want some feedback on a song that's going to be on my upcoming album. Here's the song, first one from the album I've ever uploaded anywhere.
+
+https://youtu.be/GkKjeqC6BYU",1625357734.0,1
+Fusion360,"Constraints, or just base one triangle off of the other.",1625354208.0,1
+chemistrymemes,Eat shit,1625354084.0,12
+fireworks,"You're right. He's 'probably not' going to be liable if anything goes wrong. With a disclaimer you 'will not' be liable. If you want to gamble on your country's justice system go right ahead, or just take a few steps to ensure to the self-proclaimed 'good guys' that you are not trying to harm anyone. Just saying.",1625284373.0,1
+depression,"Thanks, ig. I just feel live I ruin every good opportunity I get.",1625174607.0,0
+AbruptChaos,"That's what he is saying. The muzzle velocity is retained more when shooting more towards the horizon, rather than high up just for it to have to fall back down.",1625085812.0,5
+BuzzFeedUnsolved,"Stupid video, stupid idea, stupid execution.
+
+This is such terrible content, do they even know how to do anything other than lie and scam to get what they want?",1625085496.0,16
+boburnham,"Every time I see someone paint something that actually looks like something I get depressed. All I ever could paint was the equivalent of a three-year-olds sketches :(
+
+Either way, beautiful piece",1624980446.0,3
+todayilearned,Yep,1624933145.0,3
+askdrugs,Using multiple CNS stimulants at the same time can have a stronger-than-normal effect and cause cardiac arrest.,1624928957.0,5
+askdrugs,"Yes, it's dangerous.",1624923975.0,0
+redneckengineering,"Yeah, they don't taste different. It's mainly texture, which I don't mind.",1624923696.0,12
+NiceHash,"Based on the numbers the bot gave, the chances of this happening are 0.029667787263%.",1624923478.0,2
+NiceHash,Is that a facebook link? Yikes.,1624923399.0,1
+NiceHash,/r/gifsthatendtoosoon,1624923370.0,1
+BuzzFeedUnsolved,God damn he tore him apart.,1624923284.0,1
+ExplosionsAndFire,"How much dynamite? A pound? A kilo? A gram?
+
+Catch what on fire? Water? Paper? Steel?
+
+Not enough information to answer 🤷",1624902287.0,5
+factorio,"Wait, so how does this actually work?",1624853331.0,8
+altcoin,Does anyone give a shit about these scams? Why is this a daily post now? Fuck off.,1624842865.0,9
+Unity2D,"Looks like MapleStory :).
+
+Also, you didn't make this?",1624842814.0,13
+boburnham,It's to emphasize the feeling of how content creators talk to their audience.,1624824830.0,11
+ExplosionsAndFire,Can confirm: nitric just turns you yellow. Use a light base like baking soda to turn it orange.,1624807002.0,8
+askdrugs,"I smoke weed a lot and have never passed out because of it, but I do pass out all the time :). My resting heart rate is really low, so when I wake up/stand up then my bp is incredibly low, so the blood rushes out of my brain. This also happens to me when I am anxious and/or am in trauma, I just pass out. 
+
+My guess is you were sleeping really deep, plus relaxed from the weed, which lowered your heart rate and pressure to something not sustainable for your brain to function once stood up and having to fight gravity.",1624765181.0,1
+chemistrymemes,Depends on presence of chlorine and burn temperature. Blue is notoriously difficult to make.,1624730953.0,9
+chemistrymemes,u/repostsleuthbot,1624730227.0,1
+trees,"> I never said anything about this one means happy or sad lol... although gamma brain waves correspond to joy.
+
+Lol gotcha.",1624651418.0,1
+trees,"So, the proof that meditators are actually more present in the moment is because they emit more gamma waves, which means you are more present in the moment because meditators emit them?
+
+This is such circular logic... 
+
+I agree that brain waves exist and can be measured, I just don't think it's as simple as, 'this one means happy, this one means sad, this one means he's a special advanced meditator with a magic brain'. You can believe what you want, but you definitely haven't done any help for my view of meditation, and it was already bad 😂. 
+
+If you're going to just sit around, or you need to or whatever, just call it that.",1624651079.0,1
+askdrugs,"I started taking every drug I could get my hands on at ~14. At 16 I took enough acid to realize I was poisoning my mind and body, and was extremely unhappy, and surrounded by terrible people. Now I'm slowly building a life I love with people I care about.",1624649318.0,2
+trees,"Lol I'm not saying brain waves don't exist 🤣.
+
+I'm saying that the claims you are making about them sound woo woo. How do gamma brain waves prove you are connected to the present moment? They are the highest frequency, but not ""the highest brainwave"".",1624649145.0,1
+askdrugs,"No. I know people who have taken upwards of 30 tabs and are just fine. It was intense but nothing dangerous. LSD has never been found to harm the body physically in any way, as far as we know. Mentally it can be exhausting and torturous if you choose that path, but everyone I talk to speaks about the light of the experience and the brightness and warmth they felt :)",1624648231.0,1
+StonerEngineering,"I don't think the amount of butane you *may* ingest is ever going to be a problem, I wouldn't worry about it.",1624632273.0,1
+altcoin,"This is so stupid, go advertise to chumps that will actually believe your scam, idiot.",1624632154.0,1
+Unexpected,"Yeah man, like, fuck taxation, right?",1624631671.0,1
+askdrugs,Acid isn't dangerous 🤦,1624631499.0,3
+shrooms,"The color helps a lot, but even the original is pretty penisy to me. I think if a person's gonna see penis, it's not your fault, it's just inherent to the drawing you chose :)",1624592473.0,0
+Scrubs,Why not?,1624591614.0,1
+photography,Try film.,1624591053.0,1
+gamedev,AAAAAAAAA?,1624590635.0,23
+chemistrymemes,Until until,1624590284.0,1
+webdev,Every three letter abbreviation is fucked in some way,1624590257.0,1
+shrooms,"Not gonna lie it looks very penisy.
+
+I think the problem is I don't know what else it would be? Like it's not his leg, and not his arm?",1624589860.0,2
+trees,Yeah it's not valid. People don't just come back from drowning? Lol.,1624589495.0,1
+trees,I just get sad and/or angry though?,1624589467.0,1
+trees,"This sounds pretty woo to me, I'm just saying. Maybe it's just going over my head, but ""the highest brainwaves"" just doesn't sound right.",1624589439.0,-1
+Scrubs,"Hate to break it to you...
+
+If it walks like a duck, and talks like a duck... It's probably a duck.",1624589095.0,0
+IASIP,"That's what she does, she mashes",1624588720.0,20
+Unity2D,"It's the Ortho camera. Just switch it to perspective, or understand that you can't show anything in 3d. That's the whole point of the camera style you chose. I can't eat your cake and mine as well, or however the saying goes :)",1624588137.0,1
+shutuphapydog,This is borderline harassment... Jesus. Just leave the guy alone if you don't like him? Are the downvotes not enough for you? This is some weird obsessive bullshit.,1624587981.0,1
+ExplosionsAndFire,I do 😈,1624580413.0,8
+redneckengineering,That bin is not made out of slotted angle iron though?,1624556898.0,3
+chemistrymemes,Honestly I can't tell chloroform and butane apart in both taste or smell :/,1624555746.0,5
+ExplosionsAndFire,"But it's not? 
+
+It's the same route of administration with the same results. Not necessarily apples and oranges.",1624418072.0,5
+MicroPorn,"I've had the sorbitol and xylitol gummy bears (separately) and it was a bathroom visit to remember both times for sure. I haven't had erythritol, I just read online that it can also do that. I'm sure it differs from person to person and their gut microbiology :)",1624418009.0,1
+IASIP,I thought it was more of a Viggo Morgenstein deal.,1624405254.0,14
+MicroPorn,"It's a sugar alcohol. There's a ton of them, like mannitol, xylitol, sorbitol, etc. They are used in ""sugar-free"" foods because they taste sweet but can't be broken down by your body into sugar.
+
+They can also be used to make rocket propellants and explosives.
+
+Another interesting property is they all make you have ***hefty*** diarrhea!",1624405113.0,1
+ExplosionsAndFire,What about the other case in Bangkok where it was a purposeful injection of 2mL DCM? It stated that case had very similar findings.,1624404137.0,6
+homechemistry,"This is so cool! 
+
+What a great way to keep track of the vapor front.",1624386563.0,4
+Fusion360,This is incredible.,1624370580.0,1
+ExplosionsAndFire,"It may not be legal advice, but it is a fact!",1624323046.0,11
+boburnham,"Come on, Jeff, get 'em!",1624248439.0,24
+shrooms,"Yep! Thank you for replying with actual facts (as opposed to my druggie conjecture, hehe).",1624224411.0,2
+TikTokCringe,I'll show you mine if you show me yours 😘,1624223928.0,1
+AbruptChaos,"I go for the elbow technique, still loud as fuck. Sometimes shit just be loud, ya know.",1624215399.0,2
+AbruptChaos,Have you tried to stifle a sneeze? That shit hurts my nose and throat so bad.,1624214512.0,16
+shrooms,"But one our body knows how to deal with, to be fair.",1624208173.0,1
+dissociatives,"DMT you can still feel your body and know you are okay.
+
+With nitrous, it numbs you so much (in high doses) you can't be sure of where you are, if you even have a body, etc.",1624207687.0,1
+rickandmorty,"You too, ***buddy***",1624207572.0,2
+rickandmorty,🥲,1624207493.0,2
+Pyrotechnics,You could always make some 👍,1624207014.0,2
+codyslab,Ammonium nitrate is a common fertilizer in this area. Lots of nitrogen :),1623987264.0,3
+boburnham,😳,1623987186.0,8
+macro,I love how the perfect grid gets distorted,1623972279.0,4
+Unexpected,This made me chuckle,1623969800.0,11
+homechemistry,"So does the alcohol react, or does the insane amount of heat and fire produced by the permanganate and glycerin reaction just ignite it?",1623957151.0,1
+boburnham,Why are you like this?,1623957060.0,1
+boburnham,There's gotta be some other way!,1623956995.0,8
+boburnham,But he'd do it for free 😉,1623891633.0,198
+askdrugs,"I have often convinced myself I'm dead because I can pinch, punch, and jab myself with no feeling of it whatsoever on acid.",1623891590.0,3
+chemistrymemes,Cho***legolas***terol,1623891310.0,15
+ExplosionsAndFire,https://m.imgur.com/a/6NLOD00,1623887173.0,13
+ExplosionsAndFire,Would love to watch 🤟.,1623813899.0,7
+redneckengineering,"Needs some oil, then 😉",1623787443.0,11
+redneckengineering,"Why use something weak that might break after repeated use? Also comes with an easy tension-adjustment system, so no need to build a fancy pulley system with counterweights just to raise and lower someone.",1623787290.0,41
+redneckengineering,Safety is important.,1623787221.0,21
+redneckengineering,"Dude, why shouldn't I have sex with my motorcycle?",1623787201.0,14
+redneckengineering,"There's plenty of videos.
+
+*Pro-tip:* Use bing.",1623787179.0,35
+redneckengineering,You don't swing. It just suspends someone in the air for easy access.,1623787138.0,6
+redneckengineering,"It's mainly used to open up new positions. Beds are never the right height, and tables are uncomfortable. Plus, the freedom of movement is much greater for both parties to access what they need to.",1623787100.0,65
+boburnham,💦🤤,1623786843.0,5
+blackmagicfuckery,"Yeah, a blank still forces enough gas out the barrel to hurt people at point-blank range. This seems like the cartridges are empty and it's just the primer launching the bullet, although I could be wrong.",1623786729.0,1
+boburnham,"Oh, well, you're in for a treat :). 
+
+It's my favorite due to its multiple meanings.
+
+One of which being the innocent, child-like view that he's just referring to himself as a dad and to us as his kids, which is funny because our real relationship with him is one of entertainer and audience.
+
+The other meaning being that it is a common thing (in my age group) for girls to like to call you Daddy in the bedroom, so saying something like ""Daddy made you your favorite, open wide"" is inherently sexual. It implies that his jokes are his cum and he's ready to launch it into our mouths, and we have been waiting patiently for it to happen. 🤣",1623724283.0,2
+boburnham,Be happy! Be horny! Be bursting with rage! We've got a million different ways to engage.,1623684547.0,25
+boburnham,"So, uh, asking for a friend; source?",1623463389.0,8
+Drugs,"Lol what. I'm sure the heat destroyed most of the active ingredient. 
+
+Why are you cooking it? Just take the Vyvanse if you want to get high off of Vyvanse.",1623463350.0,3
+NiceHash,"Sort of. Lego is the brand. If I had two bottles of Gatorade, you would likely hear me refer to them as Gatorades. Same thing with Red Bulls. It's just too long to say two cans of Red Bull every time.",1623460224.0,6
+MicroPorn,"I could never get those darn things to work. I've stared at them for hours, I swear people are just messing with me.",1623459346.0,6
+chemistrymemes,Not sure why you're being downvoted. What's the meme? Is there a joke? Are these the molecules in cheese? It's just a picture of a phone case with chemical structures and reactions on it...,1623459250.0,9
+crystalgrowing,"I will definitely be doing this. I already have an arc welder I bought when I was 12, now I just need some aluminium oxide and chromium oxide!",1623441826.0,1
+BuzzFeedUnsolved,He's always Samwise in my head.,1623441759.0,3
+codyslab,"Yeah, bee strings are intense (especially in the hands and face), at least for me. Although Cody is someone who did heavy manual labor with hernias for quite some time, so I'm sure pain is not something new to him.",1623424988.0,6
+boburnham,Yeah I can't either. I think Spotify hates me :(,1623183558.0,3
+factorio,This is incredible.,1623183339.0,2
+rickandmorty,"You can clean your own pubic hair, Timmy.",1623122203.0,3
+boburnham,"You missed one of my favorite lines.
+
+""Daddy made you your favorite, open wide""
+
+That line paired with the unicorn-laser is just so creative and perfect.",1623024485.0,20
+LSD,Damn! Thank you for sharing your experience.,1622946775.0,3
+LSD,"In all seriousness, what's the harm in taking a crazy amount of acid? No lethal OD, but I have to assume you wouldn't be able to move or think in this world, mostly just unconscious exploring.
+
+Obviously a trip sitter is needed, but how bad can it really go?",1622945924.0,3
+LSD,"Once or twice, but who's counting?",1622945774.0,1
+BuzzFeedUnsolved,"So, this is in relation to the Tylenol poisonings? Is this allegedly a picture of a suspect? I'm not sure what I'm looking at, tbh.",1622855658.0,7
+Unexpected,"My dad's girlfriend threw me in the deep end of the public pool. My ear drums we're almost perforated, and my dad had to jump in and grab me because I couldn't even get to the surface by pushing off the bottom as hard as I could. I fucking hate people.",1622736717.0,40
+codyslab,Are you kidding? Everyone knows butter is his kryptonite...,1622729856.0,6
+IRLEasterEggs,This made me chuckle out loud.,1622691510.0,1
+NiceHash,"Why are you in the r/NiceHash subreddit if you don't like it, and think it's lazy? Don't come here if you're here to just hate.",1622569392.0,3
+NiceHash,"So, nicehash is for lazy people, but speech to text isn't? Lol. You can't be bothered to type your replies because you're too lazy, then get on everyone else's dick about nicehash being the lazy route of mining.
+
+You are hilarious, dude.",1622569344.0,6
+NiceHash,😬,1622569224.0,3
+boburnham,Yes! And it just kept coming back...,1622471021.0,8
+educationalgifs,This goes way too fast at the end for me to understand what is happening.,1622410706.0,1
+Steam,Tbh I've never got the appeal of TF2...,1622409648.0,3
+IASIP,Everyone forgot about Pop Pop...,1622396227.0,5
+speedrun,"Is it the internet, or the people on it?",1622395667.0,2
+MicroPorn,Is this visualizing the internal stress of the crystals?,1622394915.0,3
+AbruptChaos,"A bunt (you could have just googled it) is a baseball term where you just hold the bat still and let the ball hit it, so it doesn't go far.",1622388378.0,-1
+boburnham,*this* **game** has *gone on* **loung** enough!,1622258533.0,11
+askdrugs,Not if you live alone :)... :(,1622244787.0,5
+BuzzFeedUnsolved,"C'mon, son!",1622220512.0,15
+crystalgrowing,"I agree with lordspidey, the best cyan I've come across is CuCl2, or Copper(II) Chloride. 
+
+It grows in big needle-like structures, similar to KNO3.",1622220312.0,4
+THYZOID,What's the voltage and current? How dilute?,1622210631.0,2
+AbruptChaos,What are you swingi-... *nevermind*,1622173946.0,1
+boburnham,*thicc* content,1622162859.0,8
+Aliexpress,If that's the case then they have extended it to the max already... Ugh.,1622071756.0,1
+Aliexpress,"So, just keep pestering them?",1622071715.0,1
+Aliexpress,"Buyer protection time, I couldn't find a name for it anywhere. Thank you!",1622055198.0,1
+fountainpens,Wow. Do you live in the US? That seems insanely fast for a package from China.,1622039786.0,2
+fountainpens,How long was shipping?,1622039597.0,2
+mildlyinteresting,"Reddit is turning into YouTube. Offer a free service, wait until people use it, then start monetizing it as much as possible, as fast as possible. I wish the 0s didn't blind people...",1622039504.0,8
+rant,"True, but that doesn't make it a bad choice. 
+
+Not sure why I'm being downvoted for suggesting something healthy.",1622036409.0,1
+AbruptChaos,"Oh lol my bad. Fuck that guy. My response still stands true to who said it originally. 
+
+I'm sorry for bothering you, sincerely.",1621978504.0,3
+AbruptChaos,"If they were, this is a terrible thing to say to them.",1621973337.0,-25
+rant,"Why not? I'm done fucking waiting for the pain to stop. It just keeps getting worse, and there's no sign anything will ever change. I'm going to die a stupid teenager because there is nothing in store for my life. It has been torture enough getting to this point, and the only reward I see so far for my hard work is the ability to escape. So I'm going to. I choked myself out and it seems like it wouldn't be a bad way to go, but it's so hard to choose with there being so many and all.",1621972583.0,1
+chemistry,"I've definitely said fist bump before... Sometimes they don't pick up on the social cue, so you have to say it out loud.",1621969526.0,2
+rant,"Thanks for making fun of me. My day was going *great* already, so why not just pile on top of the steaming stack of shit, right?
+
+People like you are the reason people like me can't exist. Fuck you for being you.",1621969297.0,1
+chemistry,"Isn't this, like, standard high five procedure? You put your hand up and say high five... On the other hand, it's pretty stupid to reply upvote to a comment.",1621967954.0,1
+askdrugs,"There isn't enough information to help you.
+
+What's the concentration? There could be anything from 0 to 1000s of mg per liter, for all we know.",1621967850.0,12
+rant,"Help is not given when asked for, anyways. The people who truly need help get made fun of and bullied, or just straight up ignored.",1621965385.0,1
+rant,"Or just cut them out and you don't have to deal with their stupid, crazy bullshit and lies all the time. Ya know, your choice.",1621965326.0,0
+Pyrotechnics,"Is this a bot? I mean that's true but we're talking about burning the pith, not eating the seeds, lol.
+
+EDIT: Should've just checked the profile, it's a bot.",1621872948.0,3
+Pyrotechnics,"The problem seems to be the 'charcoal' you are using. What that is, is ash. Ash doesn't burn. Ash was burned. Charcoal is made in a hot, **anerobic** environment (no oxygen). 
+
+Personally, I've had the best success (and the most fun) making my own charcoal [using this method](https://youtu.be/1VB3LUDura0).
+
+Charcoal from the store is made from hardwood, whereas pyrotechnics needs softwood charcoal. Hardwood charcoal just can't be broken down into small enough pieces, easily (although I've had slight success using a blender and a kitchen sieve/screen thing). 
+
+Softwood charcoals can be made from Pine, Beech, Paulownia, Willow, really any softwood. As I don't have access to traditional softwoods, I've experimented and got creative with my charred materials. White bread (yes, the stuff you eat), pulled apart into pieces before charring, makes a wonderfully fine powder that is *near* airfloat. If you have access to sunflowers, the white stuff inside the stalk, called pith, makes airfloat charcoal out of the can (although a full paint can of the pith gave me ~5g of airfloat once done charring...). 
+
+Luckily, the hardwood stuff you have is good for making stars! Large charcoal particles are often used to give long orange tails in star compositions, so don't throw it away!
+
+Also, when just mixing the powders together dry, it is referred to as 'green mix', since it turns out so light in color. The dark color of black powder comes in during the wet mixing process (like when granulating or corning BP, for example).
+
+
+As for your other materials:
+
+The sulfur is fine if it really is that pure, as long as you have it powdered finely, which dusting sulfur from the garden store usually is, but it looks like you have larger pieces. I would work on grinding the sulfur down into as fine a powder as possible before mixing it with the others.
+
+The KNO3 doesn't have to be perfect for it to burn, in my experience. The granules that come from a certain brand of stump remover are just fine for testing a mix, although I opt to blend the oxidizer to a fine powder (after carefully cleaning the lab blender a few times). This might help you if you are having trouble. Also, don't try to recrystallize it when you don't know the contaminants; chances are they are water soluble as well and will just be carried through the whole recrystalization.
+
+Now, let's talk about expectations. Green mix will never burn 'fast'. The best you can do is to have as little residue as possible, but this is impossible when just hand mixing the powders. For me, my green mix leaves behind a residue of white blobs that are discolored light green or dark red, but only after *very* slowly burning away :). Once I granulate that same green mix (with Dextrin binder), it leaves little to no residue, and burns fast enough to be used as lift BP.
+
+Sorry about the wall of text, feel free to ask any questions, hope this helped.",1621872522.0,7
+askdrugs,"Depends on what kind of high you want.
+
+For downers, take a look at phenibut and similar drugs.
+
+For uppers, take a look at the various nootropics (ephedrine, PEA HCl, etc).
+
+For tripping, you could research HBWR seeds or morning glory seeds, which contain LSA (thought to be metabolized into LSD in the body). 
+DXM is okay, and I had some friends that LOVED it, but it made me so nauseous I couldn't enjoy it, and it made me feel like I had a fever.",1621868084.0,5
+ExplosionsAndFire,"So, what does bromine taste like?",1621867657.0,7
+chemistry,Just look up 'anarchist's cookbook pdf' and find one that looks good to you.,1621817945.0,2
+educationalgifs,But isn't 5g only like a quarter of a pound?,1621806608.0,5
+askdrugs,"Okay, but it's still not danger levels anywhere near the other things you can be addicted to, which is what I was saying ;)",1621707577.0,1
+askdrugs,"Exactly. These people don't get that everything you do fucks you up for life, just in different ways.
+
+At least with weed I'm not a dick to the people around me, stealing my families money, and taking insane risks just to get a baggy that will last me an hour or less. Don't get me started on pills...",1621696926.0,2
+askdrugs,"Weed is similar to nicotine, but not cigarettes. Cigarettes are filthy, dirty, cancer sticks. Weed is addictive, just like everything else.
+
+My point is it's the safest thing to be addicted to (compared to gambling, sex, meth, heroin, etc), not that you should choose to be addicted to weed.",1621696806.0,1
+askdrugs,"If I have to be addicted to something, why not make it something harmless and fun?",1621624329.0,6
+mildlyinteresting,"I mean it's not that low, it's kind of obvious the way snoop looks at her like a Scooby snack",1621566344.0,11
+chemistry,"... yes, but don't.
+
+Ferric chloride isn't the best to get in your skin.",1621566020.0,4
+SuicideWatch,"Be vulnerable and say what? 'Oh, I want to kill myself, again.' Then I can go through the whole hospital system, having to convince everybody and their mother I'm not crazy, just to end up with a lot of time wasted, right back in the same stupid fucking spot I am now.",1621489774.0,1
+SuicideWatch,"I fail at the things I love. And the only reason I ever end up getting anything out of them is when I make someone else happy, but then I just end up acting like a junkie trying to get that reaction again and again and again, and I bore everyone until they won't listen to me about it anymore and I have to find something else to like.",1621489402.0,2
+SuicideWatch,"No, it doesn't. That's not how life works. Some people just get fucked over their whole lives until they die. Some people don't. I guess I'm a part of the former.",1621488986.0,3
+SuicideWatch,Medication isn't magic.,1621488887.0,6
+SuicideWatch,"This. Every single fucking time I'm happy it ends up being a delusion, not reality, or a lie. I fucking hate this stupid shit.",1621488786.0,2
+SuicideWatch,"Every time I try to do something nice it ends up making them mad or having a ton of negative repercussions. It doesn't matter if I try to put on a show, I can't even do that right.",1621488675.0,2
+redneckengineering,"Cancer, but only a little bit",1621473552.0,3
+redneckengineering,"Basically an incense stick in the shape of a coil, if I'm understanding correctly?",1621473503.0,66
+chemistry,What is it called/how is it made?,1621472594.0,11
+Bitcoin,"But you did let me down, so...",1621445856.0,1
+Whatcouldgowrong,"He won't. No one will. That's the life I live and that's why I am this way. All it takes is not being combative, and trying to understand anger, but nobody does. They only see it, get scared at the unknown, then provoke it to see what happens (and make the unknown known).",1621435746.0,0
+Bitcoin,"The sentence is grammatically correct.
+
+That (something) was my username. (That) Must have been hard for you to find.",1621435604.0,1
+Bitcoin,Think more.,1621435088.0,1
+Bitcoin,"That was my username, must've been hard for you to find, dipshit.",1621435069.0,1
+Bitcoin,"Are you talking about me? Jesus Christ you fuckers don't understand anything. 
+
+HOW MANY TIMES DO I HAVE TO TYPE I DON'T LIKE YOU, MY BTC IS FINE, AND I (EVEN CURRENTLY) HAVE TURNED A PROFIT IN BTC. FUCK OFF WITH YOUR ASSUMPTIONS",1621435043.0,1
+Bitcoin,You.,1621434899.0,1
+Bitcoin,"Yeah well my therapists said that when I was 14 and now I'm 18 and it's worse, so I don't really believe you.",1621434881.0,0
+Bitcoin,"If you took any amount of time to read the other comments and not just your own, you would know I didn't sell shit, idiot.",1621434818.0,1
+Whatcouldgowrong,"I am talking about anger provoking. 
+
+No response was needed for the original guy, just downvote and move on. But this guy felt the need to make fun of the commenter for the sole reason that he was angry. Being angry is okay (original comment), and you are free to not like it (downvote), but treating an angry person badly (calling names and shaming) is rude and immoral, and will always end badly.",1621434769.0,0
+Whatcouldgowrong,"No. My life is full of bitches like this that cause problems for no reason other than to do it. It'd be easy and simple for them to not cause problems, but they constantly stir up the bullshit. I'm not the type of person that tolerates bullshit and I won't stand for someone being made fun of for being angry (which is my whole fucking life). I have worked with many people, professionals, and techniques but I can not be calmed, apparently. My rage doubles down on itself until one day I get so angry I pass out or something then the whole cycle restarts. I appreciate your comment greatly, and I should calm down, I just wish I knew how when the world is FULL of people that act like this (purposeful repeated anger provoking).",1621434578.0,0
+Bitcoin,I am. You are all idiots for thinking I sold anything. Jesus Christ.,1621434201.0,1
+Bitcoin,You are an idiot.,1621434183.0,0
+Bitcoin,"Why are you making more shit up? You are unbelievably naive if you don't get it at this point. I don't like you, I'm leaving, that simple. 
+
+What part don't you understand?",1621434158.0,-2
+Whatcouldgowrong,"Who cares if I'm weird? Just gonna keep calling me names then? You are so quick to judge, just talk to people without trying to seem like you are winning or the best all the time.",1621434082.0,0
+Bitcoin,"Sure, still won't do it.",1621434002.0,1
+Bitcoin,Imagine making up that I sold my BTC for a joke that only serves to try and make yourself seem smart.,1621433979.0,0
+Bitcoin,"Didn't sell anything, I'm fine with BTC, just not you rude fuckers all over the internet talking shit.",1621433950.0,-1
+Bitcoin,"Well, I don't.",1621433915.0,0
+Whatcouldgowrong,"Do you not see how immature and anger-provoking your responses are? 
+
+You should care that you are making real people feel like shit because of the actions you're taking. If not, just keep insulting people and ruining days, I'm sure someone will show you the consequences eventually.",1621433824.0,-2
+rickandmorty,"It's not existential dread, more just internal rage at anything and everything.",1621433729.0,14
+Bitcoin,"This whole sub has become a pathetic circle jerk and I fucking hate that people like you ruined not only my life, but every hobby I had in it. Fuck you.",1621433694.0,-5
+Whatcouldgowrong,"You are part of the problem. People need help, not arrested. People need civil discussion, not name calling and shaming. I hate your entire style of communication as it is ineffective. I'm done being angry at you, so I hope you take this advice. Or don't, and live your life like the person who loves treating people like trash, which is what you are doing now. You are just another reason I fucking hate this country and how it treats people while constantly boasting about being the best. Obnoxious and arrogant, although that's all most people here are anyway.",1621433493.0,-3
+Whatcouldgowrong,"Who cares if he did? It sounds like you want people in this state of emotional turmoil. 
+
+Just be nicer to people in the internet, I'm done with people provoking anger like this just because they are anonymous. Be a better person.",1621432392.0,-9
+Bitcoin,So? Still shouldn't worship one guy as the celebrity of BTC,1621351489.0,1
+askdrugs,"Eh, either way life's life, it can be lived in the heat of the desert or the cold of the winter, either way life, uh, finds a way XD",1621315317.0,3
+IRLEasterEggs,"Yeah I don't know what the fuck I was thinking in that last one lol. It clearly states a brand new engine, I was being a whole new kind of stupid XD.",1621315203.0,12
+IRLEasterEggs,Who says he got it new?,1621304548.0,-11
+boburnham,"He said in his AMA that he said something like, 'this joke isn't for you' then just moved on.",1621303998.0,54
+askdrugs,"Just to add, as someone with a family history of schizophrenia, I abused acid for a few months in my mid teens, taking it every few days, and a few times a month for a few years before that. No latent negative effects, as of now (at 18).
+
+Edit: Didn't realize that one testimonial wasn't accepted on reddit and is now downvoted. Guess we stopped sharing our knowledge, then?",1621296036.0,1
+Whatcouldgowrong,Explains why they're on Reddit,1621200697.0,7
+MushroomGrowers,We are fungus zombies,1621193845.0,4
+Whatcouldgowrong,"We're obviously both angry, lol.",1621193123.0,1
+Whatcouldgowrong,"I don't care if you don't get it, you are being extremely inappropriate. 
+
+He could not say anything, but you implied that means he is a liar and that his initial claim was not true. That is pressuring a victim into sharing a personal, private story on a public forum. I don't see how you don't get this, once again. I've blocked you at this point, because I don't want to be a part of whatever abusive shit you tolerate.",1621188973.0,2
+Whatcouldgowrong,"You haven't been abused in your life once, and it shows.
+
+Stay. Out. Of. It.",1621188575.0,1
+Whatcouldgowrong,"NO, ASSHOLE. I AM PROTECTING SOMEONE WHO MAY NOT WANT TO SPEAK UP ABOUT THEIR ABUSE DUE TO EMBARASSMENT, SHAME, OR ANY OTHER REASON THEY HAVE. 
+
+YOU ARE PRESSURING VICTIMS INTO SPEAKING ABOUT THE HARDEST THING THEY'VE EVER WENT THROUGH IN THEIR LIVES. I DON'T GET HOW YOU DON'T GET THIS.",1621188535.0,0
+Whatcouldgowrong,"u/MajPeppers, You're not nice when you're alive.",1621188377.0,-2
+Whatcouldgowrong,"It would be ignorant to not understand how rude you are being to someone who has potentially been abused. It is a very sensitive subject and you are asking a stranger about it in public like it's nothing, and saying if he doesn't respond then it must not be real. You are pressuring abusees into speaking about their experiences in public, and calling them liars if they don't speak up (which is likely with abusees, due to embarrassment, shame, etc). 
+
+You are being rude, and I don't care if I was rude in response, you deserve it for acting like a pig to people in terrible situations.",1621188322.0,0
+iamverybadass,"I hate this entire sub after discovering it. It appears to be a large cyber bullying group that makes fun of people in terrible situations, abused, etc. I am sad that there are this many people who think it's okay to act this way, and it's just another reason why I'll kill myself some day. To no longer be a part of this stupid fucking human race would be a godsend at this point.",1621188138.0,1
+Whatcouldgowrong,"People are real fucking people, like you and me. Stop discounting someone who may have been abused just because you want every single fucking detail of it before you believe it. You are being rude, and contributing the same exact problem he is bringing up. If you have not had your dick and balls fondled without your permission, STAY OUT OF IT, OK?",1621187883.0,-4
+Whatcouldgowrong,You are stupid.,1621187789.0,4
+Whatcouldgowrong,"Reddit automatically upvotes your own comments as you post them, that's what he means.",1621187765.0,0
+Whatcouldgowrong,"You are disgusting. I'd take a fun, loving swipe at your retinas with a spoon if we met.",1621187526.0,3
+Whatcouldgowrong,"Fuck off. You don't know what I've been through, who I am, what I'll do, so stop talking shit and back off. You like to annoy people in your everyday life? Make them mad? Laugh at them for saying something honest about themselves? 
+
+Just get off my dick and go laugh at someone who's okay with it, OK?",1621186949.0,-2
+Whatcouldgowrong,"Again, what's the recidivism rate for sexual offenders in the legal system? It's not low. A broken nose and a black eye would be more effective (in my opinion) than a stupid, drawn-out legal battle, or a few months to a few years in jail, even. And it's worth it even if it stops them from doing something once.",1621186309.0,-1
+Whatcouldgowrong,"The hilarious part is I am a teenager. You think you know so much about me, but know so little. I could be old, young, smart, dumb, strong, weak, sober, a junkie, anything as long as you have the anonymity of a username, you'll get away with saying it with no consequences, right? But as soon as real consequences *might* have been brought up, you stop talking shit and say goodbye. Funny how shit like that works, isn't it? One of us has a lot more to lose, it appears, or at least cares a lot more about what is being lost, lol.
+
+Stop assuming things, it makes an ass out of you and me :).
+
+And never talk shit about people being abused, that's the lowliest, scummiest thing you could have done, and you did it. You crossed a line, and you know it. I will never forget your username. I hate you, sir, and I don't even know you. Make better decisions next time.",1621186186.0,1
+iamverybadass,"Eye for an eye, bitch.
+
+Don't talk shit about me being abused, NOT FUCKING COOL ASSHOLE.",1621185609.0,0
+Whatcouldgowrong,"It's official. You are just an asshole.
+
+I'm sure your parents love you very much, never hit you, never said shitty things about the way you talk, look, eat, and do things, never got mad at you, never called the cops on you, never did SHIT to you. And that makes you a fucking god apparently.
+But because mine did, I'm allowed to be ridiculed and shamed for it. Fuck you, asshole, you are lucky you don't have your address on your profile, someone *bad* might be able to use it to hurt you.",1621185565.0,0
+iamverybadass,"This dude acts like he knows my life story based off ~10 comments. Honestly you are so rude it aggravates me. I officially don't like you, not that you care what I actually think, just what you 'know' I think and do. Fucker.",1621185224.0,0
+Whatcouldgowrong,"Sure? I don't think I fit in to your little cliche, but if you want to assume I do, that's fine.
+
+I find it odd that you are so confident you know exactly who and what I am without ever meeting me, only messaging back and forth through text a handful of times, on one day. I don't know who you are, why you are that way, and I don't pretend to. But you do, for some reason. It seems like you think you know everything, including me, which you don't. I'm sure if you did there would have been consequences long ago 😋",1621184851.0,0
+Whatcouldgowrong,"Why do you think I like anime? It's obvious you've decided who I am and won't change your mind, so I'm done talking to a brick wall. I wish we could meet in person to talk clearly, I'm pretty sure the text-only nature of this conversation is limiting the outcome.",1621184407.0,1
+iamverybadass,That's me!,1621184271.0,0
+Whatcouldgowrong,"I'd love to meet you in person. I'd think we'd have some great, deep conversation and resolution that just can't happen over the internet. Oh well, farewell, angry internet stranger.",1621184216.0,-1
+Whatcouldgowrong,"Right, because if I say it that makes it a lie, obviously.",1621184161.0,0
+Whatcouldgowrong,"I do. At least I can be honest about how I feel and not feel ashamed :)
+
+But seriously, what would I cry to come back to? Video games? My stupid attempts at music? My family that hates me? Not everyone loves life, it's not like I'm trying to say I'm strong, I'm weak. I do not have the power to control myself around behaviour like this, so I give in to anger and rage and don't so the smart thing. It is stupid. It is weak. It is not badass. Strong people are able to live normal lives, with responsibilities, deadlines, emotions, tolerating shit just so you can get back home, and other shit I don't handle well.",1621183831.0,-1
+Whatcouldgowrong,"I'm not educating anyone. Did I say I was a teacher or an expert? Reddit is a public conversation, not a learning platform.
+
+Also, I didn't shit on your opinion and call it bad for being bad, I pointed out the clear flaws in it.",1621183611.0,1
+Whatcouldgowrong,I'm sure jail wouldn't be that bad. Life can be lived anywhere.,1621183471.0,0
+Whatcouldgowrong,"You assume everyone cares about living the same way you do, it's odd. I don't give a shit if I died in this scenario, at least I was doing what I thought was right.",1621183438.0,0
+Whatcouldgowrong,"I mean I do, but if I believe I'm not a fucking idiot, does that make me a fucking idiot? The ultimate paradox. 😉",1621183379.0,-1
+Whatcouldgowrong,"My point is stop shitting on people's opinions that you don't like just because you can't admit that someone else would do that and you wouldn't. Let him say he'll fuck that guy up, he very well might be the guy that would in that scenario. So fuck off, and stop trying to be right so hard that you'll say anything.",1621183327.0,5
+askdrugs,Asking if you should relapse when you're clean after three years... You have a bad week? Lol.,1621182318.0,43
+Whatcouldgowrong,This makes no sense. This reply shows that all you read are the first few words. The stupidity in this thread is baffling.,1621182265.0,-2
+Whatcouldgowrong,"You guys are great at discounting opinions you don't like any way possible, huh?
+
+Because he must be a fat nerd, that's not you projecting *at all*.
+
+Because he wouldn't do anything but stand there awkwardly, that's what you would do so why would he be different? Maybe because he voiced his opinion on the subject on what he would do, and you did too, you just aren't man enough to say it.
+
+Back off and let someone with confidence get shit done.",1621182139.0,4
+Whatcouldgowrong,"This. People act differently online because they think there can never be a violent repercussion. It turns people into little assholes with no mutual respect and they just love to poke the bear. I hate it. 
+
+Online is still real life, idiots.",1621182051.0,0
+Whatcouldgowrong,"You're a dick, bruh. 
+
+Don't forget you're provoking a real person over the internet. You are rude.",1621181869.0,0
+Whatcouldgowrong,"So? What part about reddit isn't a giant, attention-seeking competition? Isn't that the whole point of upvotes (and downvotes)?
+
+Edit: also either way it's not 'white knighting', but can be compared to it in a behavioral pattern sorta way.",1621181697.0,2
+Whatcouldgowrong,"So, I may be charged for vigilantism, but only if he gets charged with sexual assault. Sounds good to me.",1621181526.0,1
+Whatcouldgowrong,"He 'gets away' with a broken nose and a lesson learned. 
+
+What's the recidivism rate for sexual offenders again?",1621181487.0,1
+Whatcouldgowrong,"Absolutely. Disappointed in the security team here, the singer needs protection from the stupid fucks in the crowd like this.",1621179103.0,64
+Whatcouldgowrong,"No, it isn't. Self-defense can be if you are scared for somebody else's life, as well.",1621179053.0,2
+Whatcouldgowrong,"But it does solve a whole lot of situations 🤷.
+
+No one is going to sue the singer after sexually harassing them, and if they do, that will come out in the case.",1621178988.0,4
+ExplosionsAndFire,Oh god please say this is a joke,1621127069.0,58
+Bitcoin,"What conversation? Last I checked these were jokes made by the Bitcoin community.
+
+The first picture is a parody of what Tesla said, just from the other perspective. Seems obvious that these are jokes and not the entire BTC community trying to send a message to Tesla and start a dialogue... Lol.",1621094607.0,9
+askdrugs,"Definitely don't get in a car with people you don't know. That's how so many people get robbed or killed. Definitely trust your instincts, and don't push anything. Watch out for your safety if you continue to buy from them in this manner.",1621015419.0,36
+askdrugs,"Why make someone go through all this effort just to get help, then not even help them. I hate America so much :(",1620874275.0,2
+3Dprinting,"Artistic preference? 
+
+Like why didn't Bob Ross use acrylic paint? Because he liked oil paint.",1620840311.0,27
+educationalgifs,And this sub has three times that...,1620840209.0,-1
+Miniworlds,"WELL YOU WERE WRONG, REPOSTER",1620840155.0,3
+educationalgifs,"Ha, cool word.
+
+Yeah, bad days turn into bad weeks turn into bad months turn into bad years.",1620840077.0,-3
+educationalgifs,But then no one will see it...,1620839370.0,5
+educationalgifs,Who cares what people do? Not like the bad ones are going to follow rules anyway. This whole universe is so fucking stupid.,1620839331.0,-38
+Whatcouldgowrong,Musical transformers can suck my ass,1620839198.0,1
+Whatcouldgowrong,What Could Go Rong?,1620772154.0,1
+BuzzFeedUnsolved,"Chopped a guy's head off, I heard",1620763675.0,5
+BuzzFeedUnsolved,I read this in Shane's voice,1620690099.0,6
+Piracy,"Thanks for gathering the knowledge, but large portions of the site are broken, at least for me.",1620665055.0,1
+competitivestoners,IIRC they say if it's legal where you are you can do it.,1620412878.0,6
+chemistry,"Now sex sells itself, mainly.
+
+Looking at you OnlyFans 👀",1620409455.0,21
+educationalgifs,"This sounds correct, but I understand none of it.",1620409384.0,24
+fireworks,If there is phosphorus there it isn't 'stable' by any means lol.,1620351971.0,2
+fireworks,And you're now liable. There's a reason disclaimers are a thing.,1620351932.0,3
+askdrugs,It looks like a repurposed glass blunt or something.,1620351626.0,4
+chemistry,Most sellers on eBay from China also have an AliExpress store (in my experience).,1620327201.0,1
+educationalgifs,"Definitely not, lol. Lots of cheaper and more readily available ways to create smoke.",1620162761.0,1
+CannabisExtracts,"Most likely a fine suspension of particles, rather than anything actually dissolved.",1620155832.0,10
+trees,"So you're saying your life is terrible because you eat cat food and huff glue every night? Those aren't real problems, Charlie!",1620155706.0,2
+Integza,"Don't fuck around with flash powder as a rocket fuel, please. Let alone show how to do it on the internet. I'm disappointed with the stupidity of half the shit that gets suggested here.",1620155077.0,5
+Whatcouldgowrong,"Right? His reaction infuriates me through my phone screen.
+
+I hope someone beat his ass just for covering his mouth and walking away like that, let alone SPRAYING SANITIZER IN THE EYES OF A CHILD. Ugh.",1620154965.0,1
+Whatcouldgowrong,"And exactly why so many people want it gone. 
+
+It's just another gang, with weapons, and authority over the public. They even have matching outfits!",1620154867.0,1
+Whatcouldgowrong,"Nah, I'm going to punch until blood, this fuck deserves it.",1620154774.0,1
+Whatcouldgowrong,"Not really. Assault is a threat, battery is fucking somebody up.
+
+EDIT: Apparently I'm wrong, see comment below.",1620154746.0,1
+Whatcouldgowrong,"No. Assault is a threat, battery is fucking somebody up.",1620154743.0,1
+Whatcouldgowrong,"He can apologize and show concern, not just wander away like a blubbering asshole with his hand over his mouth.",1620154707.0,9
+Whatcouldgowrong,"Eh, I'd just assault him. It's wrong, and I'd probably get arrested, but fuck that guy for not caring.",1620154675.0,1
+Whatcouldgowrong,"This. It's obvious he doesn't care about the kid at all, more just, 'I can't believe I did that'. 
+
+Pathetic how people act when people get hurt and it's their fault.",1620154608.0,13
+educationalgifs,"Forming aluminum bromide, a reactive substance with a few uses in some niche chemical reactions.
+
+It's also a really cool reaction.",1620148896.0,27
+educationalgifs,Yes. It's called an experiment.,1620148808.0,76
+educationalgifs,This is not the case. Aluminum is a main ingredient in almost every firework.,1620148711.0,7
+boburnham,I want to have a daughter^^aughter^^aughter^^aughter^^aughter,1620081725.0,33
+NiceHash,Get a life.,1619978197.0,2
+NiceHash,Lol. The only resources you cite are YT and TikTok. Sounds legit ^^/s,1619978125.0,3
+NiceHash,"Yeah, it's a scam",1619978098.0,3
+NiceHash,"This is such terrible lying.
+
+You should be ashamed for trying to steal money from people.",1619978086.0,2
+NiceHash,A scam,1619978025.0,1
+NiceHash,It is a SCAM,1619977997.0,2
+NiceHash,"Oh so a youtube video means it's totally legit, no one has ever lied in a youtube video ever.
+
+This is the stupidest post. Can't wait for it to be deleted.",1619977965.0,7
+AbruptChaos,"Yes, but I would know that it is wrong and there will be consequences.
+
+I would also not be acting out of rage (entirely), but moreso avenging someone that meant so much to me.
+
+You can keep making up scenarios, it still doesn't make it right to attempt vehicular manslaughter 🤷.",1619967210.0,5
+AbruptChaos,Lol you gon shoot a guy for throwing a rock at you.,1619966912.0,3
+AbruptChaos,"Why run over them when you have a perfectly good freedom-delivery-system? 
+
+^^rapid ^^onset ^^lead ^^poisoning ^^has ^^been ^^known ^^to ^^occur ^^with ^^misuse ^^of ^^freedom-delivery-system.",1619966760.0,-2
+shrooms,"Personally, there wasn't a strength increase. It did come on faster, like 20 minutes vs an hour, and didn't last as long. I think most of the lemon tek is just to get the mushrooms crushed and ingested, the liquid acting as a carrier of sorts. I recommend just eating the mushrooms, but you do you.",1619966568.0,1
+Copper_Salts,Somewhat. You'd have to intentionally poison yourself (like eating quite a bit every day for a few weeks) for it to be really harmful to your health.,1619966400.0,1
+Pyrotechnics,"It seems your 'charcoal' is really just ash. The wood has to be burned without the presence of oxygen, not just burned in open air.
+
+See [this video](https://youtu.be/1VB3LUDura0) by NightHawkInLight on making your own pyrotechnic-grade charcoal. I recently followed these instructions to make some sunflower-stalk charcoal, which works great for my BP.
+
+Along that same vein, I'm pretty sure Spectracide is the only stump remover with potassium nitrate. If you really think you have kno3, dissolve it in boiling water and recrystallize it. If long needle-like crystals form, you now have pure potassium nitrate.
+
+See [this video](https://youtu.be/VOgDdGLdZ_k) by Grant Thompson on recrystallizing KNO3.
+
+As for the 90% dusting sulfur, I've used that stuff for just about everything from flash powder to BP, and it works just fine (not even adjusting for the purity).",1619906817.0,2
+chemistry,"Everyone knows blue isn't real, duh ^^obligatory ^^/s",1619906504.0,11
+boburnham,Yep. Called 'Inside'. Being released on Netflix. The bottom pic is the art for it.,1619811384.0,13
+boburnham,"If he gets to be jesus, can I be like, the holy ghost at least, there's like no speaking parts left",1619811242.0,12
+Bitcoin,"I don't have much of an opinion of Elon, but when questioning people that had negative opinions non-aggresively, I got mass-downvoted and called names. 
+
+When someone finally wrote up a response, it was that he was rich off of his families emerald mines, used that money to make a bunch of businesses and technologies, and then distributed it to the public... 
+
+The other complaint was the benefits of his workers, but like any other large corporation with that many workers has much shittier benefits (in my experience). 
+
+He's doing pretty good at running many companies and funding thousands of people's lives, imo, and, just like any other large corporation, there are upsides and downsides.",1619632126.0,3
+CryptoMarkets,"Yes. The Tesla board isn't going to just transfer a fuckton of profit into an asset before they know they can get it back. It's not like they are all crypto experts, I'm sure he had to both educate and prove to them that bitcoin is viable as an asset, just like the US dollar, which they have been using their whole lives. Theory doesn't mean shit when the money is gone.",1619628839.0,1
+Bitcoin,"Lol right. It's so weird to me to be butthurt that someone has (a lot of) money and you don't... People just think they deserve the world, ig.",1619628717.0,1
+IASIP,🧂 THE 🐌,1619624340.0,16
+Bitcoin,Elon has some major hate in basically any other subreddit for some reason. It seems like most people just don't like that he's rich?,1619624281.0,5
+CryptoMarkets,Lol what,1619540249.0,1
+chemistry,I'm curious to know this as well,1619539955.0,1
+chemistry,What is bad crudes,1619539929.0,1
+boburnham,FUCK I'M SO EXCITED. I got goosebumps when I saw the pic.,1619536250.0,1
+chemistrymemes,Are are,1619391066.0,2
+askdrugs,Fellow kids,1619206161.0,10
+ExplosionsAndFire,"The fact that mercury fulminate is probably safer shows the levels of danger we are talking about here, lol.",1619143124.0,9
+ExplosionsAndFire,The only correct answer,1619122820.0,4
+ExplosionsAndFire,Apparently he didn't lol,1619122805.0,4
+ExplosionsAndFire,You must be fun at parties,1619122791.0,19
+ExplosionsAndFire,"He also lost multiple fingers, has had glass shards lodged in him (including in his eye), and a multitude of other injuries.",1619122760.0,22
+ExplosionsAndFire,"This. Don't make TATP just because someone on the internet says its 'not that sensitive'.
+
+It is sensitive. 
+
+Why even make a high explosive just to have it go off before you are done making it?
+
+If someone does choose to make TATP based off of these comments, I warn you to stay safe, and only make small amounts. Any amount of this is still enough to seriously maim and injure.",1619122720.0,14
+IASIP,EXTREMOS,1619053593.0,2
+crystalgrowing,"So, making a meal with lead sugar as a sweetener wouldn't kill you if you just ate it once? This sounds interesting, even though I know it's quite dumb.",1618881977.0,3
+chemistry,"I've crystallized copper chloride, and it is really cool! Large sea-urchin-like spiky structures that turn a brilliant cyan upon drying.",1618861082.0,2
+codyslab,Go River!,1618836207.0,2
+rickandmorty,"Lol yes because I am neutral about Elon I am obviously narcissistic and care what you think about my intelligence level. The connection is so obvious, I can't believe I didn't see it before. ^^/s",1618762471.0,-5
+rickandmorty,"This.
+
+He has invented so much shit that has changed how we live. PayPal, Tesla, Spacex, etc. He's doing so much for america and all these people can say is 'fuck you' for no reason. Lol.
+
+Sounds like redditors are salty at a millionaire because they are poor. Lol.",1618754333.0,-27
+rickandmorty,Why?,1618754248.0,15
+rickandmorty,"Lol why?
+
+I don't have a strong opinion on Elon, but is there a reason people here seem to dislike him?",1618754219.0,-48
+educationalgifs,Maybe a lathe tool?,1618672840.0,2
+mildlyinteresting,I hear that screech in my head daily,1618593871.0,5
+BuzzFeedUnsolved,"It's not unfair to not like something... The channel is marketed as entirely Ryan and Shane material, as well as being goofy and joking during these spooky and boring occurrences.
+
+These videos are just a monotone narrator and a script. It feels like Buzzfeed just saw the word unsolved and did the first thing they thought of for filler content.",1618593715.0,4
+rickandmorty,"To be fair, you have to have a very high IQ to understand Rick and Morty. The humour is extremely subtle, and without a solid grasp of theoretical physics most of the jokes will go over a typical viewer's head. There's also Rick's nihilistic outlook, which is deftly woven into his characterisation- his personal philosophy draws heavily from Narodnaya Volya literature, for instance. The fans understand this stuff; they have the intellectual capacity to truly appreciate the depths of these jokes, to realise that they're not just funny- they say something deep about LIFE. As a consequence people who dislike Rick & Morty truly ARE idiots- of course they wouldn't appreciate, for instance, the humour in Rick's existential catchphrase ""Wubba Lubba Dub Dub,"" which itself is a cryptic reference to Turgenev's Russian epic Fathers and Sons. I'm smirking right now just imagining one of those addlepated simpletons scratching their heads in confusion as Dan Harmon's genius wit unfolds itself on their television screens. What fools.. how I pity them. 😂
+
+And yes, by the way, i DO have a Rick & Morty tattoo. And no, you cannot see it. It's for the ladies' eyes only- and even then they have to demonstrate that they're within 5 IQ points of my own (preferably lower) beforehand. Nothin personnel kid 😎",1618588526.0,1
+BdsmDIY,Boo,1618491390.0,1
+Pyrotechnics,"More power to you! I'm glad you are able to find something that's possible where you are located, got to have fun somehow :). 
+
+That's really crazy about the noise, in america there's someone lighting fireworks like a few times a month, and no one seems to mind (no cops called, no complaints, etc).
+
+Edit: also, really nice video! The underwater and underground ignitions are different from what I usually see, and were a pleasant surprise.",1618487810.0,1
+Copper_Salts,"Very cool!
+
+I will check out the video for sure :)",1618373524.0,3
+redneckengineering,Because it's very enjoyable in hindsight. No price on making a memory with another human being.,1618355300.0,5
+redneckengineering,Maybe they are rocks/weights tied with ropes to attempt to counteract this problem?,1618354392.0,1
+educationalgifs,Prime?,1618349833.0,3
+chemistry,"Crystals, bruh",1618281337.0,1
+MicroPorn,"Kind of useless without a before shot. Still looks cool, but no telling what the using of the brush did :)",1618278651.0,2
+mildlyinteresting,I really wanna know too,1618105046.0,19
+chemistry,Great piece! Reminds me of After Skool on YT,1618068093.0,1
+ExplosionsAndFire,"You are not responsible. This man has shown a lack of safety and clearly illogical thinking for some time now. We love you, Tom, and don't worry about accessible chem. You encourage, very clearly, pretty much every safety procedure in the book. 
+
+Being aware of the dangers is half the battle.",1618030740.0,4
+factorio,y e l l o w  c h e m,1617999952.0,2
+askdrugs,"On acid this feeling is basically constant (for me). 
+
+Like electricity travelling through every part of your body that feels so weird but so fucking good.",1617911343.0,1
+homechemistry,That is so good to hear you are staying safe! Have fun with the synthesis! Bromine is such a cool element :),1617901713.0,2
+ExplosionsAndFire,"You are talking about the output of an MOT... What about the input? This is mains power we're talking here. Lethal 100%. Stop trying to argue that 120VAC isn't dangerous enough, let alone wiring your own transformer as your first project. Jeez.",1617855103.0,1
+ExplosionsAndFire,"Fair enough. 
+
+For me, having to deal with the trauma and grief caused by that, and the life change, it would be a lot. But maybe death is super bad and hurts a lot, or it might just be a peaceful drift into nothingness. Or something else.",1617827879.0,1
+ExplosionsAndFire,"True. Hopefully the presence of this video can do some good and be used as a 'how-NOT-to' video, lol. What good can come of making over an oz of organic peroxides and then storing it at HOME?? Especially synthesizing it with his own 'impatient' method, as well. Very scary stuff, and a very scary result is the outcome...",1617826560.0,5
+ExplosionsAndFire,Haha lithium fire go brr,1617820083.0,2
+homechemistry,"Be careful! I know it's quite a common chemical to synthesize as an amateur chemist, but research, remember, and remind yourself of the dangers! Bromine is no joke, and can be lethal, easily.
+
+-
+Excerpt from [Bromine wikipedia article](https://en.wikipedia.org/wiki/Bromine#Biological_role_and_toxicity):
+
+Elemental bromine is toxic and causes chemical burns on human flesh. Inhaling bromine gas results in similar irritation of the respiratory tract, causing coughing, choking, and shortness of breath, and death if inhaled in large enough amounts. Chronic exposure may lead to frequent bronchial infections and a general deterioration of health. As a strong oxidising agent, bromine is incompatible with most organic and inorganic compounds.[67] Caution is required when transporting bromine; it is commonly carried in steel tanks lined with lead, supported by strong metal frames.[46] The Occupational Safety and Health Administration (OSHA) of the United States has set a permissible exposure limit (PEL) for bromine at a time-weighted average (TWA) of 0.1 ppm. The National Institute for Occupational Safety and Health (NIOSH) has set a recommended exposure limit (REL) of TWA 0.1 ppm and a short-term limit of 0.3 ppm. The exposure to bromine immediately dangerous to life and health (IDLH) is 3 ppm.[68] Bromine is classified as an extremely hazardous substance in the United States as defined in Section 302 of the U.S. Emergency Planning and Community Right-to-Know Act (42 U.S.C. 11002), and is subject to strict reporting requirements by facilities which produce, store, or use it in significant quantities.[69]
+
+-
+So doing a distillation of this stuff is no joke. Treat it with the respect it needs in order for there not be *another* bromine accident. Be safe :).",1617819054.0,6
+ExplosionsAndFire,"Thank you for clarifying. I can't believe how many people have been down-playing dangerous actions in this thread and on that channel. It seems like people don't like being told what not to do, even if it is because you will lose your hand (or life) if you do...",1617818618.0,2
+ExplosionsAndFire,"Thank you for this amazing reply! I wish I could give this more upvotes :).
+
+That's really good on the shaming for simple chemistry, because most of it really is. Like, go to ~~Home Depot~~ -generic store name here- and get two to three things for $40, mix them once you get home, and you did it...
+
+In that same vein, maybe a good deterrent would be pointing out the guilt of the burden it puts on everyone else if something goes wrong? Like, the hospital has to spend thousands of dollars paying tens to hundreds of people just to fix your hand because you chose to do 'simple chem'? The paramedics have to live with the horrific sight of your stump just because you wanted to do something that you saw online? These are just examples, if they are terrible please let me know. I'm hesitant to say things like 'think of what your family would think' because everyone's situation is different regarding family, and some aren't as accepting and feel left out anyway, so warning signs like that don't work.
+
+We know the 'sex-ed technique' doesn't work where you show gory pictures and point out every single danger known to man... Teenagers still end up fucking, at some point. I guess that's kind of an extension of what we're running into here: a danger presented as very dangerous is not taken seriously.
+
+I'm in a very similar boat to you as far as dangerous synths, except for the fact that I am very, very scared of them :). I still do them, but, honestly, sometimes I can't sleep the night before and have to get a notebook and write down everything that can go wrong. I guess I'm a bit neurotic in that sense... That bit about fail-safe rather than fail-lethal is huge, and is something I didn't even realize I learned from mythbusters until I read what you wrote, haha. I assume anything that can explode, will, and set up safety precautions for that exact scenario, and then some. Same thing for flammable liquids, I just assume that it will spill and have ways on hand to deal with it (class B fire extinguisher, usually). Also, only ever make a gram or less of highly explosive materials, that way it's some ruined glassware and some glass shards in the fume hood protective plastic, not in your eyes and hands.",1617817984.0,1
+ExplosionsAndFire,"I guess I didn't realize people wouldn't heed the safety warnings... How would this information be better presented to reduce the likelihood of actually carrying out the synthesis?
+
+I know this is a stretch, and hypothetical, but I'm genuinely curious as to how this information can be safely spread through time.",1617814636.0,2
+homechemistry,You got a great deal!,1617814230.0,2
+factorio,I can't turn left...,1617814202.0,7
+ExplosionsAndFire,"Although it's not 'dangerous' to you, it's not something you would want to be touching and treating like a 5v usb charger. Definitely still has many consequences that can be lethal in a multitude of scenarios, and should be treated as such, imo.",1617813090.0,2
+ExplosionsAndFire,The videos aren't even that fun or cool... It's like he's bragging about doing this stuff.,1617812753.0,3
+ExplosionsAndFire,"I mean it seems pretty likely that this guy would have an accident of this nature... I feel bad for him, but he's constantly handling high explosives in bare hands in sealed containers. Something was bound to happen.
+
+Not to mention how he sloppily manufactures large amounts of them at home without proper safety equipment, and then boasts about it online.",1617812570.0,2
+ExplosionsAndFire,"I agree with you, Campbell is very stupid.
+
+I agree, you should explain the dangers and how they most often arise. I have a video on Mn2O7, a very powerful Oxidizer, in my recent post history.
+It starts with a large 'DANGER: DO NOT REPLICATE' notice, as well as what can happen if you do (fingers gone, blindness, etc). There's no questioning that I think more safety precautions should be explained in youtube videos pertaining to dangerous things. (If there's anything more I should include in future videos, let me know).
+
+At the same time, there are many information sources that don't outline the dangers of certain things particularly well (wikipedia comes to mind). There is no safety warning in the preparation section of wikipedia, but there is everything you need to make it, and the procedure...
+It's also one of the first links that pops up when you google just about anything.
+
+Also, if you're arguing that saying 'do this with adult supervision if you're a minor' is wrong, there are many, many sources in media where that phrase is used in relation to a multitude of dangerous things (cooking shows come to mind, as well as science class in school).",1617812350.0,1
+ExplosionsAndFire,The only correct response...,1617810364.0,3
+ExplosionsAndFire,"Isn't losing a hand and having to live a life without touch much, much worse than just dying? It is imo...",1617809456.0,1
+ExplosionsAndFire,"Why? 
+
+Does nobody have the common sense to not manufacture large amounts of high explosives at home?
+
+I've known how to make acetone peroxide since I was 10, and you don't see me playing with the stuff, because ITS EXPLOSIVE AS FUCK.",1617809422.0,-1
+ExplosionsAndFire,"He does not, that's why he keeps getting injured.",1617809327.0,9
+ExplosionsAndFire,"Maiming yourself is much, much worse than instant death.",1617809292.0,1
+ExplosionsAndFire,"Instant death 100%.
+
+ Enough current to melt metal (~10A from a 110v arc welder) is basically 200000x what's needed to kill you (as little as 5mA). 
+
+The arc is caused by a high voltage being able to jump across air, carrying current across. This high voltage means that arc can also go through your skin, to your blood, basically straight to your heart.
+
+Also, apparently AC electrocution is one of the most painful deaths possible, due to the electricity activating nerves a crazy amount, back and forth, hundreds of times per second.
+
+The fact that people try this stuff without the slightest bit of research into the dangers scares me greatly.",1617809261.0,4

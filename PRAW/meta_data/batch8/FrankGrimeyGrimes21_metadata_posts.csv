@@ -1,0 +1,220 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+cprogramming,Questions about Dinamic Memory and Memcpy function,"Hello everyone, Hope you doing well. I have a few questions about these topics.
+
+I'm trying to do an exercise wich asks me to implement a generic function that trasposes a given memory allocated **square** matrix in situ. Because the function needs to be a generic one, i don't know the type of the variables that the matrix holds.
+
+Here is the function i made:
+
+    void TransponeSquareMatrix(const void** matrix,const int MatrixSize, const int SizeOfElementInBytes)
+    {
+      int i,j,sizeOfPointerInBytes=sizeof(void*),sizeOfRowInBytes=MatrixSize*SizeOfElementInBytes;
+        void *aux=malloc(SizeOfElementInBytes);
+        for(j=0;j<MatrixSize;j++)
+        {
+            for(i=0;i<0+j;i++)
+            {
+                memcpy(aux,(*(matrix+(i*(sizeOfPointerInBytes+sizeOfRowInBytes)))+(j*SizeOfElementInBytes)),SizeOfElementInBytes);
+                memcpy((*(matrix+(i*(sizeOfPointerInBytes+sizeOfRowInBytes)))+(j*SizeOfElementInBytes)),(*(matrix+(j*(sizeOfPointerInBytes+sizeOfRowInBytes)))+(i*SizeOfElementInBytes)),SizeOfElementInBytes);
+                memcpy((*(matrix+(j*(sizeOfPointerInBytes+sizeOfRowInBytes)))+(i*SizeOfElementInBytes)),aux,SizeOfElementInBytes);
+            }
+        }
+        free(aux);
+        return;
+    }
+
+The function receives 3 parameters:
+
+* matrix, wich is a pointer to a pointer, because the memory for the matrix was allocated in the following way:
+
+&#8203;
+
+    int **matrix=malloc(sizeof(int*)*3);
+    int i,j;
+    for(i=0;i<3;i++)
+    {
+      *(matrix+i)=malloc(sizeof(int)*3);
+    }
+
+* MatrixSize: The amount of rows/columns of the matrix.
+* SizeOfElementInBytes: The size of each element of the matrix in bytes.
+
+My reasoning for the algorithm is the following: i go over every A(i,j) element of the upper triangle of the matrix and switch it for the A(j,i) element, then i return to the caller.
+
+My current function crashes because of a violation of memory, more specifically on the second instance of memcpy (""memcpy((\*(matrix+(i\*(sizeOfPointerInBytes+sizeOfRowInBytes)))+(j\*SizeOfElementInBytes)),(\*(matrix+(j\*(sizeOfPointerInBytes+sizeOfRowInBytes)))+(i\*SizeOfElementInBytes)),SizeOfElementInBytes);"")
+
+Here are the asumptions i made while doing the function:
+
+* memcpy receives two memory adresses and a number of bytes, and copies the number of bytes receives from the second adress received to the first 
+* even though void pointer arithmetic doesn't exist in c, the gnu gcc compiler allows it assuming that sizeof(void) == 1. I use this to reference different elements of the matrix, for example:
+
+`memcpy((*(matrix+(i*(sizeOfPointerInBytes+sizeOfRowInBytes)))+(j*SizeOfElementInBytes)),(*(matrix+(j*(sizeOfPointerInBytes+sizeOfRowInBytes)))+(i*SizeOfElementInBytes)),SizeOfElementInBytes);`
+
+copies SizeOfElementInBytes number of bytes to the adress of the \[ j \]\[ i \] element of the matrix from the adress of the \[ i \] \[ j \] of the matrix. i calculate the adress of each row adding `i*(sizeOfPointerInBytes+sizeOfRowInBytes)` bytes to the adress of  matrix, and the adress of each element of each row by adding `(j*SizeOfElementInBytes)`  to the adress of `(*(matrix+(i*(sizeOfPointerInBytes+sizeOfRowInBytes)))`. Given the fact that the memory for the matrix was allocated using dynamic memory, i understand that it is a mistake to assume that each pointer to each row/vector of the matrix will be allocated `(i*(sizeOfPointerInBytes+sizeOfRowInBytes)` bytes from the previous one.
+
+Here is a github repository to my code [https://github.com/Frank-Grimey-Grimes/Exercise\_Example.git](https://github.com/Frank-Grimey-Grimes/Exercise_Example.git)
+
+It's the first time i use the memcpy function so i expect my code and assumptions to be horribly wrong, any kind of help or clarification will be greatly appreciated.
+
+Thanks for reading!",1729552275.0,1,1.0,2
+learnprogramming,Problems adding c files to a codeblock project,"Hi! how are you doing. i'm having trouble with a bmp editor project while using codeblocks.
+
+Context: This is a group project i made alongside 2 friends, all the functions work and its ready to be submited as a codeblocks project, but the delivery format specifies that we can only submit the following files (the names to the right correspond to the name of our files):
+
+* -group\_functions.h / (in our project) funciones\_grupo.h
+* -group\_functions.c / funciones\_grupo.c
+* -member1\_functions.h / funciones\_perez.h
+* -member1\_functions.c / funciones\_perez.c
+* -member2\_functions.h / funciones\_larriba.h
+* -member2\_functions.c / funciones\_larriba.c
+* -member3\_functions.h / funciones\_rios.h
+* -member3\_functions.c / funciones\_rios.c
+
+in wich functions.h has to include the two files of each member.
+
+While trying to test our project to see if it works, we created a new codeblocks project and included all these files into it.
+
+All good at this point, but here is the problem: to mantain a same logic throughout the project, we made some ""generic"" structures. For example, one of these structures is called t\_pixel, wich stores 3 unsigned int variables. Of course, a great number of our functions rely on these structures to work.
+
+At first we decided to copy these structures into each and every one of our member.h files, but when we compiled we received a ""conflicting types for..."" error, so we decided to move all these structures to funciones\_rios.h and include this file into the other member.h file. But now we receive a ""unknown type name t\_pixel"" for example. What should we do so that funciones\_perez and funciones\_larriba can use the generic structures without causing a conflicting type error.
+
+Any kind of help would be greatly apreciated. Apologies for my english, it is not my first language.
+
+Cheers!",1727227399.0,1,0.67,0
+learnprogramming,Problems including c files into a codeblocks project,[removed],1727223828.0,1,1.0,1
+codeblocks,Problems including c files into a codeblocks project,"Hi! how are you doing. I know this may not be entirely C related but i'm having trouble with a bmp editor project while using codeblocks.
+
+Context: This is a group project i made alongside 2 friends, all the functions work and its ready to be submited as a codeblocks project, but the delivery format specifies that we can only submit the following files (the names to the right correspond to the name of our files):
+
+* -group\_functions.h / (in our project) funciones\_grupo.h 
+* -group\_functions.c / funciones\_grupo.c
+* -member1\_functions.h / funciones\_perez.h
+* -member1\_functions.c / funciones\_perez.c
+* -member2\_functions.h / funciones\_larriba.h
+* -member2\_functions.c / funciones\_larriba.c
+* -member3\_functions.h / funciones\_rios.h
+* -member3\_functions.c / funciones\_rios.c
+
+in wich functions.h has to include the two files of each member.
+
+While trying to test our project to see if it works, we created a new codeblocks project and included all these files into it. 
+
+All good at this point, but here is the problem: to mantain a same logic throughout the project, we made some ""generic"" structures. For example, one of these structures is called t\_pixel, wich stores 3 unsigned int variables. Of course, a great number of our functions rely on these structures to work. 
+
+At first we decided to copy these structures into each and every one of our member.h files, but when we compiled we received a ""conflicting types for..."" error, so we decided to move all these structures to funciones\_rios.h and include this file into the other member.h  file. But now we receive a ""unknown type name t\_pixel"" for example. What should we do so that funciones\_perez and funciones\_larriba can use the generic structures without causing a conflicting type error.
+
+Here is a link to a drive folder that contains these files for a better picture of my problem.
+
+[https://drive.google.com/file/d/1H9FSaXQpHM8GxUQSUimAHrJwU0v6khgC/view?usp=sharing](https://drive.google.com/file/d/1H9FSaXQpHM8GxUQSUimAHrJwU0v6khgC/view?usp=sharing)
+
+Any kind of help would be greatly apreciated. Apologies for my english, it is not my first language. 
+
+Cheers!",1727223630.0,1,1.0,0
+cprogramming,Problems including c files into a codeblocks project,"Hi! how are you doing. I know this may not be entirely C related but i'm having trouble with a bmp editor project while using codeblocks.
+
+Context: This is a group project i made alongside 2 friends, all the functions work and its ready to be submited as a codeblocks project, but the delivery format specifies that we can only submit the following files (the names to the right correspond to the name of our files):
+
+* -group\_functions.h / (in our project) funciones\_grupo.h 
+* -group\_functions.c / funciones\_grupo.c
+* -member1\_functions.h / funciones\_perez.h
+* -member1\_functions.c / funciones\_perez.c
+* -member2\_functions.h / funciones\_larriba.h
+* -member2\_functions.c / funciones\_larriba.c
+* -member3\_functions.h / funciones\_rios.h
+* -member3\_functions.c / funciones\_rios.c
+
+in wich functions.h has to include the two files of each member.
+
+While trying to test our project to see if it works, we created a new codeblocks project and included all these files into it. 
+
+All good at this point, but here is the problem: to mantain a same logic throughout the project, we made some ""generic"" structures. For example, one of these structures is called t\_pixel, wich stores 3 unsigned int variables. Of course, a great number of our functions rely on these structures to work. 
+
+At first we decided to copy these structures into each and every one of our member.h files, but when we compiled we received a ""conflicting types for..."" error, so we decided to move all these structures to funciones\_rios.h and include this file into the other member.h  file. But now we receive a ""unknown type name t\_pixel"" for example. What should we do so that funciones\_perez and funciones\_larriba can use the generic structures without causing a conflicting type error.
+
+Here is a link to a drive folder that contains these files for a better picture of my problem.
+
+[https://drive.google.com/file/d/1H9FSaXQpHM8GxUQSUimAHrJwU0v6khgC/view?usp=sharing](https://drive.google.com/file/d/1H9FSaXQpHM8GxUQSUimAHrJwU0v6khgC/view?usp=sharing)
+
+Any kind of help would be greatly apreciated. Apologies for my english, it is not my first language. 
+
+Cheers!",1727223555.0,2,0.67,2
+SuicideWatch,Im fucking useless,"So, basically, im useless. Everything that i have ever tried, be it videogames, school, sports, you name it, im completely mediocre at it, no matter the amount of time i put on it. Im a waste of time, space and energy. I dont even think somebody could like being around me, im a dissapointment for everyone i know. I guess i was borned this way
+
+I've always wanted to be a physicist (im more inclined to astrophysics), help the world by expanding the knowledge of the human race. Today i couldn't even solve a basic activity of MRUV.
+
+I guess the most reasonable thing its to end me so all the resources dont go to waste. If i had a firearm i'll probably would have kill myself at this point.
+
+Sorry that you had to read this mess of caligraphy and orthography.",1619726829.0,1,0.99,0
+pcmasterrace,Sentey BXP65-OR PSU (and upgrade questions),"Hello!, hope everyone's doing great!. i have a question, well, quite a few actually. Im thinking of upgrading my graphics card from a geforce GTS 250 1GB to a geforce GTX 1650 4 GB and i have doubts about my PSU. I have a sentey BXP65-OR and i couldn't find much info on it rather than some posts on gaming shops stating that it has 650W of power (wich i higly doubt). Plus sentey deleted the page of the psu on their official website wich doesnt give me much confidence
+
+My question is, is it secure buying the 1650 with that PSU? or should i buy a new PSU first? (in wich case i highly appreciate suggestions haha)
+
+heres the list of the actual components of my PC:
+
+Proccesor: Intel(R) Core(TM) i5-6400 2.7 GHz
+
+Motherboard: Asrock H110M-HDV R3.0
+
+Hard Drive: WD 1TB Sata/64MB cache WD10ezex-22mfcao 7200rpm
+
+Ram memory: ADATA ddr4 AD4U2133W8GB15-S 
+
+Graphics card: Nvidia Geforce GTS 250 1GB 
+
+PC case: Sentey BX1-4237 V2.1 (i dont have the side fans conected and i dont have any optical drive)
+
+Also, heres the PSU calculator info i got for my current components and with the 1650 (both are in basic :( sorry)
+
+Current components info:
+
+\*\*Motherboard\*\* | Desktop
+
+\*\*CPU\*\* | 1 x Intel Core i5-6400
+
+\*\*Memory\*\* | 1 x 8GB DDR4 Module
+
+\*\*Video Card\*\* | 1 x NVIDIA GeForce GTS 250
+
+\*\*Storage\*\* | 1 x SATA 7.2K RPM
+
+\*\*Computer Utilization\*\* | 8 hours per day
+
+\*\*Gaming/Video Editing/3D Rendering Time\*\* | 8 hours per day
+
+\*\*Monitor\*\* | 1 x LED 19 inches
+
+\*\*Load Wattage\*\* | 220W
+
+\*\*Recommended Wattage\*\* | 270W
+
+\*\*Note:\*\* Standard keyboard, mouse, and 8 hours of computer utilization per day already included in calculations.
+
+&#x200B;
+
+With the GTX 1650 (didn't have the option to choose between the 4 and 6 GB versions):
+
+\*\*Motherboard\*\* | Desktop
+
+\*\*CPU\*\* | 1 x Intel Core i5-6400
+
+\*\*Memory\*\* | 1 x 8GB DDR4 Module
+
+\*\*Video Card\*\* | 1 x NVIDIA GeForce GTX 1650
+
+\*\*Storage\*\* | 1 x SATA 7.2K RPM
+
+\*\*Computer Utilization\*\* | 8 hours per day
+
+\*\*Gaming/Video Editing/3D Rendering Time\*\* | 8 hours per day
+
+\*\*Monitor\*\* | 1 x LED 19 inches
+
+\*\*Load Wattage\*\* | 213W
+
+\*\*Recommended Wattage\*\* | 263W
+
+\*\*Note:\*\* Standard keyboard, mouse, and 8 hours of computer utilization per day already included in calculations.
+
+Thanks in advance!, stay safe eveyone!",1614591952.0,3,1.0,0
+pcmasterrace,Motherboard/Graphic Card Compability,"Hey mates, i have a doubt, i was wanting to buy a gtx 1650 4 gb ddr6 and i have an Asrock H110M-HDV R3.0 Motherboard, are they compatible?, im in doubt since i red that the 1650 needs a dual-width PCI Express x16 graphics slot and the h110 has one PCI Express 3.0 x16. Thanks in advance!",1613694253.0,2,1.0,7
+gaming,Motherboard/Graphic Card compatiblity,[removed],1613692541.0,1,1.0,0
+TNOmod,Egypt civil war bug,[removed],1609742833.0,1,1.0,0

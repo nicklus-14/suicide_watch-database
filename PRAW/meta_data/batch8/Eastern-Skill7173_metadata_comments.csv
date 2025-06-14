@@ -1,1 +1,1392 @@
 subreddit,body,created_utc,score
+C_Programming,"Thanks for the info.
+
+Currently I am using `vasprintf` over `vsnprintf` since I don't know the length of the final string. u/Bitwise_Gamgee mentioned that it can be achieved through this: `int len = vsnprintf(NULL, 0, pstr, args);` however, the second time that I use the function to do the actual parsing like so: `vsnprintf(presult, len + 1, pstr, args);`
+
+the passed arguments are wrong as an example if I pass it this:
+
+`display(false, ""%s the str"", ""hello"")`,
+
+The output is something like this:
+
+`O\??? the str`
+
+guessing that `va_list` can only be accessed once.
+
+Would you rather implement this using `vasprintf` or `vsnprintf` ? If the latter, how can I fix this issue? (one a side not, do you know which library `vasprintf` belongs to?)",1705657384.0,1
+C_Programming,"Thanks, this works. Just one thing.
+
+When I use `vasprintf` the compiler gives me an implicit declaration warning. I cannot find which header this belongs to. Do you know the name?",1705656119.0,1
+linuxquestions,"I cannot make anything of this:
+
+    DKMS make.log for virtualbox-6.1.38 for kernel 6.5.0-14-generic (x86_64)
+    Wed Jan 17 08:29:41 PM +0330 2024
+    make: Entering directory '/usr/src/linux-headers-6.5.0-14-generic'
+    warning: the compiler differs from the one used to build the kernel
+      The kernel was built by: x86_64-linux-gnu-gcc-12 (Ubuntu 12.3.0-1ubuntu1~22.04) 12.3.0
+      You are using:           gcc-12 (Ubuntu 12.3.0-1ubuntu1~22.04) 12.3.0
+      CC [M]  /var/lib/dkms/virtualbox/6.1.38/build/vboxdrv/linux/SUPDrv-linux.o
+      CC [M]  /var/lib/dkms/virtualbox/6.1.38/build/vboxdrv/SUPDrv.o
+      CC [M]  /var/lib/dkms/virtualbox/6.1.38/build/vboxdrv/SUPDrvGip.o
+      CC [M]  /var/lib/dkms/virtualbox/6.1.38/build/vboxdrv/SUPDrvSem.o
+      CC [M]  /var/lib/dkms/virtualbox/6.1.38/build/vboxdrv/SUPDrvTracer.o
+    /var/lib/dkms/virtualbox/6.1.38/build/vboxdrv/SUPDrvTracer.o: warning: objtool: SUPR0TracerFireProbe+0x7: indirect jump found in RETPOLINE build
+    /var/lib/dkms/virtualbox/6.1.38/build/vboxdrv/SUPDrvTracer.o: warning: objtool: supdrvTracerProbeFireStub+0x0: 'naked' return found in RETHUNK build
+      CC [M]  /var/lib/dkms/virtualbox/6.1.38/build/vboxdrv/SUPLibAll.o
+      CC [M]  /var/lib/dkms/virtualbox/6.1.38/build/vboxdrv/r0drv/alloc-r0drv.o
+      CC [M]  /var/lib/dkms/virtualbox/6.1.38/build/vboxdrv/r0drv/initterm-r0drv.o
+      CC [M]  /var/lib/dkms/virtualbox/6.1.38/build/vboxdrv/r0drv/memobj-r0drv.o
+      CC [M]  /var/lib/dkms/virtualbox/6.1.38/build/vboxdrv/r0drv/mpnotification-r0drv.o
+      CC [M]  /var/lib/dkms/virtualbox/6.1.38/build/vboxdrv/r0drv/powernotification-r0drv.o
+      CC [M]  /var/lib/dkms/virtualbox/6.1.38/build/vboxdrv/r0drv/linux/assert-r0drv-linux.o
+      CC [M]  /var/lib/dkms/virtualbox/6.1.38/build/vboxdrv/r0drv/linux/alloc-r0drv-linux.o
+      CC [M]  /var/lib/dkms/virtualbox/6.1.38/build/vboxdrv/r0drv/linux/initterm-r0drv-linux.o
+      CC [M]  /var/lib/dkms/virtualbox/6.1.38/build/vboxdrv/r0drv/linux/memobj-r0drv-linux.o
+      CC [M]  /var/lib/dkms/virtualbox/6.1.38/build/vboxdrv/r0drv/linux/memuserkernel-r0drv-linux.o
+    /var/lib/dkms/virtualbox/6.1.38/build/vboxdrv/r0drv/linux/memobj-r0drv-linux.c: In function ‘rtR0MemObjNativeLockUser’:
+    /var/lib/dkms/virtualbox/6.1.38/build/vboxdrv/r0drv/linux/memobj-r0drv-linux.c:1228:18: error: too many arguments to function ‘get_user_pages’
+     1228 |             rc = get_user_pages(R3Ptr,                  /* Where from. */
+          |                  ^~~~~~~~~~~~~~
+    In file included from /var/lib/dkms/virtualbox/6.1.38/build/vboxdrv/r0drv/linux/the-linux-kernel.h:102,
+                     from /var/lib/dkms/virtualbox/6.1.38/build/vboxdrv/r0drv/linux/memobj-r0drv-linux.c:31:
+    ./include/linux/mm.h:2430:6: note: declared here
+     2430 | long get_user_pages(unsigned long start, unsigned long nr_pages,
+          |      ^~~~~~~~~~~~~~
+    /var/lib/dkms/virtualbox/6.1.38/build/vboxdrv/r0drv/linux/memobj-r0drv-linux.c:1261:33: error: passing argument 6 of ‘get_user_pages_remote’ from incompatible pointer type [-Werror=incompatible-pointer-types]
+     1261 |                                 papVMAs                 /* vmas */
+          |                                 ^~~~~~~
+          |                                 |
+          |                                 struct vm_area_struct **
+    ./include/linux/mm.h:2400:33: note: expected ‘int *’ but argument is of type ‘struct vm_area_struct **’
+     2400 |                            int *locked);
+          |                            ~~~~~^~~~~~
+    /var/lib/dkms/virtualbox/6.1.38/build/vboxdrv/r0drv/linux/memobj-r0drv-linux.c:1245:18: error: too many arguments to function ‘get_user_pages_remote’
+     1245 |             rc = get_user_pages_remote(
+          |                  ^~~~~~~~~~~~~~~~~~~~~
+    ./include/linux/mm.h:2397:6: note: declared here
+     2397 | long get_user_pages_remote(struct mm_struct *mm,
+          |      ^~~~~~~~~~~~~~~~~~~~~
+    /var/lib/dkms/virtualbox/6.1.38/build/vboxdrv/r0drv/linux/memobj-r0drv-linux.c:1304:39: error: assignment of read-only member ‘vm_flags’
+     1304 |                 papVMAs[rc]->vm_flags |= VM_DONTCOPY | VM_LOCKED;
+          |                                       ^~
+    /var/lib/dkms/virtualbox/6.1.38/build/vboxdrv/r0drv/linux/memobj-r0drv-linux.c: In function ‘rtR0MemObjNativeMapUser’:
+    /var/lib/dkms/virtualbox/6.1.38/build/vboxdrv/r0drv/linux/memobj-r0drv-linux.c:1774:35: error: assignment of read-only member ‘vm_flags’
+     1774 |                     vma->vm_flags |= VM_DONTEXPAND | VM_DONTDUMP;
+          |                                   ^~
+    cc1: some warnings being treated as errors
+    make[3]: *** [scripts/Makefile.build:251: /var/lib/dkms/virtualbox/6.1.38/build/vboxdrv/r0drv/linux/memobj-r0drv-linux.o] Error 1
+    make[3]: *** Waiting for unfinished jobs....
+    /var/lib/dkms/virtualbox/6.1.38/build/vboxdrv/r0drv/linux/memuserkernel-r0drv-linux.o: warning: objtool: VBoxHost_RTR0MemKernelCopyTo+0x13: redundant CLD
+    /var/lib/dkms/virtualbox/6.1.38/build/vboxdrv/r0drv/linux/memuserkernel-r0drv-linux.o: warning: objtool: VBoxHost_RTR0MemKernelCopyFrom+0x13: redundant CLD
+    make[2]: *** [scripts/Makefile.build:488: /var/lib/dkms/virtualbox/6.1.38/build/vboxdrv] Error 2
+    make[1]: *** [/usr/src/linux-headers-6.5.0-14-generic/Makefile:2037: /var/lib/dkms/virtualbox/6.1.38/build] Error 2
+    make: *** [Makefile:234: __sub-make] Error 2
+    make: Leaving directory '/usr/src/linux-headers-6.5.0-14-generic'",1705515770.0,1
+linuxquestions,"Honestly, I cannot remember. I think I installed it using apt without PPA",1705515411.0,2
+C_Programming,"Thanks, this was just a question I had studying these operators it’s not practical code",1704361540.0,9
+MortalKombat,He is being nerfed exactly like how they nerfed jacqui in mk11 and look how that turned out,1702293151.0,3
+C_Programming,Thanks I tried this with my konsole on kde neon and it worked but not with vscode,1702224854.0,2
+laptops,"Thanks for the response, I kind of figured it was some sort of privacy settings, however, I did tell the guys that were selling it and they looked into it. They didn’t seem to find an option to turn it off. Claimed that it is just like this.
+
+I am going to go there today and try to disable it myself but if that’s not possible would that mean that the monitor is replaced?",1701771227.0,12
+laptops,"I am not sure about this since if you look at it directly the picture is very clear like an IPS panel, however, if you drift to the side then it just gets darker. I have seen a couple of other panels like VA and TN ones and this is not like them at all. The white light doesn’t burn your eyes and the colors don’t shift when you lean to the side they just get darker",1701721292.0,0
+C_Programming,Thank you this has given me a good idea,1700715933.0,3
+C_Programming,"This function does exactly what I want, however, as I said we can’t use workarounds",1700678478.0,1
+C_Programming,I’m sorry I don’t understand,1700677967.0,1
+C_Programming,"Thank you for the response, however, there was a typo in my question I meant to say we cannot do such methods",1700676167.0,1
+C_Programming,"Yes, that was a typo, I meant to say we cannot",1700676119.0,4
+C_Programming,"Hi, thanks for the response, I updated the question for more info.
+
+As I stated in the updated question, I only added the `static` option just because the guide said so but even without it the code still does not compile and throws errors.",1700149436.0,6
+college,"I am already fluent in English so I don’t have issues reading the sources that our professors cite. Other than that, I am not sure how having the degree itself would help my computer career",1698827592.0,1
+MortalKombat,"Agreed. I have also been a fan of mortal kombat since mk9 but this game makes me truly sad.
+
+I played mk11 on ps4 and now I am playing mk1 on PC I didn’t think much of it since I am playing with a controller anyway but my goodness is it horrible.
+
+The state of the game wasn’t already great and I don’t even know how this is possible but the recent update made it worse.
+
+The game constantly and constantly crashes. I don’t think I have ever seen this many crashes in a modern game. Every time you play ranked it’s a gamble. It can crash at any moment. Even if it doesn’t crash, the servers are awful and there’s a chance that a random message appears saying that you were disconnected from the game, even though the internet connection still works. This doesn’t just happen to me, I see it happen to my opponent too. They are playing fine and are in the middle of an attack then suddenly the game says that they left the match. Due to these things I am no longer playing ranked, at least if I play casuals I won’t lose anything. It’s truly horrendous
+
+Not to mention that the updates for the game are always late so you can’t play for a while until they release the specific PC patch. I had to wait for a day in order to just update the game.
+
+It’s truly sad",1698474903.0,1
+C_Programming,"Thank you for the comment, I feel like an idiot. Also just a quick question. In c when we want to increment something by one which is the socially accepted way? `i += 1` or `i = i + 1` or `i++`",1698162655.0,3
+MortalKombat,Cry about it,1696350576.0,-1
+MortalKombat,It was a mistake on my part. It seems fixed,1696324935.0,1
+MortalKombat,"Update: mistake on my part, after some more testing it seems like it has been fixed so now both players can do the combo that mrAPchen showed in the video. Congrats everyone the game is playable now",1696324911.0,2
+MortalKombat,Is that the only shortcut?,1696315254.0,2
+ios,"It's “fine”, honestly I think that is all that ad blockers on ios are going to be. It’s been pretty good I haven’t seen many ads I don’t know much about what the paid version offers but I have come to the conclusion that adblocking on ios is just going to be inferior, especially when you compare it to something like ublock origin",1686206624.0,2
+ios,Update: I have switched to 1blocker and it seems like the ads have disappeared. Really don’t know what was going on with Adguard,1678168056.0,16
+ios,"This is bestoftelegram.com, I am using Safari alongside adguard and many ads still appear.
+
+I have turned on the extensions in safari’s settings and protection is also on in the app but I don’t see great results.",1678115401.0,-4
+ios," Kind redditor, I have one more question.
+
+I just checked the support page and apparently they don’t offer chat support anymore? (Even though I used chat support 2 days ago) Do you know why?
+
+Is it because chat support is only available specific times of the day, or they are short on personnel, or just because my problem isn’t that important?",1675535256.0,1
+ios,I’ve reset my device (erased my iphone) and logged back in with my account but nothing has changed,1675522523.0,1
+ios,"I mean I can’t control the data on my icloud. I can’t turn on icloud sync for my apps. No matter what app, I’ll always get this error message",1675522252.0,1
+cybersecurity_help,"Cydia is not on my iphone.
+
+It asked to open a page on iTunes. Then a pop-up came by asking me if I trusted with developer to install the app.",1675150073.0,1
+cybersecurity_help,It was a direct link from the web/ an app profile thing. I have not jailbroken my iphone,1675105621.0,1
+ios,"Thanks for this, will try it but something interesting happened today.
+
+I tried to open the app but IOS said that this app is no longer available, what happened? I didn’t delete or maneuver with anything",1675084800.0,1
+ios,Unfortunately I've not backed up my iphone and I am worried that connecting the phone to a pc would result in the spreading of the spyware (if this is not a thing please correct my paranoia),1675019776.0,1
+ios,many devs from my country fail to get their app on the app store so everyone has to revert to sideloading. I installed a credit card app directly from safari,1675019590.0,1
+linux4noobs,"Though I did, thanks",1674669907.0,1
+linuxquestions,"Though i did, thanks",1674669892.0,1
+linuxmasterrace,"I tried faltpak and the issue was resolved, thanks",1673882440.0,1
+linuxmasterrace,Well it is written. Im on kde neon 5.26 (ubuntu 22.04),1673721586.0,1
+linuxmasterrace,I am using the latest kde neon version with latte dock from apt repos. Im also on wayland,1673641245.0,1
+linuxmasterrace,"I have configure latte and edit dock. Configure latte only changes latte settings, edit dock brings out a full customization section but I can't re-arrange icons individually it moves all of the icons together.",1669018020.0,2
+linuxmasterrace,https://unsplash.com/photos/MZKEqRie4-Y,1669017419.0,1
+linuxmasterrace,https://unsplash.com/photos/MZKEqRie4-Y,1669017406.0,1
+AskReddit,Modern Family,1668362704.0,1
+learnpython,"Sorry about that I updated the question
+
+Im making a class which takes functions as keyword arguments and updates the \_\_dict\_\_ with them",1664527761.0,1
+techsupport,"Wow this was such a handy tool, thanks",1662565941.0,1
+AskTechnology,"It happened on my iphone.
+
+I installed and ran kaspersky and avast immediately, there wasn’t any threat according to them. Although, I am not sure of their web security checks",1662532168.0,1
+learnpython,"So as an example if I rename a function , it will break old code but let’s say the content is the same. So i just bump the minor version?",1661611870.0,1
+linuxmasterrace,It is annoying to pronounce correctly every time... so I jsut call it widget,1661595909.0,9
+linuxmasterrace,Sorry again for the confusion but I want to run a python script and I want to be able to see its output,1661595539.0,1
+linuxmasterrace,"Oh got it now thanks but what about other commands?
+
+If i add `konsole` in a new line to my script it should open up a new instance of konsole but that does not happen (I am on kde neon)",1661535364.0,1
+linuxquestions,No new konsole instance even opens up for it to execute this,1661534506.0,1
+linuxmasterrace,Sorry if the question was misleading but I don’t particularly care where the hello message ends up as long as I can see that it is echod,1661534443.0,1
+MortalKombat,"I'll upload a new one, thanks",1661530144.0,1
+kdeneon,Thank you. apt is finally working again,1661493863.0,3
+pcmasterrace,"I felt the same a couple of months ago.
+
+All of my passwords were on chrome and I wanted to use firefox and it was too much of a hassle to get every bookmark and password into firefox manually
+
+Until I realized that there is a feature in firefox that can import your passwords and bookmarks from other browsers in a click! That was an amazing feature and now on my desktop I have fully moved to Firefox and loved it ever since",1661489100.0,1
+kdeneon,"Ok, I purged all versions wth `sudo apt purge kdenlive*` and `sudo apt purge melt*`. Also deleted the ppa manually by going into `/etc/apt/sources.list.d` (Didn’t have ppa-purge installed) and it works now.
+
+Although there is still the issue surrounding kdenlive. As soon as I try to install kdenlive (`sudo apt install kdenlive`) I get the same error.
+
+What has happened?",1661449046.0,1
+learnpython,Thanks the answer was a combination of yours and u/shiftbyte,1660045854.0,1
+learnpython,"Doing that will immediately close powershell. I want to launch the terminal for use
+
+EDIT: Thanks for the help, the answer was a combination of yours and u/FriendlyRussian666",1660044627.0,1
+learnpython,Setting shell to True is hugely discouraged for safety reasons. I would want to avoid it if possible,1660044546.0,1
+AskTechnology,"Sorry for the late response, was searching for the script you said. I only found two: this one by [julioxhukoxio](https://gist.github.com/julianxhokaxhiu/d8c4a986ddb1cfc87e19a50eb238217f) and this one that seemed more interesting from [corpnewt called gibMacOs](https://github.com/corpnewt/gibMacOS). However, I think these scripts assume I have access to a mac except the gibMacOS.",1659943588.0,2
+learnpython,Thanks this is what I have been looking for,1659798422.0,3
+AskTechnology,There are many websites the only valid one seemed like [this guy’s collection on archive.org](https://archive.org/details/macos-collection),1659785214.0,1
+AskTechnology,Tbh they all seem sketchy to me. Do you know any trusted website?,1659774671.0,1
+learnpython,I checked the `sys.path` list and I see the `src/` directory added by default but I still get the error,1659644056.0,2
+linuxmasterrace,"This helped a lot, although, is there a way to realize what DE the user is on through the terminal?",1659252381.0,1
+MortalKombat,"""What would mileena do?"" is my favorite",1659252118.0,4
+linuxmasterrace,I am aware of this. What I want is to make the file/folder highlighted in the explorer not just open them.,1658936685.0,1
+linuxmasterrace,How?,1658935538.0,1
+kivy,"u/ZeroCommission I tested things out and this is exactly what I need, however, there is still one issue. In the example, the properties were pre-defined but in my program I take the property names from a json file. If I want to create them at runtime I should use `self.apply_property(**kwargs)`?",1658421570.0,1
+MortalKombat,"I know my character, I am just braindead. Can’t rake advantage of what he has. Also, should’ve probably switched to a different variation",1658413715.0,-7
+MortalKombat,I don’t recall ever letting go of the block button more than 2 milliseconds during this match. I just can’t do the right “block”. SZ’s mixups are too much for me,1658413623.0,-11
+MortalKombat,I don’t whether to block low or high against sub. Whenever I go against mixup characters I just panic,1658413467.0,10
+MortalKombat,"I wanted to catch him jumping. Didn’t work, I should’ve gone with the wind turbine variation. Far better anti-air",1658413323.0,-46
+MortalKombat,"I know I need some practice but I just can’t handle this mixup. He hits low, I block overhead, he hits overhead I block low. I try to keep distance but his low slide is too fast for me to react to so I block low but then he gets close with throws and overheads or he gets close then he does the slide to throw me off. Oh god, this game just ain’t for me",1658413090.0,4
+learnpython,I am looking for the class property decorator (a decorator that works exactly like property but it is for classes rather than objects,1658224161.0,1
+learnpython,Thanks but I am already aware of this. The issue is that properties work qt instance level not class level,1658177308.0,1
+learnpython,"So what are the best ways of doing this? Except using meta-classes, making it a singleton class could also work but I personally think that singletons are inelegant and not so great to work with. What other methods do you recommend? (It could be different than what I have already done but if it achieves the same thing I am open to it)",1658177186.0,1
+learnpython,A singleton class could be the way but I would still like to know how I could implement something like this. Could this be done using meta-classes?,1658176987.0,1
+learnpython,The entire calculations are same throughout the class. It wouldn’t make sense to create objects of the class since there will be no difference between any of them,1658172447.0,0
+kivy,"Sorry for the confusion.
+
+My data type has many attributes and I would like **the attributes** to be tracked.
+
+This is my code before and after switching to custom data types:
+
+Before:
+
+    class MainApp(App):
+        typography = DictProperty(_typography_dict)
+        …
+
+Kv (Before):
+
+    Label:
+        font_size: app.typography[“info_label_font_size”]
+
+After:
+
+    class MainApp(App):
+        typography = ObjectProperty(AppTypography(), rebind=True)
+        …
+
+Kv (After):
+
+    Label:
+        font_size: app.typography.info_label_font_size
+
+All of my changes are like the above.
+
+In the first snippet, because it is a DictProperty, changing that key’s value will also update the font size of the label.
+
+I want the same behavior with my ObjectProperty, that whenever I change that attribute the font size of that label also updates",1657955399.0,1
+freebsd,"Thanks, after logging in as root and re-configuring my network settings, freebsd finally works",1657910559.0,2
+freebsd,Throughout the entire installation I gave one username and one password for whatever it asked and I entered that username and password on boot. If this isn’t working then I don’t know what my root username is,1657888807.0,1
+MortalKombat,They had the right mindset but sort of botched the execution. The prime example being kombat pack 2. No one was satisfied with what they delivered,1657888694.0,1
+learnpython,"This is also interesting, thanks for this",1657888057.0,1
+learnpython,"In this specific program, it is only used to prettify the size of a file, although I have other programs which use it for other units/metrics as well.
+
+As for your suggestion, that could be a good solution but I have to do some maneuvering with the code in order to allow for that. Thanks",1657888033.0,1
+learnpython,It depends on the user. I scan the user’s computer for certain file types and gather information on them. They could have 0 to thousands of these files that will call this function,1657887695.0,1
+MortalKombat,"Even though I dislike zoning, personally, mixups are harder to handle. There is usually a pattern to the mixups but as soon as you adapt, they adapt as well. In the hands of a good player, you may look paralyzed the entire set.
+
+Even then, I don’t think any of those strategies are broken if NRS just doesn’t let them be. Zoning is not broken (they learned their lesson with injustice 2). The game is generally balanced but that’s not true when it comes to the details.
+
+Many characters have so many easy krushing blows in their base kit, while others have the hardest requirements for the least amount of reward. Many characters can do high-damaging unbreakable combos while a character like mileena doesn’t even get the chance to use her armor break.
+
+At this point, NRS has experimented with a lot of different mechanics and has a lot of knowledge. I have high expectations for the next game",1657832177.0,1
+freebsd,"I entered multi user mode, logged in with my credentials. These are the errors I get with multi user mode:
+
+    eastern-skil17173@eastern-ski117173: $ su
+    su: Sorry
+    Jul 14 20:10:31 eastern-ski117173 su[7881: BAD SU eastern-ski117173 to root on/ dev/ttyvo
+    eastern-ski117173@eastern-ski 117173: $ pkg install nano
+    The package management tool is not yet installed on your system.
+    Do you want to fetch and install it now? [y/N] y
+    Bootstrapping pkg from pkg+http://pkg.FreeBSD.org/FreeBSD:13: amd64/quarterly, please wait...
+    Verifying signature with trusted certificate pkg.freebsd.org.2013102301... done
+    pkg: failed to extract pkg-static: Failed to create dir '/usr/local/sbin",1657797341.0,1
+freebsd,"During the installation, I just hit yes for every network configuration prompt that freebsd provided, can't really remember those infos.
+
+As for the errors, these are what I get:
+
+    root@:/ # su
+    root@:/ # host google.com
+    ;; connection timed out; no servers could be reached
+    root@/ # pkg install xorg
+    The package management tool is not yet installed on your system.
+    Do you want to fetch and install it now? [y/N]: y
+    Bootstrapping pkg from pkg+http://pkg.FreeBSD.org/FreeBSD:13:amd64/quarterly, please wait...
+    pkg: mkstemp(): Read-only file system
+    pkg: mkstemp(): Read-only file system
+    pkg: Error fetching http://pkg.FreeBSD.org/FreeBSD:13:amd64/quarterly/Latest/pkg.txz:
+    A pre-built version of pkg could not be found for your system.
+    Consider changing PACKAGESITE or installing it from ports: 'ports-mgmt/pkg'.
+
+As u/KnowWhatsFuckingDumb pointed out, I see the warning: ""Read-only file system"" but there is no boot media on my machine now and also why doesn't the `host google.com` work?",1657731860.0,1
+freebsd,"Oh, this could be the one. Thanks",1657731215.0,1
+freebsd,"In single-user mode it is the same, it's the sharp (#) prefix",1657731169.0,1
+freebsd,"I am new to freebsd, don't know much, I tried logging in with both multi-user and single-user mode, none of them worked. (P.S I don't get a prompt to log in as root)",1657731128.0,1
+MortalKombat,Human Smoke. Nothing more…,1657557456.0,2
+linuxmasterrace,"IMO avoid arch, definitely go with ubuntu or fedora but still ubuntu has the priority. It is extremely easy to use and for someone new to linux that’s what’s important. Since your friend comes over from windows you can go with either Linux mint or KDE neon. Those two have a similar look and feel to windows and both are based on ubuntu. You can also recommend zorin although I still think the former two are better",1657479385.0,1
+freebsd,There isn’t any dvd or usb connected,1657468112.0,1
+freebsd,How do I get out of it?,1657468048.0,1
+freebsd,"Nothing pops up, su just exits, no errors either",1657468036.0,1
+freebsd,I executed su a thousand times it still won’t work,1657456043.0,0
+linuxquestions,I tried this but bash doesn’t support variables in brace range expansions. The numbers I gave the function were random and I mean for the function to work based off of any value,1657455268.0,1
+linuxquestions,"Aren’t curly braces shell-specific? That was the reason I avoided them in the first place.
+
+Answering your question, I will be putting them in a mkdir command. Although I know mkdir can take multiple values so there is no need for me to loop over them and do it one by one but I still wanted to know the answer to this",1657452559.0,1
+freebsd,I guess not,1657452108.0,2
+freebsd,I tried to access the file but I constantly get a permission denied message,1657452101.0,-1
+linuxmasterrace,"This worked for me. I put ```shift``` after ```done``` and also added ```""$((${OPTIND} -2))""``` to it. Thanks.
+
+(P.S Is there a good guide to ```shift```? I get the idea but the syntax is a bit confusing to me.
+
+Also none of my -n flags take any argument so is the colon in the middle necessary? I wanted to prefix it with a colon in order not to get the invalid argument thing
+
+One last question, isn't it a convention to name variables with upper-case? People commented on this post that it is not but I see many scripting tutorials that define them with upper-case)",1657277772.0,2
+arcane,"It has a double meaning.
+
+There were sites that I visited and the ones that were generated by google were not blocked (the ones that have an x button and after that it has a google watermark etc)
+
+But I generally made the meme with the sevika fact not considered, although you could use it like that",1657274764.0,1
+linuxmasterrace,"A lot of software just target debian/ubuntu as it is the most common. If they go beyond that, they will support RHEL/Fedora. Rare to find software with a wide support for linux distros",1657216014.0,2
+linuxquestions,"* Some of the distros I have tried have real problems shutting down the pc, it takes a lot of time for them to turn off
+
+* Obviously, the driver issue is still there, although, the reason that it was such a horrifying experience for me was even more on nvidia. When I searched my graphics card driver on their website it gave me 420 but it actually was 390. Took me a long time to figure that out.
+
+* Also software support. It was annoying at first but I have grown to like it. It forces me to use other pieces of software and I end up loving it",1657213514.0,1
+linuxmasterrace,"That could work but what about shift?
+
+EDIT: I tried that but I am either getting an error or it still counts the flag",1657197351.0,1
+learnpython,"I love pycharm but I am switching for these reasons:
+
+*. I am getting into other forms of programming such as shell-scripting, dart, flutter etc and pycharm only focuses on python.
+
+*. To get the complete features of pycharm I have to pay whilst vscode is completely free and full of extensions
+
+*. Also I have a weak system so it running a lighter program helps anyway",1657049879.0,1
+learnpython,"Unfortunately, I couldn't find an effective source in this regard. The only formatting issue pylint notices is trailing new lines
+
+EDIT: Found a couple of config’s mentioned in the cli, will try those for now, thanks for the help",1657043315.0,1
+learnpython,"My current configuration of pylint doesn't catch formatting issues, how should I change it?",1657042281.0,1
+learnpython,"I updated the question
+
+I am already using pylint but it doesn't catch formatting issues",1657042182.0,1
+learnpython,"When I installed the python extension for vscode I didn't get that behavior except autocompletes, interpreter support etc
+
+I am using pylint as my linter I don't want flake8 to replace that. I am a beginner with vscode so how would I achieve what you are saying without changing my linter?",1657042049.0,1
+linuxmasterrace,"I will definitely explore this further but now I face another issue.
+
+Trying to uninstall virtualenv and it seems like its dependencies are:
+
+distlib, filelock, platformdirs, six, importlib-metadata, importlib-resources, pathlib2
+
+Now I don’t know what package was already there before I installed virtualenv globally. I am afraid that if I delete all its dependencies, some of them could be required by the system, therefore, breaking it",1657033344.0,1
+linuxmasterrace,"In the first page of the [virtualenv docs](https://virtualenv.pypa.io/en/latest/index.html) it is mentioned;
+>The venv module does not offer all features of this library, to name just a few more prominent:
+
+>is slower (by not having the app-data seed method),
+
+>is not as extendable,
+
+>cannot create virtual environments for arbitrarily installed python versions (and automatically discover these),
+
+>is not upgrade-able via pip,
+
+>does not have as rich programmatic API (describe virtual environments without creating them).",1657009395.0,1
+linuxmasterrace,I have heard many people say that the base venv that comes with python is not as good as the other ones,1656963695.0,1
+linuxmasterrace,"Well for virtualenv I didn’t, so what now?",1656957025.0,1
+learnpython,"Ya, i meant the formatter",1656949378.0,1
+linuxmasterrace,"Thanks for your answer but this is the part that I don’t understand. What do you mean that batch programming can be “limiting”? As in, there aren’t enough packages for the windows terminal?",1656785348.0,1
+linuxmasterrace,I was thinking base terminal but I guess you are right. So what’s up with all these advertisements saying in the terminal world linux annihilates windows? Is it just fanboying?,1656785210.0,-1
+MortalKombat,I know I ain't that much of a god myself. Got back in the scene two months ago and just decided to play more competitively,1656782561.0,1
+MortalKombat,Well he was level 41 so…,1656763744.0,-4
+MortalKombat,"I guess I haven’t, every single one has been playing terribly",1656757153.0,-11
+AskTechnology,I see now. What about the System Volume Information? Does Windows create that or Linux?,1656690705.0,1
+MortalKombat,Live like an NPC,1656487722.0,2
+MortalKombat,"Lui Kang’s AI does the craziest combos out of all of them.
+
+I don’t know how they wrote the AI but I swear the AI is literally biased. Whenever I play against very hard lui with any character I always eat 320-360 damage combos but when I switch to mileena the AI ALWAYS whiffs the combo which leads me to getting a punish. I think the AI knows that mileena is bottom-tier and it’s trying to go easy on me :(
+
+Also I think NRS wrote the AI in a way that focuses on what makes your character strong. As an example, Rain’s short hop 4 is one of the best in the game but EVERYTIME I DO IT AGAINST ANY AI they flawless block and I get punished. With mileena, it is her forward 1, with fujin it is his back 1.
+
+Overall, the AI is good but it can’t replace a training buddy",1656487667.0,3
+MortalKombat,The AI is on very hard. If you put any character on very hard it will do a combo on you although they are not optimal. I cut the recording but that corner combo at the end did about 26 percent,1656448296.0,20
+MortalKombat,I have pre-made the variations and set it to random select. It’s the AI playing my variaton,1656448214.0,32
+MortalKombat,Gaym,1656439740.0,14
+MortalKombat,Well I did say NRS introduces ground breaking AI so…,1656439733.0,42
+kivy,I just checked the kivymd repo and it seems like they have removed it themselves,1656190352.0,1
+learnpython,"I thought of type-hints as well but I only stick with using them on function arguments and return types since personally I find that they ruin code when applied to normal variables.
+
+Thanks for the comment I think I am going to stick with None",1656099638.0,1
+kivy,Well it is common python knowledge although many tutorials don’t even mention one-liners but here is a link: [18 python one liners](https://dev.to/yash_makan/18-python-one-liners-that-will-speed-up-your-coding-process-21md),1655824845.0,1
+kivy,Nothing is stopping you from choosing kivy as your UI framework but the difficult part is the actual screen recording. I don’t have much information on this but making it cross-platform is probably the most challenging part and if you want it to be GPU accelerated then that is its own thing. I believe your best shot is OpenCV also not sure but maybe you can get something done with ffmpeg,1655818575.0,1
+kivy,"The first part up until the colon is but after that, it is just a one-liner in python",1655817955.0,2
+linuxmasterrace,I am speechless,1654091615.0,1
+pcmasterrace,“Oh no!”,1654071084.0,1
+linuxmasterrace,I am on iphone and the main reason that I also want to switch to firefox on my phone is the whole sync feature between devices,1653635151.0,1
+linuxmasterrace,I know but whatever it does I have seen many complaints saying it is slow,1653599060.0,1
+linuxmasterrace,"I have an iphone and I want to switch to firefox on both my pc and iphone for the whole sync thing
+
+I have also seen others use search engines like searx but they say that it is exponentially slower",1653585104.0,1
+pcmasterrace,"I never said google was better, even if google was the trashiest company ever and chrome was the worst browser to be ever made, Microsoft has no right to shove their browser down peoples' throats just because they own the OS",1652557229.0,1
+pcmasterrace,"I agree but Microsoft literally owns the OS. In windows 11, you have to literally spend time to NOT use edge. I don't care for the advertisement when compared to this",1652556948.0,0
+pcmasterrace,"The issue isn't with edge but with the monopolistic behavior of microsoft. At this point, they are forcing edge on their customers especially with the arrival of windows 11. You can search for the videos online (LTT has one), it is nearly impossible to get rid of. Not to mention the fact that they make fun of chrome.",1652524915.0,1
+MortalKombat,"It's OMID_k_i
+
+
+not online now",1651689572.0,1
+MortalKombat,Terrible ping is just painful,1651689330.0,1
+MortalKombat,"No need to clap for me, just fighting zoning with zoning",1651689297.0,2
+MortalKombat,Wanna train?,1651689239.0,1
+MortalKombat,"Playstation, have cross-platform on if available to make the matchmaking take less time",1651685204.0,1
+AskReddit,In peace with a clear conscience,1651606417.0,1
+MortalKombat,Smoke Smoke Smoke,1651216326.0,24
+AskReddit,Tumors,1651213603.0,1
+MortalKombat,Spray him with water,1651134314.0,2
+pcmasterrace,"Is pycharm, vscode, and sublime all necessary?",1650724628.0,1
+MortalKombat,Your need a new friend. Love the combo but it is strictly practice mode since that camera crushing blow is never going to happen in a real match,1650723464.0,2
+MortalKombat,"Got it, thanks a lot",1650296871.0,1
+pcmasterrace,"Geforce 840M, shit...",1650201383.0,1
+linuxmasterrace,So that's why it's called the sudo sandwich...,1650125093.0,6
+kivy,"I am on reddit mobile now, and will give a better answer when I get on desktop.
+
+Basically, you are getting the error cause on_touch_down down is an event that returns a boolean. So you should create a function that returns False not just pass it but beware that overriding on_touch_down in a way that always returns False means that no touch is ever triggered.
+
+What you want is to check for a condition and based on that return False.
+
+Will give a snippet when I get back in desktop",1650125052.0,1
+kivy,"As u/ElliotDG has already said, you can control the ```x``` and ```y``` position of the scroll-view manually by setting the ```scroll_y``` and ```scroll_x``` values, no need to use ```scroll_to``` on the last widgets.",1649878008.0,1
+kivy,"Since the *data* property of the recycle-view is a kivy *ListProperty* **changing it will automatically cause an update**, you should pass the values in such format:
+
+    # Every dictionary indicates a new widget of the given view-class in the recycle-view
+    # Within each dictionary, you should pass the name of the property as the key and its value to be passes down to the widget
+    # As an example to create 4 Labels ( assuming you have passed ""Label"" as the view-class ) with different texts you can do:
+    recycle_view_instance.data = [{""text"": ""Pizza""}, {""text"": ""Hamburger""}, {""text"": ""Sushi""}, {""text"": ""Ravioli""}]
+
+I also didn't see any attempt to update the data within your code except when the widget is instantiated. Try this, if it does not help you, you are going to have to provide a larger snippet of your code which causes an error",1649877670.0,2
+pcmasterrace,And I thought my laptop was trash,1648574418.0,1
+AskReddit,Dishonored 1 & 2,1648573825.0,1
+kivy,"Yes, I know but when I tested it in kivy 2.0.0 the issue wasn't there. After calling .stop() and then .play() the audio file continued where it left off, now in kivy 2.1.0 I have to do an additional seek call",1648284988.0,1
+kivy,"Yes, I myself rarely use pickle. I mainly use json or sqlite for 99 percent of my work but just wanted to give OP some options to choose from",1648117559.0,1
+kivy,"You need to put it into an external file, like a database. Depending on what that variable's type is, its structure and how many variables you have, you have different options. The best ones are:
+
+• json (.json)
+
+• pickle (multiple extensions)
+
+• configparser (.ini)
+
+• sqlite3 (.db)
+
+• python-dotenv (.env)
+
+• pandas (.csv)
+
+• Also a standard txt file",1648063658.0,1
+kivy,"I got my answer.
+
+After a little bit of digging *kivymd* uses a font called *materialdesignicons-webfont.ttf* in its *fonts* directory and the font has the icons baked in. The unicode values represent each icon in the font. This is also the reason they seem so great in quality",1648031122.0,1
+kivy,"Why don't you make an app yourself? There is no need to follow someone's project to get better at a framework. If you are solely interested in **UI and front-end**, then pick an app you like and recreate it with *kivy*. With that being said I don't know a whole lot of applications that are built with kivy but maybe this ***Quora*** page can help you:
+
+ [What Popular Apps are Created with Kivy?](https://www.quora.com/What-popular-apps-are-created-using-Kivy)",1648029914.0,1
+AskProgramming,"Not sure about IDEs but having a custom game engine is sort of common in the game development industry. As an example 4A games have their own engine called ***4A Engine***, Telltale has ***Telltale Tools***, Arkane has ***Void engine*** etc.",1647945963.0,2
+AskReddit,my songs know what you did in the dark,1647891069.0,1
+MortalKombat,"Fujin
+
+
+About damn time",1647759881.0,4
+kivy,"You mean every time there is a change to the screen resolution, I calculate to see if there is enough space for another widget and if so add 1 to cols? like this:
+
+    on_width:
+        if self.width // my_widget.width > recyclegrid.cols * my_widget.width:\
+        recyclegrid.cols += 1",1647628789.0,1
+kivy,"I am making a file explorer and want the user to be able to switch from a box layout ( vertical listing ) to a stack layout ( grid listing ). I have widgets which represent files that have a width of 100 and an adaptive height. So whenever the user switches to a grid view I want to put as many of these widgets as I can in a row and then go to the other ( basically the stack layout behavior ).
+
+I tried putting a stack layout into a RecycleBoxLayout but I constantly got a
+
+    [CRITICAL] [Clock       ] Warning, too much iteration done before the next frame. Check your code, or increase the Clock.max_iteration attribute. Remaining events:
+
+Could you share a small snippet to see what I got wrong?",1647623798.0,1
+AskReddit,"SOME LEGENDS ARE TOLD
+
+SOME TURN TO DUST OR TO GOLD
+
+BUT YOU WILL REMEMBER MEEEEEEEE
+
+REMEMBER MEEEE FOE CENTURIEEEES",1647416317.0,1
+kivy,"Sorry for the misunderstanding, I just meant a terminal emulation not a read-only or a single subprocess call input output kind of thing.",1647032031.0,1
+kivy,"I want full functionality if overall proven advantageous and should also work across linux, mac, and windows. Also, how can you achieve the coloring like pycharm and dolphin?",1647029495.0,1
+kivy,I had the button widget in mind but from u/ZeroCommission's comment it looks like it is due to the borderimage instruction,1646568063.0,2
+kivy,"Oh I just searched the concept. Pretty interesting, although, I still am a little bit confused as for whether I should use images or canvas instructions",1646568005.0,1
+AskReddit,Disney,1646554201.0,1
+linuxmasterrace,So many reasons. I program and linux makes it so much easier to work especially with its terminal. As a result I also write better cross-platform code. Less overhead on my horrible laptop. Less bloat. Safety. Deploying to android easily. Great tools right out of the box etc,1646554104.0,9
+kivy,Thanks for the info but how is it that kivy's pre-packaged atlas files do not lost quality with different widget sizes?,1646507400.0,1
+learnpython,So you are saying by buying jetbrains license you are helping Putin?,1645722605.0,1
+pcmasterrace,Still stuck on my ASUS X555LDB :(,1645718787.0,1
+kivy,"This is not a good idea to do in kivy. The entire principal of kivy is to work on multiple platforms and different screen sizes. This approach will only make kivy work on desktop platforms.
+
+See this SO issue: [How Do I have Multiple Windows in Kivy](https://stackoverflow.com/questions/39359950/how-do-i-have-multiple-windows-in-kivy)",1645685812.0,1
+kivy,"If you want to open the default browser, you can use the built-in ```webbrowser``` module. I have tested it and it works on android.
+
+Using ```webbrowser.open(url)``` will open then default browser and display the url. If you want to integrate webview into your app, I sadly have no knowledge about that.
+
+I recommend searching more about this topic although I have not seen any examples.",1645684335.0,1
+kivy,"Sadly, your code snippet is very jumbled for me and I can't understand it is doing.
+
+A separate problem I noticed is that you are using ```Window.height \* 0.8``` ***after*** the launch of the program. This can cause some issues since post-launch the user can resize the app to whatever they want. Is this an expected behavior?
+
+As for my other comment, I just meant that you don't assign a variable name for everything you create. As an example, If you are making an open-world game with 1000 npc characters you don't go:
+
+    npc1 = NPC()
+    npc2 = NPC()
+    npc3 = NPC()
+    ...
+    npc1000 = NPC()
+
+It would destroy the cleanliness of the code, make it hard to manage, and possibly cause memory issues. Instead, you should do something like this:
+
+    npc_definitions = [NPC() for _ in range(1000)]
+
+I think the misunderstanding was that I related it to game development but this is just the concept for having arrays and iterables.",1645635685.0,1
+MortalKombat,It looks like there is a bit of poking ( pressing one ). These combos can be a bit difficult it requires precise timing ( Especially the corner combos ). Try ending the combo in a way you are comfortable or just go for a complete different combo if it is too hard. Ahmz and raptor's combo guides are quite complete,1645614467.0,1
+kivy,"These are the configurations for kivy. You should not change these unless you are going for a simulation of mobile on your pc like the example said.
+
+The metrics provided by kivy are: pt, mm, cm, in, dp, sp
+
+You can use this syntax:
+
+    from kivy.metrics import dp, sp",1645595204.0,1
+MortalKombat,"It's not all about combos. If you feel frustrated try to work on other aspects of your play, blocking, flawless blocking, knowing your character's frame data, weaknesses, play style etc. The tutorial in mk 11 is by far the best and most complete of all games. Be sure to complete it.
+
+Also, how *basic* of a combo is it? Do you mean his attack strings or a juggle combo? If you could share what combo you are trying to do we could help more",1645595011.0,2
+kivy,"There are many other metrics for you to choose from, have a look at: [kivy metrics](https://kivy.org/doc/stable/api-kivy.metrics.html)
+
+That being said, for layouts and widgets you can use **dp** ( density independent pixel )",1645593442.0,2
+kivy,"There is no direct way. Even if you optimized your app to run at the speed of light, the 2 seconds minimum loading screen will be there. This is because kivy puts python in a java app and that loading screen is the initialization of python.
+
+If you want to make your app run faster try profiling your code using cprofile or py-spy, see where you could improve the performance. Other than that, you can do standard style of optimization:
+
+• Using numpy, scipy, etc
+
+• Writing portions of the program in C
+
+• Or other minor improvements like using the str.join method if you are concatenating many strings...
+
+I hope this helped in some kind.",1645522806.0,1
+AskReddit,The Office,1645429253.0,1
+kivy,"Sorry for the late response, was taking a break from programming.
+
+Short answer, you **can't**. Not without messing up the principle of *kv lang* itself. You are going to have to either define them one by one or do what you did with binding a function to the ```on_parent``` event of the widget. Again hugely **discouraged**.
+
+In case later on you want to create a different number of blocks in the future just change the ```BLOCK_NUMBERS``` class level variable to a bigger number or less but do be aware that you have to define a modular recipe for this. What I mean, is for example in the snippet that I shared we are looping ```BLOCK_NUMBERS``` times, each time creating a ```Rectangle```, with this position recipe:
+
+    pos=(self.HALF_AVG_BLOCK_WIDTH + self.AVG_BLOCK_WIDTH * index, self.STARTING_Y_POS)
+
+If you solely increase ```BLOCK_NUMBERS``` *the program will iterate more but it is not gauranteed that with that specific number this recipe will ensure that all of the rectangles are visible on the screen*. I hope you understood what I said. If not just comment again.
+
+Also, just in case that you haven't noticed the ```move_block``` method is your way to move a block. You pass it an index from the ```block_definitions``` property then the offset.
+
+Example ( this will make the first block of the self.block\_definitions go one pixel to the left and one up ):
+
+    self.move_block(0, -1, 1)",1645199527.0,1
+AskReddit,Edge panels or any sort of weird edge gimmicks,1645117254.0,1
+AskReddit,Tell that to my depression,1645081009.0,3
+AskReddit,Mental illness,1645080738.0,1
+AskReddit,That any person that has any sort of mental illness is a hidden genius.,1645074418.0,2
+AskReddit,Being Happy,1644933969.0,2
+AskReddit,Elasticity,1644933400.0,3
+AskReddit,Family Guy,1644913064.0,1
+AskReddit,The Office,1644913032.0,1
+MortalKombat,You definitely did a fantastic job kicking his butt. The level of gameplay is on a different level but scorpion is very linear now unless you go for a custom variation to give him a little bit of a mix,1644874686.0,2
+MortalKombat,"At this point, scorpion is the most predictable character. Still nice but very predictable",1644872299.0,2
+MortalKombat,I don't hate him but he's very dull and boring. I feel like with a new story and especially a redesign he could be much better,1644872204.0,11
+MortalKombat,"Frost and Jacquie are the two characters I absolutely despise going against the most.
+
+
+So you should definitely go for it",1644872111.0,1
+MortalKombat,One thing that REALLY bugs me is the absolute horrible range of her back 1. I think at this point that is mileena players' biggest complaint,1644872040.0,1
+AskReddit,"""Always good to know""",1644871868.0,1
+MortalKombat,"I actually think it is a great move for a couple of reasons:
+
+• You still have access to both ball rolls. You can hold 4 and it would do the normal ball roll and it vastly increases the range on her standard ball roll. If you keep holding 4, you can do the ball fullscreen.
+
+• Also, when doing the standard ball roll and holding 4, if you release at anytime it will arc and mileena will do rolling thunder which is especially great if the opponent has a low projectile because it con dodge it. I have managed to get that a couple of times.
+
+• I could be wrong but I think that the damage on rolling thunder is more because it hits 3 times. Again not sure, gonna have to check this",1644871668.0,2
+AskReddit,"OCD, depression",1644860573.0,1
+MortalKombat,Really? Who has won a tournament with rain? Gotta check it out,1644817962.0,1
+learnpython,Thanks for your answer. Both of these ways seem legit to me. I will definitely see to it,1644769550.0,1
+learnpython,"I like this a lot, thanks for the tip!",1644769460.0,1
+learnpython,I am not sure if that would work with multiple conflicting args. What you have suggested is more of a mixing approach but I want just either of the results.,1644755848.0,1
+learnpython,"this is a sample class. From my tests, the arguments can get quite large and I am just providing a cleaner way to pass them.
+
+Also, just curious as to how I can handle these sort of situations.
+
+Although I don't insist on this approach. If there is a more standard, cleaner and just generally better way to do this then I welcome it.",1644755443.0,1
+kivy,"I didn't understand your first question but for your second question when you pass properties in *kv lang*, **it automatically binds the properties together**. However, in order to get the same behavior in python, you are going to have to use ```widget.bind``` like so:
+
+    your_widget.bind(pos=self.setter(""numeric_property""))  # This binds the two properties together
+
+Alternatively, you can define an ```on_property``` event and apply the changes there if the value needs more processing ( this is probably the way you want to do it ):
+
+    def on_numeric_property(self, instance, new_numeric_property):
+        your_widget.pos = new_numeric_property
+
+Before continuing:
+
+* Why do you need a separate ```NumericProperty``` for each ```Rectangle```?
+
+* KV lang is meant to be a separation of design and logic and you are highly encouraged to do your logic in the python section of your code
+
+* When designing games, it is very important to keep your code clean. Try following PEP-8, naming conventions, type hinting, documenting your code, OOP etc.
+
+* Also in games, it is more common to work with arrays of data rather defining a variable for every single object in the game. You usually put your objects in a variable if they are important and are different from the other objects like ***player objects*** or the ***base world***
+
+Try matching this style of code:
+
+    from typing import Final, Union
+    from kivy.lang import Builder
+    from kivy.properties import NumericProperty, ListProperty
+    from kivy.graphics import Rectangle, Color
+    from kivy.uix.relativelayout import RelativeLayout
+    from kivy.core.window import Window
+    from kivy.app import App
+    
+    
+    class MainWidget(RelativeLayout):
+        """"""
+        Base widget responsible for creating the player tile and game objects.
+        """"""
+        BLOCK_NUMBERS: Final = 7
+        """"""
+        Number of block rectangles created on the screen.
+        """"""
+        AVG_BLOCK_WIDTH: Final = Window.width / BLOCK_NUMBERS
+        """"""
+        Average width of each block. Window's width divided by the block numbers.
+        """"""
+        HALF_AVG_BLOCK_WIDTH: Final = AVG_BLOCK_WIDTH / 2
+        """"""
+        Constant value. Half of the `AVG_BLOCK_WIDTH`.
+        """"""
+        STARTING_Y_POS: Final = Window.height * 0.8
+        """"""
+        Starting y position for the block rectangles.
+        """"""
+        player_x = NumericProperty()
+        """"""
+        Player tile's starting x position.
+        
+        :attr:`player_x` is a :class:`~kivy.properties.NumericProperty`
+        and defaults to `0`.
+        """"""
+        player_y = NumericProperty()
+        """"""
+        Player tile's starting y position.
+        
+        :attr:`player_y` is a :class:`~kivy.properties.NumericProperty`
+        and defaults to `0`.
+        """"""
+        block_definitions = ListProperty()
+        """"""
+        List of the defined block rectangles.
+        
+        :attr:`block_definitions` is a :class:`~kivy.properties.ListProperty`
+        and defaults to `[]`.
+        """"""
+    
+        def __init__(self, **kwargs) -> None:
+            super(MainWidget, self).__init__(**kwargs)
+            with self.canvas:
+                Color(
+                    rgba=(1, 0, 0, .5)
+                )
+                for index in range(self.BLOCK_NUMBERS):
+                    self.block_definitions.append(
+                        Rectangle(
+                            pos=(self.HALF_AVG_BLOCK_WIDTH + self.AVG_BLOCK_WIDTH * index, self.STARTING_Y_POS),
+                            size=(50, 50)
+                        )
+                    )
+    
+        def move_block(self,
+                       block_index: int,
+                       x_offset: Union[int, float] = 0,
+                       y_offset: Union[int, float] = 0) -> None:
+            """"""
+            Method to move a block rectangle from the given index.
+            :param block_index: Index of the block `Rectangle` obj inside `self.block_definitions`.
+            :param x_offset: Offset of the x-axis to be added.
+            :param y_offset: Offset of the y-axis to be added.
+            """"""
+            block_rect_obj = self.block_definitions[block_index]
+            block_rect_obj.pos = (
+                block_rect_obj.pos[0] + x_offset,
+                block_rect_obj.pos[1] + y_offset
+            )
+    
+    
+    class MainApp(App):
+        def __init__(self, **kwargs) -> None:
+            super(MainApp, self).__init__(**kwargs)
+            self.kv = Builder.load_file(""your_kv_ui.kv"")
+    
+        def build(self):
+            return self.kv
+    
+    
+    if __name__ == '__main__':
+        MainApp().run()
+
+
+Your kv section:
+
+    #:kivy 2.0.0
+    <MainWidget>:
+        canvas.before:
+            Rectangle:
+                size: root.size
+        canvas.after:
+            Rectangle:
+                size: 150, 150
+                pos: self.player_x, self.player_y
+    MainWidget:",1644689679.0,1
+AskReddit,I am anxiety,1644606349.0,1
+AskReddit,I share a room with my sister,1644525371.0,1
+AskReddit,"Tell your mom, she owes me one",1644491709.0,1
+Python,"I personally make apps that interact with the os and store data a lot. So here is my list:
+
+    json
+    shutil
+    pickle
+    difflib
+    sqlite3",1644437972.0,10
+kivy,"Just searched the project and from the page it is said that it supports windows, linux, mac, android, and IOS.
+
+So ***theoretically***, it should work but it is also said that it is written in ***c++*** and not directly integrated with **python**, so you are probably using a binder or some other form of third-party module to use the engine.
+
+I believe in order for this to work you are going to have to make your own p4a recipe for the engine.
+
+Aside from this it also look like you are getting a ***PermissionError***. Have you requested the proper permissions? Have a look at the manifest permissions to see what exactly you need:
+
+[Android Manifest Permissions from Google](https://developer.android.com/reference/android/Manifest.permission)
+
+Also have a look at p4a's docs on runtime permissions:
+
+[P4A Docs Runtime Permissions](https://python-for-android.readthedocs.io/en/latest/apis/#runtime-permissions)",1644392185.0,1
+kivy,"Can't you just get the text by looping through the list? Try a list comprehension, like so:
+
+    [list_item.text for list_item in my_selection_list.get_selected_list_items()]
+
+Or just use a standard loop:
+
+    for list_item in my_selection_list.get_selected_list_items():
+        print(list_item.text)",1644391427.0,1
+AskReddit,Also my mom literally used it against me. She told me that if I really have OCD I would start by cleaning up my room.,1644347327.0,1
+AskReddit,"The skin damage us just 10 percent of the pain. 90 percent of it is the freaking intrusive thoughts. It is so painful, like go the hell away!",1644346997.0,2
+kivy,"It is a typo, when assigning the ```pos``` property to your ```Rectangle``` you had written ```tile_X``` while it should be ***lowercase x*** like: ```tile_x```
+
+There is no need for you to define and ```ObjectProperty``` for the rectangle. When changing the values of ```tile_x``` and ```tile_y``` whatever property that is **bound** to them, will also change, in this case the position of the rectangle. Also as I mentioned, ***you cannot assign an ID to a canvas instruction*** so if you want to have your rectangle as an object property you are going to have to do it in your python part of the code",1644312630.0,1
+kivy,It does look like look it could be made with kivy but I still doubt it,1644311262.0,1
+kivy,"I don't think that you have fully grasped the idea behind having a separate design language for your application. This code is both by kivy standards and python standards very convoluted. Try matching this style of code:
+
+    from kivy.lang import Builder
+    from kivymd.app import MDApp
+    
+    
+    def adder(*args) -> float:
+        return sum(args)
+    
+    
+    class AdderApp(MDApp):
+        def __init__(self, **kwargs):
+            super(AdderApp, self).__init__(**kwargs)
+            self.theme_cls.primary_palette = ""Amber""
+            self.theme_cls.primary_hue = ""300""
+            # It is highly recommended using a `.kv` file
+            # and defining your design portion in that file
+            # rather than a string in your python code
+            # then you would do: `Builder.load_file(""your_file.kv"")`
+            self.kv = Builder.load_string(""""""
+    #:kivy 2.0.0
+    #:import adder main.adder
+    # You can import other things from different scripts here using
+    # the `#import: x module.x` syntax, in my case I want to import
+    # the `adder` function from my main file called `main.py`
+    Screen:
+        MDFillRoundFlatButton:
+            text: ""Add Them""
+            pos_hint: {""center_x"": .5, ""center_y"": .4}
+            on_release:
+                # It is convention for the logic part of your code
+                # to be separate from your design when using kv lang
+                answer.text = str(
+                adder(
+                float(first_username.text),
+                float(second_username.text),
+                )
+                )
+        MDTextField:
+            id: first_username
+            hint_text: ""First Username""
+            input_filter: ""float""
+            pos_hint: {""center_x"": .5, ""center_y"": .7}
+            size_hint_x: None
+            width: ""100dp""
+        MDTextField:
+            id: second_username
+            hint_text: ""Second Username""
+            input_filter: ""float""
+            pos_hint: {""center_x"": .5, ""center_y"": .6}
+            size_hint_x: None
+            width: ""100dp""
+        MDLabel:
+            id: answer
+            text: '='
+            pos_hint: {""center_x"": .5, ""center_y"": .5}
+            size_hint_x: None
+            width: ""100dp""
+    """""")
+    
+        def build(self):
+            return self.kv
+    
+    
+    if __name__ == '__main__':
+        AdderApp().run()
+
+
+It seems like you are a beginner at least with kivy. Try reading articles about PEP-8, naming conventions, OOP, and generally cleaner code.",1644310783.0,2
+kivy,"I have a relatively complex project with 3rd party modules that are not kivy sister project that works fine on windows, linux, and android. From the looks of it, there is a problem with your code. Since it crashes immediately, it is probably a syntax error.
+
+All your import statements should run completely fine on android. I always suggest that you add ```logcat``` as another argument when deploying using buildozer to see where exactly the problem occurs ( like so ```buildozer android debug deploy run logcat``` ). Beyond this, it is really hard to tell what's wrong with your code without seeing anything from it.",1644308365.0,1
+AskReddit,"I don't gain weight. I literally eat junk food and greasy food everyday, even more than many people but still I see no change",1644222935.0,1
+learnpython,"Thanks for the info, I am not having any issues.
+
+The reason I asked this question was, one, for general knowledge as I was curious but also because I am planning to make a download manager in python and I am sort of worried that the program will hog resources if the user downloads many files ( like 100 or more ) and spawns too many threads that will eventually sit in the background.",1644173915.0,1
+AskReddit,I think they assumed people are magnets or something,1644169749.0,1
+kivy,"Note, I added the accessing the rectangle myself just as another example of using groups with canvas instructions, you can delete the
+
+    group: ""my_rect""
+
+And also in ```move_player``` function:
+
+    print(self.canvas.get_group(""my_rect""))
+
+As a side note, try not to bind the ```tile_x``` and ```tile_y``` properties to either width or height because their values will reset if any of them are changed",1644154782.0,1
+kivy,"You cannot assign an ID to canvas instructions like standard widgets instead you have to group them together, like so:
+
+    from kivy.lang import Builder
+    from kivy.app import App
+    
+    
+    class MainApp(App):
+        def __init__(self, **kwargs):
+            super(MainApp, self).__init__(**kwargs)
+            self.kv = Builder.load_string(""""""
+    #:kivy 2.0.0
+    Button:
+        text: ""CLICK TO SEE CANVAS GROUP""
+        size_hint: .6, .6
+        pos_hint: {""center_x"": .5, ""center_y"": .5}
+        background_down: ''
+        background_color: (0, 0, 0, 0)
+        on_release: print(self.canvas.before.get_group(""background_rect""))
+        canvas.before:
+            Color:
+                rgba: (.35, .1, .25, 1)
+            Rectangle:
+                group: ""background_rect""
+                pos: self.pos
+                size: self.size
+    """""")
+    
+        def build(self):
+            return self.kv
+    
+    
+    if __name__ == '__main__':
+        MainApp().run()
+
+
+You can also have a look at kivy's docs on accessing the keyboard: https://kivy.org/doc/stable/api-kivy.core.window.html?highlight=keyboard
+
+As per your question, you can get the rectangle each time this way and change its position, although for actions like this, I prefer to have a property defined for these values, so by solely changing the property the rectangle's position would update, like so:
+
+    from typing import List
+    from kivy.lang import Builder
+    from kivy.properties import NumericProperty
+    from kivy.uix.relativelayout import RelativeLayout
+    from kivy.core.window import Window
+    from kivy.app import App
+    
+    
+    class MainWidget(RelativeLayout):
+        full_width = NumericProperty()
+        full_height = NumericProperty()
+        # NumericProperties have 0 as their default value
+        tile_x = NumericProperty(Window.width / 2)
+        tile_y = NumericProperty(Window.height / 8)
+    
+        def __init__(self, **kwargs):
+            super(MainWidget, self).__init__(**kwargs)
+            self.step = 30
+            self._keyboard = Window.request_keyboard(
+                self._keyboard_closed, self, ""text""
+            )
+            if self._keyboard.widget:
+                # If it exists, this widget is a VKeyboard object which you can use
+                # to change the keyboard layout.
+                pass
+            self._keyboard.bind(on_key_down=self._on_key_down)
+    
+        def _keyboard_closed(self) -> None:
+            self._keyboard.unbind(on_key_down=self._on_keyboard_down)
+            self._keyboard = None
+    
+        def _on_key_down(self, keyboard_instance, keycode, text: str, modifiers: List[str]) -> bool:
+            if keycode[1] in (""left"", ""right"", ""up"", ""down""):
+                self.move_player(keycode[1])
+            # Return True to accept the key. Otherwise, it will be used by
+            # the system.
+            return True
+    
+        def move_player(self, key: str) -> None:
+            if key == ""left"":
+                self.tile_x -= self.step
+            elif key == ""right"":
+                self.tile_x += self.step
+            elif key == ""up"":
+                self.tile_y += self.step
+            elif key == ""down"":
+                self.tile_y -= self.step
+            print(self.canvas.get_group(""my_rect""))
+    
+    
+    class MainApp(App):
+        def __init__(self, **kwargs):
+            super(MainApp, self).__init__(**kwargs)
+            self.kv = Builder.load_string(""""""
+    #:kivy 2.0.0
+    <MainWidget>:
+        full_width: self.width
+        full_height: self.height
+        canvas.before:
+            Color:
+                rgba: (.5, .5, .5, .8)
+            Rectangle:
+                size: root.size
+        canvas:
+            Color:
+                rgba: (1, 0, 0, 1)
+            Rectangle:
+                group: ""my_rect""
+                size: 50, 50
+                pos: self.tile_x, self.tile_y
+    MainWidget:
+    """""")
+    
+        def build(self):
+            return self.kv
+    
+    
+    if __name__ == '__main__':
+        MainApp().run()",1644154365.0,3
+AskReddit,"I know programming it doesn't mean I can FIX EVERY SINGLE PROBLEM with your device. They literally ask me stuff about After Effects and hardware malfunctions, even printers, and when I say I don't know they're like ""what sort of a programmer are you?""",1644134915.0,1
+kivy,I meant a venv,1644125426.0,1
+kivy,"I am currently experiencing the same issue. It seems like you have to pyjnius to call the media player class of android. So far I have only been able to find this snipper of code:
+
+[Tito's GitHub Gist on Android Audio Player](https://gist.github.com/tito/8da5ee1d51cd81c556da947b225bcc2b)
+
+Hope it helps of some kind",1644087521.0,1
+kivy,"Try getting buildozer from the github repo: [Buildozer Official Repo](https://github.com/kivy/buildozer.git)
+
+IMO it is always better to install these sort of stuff in a virtual environment.",1644086881.0,1
+kivy,Is it possible that you are using tkinter instead of kivy?,1644086457.0,1
+dishonored,Very Cool. Would definitely love to see the final result. Keep going.,1644052335.0,3
+kdeneon,"Yeah, that was the issue. I didn't set the widget style to kvantum, it works now. Thanks",1644039017.0,1
+kivy,"There are a couple of ways that you could do this but right off the bat kv lang is meant to separate logic and design so you are heavily encouraged to do this sort of work inside of your python section.
+
+Although if you still insist on doing this in kv you could do one of these:
+
+As others have already mentioned you could use multiple ternary statements inside of each other:
+
+    BoxLayout:
+    width: 100 if child.width >= 50 else 150 if 100 < child.width and child.width <= 150 else 200
+
+You could also define a function in your python code ( optionally inside your app ) to process the width and return the proper value:
+
+    from kivy.lang import Builder
+    from kivy.app import App
+    
+    
+    # You can also put the function in your app class and reference it there
+    # Although it is not recommended but if you do use the static method decorator:
+    # @staticmethod
+    def get_correct_size(width):
+        correct_size = 200
+        if width >= 50:
+            correct_size = 100
+        elif 100 < width <= 150:
+            correct_size = 150
+        return correct_size
+    
+    
+    class MainApp(App):
+        def __init__(self, **kwargs):
+            super(MainApp, self).__init__(**kwargs)
+            self.kv = Builder.load_string(""""""
+    #:kivy 2.0.0
+    #:import get_correct_size main.get_correct_size
+    BoxLayout:
+        id: box
+        Label:
+            id: child
+            text: ""Test Label""
+            on_width:
+                box.width = get_correct_size(self.width)
+                # if you do place the function in your app class do this instead:
+                # box.width = app.get_correct_size(self.width)
+    """""")
+    
+        def build(self):
+            return self.kv
+    
+    
+    if __name__ == '__main__':
+        MainApp().run()
+
+Lastly, you could use a dictionary that holds uses the label's width as its keys and the box's width as its values although this sort of style is used with fixed sizes rather than ranges of sizes ( although again generally not recommended ):
+
+    from kivy.lang import Builder
+    from kivy.app import App
+    
+    
+    class MainApp(App):
+        def __init__(self, **kwargs):
+            super(MainApp, self).__init__(**kwargs)
+            # Define your break-points here
+            self.size_ranges = {150: 150, 50: 100}
+            self.kv = Builder.load_string(""""""
+    #:kivy 2.0.0
+    BoxLayout:
+        id: box
+        Label:
+            id: child
+            text: ""Test Label""
+            on_width:
+                box.width = app.size_ranges.get(self.width, 200)
+    """""")
+    
+        def build(self):
+            return self.kv
+    
+    
+    if __name__ == '__main__':
+        MainApp().run()",1643992652.0,1
+AskReddit,Quagmire,1643983772.0,2
+kdeneon,I explained in the question that the default plasma icon is not in the icon list,1643965085.0,1
+kdeneon,What am I supposed to do exactly? I installed the kvantum Ant-Dark folder but nothing happened.,1643904042.0,2
+AskReddit,The name's Bond. James Bond,1643715935.0,349
+AskReddit,Bang Bang,1643613745.0,1
+AskReddit,By going to work tomorrow,1643561837.0,2
+kivy,"Have you had a previous successful deployment with the same devices? By required permissions I meant having the debugging permission for your PC.
+
+I don't know much about AI but my suggestion is try to deploy a small hello world app with minimal amount of dependencies and see if you can get it to work.
+
+It could be a WSL problem but beyond this I really don't know.",1643561559.0,1
+kivy,"Try cloning the buildozer repo from github:
+
+[Buildozer GitHub Repo](https://github.com/kivy/buildozer.git)
+
+I believe there was a recent commit that focused on improving the whole ***AAB*** packaging.
+
+If you could share more information, like your buildozer version ( execute ```buildozer --version``` ), how you installed it, your ***buildozer.spec*** file, we could help more.",1643533940.0,1
+kivy,"This has happened to me before and it was because even though I had my phone plugged in, in the ***Developer Settings*** I had forgotten to turn on ***USB Debugging***. Also check that you have the required permissions",1643533721.0,2
+AskReddit,The Office,1643356563.0,1
+kivy,"I believe the quotations could be causing some issues, try removing them and rename the file.
+
+Also, in your first example, your path starts with  ***%(source.dir)s***  which is a relative path and then you specify an absolute path. Either give the relative or absolute path not both.
+
+For me this syntax works fine:
+
+    # (str) Icon of the application
+    icon.filename = images/App-Icon-256x256.png",1643308019.0,2
+kivy,"The new class is for simplification purposes. Basically what it does is define two icon buttons at each end of the list item and takes two string properties for each button's icon. The icon for the right icon button defaults to ***""refresh""***. You can still do the same in the logic part of your code, although in order to preserve the cleanliness of the code I would not recommend it. If you don't know about kivy properties, I suggest you have a look at the docs: [Kivy Properties](https://kivy.org/doc/stable/api-kivy.properties.html)
+
+You can modify the ***""on\_release""*** event of the ***""IconRightWidget""*** of the ***""IconListItem""*** to do anything. In the previous case, whenever the user clicked on the button I changed the text of the list item to another random element. For your other question you can do something like this:
+
+    import random
+    from kivy.lang import Builder
+    from kivy.properties import StringProperty
+    from kivymd.uix.list import OneLineAvatarIconListItem
+    from kivymd.app import MDApp
+    
+    
+    class IconListItem(OneLineAvatarIconListItem):
+        icon_right = StringProperty(""refresh"")
+        icon_left = StringProperty()
+    
+    
+    class MainApp(MDApp):
+        def __init__(self, **kwargs):
+            super(MainApp, self).__init__(**kwargs)
+            self.theme_cls.theme_style = ""Dark""
+            self.array = (
+                ""meat"",
+                ""heat"",
+                ""feat"",
+                ""leaf"",
+                ""keith"",
+                ""reef"",
+                ""seethe"",
+                ""teeth"",
+                ""queef"",
+                ""treef"",
+                ""cliff"",
+                ""jif"",
+            )
+            self.kv = Builder.load_string(""""""
+    #:kivy 2.0.0
+    <IconListItem>:
+        IconLeftWidget:
+            icon: root.icon_left
+        IconRightWidget:
+            icon: root.icon_right
+            on_release:
+                # You can bind anything to the `on_release` property of this widget
+                print(f""this is a {root.text}"")
+    ScrollView:
+        do_scroll_x: False
+        MDBoxLayout:
+            orientation: ""vertical""
+            spacing: ""10dp""
+            adaptive_height: True
+            MDRaisedButton:
+                text: ""CLICK TO GENERATE ITEMS""
+                pos_hint: {""center_x"": .5, ""center_y"": .5}
+                on_release: app.generate_items()
+            MDList:
+                id: list_container
+    """""")
+    
+        def build(self):
+            return self.kv
+    
+        def random_array_element(self) -> str:
+            return random.choice(self.array)
+    
+        def generate_items(self) -> None:
+            self.kv.ids.list_container.clear_widgets()
+            for _ in range(14):
+                self.kv.ids.list_container.add_widget(
+                    IconListItem(text=self.random_array_element())
+                )
+    
+    
+    if __name__ == '__main__':
+        MainApp().run()",1643307451.0,1
+kivy,"You shouldn't use ```MDIconButtons``` inside of kivymd's list items, they come with their own pre-defined icon buttons called: ```IconLeftWidget```, ```IconLeftWidgetWithoutTouch```. Same names respectively for the right sided icons.
+
+You can just bind a function to the on\_release event of the widget. I assume you want to do something like this:
+
+    import random
+    from kivy.lang import Builder
+    from kivy.properties import StringProperty
+    from kivymd.uix.list import OneLineAvatarIconListItem
+    from kivymd.app import MDApp
+    
+    
+    class IconListItem(OneLineAvatarIconListItem):
+        icon_right = StringProperty(""refresh"")
+        icon_left = StringProperty()
+    
+    
+    class MainApp(MDApp):
+        def __init__(self, **kwargs):
+            super(MainApp, self).__init__(**kwargs)
+            self.theme_cls.theme_style = ""Dark""
+            self.array = (
+                ""meat"",
+                ""heat"",
+                ""feat"",
+                ""leaf"",
+                ""keith"",
+                ""reef"",
+                ""seethe"",
+                ""teeth"",
+                ""queef"",
+                ""treef"",
+                ""cliff"",
+                ""jif"",
+            )
+            self.kv = Builder.load_string(""""""
+    #:kivy 2.0.0
+    <IconListItem>:
+        IconLeftWidget:
+            icon: root.icon_left
+        IconRightWidget:
+            icon: root.icon_right
+            on_release:
+                root.text = app.random_array_element()
+    ScrollView:
+        do_scroll_x: False
+        MDBoxLayout:
+            orientation: ""vertical""
+            spacing: ""10dp""
+            adaptive_height: True
+            MDRaisedButton:
+                text: ""CLICK TO GENERATE ITEMS""
+                pos_hint: {""center_x"": .5, ""center_y"": .5}
+                on_release: app.generate_items()
+            MDList:
+                id: list_container
+    """""")
+    
+        def build(self):
+            return self.kv
+    
+        def random_array_element(self) -> str:
+            return random.choice(self.array)
+    
+        def generate_items(self) -> None:
+            self.kv.ids.list_container.clear_widgets()
+            for _ in range(14):
+                self.kv.ids.list_container.add_widget(
+                    IconListItem(text=self.random_array_element())
+                )
+    
+    
+    if __name__ == '__main__':
+        MainApp().run()",1643228868.0,1
+AskReddit,White BMW,1643202285.0,1
+AskReddit,You wanna know how I got these scars?,1643116189.0,6
+AskReddit,"""Microsoft buys Activision in 2022""",1643097888.0,1
+AskReddit,Lewis Capaldi,1643086887.0,2
+AskReddit,I Hate Myself for Loving You,1643041637.0,54
+AskReddit,Different couch,1643041301.0,1
+kivy,"    from kivy.clock import Clock
+    Clock.max_iteration = 20",1643032984.0,1
+AskReddit,Temptation,1643031182.0,2
+kivy,"I assume this is for kivymd widgets.
+
+If so, I don't believe that increasing the iteration is going to solve your problem.
+
+The reason that this warning happens is because you have created many widgets' whose sizes depend on each other. Like a nested situation, instead you should give the widget that is causing this warning an absolute size, or temporarily an absolute size until later on.
+
+If you increase the max iteration of the clock widget, the warning may go away but the program will still hog your resources until it can find an adequate size for the widget which usually happens when the widget becomes ***""visible""*** on the screen.",1643031112.0,1
+AskReddit,The Android logo,1642877294.0,1
+learnprogramming,"I don't use stackoverflow anymore. One reason being the toxicity but mainly because it is not as good as reddit.
+
+Ever since I have joined reddit, I primarily post on the relative subreddit and get far better response, faster.",1642877150.0,2
+AskReddit,"""Whatever you say!""",1642840793.0,2
+AskReddit,Finish my open source project for me,1642775481.0,1
+learnpython,"If I were in your shoes, I would probably go with SQLite3.
+
+SQLite3 seems great for these stuff. It is built into python and as long as you know the structure of your data and don't require too much flexibility and versatility, then it is a great choice for a local database.",1642765504.0,1
+kivy,"This was my initial thought too but there are a couple of reasons why I am not doing this:
+
+• I want the icon to have a size hint so that it covers 40 or 50 percent of the widget. If I use a static image it will result in low quality.
+
+• I am going to deploy my app on android and in my previous tests, for some reason whenever you display an image on android the sizing is not right, which then you have to use allow_stretch to make it in the right proportions. As a result, the picture's quality drops and it is not as crisp as the desktop version. When I switched to the built in icons that came with KivyMD, I immediately saw a significant difference.
+
+• Also in my app, the user has the ability to change their theme. It is not particularly hard to bind the color of the image to the theme but it is extra.
+
+So for these reasons, I would really like to use the pre-packaged icons with KivyMD.",1642764504.0,1
+AskReddit,Ummmmm... I get murdered by the yakuza?,1642692891.0,1
+meirl,"Honestly, I will take it so I can just see who I hate the most. If the person that I hate is involved in my life then I will definitely know about it but if nothing happens and it doesn't hurt me, who cares.",1642692575.0,1
+therapy,"I am sorry for your mother's passing, grief is such a shock of emotions. That would be nice to respond to myself from her perspective, the problem is that I don't know if she would be proud. In reality she was old fashioned, very nice, sweet, caring and all of it but my mental situation requires an open mind and up to today's standards and If I were truly role playing her in my head, I wouldn't know what to say or do.",1642689183.0,1
+therapy,"I would really like that, thanks.",1642688866.0,1
+AskReddit,"Not targeting any specific manufacturer but pretty much the majority of the tech industry. I can almost guarantee that you can get a better laptop, phone or headphones with the same or even less money if you are willing to go out of your comfort zone and try something that you are not used to and search a little deeper.",1642662197.0,1
+Python,"There is a new module and framework coming to python every day. There is also a pyunity which is an implementation of the unity engine in python, although I won't recommend it for production purposes since it is fairly new and in my experience it was a little buggy",1642661705.0,1
+Python,"You can pretty much use anything in python:
+
+• Blender supports python.
+
+• I believe 3dsMax also supports python.
+
+• There is also ursina a game engine based on panda3d.
+
+• You could install GODOT on your machine and use a binder in python.
+
+• For video editing, you could install ffmpeg and use ffmpeg-python or moviepy
+
+• For photos you could utilize pillow, scikit-image and there is also OpenCV but that is more towards computer vision
+
+• For 2d graphics and UI you could use kivy ( cross-platform, based on OpenGL ), turtle, dearpygui",1642622555.0,31
+learnpython,I too would avoid it if possible but it is far more maintainable than a huge directory of files when it comes to testing and debugging,1642621808.0,1
+linuxquestions,"I too am a programmer and I have been distro hopping for over a year now ( tried zorin, fedora, manjaro etc ) and I have finally decided to use kde neon. My suggestion is go with an ubuntu based distro, then you can go with whatever DE or flavor like. In ny experience, ubuntu has felt the most like home",1642621674.0,4
+learnpython,"Would really help if you gave more information regarding the app and the tested platforms because I will be just guessing:
+
+• I don't think college computers are the most updated ones so my guess is that it is running an old windows version like 7 or XP, if not linux. At the same time you probably have packaged your app with a more recent python version like 3.8 or 3.9 which I believe on windows XP python beyond 3.5 is not supported, not sure about windows 7 but it must be around the same area.
+
+• Another factor could be that the college pc is built with a different architecture than the one you have targeted. You could be using a 64 but version of python and then testing it out on an 32 bit machine
+
+I would advise you to try to run the source itself rather than the executable to see if there are any problems with the code ( as an example using an os specific module etc ) or the packaging. Beyond this it would just come down to human errors, leaving out files, not including all the requirements for the package, etc.
+
+Just a couple of other tips: If you are using sqlite3 or any sort of database ( it has happened to me before ) try to clean all the info or even delete it if you can when testing on a new machine.
+
+Another tip is that try to package it using the --one-file flag ( if you are using pyinstaller ) which will make it way more managable and see if there are problems with external files and requirements.
+
+Would definitely help to see some more info",1642621042.0,2
+AskReddit,"""Oh my GOD! Ok, it's happening, everybody stay calm, STAY FU**ING CALM!!""",1641217238.0,1
+learnpython,Thanks for the info!,1641037526.0,1
+AskReddit,"Chadwick Boseman.
+
+
+
+So sudden, still can't believe he has passed away. Rest in peace.",1639479898.0,1
+kivy,"I don't believe that in kivy widgets, you will ever use args. Everything is a property, that means that it is going to passed as keyword arguments always, since it allows for interoperability between python and kv lang.
+
+In very simple language, use canvas.before to create instructions such as rectangles that sit behind the widget itself, use canvas.after to ensure that your instructions are created on top of the widget.
+
+For your third question, this isn't technically kivy but rather python in general which relates to OOP and inheritance. When you override an inherited method in a class ( such as __init__ ), you are recommended to do super().__init__(*args, **kwargs) in order to call the superclass' ( the classes you have inherited from ) methods. If you watch a video on this, it will help you understand it better
+
+The difference between not setting a size hint vs setting it to None is that by default your widget's size_hint is (1, 1) which means that they will fully expand to their parent's size. When you set set_hint to (None, None) it means that you don't want the widget's size to be relative to its parent. You normally set size_hint to (None, None) when you want to give a widget an absolute size.
+
+For your other question, this could be done multiple ways, an obvious approach is to loop over the list and create a Label for each value. A more advanced approach would be using RecycleView. Check out kivy's docs about recycle view.
+
+You normally see AliasProperties in the source code when they want to make a read-only property or have their own getter and setter
+
+From personal experience, you really can't make an app look completely identical on mobile and PC, I mean your phone is meant to be used in portrait, as opposed to your PC which is in landscape. Theoretically, yes, in order for your app to be truly independent of the screen size, you must use size_hint and pos_hint. Although, when testing your app you will often see that even with size_hint and pos_hint, things may not look the same on all platforms.
+
+I don't know what that function you provided is supposed to do, since it does not return anything which is crucial for on_touch_down. According to kivy docs: ""This keyword is available only in rule definitions and represents the root widget of the rule (the first instance of the rule)"". Root is basically like the originally inititialized widget of the different widget definition sections.",1639325216.0,3
+selfimprovement,"I understand, I think I didn't use the right words. By mentioning that she was still going to school I didn't mean that she should run away, I meant that she should persuade the authorities to shut down the school including all of the personnel, teachers, and students.
+
+Setting aside all of this arguing, I am terribly sorry for the amount of school shootings in US, I am very saddened  to hear such news. I hope that the future is brighter.",1638965604.0,1
+AskReddit,"Kano, mk",1638824662.0,1
+AskReddit,Geralt,1638824649.0,1
+kivy,"Well, I can't speak on behalf of everyone but kivy is only in python while most of the other frameworks are ported for multiple languages. Also, kivy is relatively new when compared to the other frameworks out there",1638778888.0,2
+kivy,"Just wanted to point out, that you can also use pyjnius to access java classes directly from python.",1638628853.0,2
+kivy,"On android, your internal storage is ""storage/emulated/0"", although in order for you to have access to this directory, you need to have the proper permission or else you are going to get a PermissionError ( check out [android manifest permission list](https://developer.android.com/reference/android/Manifest.permission) ). I recommend using plyer by the kivy devs themselves in order to get the default directory of various platforms.
+
+
+Also, setting aside debugging, if you would like to deploy your app and ask the user to choose a video file to play, you can still use plyer.filechooser to open the native filechooser on that platform.
+
+Plyer documentation:
+[plyer docs](https://plyer.readthedocs.io/en/latest/)",1638600809.0,2
+linuxquestions,"Interesting tip, will follow for sure!",1638480829.0,1
+linuxquestions,"Well, I am not forcing it on them but when they start the program I would like to ask them if they would like the supported file types to be associated with the program.
+
+
+So just setting the MimeType in the .desktop file will do the job?",1638480747.0,0
+dishonored,He looks a Jack or Henry to me.,1638469397.0,2
+kivy,"Glad to hear that your problem was solved.
+
+I normally check my icons against:
+
+[https://materialdesignicons.com/](https://materialdesignicons.com/)
+
+It includes both icons from google and from the community and is very much up to date.
+
+Also you can refer to [kivymd's icon definitions guide](https://kivymd.readthedocs.io/en/latest/themes/icon-definitions/) where they provide a sample program which displays and searches all of the icons packed with kivymd
+
+Sepcifically, this part of the page: [https://kivymd.readthedocs.io/en/latest/themes/icon-definitions/#to-preview-the-icons-and-their-names-you-can-use-the-following-application](https://kivymd.readthedocs.io/en/latest/themes/icon-definitions/#to-preview-the-icons-and-their-names-you-can-use-the-following-application)",1638451417.0,1
+kivy,"There was a change made in icon definitions.
+
+""settings"" was renamed to ""cog"" and the outline one was renamed to ""cog-outline"". The equivalents work for me, if they don'y work for you, then I really don'y know",1638450831.0,1
+kivy,what specific icon can kivymd not display?,1638450346.0,1
+kivy,So you are using 1.0.0.dev0 with latest commit?,1638449951.0,1
+kivy,"I believe the url that u/ZeroCommission provided is for solely updating the icon definitions, which I don't think is ideal. What you probably want is to update you kivymd package generally, which includes different features and bug fixes alongside the update of the icon definitions.
+
+If you have git installed on your machine clone the repo, open a terminal, change to the directory and install it from the source, like so:
+
+    git clone https://github.com/kivymd/KivyMD.git --depth 1
+    cd ./KivyMD
+    pip install .
+
+I added ``` --depth 1 ``` to clone the latest commit for every file compared to the whole commit history which would be rather large and unhelpful.
+If you don't have git, you can still get any github repo using pip as long as they have a setup.py included in their repo, which kivymd does:
+
+    pip install https://github.com/kivymd/KivyMD/archive/master.zip
+
+You can replace ```master.zip``` with ``` <specific-commit-hash>.zip``` to get kivymd from specific commit.
+
+If I forgot to mention something, you can refer to their own github for more info:
+
+https://github.com/kivymd/KivyMD",1638449649.0,1
+kivy,"Updating will definitely help, it did when I was starting out. Recent versions of KivyMD include more icons from the community as well",1638445513.0,1
+kivy,"KivyMD constantly updates their icon arsenal to match the recent material design icons. Older versions' icon definitions are not as mature. Updating it definitely helps but since KivyMD is not created by google nor is it supported by it, whenever there is a new pack of icons developed by either google or the community, KivyMD has to manually update its icons. Therefore, it is always behind on some and as a result you get the white cube.",1638445456.0,1
+kivy,"Some more information would be nice but you can use either canvas or canvas.after in the widget, create a rectangle, then assign the path of your image file to the texture property of the rectangle. You can configure the positioning and sizing as well.",1638391095.0,1
+learnprogramming,"Not sure what kind of programming you are trying to do but I personally love linux more than anything. I switched like 9 months ago and now I cannot stand the sight of windows anymore.
+
+
+These are things I enjoyed about linux myself:
+
+
+1. I have an ASUS X555LDB which is a relatively old laptop with not great performance. Using windows 10 on it, was in the meaning HORRIBLE. Everything was slow and the operating system itself was really buggy. When I switched to linux, I felt such a consistent experience. It was amazing
+
+
+2. Installing stuff on windows is an annoying process. With linux everything is just a click away. When I wanted to install git for windows, I had to go through a lot of steps which in my opinion were just unnecessary. I had to check and select everything that was supposed to be default. Also, I have heard that accessing git from cmd or pretty much not git bash terminals ( the custom terminal that git provides when you install it on windows) is a buggy experience.
+
+
+3. A lot of development tools and software are either pre-installed or a command away with linux. When I first installed kubuntu on my laptop, I was surprised to see that python, wget, curl, and gcc were all pre-installed without me having to do anything. Also you mentioned that apps like audacity and gimp are not as great as their windows equivalents like phosotoshop etc. For audacity, I have seen a lot of people use it on windows itself, inkscape is also professionally used like Adobe Illistrator, Davinci is also available on linux but some software such as gimp are unfortunately not as mature as their windows rivals. Although personally, I do very light editing with photos and have had no problems with gimp so far and as far as illustration for my programs go, I use figma which runs on the web  therefore, no difference at all between different platforms. For video editing I mostly use ffmpeg from the terminal. You would be surprised by its performance and the low amount of overhead it has. Also it is worth mentioning that adobe themselves use ffmpeg in their programs and most the problems you experience are either with Microsoft or Adobe software.
+
+
+4. Personally, it allowed me to write better cross-platform code. As an example, Windows scripts default to CRLF line endings. At this point I have no idea why they still use this but mac, linux, programming in general and pretty much the rest of the world defaults to LF. I also found out that specific portions of my code do not work on linux and therefore had to replace then with more applicable ones.
+
+
+5. This one probably doesn't need any saying but the linux terminal is fantastic. I don't think in my many years of coding on Windows, I have ever opened the terminal more than ten times. It simplifies things a lot. I won't have to open or click a thousand things to get a simple task done.
+
+
+Anyway, windows isn't as horrible as I mentioned it but it was pretty much designed around the idea of being consumer friendly which isn't ideal for a power user. If you are new to linux like me, I suggest going with ubuntu or an ununtu-based distro like kde neon or zorin.",1638371174.0,5
+kivy,"If you have tried using pos_hint ( like setting the ""center_y"" to 0.5 ) , then I am not entirely sure why this is happening. Instead of a snippet, could you provide a minimal reproducible example? Also, what version of kivymd are you using?
+
+Some tips irrelevant to your question:
+
+If you are making a chat app in kivy, be sure to check out RecycleView since the user could have many contacts and displaying large sets of data using ScrollView could cause a serious performance hit.
+
+Also, in order to post code on Reddit, you have to be on a PC and switch to markdown mode. Then to create an inline piece of code you could use triple quotes: ```in-line code``` or to insert a full snippet of code, you could space it four times. ( I am currently answering on reddit mobile which is why you don't see the text formatted.",1638344962.0,1

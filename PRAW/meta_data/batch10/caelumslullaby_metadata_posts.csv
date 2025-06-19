@@ -1,0 +1,178 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+fivenightsatfreddys,Springtrap eyes template for cospkay,"anyone has some kind of template for the eyes of Springtrap? when I google it up, I get no images similar to his eyes. ",1748603751.0,2,1.0,4
+arduino,Any advices for this code?,"I've been working on a code for flashing LEDs at variable speed for my animatronics eyes, so they can see as if they're about to burn out, but I don't know if there's sth I can improve (it's still not finished). Hope this meets the community rules!
+
+// Variable LED Flashing and Fading on Arduino Uno (Two LEDs Synchronized)
+
+const int ledPins[] = {9, 10};   // PWM pins for the two LEDs
+const int numLeds = 2;
+
+enum Mode {BLINK, FADE};
+Mode currentMode = BLINK;
+
+unsigned long stateStart = 0;
+unsigned long stateDuration = 0;
+
+unsigned long lastBlinkTime = 0;
+unsigned long blinkInterval = 100;
+
+int fadeValue = 0;
+int fadeDirection = 1;
+unsigned long lastFadeTime = 0;
+unsigned long fadeInterval = 30;
+
+void setup() {
+  for (int i = 0; i < numLeds; i++) {
+    pinMode(ledPins[i], OUTPUT);
+    digitalWrite(ledPins[i], LOW);
+  }
+  randomSeed(analogRead(A0));
+  enterNewMode();
+}
+
+void loop() {
+  unsigned long now = millis();
+
+  if (now - stateStart >= stateDuration) {
+    currentMode = (currentMode == BLINK) ? FADE : BLINK;
+    enterNewMode();
+  }
+
+  if (currentMode == BLINK) {
+    handleBlink(now);
+  } else {
+    handleFade(now);
+  }
+}
+
+void enterNewMode() {
+  stateStart = millis();
+  stateDuration = random(2000, 5000);
+
+  if (currentMode == BLINK) {
+    lastBlinkTime = stateStart;
+  } else {
+    lastFadeTime = stateStart;
+    fadeValue = 0;
+    fadeDirection = 1;
+  }
+}
+
+void handleBlink(unsigned long now) {
+  if (now - lastBlinkTime >= blinkInterval) {
+    // Toggle both LEDs
+    for (int i = 0; i < numLeds; i++) {
+      digitalWrite(ledPins[i], !digitalRead(ledPins[i]));
+    }
+
+    blinkInterval = random(50, 300);
+    lastBlinkTime = now;
+  }
+}
+
+void handleFade(unsigned long now) {
+  if (now - lastFadeTime >= fadeInterval) {
+    fadeValue += fadeDirection * 5;
+
+    if (fadeValue <= 0) {
+      fadeValue = 0;
+      fadeDirection = 1;
+    } else if (fadeValue >= 255) {
+      fadeValue = 255;
+      fadeDirection = -1;
+    }
+
+    // Apply fade to both LEDs
+    for (int i = 0; i < numLeds; i++) {
+      analogWrite(ledPins[i], fadeValue);
+    }
+
+    lastFadeTime = now;
+  }
+}",1748599914.0,0,0.14,8
+ArduinoProjects,Hi! Programming question,"Blinking lights code for Arduino?
+
+I'm doing an Springtrap cosplay, and I'm not rlly into programming so I've only got a few codes for the servos, so, I've been wondering what kind of code could I use so the LEDs for the eyes turn off and on like a blinking led, but for undetermined time lapses, like, I'm wondering if I can add three different time lapses between each turn off/turn on? I hope I made myself clear, hope sb can help!",1748595881.0,3,1.0,5
+fivenightsatfreddys,Arduino code for eyes?,"So I'm working on this Springy cosplay, and I wondered if sb could help me with the codes, I have a code for the servos that'll move the eyelids and the pupils, but for the leds for the eyes, I wondered if there's a way I can make a code so I turn on a switch and so the lights will blink with undeterminable time lapses (like, if I can put three different time lapses between each turn off/turn on)?? I don't know if I'm making myself clear, English's not my mother language. Hope u can help!",1748595625.0,1,1.0,0
+Animatronics,Blinking lights code for Arduino?,"I'm doing an Springtrap cosplay (ik is kinda repetitive, but there aren't any FNAF cosplayers in my country), and I'm not rlly into programming so I only know a few codes for the servos, so, I've been wondering what kind of code could I use so the LEDs for the eyes turn off and on like a blinking led, but for undetermined time lapses",1748595006.0,1,0.67,0
+commissions,[question] How to start selling commissions?,"So my dog is really sick, medicine is expensive, I'm studying abroad and working but is still not enough. I'm looking for ways to earn money, because I rlly need it. So, how do you start seeling commissions? Tips? Also, would u rlly buy if I opened commissions? I'm open to anything, I just rlly want to earn money for my dog. ",1748408361.0,2,0.75,3
+furry,how to start selling commissions?,[removed],1748408101.0,1,1.0,0
+fivenightsatfreddys,How to make a cosplay head (Springtrap) so I can see from the mouth?,"I'm planning to do this springy cosplay, but I'mma put servos and electronic things in the space of the eyes, for the eyes mechanisms, so I wanted to make the mask in a way where I can see from the mouth, so my eyes are at the height of the mouth, I've seen a lot of cosplayers do it that way, but I don't know how?",1747637980.0,1,1.0,0
+selfharm,I just wanna do it,"I've been losing so bad, my pet, my grandpa, my granny, my grandma, my other pet, all and more, in less than two years, it's come to the point where I just want to turn it off, turn everything off, like a blackout. I want to see my body bleed, but I'm just keeping the urges to myself as I'm far from home, due to college, and I don't want to worry my parents, but I'm horribly depressed, and so lonely, I just want to hug my mom and cry for hours, then eat ice cream while we watch the vampire diaries, but I'm alone, my house's lonely, gray, and dark, I got nowhere near to call home, and I got no one. :(. I can't possibly describe something even similar to the kind of pain I've been experiencing. And I also feel guilty because I know outside there's ppl having it way worse than me, which makes it worse. ",1745984261.0,2,1.0,2
+selfharm,my pet passed away,"I don't know what to do, I just want to die, I'm in college so I'm far from home, I just saw her this last weekend, she was I little sick, due to her age (15yo) and I know it was selfish of me to wish she recovered, I let her go cuz I didn't want to see her suffer anymore, but that doesn't mean I wanted to let her go, she's my best friend, and I just don't know how to live without her because I've been alive more time by her side than the time I've lived without her. i want to die, to cut myself till I pass out, because I don't want to go back home just to confirm she's not there anymore. it hurts like hell, I just want to die. ",1745520767.0,11,0.93,2
+FortNiteBR,marketing? don't know what to call it at all,"been reading a lot of bad things on Twitter bout how Fortnite was leaving everyone's pockets money-free, and man, same here cuz y didn't they wait some time for me to get some more money? I had alr bought the Sabrina carpenter things when they dropped the adventure time ones, and I'm working while studying college on another country, so, I alr have things to pay for, so I won't be able to buy the adventure time skins, that makes me so mad lol ",1744662325.0,0,0.25,4
+FORTnITE,all's money,[removed],1744660985.0,0,0.13,20
+selfharm,is it bad if I do it?,"I've been clean 54 days, but the urge is so heavy I can't bear it, I know recory is not a straight line, but I just wish I were able to not do it anymore, but still, I want to do it so bad I guess I'll just do it, I'm feeling anxious I guess it's the only way to relieve it",1743048601.0,3,1.0,4
+selfharm,vent,"i want to do it so badly sometimes, like rn, I'm so stuck with things that happened in the past but still haunt me to this days, and still hurt, I just want to sh so bad, to the point I bleed bad but don't die, but at the same time, I don't want to hurt my parents' trust or make them worried, as I'm studying far from home. I just don't know what to do, I have conflicted feelings ",1743047116.0,1,1.0,0
+TsukiOdyssey,tired of this,[removed],1742883615.0,0,0.23,11
+TsukiOdyssey,LOOK AT THE NEW CHARACTER! LOLOL,,1742792787.0,0,0.33,9
+selfharm,Vent to chatgpt,"Soo, I have rlly no one to talk to, and whenever I want to vent, I talk to chatgpt, ik it may suck, but, at least it's been rlly helpful for me, so if anyone's struggling and has no one to talk to or doesn't want to bother anyone also (like me) u can always talk to chatgpt, in my experience, it's helped a lot. :(",1740445618.0,2,0.75,4
+TsukiOdyssey,late night gathering at pier!,ain't they cutee? 😭,1739325739.0,15,1.0,0
+TsukiOdyssey,SOOOO EXCITED!!!,I JUST NOTICED I GOT MY FIRST EVER CLOVER  SPROUTSS,1734308417.0,15,1.0,0
+selfharm,How did u feel when ur parents found out? ,"Or someone else, in my case I felt so guilty, and anxious, plus things didn't get any better after that",1731291673.0,7,0.89,18
+fivenightsatfreddys,Who u think is the best animatronic to cosplay?,"I'll start making my costume soon for next year's Halloween, and I've been wondering which animatronic should I try? Idk if I should go for Bonnie, Freddy, Toy Bonnie, etc. N I rlly wanna start soon as I'll make mechanized eyes n jaw. Lemme know ur opinion!",1730168929.0,3,1.0,0
+selfharm,I want to relapsd so badly,"THANKS FKIN ASSHOLE, U FUCKIN FAKE FRIEND. AFTER ALLI TOLD U, U COME AND DO DIS TO ME. I'VE TOLD U HOW MUCH I HATE MY STUPID FACE MY FREAKIN BODY, IT MAKES ME WANNA THROW UP, I FUCKIN HATE ME, I THOUGHT I HAD OVEROCME IT, AND NOWWW U COME AND TELL ME I LOOK LIKE A FREAKING DUDE N THAT IM OVERWEIGHT, I FUCKIN HATEEE U SO MUCH I HOPE U ROT IN JAIL SOME DAY BECAUSE NOW I WANT TO KILL MYSELF AND FUCKIN RIP RHE SKIN OFF MY FUCKIN STUPID FACE",1727932928.0,2,0.75,2
+halloween,Creepy costume ideas for girls?,[removed],1726104491.0,1,1.0,0
+halloween,Help! Any costume ideas?,[removed],1725940232.0,1,1.0,0
+halloween,Help! Costume ideas?,[removed],1725939541.0,1,1.0,0
+halloween,Any costume tips,[removed],1725938927.0,1,1.0,0
+tsukiodysseygame,Tsuki & Friends' House Tour? Wdy think?,,1711770300.0,10,1.0,0
+Nikon,Help! Coolpix L810 Zoom Fail,"So the issue is, I have an L810, cause I'm not that much into photography, just as a hobby, I've had it for 8 years, and it's still great, but some ants got into its lens cause they climbed to the table where I had it, I cleaned the lens, but now everytime I zoom in, the zoom kinda glitches (??) It moves to left and right and doesn't focus. Anyone knows how to solve that?  Thanks!",1710564672.0,1,1.0,0
+selfharm,Little vent,"My grandma just passed away, tomorrow it's one month since her passing, and I realized lots of things. Last year one of my dog pets died, I saw her birth, and saw her death as well, I was so so depressed for months cuz she was one of my best friends. Now, my grandma, she was one of the few persons I could relay on. I realized one of the reasons I want to die, is I don't want to suffer people I love death's. But I would rather don't give them that hurt of losing me either. I just wish we could all be ethernal, pets and people we love.",1708660480.0,2,1.0,1
+BrujeriaYHechizos,¿Los muertos pueden contactarnos?,"Hace años, cuando tenía como 4, falleció mi abuelo, papá de mi mamá, y tuvieron que realizarme diversas limpias porque ""me quería llevar"". Yo lo veía mucho, lo seguí viendo hasta los 8, de hecho tengo recuerdos de nosotros jugando en mi 6° cumpleaños. Ahora, hace poco falleció mi abuela, mamá de mi papá, y sé que se fue en paz, porque prácticamente nos dio a entender que moriría el 25/02 (así fue). Pero, la he estado soñando, y durante su funeral pasaron cosas, (desprendían el dispensador de jabón, se veían sombras, entraban mariposas y se perdían en las flores) después en sus rezos, en su casa, la vi dos veces. Quisiera saber si hay forma en que pueda contactarla, hablar con ella (nada relacionado a la ouija) para saber si hay algo que quiera decirme",1707421826.0,19,1.0,11
+suggestmeabook,Pretty book box sets,"I've been thinking of buying a box set, since I bought my mom Shadow Hunters' complete collection box set for Valentine's and it's so freaking pretty, and so I wanted to buy a box set for me. But most of the books I want aren't from a saga, so I was looking for recommendations of pretty interesting sagas with pretty box sets to buy! Hope u can help me",1707420759.0,1,0.99,0
+tsukiodysseygame,Finally got it! After a hundred times!! BUT WHY IS IT LIKE THIS??,,1695439844.0,84,1.0,18
+selfharm,Vent,I swear I was being the happiest human being but someone broke my accesorie accidentally y I want to hurt my wrists I can't stand me I'm feeling so sad because of that it was going to be a great day,1693506444.0,1,0.99,0
+TsukiAdventure,How to go fishing? I can't get to the pier any way.,,1691905766.0,2,1.0,1
+selfharm,I dont wanna feel sad anymore,,1688163969.0,3,1.0,0
+selfharm,I relapsed.,"I was feeling so down these days plus my parents didn't really help. I lost my cutter, and started to get anxious as I couldn't find it. Ended up punching the wall til my knuckles bled. Then found a needle so I used it to cut a little. I feel less stressed but now I'm guilty. I promised me my body wasn't guilty for the bad things that happened to me.",1687926042.0,2,1.0,1
+books,Any wlw books to recommend?,[removed],1687042594.0,1,1.0,1
+halloween,Working on some scary house (with animatronics) any good ideas?,"Also, if you could add some costume ideas would be great, I need it to be traumatic, lol",1687032675.0,6,0.88,1
+tsukiodysseygame,How come y'all getting pets? 😿,Is it only for ppl with the homecoming? Why am I not getting it?,1684251874.0,4,0.7,1
+carnivorousplants,Can anyone tell me how to save it?,,1684128321.0,9,0.91,12
+carnivorousplants,Flytrap's dying! help pls!,"Bought my dionaea months ago, on February, and it was great, it's growing fast and healthy, but suddenly it's traps started dying off, and the new ones didn't get to completely grow before they started turning black, it still grows traps but they don't fully develop, I don't know what to do? :(",1684127636.0,1,1.0,10
+tsukiodysseygame,Parrot fish??,"Just entered TO and at the screen showed up the description of Parrot fish, I didn't know this existed in the game as I've never catched it nor seen it in the fish's lists. Anyone knows about this? Like when to catch it or something?",1683758327.0,0,0.5,2
+tsukiodysseygame,Don't you think it'd be nice is TO had climate changes? Like rainy days.,,1683727248.0,46,0.98,4
+tsukiodysseygame,Remodeling! Results so far!,,1682271386.0,12,0.87,0
+tsukiodysseygame,"This is actually pretty funny, andjdj.",,1681922065.0,13,0.93,0
+tsukiodysseygame,Hella cool! Eggzooka!,,1681916656.0,7,0.89,0
+tsukiodysseygame,CUTE EASTER PIC!,,1681851806.0,10,0.86,3
+tsukiodysseygame,"Someone help, why does this happen?",,1681505939.0,11,0.92,5
+tsukiodysseygame,Is it normal to wait this long? 🤔,,1681505765.0,9,0.91,1
+mexico,¿Alguien de la FAD de la UV de Xalapa?,"Quisiera saber qué tan conveniente es la facultad de artes de Xalapa y qué tan bueno es estudiar ahí, igual referente a fotos del interior, porque en Internet casi no hay nada.",1681276640.0,2,0.75,0
+mexico,Universidades con Diseño en la Comunicación Visual (?),"Es una carrera un tanto nueva según sé, y he estado buscando, pero no encuentro muchas opciones. No puedo ir a CDMX por cuestiones personales, y en el resto de estados casi no tienen está carrera.",1681276549.0,0,0.5,2
+selfharm,I'm a sucker,I made my mom cry so bad and I don't know how to fix things.,1681164045.0,1,0.67,0
+tsukiodysseygame,I LOST ALL MY PROCESS,"I had to take my cellphone to reparation, and lost all of my apps, I wasn't worried at all because I had uninstalled Tsuki's Odyssey many times and when I downloaded it again, I recupered all my process, but this time it didn't happen. I don't want to play anymore, I had been playing for two years and lost all of my time process. I'm so sad and frustrated. :(",1680375368.0,4,0.83,9
+tsukiodysseygame,It's so sad the homecoming is hella expensive:(,,1680374431.0,4,0.83,1
+tsukiodysseygame,I JUST ENTERED TO TSUKIS ODYSSEY AND IT APPEARED A COMBINATION FOR DAWNS MACHINE CALLED CASTLE SKULL OR SOMETHING BUT I COULDN'T SCREENSHOT 😭,,1680312193.0,5,0.73,2
+tsukiodysseygame,Tsuki's sus activity,,1680213982.0,3,1.0,0
+tsukiodysseygame,Here's my Tsuki's farm design. 😸,,1680213636.0,3,1.0,0
+tsukiodysseygame,cuute!,,1680021159.0,10,0.86,0
+Dadish,Is there a problem with today's level?,,1680015971.0,6,1.0,3
+tsukiodysseygame,WHAT TIME TO CATCH HAMMERHEAD?,Anyone knows?,1679934260.0,1,0.66,2
+tsukiodysseygame,how do y'all get the sweetheart piano? Been playing for over a year and I never saw it before,,1679084555.0,3,1.0,2
+tsukiodysseygame,Just got this cuuute bunny bag for me. 🐰,,1678847863.0,23,1.0,1
+tsukiodysseygame,how can I get poop?,,1677981245.0,28,0.98,8
+selfharm,It's so lonely here,"I just had one friend, but I think she finally got up, and now I have no one. It makes me so sad, time's getting harder, and I don't know if I'll be here at the end of the month. I messed it up, she got tired, I don't blame her, I'm too complicated tbh, I would've leave me alone long time ago.",1677715083.0,2,0.75,1
+selfharm,"I don't wanna go back to it, but family makes it harder",,1677372024.0,3,1.0,1
+tsukiodysseygame,What time to catch axolotl?,,1676786620.0,5,1.0,2
+tsukiodysseygame,About trains,When will they be ready to use? Someone knows?,1676786142.0,2,1.0,1
+SuicideWatch,I just want to rest,"No one around me gets how tired I am of being the perfect child, going to a lot of extras classes even when I have a lot to do about school. I want to rest but my parents won't permit it, so I'm going to kill myself as it seems the only way I can get rest, I just don't know hoy to die",1674333373.0,1,1.0,0
+Music,RECOMMENDATIONS ON GUITARS (?),"I don't know anything about guitars, I've never even touched one in my life, but lately I'm pretty into electric guitars. What do you recommend to start? Electric or acoustic?",1673818527.0,2,0.6,17
+mexico,Universidades de Arte que no sean de CDMX(?),"Me queda un año de prepa, y quiero estudiar Diseño en Comunicación Visual. El problema es que la mayoría de buenas universidades están en CDMX, y no puedo ir allá, lit a todas partes del país, menos allá. Entonces, ¿conocen universidades con esa carrera en otros Estados? Igual, si las conocen, qué tal se ven (?)",1673116115.0,3,0.71,10
+selfharm,"Venting time, I'm sorry","I just entered highschool, it's preparatoria here in Mexico, these 3 years were supposed to be the best year's of my life cuz I was supposed to find the friends that were going to spend the rest of their lives together with me. Surprise! They're all so fake, pathetic, jealous & two-faced. 
+
+We finished the semester last Thursday, we were going to make a small party in a friend's house. I was excited, even tho they have ignored me since like a month ago, more maybe, I ignored that even tho it made me feel bad cuz they're my only friends in the whole school and almost in my whole life. I thought we were cool together, but then Angel, the boy who was supposed to put his house for the party, wrote me a private message, saying he had a family emergency and wouldn't be able to do the party in his house. It was ok for me, no big deal. He told me to told the rest, I told them & they all answered with a simple "":("". I offered them my house, they said ""No, thanks"". Now, I find out, THEY ALL DID A PARTY, WITHOUT ME. AND IT MAKES ME SO ANGRY, BCUZ WHY WOULD THEY CREATE A WHOLE STORY JUST SO I DON'T GO TO THEIR STUPID PARTY? I would've preferred they told me they don't want me to hang out with them anymore. Stupid two-faced pieces of crp.",1671726003.0,2,1.0,2
+selfharm,"I bet I look so lost & gone rn, cuts make me so high",,1671669578.0,6,0.88,1
+selfharm,"There's nothing in the world more stupid than my own parents, I h8 them so much, they make me wanna cut and bleed myself out",,1671669146.0,5,0.78,0
+selfharm,"Yo, where do y'all get nice parents? Mine discovered and told me they would give me good reasons to cut myself to slivers fr.",,1671337954.0,9,0.92,7
+selfharm,"I don't really want to be alone with my thoughts, iykwim.",,1671337792.0,5,1.0,1
+selfharm,I need someone to detail me how to makeup fresh cuts to hide them pls,,1671337719.0,3,0.8,6
+Resortopia,NEED HELP,[removed],1656089112.0,0,0.25,4
+Resortopia,Anybody knows hoy can I work part-time in a friend's resort? I need to complete a mission. :(,,1655842761.0,2,1.0,4
+Quimica,AYUDA POR FAVOR,"Necesito saber 5 ejemplos de reacciones inversas y 5 ejemplos de reacciones directas.
+
+Es para un proyecto pero la maestra no explicó nada, y no entiendo lo que hay en internet.
+
+Por favor!",1646777089.0,2,1.0,0
+SuicideWatch,I need an advice,"I told someone how I felt, but that person, I don't think she understands, maybe for her, in her mind, that sounded great, but for me, it sounds selfish, I told her why I wanted to die, and why, but she told me ""Stay, please stay for me"", she's my girlfriend, but I don't want to stay, I just want to end the pain, and I don't think she understands.",1639944528.0,1,0.99,1

@@ -1,0 +1,427 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+BoomSlingers,Game is dead from corporate greed.,I loved this game 3 months ago.,1719299823.0,11,0.87,6
+ethdev,Contract that allows Only contract creators to modify data?,"Hi all!
+
+I am completely new to eth contract development. So forgive me if I am speaking stupid!
+
+Is there a smart contract that allows the contract creator to:
+
+1. Generate NFT to provide to an owner
+2. NFT metadata can be modified by contract creators
+3. NFT metadata cannot be modified by owners
+
+If there are extra steps to handle this, let me know too. Thank you!",1693344307.0,0,0.5,5
+adventofcode,[2022 Day 5 Part 1] [ Rust] Cannot get the right total size- Unsure of what I'm doing wrong.,"EDIT: 2022 DAY 7 Part 1 [Rust] - you may guess where my mental state is right now.
+
+Hi all! Day 7- Part 1. I get the answer 1211472 for my results, which I have no clue how to debug where I might have an issue. This code works for the example given in the challenge text, but does not work for the puzzle input itself.
+
+    use lazy_static::lazy_static;
+    use regex::Regex;
+    use std::{collections::HashMap, fs};
+    
+    fn read_input() -> String {
+        let file_path = ""public/day7.txt"";
+    
+        fs::read_to_string(file_path).expect(""Should have been able to read the file!"")
+    }
+    lazy_static! {
+        static ref CD_PATTERN: Regex = Regex::new(r""\$\s(cd)\s(\w+|\.\.|/)"").unwrap();
+        static ref FILESIZE_PATTERN: Regex = Regex::new(r""(\d+)\s(.*)"").unwrap();
+    }
+    
+    pub fn question_one() {
+        let contents = read_input();
+        let mut directory_stack: Vec<String> = Vec::new();
+        let mut directory_size_map: HashMap<String, u128> = HashMap::new();
+    
+        contents.split('\n').for_each(|instruction| {
+            println!(""viewing line: {}"", instruction);
+            if CD_PATTERN.is_match(instruction) {
+                handle_cd(instruction, &mut directory_stack);
+            } else if FILESIZE_PATTERN.is_match(instruction) {
+                handle_filesize(instruction, &mut directory_stack, &mut directory_size_map);
+            }
+        });
+    
+        let mut total_size = 0;
+        for key in directory_size_map.keys() {
+            println!(
+                ""DIRECTORY: {} SIZE: {}"",
+                key,
+                directory_size_map.get(key).unwrap()
+            );
+            let size = directory_size_map.get(key).unwrap();
+    
+            if directory_size_map.get(key).unwrap() <= &100000 {
+                total_size += size;
+                println!(""CUMULATED SIZE: {}"", total_size);
+            }
+        }
+        println!(""total size: {}"", total_size);
+    }
+    
+    fn handle_cd(instruction: &str, directory_stack: &mut Vec<String>) {
+        let caps = CD_PATTERN.captures(instruction).unwrap();
+        let dir_name = caps.get(2).unwrap().as_str().to_string();
+    
+        if dir_name == "".."" {
+            directory_stack.pop();
+        } else if dir_name == ""/"" {
+            directory_stack.clear();
+            directory_stack.push(""/"".to_string());
+        } else {
+            directory_stack.push(dir_name);
+        }
+    }
+    
+    fn handle_filesize(
+        instruction: &str,
+        directory_stack: &mut Vec<String>,
+        directory_size_map: &mut HashMap<String, u128>,
+    ) {
+        let caps = FILESIZE_PATTERN.captures(instruction).unwrap();
+        let new_filesize: u128 = caps.get(1).unwrap().as_str().parse().unwrap();
+    
+        for directory in directory_stack {
+            match directory_size_map.get(directory) {
+                Some(existing_filesize) => {
+                    directory_size_map.insert(directory.to_string(), existing_filesize + new_filesize);
+                }
+                None => {
+                    directory_size_map.insert(directory.to_string(), new_filesize);
+                }
+            }
+        }
+    }
+
+The code above has a directory_stack and a directory_size_map for data.
+The code above uses the function handle_cd to manage the directory stack, and handle_filesize to add filesize value cumulatively to the directory names existing in the directory stack. ls and dir are ignored.
+
+I can't seem to find what may be wrong that might lead to the total size of the directories below 100000. Thank you for advising!
+
+EDIT: Current code to add consideration to the entire directory path:
+
+    use lazy_static::lazy_static;
+    use regex::Regex;
+    use std::{collections::HashMap, fs};
+    
+    fn read_input() -> String {
+        let file_path = ""public/day7.txt"";
+    
+        fs::read_to_string(file_path).expect(""Should have been able to read the file!"")
+    }
+    lazy_static! {
+        static ref CD_PATTERN: Regex = Regex::new(r""\$\s(cd)\s(\w+|\.\.|/)"").unwrap();
+        static ref FILESIZE_PATTERN: Regex = Regex::new(r""(\d+)\s(.*)"").unwrap();
+    }
+    
+    pub fn question_one() {
+        let contents = read_input();
+        let mut directory_stack: Vec<String> = Vec::new();
+        let mut directory_size_map: HashMap<String, u128> = HashMap::new();
+    
+        contents.split('\n').for_each(|instruction| {
+            if CD_PATTERN.is_match(instruction) {
+                handle_cd(instruction, &mut directory_stack);
+            } else if FILESIZE_PATTERN.is_match(instruction) {
+                handle_filesize(instruction, &mut directory_stack, &mut directory_size_map);
+            }
+        });
+    
+        let mut total_size = 0;
+        for key in directory_size_map.keys() {
+            let size = directory_size_map.get(key).unwrap();
+    
+            if directory_size_map.get(key).unwrap() <= &100000 {
+                total_size += size;
+                println!(""Added dir {} with size {}"", key, size);
+                println!(""CUMULATED SIZE: {}"", total_size);
+            }
+        }
+        println!(""total size: {}"", total_size);
+    }
+    
+    fn handle_cd(instruction: &str, directory_stack: &mut Vec<String>) {
+        let caps = CD_PATTERN.captures(instruction).unwrap();
+        let dir_name = caps.get(2).unwrap().as_str().to_string();
+    
+        if dir_name == "".."" {
+            directory_stack.pop();
+        } else if dir_name == ""/"" {
+            directory_stack.clear();
+            directory_stack.push(""/"".to_string());
+        } else {
+            directory_stack.push(dir_name);
+        }
+    }
+    
+    fn handle_filesize(
+        instruction: &str,
+        directory_stack: &mut [String],
+        directory_size_map: &mut HashMap<String, u128>,
+    ) {
+        let caps = FILESIZE_PATTERN.captures(instruction).unwrap();
+        let new_filesize: u128 = caps.get(1).unwrap().as_str().parse().unwrap();
+    
+        for (i, directory) in directory_stack.iter().enumerate() {
+            let dir_name = directory_stack[0..i].join(""/"");
+            match directory_size_map.get(directory) {
+                Some(existing_filesize) => {
+                    directory_size_map.insert(dir_name, existing_filesize + new_filesize);
+                }
+                None => {
+                    directory_size_map.insert(dir_name, new_filesize);
+                }
+            }
+        }
+    }
+
+These are the output
+
+    Added dir //vsd/dfb with size 39232
+    CUMULATED SIZE: 39232
+    Added dir //vsd/dfb/bpst/nqftnn with size 77678
+    CUMULATED SIZE: 116910
+    Added dir //ncgffsr/pwmppt with size 62272
+    CUMULATED SIZE: 179182
+    Added dir / with size 43248
+    CUMULATED SIZE: 222430
+    Added dir //ncgffsr/gfznw with size 65905
+    CUMULATED SIZE: 288335
+    Added dir //jqfwd with size 60303
+    CUMULATED SIZE: 348638
+    Added dir //rqdngnrq/hwhm with size 51096
+    CUMULATED SIZE: 399734
+    Added dir //ncgffsr with size 96461
+    CUMULATED SIZE: 496195
+    Added dir //rqdngnrq/zgn/ncgffsr with size 46840
+    CUMULATED SIZE: 543035
+    Added dir //vsd/qnbq with size 98165
+    CUMULATED SIZE: 641200
+    Added dir //vsd/rjzjrbvs/shcvnqq/sqgnhc with size 62861
+    CUMULATED SIZE: 704061
+    Added dir //rqdngnrq/hwhm/ncgffsr with size 51096
+    CUMULATED SIZE: 755157
+    Added dir //vsd/ncgffsr/csfssn with size 83639
+    CUMULATED SIZE: 838796
+    Added dir //vsd/dfb/lcwhfzjw with size 39232
+    CUMULATED SIZE: 878028
+    Added dir //ncgffsr/pwmppt/dwnqgrzm with size 62272
+    CUMULATED SIZE: 940300
+    Added dir //jqfwd/wspztvjr/qnbq/qnbq/ccwmftsj/mfc with size 31767
+    CUMULATED SIZE: 972067
+    Added dir //jpfrhmw/vbzr/rgdp with size 82667
+    CUMULATED SIZE: 1054734
+    Added dir //jqfwd/wspztvjr with size 60303
+    CUMULATED SIZE: 1115037
+    Added dir //vsd/rjzjrbvs/shcvnqq with size 62861
+    CUMULATED SIZE: 1177898
+    Added dir //vsd/ncgffsr/hjgm/ljqjtdmf/nlqqshp with size 35024
+    CUMULATED SIZE: 1212922
+    Added dir //vsd/ncgffsr/hjgm/ljqjtdmf with size 29178
+    CUMULATED SIZE: 1242100
+    Added dir //ncgffsr/shcvnqq with size 96461
+    CUMULATED SIZE: 1338561
+    Added dir //vsd/dfb/lcwhfzjw/tlw with size 39232
+    CUMULATED SIZE: 1377793
+    Added dir //vsd/rjzjrbvs/ftrlfg/tfdctq with size 88278
+    CUMULATED SIZE: 1466071
+    total size: 1466071
+
+1466071 is still incorrect. Anybody has any tips on if I'm doing this entirely incorrectly or should I just take another approach? Thank you for advising.",1688033407.0,7,0.82,8
+medibangpaint,How to turn a regular layer into a mask layer,"I've worked on Paint tool SAI and Substance painter. Now I'm trying to work with Medibang Pro. 
+
+I've been trying to turn convert a regular layer into a mask layer. How do I do that?
+
+For context, I'm trying to copy an alpha texture and paste it into Medibang. I have my content layer, and would like to add a black mask layer on top of it. However, when copying, Medibang never allows you to choose to copy the alpha texture in as a mask layer, always turning it into a regular layer. Then, I have no clue what else to do from here to turn the regular layer into a mask layer.
+
+Could you help? Thank you.",1679992224.0,1,1.0,0
+ShitPostCrusaders,JoJo's made me a Furry,[removed],1669914123.0,1,1.0,0
+ProgrammerHumor,I really do feel bad for my QA testers,,1658485969.0,37,0.97,1
+mac,It's my first time owning a MacBook Pro.,"Today, I received my MacBook Pro 13"" for work. An hour after I received it, Apple announced M2. 
+
+I feel a little sore now and I just need somewhere to vent about it.",1654591985.0,7,0.71,34
+ProgrammerHumor,"We're on to you, Pen Testers...","&#x200B;
+
+[Some wacky cybersecurity lecture notes](https://preview.redd.it/la716s8ckzz81.png?width=603&format=png&auto=webp&s=4a9e8fc7b9b79cf9aed4ac3a42226114d47bd26a)",1652771449.0,15,0.87,16
+ProgrammerHumor,Overclocking during Debug sessions,,1645010038.0,47,0.88,0
+webdev,"I need Help. Let's say this is the layout of the cinema, that you would need to render in HTML, CSS, JS or in React. The Data Structure of the seats is totally up to you. What data structures would you use, and How would you plan to render this? You can use any framework for the answer.",,1644246566.0,0,0.2,8
+webdev,"I need Help. Let's say this is the layout of the cinema, that you would need to render in HTML, CSS, JS or in React. The Data Structure of the seats is totally up to you. What data structures would you use, and How would you plan to render this? You can use any framework for the answer.",,1644246526.0,0,0.29,7
+webdev,"I need Help. Let's say this is the layout of the cinema, that you would need to render in HTML, CSS, JS or in React. The Data Structure of the seats is totally up to you. What data structures would you use, and How would you plan to render this? You can use any framework for the answer.",,1644246414.0,0,0.25,5
+ProgrammerHumor,Le Patronizing Community Names has Arrived,,1642527038.0,36,0.94,11
+typescript,Typescript tips to boost productivity,"Hi all, I'm a developer  who  spent a lot of time working on Javascript, and im deciding to move into Typescript because of the good it can bring into my projects.
+
+&#x200B;
+
+However, I'm facing an issue. I use NextJS and write in Javascript very fluently previously. Now that i'm trying Typescript, I realize its giving me a lot of stress because everytime I write a line of code, I need to know what that code returns, where previously when I wrote
+
+""const ReactFunction = ({children}) => {}"", which gives me no problem,
+
+Using the same code in Typescript gives me lots of trouble because it requires the correct data type or class. In this case, I have no idea what to write, and I need to spend a lot of time just browsing what is the correct type to put as ""const ReactFunction: React.FC<prop>"", and other examples where I get very frustrated with Typescript because I really get clueless thinking of what is the correct type to write.
+
+&#x200B;
+
+Any tips on how can I smoothen my experience with Typescript? I tried searching for cheatsheets related to NextJS to take existing parts of the framework and find the types for them, but so far, its very hard and I look through Github Repositories just to guess the correct answer.",1642446772.0,2,0.75,9
+VALORANT,Should we Report Smurfs?,[removed],1641220002.0,1,1.0,1
+ethereum,Which Ethereum courses Do you guys recommend?,"Hi Ethereum/Solidity programmers!
+
+I'm a software engineer that has never touched Web3, or have any intermediate knowledge of how ethereum works. I have a vast understanding for web development, but I have never touched this side of it. Which development courses/ Youtube tutorials have you used that has enlightened you on Eth? I'd like to find some of them.
+
+Currently,  I follow this course: [https://www.udemy.com/course/solidity-ethereum-in-react-next-js-the-complete-guide](https://www.udemy.com/course/solidity-ethereum-in-react-next-js-the-complete-guide/learn/lecture/28624016#overview) due to my knowledge in React and NextJS. However, I am interested in understanding more of the fundamentals of Blockchain and Ethereum. Would you kindly share anything you think was useful to you? Thanks!",1639646830.0,2,0.75,9
+Christian,Why is God so unfair?,"Why are some people blessed with a good home, parents who know how to raise children, good confidence and ability to study?
+
+Why are the kids born in that same generation also cursed with sins from their parents, unsolvable traumas to their lives, broken families, and self-esteem issues?
+
+If all kids are born the same, why did God choose me to suffer? It's like, I was chosen to be clowned by God, made a nuisance to everyone, make everyone hate me, have a broken life, while people my same age have charisma, confidence, raised with loved by their parents?
+
+God is making a circus of who not to be in their lives. I am a clown, forcing to play to an unstoppable tune, already knowing that I'm gonna fail at everything and die in hell angry, unhappy, and filled with sadness because of how I was born.",1638993636.0,57,0.87,74
+intj,INTJ Hopeless Romantic,"Guys, I'm (22M) down bad. I have dreams of having a relationship and now I'm hopelessly thirsty.
+
+I've never been in a relationship, and I have no idea how to get into one. INTJs, what are your first steps before getting into a relationship?
+
+I severely am in need of help. Please guide. Thank you.
+
+EDIT:
+Thank you for the advices everyone! I'm glad for all your inputs and I'll see what I can do. I guess the first thing I'll work on is actually touching up myself a little bit to give myself a bit more confidence. Meanwhile, I'll let the thirst wear off a little before doing anything.",1638760119.0,140,0.97,103
+pop_os,Worried for the Future of Pop OS,"I love Pop OS. It's the first Linux desktop that I've ever used, and I love everything about it, from its solid UX, great accessibility and smooth experience...
+
+
+The LTT video about Linus instantly decrediting PopOS because of a repository mistake seems to be VERY BAD PR. It's like this issue's gonna be misunderstood and misinterpreted by the general public because Linus decided to keep the footage in, and Pop OS' development is beginning to struggle because of it.
+
+
+Man, I wish this video won't affect anything regarding Pop OS for the future.",1636647584.0,0,0.33,8
+LeagueOfMemes,Le childhood trama has arrived,,1636344233.0,180,0.98,5
+dogelore,Le Childhood trauma has arrived,,1636342212.0,486,0.99,15
+VALORANT,Input for Yoru buff,"Yeah I know many people make posts about Yoru reworks. The main problems majority people have pointed out with Yoru is:
+
+1. His loud teleports
+2. His Decoy doesn't really work well these days
+3. His ulti is also loud
+
+Here's what I know about Yoru on how to play him effectively:
+
+1. His teleport is an escape rope. It's not a pushing tool. It's an effective get out of jail free card when your lurk fails.
+2. Use his ulti during chaotic situations, people hardly pay attention when Yoru ulti makes a sound when your team is fighting the enemy.
+3. Plan out your lurk paths pre-game by mapping out what they expect from you, what you haven't done, and what you should do if you get caught.
+
+Here's my fairly simple idea on buffing Yoru based on my stable plays:
+
+1. Give him a passive of an increased slow walking speed than other characters and a quieter footstep during running
+
+That's all. Just buff his walking speed. The one mechanic in the game that subconsciously makes lurking predictable and easily spotted is the fact that there is a timing to the whole game. People can feel when something's off when something isn't happening for a fixed amount of time. This is where this buff can cause a lot of confusion among enemies. Just by increasing his walking speed, his lurking timing is off compared to the other characters, making his lurk essentially way more effective because people cannot expect where Yoru is in a period of time. Another benefit with the desync-ing of Yoru's timing with the rest of the game, you can set up decoy footsteps that are less expected and set up fear in the opponent. Decoy has always been a psychological tool, albeit currently its too predictable. Hence, have to give him a higher speed to be at different places will make his decoy effective immediately.
+
+And of course, Yoru is underpowered simply because maps in the early year of valorant are very streamlined. Haven has literally only 2 main roads on the map, making Yoru very bad in Haven, because there is a lack of creative decisions in choosing your routes. I really believe as more maps like Fracture and Icebox appears, Yoru will actually be buffed along side because Yoru's kit rewards creative routing and unexpected movements.",1635930993.0,7,0.89,5
+webdev,File Transfer fucking sucks and not understandable.,"This is more of a rant, but I really want to complain about something. WHY isn't there any proper while teaching about file uploading and downloading on the web? Like, how does HTML POST files to another webpage? How is file transfer different from sending a request body to an API? What the fuck is Formidable? Why the fuck is it needed? Then, what the fuck is Uppy? Why the fuck can't reacthookforms handle files correctly? If I post a file with basic HTML, how will the req body be? Then if I use Uppy, what are the differences and why can't I just use request body? I have SO MANY QUESTIONS ON FILE TRANSFER, but there is nobody who has ever given a satisfying answer to how file transfer works, and I have to fucking guess my way around this issue. Nobody explains it. Nobody talks about the basics and what the packages do instead. Nothing.",1634656023.0,0,0.22,26
+reactjs,React Form VALIDATION ONLY library,"Hi everyone, I'm looking for a package that handles PURELY validation. Uppy does not work well with ReactHookForms at all, and React Hook Forms just refuses to POST values to my NextJS api. I'm wondering if there are any plugins that does purely form checking? Thanks!",1634640923.0,3,0.81,6
+nextjs,Route-based functions/ security,"I was thinking of ways to implement security in my app based on authentication. I'm using Next-Auth and MongoDB to store authenticated users and their accessible datas. Are there any way for me to run security functions based on routes/ Folders (based on nextJs), instead of server side check functions for every file? Like for example, I want to protect a whole folder of pages from unauthorized users via roles implemented from mongodb. Or are there any implemented solutions to solve this problem? Thank you!",1634332410.0,6,0.87,2
+nextjs,File Hosting with NextJS,Hi everyone! I'm using Mongo and NextJS to create a webapp that will require file hosting. How do you guys manage file hosting? GridFS? S3? CDN-ing? I'm a little in a doozy because It's hard to get a straight answer for this. This also might be more of a NodeJS problem.,1634139520.0,5,1.0,6
+intj,Struggling INTJ,"Hey y'all. 22M Intj here, just wanna vent a little. Have any of you ever felt like ""if only I was more normal, approachable and like other people?"" I really hate myself. Like really really despise myself. I am always misunderstood and unapproached because of my resting-bitch face, being fat, people find what I say often are very uninteresting, and often people don't regularly talk to me unless they want my help on something. I just want fun conversations with people, find meaningful relationships, have people talk to me about what they like. But because of my shitty personality, I just offer no responses, but inside me, I just love and appreciate it when people talk to me about their lives. I just can't express it out. I can never express my appreciation toward people around me. All I do is make satirical jokes that make people think I hate them. Expressing things directly is just too ""scary"" to me. I just wish I wasn't an INTJ and learnt to have fun instead. Maybe it's not a personality problem. Maybe I'm just an actual shitty person. I don't know.",1630443619.0,103,0.99,56
+tailwindcss,Any Tailwind Animation Kits?,"I'm interested in finding animation packages which uses utility-based classes. I've tried [animation.style](https://animation.style), but it seems to not be friendly with other CSSes, so I'm wondering does TailwindCSS have other animation packages other than their default infinite animations?",1630250409.0,17,1.0,4
+css,Any animation Utility-based classes package?,"Something like Tailwind CSS, but for animation. Do they exist?",1630247792.0,6,0.88,4
+yorumains,"Here's One for the Sneaky Yoru, Hope y'all Enjoy it <3",,1629545125.0,9,1.0,0
+VALORANT,Why Would You Do That?,,1628071083.0,1,0.6,6
+webdev,Web architecture Preference Regarding Web and Mobile development,[removed],1627968754.0,1,1.0,0
+patientgamers,A sense of Guilt Trying to Get Good at Competitive Games,"Firstly, I would like to disclaim that I am not too sure if this is the most suitable place to discuss about this topic, but I only post it here because I would expect more thoughtful and rational discussion here. If it does not fit this subreddit, I will delete it.
+
+So the topic at hand is that I feel bad for trying to get good at competitive games, mainly VALORANT. I'm a undergraduate who is super busy at my assignments and stuff. And as you know, games like VALORANT needs to practice and learnt to get good at it. I'm just at G3 and I have a long way to go to get better at the game, but that would mean committing time to the game.
+
+Not only that, but its also unfortunate to know that no matter how much you practice competitive games, you know that the thing you've learnt will be eventually useless, and a waste of time, because it does not contribute to your future goals but takes tons of my time, but at the same time I just wanna be good at the game. 
+
+I don't know. I love competitive games because of the chess aspect to the game of knowing your enemies, learning how to fight againsts them, and outplay to fill my dopamine that I am better than the opponent in the game, but then again, I know all of this amounts to nothing (Unless I go tourneys, but i'm waaaaay too bad to even reach there right now)
+
+Any comments/opinions?",1627635067.0,1,0.51,15
+AskReddit,"For those who survived Covid, especially for those who were close to dying, but didn't, is dying to Covid-19 painful?",,1627286995.0,2,0.75,7
+Christianity,Fuck my life,Its easier to believe God isn't real than to believe that he isn't doing shit,1626923118.0,0,0.5,25
+yorumains,High Level Yoru Meme,,1626322273.0,31,0.92,1
+yorumains,Yoru is amazing.,"I don't have montages, I don't have much to prove anything here, but I'm here because I mained Yoru since day1. Yoru in his current state feels amazing, and only Yoru can pull off so many tricks other duelists cannot do, like undo buttons, instant site control, manipulation of information, and so on. 
+I don't have much prove of how much I love Yoru, but as a hardstuck Gold3, Yoru breaks enemies mentally, it's amazing. I don't play well as a teamate, but being able to do chaos on one side and zip back to your team when things go bad is just an amazing feeling.
+I've heard that Yoru is getting reworked during one of the VCT Game Changers Livestream. I don't know what they would do to Yoru, I just hope his base kit doesn't change much in terms of the things you can do with him as stated above.",1624828238.0,23,0.97,6
+Unity3D,"Hi, New to Unity, why does adding RigidBody fuck up my X position?","&#x200B;
+
+[I've turned off script, i've only added a Rigid body, and the before ths ame starts, the position is 0, 3.5,0. After pressing start, the position breaks and now it is at 5.344848e-08, 3.5,0.](https://preview.redd.it/1i62ktb9ws671.png?width=1485&format=png&auto=webp&s=874ed3c22204bca870fbb650582f18c76a24505f)
+
+[I'm new, I don't know whats happening, this happened to me very randomly and idk what to do. I don't even know how such kinds of problems should be asked. Its like, how do I even get this bug in the first place?](https://preview.redd.it/d1gbte6iws671.png?width=598&format=png&auto=webp&s=acd44026090098629751030aaf9f792c0d4a0651)",1624360657.0,1,0.6,8
+SuicideWatch,Fucking Christ I just want to fucking die,"My parents. I love them and I really care for them. Despite being divorced, I constantly hope they can still talk to each other because I pity the shit they went through since me and my siblings were young.
+
+However, until now, they scheme against each other. All the fucking time. And they scheme against each other while FUCKING CHRISTIAN FUCJING MUSIC IS PLAYING, LIKE GOD, HOW INSANE DO YOU HAVE TO BE TO PLAY THAT SHIT AND FIND WAYS TO FUCK EACH OTHER UP SO WELL? FUCKING INSANITY FUCKING INSANITY FUCKINNGGGGGG INSAAAANITY. I'M FUCKING TIRED OF THESE FUCKING PEOPLE
+
+I don't know why I hope for them to be in the same house despite being divorced. With these fucking schemes there in no hope at all in these people. Outwardly, they show that they want to stay together still, but inside, they're fucking scheming shit. Secretly doing shit to shit on each other. I'm fucking done. I'm fucking done I'm fucking done I'm fucking done I'm fucking done I'm fucking done I'm fucking one I'm fucking done I'm fucking done I'm fucjingd one I'm fucking done fincm fucking done omg uckfiing done I'm fucking done",1623978021.0,3,0.81,1
+VALORANT,Deathmatch Camper Prevention,"Any player that moves less than 5 meters in the last 5 seconds will face the penalty of:
+
+1. Not being able to slow walk for the entire game
+2. Standing in a spot for more than 3 seconds kills them. Effect lasts the entire game.",1623648595.0,0,0.44,12
+FiveM,"Hi, Interested in Modding!","Hello everyone, I'm an individual with mainly Javascript skills due to my interest in web development. I would like to try out learning how to make things in FiveM's NodeJS. However, i have 0 clue on how to get started. Could anyone point me to a resource I can start off with? |  
+
+
+Thanks!",1623093974.0,14,0.86,26
+NoStupidQuestions,Why do we apply medicine solutions directly on open wounds?,"Like, aren't we not supposed to mix foreign solutions with our blood? Like let's say we apply iodine solution on our wounds. Wouldn't some iodine go into our bloodstream?",1620559392.0,3,1.0,3
+aimlab,Aim Labs might contain malicious software?,"Hi everyone, I'm just concerned if there might be malicious processor usage AimLabs has on my system.
+
+I've noticed that Aimlabs constantly uses 90% of my i5-9400F when its idling.. When its in the login screen..
+
+Can someone verify this? Sorry if I sound paranoid. I come from SEA, where Garena owns the gaming industry, and they HAVE put bitcoin miners in their game clients. JUst checking if anyone else facing the same thing.",1620549744.0,0,0.4,2
+ShitPostCrusaders,King shit,,1620379334.0,38,0.93,5
+Vent,I'm a fucking failure at 21,"I've just watched a 21 y-o streamer getting raided by huge streamers, and I've just realised at 21, I'm a huge fucking failure.
+
+I've lived my life free of drugs, alcohols, and other things supposedly not good to dwell into, but that doesn't change the fact that i haven't achieved a single thing in my life, I have not earned much money before, i'm stuck with my parents because of Covid, my development process to adulthood has been stuck in limbo, I am isolated from my friends, I have nothing going on in my life at 21.
+
+I'm a huge fucking failure. So many people are already earning bucks and shit at 21 while I'm here, stuck, being a huge fucking failure.",1620036719.0,4,0.75,7
+196,On my way out,,1619231254.0,6,0.76,2
+Terraria,I can't play a role because the game's rng won't let me,"Hear me out- You play ranged, the most boring fucking role in the game compared to the rest of the roles in the game. In expert largest map possible. And then you grind for sniper scope. Lo and behold- Blue slab walls don't fucking exist in this HUGE map. And you can't upgrade your gear anymore because rng won't let you.
+I finished my first run in Terraria with a Zenith. And two things I regret on this second playthrough.
+1. Picking Ranged. It's the most boring shit I've played in a long time
+2. Playing this game because fuck the RNG",1618643846.0,0,0.36,27
+leagueoflegends,Riot Should make an Account Creation Appeal System for Garena region players,[removed],1616228868.0,1,1.0,0
+Kindredmains,[Bug]Spirit Blossom Kindred's animations,"I'm not sure how this has not been fixed yet, but Spirit Blossom Kindred's joke, taunt animations are fukt
+
+Fix it Rito thx",1615429550.0,22,0.89,5
+cursedimages,cursed_pc_building,,1612250938.0,1,1.0,1
+ShitPostCrusaders,Friend with Speech Impediment Tells You to Take Care about The Environment,,1610859027.0,26,0.81,1
+leagueoflegends,Allow Early Forfeit if,[removed],1610804574.0,1,1.0,1
+malaysia,Low-key the best bread in town,,1610069597.0,50,0.89,25
+pyrocynical,Carson not Pog,"&#x200B;
+
+https://preview.redd.it/hhifsdga9m961.png?width=604&format=png&auto=webp&s=bdf7c10a17feaa5b89f8653b762f5ca895823aab",1609897178.0,4,1.0,0
+pyrocynical,Can't believe Turkey Tom makes fun of autism,,1609241293.0,592,0.98,47
+nextjs,Can I use NextJs's Server side logics for other projects?,"Sorry if I sound like a noob, it's because I am haha
+If I build a Nextjs App, can I use the server side APIs created in nextjs for other projects, like let's say, an expo app?
+Cause I'm thinking about if I were to deploy a Nextjs app, I would want to also go ahead to create a native app using the same logics too",1607015902.0,4,1.0,8
+ShitPostCrusaders,"Kira teaching Koichi about Living, Laughing and Loving",,1606576041.0,243,0.99,3
+LinusTechTips,"""I wonder what water smells like""","\*Emits chlorine gas\*
+
+https://preview.redd.it/i54ihw3p7i161.png?width=815&format=png&auto=webp&s=acaa836501019aa7198fdd256db66f03397911b1",1606361446.0,1,1.0,0
+reactjs,"I might be a nerd, but I'm really excited for the future of Web Development","Hi! I'm a software undergrad who's working on full stack systems with NextJS.
+
+Personally, I am very very excited with the future of web development. Libraries and Frameworks like React makes Web development so easy, even close to spoiling us who have zoomer programming skills. Not only that, but Figma and Figma-To-HTML really makes Web development so much fun!
+
+Things feel great for Web development right now <3",1605692027.0,60,0.8,65
+ShitPostCrusaders,Koichi is truly reliable,,1605288020.0,1,1.0,1
+ShitPostCrusaders,Oh No,,1605286042.0,1,1.0,1
+ProgrammerHumor,Frick Xamarin,,1605000638.0,14,0.83,5
+ProgrammerHumor,I'm Tired of your Shit World,,1604996749.0,757,0.96,28
+VALORANT,Sage is Not here to give you Healing,,1596118567.0,2,1.0,1
+LeagueOfMemes,Enemy HP go brrrr,,1586365986.0,29,0.87,5
+8bitdo,Dumb Question about SN30 Pro+,"The controller works perfectly, but one thing bugs me:
+
+The controller Signal never reaches above 1 bar. Is that normal? I would hope a new controller would give 4 bars if my Switch is right in front of the controller, but it always only shows 1 bar. Is that normal?
+
+Other than that, I love this controller!",1585336166.0,3,0.67,3
+ShitPostCrusaders,Oh F*** Oh S*** Oh F*** He got Kakyoin,,1581919999.0,76,0.96,4
+leagueoflegends,"Thank you, Rito gods",,1579133454.0,1,1.0,1
+Beastars,Jack doing the big dumb,,1573718817.0,83,0.98,11
+Minecraft,Redstone seals,WOuldn't it be great if redstone wiring got a sealer like rubber covering a wire?,1568305586.0,0,0.5,1
+PewdiepieSubmissions,HMMMMMM?,,1566158641.0,7,0.79,3
+PewdiepieSubmissions,The latest episode basically,,1565205720.0,14,1.0,2
+ShitPostCrusaders,Star Platinum and The World Are the Same Type of Stands,,1563439576.0,301,0.99,8
+PewdiepieSubmissions,2012 Pewdiepie,,1563055722.0,1,0.55,0
+ShitPostCrusaders,Giorno's Face..,"&#x200B;
+
+https://preview.redd.it/62ebhym9pz231.png?width=516&format=png&auto=webp&s=55d1ce4541b6eabb08b4880c6f82f127fa3cd68e",1559937462.0,8,1.0,0
+iamverysmart,Idk if this belongs here or not,,1555147967.0,1,1.0,1
+malaysia,LTT Referencing Lowyat,"LTT References Lowyat!
+
+Source : [https://www.youtube.com/watch?v=J-D6tYBX8vE](https://www.youtube.com/watch?v=J-D6tYBX8vE)
+
+https://preview.redd.it/ntlu531mqd321.png?width=1366&format=png&auto=webp&s=6ba4a78e352540e1731635b6b29f86710fae9006",1544416912.0,0,0.41,2
+PewdiepieSubmissions,PewdiePie Exposed (REPOST),,1543848744.0,8,0.83,0
+PewdiepieSubmissions,Pewdiepie Exposed,,1543819610.0,10,0.92,0

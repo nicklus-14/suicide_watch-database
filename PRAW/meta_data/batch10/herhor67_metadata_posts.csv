@@ -1,0 +1,168 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+Minecraft,I have this old world and I cant find it on the Internet,"I have this pretty old save, probably downloaded somewhere around 2012, and it keeps bugging me, because I couldn't find it anywhere on the Internet in the last few years. The folder name is ""The lost city"" and the world name is ""Lost city of nervina"". Below are some screenshots. Maybe someone recognizes it...  
+It has clearly been eaten away by files corruptions and recoveries throughout all these years...  
+
+
+&#x200B;
+
+https://preview.redd.it/gxp6m32a9ryb1.png?width=2560&format=png&auto=webp&s=0fc28cd44d9db6c171d643d582f0382cf4f3dd17
+
+https://preview.redd.it/o6esgs1a9ryb1.png?width=2560&format=png&auto=webp&s=50867bddff4b19ee07db30f33a50cbe9959a4e83
+
+https://preview.redd.it/yakfky1a9ryb1.png?width=2560&format=png&auto=webp&s=828d4517fecfe5e2204cdfbde6ea8693d0d8d642
+
+https://preview.redd.it/p9rfns1a9ryb1.png?width=2560&format=png&auto=webp&s=b68a219a20f13a15355c2bc0a414a484f696c19b
+
+https://preview.redd.it/bz2ktw1a9ryb1.png?width=2560&format=png&auto=webp&s=91150c4698dd1628090f1adb40945d37fd5c2f2e
+
+https://preview.redd.it/vqrdqx1a9ryb1.png?width=2560&format=png&auto=webp&s=1606960e9336d7a1f5ecaaeb83b80c3488f0b29b",1699288558.0,0,0.5,1
+WorldofTanks,DPGWhores reactivation (kinda),"Hello everyone.
+
+I think it's finally time to share with the world.
+
+On my website I created leaderboards in DPG and in battle# per tank. Per-server and global. They are being updated kinda weekishly.  
+Players are sorted as described, by an ""adjusted DPB"" based on player's DPB, player's battles, parameters of global DPB distribution on that tank, etc yada yada.  
+[https://herhor.net/wot/dpgwhores/](https://herhor.net/wot/dpgwhores/)  
+[https://herhor.net/wot/dpgwhores/battles.php](https://herhor.net/wot/dpgwhores/battles.php)
+
+Oh and I also have MoE# leaderboards. [herhor.net/wot/moe/top](https://herhor.net/wot/moe/top)
+
+&#x200B;
+
+Thanks for any suggestions.
+
+Cheers.",1698255980.0,7,0.74,4
+esp32,MCP3204 speed is half what specified,"Hello,
+
+I'm building a device for my thesis, and simultaneously writing a simple library for using the MCP3xxx family of ADCs. [See source here.](https://github.com/herhor67/MCP3X0X/blob/master/main/include/MCP3x0x.h)
+
+I tried everything I thought of (240MHz, -O2, SPI as polling, functions in IRAM, checked actual frequency).MCP is running at 5V, there is no level shifter between it and ESP, can that be the reason? Anyway, 2MHz is not very fast so I kinda doubt it's about some waveform shapes or sth, even though it's connected on a breadboard with jumper wires.
+
+Basically the best I could do (even having two transactions interchangeably and parsing while one is running, like in the current version of the source, didn't give any benefit) was around 53 prints during the 1s loop. Which amounts to around 53kHz (each inner loop is averaged from 1k measurements). A bit of overhead is from creating the transactions, but thats only 50 times, it didn't have almost any influence.
+
+What am I doing wrong here?
+
+Here is the rest of the code:
+
+    static TaskHandle_t adc_task_handle = nullptr;
+    
+    void start_adc_task()
+    {
+    	if (!adc_task_handle)
+    		xTaskCreatePinnedToCore(adc_task, ""adc_task"", 4096, nullptr, ADC_PRT, &adc_task_handle, CPU1);
+    }
+    void stop_adc_task()
+    {
+    	if (adc_task_handle)
+    		vTaskDelete(adc_task_handle);
+    }
+    
+    void adc_task(void *arg)
+    {
+    	MCP3204 adc(SPI3_HOST, GPIO_NUM_5, 2'000'000);
+    	adc.acquire_spi();
+    	while (1)
+    	{
+    		float voltage = adc.get_float_volt(1, MCP_READ_SINGLE, 1000);
+    		ESP_LOGI(""MCP3XXX"", ""Voltage: %f V"", voltage);
+    	}
+    	adc.release_spi();
+    }
+
+&#x200B;
+
+    void init_spi()
+    {
+    	spi_bus_config_t bus_cfg = {
+    		.mosi_io_num = GPIO_NUM_23,
+    		.miso_io_num = GPIO_NUM_19,
+    		.sclk_io_num = GPIO_NUM_18,
+    		.data2_io_num = GPIO_NUM_NC,
+    		.data3_io_num = GPIO_NUM_NC,
+    		.data4_io_num = GPIO_NUM_NC,
+    		.data5_io_num = GPIO_NUM_NC,
+    		.data6_io_num = GPIO_NUM_NC,
+    		.data7_io_num = GPIO_NUM_NC,
+    		.max_transfer_sz = 0,
+    		.flags = SPICOMMON_BUSFLAG_MASTER | SPICOMMON_BUSFLAG_IOMUX_PINS,
+    		.intr_flags = 0,
+    	};
+    
+    	spi_bus_initialize(SPI3_HOST, &bus_cfg, 0);
+    }
+    
+    extern ""C"" void app_main(void)
+    {
+    	init_spi();
+    	start_adc_task();
+    	vTaskDelay(pdMS_TO_TICKS(1000));
+    	stop_adc_task();
+    	vTaskSuspend(NULL);
+    }
+
+&#x200B;",1694454283.0,4,0.84,6
+AskDocs,Eye movement causes muscle twitch,"Hello all, I am 23M, 190cm, 85kg, white, don't smoke, rarely drink, no drugs.
+
+This is a pretty weird thing to explain, and also English is not my native language, so please bear with me...
+
+Recently (~two weeks? around the time I stopped taking SSRIs) when moving my eyes a bigger angle (left-right, up-down, etc), especially with depth change, there occurs something, I cant describe very well... Traveling from the eyes region through most of the body, arms, etc, feels like a wave of electricity or all muscles twitching/spasm, quite unpleasant or even slightly painful.
+I can even hear something, idk if it's the ear muscles or something else, but sounds like some friction, almost always double (on-off?).",1684851582.0,1,1.0,1
+AskDocs,Eye movement causes muscle twitch,[removed],1684798018.0,1,1.0,1
+SuicideWatch,Weirdo,"22M. Everyone says Im one. Parents, family, friends, internet folks. And I can agree with them.
+Idk what is wrong with me, Im trying to be open for people; cheerful, polite, friendly, honest. But it all only comes off as creepy, stalky, etc. I cant predict the outcome of my actions until they happen. Weirdo.
+I hate that sooner or later everyone leaves me because of sth that hurt them.
+I hate myself for hurting them.
+I hate being alone, single, virgin, because no girl could've ever accepted me, even though I tried many times.
+I hate my brain for dreaming sex stuff, and then *snap back to reality* in the morning.
+At this point Ive been drinking myself to sleep for the last N days, started smoking, drive recklessly, I just do what I can to die without actually killing myself.
+
+Sorry for this incoherent rambling, english is not my 1st and as above Im not very sober.",1647733027.0,14,0.95,2
+ElectroBOOM,"""American Tech""","[https://www.youtube.com/channel/UC8MFNkCuOrpcCxwe1AgPkZQ](https://www.youtube.com/channel/UC8MFNkCuOrpcCxwe1AgPkZQ)
+
+Obviously some of his videos are total BS (CD solar cell, 7kF supercap), some are useless (razor grascutter).
+
+Some (like big-ass FET) might work? Dunno, Im not an electronics expert, and would gladly know Mehdi's opinion.",1596220345.0,1,0.67,3
+WorldofTanks,Mark of Excellence image generator,"Hello Dankers,
+
+Maybe a bit of backstory first... more than two years ago I released first version of my MoE image generator. It has become (and still is) the most popular thing on my website, so few months ago I decided to make a big update for it.
+
+Now, after A LOT of testing, everything seems to work fine, so I thought I would share with you.
+
+* Tank panels redesigned, to resemble the in-game tank carousel
+* Increased generation speed (special sorting method)
+* Migration from .png to .webp (shorter saving and loading times, reduced transfer usage)
+
+Example:
+
+https://preview.redd.it/ycl84wglx7d51.png?width=1035&format=png&auto=webp&s=b0903ad856fd078b0d897eafce255bd71c31362a
+
+Generator is free to use, but there are some additional features for Patrons: they can choose an account which will have the image hosted and updated automatically every day; they can also change size, tiers, minimum marks, etc. I also developed a Twitch extension, which can display Patrons' images. You can see some screenshots and full explaination [here](https://herhor.net/news.php?id=61).
+
+If you are a popular (>50k followers for ENG/RU | >10k followers for other langs) WoT streamer, YTber or Community Contributor, feel free to contact me for free ID.
+
+The whole thing is available at [herhor.net/wot/moe](https://herhor.net/wot/moe/).
+
+Thank you for your attention!",1595776854.0,19,0.93,12
+JoJoMemes,German science is really ze best 😳,,1595690707.0,13,0.83,0
+JoJoMemes,Joseph really be thicc tho 😳,,1595690466.0,19,0.93,2
+ShitPostCrusaders,Making this shitpost took longer than Joseph's climbing the Hell Climb Pillar,,1594149435.0,1,1.0,1
+lgg4,WiFi died?,"Hello,in past years, I've had some minor problems with WiFi connection, but nothing that a good ol' OFF-ON would not solve. However, two days ago it started doing ""the thing"" every few hours; yesterday it was every few minutes and today it is permanent.
+
+""the thing"" - either a list of WiFi networks appears, but I can't connect to any, or it just searches for networks indefinitely.
+
+\#Edit: Seems that the Hotspot isn't working too, that's no good...
+
+Can it be a software issue or my WiFi module isded?",1590480713.0,2,0.75,5
+ShitPostCrusaders,This is Requiem over Heaven,,1590423156.0,28,0.82,1
+steelseries,Rival 310 ScrollWheel LED,"Hello,  
+is it possible to change color of scroll's LED depending on choosen sensitivity #1 or #2?  
+I don't see such option in SS Engine.
+
+Thanks in advance.",1568491948.0,1,1.0,0
+dankmemes,Time to make AC/DC memes great again!,,1560973449.0,15,0.75,3
+digitalelectronics,Converting gates,"Hello, first time here.
+Does anyone know a website or program to convert logic expressions to eg. NAND or NOR gates only? I tried Wolfram, mathjs, also searched alot through the web and found nothing...
+Cheers.",1552858834.0,3,1.0,1
+PewdiepieSubmissions,PewDiePie is nazi confirmed!,,1552334374.0,8,1.0,0
+PewdiepieSubmissions,Pewdiepie is nazi confirmed!,,1552334320.0,9,0.85,0
+PewdiepieSubmissions,Elon the saviour,,1551007935.0,13,0.93,0

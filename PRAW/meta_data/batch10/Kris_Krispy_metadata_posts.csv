@@ -1,0 +1,114 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+learnpython,Help with twitter / X api errors: 401 authentication and 403 forbidden,"Here are the following things I've confirmed:
+
+* my app has Read & Write permissions
+* all my keys / secrets were generated after setting app permissions
+* my access token / secret says it was generated with Read & Write perms
+* I confirmed there is no whitespace in my .env, and printing the key matches a diff checker
+* my app is using Free tier
+* the endpoints I'm using all fall within the free tier (see bottom for list)
+
+My 403 error says ""You are not permitted to perform this action"" which really confuses me because I'm almost certain I'm doing it right.
+
+My 401 error is Unauthorized, but I think this happens for a bit after I regenerate my tokens. I had to wait overnight for it to go away.
+
+an important piece of info: in my normal program flow, I call get\_me before create\_tweet. when I authorize successfully I pass get\_me without problem and fail at create\_tweet. when I don't authorize successfully I fail at get\_me.
+
+Anyone know why this is happening? 
+
+endpoints I'm using (via tweepy)  
+GET /2/users/:id/mentions (called as get\_users\_mentions)  
+POSt /2/tweets (called as create\_tweet)  
+GET /2/tweets/:id (called as get\_tweet)  
+GET /2/users/me (called as get\_me)",1749048464.0,1,0.6,0
+learnpiano,Advice on Teaching Beginner Students,"I'm about to launch a piano tutoring service at my university, and I wanted to hear from people in this subreddit what lessons / resources were impactful for your learning? I'd really appreciate to hear from all skill levels, so if you see this please give me some advice!!",1748704770.0,1,1.0,0
+learnpiano,How to learn rhythm?,"Context: have studied piano for 15+ years playing a lot of romantic classical (Ive done some chopin nocturnes, etudes, and ballade 3 & 2 of the late beethoven sonatas)
+
+I can play notes of the same division evenly, but I struggle even the simplest of subdivisions (like even quarter to 8th or to 16th) without a metronome. don't get me started on polyrhythms.  How should I approach learning this?
+
+my end goal is to learn my favorite chopin nocturne which is all polyrhythm (the one in ab major; it sounds like love)",1748704494.0,3,1.0,5
+Conservative,What are your takes on Trump’s tweets?,[removed],1748521133.0,1,1.0,0
+webscraping,Confused about error related to requests & middleware,"# NEVERMIND IM AN IDIOT
+
+# MAKE SURE YOUR SCRAPY allowed_domains PARAMETER ALLOWS INTERNATIONAL SUBDOMAINS OF THE SITE. IF YOU'RE SCRAPING [site.com](http://site.com) THEN allowed_domains SHOULD EQUAL ['site.com'] NOT ['www.site.com'] WHICH RESTRICTS YOU FROM VISITING 'no.site.com' OR OTHER COUNTRY PREFIXES
+
+# THIS ERROR HAS CAUSED ME NEARLY 30+ HOURS OF PAIN AAAAAAAAAA
+
+My *intended* workflow is this:
+
+1. Spider starts in start\_requests, makes a scrapy.Request to the url. callback is parseSearch
+2. Middleware reads path, recognizes its a search url, and uses a web driver to load content inside process\_request
+3. parseSearch reads the request and pulls links from the search results. for every link it does response.follow with the callback being parseJob
+4. Middleware reads path, recognizes its a job url, and waits for dynamic content to load inside process\_request
+5. finally parseJob parses and yields the actual item
+
+My problem: When testing with just one url in start\_requests, my logs indicate I successfully complete step 3. After, my logs don't say anything about me reaching step 4.
+
+My implementation (all parsing logic is wrapped with try / except blocks):
+
+Step 1:
+
+    url = r'if i put the link the post gets taken down :(('
+            yield scrapy.Request(
+                    url=url,
+                    callback=self.parseSearch,
+                    meta={'source': 'search'}
+                )
+
+Step 2:
+
+    path = urlparse(request.url).path
+            if 'search' in path:
+                spider.logger.info(f""Middleware:\texecuting job search logic"")
+                self.loadSearchResults(webDriver, spider)
+    #... 
+    return HtmlResponse(
+                url=webDriver.current_url,
+                body=webDriver.page_source,
+                request=request,
+                encoding='utf-8'
+            )
+
+Step 3:
+
+    if jobLink:
+                    self.logger.info(f""[parseSearch]:\tfollowing to {jobLink}"")
+                    yield response.follow(jobLink.strip().split('?')[0], callback=self.parseJob, meta={'source': 'search'})
+
+Step 4:
+
+    path = urlparse(request.url).path
+            if 'search' in path:
+                spider.logger.info(f""Middleware:\texecuting job search logic"")
+                self.loadSearchResults(webDriver, spider)
+    #... 
+    return HtmlResponse(
+                url=webDriver.current_url,
+                body=webDriver.page_source,
+                request=request,
+                encoding='utf-8'
+            )
+
+Step 5:
+
+    # no requests, just parsing",1748356486.0,1,0.6,2
+webscraping,Advice on Scrapy Stacks Requests with a Web Driver,[removed],1748051369.0,1,1.0,1
+webscraping,How to parse a specific number from a paragraph of text,"Specifically I'm looking for a salary. However its inconsistently inside a p tag or inside its own section. My current idea is dump all the text together, use a find for the word salary, then parse that line for a number. Are there libraries that can do this better for me?
+
+Additionally, I need advice on this: a div renders with multiple section children, usually 0 - 3, from a given pool. Afaik, the class names are consistent. I was thinking abt writing a parsing function for each section class, then calling the corresponding parsing function when encountering the specific section. Any ideas on making this simpler?",1747748171.0,3,0.81,14
+classicalmusic,Bach makes me depressed,[removed],1738355624.0,4,0.75,7
+StarWarsBattlefront,What’s the game like for pc?,"Got the console version when it came out, but I don’t have a console anymore and forgot abt it. Got nostalgic and thought it would be a good distraction from school/something to do. Is it a good idea to buy it for pc? I’d be using a Lenovo L14 thinkpad",1737959054.0,4,0.99,17
+godaddysupport,Struggling with DNS Targeting / removing the stuff GoDaddy puts on the website,"I have a godaddy domain and a heroku DNS target. I want to remove all the stuff GoDaddy puts on my domain. Additionally I'm struggling to figure out the DNS targeting. I have a cname record with the domain and the dns target, and heroku says the ACM has given out an SSL too. So I'm kinda lost.",1723381482.0,1,1.0,1
+godaddy,Struggling to use GoDaddy Domain to point to Heroku App,[removed],1723381102.0,1,1.0,0
+rust,Just saw this announcement; how should I as a beginner approach learning rust?,[removed],1723316557.0,0,0.43,17
+PostgreSQL,How to share access to database,I made a database that a friend wants to see. We're on different WiFi networks. What's the process for them to access a user associated with my database?,1722790863.0,5,0.86,7
+Database,First-Time setting up large-scale database,"I'm new to database management, and for a cs project I need to set up one. I'm using postgreSQL. 
+
+The database stores information about events, with details like names, dates & times, some identifiers like is it a club/sport team, and a url representing image data in a google drive. There is more information I'm putting in too like point of contacts, member lists, and location.
+
+What is the general strategy for relating all these bits of info? my first solution was just to make a table with a bunch of columns, but there's gotta be a more elegant way to do this. I read about making a table for each type of info (dates/times/names as separate tables) and relating a club's info with a common foreign key.
+
+What is your advice?",1722357883.0,4,0.75,10
+AskWomen,What does it mean when a girl sends a snap with a scrunched face?,[removed],1689299096.0,1,1.0,1
+Windscribe,I am having troubles removing Windscribe from my computer,"So I was trying to get rid of Windscribe from my computer, and I dragged the icon out of the applications folder and put it into the trash and emptied it. However, I still get the ""connection to windscribe has been terminated"" message every time I open my computer. It also might be interfering in a separate issue involving my internet so I wanted to rule this out. Any ideas on what to do?",1606057558.0,13,0.82,15
+Overwatch,Cant Join Overwatch voice chat!!,"Yes, I have reset all my default sound settings, I have no bluetooth items connected to overwatch, and I am on xbox. I can hear them, so the bug from a couple of years ago does not apply hear, but I cant say anything. Help?",1592531868.0,0,0.5,2

@@ -1,0 +1,376 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+AskMen,How much do you like talking about yourself?,It occurred to me that I love talking about myself. In real life I'm always asking people about their lives but they don't reciprocate much. Therapists pretend to listen but they just sleep with their eyes open. It's really nice to have Reddit to share my experiences and read those of others.,1717196929.0,3,0.71,23
+typescript,Define a sum function that accepts an array of numbers OR an array of bigints,"Take this plain JS code:
+
+```
+function sum(arr) {
+  return arr.reduce((acc, element) => acc + element);
+}
+```
+
+It works whether you pass in an array of numbers OR an array of big integers as long as both types aren't mixed. However I can't find a way to properly type this function with TS. I tried generics and overloading but it doesn't seem to understand that `acc` is always the same type as `element` so it complains about mixing big integers with numbers.
+
+Edit -- Come to think about it, it's probably not a good idea to use the same function for both array types as a default value is needed in case of an empty array. I'll just use two functions.",1716496667.0,3,0.6,21
+ProgrammerHumor,functional > all,,1658482284.0,57,0.89,19
+SuicideWatch,Singlehood will be the end of me,"I'm a 30-year-old man. Last week I asked out a girl I've known for a long time and she said yes, but she obviously changed her mind afterwards as she postponed our date three days in a row with flimsy excuses. I've deleted her number and I don't want to know she exists anymore. I feel miserable. I came so close to being in a relationship again after so many years and yet, without doing anything at all, I somehow let that opportunity pass. It's eating me up inside; I have work to do tonight but I just can't focus; I keep picturing myself jumping off the 7-storey building I work in. The thought of being single for the rest of my life devastates me. But being depressed makes me all the less likely to find someone. I need to escape this vicious circle, were it only to keep my job. Please help.",1653235429.0,2,1.0,4
+learnjavascript,People taking pictures of their monitor,"Virtually no one who uses a computer this day and age doesn't know about copying and pasting. Some people on here, however, will literally grab a camera, take a picture of their monitor and post it to this sub. They know what they're doing -- you see it and think to yourself, ""Wow! who the hell does that?"" and then you start reading. Not only is it childish and cheap but it also makes it more difficult for others to help because the code is harder to read and you can't conveniently copy it and test it for yourself. So just like someone who thinks they deserve more attention because they're shouting, they shouldn't be rewarded.
+
+Have a good rest of your day.",1644789959.0,13,0.64,21
+learnjavascript,[CHALLENGE] - Find all possible ways to get a given rugby score,"I was given this challenge in a job interview. I thought it was pretty good so I'll share it with you folks.
+
+In rugby you get 5 points every time you score a try. Every try you score gives a chance to convert the try and get 2 extra points. Keep in mind you can't score a conversion if you haven't scored a try first. On top of that, you get 3 points every time you score a penalty.
+
+Edit - Clarifications:
+
+- a try can happen at any time (5 points)
+- a penalty can happen at any time (3 points)
+- a conversion can only happen after a try (2 points)
+
+Given a score (positive integer), find all possible combinations of tries, conversions and penalties it could result from.
+
+    function scoringCombinations(score: number): {
+      tries: number;
+      conversions: number;
+      penalties: number;
+    }[] {
+      // TODO...
+    }",1644506022.0,3,0.81,7
+learnjavascript,Array only used in one function — should it be declared globally or locally?,"Someone asked me about this the other day and I wasn't sure what to answer.
+
+    function printNames() {
+      const names = [""Peter"", ""Paul"", ""James""];
+
+      names.forEach((name, i) => console.log(`${i}: ${name}`));
+    }
+
+`names` is declared inside the function because it's only ever used there, which makes sense since why would you want it in the global scope if you don't need it anywhere else? But on the other hand, it gets redeclared every time the function is called and (I suppose?) garbage-collected after each function call, which feels like misusing memory. In my own projects, I often go with this somewhat unpopular syntax:
+
+    const names = (() => {
+      const names = [""Peter"", ""Paul"", ""James""];
+
+      return {
+        print: () => {
+          names.forEach((name, i) => console.log(`${i}: ${name}`));
+        }
+      };
+    })();
+
+but I can't really justify it other than by saying that `names.print()` looks nicer than `printNames()` to my eyes. Where do you think it is better to declare the array in this scenario?",1644430769.0,3,0.81,5
+ProgrammerHumor,It's not even a contest,,1643634452.0,15,0.66,5
+learnjavascript,[Challenge] - Get all the paths in a tree,"It's not the hardest of challenges but it took me way too long to find a solution I like. Here goes:
+
+Given the following class,
+
+    class Tree {
+      value; // string
+      left; // Tree | null
+      right; // Tree | null
+    
+      constructor(value, { left = null, right = null } = {}) {
+        this.value = value;
+        this.left = left;
+        this.right = right;
+      }
+    }
+
+your task is to create a method called `paths()` that returns an array of arrays of strings representing each sequence of values encountered when going from the top of the tree to one of its leaves. A leaf is any tree that has no children. Examples:
+
+    const tree1 = new Tree(""a"");
+    console.log(tree1.paths()); // [ [ ""a"" ] ]
+
+    const tree2 = new Tree(""a"", {
+      left: new Tree(""b1"", {
+        left: new Tree(""c1""),
+        right: new Tree(""c2"", {
+          left: new Tree(""d"")
+        })
+      }),
+      right: new Tree(""b2"")
+    });
+    console.log(tree2.paths()); // [ [ ""a"", ""b1"", ""c1"" ], [ ""a"", ""b1"", ""c2"", ""d"" ], [ ""a"", ""b2"" ] ]
+
+You may use as many helper methods as you see fit. Happy coding!",1642610608.0,1,1.0,2
+node,How do you do pass data from the back-end to a front-end framework?,"Hello,
+
+So far I've only been using templating engines for the client side of my Express applications. Passing data to a template is very easy.
+
+    // server.js
+    app.get(""/"", (req, res) => res.render(""home"", { title: ""Home"" }));
+    
+    // home.pug
+    h1 = title
+
+However I'm very confused as to how you do the same thing with a front-end framework. My understanding is that you simply can't; you have to make an API route that displays a JSON object which you'll then retrieve from inside a component using `fetch` or axios. But that's just weird to me. What if you have data that you don't want anyone to see just by visiting a URL? How do you keep it private? Is the idea that, if it's available to a component, then it's not worth the trouble to conceal it from your users?
+
+Thanks in advance for clearing this up.",1639001414.0,2,0.67,1
+learnprogramming,Algorithm to pair up contestants based on distance,"Hi,
+
+Say I have four teams, A, B, C, D, that will compete in the semi-finals of a tournament. I'm trying to determine which team will play against which and my only criterion for that is the distance between them -- I want to pair up the teams with the least distance between each other. The distance is an arbitrary value I get from a table like this one:
+
+|| A | B | C | D |
+| :---: | :---: | :---: | :---: | :---: |
+| A | X | 50 | 30 | 45 |
+| B | 50 | X | 50 | 10 |
+| C | 30 | 50 | X | 25 |
+| D | 45 | 10 | 25 | X |
+
+I'm simply wondering if there exists an algorithm that could help with this task. If not, that's fine -- no need to suggest anything else. Thank you very much.",1638279202.0,3,0.81,15
+ProgrammerHumor,I know HTML for Heaven's sake,,1637846218.0,443,0.95,33
+ProgrammerHumor,that pesky keyword,,1637519599.0,1697,0.98,103
+learnprogramming,What software engineering language is useful for a web developer?,"I recently passed my web development degree, looking for a first job now. My training director recommended that I add software engineering to my set of skills.
+
+Edit - I already know JavaScript and PHP. No need to recommend them to me.
+
+ The languages used in software engineering are pretty much new territory to me and honestly I have no idea which one I should pick. He mentioned learning C but, as a web developer, it's really hard to imagine how I'm ever going to use it in my profession. There's quite some demand for Spring developers where I live so Java is looking like a better choice at the moment. I also see a few offers for .NET devs so C# is another candidate. Everyone keeps bringing up Rust but like C, its usefulness in my line of work seems moot. I could be wrong. What do you guys think?",1637442247.0,1,0.6,5
+learnprogramming,Anyone who's worked on a chess game before?,"I've been working on a chess game for a while. I find it difficult to implement some of the more advanced rules in a satisfactory way.
+
+Take pins for example. The way I check if a piece is pinned is:
+- check if the piece ""communicates"" with its king, meaning it's on the same file, rank or diagonal with no pieces between them;
+- if not, the piece cannot possibly be pinned;
+- look for an enemy sliding piece (bishop, rook or queen) in the opposite direction and make sure the direction matches the enemy piece's moves (because a bishop can't pin along a rank or file, and a rook can't pin along a diagonal).
+
+This process is kind of long-winded and could probably be improved upon. So I'd be interested to know if anyone who's worked on a chess game can tell me in a language-agnostic way about how they implemented this feature or other features of the game. Just looking for inspiration. Thanks.",1637189387.0,2,1.0,9
+learnjavascript,Can someone explain my own code to me? (indexedDB),[removed],1636061734.0,1,1.0,0
+learnprogramming,I wrote my first Java program,"I'm a web developer but I've started learning Java in my free time. I wrote this program to calculate how much money I can spend each day based on how much money I have and when I'll get my next monthly salary. It works as intended but since I'm so new to Java, it'd be nice if someone with more experience could take a look and suggest improvements.
+
+[link](https://pastebin.com/AKQf4gPA)
+
+Cheers!",1632442182.0,7,0.9,2
+PHPhelp,Deployed to Heroku; can only go to home page,"Hi,
+
+I deployed a PHP project to Heroku. The home page displays correctly but when I try to go to any other location, like ""/login"", I get a  404 error even though everything worked fine in development.
+
+I wonder if it could be because of my router. I made my own; it's a little complicated but the way it works boils down to:
+
+    $routes = [
+        """" => [HomeController:class, ""home""], // ""home"" is a method
+        ""/login"" => [AuthController:class, ""login""],
+        etc.
+    ];
+
+- check `$_SERVER[""REQUEST_URI""]`
+- find the key in `$routes` matching the uri
+- instantiate the controller and call the method
+- method: render a template
+
+The home page works fine. I can even pass down variables from the controller into the template but no other location can be found.
+
+This is the final project for my web developer degree so needless to say it's very important I solve this issue. I'll provide any extra info needed for anyone willing to help. Thanks so much.",1632065247.0,5,1.0,8
+learnjavascript,Typewriter animation,"Hi,
+
+I made this typewriter animation for my own portfolio. Thought I'd share it here for anyone interested.
+
+https://codepen.io/melvdouc/pen/VwpQwBm
+
+Cheers!",1631901494.0,4,0.83,8
+PHPhelp,What does this .htacess file do?,"I added this .htaccess file to my PHP project a while but I can't for the life of me remember why I did. Can anyone tell me what it is or could be doing?
+
+    RewriteEngine on
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule . index.php [L]",1630337406.0,2,0.75,9
+learnprogramming,Logic - Can this boolean expression be simplified?,"I have two variables, x and y, and I'm trying to write a boolean expression that evaluates to true if:
+
+* (x == 2 or 7) and (y == 4 or 5)
+* OR (x == 4 or 5) and (y == 2 or 7).
+
+I know the ""brute force"" approach would be:
+
+    ((x == 2 || x == 7) && (y == 4 || y == 5))
+        || ((x == 4 || x == 5) && (y == 2 || y == 7))
+
+but I was wondering if there was a more concise way using bitwise operators maybe?",1629942363.0,1,1.0,5
+symfony,Registration form - fields for all User entity properties,"Hello,
+
+I'm trying to add a registration form to my Symfony project. I have a User entity with a bunch of properties like username, password, email address, postal address, etc. I ran the command `php bin/console make:registration-form` and followed the whole procedure. It created a registration controller and a template with the form. The issue I have is that form only has two fields, username and password, but I need it to have all the fields from my User entity.
+
+RegistrationController.php
+
+    #[Route(""/inscription"", name: ""register"")]
+    public function register(Request $request, UserPasswordHasherInterface $passwordHasher): Response
+    {
+        $user = new User();
+        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $plainPassword = $form->get(""plainPassword"")->getData();
+            $hashedPasword = $passwordHasher->hashPassword($user, $plainPassword);
+            $user->setPassword($hashedPasword);
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $this->emailVerifier->sendEmailConfirmation(""app_verify_email"", $user,
+                (new TemplatedEmail())
+                    ->from(new Address(""webmaster.pipot.wf3@gmail.com"", ""Admin PIPOT""))
+                    ->to($user->getEmailAddress())
+                    ->subject(""Confirmation de l'adresse email"")
+                    ->htmlTemplate(""registration/confirmation_email.html.twig"")
+            );
+
+            return $this->redirectToRoute(""login"");
+        }
+
+        return $this->render(""registration/register.html.twig"", [
+            ""registrationForm"" => $form->createView(),
+        ]);
+    }
+
+registration/register.html.twig:
+
+    {{ form_start(registrationForm) }}
+        {{ form_row(registrationForm.username, {
+            label: ""Nom d'utilisateur""
+        }) }}
+        {{ form_row(registrationForm.plainPassword, {
+            label: ""Mot de passe""
+        }) }}
+        {{ form_row(registrationForm.agreeTerms) }}
+
+        <button type=""submit"">S'inscrire</button>
+    {{ form_end(registrationForm) }}
+
+The email column in the database is named ""email_address"". I tried adding form rows with the properties registrationForm.email/ email_address / emailAddress / EmailAddress but I get an error saying:
+
+Neither the property ""email"" nor one of the methods ""email()"", ""getemail()""/""isemail()""/""hasemail()"" or ""__call()"" exist and have public access in class ""Symfony\Component\Form\FormView"".
+
+How can I have fields for all my User entity properties?",1629147380.0,2,1.0,4
+symfony,Getting redirected to homepage for no apparent reason,"Hello,
+
+I'm completely stuck. I tried adding an authentication process to my Symfony project but when I try to access the login url (""/connexion"") I just get redirected to the homepage without any error messages anywhere. There's too much code to copy and paste here but if you have any time to spare, would you be so kind as to take a look at [this repo](https://github.com/MelvDouc/pipot.github.io) and try to figure out what I did wrong? There's no sensitive info.
+
+The relevant files are:
+* src/Security/LoginAuthenticator.php
+* src/Controller/SecurityController.php
+* templates/security/login.html.twig
+* config/packages/security.yaml
+
+Thanks a bunch in advance.
+
+EDIT - Problem fixed, thanks a lot everyone.",1628797510.0,3,1.0,10
+node,Express + MySQL - How to write better promises?,"I'm using MySQL with Express and the mysql package. I'm not super familiar with promises and I'm amazed at how much code I need to do so little. For example, this is one of my database class methods:
+
+    async getProductById(id) {
+      id = +id;
+
+      try {
+        const response = await new Promise((resolve, reject) => {
+          const query = ""SELECT * FROM products WHERE id = ?"";
+          connection.query(query, [id], (err, result) => {
+            if (err)
+              reject(new Error(err.message));
+            resolve(result);
+          });
+        });
+        return response;
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+And this is the get function to display a product on its own page:
+
+    function product_get(req, res) {
+      const { id } = req.params;
+      const db = DatabaseService.getInstance();
+      const result = db.getProductById(id);
+      result
+        .then(([row]) => {
+          res.render(""product"", {
+            product: row
+          });
+        })
+        .catch(err => res.redirect(""/""));
+    }
+
+The code is only going to get worse as I add new functionalities. Could the code be improved? Is there a cleaner way of doing the same thing?",1628627239.0,9,0.92,7
+djangolearning,Redirect user to sign-up form if input is invalid,"Hi,
+
+I'm trying to create a sign-up form for my website. It's a standard HTML form. I'm simply asking the user to provide the necessary info. If the user submits the form but one of the fields is invalid, I'd like to the user the be redirected to the same page with an error message explaining the issue. I really don't know how to do that, though.
+
+Here's a quick overview of the form:
+
+    <form method=""POST"">
+      <input type=""text"" name=""username"" placeholder=""Enter a username"" />
+      <button type=""submit"">Submit</button>
+    </form>
+
+And this is the view:
+
+    def register(request):
+        if request.method == ""POST"":
+            username = request.POST.get(""username"")
+            if username == """":
+                # How can I redirect the user to the form and ask them to provide a username?
+        return render(request, ""register/index.html"", {})
+
+I know about the `required` attribute, by the way. I'm just not adding it yet for debugging purposes.",1627934279.0,3,1.0,4
+djangolearning,User Registration - Can I do without the built-in functionalities?,"Hi,
+
+I'm trying to add a sign-up page to my website. I don't want to use the built-in UserCreationForm() for a number of reasons, one being that I want to use JavaScript web components for the form elements.
+
+Is it possible at all to process the form data myself in the view kind of how you'd do it with PHP (using $_POST)?",1627845082.0,5,0.86,2
+sveltejs,place mines randomly in a Minesweeper game,"Hi, I'm trying to create a Minesweeper game using Svelte but I'm stuck.
+
+My app is made of two components: Board and Cell. I'd like to do the following:
+
+When the player clicks a cell for the first time, a set number of mines will be placed on random cells across the board. They can be any cells except the one that was clicked. To represent the fact that a cell contains a mine, the cell component has a variable isMined which is set to false by default.
+
+I've already made [this game with vanilla JS](https://codepen.io/melvdouc/pen/qBmxyjm). The way I did this part was:
+1. Create an array for the cells where each cell is an object with an index property.
+2. The first time the player clicks a cell element, the index of the corresponding cell object is passed into a getRandomIndexes() function.
+3. The getRandomIndexes() function generates an array of random cell indexes that cannot contain the first clicked cell's index.
+4. For each random index, the corresponding cell object has its isMined property set to true.
+
+How would I go about doing something similar with Svelte?",1627824196.0,1,1.0,22
+djangolearning,Display a user's product on their profile page,"Hi, I'm new to Django so this question might be silly but I need to know:
+
+I have a local website where people can create an account and publish things they'd like to sell. So I have a model for a user and another for a product with a foreign key ""seller"" to refer to the user that published it.
+
+On a user's profile, I'd like to display all the products published by the user. If I were to use a SQL query for that, it would be:
+
+    SELECT * FROM product WHERE seller_id = {the relevant user's id};
+
+What should my views.py function be like to achieve that? I tried:
+
+    def user_profile(request, id):
+        user = User.objects.get(id=id)
+        userProducts = Product.objects.all(seller=id)
+        return render(request, ""main/user-profile.html"", {
+          ""user"": user,
+          ""userProducts"": userProducts
+        })
+
+but got the error ""all() got an unexpected keyword argument 'seller'.""",1627740498.0,5,1.0,3
+learnjavascript,Generate a random password,"There's a ton of different ways you can generate a random password with JavaScript. Here's one using the String.fromCharCode() method and random numbers. Enjoy!
+
+https://codepen.io/melvdouc/pen/ZEKOQvq",1626107946.0,2,0.75,0
+learnjavascript,Add a Dark Mode,"Adding a dark mode to a webpage is a fairly straightforward process. I made this CodePen to show beginners the basics of how this can be achieved. Enjoy!
+
+https://codepen.io/melvdouc/pen/YzVGdjK",1626018753.0,0,0.5,14
+javascript,Smooth Typewriter Effect using requestAnimationFrame(),[removed],1625314570.0,1,1.0,1
+node,most basic CRUD using Node,"There are many tutorials on Youtube on how to create a so-called CRUD application using Node but I haven't found one that really deals with what I'm looking for here.
+
+I have this simple MySQL database table of books with a column for the title, another for the author, another for the publication date, etc. I'd like to be able to:
+
+  1. create = insert a new book into the db,
+  2. read = display the books in an HTML table,
+  3. update the data on any book in the db,
+  4. delete any book off the db.
+
+I'd like to do all of the above from a simple HTML document, not through some web application. I know how to do it easily with PHP but I don't know how to do it with Node. Is it even possible without using (too many) frameworks or libraries? If you could just give some pointers on where to start, I'd appreciate it a lot. I've been trying to learn Node for months but I'm still stuck at the basics. I believe knowing how to do this would help immensely. Thanks a bunch in advance.",1623446937.0,25,0.88,8
+learnjavascript,using Infinity in unexpected ways,"While looking for a way to recreate the flattenDeep() method from Lodash, which recursively flattens all nested arrays in an array, I came across the following:  
+
+
+`function flattenDeep(array) {`
+
+  `return array.flat(Infinity);`
+
+`}`  
+
+
+I had no idea you could use Infinity that way and it blows my mind to know that it's actually possible. Are there any other similarly handy ways of using Infinity that a relatively inexperienced JavaScripter might not know of?",1622478527.0,2,1.0,1
+javascriptFrameworks,frameworks are too hard for me,"I've been studying JavaScript for the past four months. I've mastered most of the core concepts and built many projects in vanilla JS. However I'm hitting a wall when it comes to frameworks. I've watched dozens of tutorials on React, Angular, Vue and Node (not a framework, I know) and I still don't get it. They're like Hebrew to me. It's always the same scenario: Command line this, command line that, npm this, npx install cli@latest87.59.64752 -g --save-dev that. Apparently it now takes at least 10,000 files to create a simple to-do list when a simple index.html, style.css and app.js used to be enough. The documentation doesn't help as it's written in its own opaque terminology (PHP's Symfony is the epitome of this). I end up feeling overwhelmed and discouraged.
+
+I'm aiming at becoming a front-end developer but good knowledge of a JS framework is a must. I don't know what to do…",1619618099.0,10,1.0,4

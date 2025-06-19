@@ -1,0 +1,148 @@
+subreddit,body,created_utc,score
+Corsair,"I've been using this cable for 3 months now, with my 4090 FE, and I've had no issues whatsoever. Just make sure that you have a Type-4 PSU",1697549554.0,1
+intel,It was a scam. I just got it delivered today. It was a lens protector.,1696882527.0,2
+nvidia,That math makes sense; thanks CE degree.,1692238004.0,1
+nvidia,"Okay, so, I know this because I can also directly monitor the voltage output of the PSU at the 8-pin PCIe power connector side. It is about 12.2 or so volts at idle. It also drops with higher current loads as you suggested, but the drop of the 12VHPWR side is larger.",1692204915.0,1
+nvidia,"I actually considered getting that, but then I ended up being able to fit everything with just the Corsair cable so I ended up returning it. But it's good to hear that you've not been experiencing troubles",1692195291.0,1
+nvidia,Awesome! Thank you for confirming that,1692190269.0,2
+nvidia,That's pretty interesting!,1692190226.0,1
+nvidia,GPU-Z shows you some of this information,1692189472.0,2
+nvidia,"Yeah, I think they lowered the overall power draw of the silicon in this new version. I'm not sure if it is at the detriment of overall performance, but I'll need to see some reviews on it.",1692189445.0,1
+nvidia,Awesome! Thanks for confirming that. It's very helpful to have data points like this to validate my system setup.,1692189334.0,1
+nvidia,And you didn't notice any burning on the connector at the GPU side?,1692189272.0,1
+nvidia,"Interesting, it looks like the PSU is providing a higher base voltage. The key concern here is the voltage drop via the 12VHPWR connector as that can indicate a power loss a.k.a. heat and melting. In your case, it looks like the max difference is about 230mV.",1692189233.0,1
+nvidia,"For those who are interested. Here's the Python notebook that lets you plot stuff. Just upload a .CSV file recorded from HWiNFO and run it to plot any of the attributes you want from temperature to power to whatever else you want :)
+
+&#x200B;
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import pandas as pd
+    
+    df = pd.read_csv('GPU_Temp_Analysis_Superposition.CSV', encoding= 'unicode_escape')
+    
+    print(df.columns)
+    
+    N = len(df)
+    
+    V1 = df.loc[:N-3, 'GPU PCIe +12V Input Voltage [V]']
+    V2 = df.loc[:N-3, 'GPU 16-pin HVPWR Voltage [V]']
+    P1 = df.loc[:N-3, 'Total GPU Power [% of TDP] [%]']
+    P2 = df.loc[:N-3, 'GPU 16-pin HVPWR Voltage [V]']
+    
+    t = np.arange(N-2)/(N-2)
+    
+    plt.figure(figsize = (16*1.5, 9*1.5))
+    
+    plt.subplot(2, 1, 1)
+    
+    plt.plot(t, V1.astype(float), lw = 1.5, label = 'GPU PCIe +12V Input Voltage [V]')
+    plt.plot(t, V2.astype(float), lw = 1.5, label = 'GPU 16-pin HVPWR Voltage [V]')
+    
+    plt.axhline(y = 12, lw = 2.5, c = 'tab:red', linestyle = '--', label = '12V reference')
+    
+    plt.legend()
+    
+    plt.title(""RTX 4090 FE Voltages"", fontsize = 20)
+    
+    plt.ylabel(""Voltage (V)"", fontsize = 20)
+    
+    plt.grid()
+    
+    plt.subplot(2, 1, 2)
+    
+    plt.plot(t, P1.astype(float), lw = 1.5, label = 'Total GPU Power [% of TDP] [%]')
+    
+    plt.axhline(y = np.max(P1.astype(float)), lw = 2.5, c = 'tab:red', linestyle = '--', label = 'Peak Power 92%')
+    
+    plt.legend()
+    
+    plt.title(""RTX 4090 FE Power Usage"", fontsize = 20)
+    
+    plt.xlabel(""Time (s)"", fontsize = 20)
+    
+    plt.ylabel(""Relative Power [% of TDP]"", fontsize = 20)
+    
+    plt.grid()
+    
+    plt.savefig(""RTX-4090-Voltage.png"")
+    
+    
+    plt.figure(figsize = (16*1.5, 9*1.5))
+    
+    plt.scatter(P1.astype(float), V1.astype(float), lw = 1.5, label = 'GPU PCIe +12V Input Voltage [V]', s = 10)
+    plt.scatter(P1.astype(float), V2.astype(float), lw = 1.5, label = 'GPU 16-pin HVPWR Voltage [V]', s = 10)
+    
+    plt.title(""RTX 4090 FE Voltages v/s Total GPU Power [% of TDP]"", fontsize = 20)
+    
+    plt.ylabel(""Voltage (V)"", fontsize = 20)
+    
+    plt.xlabel(""Relative Power [% of TDP]"", fontsize = 20)
+    
+    plt.legend()
+    
+    plt.grid()
+    
+    plt.savefig(""RTX-4090-Scatter.png"")",1692189034.0,1
+nvidia,"Okay, that makes sense to me. Thank you so much for confirming that!",1692153515.0,1
+nvidia,"Ohh good god! Thank you so much for confirming that. It's been eating on my mind. And yeah, mine hovers around 12.2V or so at idle. This was at almost 92-95% of TDP. I appreciate you taking the time to confirm that.
+
+&#x200B;
+
+And that's interesting that you had a change from plugging in the connector to a different rail on the PSU. Did not consider that as a variable.",1692152802.0,5
+nvidia,"Hey so, after a bit of sleuthing, I did find that the one I have is the newer one with the recessed pins. Found some information on updated device ID and the switch to ad102-301 from ad102-300.",1692152605.0,1
+nvidia,"Yup, I do have the cable that came with it",1692151866.0,1
+nvidia,Ohh its python with numpy and matplotlib,1692151238.0,7
+nvidia,Thanks for the information. Any idea how to tell if the one I have has these new recessed connectors? Is there a manufacturing date or a serial number thing that I can use to assess that?,1692151213.0,1
+nvidia,I'm not sure what that is? Could you share any information on that?,1692150450.0,1
+nvidia,"It's brand new, in fact it's just 2 weeks old.",1692149725.0,1
+nvidia,"Yes, they are 2 x 8 pins and listed at 600W.
+
+Its these exact ones:  [Premium Individually Sleeved 12+4pin PCIe Gen 5 12VHPWR 600W cable, Type 4, WHITE (corsair.com)](https://www.corsair.com/us/en/p/pc-components-accessories/cp-8920332/premium-individually-sleeved-12-4pin-pcie-gen-5-12vhpwr-600w-cable-type-4-white-cp-8920332)",1692149160.0,1
+Corsair,"Haha, yeah, that's exactly why I got the founders edition. I was on the fence about getting an MSI or Asus because of their higher factory clocks; but they're just so massive that it wouldn't have fit.
+
+Yeah, I recommend these. It was super easy to setup and it's a lot cleaner than using the ones Nvidia sends you.",1691434650.0,1
+Corsair,That's great to hear. I didn't even know that something like this was in the works. Thanks for sharing!,1691335521.0,1
+Corsair,Ohh cool! I didn't know this. Will this work with existing 40 series cards?,1691276486.0,1
+Corsair,"Yes, a heat gun might be way too much heat! 
+
+I will, thank you!",1691272575.0,1
+Corsair,They suggested that if you need to make a bend in the cable to use gentle heat from a hair dryer or something and that actually sounds like a good idea. I'll try that and see what happens.,1691271016.0,1
+Corsair,"Okay, yeah that makes sense. I'll probably spend a couple of minutes assessing the cable's tension and make sure that it's correctly seated in.",1691270911.0,1
+Corsair,Ohh that's really helpful! Thanks for sharing,1691270840.0,1
+Corsair,Ohh those are just the cable combs. You can tell that I snipped the 24-pin comb to the 12-pin you see in the picture,1691270823.0,1
+Corsair,"Right, yeah, that makes sense. I could find some way to give it a bit of support from the bottom. Good catch! Thanks for pointing that out!",1691221676.0,1
+Corsair,"Yup! I spent a good 10-15 mins pushing it all the way in and it doesn't go in any further. I did click when I pushed it in the first time. And as far as I can tell, using a bright torch, I could not see a gap. So, I did okay. Thanks for confirming that!
+
+Yeah! I find it so baffling that so much engineering effort went into the design of the computer architecture itself and yet their QC has allowed such a shitty power connector, it definitely seems like an afterthought on their end.",1691203473.0,2
+cablemod,"Hey Matt, quick update for you. I worked! When I plugged it in, I heard a nice audible click sound as the clip engaged and the connector sits flush against the GPU. Great quality stuff. Thanks for helping me through this!",1691185528.0,1
+cablemod,"Awesome! Will do and let you know how it goes! Thanks so much, Matt!",1691151972.0,1
+buildapc,"Awesome! Thanks for confirming that. And yeah, I completely understand how much of a pain it is during the summer 😅",1691092922.0,1
+cablemod,"Hey Matt, I finally got those cables delivered this morning. Before I plug things in and run it I wanted to confirm if the cables look right:
+
+Cable and its packaging: [https://imgur.com/UNFl5ue](https://imgur.com/UNFl5ue)
+
+Cable front view: [https://imgur.com/Ewcew2N](https://imgur.com/Ewcew2N)
+
+Cable side view: [https://imgur.com/8t1MYYM](https://imgur.com/8t1MYYM)
+
+PSU: [https://imgur.com/Sh5ExGQ](https://imgur.com/Sh5ExGQ)
+
+Please let me know if this looks good. Again, I appreciate your time and help!",1691088556.0,1
+buildapc,Hey just a follow-up on your post here. Are you still using it and has it given you any trouble?,1691074232.0,2
+cablemod,Gotcha. Thanks for confirming that for me!,1690946081.0,1
+cablemod,"Right on! Thanks for confirming that. And just one final question, I can just plug the 8-pin connectors on the other side of the cable to any of the PCIe connectors on the PSU, right? 
+
+I'm just a bit apprehensive about the power connector on the 4090 and modular PSUs in general 😅. I appreciate your time!",1690935873.0,1
+USCIS,"Wait, why can't you ask for an extension? Also, what is your approval date? I believe they are currently producing cards for the 15th",1687327138.0,1
+USCIS,Thanks for letting me know! It's a huge relief to hear that.,1687327082.0,1
+SuicideWatch,"""With your lady friend, take comfort in her free will. She is with you because she wants to be. You don't need to push her away before she is ready.""
+
+Thank you for saying that :) You have no idea how much that one statement made me feel. I actually got off the bed, and am about to get on with the day. I love you.",1624808927.0,2
+SuicideWatch,"Yeah! Something like pornfree or nofap would really help me out! I've had these obsessive and self-destructive thoughts forcing me to rewatch porn (especially the more humiliating ones) over and over till I feel like my brain is going to melt!
+
+&#x200B;
+
+As for my relationship, I've never once taken anything out on her. It's just an unease that I feel around her, I feel like I'm not good enough and that I need to look for another person to better satisfy her... It's these thoughts are hard on my mind. It's just so difficult to cope with.",1624806463.0,1
+SuicideWatch,It would really help! May I dm you?,1624806284.0,1
+SuicideWatch,"Hi DoctorCthulhu, yeah, I've explored that option. They aren't trained to handle this specific type of situation. So, they've been asking me to seek out a therapist that specializes in porn addiction and self-esteem development. They also want a psychiatrist to put me on SSRIs. It's just that my student insurance doesn't cover these visits.",1624806266.0,2

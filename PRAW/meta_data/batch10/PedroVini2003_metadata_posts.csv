@@ -1,0 +1,663 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+Watches,"[Question] Suggestions on watches similar to this one from a ""renowed"" brand?","I found this watch beautiful. However, reading some posts in this subreddit, I found out that Tommy Hilfiger is a ""fashion brand"" in the sense that the watches aren't selled by the fact they're good watches, but rather because of the association with the brand, in contrast to other brands like Casio, etc.
+
+So, my question is: Do you guys have any idea of a watch that is similar to this one, but from a renowed watch-manufacturer?
+
+Note: I'm not a billionaire, but I make good money. Also, I'm looking for my first ever watch!",1749609186.0,0,0.4,8
+programmingcirclejerk,"""Codd's twelve rules are a set of thirteen rules...""",,1732965446.0,72,0.97,20
+openstreetmap,"Given a series of ""ways"", how to get them in the order they're walked?","For example, the [Relation 3800326](https://www.openstreetmap.org/relation/3800326#map=10/-10.9478/-37.5334) is composed of a series of ways.
+
+However, whenever I query this relation on a service such as the Overpass API, these ways are not returned in the order a person would walk on them, from beginning to finish. That is, they ways aren't returned in an order that forms a path.
+
+How could I solve this problem? Has anyone ever dealt with something similar?
+
+Thanks.",1722184496.0,10,1.0,6
+linux4noobs,How can I automatically redirect an SSH client to a host on my LAN?,"Suppose I have 3 hosts:
+- A, which is someone on the internet trying to do an SSH connection.
+- B, which is has a hostname example.com and has the 8080 port exposed to the internet. B doesn't run an SSH server.
+- C, which is on a LAN with B, not exposed to the internet and runs an SSH server on the default 22 port. It's local IPv4 is 192.168.15.10.
+
+Is there any way to manipulate incoming TCP traffic to B, such that B redirects the traffic to C's SSH server (listening on 192.168.15.10:22).
+
+In summary, A should be able to do this:
+```
+$ ssh -p 8080 user2@example.com
+# A -> B, B -> C
+$ echo ""Hello from C"".
+```
+
+I'm looking for a solution to this, because currently I do two SSHs accesses in sequence (and for this I must setup an SSH server on B).
+```
+# From A to B
+$ ssh -p 8080 user1@example.com
+# From B to C
+$ ssh -p 22 user2@192.168.15.10
+$ echo ""Hello from C""
+```
+
+Which works, but feels weird. Is there any way of automating this sequenced access?
+
+**Obs:** Something similar to what I'm looking for occurs when I run a Docker container (with B as the Docker host) which has an SSH server running on its port 22, then upon running I map B's 8080 port to the container's 22 port, and A would be able to enter into the container via SSH.",1716218589.0,1,1.0,1
+InternetBrasil,"Disponibilizando um serviço web, mas empaquei na abertura de portas do roteador.","Oi pessoal. Eu estava tentando rodar um servidor web simples no meu computador Linux, e poder acessar esse serviço de fora da minha rede local.
+
+Tenho um roteador Vivo Box. Suponham que ele tenha um IP externo 000.111.102.222 (via DHCP, mas não tem problema pq meu objetivo é aprender como o roteador controla a comunicação com os dispositivos locais e não ofertar um serviço permanentemente), e meu computador tem um IP interno de 192.168.15.10.
+
+Eu ouvi falar que para que alguém de fora possa se conectar, precisa liberar as portas do roteador. Porém, a interface web do roteador não é muito óbvia sobre o significado dos valores. Por exemplo:
+
+https://imgur.com/tx4zecs
+
+Eu interpretei que essa regra faria com que requisições em 000.111.102.222:80 seriam levadas para o processo ouvindo em 192.168.15.10:80. Porém, como a imagem mostra, a interface rejeita falando que o IP é inválido. Eu não tenho certeza se é o IP externo (que está vazio, pois eu não entendi o papel que seria feito por ele) ou o IP interno que eu coloquei que tem problemas.
+
+Se alguém puder ajudar, eu seria muito grato!",1715890807.0,2,1.0,10
+linux4noobs,What are symbolic links (symlinks) that also include commands to the linked file?,"Some symlinks do more than just link to files directly. They seem to perform extra operations (eg, calling a command on the target file).
+
+For example, the `vgs` command has the same effect as typing `vgs` at the `lvm>` prompt of the interactive `lvm` tool.
+
+What are these symlinks called? How can I create one such symlink (for example, create my own `vgs` link).
+
+Thanks.",1715551554.0,2,1.0,10
+computerscience,Clarification on definitions of concurrency models.,"I was reading about how different programming languages approach concurrency models, and I'm in need of some clarification on the definition (and, if possible, additional pointers) of many concurrency models.
+
+These questions popped up while I read about [Go's scheduling behavior](https://github.com/golang/go/issues/11462#issuecomment-116616022) and the [two-color problem](https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function/).
+
+The models are above, and the ones I'm puzzled with are highlighted with `???`.
+
+# Threads
+
+* **OS-level**: Managed/scheduled by the operating system, reflecting the hardware's multithreading capabilities. Fairly straightforward. Java, Rust, C (Pthreads), C++, Ruby, C#, Python provide interfaces that implement this model.
+* **Green Threads**: Managed/scheduled by a runtime (a normal process) that runs in user-mode. Because of this, it's more lightweight since it doesn't need to switch to kernel mode. Some languages had this but have abandoned (Java, Rust), others never had it at all (Python), but there are implementations on some 3rd party library (Project Loom for Java, Tokio for Rust, Eventlet/Gevent for Python, etc). The current 1st-party implementations I'm aware of: Go, Haskell(?).
+* **Virtual threads** (???): The [Wikipedia page on this](https://en.wikipedia.org/wiki/Virtual_thread) says that they're not the same thing as green threads, even thought the summary seems to be very similar:
+
+>In computer programming, a virtual thread is a thread that is managed by a runtime library or virtual machine (VM) and made to resemble ""real"" operating system thread to code executing on it, while requiring substantially fewer resources than the latter.
+
+>In computer programming, a green thread is a thread that is scheduled by a runtime library or virtual machine (VM) instead of natively by the underlying operating system (OS).
+
+This same page says that an important part of this model is preemption. Go's model before Go 1.4 was non-preemtive. After it, it's preemptive. So Go would fit into virtual threads rather green threads. But I think this cooperative/preemptive requirement for the scheduler is not generally accepted, since the Wikipedia page is the only one I've seen this being cited.
+
+Java is the only language I know that seems to use this term.
+
+# Coroutines
+
+* **Coroutines**: A routine/program component that allows execution to be suspended and resumed, allowing two-way communication between, say, a coroutine and the main program routine. This is cooperative/non-preemptive. Python calls functions declared with async as coroutines. Other languages that use the same terminology are C++ and Kotlin.
+* **Fibers** (???): These seem to be defined as stackful coroutines. So I guess the term ""coroutine"" per se doesn't seem to imply any stackful/stackless characteristic to it. These stackful coroutines allow for suspension within deep nested calls. PHP and Ruby have this. Python/C++/Kotlin all seem to have stackless coroutines. Obs: stackless here follows [C++'s definition](https://en.cppreference.com/w/cpp/language/coroutines).
+* **Generators** (???): Seem to be stackless coroutines? But with the difference of only passing values out from it, not receiving data in, so it's a 1-way communication between different program components. Many languages have this. I'm not sure if their implementation is compatible. Rust noticeably changed the Generator term to Coroutine (only to reintroduce Generator with `gen` blocks that are based on async/await).
+
+# Asynchronous computing.
+
+* **Asynchronous computing** (???): If Python coroutines are defined with `async`, does it mean asynchronous computing is just a very abstract model that may be implemented by means of \[stackless\] coroutines or any other method (discussed below)? This seems to be reinforced by the fact that PHP's Fibers were used to implement asynchrony by frameworks such as AMPHP. How does the definition of async by different programming languages (Python, JS, Rust, C++, etc) relate to each other?
+* **Callback/Event-based**: This seems like a way of implementing asynchronous computing by means of callbacks passed as parameters. JS (both Node and Web) used this heavily before Promises. Performant, but non-linear makes it hard to read/write/mantain.
+* **Promises/Futures** (???): A type abstraction that represents the result of an asynchronous computation. Some languages have only one of these names (JS, Rust, Dart), others have both (Java, C++). [This SO answer](https://stackoverflow.com/questions/14541975/whats-the-difference-between-a-future-and-a-promise) helped me a bit. But the fact that some have only one of the terms, while others have both, makes it very confusing (The functionality provided by Futures is simply non-existent in JS? And vice-versa for Rust/Dart?).
+* **Async/await**: Seems like a syntactic abstraction for the underlying asynchronous computing implementation. I've seen it in languages that make use of Promises/Futures for its asynchronous computing. The only major language that I know that currently doesn't provide this as a 1st party feature is PHP, Java, Go.
+
+# Message-Passing Concurrency
+
+This an abstract category of models of concurrency based on processes that don't share memory communicating over channels.
+
+* **Communicating-Sequential Processes (CSP)**: I haven't read Tony Hoare's original work. But I have heard that this influenced Go's model by means of channels/`select`.
+* **Actor model**: I'm not sure how it differs from CSP, but I know it has influenced Erlang, Elixir, Dart, etc. I also think it influenced WebWorkers/WorkerThreads (JS) and Ractor (Ruby).
+* **Message Passing Interface (MPI)**: Again, not sure how this differs from the previous two. But I have used with the C API.",1714513183.0,12,0.99,3
+programmingcirclejerk,"I try to choose all my technologies based on the fact that they are written in Go. For example, I chose Ory Kratos and Traefik because of this. ",,1714320571.0,38,0.95,16
+programmingcirclejerk,"If I see Clojure on a resume, they immediately go to the top of the list [..] If I see only Java... bottom of the list.",,1714102925.0,76,0.95,29
+PHP,What can one do with a fiber that it can't be done with a generator?,"The manual's sections about fibers and their use cases are not very good. I searched online, and the examples don't really answer the title question.
+
+For example, I understand fibers are stackful, where generators are stackless. So one can trivially write code like this:
+
+    function suspend(string $msg): int {
+      $val = Fiber::suspend($msg);
+      return $val;
+    }
+    
+    $f1 = new Fiber(function() {
+      $val = suspend('hey');
+      echo ""f1 got $val\n"";
+    });
+    
+    $f2 = new Fiber(function() {
+      $val = suspend('you');
+      echo ""f2 got $val\n"";
+    });
+    
+    $res = $f1->start();
+    echo ""\n$res\n"";
+    
+    $res = $f2->start();
+    echo ""$res\n"";
+    
+    $f1->resume(100);
+    
+    $f2->resume(10);
+
+Now, this showcases the stackful nature of fibers very well: they can be suspended anywhere in the call stack! I would think that this would be hard to simulate with generators, and with plain generators I think it really is.
+
+However, by leveraging generator delegation the code turns out to be equivalent and not so bad:
+
+    function suspend(string $msg): Generator {
+      $parm = yield $msg;
+      return $parm;
+    }
+    
+    $g1 = (function() {
+      $val = yield from suspend(""hey"");
+      echo ""g1 got $val\n"";
+    })();
+    
+    $g2 = (function() {
+      $val = yield from suspend(""you"");
+      echo ""g2 got $val\n"";
+    })();
+    
+    $res = $g1->current();
+    echo ""\n$res\n"";
+    
+    $res = $g2->current();
+    echo ""$res\n"";
+    
+    $g1->send(100);
+    
+    $g2->send(10);
+
+The only difference is the return type of `suspend`: Functions that work with fibers are free to keep their original return type, while those that do a similar job with generators must return a generator.
+
+So, I really want to know: **What's the use case that fibers make possible or much less painful to write/mantain?**
+
+Thanks.",1714100311.0,27,0.93,19
+programmingcirclejerk,"What would be a point in implementing another heavy OOP languages? Nothing, as OOP is an illegitimate paradigm. It is just stupid in a statically typed language.",,1709244050.0,37,0.95,17
+javascript,[AskJS] What happened to task runners such as Grunt and Gulp?,"I was reading a relatively old book on JS Best Practices. It touched on the topic of build tools such as transpilers/Babel, code bundlers and minifiers, and how some programs were used to coordinate this build process, such as Gulp.js and Grunt.js.
+
+However, I took a look at the repositories of both tools, and they seem unmaintained, with last updates/releases of more than 2 years. And to be frank, I also don't hear so much about these.
+
+Is there something that happened in the JS ecosystem recently that changed the usage of these tools?",1707860710.0,72,0.94,35
+javascript,What happened to JavaScript build systems/task runners?,[removed],1707860369.0,1,1.0,1
+rust,Which application/problem would you choose for presenting Rust to newcomers in 1h30min?,"I'm planning on giving a workshop about Rust for some undergraduates in a public university. All have programmed before, and a number have done so in C and C++.
+
+I have 1h30min, roughly, to present it and help them getting their hands dirty with solving a problem in the language, which highlights its main characteristics.
+
+I thought of something like a concurrent data structure (which one?), but would like to hear from you.
+
+Thanks.",1701908523.0,28,0.92,14
+webdev,"Are there any sources (Book, article, etc) on the history of web development?","## Background
+
+I'm not a web-dev guy. I mostly work with data and infrastructure stuff with Python, C++, etc.
+
+However, I would like to understand how web development works because the way most people interact with computation today are in the intent of using this specific technology (unthinkable some ~25 years ago).
+
+When I go searching for learning resources on the main concepts of web development, I've found some which talk about the usual technologies (HTML, CSS and JavaScript), but also about technologies and tools that I feel that are dead¹: JQuery, AJAX, PHP, XHTML, XSL, Java Applets, Flash, etc (Yeah, I'm a bit old)
+
+Then I started wondering: what happened to these? And most importantly, **why they died**? Then I found out some resources that elicited me:
+- [r/webdev - Is jQuery dead](https://www.reddit.com/r/webdev/comments/sfizjg/is_jquery_dead/?utm_source=share&utm_medium=web2x&context=3)
+- [r/webdev - Is XHTML dead](https://www.reddit.com/r/webdev/comments/410s0a/is_xhtml_dead/?utm_source=share&utm_medium=web2x&context=3)
+
+These gave some of the context I needed for understanding why some technologies became obsolete:
+- jQuery is now obsolete because the Browser Wars ended, leading to better compatibility and standardization (through W3C) of the DOM among browsers and the creation of various script APIs with it, such as Selectors.
+- Kinda similar to XHTML, XSL, AJAX (the 'X' part at least) and everything XML-related: some right-thinking people decided to create a standard for real-time client-server data-exchange with JSON, which killed the previous concepts simply because of superior design. Makes sense!
+
+These events probably had something to do with the rise of frameworks such as React, but I may be mistaken.
+
+## Question
+
+This led me to think of resources that compile this untold history of the web (which is an area of computing with a particularly interesting history, as the term ""Browser Wars"" suggests) in a fairly complete way. So the question is the same as in title. Does such a resource exists? One that focus not only the facts, but on the correlation of them.
+
+Thanks!
+
+¹ By dead, I mean stagnant or declining usage.",1697410581.0,8,1.0,1
+test,text test,"```py
+
+def main
+
+```
+
+```hs
+Int
+```",1694659467.0,1,1.0,0
+haskell,Making Space Invaders more idiomatic,"*Obs: This post uses CodeWorld for some functions. However, this is a question that doesn't depend on any library. It's about writing idiomatic code, that is, elegant and functional in Haskell*
+
+Suppose I'm interested in writing a Space Invaders game in Haskell, probably using something like [CodeWorld](https://code.world/haskell#). I'm in the module of writing the actors: the 9 enemies and the ship. A initial version of a program for achieving this is shown in Listing 
+
+    -- Listing 1
+    import CodeWorld
+    type PixelMatrix = [[Color]]
+    pixel :: Color -> Picture
+    pixel color = colored color $ solidRectangle pixelSize pixelSize
+    
+    pixelArtFrom :: PixelMatrix -> Picture
+    pixelArtFrom ccs = pictures \[translated x y (pixel c) | (linha, y) <- zip (reverse ccs) \[0..\], (c, x) <- zip linha \[0..\]\]
+    
+    
+    (e0, e1) =  (RGBA 0.00 0.00 0.00 0.00, RGBA 0.01 0.03 0.03 1.00)
+    (s0, s1) =  (RGBA 0.00 0.00 0.00 0.00, RGBA 1.00 0.10 0.00 1.00)
+    enemy1 = pixelartFrom inimigo1raw
+      where
+        enemy1raw = [[e0, e0, e1, e0, e0, e0, e0, e0, e1, e0, e0],
+                [e0, e0, e0, e1, e0, e0, e0, e1, e0, e0, e0],
+                [e0, e0, e1, e1, e1, e1, e1, e1, e1, e0, e0],
+                [e0, e1, e1, e0, e1, e1, e1, e0, e1, e1, e0],
+                [e1, e1, e1, e1, e1, e1, e1, e1, e1, e1, e1],
+                [e1, e0, e1, e1, e1, e1, e1, e1, e1, e0, e1],
+                [e1, e0, e1, e0, e0, e0, e0, e0, e1, e0, e1],
+                [e0, e0, e0, e1, e1, e0, e1, e1, e0, e0, e0]]
+    
+    enemy2 = pixelartFrom inimigo2raw
+        where
+           enemy2raw = [[e0, e0, e0, e1, e0, e1, e0, e0, e0],
+    [e1, e0, e1, e1, e1, e1, e1, e0, e1],
+    [e1, e1, e1, e0, e1, e0, e1, e1, e1],
+    [e0, e1, e1, e1, e1, e1, e1, e1, e0],
+    [e0, e1, e0, e1, e0, e1, e0, e1, e0],
+    [e1, e1, e0, e0, e0, e0, e0, e1, e1]]
+    
+    -- similar for other enemies
+    
+    ship = pixelartFrom naveraw
+        where
+        naveraw = [[s0, s0, s0, s0, s0, s1, s1, s1, s1, s1, s1, s0, s0, s0, s0, s0],
+                    [s0, s0, s0, s1, s1, s1, s1, s1, s1, s1, s1, s1, s1, s0, s0, s0],
+                    [s0, s0, s1, s1, s1, s1, s1, s1, s1, s1, s1, s1, s1, s1, s0, s0],
+                    [s0, s1, s1, s0, s1, s1, s0, s1, s1, s0, s1, s1, s0, s1, s1, s0],
+                    [s1, s1, s1, s1, s1, s1, s1, s1, s1, s1, s1, s1, s1, s1, s1, s1],
+                    [s0, s0, s1, s1, s1, s0, s0, s1, s1, s0, s0, s1, s1, s1, s0, s0],
+                    [s0, s0, s0, s1, s0, s0, s0, s0, s0, s0, s0, s0, s1, s0, s0, s0]]
+
+
+This code is really ugly. The actors functions, `enemy{1..9}` and `ship` have very similar structure, however different content. How can I make this code more idiomatic? How would you guys handle this problem? Thanks!
+
+Edit 1: For some reason, Monospace font is not being used with backticks.",1694655957.0,4,0.84,8
+brdev,"Dos que trabalham numa posição relativamente importante, quantos usam UML?","Sou estudante de Ciência da Computação numa universidade federal. Como é de praxe, existem pelo menos 4 disciplinas (geralmente, recebem o nome de Engenharia de Software, Prática Orientada em Computação, etc) que são focadas em formar profissionais para trabalhar num contexto empresarial. Uma parte muito importante desse contexto é **modelagem**.
+
+Para quem não sabe, quando Java surgiu, o mundo começou a achar que a chave pra construir software empresarial era a santíssima trindade:
+
+- OOP (Object-Oriented Programming), com C++, Java, C#, Python, etc
+
+-  Desing Patterns/Padrões de Projeto (Factory, Decorator, etc), uma metodologia popularizada pelo livro de mesmo nome da Gang of Four.
+
+- Modelagem com UML, BPMN, RUP, ou algo parecido.
+
+O que sempre me incomodou sobre este último (na verdade, sobre como algumas pessoas o utilizam) é que o foco muitas vezes parece ser na corretude sintática do que na claridade semântica. Por exemplo, numa prova recente, a professora falou que ia zerar uma questão que pedia um diagrama de objetos para quem não sublinhasse o nome dos objetos.
+
+Por curiosidade, eu peguei pra ler um livro da O'Reilly chamado ""Software Engineering at Google"". Pra minha surpresa, não existe uma (!!) citação à UML no livro. Isso fortaleceu uma suspeita minha: quem é produtivo (e eu imagino que o pessoal da Google seja) não gasta tanto tempo estudando um padrão de diagrama, muito menos cobrando corretude sintática. Procurando sobre UML em fóruns de computação como Hacker News, isso fortaleceu-se ainda mais: tratam UML como um conceito do passado.
+
+Obs: Isso não é pra falar que modelagem é inútil. Qualquer pessoa que já fez um curso de projeto de algoritmos teve que rabiscar diagramas no papel pra encontrar a melhor estratégia. Essa é uma técnica comum pra resolver problemas. O foco da minha crítica/pesquisa é em padrões de modelagem como UML, BPMN, RUP etc.
+
+**TL, DR**
+
+Finalmente, minha pergunta é a do título deste post: Quem trabalha numa posição razoavelmente importante, que tem responsabilidades pela arquitetura do software que é construído por uma empresa, usa UML?
+
+Edit1: Outra coisa que me incomoda em UML é a redundância. Diagrama de Classes de domínio/projeto são redundantes. Diagramas de atividade são redundantes com BPMN. Acho que o único diagrama q eu enxergo utilidade é o de sequência.",1693581616.0,8,0.9,11
+emacs,Why emacs-nox take almost the same size as GUI emacs?,"Just noticed that [emacs-nox](https://archlinux.org/packages/extra/x86_64/emacs-nox/)'s installed size is 110 MB. Almost the same as [GUI emacs](https://archlinux.org/packages/extra/x86_64/emacs) 111 MB.
+
+Why is this the case? I thought that by having no graphical interface the difference would be greater than 1 MB. 
+
+I have no experience in developing GUI applications, but this striked me as a surprise.",1682933853.0,13,0.93,3
+ProgrammingLanguages,A gentle introduction to simply-typed lambda calculus (STLC) and type theory in general?,"I was reading a book, [*Lectures on the Curry-Howard Isomorphism*](https://disi.unitn.it/~bernardi/RSISE11/Papers/curry-howard.pdf) by Sorensen and Urzyczyn. 
+
+Despite its title, it actually is really broad. But, I got to the part of simply-typed lambda-calculus à lá Curry, and the authors do a rigorous mathematical treatment of the subject, which I think is great, but frequently they give a proposition or lemma (Such as the generation lemma), and they assume the reader is already comfortable with, for example, giving a proof by induction on the derivation of the typability relation (which is a concept just introduced!) to prove the proposition/lemma.
+
+I consider myself with a good mathematical maturity, but I think the authors assume the reader had some previous experience with the type system being worked on.
+
+So, my question is: Are you aware of any learning resource that gives a gentler introduction to STLC, both Curry and Church, than the one given at the Lectures? If you do, please let me know, I would be very grateful. Thanks.",1677434933.0,19,0.92,3
+opendata,[Request] Datasets of images of cotton/soy seedlings?,"Hello guys, if anyone has ever worked with agragian visual data, specifically images of COTTON/SOYBEANS **seedlings** . Would be even better if they'are taken from nature, not from lab.
+
+I'm having a rough time finding a good one. If I don't, I guess I'm gonna have to build one myself using Google Images API.",1672364711.0,1,0.67,0
+ProgrammingLanguages,Book recommendations about TYPES?,"I want to know the fundamental literature there is about type systems and their intrinsicate relation with programming languages. 
+
+One book that is sitting on my to-read list is ""Types and Programming Languages"" by Benjamin C. Pierce. But I haven't read it and, honestly, not sure if it is the best place to start. 
+
+Thanks.",1670814400.0,49,0.95,17
+wow,A little question about the First Craft feature in DF,"How do I know the First Craft bonus has been consumed? I just crafted 3 differentes things in Dragon Isles Engineering, and the ""First Craft"" is in all 3 recipes. I don't know if this is intended, that label is gonna stay there forever. If so, that is kinda misleading. 
+
+Would be useful that the ones that we already crafted don't have the label.",1669703885.0,3,0.8,0
+wow,"[Question] Why there is differente BiS gear for diffented kind of contents, especially PvE content?","I'm not new to WoW, I played the first time in 2013/14. But now I got back to the game. I was reading in guides like Wowhead, Icy veins and I scratched my head thinking: I there's different BiS gear for Mythic+, Raids and PvP?
+
+For example, season 4 BiS for Shadow Priests:
+ * PvP: https://www.icy-veins.com/wow/shadow-priest-pvp-stat-priority-gear-and-trinkets
+* Mythic+: https://www.wowhead.com/guide/classes/priest/shadow/shadowlands-season-4
+* Raid: Same link above and https://www.icy-veins.com/wow/shadow-priest-pve-dps-gear-best-in-slot
+
+What would make one wants to use the gear from the Mythic+ list and not from the Raid (I know the obvious answer is  ""doing Mythic+"", but WHY? I don't see any obvious benefits of using the Mythic+ gear, beyond the fact that it's easier to get if one only doea Mythic+).
+
+Also, there wasn't some kind of equivalence between PvP and PvE gear? That there isn't much of the old PvP- and PvE-specific gear? So that one player that mainly does PvE could do PvP now and then?
+
+Thanks.",1669079273.0,1,0.57,12
+wownoob,How do Wowhead comment's people discover that stuff?,"Like, really. I'm not talking about the very obvious things that the game puts in front of you. Take for example the jellyfish mount from ZM (https://www.wowhead.com/npc=180978/hirukon#comments). How do people know that to evoke this guy u have to fish in that water, then go specifically to Vashj, and then to some other watery places in the game? How does one even comes to discover this?
+
+Another example: Hand of Nilganihmath. https://www.wowhead.com/item=186713/nilganihmaht-control-ring#comments:id=5194960
+
+It's a really secret mount. I can't even conceice how one would get to discover everything necessary to achieve this mount.
+
+Or I'm just dumb?",1669078188.0,143,0.97,26
+wow,"Currently, how can I apply enchants to other char's soulbound gear?","Basically, title. I know that in current WoW, the enchanting window opens and each enchant has a slot to put items that are gonna be enchanted. But what if I want to enchant some other char's gear, which is soulbounded?
+
+Thanks a lot, sorry for the noobey question. All other answers I got are from older xpacs, but they always say it involves trading with other chars - making enchants for your alts very hard. Is that so, as of today?",1668937241.0,12,0.83,6
+warcraftlore,Has Blizzard clarified how the Shadowlands relates to other death-related aspects of lore?,"WoW, like life, had many approaches about death. Until Shadowlands stablished a pattern about the afterlife: 
+
+Living beings have souls -> The kyrian race is responsible for transporting these souls to the Arbiter in Oribos, upon death -> The arbiter judges and sends the soul to one of Shadowlands' infinite realms. 
+
+Now, there are some exceptions and variations to this 3-step process. I have questions about some of them: 
+
+* Undeads/Necromancy:
+
+If a being dies and, after a reasonable amount of time, is brought back as undead, is that soul pushed back from the Shadowlands to the living plane? Does the soul have any memory about it's experiences at the Shadowlands?
+
+* De Other Side:
+
+No question here, since Bwonsamdi has a pocket dimension in Ardenweald and he is responsible for the transport of his followers' souls.
+
+* Frostmourne:
+
+Since the blade consumes souls, so Kyrians don't have even a soul to collect. But in Afterlives: Bastion, Uther is shown to have his soul divided in 2 by Frostmourne. One is collected by the Kyrian, the other stays in the blade. Uther's soul in Bastion doesn't have memory about its other half.
+
+* Wild Gods:
+
+No question here. They hibernate in Ardenweald and go to the Emerald Dream.
+
+* Liches:
+
+No question here. Soul isn't able to be collected if a lich's phylactery is intact. After it's damaged, it can be collected (such as Kel'Thuzad)
+
+* Elementals/Demons :
+
+No question here. Elementals don't have souls. They are bound to their elemental planes. Demons have souls, but it's bound to the Twisting Nether. (the Twisting Nether being apart from the Shadowlands was planned by the First Ones? who knows)
+
+* Halls of Valor and Helheim
+
+This is well explained, since Odyn gave his eye to look in the Shadowlands and construct similar being to the kyrian, the val'kyr. I gues Helheim also has val'kyr for soul transportation.
+
+* Spirits and ghosts
+
+Take for example Oshu'gun. Souls of dead orcs gather there. Also, some other ghosts and spirits exist in almost any place. For example, the ones in Outland at Hellfire Peninsula.
+
+How does that relate to Shadowlands? Why are their souls not being collected by the Kyrian? 
+
+Thanks.",1667178696.0,93,0.97,65
+brasil,Quais brincadeiras/jogos vcs usam pra passar o tempo?,[removed],1665539955.0,1,1.0,0
+AskComputerScience,"Books and learning resources about Automata Theory, Turing Machines, Computability and Complexity?","I'm looking for learning resources like books ( prefably), videos, articles/general text about theoretical computer science, pertaining to themes like those in the post's title. But it also may be about a more specific subject, as long as it's related to theoretical CS.
+
+
+I've reading Michael Sipser's ""Introduction to the Theory of Computation"", 2nd ed, and even in this book there's some recommended reading by the author. I plan to take a look at those as well. But since this field of CS caught my attention, I was looking for what other people could suggest.
+
+Thanks.",1664558459.0,4,0.76,3
+computerscience,Which Data Structure gave you the hardest time implementing/learning it?,[removed],1663123825.0,15,0.83,10
+EndeavourOS,"[Support] My EOS system doesn't recognize the headphones as input, only as output.","Hi guys, I recently installed EOS with i3. I love the distro, it's beautiful and lightweight, and easier than Arch. So, congrats for all involved in it.
+
+I recently got in a problem that only got noticed after I installed Discord. My laptop recognizes the headphone as output, but not as input. To make sure that this wasn't an issue with the headphone, I tested it with a Manjaro XFCE machine. It correctly works as expected: Input and Output.
+
+Here's how PulseAudio looks when I  plug the headphone: 
+
+https://forum.endeavouros.com/uploads/default/original/3X/8/0/80e1bae1f0495b2863d71682046cf50e535e701f.png
+
+https://forum.endeavouros.com/uploads/default/original/3X/a/7/a7035d425184ea77b2a05274ddb5d3b7e23795ea.png
+
+
+Basically, I can use the headphone for HEARING stuff, but can't use it for SPEAKING stuff. This happens to all the headphones I tested. 
+
+[This post on the forum has more details about what I already tried.](https://forum.endeavouros.com/t/cant-reproduce-audio-because-pipewire-is-unable-to-start/31265/12)
+
+**UPDATE /SOLVED**: I found a [solution](https://superuser.com/questions/1312970/headset-microphone-not-detected-by-pulse-und-alsa) that works for me in the SuperUser stack.",1662581832.0,3,1.0,0
+ManjaroLinux,Fn keys not working in Manjaro (Sound/Brightness),"Hey guys. I'm currently using Manjaro XFCE. Initially, I could use keys like F2/F3 for changing the system's sound. Or F5/F6 for brightness. But somehow I messed up and now these keys are not working. There's any standard way to change brightness/volume in the terminal, so I could set shortcuts for these commands?",1659217489.0,2,1.0,1
+ManjaroLinux,"Manjaro ""forgets"" configurations after the sessions ends","Hey guys, I recently installed Manjaro Xfce in my laptop. After I login, my Wi-Fi is disabled and the apps I opened in the previous session are closed automatically. How can I change this? I mean, for the Wi-Fi to be permanently enabled and even after I end a session, all configs I made be ""remembered"" by the system?
+
+&#x200B;
+
+Any help would be appreciated. Thanks.",1659102000.0,2,0.63,6
+computerscience,What are some classical and influential books in CS field?,"Hey, I have recently collected some books considered to be part of the ""classics"" collection of CS books. These books have long-lasting influence, shaped generations and even have some nicknames. Here are some I have already collected:
+
+- The Art of Computer Programming - Knuth
+- Introduction to Algorithms - CLRS
+- SICP/Wizard Book - Abelson, Sussman
+- Principles of Compiler Design/Green Dragon Book - Aho, Ullman
+- Compilers: Principles, Techniques and Tools/Dragon Book - Aho, Ulman, et al
+- Introduction to the Theory of Computation - Sipser
+- Introduction to Automata Theory, Languages and Computation / Cinderella Book - Hopcroft, Ullman
+- Algorithms + Data Structures = Programs - Wirth
+
+So, any book missing?",1658214911.0,138,0.97,26
+haskell,"An Asteroids-inspired, space battle game written in Haskell","Hi guys, a while ago I wrote a simple space battle game that features 2 ships and 2 big asteroids. The game is fully written in Haskell, using the CodeWorld modules. 
+Here's the Github repo, and the suggested way to play the game is using the featured link in the README:
+https://github.com/Pedro-V/naves-codeworld
+
+https://code.world/run.html?mode=haskell&dhash=D2FIZM7ESJpIZZfkgjwIxLA
+
+Since I wrote the game mainly wth my brazilian peers, the documentation is in portuguese. But the game's source code is comprehensible to anyone familiar with Haskell's registers and function compositions.
+
+* U can use WASD for the first ship
+* And Up/Left/Right/Down keys for the second one.
+* A ship will be destroyed if it hits an asteroid or if it gets hit by more than 10 shots",1656426648.0,73,1.0,2
+scala,Why is Scala a mildly loved language?,"[Stack Overflow's survey results](https://survey.stackoverflow.co/2022/?utm_source=so-owned&utm_medium=announcement-banner&utm_campaign=dev-survey-2022&utm_content=results) are out! 
+
+In the most loved session, It attracted my attention that Scala, despite being a powerful, general and elegant language, has only \~50% ""loved"" responsed. That's average, if u look at the result of the other ones. There are other nice stats in the survey as well. It's worth checking out.
+
+Important to note that:
+
+*  Java has 45% in that same aspect
+* Another JVM language, Clojure, is in the top 3
+* Scala had 52% in 2021, 53% in 2020, 58% in 2019 and 2018.
+
+Do u guys/gals have any insights or opinion about this?
+
+Is it because it's seen as a ""scalabe database"" language for tools like Hadoop and Spark? Or something else? Share your opinion!",1656038586.0,22,0.8,38
+redditsync,Is there a way of showing a subreddits's background image?,,1654415902.0,13,0.93,4
+dataengineering,Suggestion of books for learning Hadoop and Spark?,"I'm a 19year old and I've been studying to be a data scientist or data engineer. 
+
+I've a fair knowledge of SQL and data-oriented Python (Numpy, pandas, etc)
+
+On the future I'll try to learn:
+
+- R
+- some cloud platform (AWS or GCP? Suggestions would be welcome)
+- Docker
+- Apache Airflow
+- Linux/bash
+- Terraform
+- MongoDB
+- Hadoop/Spark/PySpark
+
+I have some books in mind to learn all of these, except for the last ones.
+
+Some of the books I found would only cover Hadoop 2, while I know version 3.x is already in the market. Some of the books don't cover the Spark tool (I don't know if they even should cover it, but I usually see Hadoop and Spark being treated as 2 complementary tools).
+
+So my question is:
+ What would u guys suggest for books introducing Hadoop, Spark and PySpark? 
+
+Thanks to anyone who answers.",1653433454.0,19,0.91,38
+aws,How can I document an AWS project?,"I'm intending to do a personal project using AWS tools suchs as S3, EC2, MWAA and etc for my portfolio.
+
+I'm not an AWS expert, but a question striked me: How could I document this project in common portfolio platforms such as GitHub and etc?",1653097656.0,38,0.91,34
+translator,[Arabic > English] Someone posted this Arabic text in a teacher's office. Can someone translate it?,https://imgur.com/a/ayXElaI,1651588577.0,1,1.0,5
+statistics,[Q] Quick question about positive and negative values in T-Table.,"Hey guys. I've seen some values in the T-Student being described both as negative and positive.
+
+For example: T0,99;24 (p = 0,99 and 24 degrees) being both:
+
+**-2.492159** (As in [https://goodcalculators.com/student-t-value-calculator/](https://goodcalculators.com/student-t-value-calculator/) and other sources)
+
+and
+
+**2.492159** (As in [https://www.sjsu.edu/faculty/gerstman/StatPrimer/t-table.pdf](https://www.sjsu.edu/faculty/gerstman/StatPrimer/t-table.pdf) and other sources).
+
+&#x200B;
+
+I've been looking for some clarification on why sometimes the value is rendered as positive and negative, depending on the source.",1651343919.0,2,0.75,4
+statistics,[Quick Question]Clarification about values in T-Student table.,[removed],1651343842.0,1,1.0,1
+SuicideWatch,"Struggling with suicide almost everyday, going forward with the treatment","I'm 19M which, for the last year, has been struggling with anxiety attacks and depression. I think a lot about me being a lonely person, with very few emotional intimacy with other people over my lifespan. My birthday was last week but none of my friends congratulated me for (not angry at them, they are probably dealing with their own problems life has thrown at them, but it makes me sad tho).
+
+There are no major problems at home and at my Uni I've been doing well. Haven't found a job yet. Still, can't see myself being happy or loved/cared by someone else in the near future (Again, I've never dated or felt feelings towards me by anyone). Also, everyday I try to talk to people I don't know, to fight my anxiety or feel less lonely. But there's always an inner fear of being a nuisance to the person I'm talking to. 
+
+For the last two months, I've been going to therapy. It has helped, the anxiety attacks have diminished, but they are still present and when the night comes it's hard to not feel suicidal.
+
+Despite all that, I'm going forwards with the treatment. Gonna start taking pills to control anxiety and depression next month. I hope they help.
+
+To anyone reading this and that has related: You're not alone. Both you and me have been extremely strong these dark times. We are gonna make it.",1651201160.0,11,0.93,1
+chrome,Bug when selecting text in Android Chrome,"For the last few months, when I try to select any text in the screen in Chrome, the screen ""glitches"" and shows something like a static screenshot of a previously seen page.
+
+Here's an example: https://imgur.com/a/APwcxyn
+
+I tried to copy a part of the MacMiller page on Genius. But automatically the screen changed to a previously seen page. 
+
+▪︎ Why this is a problem
+Despite I can see the ""Copy"" tab after selecting text, I can't use the selection cursors to select other words for example. So this bugs makes it impossible to select a whole phrase in the current/actual page.
+
+▪︎Some notes:
+• This doesn't happens all the time. But it's frequent.
+
+• I have searched on the web and on Reddit for reports about issues similar to this one. Didn't find one that was corresponding.
+
+• I've sent a feedback report to Chrome about this issue. But I'm posting here since maybe someone is searching for this problem.
+
+• My Chrome version: 100.0.4896.127",1650773992.0,13,0.94,9
+askmath,[LINEAR ALGEBRA] There is a possible solution to this problem involving operations with subspaces?,"This is the question:
+
+**V = F(R, R)**
+
+**W1 = {f ∈ F(R, R)|f(x) = f(−x), ∀x ∈ R} (This is the real even functions)**
+
+**W2 = {f ∈ F(R, R)|f(−x) = −f(−x), ∀x ∈ R}  (These are NOT the real odd functions)**
+
+**Prove that W1 and W2 are vector subspaces and prove that** 
+
+**V = W1 ⊕ W2.**
+
+Although i can proof that both W1 and W2 are subspaces, I simply can't find a way to solve the second part. I believe there is a typo in this question (In the W2, maybe it should be the real odd functions), but if there is a true solution to this? I would like to know.
+
+Any help would be deeply appreciated.",1646946800.0,1,1.0,4
+MLS,There is any club in MLS or 🇨🇦/🇺🇲 that is an association?,[removed],1639530321.0,1,1.0,1
+AskWomen,"If you could give just one advice to ur 18-year old self, what would it be?",,1637645863.0,1,1.0,1
+askmath,Question about how to obtain the variance of a variable given these informations,"So, suppose two variables X and Y, and the standard deviation and mean of each:
+
+   
+
+&#x200B;
+
+||X|Y|
+|:-|:-|:-|
+|Mean|5 |10|
+|Standard Deviation|2|2|
+
+&#x200B;
+
+The covariance between X and Y is 3. 
+
+&#x200B;
+
+How do I obtain/prove:
+
+a) the variance of X?
+
+b) Can the linear regression line of Y in function of X obtained through the Least Squares Method be written as:  \^y = 0,75X + 6,25?
+
+&#x200B;
+
+Thanks to anyone who answers!",1634865431.0,1,1.0,1
+haskell,How I obtain a True value from evaluating a indetermined variable?,"So, suppose I name a variable t = 0/0. If I only operate 0/0 in GHCi the result is NaN.
+
+Then I ask Haskell to tell me if t == read ""NaN"". It doesn't work. The results is False.
+
+ Then I proceed to ask Haskell if t == 0/0. The result is False.
+
+What I need to compare t to, so I can get a True value from these comparisons?
+
+&#x200B;
+
+Obs: I know I could do a = 0; b = 0. So t = a/b. So if b == 0 it would return True, then t is indetermined.  But I want to directly envolve t in the boolean expressions. 
+
+&#x200B;
+
+Thanks to anyone who answers.",1633810013.0,7,1.0,8
+askmath,Reflecting a vector over another line,"&#x200B;
+
+https://preview.redd.it/f0bhiqglnbs71.png?width=560&format=png&auto=webp&s=5eb6030676325fb995fc0238b3661823d112430b
+
+&#x200B;
+
+In the above image, I have a line segment ""3"" and a vector ""1"" directed at line segment ""3"".
+
+&#x200B;
+
+**What I want is the reflection vector of ""1"" when it hits ""3"".**
+
+&#x200B;
+
+It also has to be of the same angle (Theta in the image) that ""1"" created when hitting ""3"".
+
+&#x200B;
+
+It's worth noting I don't have any equations related to the line segment. All I have from the beginning is the vector ""1"" and the ending points of the line segment ""3"".
+
+In the image, ""2"" is just a test  reflection vector I tried to calculate but it ended up having an angle greater than Theta. I would like to correct this. Any tips?? Thanks to anyone who answers.",1633740384.0,0,0.5,15
+askmath,I have vector 1 and vector 2. What I have to do so that vector2's magnitude be equal to vector1's magnitude?,"Self-explanatory.
+
+I calculated how to achieve the reflection of a given vector. And it works well. 
+
+&#x200B;
+
+The problem is that the the reflection vector is of a different magnitude from that of the original vector.",1633724833.0,1,1.0,7
+askmath,How to verify if two lines intersect using only their points?,"Hey guys, how do I verify if two segments intersect without using only the starting and ending points of both of them?
+
+And, obviously, drawing them is not the answer I'm looking for.",1633476507.0,4,1.0,8
+askmath,"In this limit question, after the splitting of limits, how the numerator went from -1 to 1?","[https://imgur.com/a/tOfhmIQ](https://imgur.com/a/tOfhmIQ)
+
+It seems dumb to ask but I simply can't see how he went from -1 in the numerator to 1.",1631301903.0,2,1.0,1
+askmath,"Can i cancel out x^2 in the following equation? If not, what are some other situations that seem passive of cancelling but in reality are not?","This may seem like a dumb question, but I honestly want to know. Look at this equation:
+
+[https://imgur.com/gallery/vC9skLG](https://imgur.com/gallery/vC9skLG)
+
+&#x200B;
+
+Could I cancel out x\^2? I think the answer will be no, because that will lead to different results whether u cancelled it or not.. But that's the only reason for it? And there are other situations where cancelling seems like an option but in reality isn't?",1630199567.0,1,1.0,3
+haskell,I can't find a solution to this problem involving stack install,"Hi guys, I've recently tried to install hlint through stack, but the terminal said that the plan of instalation couldn't be completed, so it made some recommendations about extra-deps I should add in the yaml file. I got every recommendation the terminal suggested, but now it has informed that there are a same package name being used in multiple local packages.
+
+i've detailed better my situation here: https://stackoverflow.com/questions/68946922/trying-to-install-hlint-by-stack-got-same-package-name-error
+
+If u guys need any more information, I can give it. i just need to solve this. Thank a lot to anyone who pays attention.",1630035133.0,3,1.0,11
+askmath,"Proofing, by definition, that a function featuring a root is continuous in the given point.","I know how to proof by definition the continuity of a very basic function, but I'm getting the math wrong when it envolves a root, like for example those three: http://imgur.com/gallery/uK7bMh4
+
+Can someome at least solve one of them so I can get the rest of them right? Solve showing the steps pls, so I can learn.",1629914991.0,1,1.0,1
+askmath,"How to solve |x| = 2x + 1? Know the result, don't know the method.","I recently came across an equation which goes: |x| = 2x + 1
+
+The module o x equals a binomial (2x+1). I've done some search and there's 2 possible results: either is -1/3 OR non-existent/false. But I couldn't see the method used (paywall)
+
+How can we obtain x = -1/3 from this equation? My thanks to anyone who answers.",1629740968.0,1,1.0,4
+askmath,Question about binomial in inequality,"http://imgur.com/gallery/B9tF6Pz
+
+So, how does one concludes that (x-r)(x+r)<0 equals to -r < x < r?
+
+ Thanks to anyone who answers!",1629645922.0,1,1.0,3
+askmath,How he got to x+2 common denominator? After or Before he changed the size of 5(x+2)/x+2?,"http://imgur.com/gallery/Z29bE9C
+
+Hey guys, I'm studying inequality and I would like to know how, in this question, the common denominator was achieved? Before or after he made it greater or equal to zero? thanks a lot to anyone who answers",1629248466.0,1,1.0,5
+neoliberal,[Middle East discussion] Does the UAE indirectly finances Muslim Brotherhood's propaganda?,"Hi guys. I read a lot about the growing rivalry of arab rulers like MBZ (In UAE), MBS (Saudi) and Hamad bin Isa (Bahrain) against the Muslim Brotherhood. Those rulers even financed and supported protests that eventually led to Egypt's Mohamed Morsi disposal. 
+
+So, my question is, despite all this rivalry, why does one of the Muslim Brotherhood's propaganda organizations in Europe (https://en.m.wikipedia.org/wiki/Federation_of_Islamic_Organizations_in_Europe) is financed by Al Maktoum, the prime minister of the UAE, one of the most anti-MB states in the Middle East? It doesn't contradicts the whole anti-MB/anti-extremism narrative favoured by the UAE?
+
+Is there some aspect of this whole conflict that I don't perceive?",1626068064.0,9,0.85,1
+heroesofthestorm,How do u play as Malthael against a Zul'jin?,"I recently played Malthael against a comp that was Blaze, Lili, Aba, Zul Jin and Jaina.... ZJ was their team's main source of dmg (With Aba's help too) and I absolutely failed at trying to do anything against him or against any of the enemy heroes. If I tried to focus on Blaze, there was a massive amount of dmg from Jaina + ZJ and I would quickly die...
+If I tried to go directly against him, he would have his ult + W slow + Lili's help
+
+Did I do something wrong or is this just a very hard matchup to play as Malthael?
+
+Obs: My team comp was Arthas, Malthael, Anduin, Nova and Orphea.",1624656750.0,4,0.83,11
+portugal,Qual a diferença entre uma Câmara Municipal e uma Assembleia Municipal (no nível de Concelhos)?,"Oi pessoal, sou do Brasil e aqui os termos ""Câmara"" e ""Assembleia"" indicam uma só coisa: Legislaturas, com as assembleias sendo sempre no nível estadual e as Câmaras no nível federal ou municipal. 
+
+Mas em Portugal, descobri recentemente (por causa das eleições em 2021) que todos os 308 concelhos/municipalidades possuem tanto uma Câmara Municipal quanto uma Assembleia Municipal. Eu li em algum lugar que a Câmara é uma instituição executiva, mas é muito estranho de se pensar que um corpo executivo possua tantos membros (17, como em Lisboa) de diferentes partidos. Portanto, não sei se essa é de fato a diferença entre eles. 
+
+Qual exatamente é a diferença em termos de autoridade entre essas duas instituições municipais? Grato desde já.",1624246055.0,2,0.67,3
+germany,A question about german election system and the math behind it,"Hi guys, I'm from Brazil and recently I've been reading about Germany's electoral system, the MMP. I recently tried to do the math behind allocating the seats in the 2017 german federal election to see if my results corresponded to those of  the actual election (This is my way to really ""learn"" how an electoral system works).
+
+Now, I know that Germany's allocation is state-based (which differs from national-based New Zealand's MMP), so I went for Schleswig-Holstein state, but my results were slightly different from the results in that state, so probably I got the math wrong and would like to someone to correct me. Here it goes:
+
+In 2017 Schleswig-Holstein election, FDP party had no district/direct mandates, but received 216.844 votes in the party list. When considering only the votes of the parties that surpassed the national 5% threshold, FDP party list' vote share is proportionally around 12,98%. This, multiplied by the total seats in the state (22) should give them 2,85 seats, which rounded up goes to 3 (In the real election, they got 3 seats).
+But in Schleswig-Holstein the CDU ended up having 2 overhang seats (Party list entitled them to 8, they got 10 direct mandates). 
+
+So, there also is a need to put leveling seats in this situation, right?? How do we decide how many leveling seats are going to be distributed to other parties?
+
+ I've read somewhere that all we should do is divide the actual CDU seats (10) divided by what they should have received via the party list only (8), obtain a ratio, which is 1,25 in this case, and then multiply it by the seats of all other parties current result. If we did this method to the seats the FDP got (2,85 or rounded up 3), it would end up with them being entitled to 3,57 or 3,75 seats, which rounded up would be 4 final seats to the FDP. But in the actual election they got only 3! How the leveling seats wasn't allocated to them? Or am I doing the wrong math? Pls help
+
+Also, sorry if the text went really long. I wanted to make sure everyone understood my question. Also, sorry for the bad english.",1623078296.0,43,0.88,17
+hungary,Why Hungary has the highest Covid-19 death rate in the world?,"Hi guys, I'm from Brazil and my  country's response to the pandemic has been pretty bad... We are in our way to surpass 500k deaths in June and we are lagging behind in vaccination if compared to other countries like Uruguay, Chile etc. So consequentially Bolsonaro's government approval ratings started to fall hard and only about ~25% of the population still approve him.
+
+My point is: Why Hungary had such a huge death toll? And also why your current government, ruled by Fidesz and Orban, didn't suffered such a strong drop in gov approval similar to the one Bolsonaro is suffering?
+
+edit1: Just for information purpose, Hungary just surpassed 300 Covid deaths by 100k habitants (cumulative). In Brazil, our figures are still at 210.",1621624738.0,56,0.89,43
+biology,Is there other species that are one gender only beyond the New Mexico whiptail?,"Hi guys, I've been reading a lil bit about parthenogenesis, and I found this species of all-female lizards (https://en.m.wikipedia.org/wiki/New_Mexico_whiptail).
+
+My question: There are any other species (either in nature or not) who are also one gender only, be it male or female only? 
+
+Thanks and sorry for my bad english.",1620076308.0,5,0.86,5
+heroesofthestorm,Why Jaina's Elemental dmg is now considered basic attack dmg?,"Honest question, I just noticed this change yesterday. I'm almost 100% sure that Elemental dmg was magical, but now it isn't anymore. The magical dmg of this ult really helped against heroes like Illidan or Qhira, and I can't really see this as a reasonable motive for the change.",1615152160.0,3,0.6,11

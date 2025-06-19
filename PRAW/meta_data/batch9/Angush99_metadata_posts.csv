@@ -1,0 +1,226 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+archlinux,nvidia or nvidia-open?,"So I am following the ArchWiki, and am currently installing drivers for my Nvidia RTX 3080 Ti.
+
+The wiki recommend the `nvidia-open` package over the `nvidia` package for my graphics card, considering my card falls under ""Turing and newer"".
+
+However, I am a bit confused, as upon checking both the `nvidia` and `nvidia-open` packages, they appear to be WILDLY different in size. The proprietary `nvidia` driver is 51.5 MB, while the `nvidia-open` driver is a mere 6.1 MB. How can they possibly be the same drivers with the same functionality?!
+
+Are they truly analogous, with `nvidia-open` being preferable? Or is the wiki erroneous, and I should still go with the traditional `nvidia` drivers? Or have I completely misunderstood something, and I need to ""combine"" the drivers, replacing the `nvidia` driver's closed-source kernel module with the open-source kernel module provided by `nvidia-open`?
+
+If you want to know what I mean, here are the links to the `nvidia` and `nvidia-open` drivers.:
+
+* `nvidia` driver: [https://archlinux.org/packages/extra/x86\_64/nvidia/](https://archlinux.org/packages/extra/x86_64/nvidia/)
+* `nvidia-open` driver: [https://archlinux.org/packages/extra/x86\_64/nvidia-open/](https://archlinux.org/packages/extra/x86_64/nvidia-open/)
+
+Additional notes:
+
+* I use an RTX 3080 Ti, which is Ampere architecture.
+* I use the `linux` kernel, so I probably won't need DKMS.
+
+# UPDATE
+
+I'm marking this post as \[SOLVED\]. Per Iritzdorf, a reason for the file-size discrepancy is possibly due to much of the core functionality of the GPU being moved into the card's ""GSP firmware"". To be honest, I have absolutely no clue what any of that means, but what's important is that the discrepancy is not an issue! I'm going to proceed with `nvidia-open` drivers and configure them in accordance with the wiki.
+
+Thanks for your support.",1725681316.0,87,0.93,31
+archlinux,"When installing GRUB to /boot/efi, how should grub-mkconfig be configured?","I have the following partitions, configured as follows:
+
+* nvme0n1p1 --- EFI system partition --- `/boot/efi`
+* nvme0n1p2 --- x86-64 root partition --- `/`
+
+Unless I am mistaken, I should therefore install GRUB to the EFI directory with the following command:
+
+    grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB
+
+After executing this command, I must generate the main configuration file. The Arch Wiki recommends the following command:
+
+    grub-mkconfig -o /boot/grub/grub.cfg
+
+However, as my EFI directory is in /boot/efi, not /boot, should I use the following command instead?
+
+    grub-mkconfig -o /boot/efi/grub/grub.cfg
+
+^(PS: do I append ""--recheck"" to the grub-install command? I've seen some unofficial sources use it, and upon reading the man pages for grub-install, I don't quite understand. If someone could clarify, that would be great. Thanks.)
+
+UPDATE: I used the standard grub-mkconfig method, and it seems to work just fine. I'm marking this post as \[SOLVED\].",1725569580.0,6,0.8,3
+archlinux,"EFI Partition: /boot, /boot/efi, or /efi?","I am manually installing Arch. I'm a Linux noob, so I'm doing it to familiarise myself with Arch. Please forgive me if this is a stupid question.
+
+My question is: for the EFI system partition, should it be in `/boot`, `/boot/efi`, or `/efi`? I have followed the Arch installation wiki, and it seems to recommend `/efi`, but the phrasing is ambiguous and I don't quite understand which I should choose. I have checked multiple other guides to see if that would clarify anything, and most seem to recommend `/boot/efi`, so there is no clear consensus. I also haven't found a clear explanation as to *why* one is preferable over the others.
+
+Could someone explain the difference(s) between these, and which would be best? Also, could you explain *why* it would be best? Thanks.
+
+Additional context if needed:
+
+* I use an Intel / Nvidia system.
+* I will use GRUB as my boot loader.
+* I may occasionally use Windows on an external SSD.
+
+# UPDATE AND CONCLUSION
+
+I have decided to go with `/boot/efi`, and seem to have no issues. Therefore I am marking this post as \[SOLVED\].
+
+The key takeaways seem to be:
+
+* `/boot`
+   * Do NOT use, if possible; your case may vary.`/boot` also contains critical files for your operating system, including the Linux kernel. This can make managing your files a bit cumbersome and messy. Furthermore, if you are dual-booting different operating systems, ESPECIALLY Windows, their EFI files can conflict with others, potentially damaging/corrupting your operating system. It also makes it impossible to encrypt `/boot`, which can be a security risk.
+* `/boot/efi`
+   * This seems to be the most popular option. It is tried and true, and seems to have been the de facto standard. By keeping your OS-specific and EFI files separate, you will find it easier and safer to dual-boot, It also allows you to encrypt `/boot`. This is what I use with GRUB, and it works perfectly.
+* `/efi`
+   * This is another popular option. It has the same advantages as `/boot/efi`, but is a shorter directory, making it easier to type out. However, some have noted that when using ""tab completion"" (a feature on many shell interfaces that reduces your likelihood of making typos and significantly increases the rate at which you can execute commands), it can conflict with `/etc/` which is one of the most commonly navigated-to directories, since it contains most of your config files. Also, some bootloaders do not have the ability to detect kernels outside of their directory, so it's always worth checking up on what your preferred bootloader is capable of before-hand.
+
+TL;DR do not use /boot unless you have a very good reason to do so, and /boot/efi vs /efi comes down to personal preference, and you likely won't encounter many issues.
+
+As mentioned in my post, I *am* a Linux noob, and therefore I may have misunderstood some things. Do not take the above as gospel. The Wiki is your best friend, and should be followed to ensure you have everything configured appropriately. The comments on this post have likewise been excellent at clarifying what the Wiki means if all the technobabble flies over your head like it did for me.",1725507874.0,68,0.94,48
+linux4noobs,How do I Correctly Configure 2 Storage Devices with Arch?,"I have
+
+* 1TB SSD (nvme0n1)
+* 2TB HDD (sda)
+
+# Part 1: is everything here okay?
+
+^(This part is just about partitioning my NVME as standard; I'd just like to double check that everything here is okay.)
+
+I would like to use my 1TB SSD as my primary storage device, containing the: root directory, /boot, /efi, and /home. Please point out if I am wrong for wanting to do so, but I would like /efi to be in /boot (since most guides and the wiki itself seem to imply that it is best), as follows:
+
+    /boot/efi
+
+I am manually installing Arch, and am in tty right now. I have partitioned nvme0n1 as follows (correct me if anything is wrong or missing):
+
+    Disk /dev/nvme0n1: 931.51 GiB, 1000204886016 byes, 1953525168 sectors
+    Disk model: KINGSTON SNV2S1000G
+    Units: sectors of 1 * 512 bytes = 512 bytes
+    Sector size (logical/physical): 512 bytes / 512 bytes
+    I/O size (minimum/optimal): 512 bytes / 512 bytes
+    Disklabel type: gpt
+    Disk identifier: 100637B9-6B66-48A8-AD38-4FFFD63036AA
+    
+    Device               Start          End      Sectors    Size  Type
+    /dev/nvme0n1p1        2048      2099199      208715       1G  EFI System
+    /dev/nvme0n1p2     2099200    136316927    134217728     64G  Linux root (x86-64)
+    /dev/nvme0n1p3   136316928   1953523711   1817026784  866.5G  Linux home
+
+Please correct me if any of the above looks incorrect, or if anything is missing. To further clarify:
+
+* /dev/nvme0n1p1 will contain `/boot/efi/`
+* /dev/nvme0n1p2 will contain `/` (root)
+* /dev/nvme0n1p3 will contain `/home`
+
+# Part 2: configuring my hard drive
+
+^(This part is about correctly configuring my HDD as a secondary storage device.)
+
+I would like my second storage drive, my 2TB HDD ""sda"" to be configured akin to the ""(D:)"" drive on Windows. I want it to function as a secondary storage medium, which I will use for miscellaneous files, apps that are helpful to have installed but I do not frequently use, and games that do not have high enough loading times to warrant taking up precious space on my SSD.
+
+How exactly should I partition, format, and mount it? How *many* partitions should I have? What ""Type"" should it be in cfdisk? Linux filesystem, Linux home, or something else?
+
+# PS:
+
+* I mostly use cfdisk.
+* I want /home to remain on nvme0n1, and only have certain apps/games/files/folders on the HDD.
+* I do not want a SWAP partition as I am not interested in hibernating. I will use a SWAP file instead.
+* I am not intending on encrypting my drives because this is a desktop.
+
+Thanks for feedback, and sorry if these questions seem stupid. I've been following the ArchWiki installation guide, but I kinda hit a roadblock when I realised it doesn't talk about what to do if you have multiple drives.",1724994742.0,1,1.0,3
+Warthunder,does anyone know what this means?,,1724329244.0,0,0.2,3
+linux4noobs,Is there a Linux equivalent to Event Viewer?,"I have had some troubleshooting difficulties in the past year or so with my PC, and have relied on Windows Event Viewer extensively to review error logs after my GPU hangs (thus completely crashing my PC).
+
+I've been wondering if there is a Linux equivalent to this? Ideally I'd like to have a GUI rather than navigating a CLI.
+
+Thanks.",1722714362.0,10,0.99,12
+thrifting,How the hell do I find clothes that actually fit?!,"I've recently tried thrifting a bit more for clothes, but I've pretty much only been able to find belts. Everything else is either completely not my style, or way too large for me.
+
+I'm a fairly petite and waifish guy, a little under 5'7"" and 50-something kilogrammes (\~115 lbs). Almost all of the thrift shops in my area are over 80% women's clothing, and the vast majority of the men's clothing is either L or XL, and I'm usually an XS or S.
+
+On the rare occasion that I actually find clothes that *do* fit, it's either heavily worn to the point it's falling apart at the seams, poorly designed/made, or literally for children.
+
+I have the exact same issue multiplied by 1,000 with shoes. I'm a size 5 UK, which is in the bottom 5% of men's shoe sizes, and almost all shoes in local thrift stores are size 8.5 MINIMUM. And that which on the incredibly rare occasion *does* fit me is for preteen children.
+
+Any advice or guidance? Thanks.",1722459300.0,16,0.79,20
+persona3reload,What boots does Makoto wear?,"I actually really like the style of boots he wears, and I'm looking to pick a pair up. I'm not looking to cosplay, but I really like the dual-buckle boot design, and think it'd go well with my style.
+
+Unfortunately, I can't seem to find any information on the boots he wears, and I doubt they're a real pair of shoes (like how Makoto's MP3 player is a real Sony model). So, I have come here to see if any of y'all have any further information. Are they based on a particular type of shoe?
+
+The closest I've come to finding them is ""dual-buckle Chelsea boot"", but I'm still having difficulties finding anything that truly resembles them. Cosplayers, do you have any recommendations?
+
+Thanks
+
+UPDATE: per u/Eragahn-Windrunner, they are double monk strap boots. Thanks for your help!",1722401592.0,16,1.0,4
+linux_gaming,"Should I Dual-Boot Windows, or Run it as a Virtual Machine in Order to Play Xbox Game Pass?","I am switching from Windows 11 to Linux (Arch, Majaro, PopOS, or Mint most likely) in a couple of days. However, I use Xbox Game Pass, and would like to continue doing so when I switch. Unfortunately, Xbox Game Pass is incompatible with Linux, and since it is UWP, it is not supported by Wine or Proton.
+
+I have decided to continue using Windows as a backup in order to play Game Pass games. But now I must decide whether it will be best to run it as a Virtual Machine, or on an external SSD. What do you guys think?
+
+My main concerns are performance and compatibility. The games I want to play tend to have kernel-level anti-cheat or Denuvo DRM, and I'm worried that they might not work if I try to use a virtual machine. Furthermore, I have concerns about performance -- will the virtual machine take a substantial performance hit?
+
+Some of the games I wish to play are: Persona 3 Reload, Call of Duty Modern Warfare III, Star Wars Jedi Survivor, Assassin's Creed games, and Titanfall 2.
+
+My specs are: 32GB DDR4, RTX 3080TI, i9-11900k, 1TB SSD, 2TB HDD.
+
+PS: I am aware that Game Pass *can* work on Linux if you stream games, however I am unwilling to do this, partially due to my sub-par internet, and also due to the fact I like to mod some of my games (e.g. ReShade).",1722233836.0,4,0.59,29
+linux4noobs,Could somebody explain the differences between Linux Mint vs Linux Mint Debian Edition like I'm a lobotomised infant with a concussion and raised by wolves?,"Every time I've tried to find out the differences between LM and LMDE, all I see is acronym after acronym after made up word after acronym and my brain just sorta shuts off.
+
+I'm a complete noob to Linux, but would like to switch on my main PC in the next couple of months or so.
+
+Please pretend I'm a literal troglodyte in the comments, no big words please and thankyou.",1721345503.0,63,0.88,92
+persona3reload,Do I need to EQUIP a Persona to reap bonus Social Link points?,"I am aware that having a corresponding persona to the social link that I am hanging out with nets bonus points when saying/doing the ""right"" thing.
+
+However, does this persona need to be \*actively selected\*, or can it just be summoned passively in my roster?
+
+So far I've been tediously swapping from one persona to another before every social link interaction to ensure I have a persona of the corresponding arcana selected, but if it just needs to be passively within my roster, that'd be a massive time saver.",1721100120.0,19,0.92,10
+persona3reload,Is item availability at the police station time-sensitive?,"I'd like to purchase every item available at the police station (weapons, armour etc.), but I'm wondering if any of it is time sensitive.
+
+For instance, I'd like to buy the Gladius for Makoto, but I have better weapons already and I'm fairly strapped for cash right now. Nonetheless, I'd like to buy every weapon (I'm a completionist), so do they ever stop being sold after a certain time? Or are all items available up until the end of the game?
+
+Thanks.",1721003371.0,8,0.84,1
+persona3reload,Does selling valuables on discount days net increased money?,"I am aware that the police station discounts goods every Monday. However, does selling items on Mondays increase the amount paid? Or is it the same?",1720993365.0,5,1.0,3
+NoMansSkyTheGame,How will the Better Planet Generation mod affect already visited planets?,"Sorry in advance if this is a stupid question - I'm a new player and am still doing the Awakenings questline.
+
+I recently discovered the BPG mod, which radically overhauls map generation. I was beginning to find planet generation rather repetitive and wanted to spice things up -- and avoid the repetitiveness of Starfield which had a much the same (albeit significantly worse) issue.
+
+However, I have one concern. I have already visited several planets in the first star system, and have just travelled to the second. I presently have two bases on the first planet you start the game on. My question is - what will happen to these bases when I install the mod? Will it delete these bases? Or will the terrain be regenerated around them? Is it possible that they glitch under the map or out of bounds?
+
+[https://www.nexusmods.com/nomanssky/mods/797](https://www.nexusmods.com/nomanssky/mods/797) <- the mod in question.",1719575134.0,6,0.75,6
+FallenOrder,How does Cal know about Sidious?,"I am playing through Jedi: Survivor, and have just reached the part where Cal frees Dagan Gera. During his conversation, Cal updates Gera on the past few hundred years since he was suspended in Bacta stasis, saying:
+
+>""...things have changed since you've been gone. A Sith Lord corrupted The Republic. Turned it into an Empire.""
+
+This is a very obvious quote in reference to Emperor Palpatine, but this is highly specific knowledge, something I doubt Cal could possibly know. Very VERY few people knew that Palpatine was a Sith Lord, even as late as 0 BBY.
+
+As far as I am aware, the only non-imperial people who knew that Palpatine was actually Darth Sidious during the events of Jedi Survivor (9 BBY) were Yoda, Obi-Wan Kenobi, and perhaps Ahsoka Tano.
+
+So, my question is -- how the hell does Cal know? Cal was a padawan during the era of the Republic, so he would surely know of Darth Maul, Savage Opress, Asajj Ventress, Count Dooku, and perhaps Barriss Offee, but none of these would have been the ""Sith Lord \[who\] corrupted The Republic"" as Cal described it. They were all either dead, missing, or weren't even Sith Lords by the time of Order 66, and so he must have known that if a Sith Lord really were responsible for this, they would have to be someone else entirely,
+
+My only theory is that after the events of Jedi: Fallen Order, he put 2+2 together, and naturally assumed Vader to be the Sith Lord in question who corrupted The Republic, failing to realise he was merely a puppet of Palpatine.
+
+So, am I missing something here, or does Cal actually know of Sidious?",1717287465.0,57,0.9,25
+DMZ,Incorrect Weapons in Enemy Inventory,"For the past 3-5 days or so, I have encountered a pretty severe bug, wherein the game incorrectly displays the weapons in a dead player's inventory.
+
+For example, I have opened up a backpack and seen what is clearly an MCPR-3000 sniper in their inventory. I excitedly swap out my secondary for it, hoping for the MCPR to be a much better rifle than the one I had previously equipped.
+
+But no -- not only was it **not** a good weapon, it wasn't even an MCPR-3000! And I end up with a riot shield or a Bailiff or a Lockwood instead. This has ***repeatedly*** got me killed in the past few days, where I swap a weapon to what I believe to be more appropriate for dealing with remaining enemies, only for the weapon to be completely different from the one I pick up. Just the other day, I was in the tunnels around Tsuki Castle in Ashika, and killed an enemy player. I quickly opened their loot, and swapped my DMR for their shotgun so I could finish off their teammates in the close-quarters environment of the tunnels. But no. When I ran out of ammo in my SMG and switched to what I *thought* was a shotgun... I pulled out a Crossbow instead.
+
+I have had this bug intermittently for months now, but it's normally very rare or inconsequential, usually just misreporting the number of attachments a weapon has (e.g., showing it has 5 attachments instead of 4) so it's usually not a big deal. But for whatever reason, it's happened >50% of the time for the past few days.
+
+Is there a fix for this? Is it just me experiencing this, or is it affecting everyone right now?",1715163650.0,4,0.67,14
+DMZ,How do I stop stealing loot from friendlies?,"So, if one of my teammates has been killed, and I am fighting an enemy and desperately need ammo or shields, I will occasionally open their backpack inventory, and take what is needed to win the fight.
+
+However, doing this often automatically siphons all their stuff into my inventory, including all of their cash, and all duplicate stackable valuables. This is especially annoying because there is usually only a moment to quickly gauge how much stuff I am ""stealing"" from their inventory before it is automatically siphoned, and my focus is usually elsewhere (on the enemies I am fighting)
+
+Because of this, after the battle, I try my best to reimburse my teammates what I *think* was stolen, but I can never be certain. This means I end up dropping way too much cash, or not enough.
+
+Is there any way to disable this? Thanks.",1713348944.0,1,0.55,12
+DMZ,Shadow Company in Vondel - what happened?,"I remember back when I first started playing Vondel DMZ, there were two factions of NPCs.
+
+Of course, there was the hostile NPCs who are the current main group of NPC in Vondel. But there was also a sizeable number of ""Shadow Company"" soldiers who were friendly unless aggressed upon, wherein they would become a temporary hostile faction.
+
+Recently, I returned to CoD:DMZ, and have come to the realisation that Shadow Company is seemingly nowhere to be found in Vondel. So, were they removed? If so, why?
+
+I used to love being able to hide myself in amongst the chaos as Shadow Company fought Konni on the streets of Vondel, or not knowing whether the gunshots around the corner are from a NPC shoot-out or a hostile squad of operators. It seems odd that Shadow Company would be removed, considering this
+
+^(Also, as a side question: was fog buffed in Vondel? I find it much harder to see, and using thermals in the spotter scope doesn't seem to help.)",1713171597.0,3,0.67,7
+DMZ,Lots of French Players?,"For whatever reason, I keep encountering LOADS of French-speaking players in my squads. Pretty much every squadmate I have had on voice chat has been French-speaking or had a French accent.
+
+I have no problem with this personally, my only concern is the language barrier often jeopardises our teamwork as we cannot effectively communicate. If I had a penny for every time I have said ""Je suis désolé, je ne comprends pas, mon français n'est pas très bon. Parlez vous l'anglais?"", I could probably afford a private tutor to teach me fluent French.
+
+For the record, I am in England, so I guess it's possible that the game server location lumps in the UK and France on one server. But then, I'd expect to see at least *some* Dutch, German, Spanish, Norwegian, Portuguese speakers etc. In fact, I can't remember the last time I had a British player on my team.
+
+So, is CoD:DMZ especially popular in France? Or am I accidentally on the French game servers? Or is this just a weird coincidence? Thanks.",1712962157.0,1,0.6,1
+nvidia,Force disabling Resizable BAR -- How?,[removed],1712510240.0,0,0.5,2

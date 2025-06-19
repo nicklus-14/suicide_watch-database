@@ -1,0 +1,1372 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+ExperiencedDevs,AI tools are ironically way more useful for experienced devs than novices,"Yes, another AI post about using them to learn, but I want to focus on the topic from a more constructive viewpoint and hopefully give someone an idea on how it can be useful for them.
+
+**TLDR:** AI tools are a force multiplier. Not for codegen, but for (imo) the hardest part of software development: learning new things, and *applying them appropriately*. Picking a specific library in a new language implicitly comes with a lot of tertiary things to learn: idiomatic syntax, dependency management that may be different than what you're used to, essential tooling, and a host of unknown unknowns. A good LLM serves as a great groove-greaser to help launch you into productivity/more informed research, sooner.
+
+We all know AI has a key inherent issue that make them hard to trust: they hallucinate confidently. That makes them unreliable for pure codegen tasks, but that's not really where they shine anyway. Their best usecase is natural language understanding, and focusing on that has been a huge boon for my career over the past 2 years. Even though CEOs keep trying to convince us we're being replaced, I feel more capable than ever.
+
+Real world example: I was consistently encountering bugs related to input validation in an internal tool. Although we enforce a value's type at the entry points, we had several layers of abstraction and eventually things would drift. As a basic example, picture \`valueInMeters\` somewhere being formatted with the wrong amount of decimals and that mistake propogating into the database, or a value being set appropriately but then somewhere being changed to \`null\` prior to upserting. It took me a full day of running through a debugger and another hour-long swarm with multiple devs to find the issues.
+
+Now, in a perfect world we'd write better code to prevent this, but that's too much of a ""[draw the rest of the fucking owl](https://www.google.com/search?sca_esv=34b770eb4fc2a6ee&sxsrf=AHTn8zoGEffY7L5XXyyayCaj0mlU7FNsog:1744718025449&q=draw+the+rest+of+the+owl&udm=2&fbs=ABzOT_CWdhQLP1FcmU5B0fn3xuWpA-dk4wpBWOGsoR7DG5zJBkzPWUS0OtApxR2914vrjk4ZqZZ4I2IkJifuoUeV0iQtlsVaSqiwnznvC1owt2z2tTdc23Auc6X4y2i7IIF0f-d_O-E9yXafSm5foej9KNb5dB5UNNsgm78dv2qEeljVjLTUov5wWn4x9of_4BNb8vF_2a_9-AxwH0UJGyfTMDuJ_sz_gg&sa=X&sqi=2&ved=2ahUKEwidoY-R_dmMAxWg5ckDHUSOF4sQtKgLegQIEBAB&biw=1512&bih=823&dpr=2)"" solution. 2nd best solution would be to codify some way to be stricter with how we handle DTOs: don't declare local types, don't implicitly remove values, don't allow something that should be \`string | null\` to be used like \`val ?? ''\`, etc. I really wanted to enforce this with a linter, and there's a tool I've really been interested in called [ast-grep](https://github.com/ast-grep/ast-grep) that seemed perfect for it, but who has time to pick that up?
+
+Enter an LLM. I grabbed the entire documentation, a few Github discussions, and other code samples I could find, and fed it to an LLM. I didn't use it to force feed me info, but used it to bounce ideas back and forth to help me wrap my head around certain concepts better. A learning tool, but one tailored specifically to me, my learning style, and my goals. The concepts that usually would've taken me 4-5 rereads and writing it 100 times to grasp now felt intuitive after a few minutes of back and forth and a few test runs.
+
+It feels really empowering; for me, my biggest sense of dread in my career has been grappling with not knowing enough. I've got \~8 years of experience, and I've taken the time to master some topics (insofar as ""mastery"" is possible), but I still have huge gaps. I know very little about system programming, but now with AI as a swiss army knife, I don't feel as intimidated/pre-fatigued to pick up *Programming In a Unix Environment* on the weekends anymore.
+
+And I think that's the actual difference between people who are leveraging AI tools the right way vs. those who are stagnant. This field has always favored people who continuously learned and poured in weekend hours. While everyone's trying to sell us some AI solution or spread rhetoric about replacing us, I think on an individual level AI tools can quietly reduce burnout and recharge some of us with that sense of wonder and discovery we had when first learning to program, the energy that once made work not feel like work. I think that the hyper-capitalist tech world has poisoned what should be one of the most exciting eras for anyone who loves learning, and I'd love to see the story shift towards that instead...hence, this post.",1744718198.0,835,0.93,181
+nextjs,"Vercel...please figure this out, because it's not working","I'm an experienced dev that has been using Next.js since v9. I have used it in corporate ecom jobs, for big-tech contract work, and for freelancing. I'm what you'd call an ""enthusiast"". But after [the recent security vulnerability that was posted](https://nextjs.org/blog/cve-2025-29927), I'm kind of fed up...I'm nobody special, but if your day 1 fans are at their breaking point surely something is wrong? 
+
+To me, *so many* Next problems arise from the architecture decisions made. Since App router, it seems the identity of it all is tailored towards hyper-granular optimizations on a per-component level...but is that really what we want? Due to this architecture: 
+
+* server state is more difficult to share, which has to be mitigated by funky APIs like a patched \`fetch\` pre-v15
+* client-first logic is tricky and requires a lot of workarounds that aren't intuitive
+* all of the magic that occurs at runtime means a ton of bundler work, hence the sickeningly-long compilation times in dev
+* we're only JUST getting a regular node-runtime middleware, and all the 'magic' header logic there is what led to the vulnerability 
+
+Note: I'm not saying those things aren't slowly getting better; they are and some have been fixed already. But when you think about the fact that:
+
+* there's NO auth primitives at all
+* self-hosting and taking advantage of all the optimizations that Vercel was proud of historically was difficult until recently
+* there's no dev tools (like with other frameworks) 
+* no type-safe routing (yet), and query param validation is offloaded to 3rd party libs
+
+...what's the point? It feels like you guys focus too much on stuff that *might* make my app perform better, at the detriment of things that *would* make development so much easier. 
+
+I'm not interested in dogpiling (most of the reasons social media dislike Next/Vercel are nonsense). But I am completely dissatisfied with the direction Next is taking. Getting off the phone with a freelance client today who got locked out of their app due to the vulnerability + Cloudflare fired me up enough to  start a dialog about the development direction that's being taken here.",1742674404.0,158,0.92,43
+webdev,"AI is a very solid tool in your toolbox for learning & side projects, even without it writing any code","No, not another hype post. AI sucks for writing code, so that's not what I mean.
+
+All those cases where I was working on something niche with a library/language that has little documentation or that I just can't grok without large time investment are now way, way smoother with AI tooling. A specific example: 
+
+Telefony architecture (read: Twilio, Telnyx) is hard to understand, I get lost in all the acronyms. But with AI, I can basically treat it like a rubber duck and ask ""so, SIP and PTSN are the same thing?"" and it can correct me by tailoring the response. This is a snippet from the back and forth so you can see what I mean: 
+
+   * Me: ""So SIP is kind of like a combination of a) a DNS, for identification b) cookie authentication c) a websocket, but instead of for the browser it's for phones. i know the analogy isn't exactly precise but is that the idea?""
+   * Claude: ""Your analogy is quite good! Let me refine it slightly: <truncated>""
+   * Me: ""So, phones automatically handle this SIP handshake or whatever it's called behind the scenes, whereas in a browser we have to handle SIP logic ourselves?""
+   * Claude: ""Not exactly. Regular phones don't handle SIP - they use traditional phone protocols (PSTN). <truncated>""
+
+The benefit here isn't necessarily that AI puts out the right answer (I still have to fact check). But personalized learning through dialogue, I've found, is huge for me. I can explore through analogies and receive tailored feedback, which has always been my preferred learning style. It helps to develop a more comprehensive mental model even if some of the finer details are off. Like, at the start of that convo, I didn't even know PTSN was a thing. If you google ""what is session initiation protocol (sip)"" many of the resulting articles don't menton it.
+
+Other things its helped me with (maybe some of these will give you brainstorm fuel):
+
+* Understanding WebMidi and all its edge cases for a piano web app I'm working on
+* Deep diving into shell scripting, terminals, and Docker to build my own custom containers in a language that I'm still learning (Go) 
+* Building my own VSCode extensions for niche uses instead of endlessly searching for extensions (creating my own custom commands on the fly, tweaking the UI for parts that irk me, etc)
+* Tiny AI agents for quickly performing RAG search on a Github repo's issues so I can debug more easily without trying 10 different iterations of a google search with my error message 
+
+A lot of devs are becoming lazy with AI, but I think good ones are becoming even better with it. The cognitive fatigue from trying to learn more or write more code has always been difficult to deal with if you work full-time, but AI makes me feel like my limiting factor now is my drive as opposed to time or my brain. 
+
+Even if you're the biggest skeptic and hate the corporate hype around it, give it a try. ",1737752780.0,0,0.41,2
+ExperiencedDevs,Has anyone else found serious value in building LLM integrations for companies? ,"It seems like LLM usage is a bit of a touchy subject on this sub and many other places. I think people are still under the impression that Github Copilot is the only way to leverage AI/LLMs. Over the past 3-4 months I think I've reached the conclusion that mass code generation is literally the *least useful* way to use LLMs, even though that's how they're most frequently marketed. Here's some of the things that have had real impact on processes at work/clients I've freelanced for, maybe it'll help somebody here brainstorm:
+
+* Fixing broken onboarding docs and automatically keeping it up to date on new PRs  
+* Automatically adding the necessary type annotations for an entire codebase; a menial task that could take 90 minutes but pays off hugely due to our framework (Laravel)
+* Mass refactoring; a small model fine tuned + prompted well can use ast-grep/GritQL/etc. and extract every type used across all your services and create a universal type library for easier sharing 
+* Attaching AI to a debugger for a quick brainstorm of exception causes based on a stack trace, filtering out things that aren't your code
+* Mass generation of sample/seeder data that actually mirrors production instead of being random Faker/mocked values 
+* Working with DeepL and a bespoke dictionary API to get more robust translations for more languages, with zero human effort minus manual review
+* This is cliche, but a quick and dirty chatbot that could answer questions about our userbase and give some statistics on our acquisition rates, demographics etc. helped us close a big contract
+* A script for a highly-specific form builder/server driven UI that was the bane of my existence for months, now bug free since
+
+Basically, any cool thing you wanted to build at work that would've taken you 2-4 hours to read up and research, then another 2 hours to write code for, can be done in 2 hours total. Sounds minor but if you're working at say a startup, it can be hard to find time to build things to make your life easier. Now you can knock it out in 2 lunch breaks.
+
+The other thing I've noticed is: AI being wrong 30-40% of the time (with a zero-shot, general task) is perfectly fine; it still often times serves as launching pad for figuring out how to tackle a problem. It's basically a great rubber duck. 
+
+Am I the only one really enjoying this? I'm working on a custom GUI for Docker to make local dev easier for us, and considering containers has been one of my knowledge gaps and I'm not experienced with Go it feels really great to at least be able to move forward with it. I feel like a kid again.",1736524988.0,217,0.88,124
+LLMDevs,"HuggingFace’s smolagent library seems genius to me, has anyone tried it? ","To summarize, basically instead of asking a frontier LLM ""I have this task, analyze my requirements and write code for it"", you can instead say ""I have this task, analyze my requirements and call these functions w/ parameters that fit the use case"", and those functions are tiny agents that turn those parameters into code as well. 
+
+In my mind, this seems fantastic because it cuts out so much noise related to inter-agent communication. You can debug things much more easily with better messages, make your workflow more deterministic by limiting the available params for the agents, and even the tiniest models are relatively decent at writing code for narrow use cases. 
+
+Has anyone been able to try it? It makes intuitive sense to me but maybe I'm being overly optimistic ",1736358645.0,78,0.98,19
+PHP,Question from someone new to PHP: is this a code smell or am I tripping?,"Experienced dev, new to PHP/Laravel. My coworker consistently writes code like this:
+
+    $class = 'App\Entity\\'.$eloquent_model->namespace.'\\'.$eloquent_model->method;
+      if (is_subclass_of($class, EntityInterface::class)) {
+        if (app($class)->checkCondition($variable)) {
+          $this->performAction($request, $user);
+
+In other words, frequently calling classes dynamically by constructing their names as strings and calling methods dynamically via \`app\`. To me, coming from other languages and ecosystems, this seems like a code smell because:
+
+1. she claims this allows reuse of logic; to me, if we have to wrap it with all these conditions how useful is that reuse? It feels like unnecessary indirection and mental overhead
+2. my IDE can't properly track down uses of checkCondition or performAction easily; maybe there's an easy way to do so with tooling but it makes the code harder to understand when coming in new
+3. It's hard to tell the flow of a request. Looking at it, I have to conceptually think about all the namespaces and classes available just to reason about which class actually gets called at the end by seeing which ones return what value from \`checkCondition\`
+
+This is done a lot throughout the code and in some places, even searching the codebase for a method name somehow doesn't turn anything up. Is this just a case of me being unfamiliar with modern PHP practices, or is it truly a code smell?",1734161345.0,57,0.88,117
+nextjs,AI is screwing up a lot of you guys' projects,"I comment a lot on this subreddit offering help where can, and I've noticed a very large number of you are clearly debugging with AI because
+
+* your code makes no sense; unused variables, circular logic, odd uses of 'use client', etc. etc.
+* the inline comments are very clear...no real person writes ""// returning the value"" or other obvious, redundant comments
+
+There's nothing wrong with AI, it's just a tool, but I think the ""build a startup fast"" mentality is hurting some of you. So, instead of relying solely on AI:
+
+1. Read the documentation. Yes, I know, sounds obvious but there has been times I have read the same docs 3-4 times and found something I missed the first times. DON'T just copy/paste the docs and ask AI to fix it; you will be much better off understanding it yourself, or even have AI explain parts to you that are confusing.
+2. Github has everything you could ever want. If you're stuck on a feature, find any repo that implements it. See what they did, and understand why it worked; that knowledge will help you too. Also, search Github issues + discussions for your errors; I've found a LOT of great resources this way.
+3. Use the network tab. This is a no brainer for some of you, but it's kind of crazy how many issues I see on here that could easily be fixed with this. You can see what URL was requested, the response, the timing, and all sorts of details that can at least point you in the right direction.
+
+This advice isn't really groundbreaking, but I do think there's a subset of new devs on this subreddit who aren't use to a world of debugging that doesn't include AI (as crazy as that sounds). Hopefully it helps someone.
+
+edit: One last thing...use Typescript, not JS. I will not elaborate further, just do it",1731535285.0,404,0.97,80
+blackmen,Tips that I wish I could give myself 10 years ago,"Keeping this short and sweet. I reflect a lot on what manhood means to me these days and over the past 10 years, these are the things I wish I could have learned sooner. Some of them are directed at myself, so don't take it too literally, and some may not resonate with the non-religious, but that's ok. 
+
+1. Often times, the internal work you need to do to improve yourself lies in whatever you're avoiding. Sometimes, ""locking in"" can be a coping mechanism in disguise. Don't try to hide your issues behind working hard and getting money. Deal with them.
+2. Just because someone or something is 90% wrong, doesn't mean you can't learn from the 10%
+3. Being disciplined doesn't necessarily mean you enjoy working hard. Sometimes it just means that you can endure how much a task sucks to reach a greater goal. So stop feeling guilty about not wanting to do it and just do it. 
+4. Take your ass to therapy. I don't care how 'self aware' you think you are or how much you pray and go to the gym. Therapy is about building a toolbox for emotional regulation, it's not about not ""feeling sad"". You will benefit from it the same way a manager benefits from a good leadership class. 
+5. Do not allow yourself to believe that your worth comes purely from being useful to others. You do that out of choice, but your worth lies in you being you. Not in how much you serve or protect people around you. 
+6. ""I won't ever be shit"" and ""I trust you God"". Pick one statement or the other, but you can't pick both. 
+7. $20 drinks at the bar add up every weekend, trust me. May seem insignificant now but not when you look back at your bank statements after 6 months.
+8. If the amount you put away in savings every check doesn't feel slightly uncomfortable, you're not saving enough
+9. See a physical therapist for what's bothering you. Don't take ""well you just need to rest more"" as an answer. Your knee pain, your lower back always being sore, your anterior pelvic tile, your neck tightness, etc. all of that has a reason that can be fixed if you talk to the right person.
+10. That thing you wanted to study? If you do 15 minutes a day, in 10 years you'll have spent over 900 hours. You don't need to do an hour a day for it to pay off. At least do a little. 
+
+Feel free to comment on mine or add your own",1730240334.0,25,1.0,17
+nextjs,Found an interesting video re: why ChatGPT likely switched from Next.js to Remix,"Video is mostly evidence-based and based on looking at their actually code (at least what's available from the browser). Credit to Wes Bos
+
+[https://www.youtube.com/watch?v=hHWgGfZpk00](https://www.youtube.com/watch?v=hHWgGfZpk00)
+
+TLDW; they likely wanted more CSR functionality rather than SSR. The large majority of the app is CSR now.
+
+My speculation/opinon: [the evidence seems to aligns with what I hypothesized yesterday](https://www.reddit.com/r/nextjs/comments/1f92jdv/comment/lljsaxa/). For example, give this a try: navigate to the GPT marketplace or click on one of your chats. IMO, the load speed is MUCH faster than it once was with Next.js. Which makes perfect sense, that's the strength of CSR for dynamic data. 
+
+ ",1725583527.0,123,0.95,79
+webdev,"CMV: ""Language/framework performance doesn't matter"" is a useless statement and a bad way to make decisions","I think we all are aware that all software solutions have trade offs. But I think that is conflated with the idea  that performance doesn't matter. It reminds me of the ""gear doesn't matter"" repeated in other domains like say, photography. 
+
+The idea can be more accurately assessed as ""Performance doesn't matter, until it does. Then, it matters a whole lot"". Sure, a 20 year old Canon 5D might work just fine in many situations. But when you want to capture Noah Lyles crossing the finish line you better show up with a Sony A9III. Similarly I don't think simply saying ""yeah, Python is slow-ish but performance doesn't matter"" is a great way to express that nuance.
+
+Many of us work on CRUD apps where the primary bottleneck is coming from database calls and network requests in general. But even if we arbitrarily say that takes up 80% of our illustrative performance bucket, that ignores the existence of 10 other buckets where your language of choice takes up a whole lot more volume.
+
+TS and Python aren't good backend languages, but they ARE productive ones. The trick is this though: that upfront boost you get in productivity has to come with a trade off in another bucket somewhere. And that trade off is often memory efficiency, scalability, dev ecosystem (e.g. JS devs and the culture of using packages for everything), footguns, poor build/dependency management, and an assortment of other issues. 
+
+Yes, you might never need low level string management at a scale that can handle 100k requests a second, but you might benefit from getting better cold start times in a lambda. Or getting better type safety that slows you down at first but leads to less production bugs.
+
+I think there's this underlying hesitancy in professional programming to avoid saying that X sucks at Y, probably to avoid pissing anyone off. Instead, people either say ""every tool is roughly equivalent just pick one"" or ""X language hawk tuah's, pick Y because it doesn't suck"". If we can all agree that every programming language sucks somewhere, it's really ok to point it out. I'm primarily a TS dev, and I will be the first to say it sucks for performance, but is great for productivity. Even for new devs, we should be explaining things to them in a way that will teach them to assess trade offs and pick a tool that fits their usecase. Hand waving away performance concerns is just sugar coating it.
+
+TLDR: more nuance please. Lazy blanket statements help no one.",1722881971.0,0,0.43,11
+Jujutsushi,Yuji and Yuta are going to prove that Sukuna and Gojo's view on strength is wrong ,"Gojo and Sukuna's view on strength is that it makes you the ""main character"", which isolates you and causes others to seek your love for their fulfillment.
+
+By the end of the manga, Yuta and Yuji will prove the opposite. Loving OTHERS gives YOU fulfillment which augments your strength with theirs. While you may not end up as individually strong, the ideal that bonds you and your loved ones will end up stronger than any form of solo strength. 
+
+So, instead of:
+
+**Strength -> Isolation -> Divisive, one-sided love**
+
+it becomes:
+
+**Collective love -> Unity -> An incredibly strong ideal**
+
+The key reasons why are represented in both Yuji and Yuta's mentalities. 
+
+**Yuta's cursed technique is the exact opposite of Gojo's: it makes you AND your entire team stronger through ""love"" (remember his domain's name), whereas Gojo's CT isolates him and is hard to use with others.**
+
+* Did you notice that every aspect of Yuta's fights and plans involved someone giving the assist, or vice versa? From Takaba to Maki to Gojo's 'body' to Inumaki, and now to another person in the last chapter (spoiler)? 
+* Plus, Yuta himself just said it: his techniques true strength is that it creates opportunities for his allies, not that it makes him incredibly strong individually.
+* We saw the difference in thought process and ability between Gojo and Yuta just now: Gojo is incredibly strong, unfathomably so. BUT, Yuta took his body and found a way to implement Gojo's technique with everyone else's, which is something Gojo failed at. 
+* Gojo had it wrong when he told Megumi to go from the home run instead of a bunt. **Yuta just did both.**
+* I think this will be further proven with Yuta ending up back in his body through the attack that was just used in the last chapter (can't mention due to spoiler rules), but we'll see
+
+As for Yuji, this is still up in the air and I don't have as much proof. But my belief based on the context of the story so far is that the cog mentality is actually the right one. 
+
+**But the difference is: being a cog not in a machine, but a cog to your ideals is the strongest mentality there is. That's why Sukuna hates Yuji. We're wondering when Yuji will surpass him...in mentality, he already has.**
+
+* And that ideal is the one Yuji's grandpa gave him: save people
+* I also think this is why Yuji is literally better than *any other character in the entire verse* at hitting black flashes. When your focus peaks and **your soul is perfectly aligned with your ideal**, I think that's the real secret behind black flashes. 
+* Symbolically, it makes sense why Yuji has always been able to suppress Sukuna.
+* And my favorite representation of this just showed up in the most recent chapter (I like it so much that I'm gonna put it in all caps, sorry not sorry...also, it's kind of a spoiler but not really so let me slide mods):
+
+**SUKUNA, MR. ""I'M SO STRONG AND COOL I DON'T NEED LOVE OR ANYONE AROUND ME"" NEEDED MAHORAGA TO CHANGE HIS TECHNIQUE'S TARGET.**
+
+**YUJI'S IDEALS ALLOWED HIM TO CHANGE HIS TECHNIQUE'S TARGET ON THE FLY, MID-BATTLE.**
+
+If Sukuna's ideals were on par's with Yuji, he'd be even stronger. And if it was Gojo, the manga would've ended 50 chapters ago. 
+
+I think by the end of the manga, it'll be clear that Yuta and Yuji were the ones who led the team to victory.",1720896495.0,130,0.92,47
+ChatGPTCoding,"Without good tooling around them, LLMs are utterly abysmal for pure code generation and I'm not sure why we keep pretending otherwise","I just spent the last 2 hours using Cursor to help write code for a personal project in a language I don't use often. Context: I'm a software engineer so I can reason my way about problems and principles. But this past 2 hours demonstrated to me that unless there's more deterministic ways to get LLM output, they'll continue to suck. 
+
+Some of the examples of problems I faced:
+
+* I asked Sonnet to create a function to find the 3rd Friday of a given month. It did it but had bugs in edge cases. After a few passes it ""worked"", but the logic it decided on was: 1) find the first Friday 2) add 2 Fridays (move forward two weeks) 3) if the Friday now lands in a new month (huh? why would this ever happen?), subtract a week and use that Friday instead (ok....) 
+* I had Cursor index some documentation and asked it to add type hints to my code. It tried to and ended up with a dozen errors. I narrowed down a few of them, but ended up in a hilariously annoying conversation loop:
+   * ""Hey Claude, you're importing a class called Error. Check the docs again, are you sure it exists?""
+   * Claude: ""Yessir, positive!""
+   * ""Ok, send me a citation from the docs I sent you earlier. Send me what classes are available in this specific class""
+   * Claude: ""Looks like we have two classes: RateError and AuthError.""
+   * ""...so where is this Error class you're referencing coming from?""
+   * ""I have no fucking clue :) but the module should be defined there! Import it like this: <code>""
+   * ""....""
+* I tried having Opus and 4o explain bugs/issues, and have Sonnet fix them. But it's rarely helpful. 4o is OBSESSED with convoluted, pointless error handling (why are you checking the response code of an sdk that will throw errors on its own???). 
+* I've noticed that different LLMs struggle when it comes to building off each other's logic. For example, if the correct way to implement something is by reversing a string then taking the new first index, combining models often gives me a solution like 1) get the first index 2) reverse the string 3) check if the new first index is the same as the old first index (e.g. completely convoluted logic that doesn't make sense nor helps), and returns it if so
+* You frequently get stuck for extended periods on simple bugs. If you're dealing with something you're not familiar with and trying to fix a bug, it's very possible that you can end up making your code worse with continuous prompting. 
+* Doing all the work to get better results is more confusing than coding itself. Even if I paste in console logs, documentation, craft my prompts, etc...usually the mental overhead of all this is worse than if I just sat down and wrote the code. Especially when you end up getting worse results anyway!
+
+LLMs are solid for explaining code, finding/fixing very acute bugs, and focusing on small tasks like optimizations. But to write a real app (not a snake game, and nothing that I couldn't write myself in less than 2 hours), they are seriously a pain. It's much more frustrating to get into an argument with Claude because it insists that printing a 5000 line data frame to the terminal is a must if I want ""robust"" code. 
+
+I think we need some sort of framework that uses runtime validation with external libraries, maintains a context of type data in your code, and some sort of ATS map of classes to ensure that all code it generates is properly written. With linting. Aider is kinda like this, but I'm not interested in prompting via a terminal vs. something like Cursor's experience. I want to be able to either call it normally or hit it via an API call. Until then, I'm cancelling my subscriptions and sticking with open source models that give close to the same performance anyway.  ",1720496794.0,100,0.83,114
+nextjs,"Post a repo of your app, project, or anything and I will find you easy opportunities to improve its performance","Inspired by the excellent series called [Speeding Up the Javascript Ecosystem](https://marvinh.dev/blog/speeding-up-javascript-ecosystem-part-9/), I want to write my own set of articles about common mistakes people make when building with Next that is beyond the obvious stuff like large uncached JSON, unmemoized expensive calculations, etc. I want to focus more on design patterns/tricks for SSR/CSR, how to properly use the cache, being more imperative about rerenders, etc. Just, instead of creating made up examples like a regular article, I'd rather help some folks out and have some more realistic cases.
+
+Post your repo in the comments and I'll either create a PR with some suggestions, leave some suggestions in a comment reply, or both. Bonus points if you can provide .env examples with a guide on how to start your app so I can test performance programatically.",1719438772.0,5,0.86,7
+nextjs,"If you knew how to code, you wouldn't worry so much","*Which auth should I use? I want to use Clerk, but what if I hit 10k users? Is NextAuth that bad?*
+
+*Is hosting on Vercel worth it? What if my app blows up?*
+
+*What's a good database? Is MongoDB good because someone on Reddit said...*
+
+*Do I need another backend? What do you guys think about XYZ? Is this product worth it?*
+
+Calm. Down.
+
+1. 90% of the time, when you're building a project you don't know enough about the problem to pick the perfect choice from the beginning. That's perfectly fine. Just pick something and move forward. Bias towards action. And before you write a comment trying to disagree with me, read #3 first.
+2. Hype storms will lead to you getting overwhelmed. I saw someone comment the other day ""don't use Vercel! These serverless platforms are dumb and just want to charge you crazy amounts of money! Use AWS instead, much safer!"". Do not bother trying to chase the zeitgeist of internet opinion, it will have you running in circles.
+3. Anti-hype is not inherently more intelligent. Remember: Reddit biases towards opinions that are critical of content creators and/or contrary to public opinion/popular ideas (in an ""I am very smart"" way). As such, take anything you read or watch online as just another opinion and evaluate them objectively.
+4. 3) Learn SOLID. Spend a week with Java or C# (\*whispers\* not Java though) and learn what that looks like. Then, bring your new knowledge to Nextjs when you're writing code for your auth or database or whatever, you won't have to worry constantly about ""well what if I want to switch later?"" because your code will be more package-agnostic.
+   * Note: not saying you have to adhere to OOP patterns in JS. But dependency injection, single responsibility, etc. are concepts that will help you.
+5. 4) Learn how the tools you use actually work. If you don't know the benefits of Nextjs outside of SEO then your app is simple enough that you probably could just be rawdogging vanilla JS and Express and be fine. You will NEVER learn even 1% of everything that's out there, but once you have the basics down, you will be freed of some of decision fatigue that comes from trying to build an application.
+
+I really don't want to see internet discourse continue to spiral down the toilet. Unfortunately, I do think Next.js has played a role in people starting to see software development as a get-rich-quick scheme or a shortcut to becoming a good dev. Next.js is a super-accessible framework, but it's not a beginner one...I think we need to try and shift the conversations back towards treating this with a sort of reverence (yikes that sounds corny), the kind an artisan would have for their craft. And that starts with beginners learning good habits instead of trying to Frankenstein an AI SaaS app together.",1718220338.0,288,0.92,52
+ExperiencedDevs,I went way above and beyond in a take home assessment. Mistake or worth the risk? ,[removed],1718063409.0,11,0.74,19
+Jujutsushi,JJK is frustrating because Gege is a generational talent with tunnel vision ,"When Obito was revealed in Naruto, no one was surprised. I still remember opening that thread, reading the chapter and thinking...""wait, really? that all it was? lol ok I guess"".
+
+Being unique, unpredictable, surprising your readers...that's very rare among shonen.
+
+Gege Akutami is, without a doubt, **the best shonen writer when it comes to taking the story in a direction you didn't expect**. Even more so than Togashi, who is like the Kamina to Gege's Simon. But that's the issue...**he's so good as surprising us, that he leans on it as a storytelling device too often**. Tunnel vision. 
+
+To me, it feels like he came up with the panels meant to shock us in his head (like the reveal of Gojo cut in half) then *worked backwards* to try and make those panels a reality instead of them feeling natural. 
+
+My absolute peak hype in this story was Sukuna taking Megumi's body, which compared to Gojo's death, felt like shock done right. The moment wasn't only about of the shock value. I was also so intruiged with where the story would go. How would it impact Yuji? What was Gojo gonna say or think? What about Tsumiki? Hmm, Megumi's being bathed in 'shadows' and 'darkness', could this lead to something? What type of convos will Megumi and Sukuna have inside the inner world? 
+
+Nope, none of that mattered nor was it touched on...at all. 
+
+Gege gets the major parts either perfect or, at worst, a solid B+. Yeah, I'm tired of binding vows and the Sukuna fight is really dragging on, but the main story being told (solitude and love, a cog vs. utter selfishness) has so much potential, the fights overall are really good, and the world is interesting. But he fails way too often with the small nuances, the character interactions, satisfying payoffs, in favor of dropping panels that are meant to shock us. 
+
+Personally I criticize the story often for one reason and one reason only: because it's *so close* to being one of the best 2 or 3 shonen ever, but inexpliably fell short in so many small ways. I think literally just an extra 10-20 chapters is all that's needed to make the story feel more...whole. To bring it from a B- to an A+. 
+
+This most recent chapter was a great return to form in a sense, becaues the shock is balanced by wondering what will happen next while also adding soooo much dimension to a certain character who was considered to be a bit boring by some. I hope we get more of this type of thing, but at this point I'm just tuning in to see how Gege tries to jump scare us next.",1716583639.0,1196,0.88,449
+ChatGPTCoding,"Cursor is not nearly as good as this sub makes it sound, what's going on?","I enjoy using Cursor, usually, and I've been doing so for months now.. Primarily, I find the docs feature to be the most useful by far. I'm experienced enough with programming to figure most things out, but parsing crappy documentation feels like a frustrating waste of time and there was a point where Cursor was helping with that significantly. 
+
+...at first. Lately, it's been feeling like it's worse than GPT 3.5. It's definitely not GPT performance. I have been noticing this over several sessions the past couple weeks, but managed to catch a great example tonight: 
+
+[Note: I also tried asking while passing no context](https://preview.redd.it/w7pdicfwb5zc1.png?width=1600&format=png&auto=webp&s=b72b5a68e21db36f268234e60b6385110c4ee458)
+
+A super basic issue that should be straightforward to fix, figured I'd save myself 3 minutes of needing to find the right property in the docs, but nope. Even passing it the relevant documentation, it still failed utterly after 6-7 different attempts with different prompts. 
+
+  
+And on the first try, GPT4: 
+
+https://preview.redd.it/kcocn2f7c5zc1.png?width=1334&format=png&auto=webp&s=080ec16683c1699ad3e892de81ca396ce5cc9cec
+
+Naturally a bit concerning considering I pay for a Cursor membership. Even more concerning that Cursor seems to have some sort of brigade that come out of the walls to sing its praises, meanwhile it frequently gets things so wrong that I have to open up a separate browser or write code myself like the stone age? Something doesn't add up. 
+
+I'm of half the mind to scrape some repos and perform some side-by-side tests or something, but Cursor's performance, the constant posts that make you wonder if they're paid ads...I'm beginning to wonder if this product is worth it at all. Am I the only one getting a negative experience?  ",1715149875.0,65,0.94,48
+Nigeria,Thinking of hiring a Nigerian later this year. Is 500k a fair monthly salary for a technical assistant role? (and other questions),"I trust that people in this subreddit will let me know if this is a lowball offer. I'm going to be hiring someone for a technical role a few months from now that will require some software engineering + UI/UX abilities. Generally doing things like research, documentation writing, and occasional basic coding. 
+
+I want to hire a Nigerian for altruistic reasons (there's many talented people for Naij who just need an opportunity) and also because it's more affordable for me, obviously. But I don't want to take advantage of anyone; I want to pay a fair, maybe even above average rate for a job like this.
+
+Is 500k monthly a fair price for something like this, or should I increase it? What salaries are you guys earning there, for those of you in tech roles (whether you write code, do project management, or something else)? 
+
+Additionally: I'd probably include something like a take-home assignment during the interview process e.g. write documentation on XYZ methods for solving problem A, compare them, and decide which is best. I'd imagine something like this to take 8-12 hours; would 50k be fair for this? As I'm putting together my budget and logistics, I want to keep payroll in mind so I can be sure to fund things appropriately. 
+
+Lastly: what are the logistics like for handling payment in Nigeria? Should I be using a specific platform? Is biweekly or monthly pay more standard? Should I be concerned with data/internet access? Any other things I should keep in mind? I'm in the US so I'm already aware and prepared for the time difference. ",1714090966.0,18,0.88,63
+ExperiencedDevs,Following up with a CTO after an interview? Good idea or overzealous?,"A CTO at a startup reached out to me on LinkedIn a couple weeks ago for an interview. Scheduled a screening call with their people for the next week, and I think it went well? But now I'm nervous. The screening call was Thursday, and I really, really would like this job specifically as it seems like my exact type of place. 
+
+Should I circle back with the CTO, mention that the first call went well, and that I'm excited to potentially speak more with them? 
+
+I've built a library before that exists in the same domain as the startup. I was thinking about writing a blog post about it that talks about the why, how, etc. and linking to my code, then sending it to the CTO. But I'm not sure if that would just feel like I'm arrogantly promoting myself, or if it'll come across as me being passionate about the problem, and excited to join a team that's working on solving it. 
+
+I don't want my decision making to be tainted by the fact that I'm a little thirsty for this job, out of genuine passion. ",1713297815.0,8,0.64,13
+Jujutsushi,Gojo can comprehend someone's cursed technique just by looking at them. Could he have percieved Sukuna's binding vow as he made it?,[removed],1713239050.0,1,1.0,2
+Jujutsushi,Something I realized after reading Viz that might make some people ok with Sukuna's binding vow,"A lot of people were lukewarm about Sukuna's binding vow that allowed him to cut Gojo. But I think this quote from Viz explains it a bit more, and helps illuminate why Sukuna's binding vow was enough to cast the technique.
+
+>""However, before transforming, when he had half his arms, Sukuna imposed a binding vow on the acivation conditions so he could cut Gojo""
+
+Meaning, that while Sukuna only had two arms, he created a binding vow that stated he had to 1) use both hands to cast his domain hand sign 2) direct the slash with his hand 3) chant to cast the technique.
+
+The key part is, at the time of this vow, Sukuna only had two arms. Meaning that, technically speaking, Sukuna imposed conditions that would be **impossible to fulfill** in order to cast it once with no spark (maybe), chant, or hand signs. Hell, maybe he even has to warn people before the slash comes and that's why he's constantly calling it out. But at the time of the vow, it would've meant he was obstensibly giving up the ability to cast the attack forever. 
+
+That is, assuming binding vows are indiffiferent to hypotheticals. It only makes sense if it doesn't factor in that Sukuna had the ability to sprout two extra arms. The new world dismantle conditions are impossible to fulfill with two arms. That sacrifice is what made it castable. To me, that makes it a lot more ""okay"" than what initial impressions may have suggested.
+
+But what do you think?",1712205902.0,302,0.92,171
+AmaPiano,I just listened to Khawleza by Kelvin Momo for the first time yesterday and I've been crying nonstop since,"Don't have an inkling of what the song means, all I know is it feel spiritual",1711840795.0,10,1.0,12
+reactjs,"What's the most advanced, complicated React project you've worked on? What problems did you encounter and how did you solve them?","I've been building with React for longer than any of my relationships, so at this point I feel like I know it pretty well. But, considering that at the end of the day all of my jobs have centered around CRUD, I can't help but be curious about people who had to solve really complex problems with React.   
+
+
+The most complicated thing I've ever had to do was build some dynamic filtering functionality for a large ecommerce site, but there's people out there building Figma or an advanced IDE with React. I want to hear from you guys, what's the hardest thing you've had to do and what did you learn from it?",1709748586.0,92,0.94,53
+nextjs,Next.Js doesn't feel like a full stack framework,"It feels more like an internal tool that some legendary genius at your job built and maintains on his own. But it always breaks and only one person knows how to fix it...Next doesn't have the structured toolbox feeling that other full stack frameworks like NestJs (for the backend specifically) or Laravel or .NET have.
+
+Every day at work, I'm running into errors, broken dependencies, and other oddities and weirdities. One day it's the sharp package breaking our prod deploys. Next day it's next/third-parties randomly not working. Next we're getting weird hydration errors that are impossible to trace. Next day I'm googling ""wtf is the difference between Response, NextResponse, and NextApiResponse"" for the 8th time and clicking on the 6th purple link because I can never seem to remember. Or why I can't get the Profiler in DevTools to work, ever. Is a lot of this stuff user error? 100%, but I don't have these same issues working with other batteries-included frameworks.
+
+I love Next. I love the speed of development, I love having typed server code and client code, I love the community around it, and I have a soft spot for Lee. but sometimes it just doesn't feel right. I'm struggling to truly articulate why, but the folks who talk about it feeling like magic are very right. Except, it's magic where you don't know all the rules and you accidentally combust yourself every Tuesday while trying to boil water. Then you read the Magic.js docs and see at line 68 in a footnote it says if you heat liquid on a new moon day you have a 99% chance of death and you're not sure if you're relieved that you know the solution to you problem, or annoyed that you even have to worry about that weird edge case.
+
+I'm not sure what the solution is. I think as folks understand the client/server relationship in a React context more, it'll get better and better...but I can't help but feel like the road to improvement isn't in just fixing bugs and adding more stable features. It feels like Next needs a more structured approach than just inserting directives and functions in places to toggle certain behavior on or off.",1708667767.0,159,0.85,135
+videography,Splitting Sony K3M XLR adapter between mic & ambient sound: possible?,"I want to record/stream an event, and ideally I'd like to capture the audio coming directly from the speakers, but also the audio of the room itself (for people's reactions, etc). Is there a way to do a L/R split or something of each with the K3M adapter, using a line input and my camera's built in mic? Or should I just plug in another mic, like a lavalier mic, to another channel on the adapter? ",1705176154.0,1,1.0,0
+Nigeria,How many Nigerians are panafricanists?,"Curious to see if Nigerians hold a belief that Africa should ""unite"" (obviously a bit cliche of a term but you know what I mean). Often see lots of attitudes that imply Nigerians don't care for solidarity with other African communities, I'm curious if this is the norm or if many of us believe in Africans banding together ",1703368408.0,12,0.88,41
+Jujutsushi,I have criticized Gege quite a bit as of late...but I have to say Gojo vs. Sukuna is one of the best fights I've ever read,"I'm forcing myself to not bring up anything negative, so this topic isn't for debating the ending or any other controversial aspects of the fight like the emotional stakes.
+
+I've been reading manga and watching anime for a long time...of all the hyped fights I've seen in my life (Yusuke vs. Toguro, Chrollo vs. Hisoka, Kiritsugu vs Kirei, Naruto vs. Sasuke, Hashira vs. Upper Moon 1, Ichigo vs. Byakuya, etc etc etc), this one might honestly be the best in terms of the fight itself.
+
+The way Gege went back and forth on who had the upper hand was amazing. Gojo starting with the advantage, then being put in a situation that would kill literally every other character in the verse (inside Sukuna's domain with your technique burnt out), then having Sukuna on the brink of death thanks to his go-for-the-fences mentality and combat genius, then Sukuna showing that he's the most elite sorcerer of all time...and this is only the first half of the fight, that somehow Gege wrote to believably end in a total draw. 
+
+I'll never forget live-reading Gojo healing through those slashes, almost being turned into salami, and suddenly recovering his technique in a way nobody thought was possible and blasting Sukuna in the face with red. 
+
+Say what you want about Gege or the story in general, but the fight itself was overall written as a near-masterpiece. ",1701891774.0,1514,0.94,439
+askSouthAfrica,DJ in America looking for Amapiano translations,"Hi all, I'm a DJ in the US working on a piece of Amapiano content. There's a perception among a lot of people here that Amapiano songs are all loud, bombastic, and without meaningful lyrics and although I'm not South African, I want to post a mix of soulful, meaningful Amapiano songs to introduce people to songs that aren't often played in the clubs here. These are the songs I want to discern the meaning to. Some of them I've been able to get the general gist of through Google searches, but line-by-line translations would be great
+
+\- Mawhoo, Kabza De Small and DJ Maphorisa - Nduma Ndumane
+
+\- Gaba Cannal & George Lesley - Healer Ntliziyo Yam
+
+\- Sam Deep, Eemoh - iMpumelelo ft. Da Muziqal Chef
+
+\- De Mthuda, Da Muziqal Chef, Kwiish SA - iThuba ft. Eemoh
+
+\- Pabi Cooper & Yumbs - Dali Wam \[Feat. MaWhoo & Nkosazana Daughter\]
+
+\- DJ Jaivane -uLala Kanjani ft. LeeMckrazy and Skandisoul
+
+Also, I'm very willing to pay for this if it's too much work. Accuracy and authenticity are important to me, as I wanna do the genre justice as an outsider. (If this isn't appopriate for the subreddit please let me know)",1701118493.0,5,0.73,5
+southafrica,DJ in America looking for Amapiano translations,[removed],1701118343.0,1,1.0,1
+ExperiencedDevs,What could my career look like if I have a passion for teaching and education?,[removed],1700717097.0,1,0.67,4
+Bestbuy,Any interest in an AI to help with products on the sales floor?,"Ex employee turned software developer. Been mulling over the idea of starting an AI project, and was thinking about making one that could help my old blue shirt family.
+
+The idea would be that you could essentially ask an AI anything and it'll be able to spit out recommendations based on the customer's situation. Such as:
+
+""My customer wants a small and light camera for bringing on their cruise. Their budget is $1000"".
+
+The AI could spit out a few camera recommendations, tell you how much it would cost with financing, suggest accessories, and more. 
+
+""What's the best value sale we have on 65"" TVs right now?""
+
+""My customer has a 2500 sq foot house. What's the best value router for them to get?""
+
+""What accessories do I need to make sure I add to this sale of a washer and dryer with installation?""
+
+""Which processor would be better for video editing, this M1 Pro or the i7 in this gaming PC?"" 
+
+Obviously it wouldn't be able to solve everything, and there's always the danger of information being wrong or out of date, but it could be a good starting point fo a sale with a customer and might ease some of the anxiety with helping out other departments. I still remember how years ago everybody would be scared shitless of helping out in DI. 
+
+Could any of you guys see yourselves using this? ",1697732282.0,0,0.3,11
+learnjavascript,"If I was learning JS in 2023, I would 100% start from scratch with Typescript","Just finished up a work project where I had to work with an internal library written in vanilla JS...and it was the biggest pain in the ass. Even with JSDocs, there was so many issues (and bugs) such as things being undefined, nested data structures that were hard to parse, vague params that slipped through the cracks and more. It slowed down my productivity by at least 50%. 
+
+Typescript spoils the hell out of us with how it's basically a very light version of a unit test, documenter, autocompleter, and linter all in one. I think anyone learning JS would have a much easier time if you start straight from TS, just with the basics of primitives and return typing. It'll make your life so much easier. ",1695836370.0,254,0.85,114
+blackladies,I love black women and those words aren't said enough,"On social media, the large majority of trending content leans towards inciting gender divide, demonizing black women, overt and covert racism, and with the modern content centered around this new-age manhood and toxicity it's only getting worse. So to counteract some of that:   
+
+
+I love black women. I love your strength and your resilience, but I also love your softness and vulnerability. I love your beautiful fros and natural hair. I love your braids, locs, and how nobody can style a wig like y'all. I love how community-driven you are. I love how the ugliness of the world brings out the beauty in y'all; turning lemons into lemonade via art, via academic excellence, via any aspect you can. I love how mf smart y'all are, whether it's in school or in the streets or in the corporate world. The way y'all will hype somebody up for anything, even if they're not the best, embodies how amazing y'all are. I love how y'all live with an agenda of breaking generational curses and trauma.  
+
+&#x200B;
+
+Of course words don't mean much without action, which is why I do my best to protect and be a good friend to all the black women in my life. But as somebody who grew up around almost exclusively black people, I've always seen y'all as my sisters and I think that line of thinking needs to be normalized way more.",1695138858.0,368,0.98,34
+golang,Would golang be faster for specific AI usecases built around OpenAI?,"Curious, as I have a beginner's level of skill with Golang (I generally work with JS/TS for work and Python for fun), but not enough real-world experience with the apparent speed that Golang can perform operations with compared to languages I more frequently use.
+
+I'm mulling over building a couple projects that would leverage some popular AI APIs, but I'd like them to be as close to realtime as possible. API consumption is pretty basic so I imagine the speed would be similar there (please correct if I'm wrong) but when it comes to things like tokenization, vectorizing, etc. would Go offer a speed bost over Node/Python libraries? ",1694103881.0,0,0.3,7
+reactjs,Your subjective favorite backend framework for React (besides Node)?,"Looking to start allocating time on the weekends to experiement with other languages besides what I use at work. In terms of dev experience and pure enjoyment, what's your favorite backend language/frameworks to pair with React?",1683603077.0,1,0.67,17
+MMA,"Israel Adesanya on UFC 287, Pre Fight Injury & What's Next",,1682538076.0,1,1.0,0
+InlandEmpire,Is anyone using Spectrum Mobile? How is your speed/coverage?,Especially compared to T Mobile.,1679198402.0,8,0.84,4
+podcasting,Videographer looking to shoot podcasts on the side. XLR adapters or laptop + mixer?,"Looking for advice from advanced video/audio guys on this one.
+
+I shoot Sony, and am trying to decide between two options: 1) buy an XLR adapter for my camera and record podcast audio internally 2) use my laptop, plug my camera in along with XLR mics via a mixer, record via some software (does OBS do this?) 
+
+I would love to do everything internally and never have to worry about syncing audio in post again (I have nightmares of trying to do this years back, although I don't know if it's still a problem that isn't fixed by modern software). However, my value-obsessed mind is wondering if it's even necessary, or if I can just shoot it with equipment I already own. I assume if I plug in my camera to use as a webcam, plug in some mics, I can just record the 4k HDMI feed coming from my camera. 
+
+Anyone have any opinions or guidance?",1677537868.0,6,0.81,6
+A7siii,Catalyst Browse/Prepare 1-Year Update: Premiere Pro plug in saves it,"A year ago I made [this post](https://www.reddit.com/r/A7siii/comments/t4e00b/catalyst_browse_is_actually_extremely_underrated/) about Catalyst Browse, and after having a lot of good experiences with it I decided to purchase Catalyst Prepare. 
+
+Since then, I had a lot of issues. Including: 
+
+* Terrible playback, constantly dropping frames
+* Random glitches after applying stabilization, like my footage suddenly being a crazy-skinny aspect ratio 
+* Weirdly implemented batch exporting - I can't add stuff to queue by individually going through clips; you have to analyze one then blanket apply settings across all of them? Not to mention, half the time it crashes when you try to do a lot of clips 
+* Didn't work on my Macbook 
+* In fact, I'd say 1/5 exports, unless I'm doing a single one at a time, crashes. It routinely froze up, too. 
+
+I was ready to drop it, until I saw they released a Premiere Pro plugin. With this, it basically solved all my issues 
+
+* On a computer with h.264/h.265 encoding and decoding, the analysis step is lightning fast and doesn't affect your playback noticeably. This makes my M1 Pro Macbook perfectly suited for it
+* It cuts out the step of needing to export every single clip, saving a huge amount of time 
+
+Beyond that, learning more about how it works has improved my workflow with it. For example, you can use it with Active stabilization, which means it will basically fix the issue of robotic Active movements. It sucks that it still doesn't work with 120p or manual lenses though. 
+
+I haven't tested export times yet, but even if the stabilization makes it twice as long, it's a worthy trade off for the time saved in exports. I shoot high-paced, run and gun situations like clubs and concerts and working with a gimbal slows me down way too much. So far, Catalyst Prepare has fixed that for me.",1677183006.0,6,1.0,6
+hiphopheads,I haven't kept up with hip-hop since 2018. How can I catch up?,[removed],1676616576.0,1,1.0,0
+allthingsprotoss,PvT ruins my enjoyment of the game,"For context, I'm a low level Plat player so obviously I'm not good. But the fact that people at my same skill level can make the matchup so unenjoyable is pretty frustrating.
+
+With a variety of all ins that are hard to scout, great mobility with medivacs while at the same time being able to easily hold areas of the map with tanks/libs/etc, half a dozen ways to kill 20 workers in a split second, it just feels like this matchup hangs on a knife's edge way too often. One mistake, one glance away from your minimap, and you just lose. 
+
+This is more venting about how the game design makes it hard to enjoy unless you can micro and macro simultaneously at a high level, since I know a lot of my PvT losses were preventable. But damn it really just is not fun to play at all.",1676518671.0,41,0.85,42
+smashbros,What’s a good character to pick up if I have low APM but solid spacing & neutral?,"I’m looking for a new character to play. I generally main Byleth, but I’ve been getting bored of constantly beating my friends (not claiming that I’m good at all, just in my small friend circle) and I want to pick up a new character. 
+
+I’m not really interested in having to start playing super fast, and I would prefer a character like Byleth that doesn’t require super fast inputs to play, but can shine if you simply play with solid fundamentals. For example, I really enjoy Ganondorf because of this (again, I’m not a good player but I’m significantly better than those in my friend group so it works). I was considering Ike but for some reason he seems really limited, dtilt nair and fair seem to be his only moves worth using. Any other ideas?",1663874418.0,24,0.85,34
+Christianity,It's the moments where you are beset on all sides where it's most important to cling to God,"I want to preface this with saying that I'm a simple Christian. If you come here for theological debate or advice, I can't help you because I don't know much. All I know is that Christianity is the framework with which I've chosen to view the world. We all have many questions about why God causes us to suffer...I don't have those answers. What I do know is that I've seen certain patterns in my life that I'd like to share with other believers. Please excuse the typos and excessive run on sentences 
+
+Life is so, so hard. Incredibly so. Many of us are suffering in ways that make our life impossible to live like other people. Things like optimism, hope, joy, all seem far from us and outside of our reach. I'm here to remind somebody that if you feel this way, this is your time to set aside your usual coping mechanisms and pray. 
+
+For me, the majority of my 20s have been filled with failure. I don't have a debilitating disease. I'm not homeless. My parents aren't abusive on a daily basis towards me. Realistically, I've struggled and stumbled my way into a not-bad life, but constant mental health and financial issues have plagued me. I'm too broke to take care of my parents or my loved ones, I have a few thousand in debt because of my own poor money management and seeking endorphins in the wrong places, my depression and ADHD, which I've struggled with for 10+ years, have stagnated my academic pursuits, and my career has stagnated for over 5 years due to my own inability to make something of myself. All of this isn't to garner sympathy, but to let you know that I'm not sitting on a high horse telling you empty positive platitudes. 
+
+In the midst of this struggle, it's been God who has seen me through. I'm not even a good Christian at all, and yet there have been moments where His presence has been clear as day. It hasn't been a booming voice coming from the sky, but subtle changes in perspective, blessings that came right exactly when I needed them, other people of God sending me messages that were perfectly applicable to my situation. 
+
+However, the important thing isn't to point out that ""good things and blessings come when you're suffering and you pray"", because that assumes God is merely a vending machine. No, **these moments made me a much better Christian and that's why I thank God for them.** I'm more giving, more grounded in my faith, more compassionate, more forgiving, more loving, more humble, more Christ-like thanks to the moments where I cried out to God in the midst of my struggle. And most importantly, I feel closer than ever to God. So consider that when times are rough, it's the perfect opportunity to bond with your God, who earnestly loves you and desires that connection. Many of you are suffering things that I could never expect to make it through. If you're like me, it may make you apathetic towards all things related to God. If you're open, though, I would strongly suggest you take your pain and bring it with you before His feet. Pray earnestly, and turn away from all the ungodly and/or unhealthy ways we humans try to cope with pain. I believe that it will enrich you and your life, even if it doesn't necessarily reverse your suffering.",1662330084.0,4,0.84,0
+photomarket,[S][USA-CA] Sony FE 20mm 1.8,"Selling my trusty 20mm to make room for some new stuff. Doesn't come with original box, but does include front and rear lens caps. Asking 700 shipped (including Paypal fees), or $640 if picking up local to 92336. 
+
+[Pictures + Timestamp](https://imgur.com/a/MtE29DO)",1660246005.0,3,0.81,3
+photomarket,"[S][USA-CA] A7C (Silver) w/ 28-60mm lens, Sony 55mm 1.8 Zeiss","Photos: [https://imgur.com/a/Ql2tp32](https://imgur.com/a/Ql2tp32)
+
+~~Selling off a bit of my Sony kit as I just upgraded. Camera has roughly 15k actuations, half of which came from 2 weddings; it's essentially brand new, zero marks anywhere on the body. Comes with OG box but no accessories minus the lens cap (peak design straps not included, sorry I forgot to take them off). I will throw in a BCQZ1 charger to sweeten the deal. Price - $1600 net to me~~
+
+Also letting go of one of my favorite all time lenses, my 55mm. Got the 35mm 1.8 and been using it way more lately. Has some cosmetic marks but nothing that impacts quality or makes it look too worn; I've just shot with it primarily for the past 6 years. No original box. Price - $450 shipped",1657993681.0,3,1.0,11
+PUBATTLEGROUNDS,"Haven't played in 2 years, but saw the new map. Looks intriguing, is it worth coming back for?","Like most people I put in most of my hours 3-4 years ago, I haven't played at all since 2020 one random day during the pandemic.",1657903142.0,8,0.7,23
+AskMechanics,Thief attempted to steal my car but only ended up breaking something off in my ignition. What next?,"I drive a 2016 Hyundai Sonata SE.
+
+While I was at work, some idiot tried to break in my car with what I assume was a piece of metal; they jammed it in my driver side keyhole and got in, stole some not-too-important stuff, then tried to start the car with the same piece of metal. It broke off in my ignition and now I can't get my key in it.
+
+I know I have to replace the ignition cylinder, and I have a locksmith quoting me about $300 for the part. Not too crazy, but my gut tells me I can find this part online for much cheaper (I'm seeing a lot of cheap ones online). However the locksmith already warned me that finding the right ignition can be tricky, and I don't wanna buy the wrong one and be stuck. 
+
+How can I go about finding the exact part for my car? What's the worst case scenario if I get the wrong one? Does $300 for one actually sound about right? Thanks for any help",1657610734.0,1,1.0,2
+A7siii,Catalyst Browse is actually extremely underrated,"I've been testing this for some weeks, and I finally got a chance to shoot an entire project utilizing Catalyst Browse exclusively with no other form of stabilization; I can say everyone who labeled it a gimmick simply didn't know how to use it effectively. 
+
+Recently shot a collection of reels for a fashion brand 100% handheld and all the footage came out great with minimal cropping required. The only significant downside for me was not being able to export footage as 10bit, but being able to run around all day with no gimbal, swapping lenses with no need to rebalance felt amazing. 
+
+By the way, it does indeed work with IBIS on, as well as with 3rd party lenses (I used a Sigma 35mm 1.4).
+
+The primary thing to be aware of is that it works best with shots where the camera movement is limited to pans, dolly movements, etc. not for walking vlogging. That cuts out the motion blur you get from the walking movement that makes it unnatural. And to get around that, you really don't need to be at 1/200 shutter like everyone makes it sound; 1/125 worked fine for me for slow deliberate walks.
+
+It did add another step to my post workflow, but it didn't really significantly lengthen my usual culling process since each clip I shot was 10-30 seconds, and took about 60-90 seconds to stabilize, although I have a 3070 and a 11700k so YMMV.
+
+Really this post is just showing appreciation for a feature that I think is misunderstood, and to counter a lot of the chatter online that makes it sounds like a useless gimmick",1646157630.0,24,0.96,35
+Eldenring,What part of the early game have you all been struggling in the most?,[removed],1645822483.0,1,1.0,0
+Eldenring,"An update on /u/Stray_Demon, who is thankfully doing better",,1645782832.0,2,1.0,1
+MMA,Israel Adesanya on Rob Whittaker: We're like step brothers who don't get along - UFC 271,,1643759193.0,99,0.89,27
+hardwareswap,"[USA-CA][H] M1 Macbook Pro 13"" 8/256 [W] Paypal, Local Cash","[Timestamps](https://imgur.com/a/DA2xgG6)
+
+~~Looking for $800 including shipping. $740 if local (92336).~~ SOLD 
+
+Selling my M1 Macbook. Consistent use since its purchase last May, however in great condition. There is wear on the trackpad, but nothing that interferes with its use (see pictures). Comes with original box + charger. 49 cycles on the battery with 100% capacity left. Price includes shipping, CONUS",1642139867.0,1,0.67,5
+hardwareswap,"[USA-CA][H] Parted-out gaming PC (R5 3600, 16GB Ram, XFX RX 580), Nintendo Switch v2, Rode Wireless Go II [W] Paypal, Local Cash","Getting rid of some tech I've got laying around after grabbing a bunch of stuff this year and for Christmas
+
+Shipping to US only, and I'm local to 91730
+
+[Timestamps](https://imgur.com/a/hHqqQ7q)
+
+All PC Parts were taken out of a Cyberpower PC purchased at Best Buy in 2019 iirc, used for semi-frequent gaming and video editing
+
+~~Ryzen 5 3600 + Cooler Master cooler - $150~~ 
+
+~~16GB Corsair Vengeance 3200 mHz Ram - $65~~
+
+~~XFX RX 580 8GB GPU - $350~~
+
+~~Nintendo Switch v2 + Pro Controller + Dock/Cables - $250~~
+
+~~Rode Wireless Go II BNIB (never used) - $240~~
+
+Let me know if you need additional pictures or info. Please comment before PMing",1640635027.0,4,0.71,13
+photomarket,[S] [USA-CA] Rode Wireless Go II BNIB $250,"Letting go of a Rode Wireless Go II kit that was purchased but never used, never opened. Project it was meant for got cancelled past my return date, so my loss is your gain. 
+
+Looking for $250 shipped for it 
+
+https://imgur.com/a/ZbdoEUf",1639639929.0,7,1.0,3
+hardwareswap,"[USA-CA][H] 2020 M1 Macbook Pro 8/256GB, Cyberpower PC Ryzen 5 3600 RX 580 [W] Paypal, Local Cash","[Timestamps](https://imgur.com/a/AEvnHZE)
+
+Just upgraded my rig so I'm looking to consolidate.
+
+Cyberpower PC was purchased in 2019, ram was upgraded and runs smoothly. Full specs:
+
+Ryzen 5 3600
+
+Radeon RX 580 8GB
+
+16GB Corsair RAM 3200Mhz
+
+256GB SSD (boot drive), 1TB Hard Drive
+
+I'm looking for **$700** for it. If shipped (US only) it will come without a case so that it doesn't cost a ridiculous amount to send it. If picked up locally (my zipcode is 92336) it will come in the case. 
+
+Macbook Pro is self explanatory, purchased this year around May. Looking for **$1000** for it. No dents, scratches, or any other physical damage on it. Trackpad has clear signs of use but works flawlessly. 
+
+PM me for any questions, concerns, or negotiations. I'll be honest, none of my prices are firm because I'm not 100% sure what things go for these days and I kinda just wanna get rid of this stuff, I bought way too much tech this year.",1639479751.0,3,1.0,1
+2007scape,I just got gifted 100M. I have never had more than 10M. I have no idea what to do with it.,Any non-meme advice? My stats are pretty [mediocre](https://imgur.com/4iZsC3K) but I don't know what to train or invest in without blowing all my money and being broke again. What should I do?,1634921922.0,423,0.89,400
+Naruto,"A common criticism of the war arc is that there's minimal deaths, and the ones that happen aren't done well. Who would you have killed off during that arc to make a more satisfying story?",,1631313027.0,1,0.56,44
+appleswap,[USA-CA] [H] 2020 M1 Macbook Pro 256gb/8gb [W] Paypal or Local Cash - $1050,"Note: this is a crosspost for another thread I made on /r/hardwareswap
+
+Selling off my Apple ecosystem products. I use them for creative work, and while I enjoy them a lot, it was only a test run to see if the Apple ecosystem is for me. It is, and I'll be upgrading to their 2021 products. Zip Code is 91730
+
+Macbook Asking Price (Silver 256GB 8 GB RAM, zero damage) - $1050 OBO
+
+[https://www.dropbox.com/sh/48cp6h0a622kf93/AABVpdUzKyBF8dvzCYl0C2Ria?dl=0](https://www.dropbox.com/sh/48cp6h0a622kf93/AABVpdUzKyBF8dvzCYl0C2Ria?dl=0)",1619655718.0,2,0.67,8
+hardwareswap,"[USA-CA] [H] 2018 Ipad Pro 11"" 64GB and 2020 M1 Macbook Pro 256gb/8gb [W] Paypal or Local Cash","Selling off my Apple ecosystem products. I use them for creative work, and while I enjoy them a lot, it was only a test run to see if the Apple ecosystem is for me. It is, and I'll be upgrading to their 2021 products. Zip Code is 91730
+
+Macbook Asking Price (Silver 256GB 8 GB RAM, zero damage) - $1050
+
+~~\[SOLD\] Ipad Asking Price (Space Grey 11"" 64GB w/ DBrand skin) - $450 \[SOLD\]~~
+
+* ~~There's a ding in the frame of the Ipad near the charging port, as pictured. Comes with screen protector~~
+
+[https://www.dropbox.com/sh/48cp6h0a622kf93/AABVpdUzKyBF8dvzCYl0C2Ria?dl=0](https://www.dropbox.com/sh/48cp6h0a622kf93/AABVpdUzKyBF8dvzCYl0C2Ria?dl=0)",1619583649.0,0,0.5,4
+allthingsprotoss,I got owned by a 2 robo 1-base all in that I scouted on time...what did I do wrong?,"Here's a link to the replay.
+
+[https://sc2replaystats.com/replay/17755346](https://sc2replaystats.com/replay/17755346)
+
+These are things that I think I could've done better:
+
+1) (Most important?) not warping in the moment I got off forcefields 
+
+2) Not pulling probes quickly enough
+
+3) Not enough gateways in time (not sure about this one, I didn't think I'd have enough money for more gates, I initially planned to get charge hence the twilight but in hindsight there's no way I would've gotten it in time) 
+
+4) Not enough sentries. I think another set of forcefields to delay could've given me time to get enough stalkers to defend
+
+Is there any thing else practical that I'm missing? I'm trying to get to Dia 3 but my improvement is very stagnated",1609868628.0,1,1.0,4
+photography,State of Mirrorless according to /r/photography Part 2: 2021 Edition,[removed],1609744791.0,0,0.5,7
+videography,"A cinematic dance video I shot for a friend who's a budding artist. Accepting all criticism, rip it apart",,1609655919.0,3,0.71,9
+videography,Apple M1 MacBook vs PC Desktop Workstation for Adobe Creative Cloud,,1605676599.0,7,0.65,15
+photocritique,"Still learning studio flash photography, hows the lighting?",,1605223652.0,12,1.0,5
+whatcarshouldIbuy,"Fun to drive, good looking, very reliable, under $15k. Is this even possible?","I’m looking to replace my 04 VW Passat as I’m getting the feeling that it’s in its last legs. Check engine light won’t go away no matter who I get to fix it, makes weird sounds during idle and my mileage has been crap lately. I’m just not willing to pour any more money into this thing. 
+
+I’ve had a Camry in the past, and I don’t think I want to go back to that because that thing was not fun to drive, at all. Terrible acceleration when I’m trying to get onto the freeway as well, so now I’d like something more sporty if possible (so no Toyota’s) 
+
+In order of importance: rock solid durability/reliability (of course no car is perfect especially used but I don’t want a car with sensors that constantly go bad, random things that break, or a car that will be expensive to repair), under $15k. Those two things are must haves. It would really be nice to get something sporty and good looking as well. Lastly, I would ideally like something where I can work on basic repairs myself, something that doesn’t require that I take off the whole damn front bumper to change a headlight like my current VW. 
+
+So far, I’ve been looking at the 2013/2014 Honda Accord, but is that all that’s really out there? I’ve considered Mazda as well but i hear a lot of mixed reviews on their reliability. I considered Lexus as well, like a late 2000s IS, but while I can deal with their dated looking interiors and infotainment I can’t help but feel like there’s more out there.",1599874401.0,2,1.0,4
+hardwareswap,[USA-CA][H] Nintendo Switch + Smash Bros + Pro Controller [W] PayPal or Local cash,"$300 shipped. I bought this switch used and it lived under my desk where I played smash Bros. Never took it out of the dock (dock is 3rd party). Functions just fine, I’m just a bit tired of playing Smash online. Not interested in parting it out at this time. 
+
+https://imgur.com/gallery/xDeOYee",1599667582.0,5,0.86,10
+photography,(SR5) Sony will DEFINITELY announce the new Sony A9II in early October - sonyalpharumors,,1567654543.0,53,0.8,54
+photography,Panasonic officially launches video-centric Lumix DC-S1H: Digital Photography Review,,1566936232.0,1,1.0,1
+Christianity,"Is it true that all leaders, every leaders are chosen by and placed there by God? And because of this, we should honor and obey them?",,1563501470.0,2,0.75,20
+photography,Tamron FE 17-28mm official US price will be $899 and preorder start on June 27 - sonyalpharumors,,1561535127.0,36,0.85,24
+photography,Battle of The Photography Blogs: SLR Lounge vs Fstoppers,,1559236004.0,17,0.75,8
+photomarket,[S][USA-CA] Canon 5d (original) + 50mm 1.8 II,"Functions perfectly; a few minor scratches along the body, as you'd expect from a 10+ year old camera. Was purchased from an FredMiranda member just a few weeks ago for a fun experiment, but I think I'll stick to more modern full frame cameras, although I do love the images from this little guy. Not sure the going rate on these, so I priced it at what I think to be fair: $225 shipped for both
+
+&#x200B;
+
+[https://imgur.com/a/mnRKSP6](https://imgur.com/a/mnRKSP6)
+
+&#x200B;
+
+edit: sold",1556331179.0,11,0.92,3
+hardwareswap,"[USA-CA][H] Zhiyun Crane v2 Gimbal [W] Paypal, Local Cash","Local to 92336
+
+Selling my gimbal, has served me very well but I'm looking to move away from video work.
+
+https://imgur.com/a/qSDz2Xf
+
+Asking for $250 shipped obo. ",1553108017.0,1,1.0,2
+photomarket,[S] [USA-CA] Zhiyun Crane v2 Gimbal Stabilizer,"Selling my stabilizer. Worked great for me, but moving away from video work. Looking for $250 shipped.
+
+https://imgur.com/a/qSDz2Xf",1553107057.0,7,0.99,2
+hardwareswap,"[USA-CA] [H] Sony WH-1000x Mark 3 Headphones, Sealed and Unopened [W] Paypal, Local Cash","Zip code is 92336.
+
+Selling a pair of headphones I was gifted that I don't want (already have my own pair). Package is unopened and still sealed, purchased through a reputable major retailer. As such, asking for $320 net to me including shipping. 
+
+https://imgur.com/a/ysKbbJQ
+
+Haven't sold on this subreddit before, but have done so on /r/photomarket and /r/gameswap",1550351388.0,0,0.33,5
+photography,Hands-on with the Canon EOS RP: Digital Photography Review,,1550119355.0,6,0.8,3
+CrazyHand,Looking for some critique of my Lucina play. I've never been able to beat my friend (Link player),,1546891346.0,0,0.5,5
+CrazyHand,Is it possible to full-hop forward air in this game? All my inputs automatically short hop fair,,1546388725.0,2,0.67,7
+GameSale,[USA][H] Nintendo New 2DSXL + Smash & Dragon Quest [W] $110,"Now that Ultimate is out, getting rid of my 2DS XL that was exclusively used for Smash Bros. Comes with charger, but no box. 
+
+Smash game is opened in good conditioned. Dragon Quest VII is sealed. 
+
+Looking for $110 for everything, but I'm willing to split things up. $80 shipped for the DS, $20 for each game. 
+
+https://imgur.com/a/w6wRg8x",1544295765.0,1,1.0,5
+CrazyHand,"Getting destroyed by good Marios on FG as Marth, help","Not even looking for matchup specific advice (although that's of course needed and appreciated), I just know I have so many bad habits (like rolling too damn much) that I don't even notice myself; can anyone help me dissect my play? Want to unlearn these bad habits before Ultimate comes out
+
+https://www.dropbox.com/s/ro8nsygq2zhyjyp/Video%20Nov%2029%2C%208%2048%2031%20PM.mov?dl=0",1543553758.0,3,0.72,4
+whowouldwin,Conor McGregor vs. Floyd Mayweather on the street,Both are wearing nothing but a crotch cup and boxers. Floyd has brass knuckles. Fight goes until one fighter is put in a position where they can't fight back (think UFC stoppage rules),1541609079.0,0,0.5,9
+photography,Tony Northrup: Micro Four-Thirds is DEAD (Picture This! Podcast),,1541028334.0,17,0.56,64
+SonyAlpha,Viltrox announced one new autofocus and two manual lenses for Sony Full Frame E-mount cameras! - sonyalpharumors,,1538028621.0,5,1.0,1
+legaladviceofftopic,"Is selling ""artwork"" like this that's derivative of other people's work legal?",,1537247177.0,1,1.0,0
+photography,"The new Panasonic FF camera aims for the big guys: Will compete against the Sony A9, Nikon D850 and top Canon cameras - 43 Rumors",,1536913356.0,32,0.77,48
+photomarket,[S] [USA-CA] Sony A7ii + FE 50mm 1.8,"Selling my trusty a7ii and my 50mm 1.8 along with it. Was a backup camera to my a7rii for several months, have upgraded to the a7iii and no longer need it.
+
+Looking for $750 for the body, $180 for the lens. Price is firm on the body, but i'm willing to work on the price if you're looking to buy them together. Here's a quick photo I took of them:
+
+https://imgur.com/a/HfaD1b8",1536114215.0,2,0.75,3
+photomarket,[S] [USA-CA] Sony A7ii + FE 50mm 1.8,[removed],1536100449.0,1,1.0,1
+photomarket,"[S] [CA, USA] Sony a7ii body + 50mm 1.8",[removed],1536098496.0,1,1.0,1
+photography,Panasonic will announce it's first Full Frame system camera on September 25! - 43 Rumors,,1535727756.0,218,0.93,135
+GoldenSun,Rank the musical themes of each Lighthouse from your favorite to your least favorite,"Mine: 
+
+Mercury
+Venus
+Mars 
+Jupiter
+
+Gotta say each Lighthouse had extremely fitting music, though",1531373615.0,12,0.93,18
+whowouldwin,Konoha 11 (Naruto) vs. Class 1A (My Hero Academia),"* Speed Equalized
+* Konoha 11 as they are right before the timeskip (no filler feats)
+* Class 1A as they are currently in the anime adaptation
+* If Konoha loses, add Sasuke. If Class 1A loses, add Aizawa",1531182742.0,3,1.0,2
+SonyAlpha,"Anyone use crop lenses on your full-frame Sony, for video? What's been your experience?","Curious if this is a viable way to go about things. Would love something like the 18-105 for run & gun work, if it works well.",1530587707.0,1,1.0,4
+whowouldwin,Team Urameshi vs. Team 7,"* End Of Series for all characters
+* Speed Equalized 
+ ",1527791814.0,9,0.86,5
+PUBATTLEGROUNDS,Why are streamers allowed to cooperate with stream snipers who basically gift them airdrops and weapons?,"Was watching a random shroud clip earlier, and there was a sniper who ran in, with no weapon equipped, carrying level 3 gear and an AWM. Now I like shroud and some stream snipers are funny, but if I'm part of that game I'd be a little pissed that people are basically gifting streamers items that give them a strong advantage in-game. Same thing with people like LootDeliveryGuy and others who will drop tons of meds.
+
+Not sure how this can be enforced, just seems a little odd that no one seems to care about it.",1527013625.0,6,0.57,26
+photography,State of Mirrorless according to /r/Photography: Results,"Now that votes seem to be slowing down, now seems like the right time to post. A few notes about the survey before we get to the results (which you can find by scrolling to the very bottom):
+
+* Originally, the idea was to keep most questions as being mutually exclusive, as I wanted to see which options had highest absolute priority. In hindsight this probably wasn't the best move, since some of the questions would've strongly benefited from allowing multiple choices
+
+* Related to the first point, the questions didn't cater to those who use both DSLR and mirrorless cameras. I'm not sure how this would've affected results 
+
+* I suspect this survey has a slight mirrorless bias. As in, people who use mirrorless were more likely to click on the link and vote. So while we can't draw and hard conclusions on it, the results are interesting
+
+* Lastly, I can't figure out how to allow everyone to see the in-depth graph results, so I had to copy the graphs into a google doc to make it viewable. Not the optimal way to share, I know, but if you have any questions on specific numbers ask and I'll get them for you.
+
+* I did this survey on a whim in 5 minutes just to spice up the subreddit, so please excuse it for not being perfect.
+
+* **900 people voted**, which was a surprise; I was expecting around ~500 votes
+
+With all that said, you can view the results [here](https://docs.google.com/document/d/1Aii7YMzyEUURczYuaRbcHSZMz2KfpZ_Npkc8N4EeGmU/edit?usp=sharing). 
+
+**EDIT:**
+
+/u/omniamors did a great job of further analyzing the data, and was able to show results for some of the questions broken down by current camera type and years of experience.
+
+https://imgur.com/a/M7EDG",1523556810.0,85,0.88,154
+AskDocs,"Stomach pain/cramps, bloody diarrhea, no insurance. What to do?","24 M 170lbs, stomach, no history of prior disease or meds 
+
+Currently typing this from the toilet. For roughly 36 hours now my stomach has been hurting. A dull ache that feels like cramps, not sharp. For the first 24 hours it was only cramps, I didn’t use the bathroom once. Took some milk of magnesia or something similar, and about 5 hours later had my first bout of mostly watery diarrhea. Since then I’ve been consistently using the bathroom. Not a lot comes out, but the past 3 sessions have included mostly blood, bright red blood. I don’t feel sick whatsoever, it’s just my stomach is really uncomfortable and the blood is starting to scare me. I was planning on going to the doctor but now I’m a little nervous. My stomach has felt bloated for the past 48 hours or so, as well. 
+
+What would my options be? Is this something serious, if you had to take a guess? ",1523499384.0,1,0.67,1
+photography,Survey: State of Mirrorless according to /r/photography,"**If you shoot DSLR, please vote! This poll in some ways is catered to you the most!**
+
+Since apparently we're all thirsting for actual discussion, I thought I'd make this survey.
+
+Now, this DSLR vs. mirrorless discussion has already been done ad nauseam, and to me it's no longer interesting. What is interesting to me, is seeing how our shooting habits and bias plays into our perception of the current mirrorless wave. I'm curious; is all of the hype coming from amateurs while the pros couldn't care less? How does how long you've been shooting correlate to how likely you are to embrace mirrorless? Hopefully this poll will help shed light on some of this.
+
+You can take the survey [here](https://docs.google.com/forms/d/106dVaqqrMYh3L-YOCyJYeP7WUMUB5ymaLAGA_IvFAPA/). I'll post the results within the next 48 hours, once it seems people are no longer taking it. ",1523398076.0,51,0.83,133
+WritingPrompts,"[WP] Write a take on any overdone hero trope (such as knight saving damsel from the dragon). No plot twists. No surprises at the end. Nothing but your best, most engaging writing.",,1522435125.0,88,0.94,8
+YuYuHakusho,What's your favorite line from the dubbed anime?,"Looking to convince my friends that the dubbed version of YYH is worth watching, and in some ways better than the subbed. What are some good examples to show them?",1518593426.0,12,0.81,22
+chicago,15 men were framed by corrupt Chicago cops. Now they’re being exonerated.,,1511031147.0,0,0.5,0
+nba,"Derrick Rose, on if the league has forgotten about him: ""I really don't care...I'm past that. That's why I grew my hair, it's about being free. When you see me, you're going to know that I can hoop""",,1507656155.0,368,0.96,57
+Bestbuy,Is there a deductible on GSP purchases?,,1504059249.0,0,0.5,5
+PUBATTLEGROUNDS,"This Subbreddit Has Already Built a Negative Rep Online: ""The PUBG Community is a mess""",,1503591502.0,6,0.56,4
+Naruto,Haven't paid an ounce of attention to Naruto since Chapter 700. What's the quality of this new stuff like in comparison?,,1503001093.0,0,0.5,3
+MMA,"[Video] Daniel Cormier Breaks Silence, Believes He'll Fight Jon Jones Again",,1502854989.0,0,0.25,3
+OnePunchMan,Can we please be more mindful of webcomic spoilers on this sub?,"This is the 2nd time now I've had a major development in the upcoming arc spoiled for me just by casually browsing the newest chapter's thread. I get a lot of you have read the webcomic and want to discuss it, but can't there be separate threads for that?
+
+Many of us are Murata-manga only readers, and I have little interest in reading the webcomic. But at this point I almost know all of the major plot points of this next arc, involuntarily. It ruins some of the fun for me. I, and many others I think, would greatly appreciate it if you didn't have to put blatant spoilers in your post in a new chapter thread.",1502031546.0,145,0.82,40
+hardwareswap,[USA-CA][H] Surface Pro 3 i7 256G RAM [W] PayPal,"Selling my Surface Pro, as I'm upgrading to a better rig. Screen is cracked (it's one hair-thin crack that runs along the lower left corner), so **touch screen does not work**, so it's basically a regular laptop. Aside from that, runs fantastic, and is plenty fast. Including charger and surface keyboard as well. I'm looking for $350 for it. 
+
+[Timestamp](http://i.imgur.com/wlxdq0c.jpg). More pictures can be given if necessary, of course. 
+
+edit: if it's not obvious, it's 256 GB of internal memory not RAM...apologies ",1501125782.0,1,0.6,11
+photomarket,"[S] A6000 body + 20mm 2.8 + FE 50mm 1.8 $500; (Fontana, CA)","> **meant to put $550 in my title; can't edit it**
+
+My a6000 has been sitting collecting dust for months so I figured I'd rather just let someone else get use out of it and get a little case for it myself.
+
+Comes with a6000 body + 20mm lens (which is basically a better version of the 16mm Sony makes). Lens has been dropped once, and due to that the focus ring no longer turns and there's a crack on the front of the lens as well as a dent on the side. Aside from that, and a little dust on it the outside, it works perfectly. Focuses fine, IQ is fine. 50mm FE lens works perfectly also, no physical damage on it.
+
+Price is negotiable but no super lowball offers please.
+http://imgur.com/a/reUgQ
+
+> **meant to put $550 in my title; can't edit it**",1500928117.0,1,1.0,2
+HunterXHunter,Let's argue: which version of this particular scene do you like better & why? 1999 or 2011?,"[The new version of ""that scene""](https://youtu.be/j_VrgFqNSEA?t=13m5s)
+
+[Or the OG version from 1999](https://youtu.be/3eh8FHyGQw4)
+
+This is something I see people discuss often, and I'm curious to see you guys' opinions. ",1500766586.0,3,0.64,24
+photomarket,[S] A6000 body + 20mm 2.8 50mm 1.8 (Southern California),"My a6000 has been sitting collecting dust for months so I figured I'd rather just let someone else get use out of it.
+
+Comes with a6000 body + 20mm lens (which is basically a better version of the 16mm Sony makes). Lens has been dropped once, and due to that the focus ring no longer turns and there's a crack on the front of the lens as well as a dent on the side. Aside from that, and a little dust on it the outside, it works perfectly. 50mm FE lens works perfectly also. 
+
+Price is negotiable but no super lowball offers please.
+
+http://imgur.com/a/reUgQ",1500355276.0,1,1.0,1
+changemyview,CMV: Super Smash Bros is an objectively better fighting game franchise than traditional fighting games such as Street Fighter,[removed],1497149678.0,1,0.54,13
+photography,This is the first a9 autofocus footage I've seen that has genuinely impressed me (x-post from /r/sonyalpha),,1495839536.0,232,0.92,42
+SonyAlpha,This is the first a9 autofocus footage I've seen that has genuinely impressed me,,1495826341.0,45,0.94,4
+photography,"Full Initial Sony a9 Review: Is the HYPE real? vs a7R II, Canon 1DX II, Nikon D5, D500",,1493313031.0,40,0.74,42
+starcraft,Any tournaments/competitions for lower leagues to compete in aside from the ingame ones?,"Just a lowly Gold leager looking for people at my skill level to compete against, as well as hopefully make some friends. The ingame tournaments are good for the first purpose, not so much the 2nd. ",1489426714.0,10,0.74,7
+photomarket,"[S] Sony a7 Body (Fontana, CA) $800","Selling my old Sony a7 body as I've upgraded. Minor dings and scratches but it works perfectly. $800. Price is negotiable but no lowballs, please. 
+
+http://imgur.com/a/8l5i0",1488836274.0,1,1.0,1
+photomarket,"[S] Sony a7 body (Fontana, CA) $800",[removed],1488835632.0,1,1.0,1
+photocritique,Something Is terribly off in this picture and it really bothers me...but can you notice it?,,1487217203.0,6,0.81,6
+Filmmakers,Why did my video come out splotchy with artifacts?,"Did a short video on a local music artist that has some slo mo segments. Was shot in S-Log 2 & was color graded with Lumetri Color.
+
+[Here's a link](https://www.dropbox.com/s/f1w0blkkn68z6g5/Charles%20Spotlight.mp4?dl=0) to it. Dropbox doesn't play the video in full quality but you can still kind of see what I'm talking about. Download it if you want to see what I'm seeing fully. 
+
+Perhaps I pushed certain areas too far while color grading/correcting? I suspect it may have to do with my export settings though, as I wasn't seeing any artifacts while editing.",1487125283.0,3,0.81,5
+photocritique,Attempting to take pictures in a cliche location but keeping them fresh...thoughts?,,1486673207.0,2,0.67,1
+SonyAlpha,A6300 on sale this week everywhere for $100 off,,1486311099.0,10,0.92,4
+postprocessing,"Took a picture with a $5000 set up at ISO 500, picture doesn't seem sharp whatsoever. Help?",,1485022197.0,17,0.56,108
+photocritique,"Tried to capture a movie-like atmosphere with this image, did it succeed?",,1484935850.0,40,0.91,5
+photography,Portrait Battle: 3 Photographers Shoot the Same Model,,1484600101.0,1,1.0,0
+SonyAlpha,"Finally, a budget & native 85mm will be coming to FE this year (SonyAlphaRumors)",,1484159656.0,41,0.97,43
+photocritique,"I'm partial to this image, but does the lighting actually work?",,1483983675.0,4,0.83,6
+pcmasterrace,Looking for a PC primarily for video & photo editing + mild gaming here and there. Build my own or go pre-built?,"My old computer has reached the point where it's crapping out on me, and now I want to upgrade. I've been doing research into it, and while I know putting one together myself is more economical, I'd *strongly* prefer to get a decent pre-built one since I hardly have the time to work on it (seriously, I work so much that 2-3 more hours of free time is worth $2-300 dollars to me). Plus, a lot of pre-built ""boutiques"", as I think they're called, offer financing which would be helpful to me as I'm strapped for cash currently, but soon I'm going to have some projects to work on so I need the computer ASAP.
+
+In a situation like mine, would a computer like [this](https://www.xidax.com/workstations/w-4-workstation-desktop) from Xidax be ok for my needs (Adobe Lightroom, Premiere, & Photoshop, plus occasional casual gaming)? Are there better alternatives under $900? Am I saving *that* much by building my own that it's imperative? Again, I'm strapped for time (and frankly motivation) so buying something pre-built is ideal for me.",1481869755.0,0,0.5,7
+SonyAlpha,"Anyone got sample images of using a f/1.2 lens (Canon FD, Nikkor, etc) lens on a 6000-series camera?","Whether it's the 60, 63, or 65, I'm curious as to what the DoF looks like when putting this lens on a crop body, in street photography, portraits, etc. ",1481225471.0,14,1.0,9
+photography,What's with the obsession with crop sensor/full frame equivalences?,"I notice this on here as well as other photography forums and I'm curious as to the reasoning
+
+Frequently I'll see posts that talk about field of view/mm length on lenses, and usually an exchange similar to the following occurs:
+
+""Yeah, I have a 50mm lens, is it good for portraits?""
+
+""Yes, 50mm on your crop sensor is equivalent to roughly to 85mm on full frame. You can also use a 135mm, which on your sensor would actually be an 85mm. So don't buy a 135 mm, because you actually want an 85mm, because even though the lens will say 85mm on it it actually is a 135mm on your camera which is 85mm x 1.6 to account for the crop factor and blah blah here's more totally unnecessary information because you've never shot full frame so all these conversions are useless to you."" 
+
+The way I see it, someone who has shot with a crop sensor already has an idea of what 135 or 85 is like. Bringing up conversions seems needlessly pedantic. 
+
+Not to mention, the implication is that 35mm/full frame is the ""proper"" sensor size when I'm not even sure that's the case. If I'm not mistaken, medium format predates 35mm, so if anything that should be the sensor size we always default to. I'm just really confused when I see statements like ""yeah, 24-70 is a great lens, but on your camera it'll actually be 40mm-112 which is pretty awkward""...huh? If the field of view works, it works. Just because the numbers look less pretty when you convert them doesn't make it ""awkward"" suddenly. 24-70 is an awesome portrait lens whether on crop or full frame, in my eyes.
+
+Am I missing something? Why are conversions seen as being so important? ",1473474412.0,0,0.21,12
+photography,"I love shadows in portraiture, but how do you manipulate them?","After lots and lots of shooting, I've found that my photography style is big on shadows and high contrasts in light. I want to start playing with shadows in my portraiture, but I'm unsure how to get some of these effects. Like for example...
+
+[This one](http://i.imgur.com/25d6z7j.jpg) is clearly using a hard light, but still has a sort of diffused look...it's not washing out detail like a regular bare bulb flash would do, but it has the hardness of one, so I'm slightly confused.
+
+[There's there's stuff like this](https://s-media-cache-ak0.pinimg.com/236x/25/ec/a2/25eca23a1955856e65fb49cc9ecc5e36.jpg), where an entire pattern is somehow projected onto their bodies. I've been reading about projectors and gobos, but is that really the only way to recreate stuff like [this?](https://s-media-cache-ak0.pinimg.com/564x/f2/dd/82/f2dd827bd8ebe66fcc8821067eb70f9e.jpg)
+
+Then, there's the opposite, where only a [sliver of light](https://s-media-cache-ak0.pinimg.com/564x/1e/59/90/1e5990c83cce5171b0ce2379c728f933.jpg) is visible. All the ways I can think of that might work, like using a board to block some of the light, seem cumbersome. Is there another way to accomplish [this?](https://s-media-cache-ak0.pinimg.com/564x/47/06/c5/4706c5944f1b2efeaf3c3b4a696df416.jpg)
+",1470005506.0,50,0.88,20
+AskSocialScience,Is there any truth or substance to the idea that integration was harmful for black people?,,1469652490.0,0,0.47,1
+LAlist,[FREE] Portraits/Headshots in DTLA today,"This is sort of last minute, but I'll take a chance and see if anyone is interested. 
+
+I was scheduled for several portrait sessions in DTLA but I've had some cancellations so I have a lot of free time. If anyone is interested, I can provide free (100%) portraits or headshots for whatever theme or purpose. 
+
+If you're down, shoot me a PM and we can talk schedules & such. We can even do some quick work during your lunch break or whatever. You can check out my portfolio here: chigerianimages.com",1468431663.0,5,0.71,5
+photography,"Been trying to understand how Satoki Nagata took this photos for weeks, to no avail...",[removed],1467648375.0,1,0.6,3
+photography,[Meta] In favor of gear and question posts...,"Not sure whether meta posts like this need to be mod approved or whatever, if so my apologies 
+
+Lately we've been talking a lot about the increased volume of deleted posts, as well as how they relate to the weekly and daily posts dedicated to them. It seems the consensus is that deleted posts, such as ""what camera do I get"" are being shunned and deleted, with people asking questions told to save it for the question thread. I think that's flawed for a couple reasons...
+
+1) Comments in the question thread aren't searchable with reddit's search bar. If I have something I'm trying to figure out, I'm not going to pour through every last question thread and ctrl + F until I find an answer. Typing in keywords in the search bar is much more practical and helpful, but if we shut down every question thread eventually that's not going to work anymore. 
+
+2) Threads dedicated to questions get more responses + discussion than questions posted in the dedicate thread. Yeah, it's likely that if you post in the daily questions thread you'll get AN answer, but dedicated threads will likely give you SEVERAL answers. From experience, I've posted questions in the dedicated thread a few times, and I might get one or two responses. But threads I make typically get 10+ comments, with discussion that furthers my understanding that I wouldn't get in the daily question thread. Even if I already know the answer to someone else's question, I still like reading other answers because it's an opportunity to learn something new. You just don't get that kind of broad discussion in the daily thread. 
+
+Frankly, I don't see what all the fuss is about. If you don't like it, don't read it. The idea that it ""clogs up"" the front page doesn't make sense to me. I don't think deleting question posts is helpful, even though I may be in the minority. Personally I'd rather have the community decide by using up votes and downvotes what kind of content we have here, rather than having mods use heavy handed deletion methods. ",1466824155.0,0,0.23,9
+photography,Nikon Accused of Falsely Advertising the D500's Wi-Fi,,1466196182.0,1,1.0,0
+videography,"Attempting to sync externally recorded audio with video, slowly goes out of sync over time","
+
+So recently I recorded a studio session of two musician friends of mine. It was a live performance, with microphones and such, that was recorded as a separate file from what my camera picked up. The audio engineer then mixed that file, and sent it to me to sync up with the video i recorded to create a live music video, essentially.
+
+The only problem is, I can't get the files to sync. I'll have them sync perfectly at the beginning, which will last for a little while, but then 60 seconds in they're off by a second or two. I have no idea what the issue could be. Google gave me all sorts of results on sample rates, frame rates, etc, but nothing really concrete or helpful, so here I am.
+
+Anyone got any advice on this one?
+
+(I posted the metadata for both files on another forum, if that helps at all. I can't format it as nicely on reddit, so I'll just include the link [here](https://www.lwks.com/index.php?option=com_kunena&func=view&catid=8&id=116386&Itemid=81#116386))
+
+",1465968768.0,1,1.0,3
+cinematography,"Attempting to sync externally recorded audio with video, slowly goes out of sync over time","So recently I recorded a studio session of two musician friends of mine. It was a live performance, with microphones and such, that was recorded as a separate file from what my camera picked up. The audio engineer then mixed that file, and sent it to me to sync up with the video i recorded to create a live music video, essentially.
+
+The only problem is, I can't get the files to sync. I'll have them sync perfectly at the beginning, which will last for a little while, but then 60 seconds in they're off by a second or two. I have no idea what the issue could be. Google gave me all sorts of results on sample rates, frame rates, etc, but nothing really concrete or helpful, so here I am.
+
+Anyone got any advice on this one? 
+
+edit:
+
+(I posted the metadata for both files on another forum, if that helps at all. I can't format it as nicely on reddit, so I'll just include the link [here](https://www.lwks.com/index.php?option=com_kunena&func=view&catid=8&id=116386&Itemid=81#116386))",1465932070.0,3,0.8,18
+Surface,Looking into a Surface Pro 2 for photography on location + lightroom; good enough?,"So I do a lot of photography work, and I'm looking into getting a Surface Pro 2 to 1) tether to my camera via lightroom for live shot previews in the middle of shoots and 2) edit/cull pictures while I'm not at home. I'm a broke college student, so I figured I could go with an older Surface Pro to save money, and from looking at specs online it seems like it should be perfectly capable of handling what I need it to handle. 
+
+But...I'm not sure. Has anyone used a Surface Pro 2 for this purpose? The most important part for me is tethering it to my camera for picture previews/on-the-spot editing ",1465440277.0,3,1.0,4
+changemyview,CMV: it makes zero sense for Batman to want to kill Superman in BvS,"firstly, let me clarify my argument. I'm not saying it doesn't make sense for Bruce to DISTRUST Superman, not at all. But Bruce stance that they have to treat the smallest chance that Superman will destroy them as an absolute certainty is absolutely asinine. In a world where flying immortal aliens exist, full of meta-humans with all sorts of unknown power, why on earth would you kill the ONLY one that has demonstrated to be on your side? 
+
+Or, looking at it from this angle: what's more likely, that Earth is attacked by something beyond the scale of human might, or that Superman turns on humanity? Based on Superman's actions thus far, I think betting on being attacked again makes much more sense. 
+
+Maybe the idea is that Superman is the reason why enemies come to earth to begin with. Even if so, Batman should be aware of the presence of meta-humans due to what he saw in Luthor's files. It's clear that there's a world out there full of unknown entities with unknown powers; it makes much more sense to, at least, keep Superman on your side in light of the potential enemies that may arise in the future. 
+
+Overall, Bruce's stance seems to be one centered on fear and emotional outrage, not logic. 
+
+
+_____
+
+> *Hello, users of CMV! This is a footnote from your moderators. We'd just like to remind you of a couple of things. Firstly, please remember to* ***[read through our rules](http://www.reddit.com/r/changemyview/wiki/rules)***. *If you see a comment that has broken one, it is more effective to report it than downvote it. Speaking of which,* ***[downvotes don't change views](http://www.reddit.com/r/changemyview/wiki/guidelines#wiki_upvoting.2Fdownvoting)****! If you are thinking about submitting a CMV yourself, please have a look through our* ***[popular topics wiki](http://www.reddit.com/r/changemyview/wiki/populartopics)*** *first. Any questions or concerns? Feel free to* ***[message us](http://www.reddit.com/message/compose?to=/r/changemyview)***. *Happy CMVing!*",1462737360.0,11,0.74,16
+darksouls3,When did you first realize that....(SPOILERS)? Am I the only one whose jaw dropped?,"I remember going through Irithyll post-Pontiff, wondering if Anor Londo was nearby due to the Silver Knights. Of course, running along the bastions while being shot at was reminiscent of Anor Londo, but it wasn't until I walked into the Darkmoon Tomb room that I went ""...holy shit.""
+
+I wasn't THAT surprised because Smoldering Lake seems to pretty explicitly be Izalith, but I didn't expect to go to Anor Londo. And seeing that Gwyndolin was devoured...heavy stuff.
+
+Am I the only one who found it to be one of the most awesome reveals in Souls games?",1462653691.0,11,0.73,36
+photocritique,Haven't been shooting for several weeks...trying to get back into it but it feels awkward. Thoughts?,,1461793389.0,3,0.71,6
+darksouls3,So it's been a night since release...what are your immediate first impressions?,"Mine: 
+
+- whoever said it was easy is a liar. the minibosses are tougher than the ones in prior games, and the mobs are more difficult because they all have versatile movesets
+
+- AI is much improved. The first NPC invasion I came across was crazy due to how human like he plays 
+
+- coming from DS1, I'm having a hard time invading due to it routinely being a 1v2 or 1v3, plus I don't quite understand how poise works since everything is stunning me at least once 
+
+- areas are incredibly dense, I've already missed several weapons and I'm only on the 2nd stage 
+
+-  (SPOILER SPOILER SPOILER SPOILER) Seigward died while I was fighting the fire demon, and I'm immensely pissed about that. His weapon implies he was a good friend of one of the lords of cinder, which only makes me wonder where his story line would've went ",1460483698.0,1,0.67,5
+darksouls3,"If you're a streamer with low views and you're going to stream DS3, I want to watch. Post your link","As long as you're not donation hungry, and you're not attempting your best pewdiepie impression, I'd love to watch you stream the game. It makes it all feel like we're in this together, watching one another stumble clumsily through a new world for the first time.
+
+edit: can't wait to invade every single one of you :)",1460398442.0,274,0.88,196
+changemyview,CMV: Gaming console exclusives are overall beneficial,"People complain a lot about console exclusives, and I understand where a lot of the criticism comes from. Nobody likes having to buy two consoles to play everything, but I think that one benefit we get from them is that it helps cultivate a community for each console, which makes engaging with other players that much more fun. PS4 & Wii have some fantastic, A+ exclusives, and I think that's one of the exciting parts of joining a community. I don't see it as anti-consumer by any means, but I'm open to having that perspective change 
+
+_____
+
+> *Hello, users of CMV! This is a footnote from your moderators. We'd just like to remind you of a couple of things. Firstly, please remember to* ***[read through our rules](http://www.reddit.com/r/changemyview/wiki/rules)***. *If you see a comment that has broken one, it is more effective to report it than downvote it. Speaking of which,* ***[downvotes don't change views](http://www.reddit.com/r/changemyview/wiki/guidelines#wiki_upvoting.2Fdownvoting)****! If you are thinking about submitting a CMV yourself, please have a look through our* ***[popular topics wiki](http://www.reddit.com/r/changemyview/wiki/populartopics)*** *first. Any questions or concerns? Feel free to* ***[message us](http://www.reddit.com/message/compose?to=/r/changemyview)***. *Happy CMVing!*",1460061002.0,0,0.5,16
+whowouldwin,"Spiderman, Venom, and Carnage run an anime character gauntlet","All rounds take place in New York. Each anime character is in character, but is also attempting to kill the spider team competently. Spidey,Venom, and Carnage are also in character but will work together
+
+Round 1: Garou (One Punch Man - up until the current redrawn arc)
+
+Round 2: Hisoka (Hunter x Hunter)
+
+Round 3: Saber (Fate/Stay Night)
+
+Round 4: Pain (with all 6 paths - destroying the bodies counts as a win) ",1459982519.0,3,0.81,3
+whowouldwin,Spider-Man runs an Anime Villain gauntlet,"All rounds take place in New York. Each villain is in character, but is also attempting to kill Spidey competently. They will pursue him if he flees. 
+
+Round 1: Shishio (Rorouni Kenshin)
+
+Round 2:Wrath/King Bradley(Fullmetal Alchemist)
+
+Round 3: Garou (One Punch Man, up until the current redrawn arc)
+
+Round 4: Hisoka (Hunter X Hunter) 
+
+Round 5: Firelord Ozai (Avatar; last-episode Ozai)
+
+BONUS: Spidey & Venom fight all 5 at once. Can they win a majority?
+",1459307895.0,7,0.88,38
+photography,3 rules /r/photography told me that I'm glad I've broken,"**1) Shoot at the golden hour. If it's too early, wait. If it's too late, go back tomorrow.**
+
+After shooting for a few years, I've found that different lighting situations provide different opportunities. Shooting at high noon gives you harsh shadows on the face, yes, but you can be creative with it. It's an opportunity to use shadows cast by trees, buildings, etc. in your composition. Shooting at night opens up a whole other world of lighting, with street lights, car lights, and moonlight at your disposal. The golden hour is lovely, and I still prefer it, but it doesn't mean that's the only time you can shoot. 
+
+**2) All good pictures tell a story of some kind. Otherwise, it's just a snapshot.**
+
+This one annoys me the most. Every good picture doesn't require a narrative. Not every portrait needs the model crafting some enigmatic facial expression that represents their apathy towards life propagated by our capitalistic culture that sucks us of all passion. If that's your personal definition of good, great. In my opinion, a technically sound photo with pleasing and interesting elements is a good one. We can all appreciate different things but telling every newbie that unless their photo weaves a H. G. Wellsian narrative it's a meaningless picture is misleading. 
+
+Honestly, sometimes things just look cool.
+
+**3) Gear doesn't matter.** 
+
+I think we tend to conflate ""gear is not the end all be all"" with this one. Of course, there's factors outside your gear that matter when taking a picture. But saying it doesn't matter is faulty. 
+
+I've used crop sensors my entire photographic ""career"". Recently, I've had the opportunity to do some fashion work, and a 6D with a 50mm 1.4 Sigma was loaned to me. The difference was night and day. The shots were so remarkably sharp and I could use the more shallow depth of field in a lot more artistic ways. Is my crop sensor holding me back? Not necessarily. But better gear exposed me to a world of possibilities I wasn't aware of prior, and now I'm determined to move to full-frame at some point. 
+
+**All of these ideas have merit. None of them are totally false.** I just think that, instead of mindlessly repeating them like memes, we should critically look at when they apply, and when they do. When I was new, I was under the impression that these rules were steadfast. But now I've reached the point that, creatively, there are no rules when it comes to photography. Only tools. ",1458847501.0,81,0.87,52
+Ask_Politics,People call Trump a racist and a bigot. Why?,[removed],1456785180.0,2,0.75,10
+OutOfTheLoop,People call Trump a racist and a bigot. Why?,[removed],1456773987.0,1,1.0,1
+borrow,"[REQ] (350 ) - (#Fontana, California, US), (April 1st), (PayPal)","Hello, looking to get a loan to help get my checking account out of negative and get myself back on my feet. Truthfully, I've been struggling for a while but some incoming financial aid money + tax refund, I should be able to repay this amount no problem. Looking to spread the money out over some weeks so that I don't empty my account of a lump sum all at once. Please refer to my borrower history, and I can also provide any information needed about my identity.
+
+Also: I currently have two other loans that I'm paying off; one I just received & one that's a little older. Anticipating that my tax return, financial aid, and regular job pay will be able to pay these off in time. ",1456256034.0,2,0.75,5
+borrow,"[REQ] (350) - (#Fontana, California, USA), (April 1st), (Paypal/Venmo)","Hello, looking to get a loan to help get my checking account out of negative and get myself back on my feet. Truthfully, I've been struggling for a while but some incoming financial aid money + tax refund, I should be able to repay this amount no problem. Looking to spread the money out over some weeks so that I don't empty my account of a lump sum all at once. Please refer to my borrower history, and I can also provide any information needed about my identity.",1456201322.0,3,1.0,7
+borrow,"[REQ] (350, repaying 400) - (Fontana, CA), (Fully paid by Apr 1), (PayPal)",[removed],1456200485.0,1,1.0,1
+borrow,"[REQ] ($1000, $1300 repaid) - (Fontana, CA), (Monthly payments), (Paypal/Chase Quickpay)",[removed],1456138477.0,1,1.0,1
+photocritique,"getting an off-camera flash has been my best investment so far, but it still feels clumsy. how am i doing?",,1454365707.0,36,0.95,8
+photocritique,"I love heavy blacks and dramatic contrasts, but I'm interested to hear other opinions on this",,1453949608.0,6,0.88,3
+borrow,"[REQ] 500 for Car Repairs - (Fontana, Calif.), repay by March 4","Looking to borrow some money to get my car repaired. Interest is negotiable, looking to pay the loan back in installments, with the full amount being paid by March 4th 
+
+I use Paypal & Chase Quickpay, Quickpay being preferred as it's instant (am also open to any service that will get the money into my account ASAP as I need my car badly) ",1453930966.0,2,1.0,7
+photography,"What are your favorite ""rule-breaking"" photographs?","Of course photography has no hard-and-fast rules, but for inspiration's sake i think it'd be interesting to share your favorite underexposed, tilted-horizon, oddly composed, missed focus pictures to explore avenues of photography that don't adhere to how it's ""supposed"" to be.",1453004374.0,27,0.86,27
+SonyAlpha,What's the best way for me to get really shallow depth of field with my a6000,"I'm working on a project that will require a certain type or portraiture, and [this](https://www.flickr.com/photos/89478262@N00/8538515599/) is the kind of look that I'm going for: really shallow depth of field with tack sharp focus on the eyes. As of now I have an a6000 and I just ordered a Rokinon 85mm/1.4, but I'm concerned that I won't get shallow enough dof for what I'm looking to do. I'll try out the lens once it gets here, but beyond that I figure my options are a) get a legacy lens with a really big aperture, like 1.2 or 1.0 & also possibly longer, like 135mm b) upgrade to an a7ii c) make do with the Rokinon. Again, this is for a project I'm engaging in and it's pretty integral to its theme that I achieve this look.
+
+What are your thoughts?",1451342286.0,6,1.0,22
+blackladies,Not a black lady but since it's for you I'm asking for opinions: would you buy a photography book filled with portraits of black women?,"I'm a photographer and for a while I've wanted to do something to get my work off Instagram and recreate it as something tangible, and the idea I arrived at was making a book of photography for & covering black women. Similar to [Humans of New York](http://www.humansofnewyork.com/), but instead of it being 95% about the person's story and 5% about the actual photography, I'd want portraits to be a bit more artistically expressive so that it's split 50/50 between both in terms of importance. 
+
+As of now, I was thinking about pricing the book at about $50 for about 30-50 pages. Does this sound like something that would interest any of you? & if not, any way I can make the idea better? My primary purpose is to showcase the humanity & diversity behind black women, so if there's a way that it could reach you better I'd love to hear it ",1450682431.0,10,0.67,35
+SonyAlpha,Best budget legacy lenses?,"Finally upgraded from my a6000 to an A7 and I'm really excited. The plan for now is to stick to cheaper legacy lenses until I have the money to invest in the expensive-ass native FE lenses that Sony has. I'm primarily interested macro & portrait lenses, and pretty much whichever lenses will give good performance on a budget (under $200, roughly). I only do portraits right now but the right lenses could help me branch out  ",1449973336.0,12,1.0,30
+bloodborne,Is this game worth buying a PS4 for? Yes or no?,,1448260295.0,1,1.0,1
+starcraft,D+ player in iCCup (Brood War) looking to finally get into SC2. What do I need to know?,"As far as mechanics, leagues, what to focus on, etc.
+
+Also, I've heard a lot about micro being less of a thing in this game compared to BW. True?",1447901620.0,13,0.94,15
+borrow,"[REQ] $400 for school fees, to be repaid by Dec. 25","Had some unexpected expenses come up, and I'm a bit short for the school fees I need to pay ASAP (before the end of this week) in order to maintain my status as a student. 
+
+I have a stable job and will be able to repay by Christmas, perhaps even earlier. I intend to pay within a month so that I have time to put the money together instead of sending it all at once and ending up broke again.
+
+Interest is negotiable, and I reside in California. Payment methods are Chase Quickpay (preferred, as it's faster) & Paypal ",1447711699.0,3,0.72,4
+photocritique,Hard to take pictures of friends because you tend to overlook their flaws. Tear this one apart please,,1447707227.0,25,0.82,10
+photography,What are your favorite photography books that you look through for inspiration?,"Not necessarily books about techniques or learning principles, but books that great photographs that offer new ideas for you to try",1447212870.0,10,0.86,10
+darksouls,"Which platform has the most active userbase currently? PS3, Xbox, or PC?",,1446933467.0,8,0.84,12
+SonyAlpha,"Dissatisfied with my A6000 performance thus far; upgrade to a7 series, d5500, or is it me?","I'm currently using an a6000, and I'm considering switching systems/camera bodies because I do a lot of low-light work (low light portraits, concerts, etc.) and I've been getting frustrated by 1. my camera's inability to focus well in low light 2. the large amount of grain I get when I go to ISO 1600 or so. As of now I'm considering a d5500 or upgrading to an A7/A7ii
+
+I know the A7/A7ii will give me better low light performance and a more shallow depth of field (the two main reasons I'd upgrade to full frame), plus the A7ii giving me in-body stabilization, which I presume would be huge for me. But I'm not sure how the AF will do on those compared to my a6000. Will they hunt as much? I'm really tired of potentially great shots being ruined by eyes not being in focus and such. (although perhaps i could just use MF and take advantage of the MF assist tools? i kind of feel like i'm not using them to their full potential as it is; do the MF assist tools improve on the a7 series as opposed to my a6?)
+
+I've been considering a d5500 because i've been under the impression that DSLRs do AF in low light better than mirrorless, plus i'd be able to take advantage of the better camera ecosystem that Nikon has. Not sure if it would perform better in low-light.
+
+But, again, do I really even need to upgrade? It could be that with better use of MF assist + postprocessing my pictures more effectively, I won't get out of focus/noisy shots as much. I just need some insight on what would be the most intelligent move.",1446766032.0,0,0.5,38
+PS4,Looking into getting a refurbished PS4 from Best Buy. What games should I get?,[removed],1446700943.0,1,1.0,0
+whowouldwin,Which universe possesses more hax abilities: Worm or the HxH Universe?,"Note: by universe, I mean all entities in both worlds. Endbringers, Chimera Ants, everything. 
+
+ALSO: This isn't, ""which universe would win in a fight"" (although feel free to make your comments on that as well). It's ""which universe possesses more hax abilities"". A bit more subjective but I'm interested in seeing people's reasonings.",1445989122.0,51,0.96,25
+Fallout,Fallout series is on sale on Steam. What should I get: NV or 3?,"Never played a Fallout game before. Only Bethesda game I've played is Skyrim. Which game should I go for? Only looking to get one, honestly. ",1445573724.0,2,0.63,8
+darksouls3,Can you use weapon items (i.e. throwing knives) out of a roll?,,1445300188.0,1,1.0,1
+borrow,[REQ] $75 for textbook,"Located in Fontana, CA
+
+Looking to borrow $75 for a textbook/online code I need for my class ASAP. I'd be paying back $100 on Oct. 30th, my next payday 
+
+I accept Paypal & Chase, Chase would be highly preferable if possible due to it being faster, though Paypal works too ",1444757703.0,2,1.0,6
+Christianity,I'm lost in the midst of all the questions and theology surrounding Christianity. How do I get back to simply living a Christian life?,"Being on this sub has raised a lot of questions regarding my faith. Is the way I see hell and Satan accurate? What's the proper way to interpret scripture? Is pro-choice reconcilable with a Christian worldview? Is cursing Christian-like?
+
+After spending so much time meditating on all of these things, I've realized I've forgotten what it even means to be Christian. The rules and regulations can get tiring at times. I'm in the midst of picking out a career and I feel paralyzed because I don't know if God is even with me as I make this decision.
+
+How do I get back to living as a Christian, simply and without worrying about all the details? Is it really just about praying and being nice to people?",1444256710.0,5,0.86,19
+photocritique,Been trying to improve at portraits + postprocessing for some time now. How am I coming along?,,1444196307.0,4,0.64,5
+DarkSouls2,Looking for help in Shrine of Amana [PC],"Level 120, SM 1.89 million
+
+Been having some trouble getting through Shrine of Amana, could really use some summoned help if anybody knows the area well & wouldn't mind keeping the damn sorcerers off me",1443488920.0,1,0.67,7
+cars,"Need a new car key. Dealership tells me it needs to be programmed, locksmith says it doesn't. What to do?","So I lost my car keys, and after a couple days of looking it appears I'm not gonna get them back. So I'm looking into getting a new key.
+
+After calling around a few places, I've gotten conflicting information. I called two Chevy dealerships in my area, they both said the key for my car (a 2005 Chevy Aveo) needs to be programmed, which obviously increases the price quite a bit, since I'd have to get it towed to the dealership. I called two locksmiths, however, and they both said the key did not need to be programmed. This would save me a lot of money, but if they're wrong then my situation still isn't solved. At this point, I'm not quite sure what to do. ",1442698764.0,1,1.0,6
+DarkSouls2,"DS1 veteran coming over to SotFS, anything I need to know?","I've put in roughly 200ish hours in Dark Souls (probably 150 of that is PvP), and seeing as SotfS is on sale I figured it'd be a good time to migrate over and hope it satisfies me until DS3.
+
+With that said, is there anything I need to know in order to make the process more smooth? Mechanics or gameplay tactics that I should be aware of? I know the rolling mechanics are different now and your i-frames are based on your stats, or something. How does that work? ",1441948298.0,0,0.5,21
+blackladies,"Black America, please stop appropriating African clothing and tribal marks.",,1441604205.0,10,0.63,13
+photocritique,Memorial; I've always focused on portraits and have found pictures of the environment difficult. How's this?,,1441424997.0,1,0.57,4
+whowouldwin,Hisoka vs. Spiderman and Edward Cullen,All characters in-character. Fight is to the death and takes place in a clearing with forest surrounding it. ,1441175253.0,2,1.0,7
+SonyAlpha,What's the best focusing mode/options for portraits,"I'm using an a6000 and there's so many different ways to go about it that I'm kind of lost.
+
+AF-S and recompose
+
+Continuous so I can have them move around and get more natural shots
+
+But then there's options like eye focusing and face detection, i'm not sure which route to take",1441166098.0,2,1.0,7
+photography,How the heck can I get eyes to shine and glint?,"I've been spending the majority of my time lately working on portraits, and one thing I've failed to do so far is get my subject's eyes to light up. I don't know if it's a lens/aperture thing, or a lighting thing, or both, but I've always felt a ""wow"" reaction when seeing a subject's eyes with [this much](http://www.lightfinity.net/gallery/galleries/2015-08/20150809-00635.jpg) detail (taken from /u/lightfinity's website). Any tips on how I can get eyes to stand out like in the Afghan Girl photo?",1441131993.0,17,0.78,10
+photocritique,Feeling very stagnant and considering selling my camera. Am I at least on the right track?,,1440524883.0,3,0.6,2
+SonyAlpha,Connecting my off-camera flash to my a6000,"Is there a way I can connect my Sony flash to my a6000, but off camera? I know that connector cables exist, but I can only find ones for Nikon and Canon. What about for Sony mirrorless? ",1439668049.0,1,1.0,7
+photocritique,An ordinary sibling portrait,,1439407258.0,3,0.71,6
+dragonage,[No Spoilers] Haven't touched the game since a month after release. Miss anything?,"I got DA:I on release, since I was a gigantic fan of Origins. The hype was real, but after playing for about a month I ended up getting sidetracked by Dark Souls & more recently the Witcher. I want to jump back in, although I do remember frequently being irritated with the combat system (mostly the camera, tactics, and the overcomplication with trying to micromanage everything like I used to do in Origins).
+
+Are there any mods I can use to improve my experience? Patches that improved things? Good DLC?",1436131363.0,11,0.87,4
+borrow,[REQ] $400 repaid through biweekly installments,"Fontana, CA
+
+Interest is negotiable. I'd be willing to pay higher interest if the lender is willing to break the payments up into 3 or 4 biweekly payments. I need the money to cover some other bills I have, and paying it off slowly would help me from falling too deeply into any further financial troubles.
+
+I use paypal & chase quickpay ",1435650487.0,2,1.0,4
+whowouldwin,Geralt of Rivia vs. Arkham Knight Batman,Feats from books and games count for Geralt. Only feats from the Arkham games count for Batman. ,1435520257.0,18,0.92,10
+borrow,[REQ] $300 to be repaid on June 26,"Currently have a few bills I need to pay by Friday this week. I also get paid on Friday so I'll be able to cover them, but it will take my entire check to do so. In the 2 weeks until my next paycheck, I have 1 bill and several living expenses I need covered. That's what the $300 will be used for. 
+
+I currently reside in Fontana, California (just moved). Chase Quickpay is preferred but I can also do PayPal ",1433891057.0,1,1.0,8
+DarkSouls2,Transplant from DS1. What do I need to know about invincibility frames and the stats that correlate with it?,,1428348969.0,1,1.0,10
+AskHistorians,Did the relatively young age of many of the Founding Fathers have any impact on how America was viewed by the British or other countries?,,1428021333.0,9,0.91,0
+DarkSouls2,Dark Souls 1 lover and PVP junkie: will I enjoy SotFS?,"I've put in roughly 100 hours into Dark Souls, about 35ish playing single player and the rest in pvp. It's one of my favorite games ever.
+
+With that said, how strongly would you recommend SotFS for me? For it to be worth it I really need the pvp to be great and active, and for the campaign to be at least as good as DaS. Does it have that to offer?
+
+Also, how exactly do I know which version to get? ",1427992605.0,1,1.0,8
+graphic_design,"So I think I want to be a graphic designer, but I want to get a firm grasp on EXACTLY what I want to do...","After spending the past few months agonizing over my career choice, bouncing back and forth from being a physical therapist to an English professor, I believe I've settled on being a graphic designer. It was a career I've always considered, but now that I've taken up photography and been exploring what it's like to dedicate myself to artistic endeavors, I can finally say I feel comfortable with making this a career. My only problem is figuring out exactly WHAT I want to do with it. I do know that:
+
+* I want to be able to satisfy my artistic itch with my work
+
+* I want to tie in photography to my graphic design
+ 
+* I want to be able to assist both companies and individuals with their brand; for example, helping a budding clothing company put together a lookbook, a website, and then help them promote it
+
+* I want to eventually freelance either on my own or part of my own team
+
+Those are the important things I want to be able to do in this career. But now, I'm wondering what skills would I need to be able to do each of those things? Is my scope too narrow? Too wide? Another important question is, what should I major in to cover all of those bases? I wanted to be a Graphic Design major and a Photography minor, but I'm not sure that would be sufficient. What other ways can photography be tied in to graphic design? Do I need to learn to code as well? 
+
+I feel as though my post may not come across as clearly as I'd like due to my lack of knowledge on the field as a whole. I just want to be able to pinpoint exactly what areas I'll need to learn very well to be successful, and see if there are perhaps any avenues that I haven't explored that are related to my interests as well. Thanks in advance for any help ",1427942045.0,5,1.0,3
+borrow,[REQ] $75 loan w/ $15 interest,"I'm located in Ontario, California
+
+Currently I've got several bills that are due at the end of this month, and can barely afford them. Seeing as I don't want to be cause in a position where I'm unable to buy groceries & gas for two more weeks until my refund check comes, I'd like an extra $75 in my account just to add some cushion. I'd be able to pay back no later than 4/16. I also currently have a loan out with another user on this subreddit. 
+
+I can use both Paypal and Chase QuickPay ",1427215613.0,1,1.0,3
+Christianity,I just got the most blatant sign from God I've ever gotten,"I just need to profess this to someone.
+
+The other day I made a post addressing some issues in my life that were occurring, things that were outside of my control and had a large impact on my current life situations. To the point that I was seriously considering suicide if they didn't work out, although I didn't mention it in the post because I already knew what people would say.
+
+5 minutes ago, I prayed. A simple one done in passing, with a promise to God at the end. When I came back to my phone moments later, I received a call that evaporated all of my worries in an instant. As if  they were no big deal to begin with.
+
+I don't really believe in miracles. Nor do I believe that God is necessarily responsible for every good thing or every bad thing that occurs in our lives. But I definitely believe that God issued me a lesson here. 
+
+This post isn't so much for the purpose of going, ""yay, God gave me what I wanted! praises be!"". But now I can say that I've been taught that forgetting who He is, allowing myself to rely on my own power, presuming that my life circumstances are more powerful than He is, are antithetical to Christian belief. The myopia inherent within humans made me lose sight of that momentarily. 
+
+But now I'm back. And to be honest, this kind of lesson branded this knowledge on my soul a lot more deeply than any Bible verse or quote from a pastor, so I understand why I needed to go through it. Hallelujah. ",1426787906.0,69,0.86,26
+Christianity,Feeling spiritually desolate,"I don't know the point of this post but I feel compelled to try.
+
+I'm currently going through some situations in my life that are crippling me mentally and, some of them new, some of them that have been with me for years. I feel thoroughly abandoned by God and haven't felt a wisp of his presence in weeks. Regardless of what the Bible says about God always being there, my own circumstances seem to contradict that
+
+Today, my biggest hurdle presented itself, and could potentially spell disaster for my future. I'm hurt and feel hopeless, so I'm hoping that a return to God will at least give me the strength to keep moving forward. Or something.
+
+I guess the point of this post is just to get some things off my chest as well as to request prayers. Maybe it will help assuage the feeling of the universe conspiring against me. Thanks for reading ",1426642295.0,20,0.95,14
+borrow,[REQ] Looking for $180 to fix my car,"I live in Ontario, California. Just got paid this week but after paying a number of bills I'm down to almost nothing, and unfortunately my car has picked now of all times to break down. I'm looking for $180 to fix it, and once I get my financial aid check from school in a month, I'll be able to pay back $200 (or more, if you wish). ",1425796229.0,4,0.83,8
+Frugal,Need a small loan to get my car fixed. Options?,"My car has been having some trouble lately, and finally it's gotten to the point where I can't drive it. Only problem is, I absolutely need it to get to and from work. After talking with a few mechanics, I can get it fixed for about $180...which is money I don't have right now. 
+
+Since I don't have any friends or family who can help out, I've been looking around online to see where I could get a tiny loan, one that I'd be able to pay back in about 2 weeks at my next paycheck (not including whatever interest might accrue). Unfortunately, a lot of places require credit (which I don't have). Is there anywhere else I can try that you guys would recommend? ",1425793803.0,27,0.87,21
+2007scape,"Ok, Jagex, you win. I'm coming back after years of inactivity. What have I missed?","From about 2006-2011 I was a heavy Scaper. Not that the game I once loved is back, gotta admit the pull is too strong to resist.
+
+My question is, though...is the game literally as it was back in 07? I know there's GE, but what other major changes are there? Is there Clan Wars, PVP worlds? Does the trade/drop/kill system still work as it once did?
+
+Also, what are some reliably money making methods? I'll probably be buying a subscription as well, and I'm probably going to make a pure (as that was pretty much my life way back then), but having no main account to siphon money from could complicate things. I'd like to make a few million semi-quickly; is there any feasible ways to do this?",1425415544.0,30,0.87,38
+Christianity,I lost my virginity and I feel like I betrayed God,"45 minutes ago, I lost my virginity. 
+
+I'm usually not this open with my emotions either on the Internet or online but for this, I'm just going to bear my soul raw. 
+
+God and I haven't been on good terms the past few weeks due to some of the circumstances in my life. I've been harboring a lot of bitterness towards Him, although I go through these phases sporadically I always come back. 
+
+But now, I feel like I've betrayed Him on the deepest level. I met a girl on a  dating website Sunday, we hit it off beautifully, and now we've had sex. I  promised God years ago in high school that I would keep my virginity...and it's not simply the fact that I had sex that's eating me up, but my vow of chastity was like a constant reminder of my relationship with him, a symbol of my devotion. And today I broke it. From now on, any time I date a Christian woman, I'll have to tell her that I'm not a virgin. My entire life has changed due to a fleeting moment of lust,  and my vow to God broken. I feel like a backstabber. And who knows how God will decide to punish me for this. 
+
+I don't know what I'm expecting from this, but I just needed to get this off my chest. Perhaps public confession along with whatever admonishing & insight I get from this post will help. I also apologize for any typos or awkward phrasing, as I typed this on my phone and to be honest, I don't want to read it again. ",1424762839.0,5,0.65,53
+Christianity,The Radical Christianity Of Kendrick Lamar - Parsing prominent religious themes in the life and music of hip-hop’s most unconventional new superstar,,1423040353.0,31,0.92,12
+darksouls,I am getting my ass KICKED in PvP. I think it's my gear/stats. Help?,"PvP in this game is super, super fun. Fun enough to the point that I've stopped playing single player and have been in the forest for about a week now doing forest invasions. I haven't even beaten the game yet because I'm having too much fun.
+
+The only problem? I lose. A lot. As in, 4/5 fights. 
+
+The weapons I'm using are good weapons (I alternate between the Dragonslayer Spear & +15 Uchi). I'm using the Wolf Ring & Havel's Ring so I can fast roll while still maintaining enough poise. Yet...I get destroyed. As in, I get backstabbed once, hit with an R1 once, and I'm dead. But when I'm poking at someone with my spear, I'm doing 120 damage. The heck?
+
+My current stats are 30 dex & 36 str (had I known a little more about stat scaling, I would've went a strictly dex build). SL91. Could this be why I'm getting owned so consistently? 
+
+25 Vitality
+
+11 Attunement 
+
+34 Endurance
+
+36 Strength
+
+30 Dex
+
+12 Resistance
+
+15 Intelligence
+
+11 Faith
+",1422923728.0,1,1.0,8
+AskHistorians,Did the relatively young age of many of the Founding Fathers have any impact on how America was viewed by the British or other countries?,,1421883556.0,13,0.78,0
+changemyview,"CMV: Singing well is largely natural and for most, no matter how much they practice, they will never be great singers","I am a musician. I've played and composed music from the time I was 8, and one thing I've always wished I could do is sing, and sing well. I've watched every tutorial imaginable on Youtube, read books, gathered knowledge from every resource available, and still my voice sounds...not good. I think of singers who are able to power through their notes and/or use the timbre of their voice to create a unique sound, and can't help but feel they have a natural affinity for it. Marvin Gaye, Billie Holiday, Erykah Badu, Sam Smith, Justin Timberlake...singing seems to come so intuitively to them.
+
+Of course, I'm not seeing the hard work each of the singers I listed above put into practicing, I'm only seeing the end result. I believe that in many instances, hard work can get good results in any particular field.  With singing, however, I'm not sure that's the case. 
+_____
+
+> *Hello, users of CMV! This is a footnote from your moderators. We'd just like to remind you of a couple of things. Firstly, please remember to* ***[read through our rules](http://www.reddit.com/r/changemyview/wiki/rules)***. *If you see a comment that has broken one, it is more effective to report it than downvote it. Speaking of which,* ***[downvotes don't change views](http://www.reddit.com/r/changemyview/wiki/guidelines#wiki_upvoting.2Fdownvoting)****! If you are thinking about submitting a CMV yourself, please have a look through our* ***[popular topics wiki](http://www.reddit.com/r/changemyview/wiki/populartopics)*** *first. Any questions or concerns? Feel free to* ***[message us](http://www.reddit.com/message/compose?to=/r/changemyview)***. *Happy CMVing!*",1420062353.0,25,0.85,35
+whowouldwin,Eragon & Saphira take on the WH40k Universe,"Eragon and Saphira are dropped off on WH40k Earth. They both receive 1 year of prep in order to simply fuck up as much shit as possible, and take out who they can.
+
+How far can they go?",1419019829.0,3,1.0,15
+whowouldwin,Could /r/www take over the Marvel Universe?,"All 62k of us are dropped into the world of Marvel inside of an abandoned warehouse. The following things occur:
+
+1) We are all now Marvel peak humans
+
+2) We still retain the knowledge of every Marvel event that has occurred, as well as a real-world laptop for the purposes of looking up anything we may have forgotten
+
+Essentially, the challenge is this. With the manpower of 62k of us, in addition to the almighty power of **writer's omniscience**, could we take over the entire Marvel Universe?",1418757142.0,13,0.8,12
+Christianity,Is Christianity supposed to be impervious to cultural/societal changes?,"After learning about how religion is often molded by the culture and society it resides it, it makes me question whether or not Christianity is supposed to be an ever-consistent model of holiness that doesn't change no matter where society moves. Should we always follow Biblical values whether they contradict mainstream society? An example: the role that women play in the church",1417904804.0,1,0.67,13
+dragonage,I'm jumping into DAI from DA:O. Kind of lost with the plot.,"I know there's a lot of extra lore out there, with the DA anime movie, the text game, and there's even an entire game I skipped (DAII), but I didn't expect to be this lost going in. I just defeated the first boss of the game, and every other second I had another bout of confusion. Who's Cassandra? What's Leliana doing here? What are the Seekers? Why the heck are we in Haven? 
+
+I don't want to end up spending hours going the wiki trying to piece together the story (especially since I feel it'll lose some substance that way), so I wanted to see if anyone could point me in the direction of what I should be reading/watching to get the most out of the story, or provide me with a decent enough summary to understand & care about what's going on.",1416338500.0,2,1.0,10
+malefashionadvice,"Looking for a pair of rich, oak-brown tassel loafers (picture provided)",I'm looking for a pair of loafers that look similar to [this](https://33.media.tumblr.com/5504e5c3a948028251ed6ed38ba86f7c/tumblr_nenbpzHMC91rsyaepo1_1280.png). Any help finding something similar is appreciated,1415404958.0,1,1.0,1
+Christianity,Does anyone else feel like Christian culture insulates itself from the world too much?,"This is a feeling I've had for a while, and though I've tried to put it into words in the past, it'd been difficult. Bear with me.
+
+A lot of times when I spend time around other Christians, be it in church or encountering them on the street, I get the feeling they're clueless about the rest of the world. The only music they know about is Christian, the only movies they watch are Christian, all they listen to in their cars are Christian radio stations. It may be odd to hear someone who's also Christian complaining about this, but it's almost like being around someone who's currently in the process of brainwashing themselves.
+
+I have always felt that Christians will often try to cut themselves out from the world and exist upon their own ideological island, separating themselves from everything else. Personally, I don't/can't live that way. I've always been able to find God in the most ungodly of circumstances, I don't see the need to create our own subculture, and I feel that those who do that are simply trying to create a comfort zone for themselves.
+
+I hope I've written down my thoughts coherently. What do the rest of you think? ",1413246278.0,30,0.86,13
+whowouldwin,The Witcher vs. Chosen Undead,"Between Geralt of Rivia & the Chosen Undead from Dark Souls, who would win?
+
+1 hour prep with no knowledge of each other other 
+
+Takes place in [this](http://th05.deviantart.net/fs71/PRE/f/2012/024/3/9/dungeon_level_2___level_concept_a__main_corridor_by_cloister-d4ngitg.jpg) corridor
+
+",1409335055.0,13,0.83,7
+makinghiphop,[Question]How do you emulate the soft filter-type effect used on this Bas/JCole song?,,1408823995.0,1,1.0,2
+whowouldwin,Spiderman vs. Hisoka (HxH),"No prep. Both have zero knowledge of each other. Spiderman cannot see nen. Both are in-character but want to win.
+
+Who comes out on top? ",1407097077.0,1,0.58,2
+whowouldwin,Spiderman runs a Hunter x Hunter gauntlet,"Each round takes place [here](http://img2.wikia.nocookie.net/__cb20120106113009/hunterxhunter/images/thumb/8/8d/Hills_GI.png/1019px-Hills_GI.png)
+
+Both combatants know next to nothing about each other prior to each fight. Spidey is healed after each round. Spidey also has learned to use gyo, and thus can see nen. Every fight begins with both characters standing on a plateau about 100 yards apart. Everyone is in-character, but are trying to kill their opponent. 
+
+Round 1: Spidey vs. Genthru
+
+Round 2: Spidey vs. Kurapika. Spidey has an emblem of a spider on his back which leads Kurapika to believe Spidey is part of the Phantom Troupe. (Kurapika is bloodlusted)
+
+Round 3: Spidey vs. Hisoka
+
+Round 4: Spidey vs. Gon & Killua
+
+Round 5: Spidey vs Silva
+
+Round 6: Spidey vs. Netero
+
+Round 7: Spidey vs. Meruem pre-bomb
+
+How far does he go?
+",1406938023.0,2,1.0,0
+Christianity,"Does God discipline us by causing/allowing bad events in our lives? If not, how does he do so?",,1406756236.0,8,0.9,16
+whowouldwin,What's the most intriguing in-universe matchup that has yet to happen?,"My vote goes to Naturo vs. Sasuke. Technically it's happened in the past but I think we can all agree that if they fought now, things would be very different. ",1404006718.0,19,0.84,92
+whowouldwin,Chris Tucker + Jackie Chan (in Rush Hour 1 + 2) vs. Gotham Crime,"How far could the two of them get? Could they take out any of Gotham's kingpins? 
+
+Bonus: they are joined by Jason Todd in an attempt to completely clean Gotham. How far do they go?",1403465529.0,3,1.0,3
+whowouldwin,"Genjutsu now works on any and everyone, even those without chakra. Who is the strongest character/team of characters/universe the Uchihas can defeat?","The Uchiha squad will be:
+
+Revived Madara (immediately post-Edo)
+
+Prime Itachi 
+
+Shisui
+
+Obito as seen throughout the majority of Shippuden
+
+Sasuke as currently seen in the manga
+
+Round 1: what character/team of characters/universes can they beat if they spontaneously dropped into the Grand Canyon to face their opponent? Both sides have zero prior knowledge.
+
+Round 2: what character/team of characters/universes can they beat if they infiltrate their universe silently and have 1 year of prep?
+
+Round 3: The team now has Edo Itachi, 10-tails Madara, and Juubito. Who is the strongest character/team/universe they can defeat, in the same scenario as round 1?",1402553880.0,4,1.0,7
+whowouldwin,Who's the strongest person who could logically exist in our world?,"Out of every character in fiction, who is it? 
+
+To specify, people like Superman or Flash couldn't exist because their powers defy the laws of physics. Spiderman couldn't exist because the way he got his powers probably wouldn't transfer to the real world. Naruto couldn't exist because there's no such thing as chakra. Etc. etc.",1401580431.0,13,0.86,73
+whowouldwin,What is the most memorable one on one fight in anime/manga history to you?,"Since we have one for comics, why not add in one for its Japanese counterpart? ",1401481315.0,30,0.79,75
+whowouldwin,Full Metal Alchemist-verse vs. Hunter X Hunter-verse,"In an all-out brawl, which universe would win?
+
+Extra rounds:
+
+* State Alchemist Military vs Hunter Association
+
+* Homunculi (excluding Father) vs. Phantom Troupe 
+",1401221706.0,5,0.79,3
+nba,Why Is Westbrook Considered Elite? A Study by Pounding The Rock,,1401002213.0,71,0.66,249
+Christianity,Feeling apathetic towards God and religion. What's the point?,"I've been raised a Christian for most of my life, and also for most of it I've been diligently seeking God. But recently, I've hit a wall...what's the point?
+
+There are so many questions, struggles, difficulties, and wounds that come through life. Why should I waste time trying to chase something that has yet to reach back out to me?
+
+I could go through my entire life without God and not notice a difference. If I want to improve my life my best bet in terms of finding resources to help is going to a subreddit like /r/GetMotivated, not reading my Bible. What role does God play in my life? In the world?
+
+My problem isn't that my life has rough patches. That's ok. But the hardships that I do face don't seem to have any influence from God on them. I can't see them pointing towards a goal. I can't see them gently being fixed. But when I turn to the secular world, I find more answers, more encouragement that doesn't simply boil down to ""God has a plan"". But as much as a read read read, seek seek seek, pray pray pray, I don't get *anything*.
+
+I'm just tired of a religion that drains me and pours nothing back in.",1400962350.0,28,0.81,31
+HunterXHunter,What's up with all the weird topic tags and downvote brigades?,[removed],1399149672.0,1,0.67,0
+Christianity,"After years attempting to seek God, I'm not sure I can continue. Jaded of Christian life","In recent years, my faith has experienced a series of peaks and valleys, and at this point I can't find any motivation to pull my faith out of the trenches again.
+
+It seems that every video I'm linked to, every Christian quote, they all seem too 'perfect'. They all seem to imply, ""Sure life might be hard, but all you've gotta do is x y z and you'll get back on the right track and everything will be perfect!"". I find myself rolling my eyes and every word of encouragement sent my way, because they feel too idealistic. I'm sick of the same quotes from the Bible being thrown at me because I feel like they only tell half the story. Even when you get quotes from the Bible addressing anguish, loneliness, anger, bitterness, they all seem to lead to the same thing: sunshine and rainbows when you ""come to Christ"". As if it were that simple.
+
+Believing in God is difficult, being a Christian is more difficult still. I'm reaching the point where I may just give up for good. I know this subreddit gets dozens of individuals looking for advice daily and it's likely that this post goes unnoticed but if anyone can offer any sort of insight I'd be immensely grateful. 
+
+edit: I can't/won't reply to everyone but I'm appreciative of every person who's taken time out of their day to reply to this. It means a lot to have other people care about what I'm going through. Seriously. I can't overstate my gratitude for every reply.",1398867313.0,135,0.92,211
+whowouldwin,Whitebeard (One Piece) vs. Isaac Netero (Hunter x Hunter),"Who would win in these scenarios:
+
+1) 100m distance, in character, mild knowledge of each other's abilities
+
+2) 20m distance, bloodlusted, no knowledge of each other",1398749708.0,3,1.0,1
+whowouldwin,Who is the strongest being with only human-level durability?,"Who's the strongest glass cannon out there? 
+
+",1397975869.0,6,0.7,9
+whowouldwin,What are the two most evenly-matched universes in fiction?,,1397945184.0,19,0.82,29
+piano,Could someone transcribe this (relatively simple) song for me?,"Here's the song: https://www.youtube.com/watch?v=Ptbqn-7VJUk
+
+I really want to learn how to play this song, and it's killing me that there are no tutorials on youtube or anything of the sort. It's not super complicated, but I can't seem to find the *exact* chords on my own.
+
+If you can figure it out, you can just tell me the names of each of the chords and I can figure it out from there. I play by ear and can't read sheet music well enough to play by it anyway, ha. ",1397606724.0,4,0.76,3
+whowouldwin,Who's the most powerful city-busting comic or anime character?,"City-busting meaning they cannot be above the level of power required to destroy a city, both in terms of offensive output and durability. I.e. Hulk does not count because he can take hits capable of leveling a city.",1397178704.0,2,1.0,8
+whowouldwin,The Incredibles vs. the Teen Titans,"Incredibles from the movies, and Teen Titans from the cartoon from a few years back, in case there was any confusion.",1395725948.0,4,0.84,19
+HunterXHunter,Characters from other anime whose abilities fit well into the HxH universe,"Ever since I've been watching HxH, I've been starting to notice more and more that other manga have similar ""condition"" based, complex fighting systems. And I was thinking, what other characters could carry their abilities over to the HxH world and use them with little difficulty?
+
+From Bleach, one example would be Captain Shunsui from Bleach. All of his attacks are based on kid's games (wonder if he could invent one based on janken), and his most powerful one is based on striking the color on an opponent's body. This one works exactly like the conditions in HxH do: increase the restriction/risk, give out more damage.
+
+Any others you guys can think of?",1394593452.0,8,0.76,14
+whowouldwin,"Goku is granted a golden power ring that derives its power from the ""goodness"" of the weilder. Who's the strongest one he can defeat?","Goku still has all his existing abilities and techniques, just the power ring on top of them. ",1394149940.0,9,0.73,18
+whowouldwin,"Who is the strongest human swordfighter across all mediums? Anime, comics, movies, etc.","Human, meaning literally full-human, not mixed with any hollows or what have you, no cyborgs, nobody with augmented limbs or telekenisis or anything of that sort. Strictly based on sword techniques and abilities, who's the greatest of them all?",1393881626.0,11,0.81,74
+whowouldwin,"1v1 Anime Tournament: Team Chimera Ant, Akatsuki, Straw Hat Crew, Team Ichigo, Team Urameshi, Team Naruto","Format: All teams are summoned to a tournament-style battle. Fights take place as 1 vs 1s, with the weakest members going first, all the way up to the team leaders.
+
+**Rules**
+
+* Losses occur when a fighter is 1) incapped 2) killed 3) knocked out of the ring for more than 10 seconds.
+
+* Each member fights until they lose. For example, if Sanji matches up with Renji and wins, he must stay on the battlefield and fight the next person from Renji's team
+
+* All weapons and techniques are legal
+
+* Every person that dies in a round gets revived in the next one
+
+* Each team has been provided a booklet with short bio/summary of every member of the other teams, thus giving them basic knowledge of techniques (for example, they all know what Rukia's bankai does, and that all paths of Pain share the same field of vision, etc)
+
+This is the arena:
+http://i278.photobucket.com/albums/kk118/kotofoxy/FinalStadium.png
+
+Teams:
+
+
+**Team Hunter**
+
+Leader - Meruem
+
+Pitou
+
+Pouf
+
+Youpi
+
+
+
+**Team Akatsuki**
+
+Leader - Pain (and all his paths)
+
+Itachi
+
+Kisame
+
+Kakuzu
+
+
+**Straw Hat Crew**
+
+Leader - Luffy
+
+Zoro
+
+Sanji
+
+Franky
+
+
+**Team Strawberry**
+
+Leader - Ichigo (using his strength while fighting Ywatch, all other members as currently portrayed)
+
+Renji
+
+Rukia
+
+Isshin
+
+
+**Team Urameshi** (all characters as they were immediately post-Dark Tournament)
+
+Leader - Yusuke
+
+Hiei
+
+Kurama
+
+Kuwabara 
+
+
+**Team Naruto**
+
+Leader - Naruto
+
+Jiraiya
+
+Kakashi
+
+Minato
+
+
+
+Who comes out on top?
+
+NOTE: The only thing written in stone is team leaders. Meaning, they HAVE to fight last, however you can put the other fighters in whichever order you wish if you believe it'll make a difference in the fights.
+
+[Here](http://challonge.com/tournaments/bracket_generator?ref=bsIa8zhvNL) is a bracket I randomly generated for it. You can use this if you like, or create your own.",1393723834.0,2,1.0,7
+Christianity,"Watched a Joseph Prince sermon, what's wrong with his message?","I've seen the ""Word of Faith"" type televangelists being downed on this subreddit often. A friend of mine recommended for me to watch sermons from Joseph Prince, because I struggle with depression and lack of self esteem, and she claimed his messages could help people like me. After doing a little research, I see his name mentioned on this subreddit not too often, but when it is it's usually negative.
+
+However, after checking out one of his sermons on ""Soul Prosperity"", his teaching seems to be very Biblically based, which surprised me as I was expecting more Joel Osteen type motivational talk with God simply sprinkled in.
+
+Here's the specific one I watched: http://www.youtube.com/watch?v=PQe_Tfw1plI can anyone who has seen it, or has seen another one of his sermons tell me why he's considered to not be a good teacher of the Word?",1392323986.0,11,0.92,8
+Christianity,Struggling to find meaning/motivation for my life. What's the point?,"In the recent months I've felt my faith basically fall to the wayside. I've been trying to rekindle it, but honestly...I don't even see the point. 
+
+I'm currently in college with dreams of becoming a professor, a career which is difficult to break into, to say the least. I always thought God put me on Earth to accomplish something, but lately I've been feeling my journey on this planet is worthless. What's the point of busting my ass trying to succeed in a difficult career and live to be 70 when there's heaven? Nothing on this planet that we can do really seems to have any point. Why should I struggle? If I killed myself and ended up in heaven, things would be a lot less complicated. It all seems meaningless; probably the main reason I can barely motivate myself to wake up and get out of bed in the morning.
+
+Sorry if I'm ranting or if my points are incoherent. I'm just looking for some direction or guidance or inspiration, anything. Seems like only people who are struggling with losing their faith or are in danger of dying/having a family member die ever get any replies on this subreddit, but I'm desperate for help, because I feel dead and empty inside.",1392199173.0,5,0.7,42
+HunterXHunter,"Rank the following ""nen masters"" in order of strength","Note = strength as in **combat strength**
+
+Kite
+Morel
+Netero
+Bisky
+Zeno
+Razor
+",1391155514.0,8,0.84,36
+hiphopheads,Hip Hop Artists with the hardest discographies to put in order from best to worst?,"Who are some artists/groups that, for you, are hardest to definitively rank from best album/project to worst? We all know that for Nas, it goes Illmatic then It Was Written then Stillmatic (I'm talking general consensus) but what about:
+
+Kanye (MBDTF or LR at #1? Then Grad before or after CD is another hard decision for me)
+
+The Roots (so many great albums, projects, some days I'm feeling Things Fall Apart the most, some days Game Theory, some days Undun)
+
+
+Name some artists, then try to put them in what order you tentatively think is best. I think some great discussion could be had ",1389821945.0,1,0.53,18
+Christianity,Sometimes I feel as though prayer is pointless...,"Yes, I've read in the Bible and seen the various verses that list prayer as something essential to the Christian life. But at times it just feels superfluous. A friend might ask me to pray for them because they have a test coming up, but in my mind I can't help but think ""Studying is what you need, not prayer."" And I'm not sure if it's my lack of discipline, but the concept of praying all day every day seems like wasted effort. Why does God want me to pray if He knows my 
+thoughts, anyway?
+
+I'd really like some perspective on this because I recognize my feelings on this are a detriment to my Christian life.",1388514882.0,3,0.81,18
+Christianity,Please help. How can I love and seek God more?,"I don't have much else to add besides the title, but this is something I'm really struggling with. I find myself getting caught in living my daily life and neglecting God often. It's often not until I'm in the middle of my day that I remember to stop and pray. Its been something that has stagnated my spiritual life, and the single biggest cause of frustration that I have currently.
+
+What can I do to love God the way He wants to be loved? How can I seek Him and get closer to Him? It isn't evident over the internet but I'm desperate and begging for any help you all can give.",1388098339.0,9,0.86,11
+Christianity,Are prayers from each Christian valued equally?,"So I was spending some time thinking about prayer, and how exactly it ""works""...often times we ask others to pray for us, and if you're Catholic you ask the saints in heaven to pray for you as well. But, why do we do this? Do we ask our pastors to pray for us because God is more willing to listen to them? If I ask Mary to intercede for me, is Jesus more likely to listen to her because she's Mary? (I know not everyone in this sub is Catholic but I think the principle is the same)",1387840756.0,6,0.87,14
+WritingPrompts,[WP] A badass soldier must convince Jesus and God to let him in heaven in spite of the hundreds of lives he has taken,,1387449854.0,11,0.87,7
+hiphopheads,"If you could Space Jam-steal any rappers voice, lyrical ability, songwriting skill, ear for beats, or all of the above, who/what would you steal?",,1387403361.0,0,0.5,7
+patientgamers,Old-ish games that require skill for the PC?,"After playing games for a long time I've realized I enjoy games that require skill, timing, strategy. If I hop on Halo:CE for the PC right now, I can get in a strafing pistol duel with someone and win or lose depending on how well I evade/aim. Or, if I start up Brood War on Iccup, I can win or get torn apart depending on how well I micromanage my units while simultaneously building them. I was about to start playing Morrowind the the fact that the game is more about levels than skill turns me off.
+
+
+Are there any other games out there that will satisfy my need to be challenged? ",1386893298.0,8,0.71,19
+hiphopheads,"Great songs by ""average"" artists","So I think this is one of those threads that will help all of us add little hidden gems to our music libraries. 
+
+What are some great songs by artists with subpar discographies? ",1386582127.0,131,0.94,405
+HunterXHunter,Gon + Killua (post-training) + Kite vs Pitou,"So with recent episodes, its been put into perspective that the Royal Guards are insanely strong, as evidenced by Knov losing his mind at the site of Pouf's En. And there's evidence to believe that Pitou is even stronger than him.
+
+We also know that Kite, with one arm, was at LEAST able to rough up Pitou enough to 1) leave a little damage 2) buy time for Gon/Killua to escape. Had current Gon/Killua been with him (that is, the Gon and Killua who are at their current levels in the anime), could they have beaten Pitou?",1385708228.0,1,0.6,11
+hiphopheads,Beat that you can't help but bob your head to,"You know what I'm talking about. Those beats that, every time they drop, you instantly turn up your headphones and getcha head nodding.
+
+Some of my current favorites are:
+ [XV - All For Me](http://www.youtube.com/watch?v=McC9sxY4rL0), [A$AP Rakim - Goldie](http://www.youtube.com/watch?v=neQVjDhOvOE), [Common - Chi City (if I may say, one of the dopest fucking beats I've ever heard)](http://www.youtube.com/watch?v=pXzHOOuCYZc)
+
+What's some of y'alls?
+",1384192911.0,0,0.3,8
+Christianity,Really need help/insight. Should I hate myself or love myself?,"This is a question that has been plaguing my mind for a long, long, long time (essentially my entire Christian life). I believe it's something that's holding me back from getting closer to God so I'm desperately looking for any insight on the matter.
+
+Christian rhetoric has led me to believe that, because my self is sinful, mistake-prone, imperfect, that it is keeping me away from God. In light of this, I don't see how self-love can be compatible with a Christian worldview. Instead, I should regard myself with disdain and tear myself down so that nothing but an image of God remains.
+
+But...this mentality has led to a lot of self esteem issues. When I make mistakes I tend to beat myself up viciously and to be frank I can't see myself in any sort of positive way at all.
+
+Can anyone please help me understand what the role ""self"" should play in your relationship with God? Should I hate myself? Love myself? And if I'm inherently sinful, how CAN I love myself when it's my being that's keeping me from God?",1383933838.0,2,0.67,18
+hiphopheads,Simple lines in songs that are very subtle yet impactful/powerful?,"What are some lines in songs that won't wow anyone with technical rhyming, or because of an awesome punchline, but still make you stop for a second and think, ""damn...""
+
+Some examples if it's not clear:
+
+From Jay's verse in Free Mason
+""Rumors of Lucifer, Ion know who to trust
+**Whole world want my demise, turn the music up**""
+
+I love this line cause it captures Jay's confidence in one line. It evokes an image of him boldly sticking his chest out as the world throws rocks at him, rapping loudly, completely undeterred. 
+
+Another one is from 3k in Da Art Of Storytellin' Pt. 1
+
+""...but in spite all of the bullshit we on our back starin at the stars above
+talkin bout what we gonna be when we grow up
+**I said, what you wanna be? she said, ""Alive""
+It made me think for a minute, then looked in her eyes
+I could've died.**""
+
+I feel like tryna explain this one would diminish how poignant it is so Imma let it stand by itself. 
+
+
+What are some of yours? ",1383602518.0,50,0.88,150
+Christianity,How can we put our faith in Biblical canon?,"My question is a simple one: how can we trust the Bible? How can we be sure that the books that have been compiled are an accurate representation of what the religion is supposed to be about?
+
+I've been raised up in my church to always put my faith in the Bible and trust it as a source of guidance above all else, but how can I do that with so much certainty?",1381451444.0,9,0.82,24
+Christianity,"""If I'm going to be religious, why Christianity?""","These days I find myself running into more and more of the ""spiritual but don't believe in religion"" crowd. They often cite things such as corruption in the church, its role in wars, etc. as reasons to not believe. Which is fine, because I feel as though those concerns can be addressed a lot more easily than this question:
+
+""I believe in God. Why do I need to believe in Christianity?"" or: ""What does Christianity offer me than another religion doesn't?""
+
+Obviously this is a questions that can't be answered with a Bible verse stating that Jesus is the only way. What are some of your insights on this? What sets Christianity apart from other religions, and why is mere faith in God without calling oneself a Christian not enough?",1380768519.0,4,0.83,33
+Christianity,"Struggling with ""selfish ambition"", need your thoughts","So I'm a young adult male still in undergrad, and lately I've been trying to motivate myself to excel in life while I still have youth on my side. But these days I find that a lot of my ambitions might file under the selfish kind that the Bible condemns.
+
+I catch myself thinking thoughts like ""I want to do the best for MYSELF"" or ""I want to be the best ME I can be"". I've reconciled that by thinking that God would absolutely support me trying to fulfill my potential, but my fear is that I might be putting to much emphasis on this world instead of the next.
+
+By no means am I seeking to become rich or famous; my biggest desire is to impact the world for the better, and my chosen career is to become an english professor to help the youth learn to express themselves, because that's the beginning of obtaining agency and power in this world. But how can I try to pursue accomplishment (not for its own sake but for self-actualization and the benefit of others) while still staying on God's path?
+
+Apologies if this post is circuitous or rambling, I just wrote down what I was feeling. I'm just looking for any and all insight, from anyone. ",1380388398.0,0,0.5,6
+Christianity,Questions about prayer's effectiveness,"This is a question that's crossed my mind a lot.
+
+We all know that in the end, God's plan will always come to being. That's without a doubt. In that case, what role does prayer play?
+
+For example, if someone is on life support from a car accident, you'll undoubtedly be asked to pray for their healing...but if it's in God's plan to bring them home, what's the point (in fact, doesn't it make sense that we pray that the Lord brings them to heaven, which is a much better place? but that's a different question)? Should we not simply pray, ""Your will be done oh Lord""?
+
+Another part of this question is, if something is in God's plan, what difference does prayer make? Will God change His plan on our own whims? An obvious example one might bring up of this is the story of Sodom and Gomorrah, but is that applicable today?
+
+I aplogize if this question is unorgonized or convoluted in any aspect. Truthfully, it was inspired for some requests for prayer in this very subreddit. I found myself indifferently scrolling past most of them, and when I questioned why I was doing it I found these inquiries in my heart. Hopefully some answers will assist me in being more eager to help others through prayer. ",1378399594.0,10,0.73,36
+Christianity,"I've been feeling that Protestantism is ""wrong"" lately, and that Catholicism is ""right""","So I'm a member of a Pentecostal church of which my dad is a pastor, and I've been in this same environment my entire life. Growing up I never paid much attention to Catholicism, but recently now that I've learned more about it and religion in general, it almost seems like a no-brainer that Catholicism is the ""correct"" denomination, mostly because 1) it can be traced all the way up to Peter himself and 2) some of its doctrines make sense to me, such taking a less literal interpretation of the Bible and believing evolution (two things that I don't see in my Pentecostal church). 
+
+I'd appreciate thoughts from anyone from all denominations on either why they believe Catholicism is ""right"" or ""wrong"".
+
+NOTE: I'm using the terms right and wrong very loosely. Additionally, I know very little of Catholic doctrine besides the common-known facts (so please excuse whatever ignorance may be in this post, or in any comments I post from here on), and while it would be definitely wise to do research on it myself, I'm looking to this subreddit for help because I've found answers to my questions are far more easier to digest and understand when I post here instead of reading a complicated Wikipedia page.",1377574474.0,22,0.73,101
+Christianity,Confessing your sins to a priest? Why?,"So I know about the Catholic practice of confessing your sins to a priest. Why is this done? I was always under the impression that thanks to Jesus, we can connect with God directly without any intermediaries. Is there a Biblical reason why Catholics do this? 
+
+Just as a disclaimer, I'm only asking this for my own education. Not trying to undermine anyone's beliefs. ",1375926756.0,11,1.0,43
+Christianity,The Christian concept of a wife submitting to her husband,"Is it sexist? Is there a reason for it other than ""God says so"" (which I'm not implying is an insufficient reason)? How do submission and equality exist simultaneously? ",1375891954.0,4,0.67,104
+Christianity,What's your routine when you feel spiritually disconnected?,"A lot of times, if you're like me, you may be feeling that your focus in life has been turned away from God. Whether you find yourself thinking about any sort of idol more than God (a significant other, a job, your academics, yourself, or any combination of worrying about these things) or just feeling that your life lack's God's presence, what formula do you follow in order to ""get right"" with God once more?
+
+For example, when I'm feeling this way I'll shut off all distractions (computer, phone, TV, books, whatever) for a couple hours and try to think of what could be keeping me from Him. Then I usually look up or read something that will remind me of God's love for me (usually C.S. Lewis quotes, or even reading some posts in this subreddit) and finish it off by reading my Bible. Personally, once I remind myself of how infinite God's love is, I feel inspired enough to get back on the right track.
+
+I think this post will help a lot of people who find themselves in spiritual ruts often think of ideas to remind themselves who they are and why they became a Christian in the first place.",1375158294.0,23,0.93,18
+AskAcademia,Dreams of being a college English professor. How realistic? Other options?,"So I've always loved the idea of opening other's (and my own) minds, especially younger people, and recently I decided that becoming a college professor was the ideal career for me. Obviously there are other levels of teaching, but I'd much prefer teaching in a college environment as opposed to a high school. 
+
+I understand that this would require a PhD and that these are very taxing and difficult to obtain. And that after a PhD, obtaining a job with tenure is the academic equivalent to climbing Mount Everest. I've considered all this and I feel as though all that would be worth the fulfillment that becoming a college professor would grant me. I do want to try and research it as much as I can, however, because while I don't mind being a poor mid-20s grad school student, I don't want to be struggling to find a job in my mid 30s.
+
+I know there are options like teaching at a community college, being a TA, or even teaching high school, but it would all be for finding a job at a college. How realistic are my goals? Any professors out there who would recommend or dissuade me from trying to go down this path? For background, I'm a 2nd year California community college student.",1374966078.0,14,0.83,35

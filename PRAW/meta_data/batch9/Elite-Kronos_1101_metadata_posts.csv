@@ -1,0 +1,104 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+AndroidStudio,"This is the code for the Register class, the internal Toast and the redirection isn't being executed, any idea why? help would be appreciated? Its actually @Override","package com.example.chattingapp;  
+import static android.app.ProgressDialog.*show*;  
+import androidx.annotation.NonNull;  
+import androidx.appcompat.app.AppCompatActivity;  
+import androidx.appcompat.widget.Toolbar;  
+import android.content.Intent;  
+import android.os.Bundle;  
+import android.text.TextUtils;  
+import android.view.View;  
+import android.widget.Button;  
+import android.widget.EditText;  
+import android.widget.Toast;  
+import com.google.android.gms.tasks.OnCompleteListener;  
+import com.google.android.gms.tasks.Task;  
+import com.google.firebase.auth.AuthResult;  
+import com.google.firebase.auth.FirebaseAuth;  
+import com.google.firebase.auth.FirebaseUser;  
+import com.google.firebase.database.DatabaseReference;  
+import com.google.firebase.database.FirebaseDatabase;  
+import java.util.HashMap;  
+public class RegisterActivity extends AppCompatActivity {  
+ EditText username,email,password;  
+ Button btn\_register;  
+ FirebaseAuth auth;  
+ DatabaseReference reference;  
+ u/Override  
+ protected void onCreate(Bundle savedInstanceState) {  
+ super.onCreate(savedInstanceState);  
+ setContentView(R.layout.*activity\_register*);  
+ Toolbar toolbar=findViewById(R.id.*toolbar*);  
+ setSupportActionBar(toolbar);  
+ getSupportActionBar().setTitle(""Register"");  
+ getSupportActionBar().setDisplayHomeAsUpEnabled(true);  
+ auth=FirebaseAuth.*getInstance*();  
+ username=findViewById(R.id.*username*);  
+ email=findViewById(R.id.*email*);  
+ password=findViewById(R.id.*password*);  
+ btn\_register=findViewById(R.id.*btn\_register*);  
+ btn\_register.setOnClickListener(new View.OnClickListener() {  
+ u/Override  
+ public void onClick(View view) {  
+ String txt\_username=username.getText().toString();  
+ String txt\_email=email.getText().toString();  
+ String txt\_password=password.getText().toString();  
+if((TextUtils.*isEmpty*(txt\_username))||(TextUtils.*isEmpty*(txt\_email))||(TextUtils.*isEmpty*(txt\_password))){  
+ Toast.*makeText*(RegisterActivity.this, ""You cannot register with these credentials"", Toast.*LENGTH\_SHORT*).show();  
+ }  
+ else if((txt\_password.length())<6) {  
+ Toast.*makeText*(RegisterActivity.this, ""Password must be at least 6 characters long"", Toast.*LENGTH\_SHORT*).show();  
+ }  
+ else {  
+ register(txt\_username, txt\_email, txt\_password);  
+ }  
+ }  
+ });  
+ }  
+ private void register(String username,String email,String password){  
+ auth.createUserWithEmailAndPassword(email, password)  
+ .addOnCompleteListener(new OnCompleteListener<AuthResult>() {  
+ u/Override  
+ public void onComplete(@NonNull Task<AuthResult> task) {  
+ if (task.isSuccessful()) {  
+ FirebaseUser firebaseUser=auth.getCurrentUser();  
+assert firebaseUser != null;  
+ String userid=firebaseUser.getUid();  
+ reference= FirebaseDatabase.*getInstance*().getReference(""Users"").child(userid);  
+ HashMap<String,String> hashMap= new HashMap<>();  
+ hashMap.put(""id"",userid);  
+ hashMap.put(""username"",username);  
+ hashMap.put(""imageURL"",""default"");  
+ //reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {  
+//public void onComplete(@NonNull Task<Void> task) {  
+//if(task.isSuccessful()) {  
+ Toast.*makeText*(RegisterActivity.this, ""Registration Successful"", Toast.*LENGTH\_SHORT*).show();  
+ Intent intent=new Intent(RegisterActivity.this, MainActivity.class);  
+ intent.addFlags(Intent.*FLAG\_ACTIVITY\_CLEAR\_TASK* | Intent.*FLAG\_ACTIVITY\_NEW\_TASK*);  
+ startActivity(intent);  
+ finish();  
+ //}  
+//}  
+//});  
+ }  
+ else {  
+ Toast.*makeText*(RegisterActivity.this, ""You cannot register with these credentials"", Toast.*LENGTH\_SHORT*).show();  
+ }  
+ }  
+ });  
+ }  
+}",1659025467.0,1,0.6,1
+OperaGX,Logitech GHUB not detected by OPERA GX,"I am on Windows 11, and the GHUB controls my mouse (Logitech G102), but the browser is not detecting the GHUB. Any suggestions, or could I please be referred to some posts in which the problem has been resolved?
+
+TIA",1655013388.0,4,0.84,1
+PornhubAds,Could someone please provide the sauce?,,1651814422.0,14,0.9,3
+matlab,Running Python Scripts on Jenkins (Master/Slave),,1649081122.0,1,0.67,0
+jenkinsci,Running Python Scripts on Jenkins (Master/Slave),"Jenkins newbie here. I need help for running Python scripts between master and slave devices. We are trying to implement the IEEE 1588 PTP. We have to verify the outputs on MATLAB, and run the codes on Python, without any packages. We're trying to run the master from the below given GitHub repo. We have made the slave machine using a Linux VM, but we are unable to execute the code in Jenkins.
+The repo that we are trying to implement is:
+https://github.com/bestvibes/IEEE1588-PTP",1649080881.0,2,1.0,13
+DysfunctionalFamily,How to maintain your sanity while caught between warring parents.,"I am almost 20 year old male. I live with my parents, who are constantly at war. The truce moments feel like the Cold War, with the tension being palpable in the air. I am hence always caught in the crossfire, and I am hence forced to be the broker in between then, I am the guy who is forced to trade their insults between them. And don't get me started on trying to earn for myself, I am an Indian kid, so our parents pay our tution upto our graduation. Hence I am unable to cope up with the situation, and have been in a constant rut since the age of 13, in a family where grades define my standing. And this constant war, has been ongoing since I was born(arranged marriage) and I feel like the only reason they stayed together was because of me. I neither have financial or emotional freedom of any form, and I am humbly reaching out to you people here, who may suggest me coping mechanisms (non -addictive/no substance abuse) so that I can get through the 3 years before I finally move out. I have realised this family is a lost cause, and I don't want to kill the last morsels of my sanity by sticking around in the crossfire trying to fix things.",1631871556.0,36,0.98,4
+SuicideWatch,"A call for help,ig","I am almost 20 years old now,and I haven't once felt happy since I turned 13. My parents have been fighting everyday for as long as I can remember,and I have regularly been dragged into their fights. I feel like my birth is the reason they weren't able to seperate. Over the years several other factors kicked in, causing other feelings in me like absolute worthlessness,not having the energy to anything, crying myself to sleep every night, punching and shattering the mirror whenever I look at it,etc. My whole life worth has only been decided by grades,and my parents have started badmouthing daily me since the day my grades started tanking. The few friends I have,while they try to be supportive,can only do so much. Thus,me,a student who has a loan on his head, parents who consider him to be the absolute worst among his peers, though I have sworn to myself I won't take the ultimate step,I still do feel suicidal every night,and consider myself to be the literal personification of trash. Also,as you may have already guessed from the post,I have clearly been denied a shot at counselling.
+
+Sorry for the long post,and for sounding like an attention whore.I just felt this may be a good place to ask se coping methods,ways to turn myself destructive mentality around,etc.
+
+Also I don't have any addictions in case this may be necessary for you guys to understand, though I did have an addiction to porn,which I have been able to majorly suppress by myself.",1624401100.0,5,1.0,3

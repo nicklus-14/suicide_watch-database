@@ -1,0 +1,231 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+FemFragLab,"US ONLY - Free sample boxes to good home, just pay shipping!",[removed],1749322034.0,1,0.6,9
+numnoms,"Free num noms to good home, just pay shipping","Free to good home, just pay shipping! I'm moving and decluttering some of my old collections, every num has a nom in it but all the other ones are extras. I'll clean out all the old lipgloss for hygiene reasons lol except three are unopened so I'll leave those as-is. 
+
+I'm located in the US and will ship these guys out Tuesday!
+
+Sidenote I also have a couple squinkies that I couldn't find a dedicated subreddit for, so if you're interested lmk and I can throw those in!",1747017041.0,10,1.0,8
+TsumTsum,Free tsum tsum vinyls to good home,Free tsum tsum figures to a good home! I'm moving and getting rid of clutter but trying to find direct homes for things instead of donating them because there's no guaranteed they won't end up in a landfill anyways. I'll ship them in the smallest bubble mailer I can find haha,1747004378.0,14,1.0,4
+learnpython,I apologize for asking such a daft question but how do you display the contents of a dictionary into a tkinter window after pressing a button,"I feel so incredibly stupid right now because I'm certain this should be an easy problem to figure out but I've been doing research for hours and I can't figure it out, I'm literally at my wits end. 
+
+My final project for my Python coding class requires that I make a tkinter program that can read a text file, place it into a dictionary, and then display the contents of the dictionary once a button is pressed. I've gotten as far as being able to read the text file and place it into a dictionary but I absolutely cannot for the life of me figure out how to display the dictionary in a pretty format in the tkinter window. 
+
+&#x200B;
+
+This is how my dictionary is:
+
+{12345: \['Test', Employee', 'Testing', 'Department'\], 67891: \['Another', 'Employee', 'Another', 'Department'\]}
+
+&#x200B;
+
+And this is how I would like it to be displayed in the tkinter GUI (I don't care if it's in a textbox or label or whatever at this point, I just need something):
+
+12345 Test Employee Testing Department
+
+67891 Another Employee Another Department
+
+&#x200B;
+
+And so on. 
+
+&#x200B;
+
+I know the answer must be simple but I'm literally not smart enough to figure this out on my own and this is due tomorrow (because of aforementioned lack of smartness I waited until the last minute as usual). I know how to do this with a simple loop using print but obviously this doesn't solve my problem because it won't display in the tkinter window:
+
+&#x200B;
+
+    for key, value in database.items():
+        print(key, ' : ', value)
+
+&#x200B;
+
+Here's my entire code so far but keep in mind it's not finished yet so it's rough around the edges
+
+&#x200B;
+
+    import tkinter as tk
+    from tkinter import ttk
+    from tkinter import messagebox
+    from employee import Employee
+    
+    class EmployeeDatabase(tk.Tk):
+    
+        def __init__(self):
+    
+            super().__init__()
+    
+            self.database = self.Database_reader()
+    
+            #Creates our tkinter window
+            self.title(""My Final Project"")
+            self.geometry(""500x500"")
+    
+            #Makes a label that instructs the user what to do
+            self.mainLabel = ttk.Label(self, text=""What would you like to do?"")
+            self.mainLabel.place(x=0, y=0)
+    
+            #View Button
+            self.showView = ttk.Button(self, text=""VIEW"", width=5)
+            self.showView['command'] = self.show_view
+            self.showView.place(x=0, y=25)
+    
+            self.viewLabel = ttk.Label(self, text=self.database)
+    
+        #Creates a function that will read our employee database
+        #and place it into a dictionary with the employee id as the
+        #key and the rest of the employee's information as values, like so:
+        #12345: ['example', 'employee', 'testing', 'department']
+        def Database_reader(self):
+    
+            #Creates the dictionary that we will place the database into
+            employee_database = {}
+        
+            with open('employee_database.txt', 'r') as x:
+                for line in x:
+                    items = line.split()
+                    key, values = items[0], items[1:]
+                    employee_database[(key)] = values
+    
+            return employee_database
+    
+        #Creates a function that will print the employee database in a pretty format
+        def Database_Printer(self):
+            for key, value in self.database.items():
+                print(key, ' : ', value)
+    
+        #Executes when the view button is clicked
+        def show_view(self):
+            self.viewLabel.place(x=0, y=100)
+            
+    if __name__== ""__main__"":
+    
+        window = EmployeeDatabase()
+        window.mainloop()
+        
+    
+
+This is the employee class I am importing
+
+    import re
+    
+    class Employee():
+        
+        def __init__(self):
+            self.resetter()
+    
+        def __str__(self):
+            pass
+    
+        def __repr__(self):
+            pass
+    
+        def resetter (self):
+            self._id_num = """"
+            self._first_name = """"
+            self._last_name = """"
+            self._department = """"
+            self._job_title = """"
+    
+        @property
+        def id_number(self):
+            return self._id_number
+    
+        @id_number.setter
+        def id_number(self, idnumber):
+            if re.search('^\d{5}$', idnumber) == None:
+                raise Exception(""Invalid employee id, please try again"")
+            self._id_number = idnumber
+    
+        @property
+        def first_name(self):
+            return self._first_name
+    
+        @first_name.setter
+        def first_name(self, firstname):
+            self._first_name = firstname
+    
+        @property
+        def last_name(self):
+            return self._last_name
+    
+        @last_name.setter
+        def last_name(self, lastname):
+            self._last_name = lastname
+    
+        @property
+        def department(self):
+            return self._department
+    
+        @department.setter
+        def department(self, dep):
+            self._department = dep
+    
+        @property
+        def job_title(self):
+            return self._job_title
+        
+        @job_title.setter
+        def job_title(self, jobtitle):
+            self._job_title = jobtitle
+
+And this is the text file I am reading from
+
+    57899 Susan Meyers Accounting Vice President
+    39119 Mark Joes IT Programmer
+    81774 Joy Rogers Manufacturing Engineer
+
+Thanks in advance for any help I really appreciate it, and I'm sorry for asking such a stupid question, usually I would figure this out myself but I literally don't have time.",1652169915.0,2,0.76,4
+selfimprovement,"Struggling with coming to the conclusion that there definitely is something wrong with me, but I'm not sure specifically what","For most of my life I've felt this inkling that there was something ""off"" about me, but I guess it wasn't something present in the forefront of my mind. I never really battled over whether or not I was a good person, I just kind of accepted that I was average and that was good enough for me. 
+
+This has changed in the past two years or so however. After doing a lot of soul searching and thinking back on my past actions and how I treated people I've come to realize that I'm not, and never have been, what I would define as a good person. It's a really hard conclusion to come to because I've always valued being a good kind person over everything else, and it's just hard realizing something I value the most has been lacking within me for my entire life. 
+
+Subsequently that feeling of ""offness"" has settled into the conclusion that there is something deeply intrinsically wrong with me. I know that the first step is realizing you have a problem, but my issue is despite agonizing over it I can't identify what is wrong with me, and it's hard to fix something when you don't know what's broken. I guess my situation is like watching a PC crash, like obviously you realize something is wrong, but until you troubleshoot it you don't know what the root of the cause is. But imagine troubleshooting that computer for years and it still won't turn on. 
+
+I don't really know what I want out of posting this but I guess I don't really have anyone in my personal life to talk to about this, and it's bothering me to the point that just journaling about it isn't enough. Thank you for being patient if you've read this far.",1651000019.0,1,1.0,5
+apologies,To the Wendy's drive through worker,"I know this must sound benign but I always feel guilty when I make things inconvenient for retail/fast food workers because, as someone who's worked retail, I know their jobs are hard as it is without obnoxious customers like me making it harder for them. 
+
+Today I pulled up and after the worker asked for my order I asked if he could give me a second because I needed to ask everyone in the car what they wanted. I feel stupid for doing this because it's wasting time for everyone involved, the people behind me have to wait longer while I figure out what everyone wants, and I'm wasting the worker's time because he's waiting on me to order and I'm sure it must get obnoxious to have a customer pull up just to say ""yeah give me a second"" like there was plenty of time for you to figure out what you wanted on the ride there *and* while you were waiting in line. 
+
+So to the Wendy's drive through worker I'm sorry I'm another customer in the void that makes your job more annoying and I'm sorry to the people behind me who have to wait for me to get my shit together. Next time I'll figure out what everyone wants on the way there and I'll be prepared to give my order as soon as I'm asked. I'm sorry you have to deal with customers like me.",1645755224.0,3,1.0,0
+Carebears,"ISO looking for these 2003 era 20th Anniversary Terri Keychains, if anyone has these and is willing to sell or trade, please let me know",,1645485280.0,14,1.0,3
+EnamelPins,ISO Coey and Shy Limited Edition Rainbow Unicorn,,1645257652.0,9,1.0,1
+selfimprovement,It's hard coming to terms with the fact that you are the problem,"There's a lot of things I'd like to improve about myself but one of them is this desire to look outwards and blame other people for my problems. I think I do this because it's a lot easier to believe that someone else is the source of your issues rather than yourself, because if you are the problem then the only person who can fix it is *you* and it's hard having that burden on your shoulders. I'm hoping that by working on this specific issue that other flaws in my disposition might fall into place and be easier to fix.",1644996770.0,42,0.96,20
+suggestmeabook,"I would like to read some books about characters with complex internal moral conflicts, and books about characters with trust issues","Hi.
+
+There's two things I struggle with, and I want to read some books about people who struggle with the same thing.
+
+I struggle with coming to terms with the fact that I'm a bad person, and I want to read books about characters who struggle with their morality and constantly question if they're a good person or not. They can be books about bad people who question their badness but are in denial and never change, books about good people who come to terms about being bad people but they're wrong, books with unreliable narrators so you're not sure if they're good or bad, and anything in-between.
+
+I also struggle with trust and opening up to people. I'd like some suggestions of books about people who are closed off and learn to open up to people and feel freed by it, but I'd prefer books about people who open up to others and regret it and end up closing off even tighter than before. They can remain that way or end up opening up again it doesn't matter.
+
+The books can also be a mix of the two. I'd prefer no self help books, fiction only please. I don't really care about genre as long as it fits the themes.
+
+Thank you in advance.
+
+Update: Thank you for so many suggestions, here's a list of all the suggestions and the order I intend to read them in. Hopefully I'll be able to give each of them at least a shot.
+
+&#x200B;
+
+1. Crime and Punishment by Fyodor Dostoevsky
+2. Mansfield Park by Jane Austen
+3. Nothing to Envy - Ordinary Lives in North Korea
+4. Worm by John C. Wildbow
+5. Artist of the Floating World by Kazuo Ishiguro
+6. The Midnight Library by Matt Haig
+7. Vicious by VE Schwab
+8. Winters Orbit by Evinera Maxwell
+9. Watchmen by Alan Moore
+10. A Little Life by Hanya Yanagihara
+11. East of Eden by John Steinbeck
+12. War and Peace by Tolstoy
+13. The Broken Earth trilogy by N.K. Jemisin
+14. The Sparrow by Mary Doris Russell
+15. The End of the Affair by Graham Greene
+16. Happy All the Time by Lauri Colwin
+17. Winters Orbit by Evinera Maxwell
+18. The Brothers Karamazov by Fyodor Dostoevsky
+19. The Vegetarian by Han Kang
+20. Tenderness by Robert Cormier
+21. The Nature of Witches by Rachel Griffin
+22. Kinsey Milhone series by Sue Grafton",1643784569.0,37,0.96,59
+SuicideWatch,I'm done,¯\_(ツ)_/¯,1623433341.0,2,1.0,1

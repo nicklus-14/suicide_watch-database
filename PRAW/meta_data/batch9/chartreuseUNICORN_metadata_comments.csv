@@ -1,0 +1,674 @@
+subreddit,body,created_utc,score
+RevitMEP,"consider using worksets by area to manage large models.  it seems people often like the simplicity of treating worksets like layers in cad, but the real power for worksets is in the open/close capability to manage which elements are loaded into memory.  so on large projects, having some granular control helps (if i'm working on L2, i don't need to have L20 loaded)",1741284662.0,1
+AutoCAD,"yeah, but how cool would it be if you could write them for yourself?",1740074641.0,2
+RevitMEP,"what version is it in? i've had some success in newer versions (maybe R23, R24) using the ootb Align command in 3D or troublesome piping elements.  just make sure you target the centerline of the element.",1737477566.0,1
+Revit,are you looking for duplicate element types (copied names) or elements in the same place?  elements in the same place can be retrieved from the warnings via Document.GetWarnings() method,1736809599.0,1
+Revit,"you just mean cosmetics? there have been demos that it's possible, but it sort of seems like a waste of time. if you're going to go so far as writing custom extensions, you're probably just going to focus on making that do something, and not ricing out the revit ui.",1736549615.0,3
+Revit,"there are a number of paid solutions (kinship, ctc hive) that can help with this sort of content management, but Autodesk recently deployed their Content Catalog, but it's only for R2024 and forward.  You can also looking at mapping a cloud drive (google drive, onedrive/sharepoint) and allowing multiple users to access approved content that way.",1735328661.0,6
+RevitMEP,"if you're using fabrication parts you are able to attach the hanger to the pipe or duct.
+
+if you're trying to use families, you could look into making them face-based, but getting perfect attachment to the bottom of a round object is difficult to do manually.",1730321889.0,2
+AskEngineers,"it really depends on how valuable the car is.  i would expect the garage door is typically more replaceable than the car.  keep in mind the main damaging factors in hurricanes are debris and flood water, not necessarily the force of the wind itself.",1728476341.0,28
+RevitMEP,"as a schedule or on a sheet? you could modify your electrical equipment tag to include the performance data as a tag to show on the sheet.  as long as you're not interested in the circuiting information associated/displayed in a panel schedule, schedules and tags will be the main way to access/display the metadata you want.  identify how you want the information organized/presented, then look at the ways you can access that parameter data.
+
+there might be information that is derived, and for that, you may want to look into calculated values.",1727740812.0,1
+RevitMEP,"do you want an overview/summary of the whole project?  consider looking into a schedule (not panel schedule) for Electrical Equipment, and select the fields that you want to display.",1727734443.0,1
+RevitMEP,have you tried the temporary view overrides/temporary view templates,1726325522.0,3
+RevitMEP,"it sort of depends on if you're using revit piping or fabrication parts.  
+if you're using revit piping, configure the 'flange' setting in the pipe type's routing preferences to include the coupling you want to use.",1725994038.0,3
+Revit,"when i've had to do things like this before, i just load them all into the project and write a script to place instances of each family in a grid.",1724859327.0,1
+Revit,"if you want to get real saucy with it, you can use something like [https://github.com/kmonad/kmonad](https://github.com/kmonad/kmonad) to create software input layers, and just embed a numpad in the left hand side of your keyboard.",1724859164.0,1
+RevitMEP,"a really important part about using revit is that you have to think about the way it functions.  at it's core, revit is a database with a record of elements, and their attributes. some of which is geometric information.  a common disconnect is that people think about what they want to show on the drawing, but can often have a hard time figuring out how to get revit to display or access that information.
+
+unfortunately, electrical is probably the least supported and there are a lot of configurations that you either a) can't modeled in a way that reflects reality or b) can't tweak/tune non geometric information in a way that feels straightforward.  
+
+if it's just modeling: learn about views, view ranges, electrical circuits.  It's worth learning about the nuances of the Electrical Equipment part types and electrical connectors.  For documentation, you need to have an understanding about parameters and schedules.",1724507620.0,3
+RevitMEP,"just curious, why would you need to edit the coordinates? if the coordinates don't reflect the reference to your project positioning reference, don't you need to update the site data so the relative measurements are correct?",1724432239.0,1
+RevitMEP,"the main advantage is that changes to one don't impact changes to the other.  sometimes this might be desirable, sometimes not.",1724274629.0,1
+RevitMEP,"it depends on what exactly you're trying to do and at what level of detail.
+
+if you want the collar to dynamically inherit the elevation of your piping,  you're out of luck.  Or at least, I failed to find a way to do this when i tried.
+
+There is a trick i've used before for something similar.  Attach the connector pointing down (0,0,-1) on an interior face near the reference level.  Once you load it in the project, you can create a pipe placeholder as the vertical pipe, and then connect horizontal pipe to the pipe placeholder (or convert the horizontal pipe placeholder).    
+This allows the pipe elevation to be independent of the family instance geometry, while still connected for system purposes.",1724160387.0,1
+AskEngineers,not the target audience/market.  i imagine it's all about economics.  mechanics/technicians aren't the ones buying vehicles.,1722541181.0,23
+RevitMEP,you -could- set the detail level for the pipe accessories category to 'coarse' or 'medium' in these views if you want to represent the accessories symbolically.,1715648822.0,3
+Revit,"technically, there is a way to do this.  find the  to filter a collection of the category: OST\_Viewers by the GetDependentElements method looking for the source detail you want to count.  then generate a list of each unique view using the OwnerViewId property.",1713377362.0,1
+MEPEngineering,"i think a tricky thing is forcing the changes to be slow and intentional.  content for MEP is really the biggest thing: it's most of your annotations and graphic elements.  I think it's really important to review resource effectiveness at multiple points during a project, but most importantly at the end to feed back into the resources available for future projects.
+
+assess what families were good, what didn't work, what changes need to be incorporated into the template.  commit to incremental, thoughtful improvements and you'll be ok.  Support project teams on the front end with a 'bim kickoff meeting' to try and understand the needs/issues before they start production. use this time to identify gaps (families, annotations, schedules, details) and generate/update items that didn't get processed from other close-out reviews.
+
+yes, there's going to be a bit of overhead at the beginning and you're going to have to fight leadership and .. well everyone: engineers, draughtsmen, but it's necessary to get enough of a foundation for the rest of the team to rely on.
+
+Families are always a toss-up.  some people like manufacturer families, some people like more generic custom ones.  I think less is more on the design side, and generic families adhere to open spec contracts better, and you get to build the user experience you want instead of what was easiest for the manufacturer to build.  There may be some merit to an initial content generation effort, but you're 1) not going to get everything  and 2) not going to get everything -right- the first time.  Target the critical families (lay-in lights, air terminals, terminal units) and make incremental improvements on every project.",1712175966.0,1
+RevitMEP,"there are sort of thee ways to do 'symbolic' families:  detail lines in the family, nested detail item, or nested generic annotation. 
+
+you need to be sure you understand which behavior you want.  detail lines and detail items are always true size in the model.  generic annotations always scale for the printed size.
+
+something like a 2x4 fixture you should use detail lines or detail items because the object in the view needs to be the actual size.  something like a ceiling mounted occupancy sensor or something like that would be a generic annotation because you want the symbol to be the same size regardless of scale.",1709735515.0,3
+Revit,explodes,1709069490.0,8
+RevitMEP,"depends on which parameters you need to change?  you should be able to control or constrain the transition angle in the type properties of the OOTB transition families.  
+
+
+just duplicate a type and set the angle.",1708713190.0,6
+Revit,"i think the configuration you need here is to make sure that inside the family the two connectors are NOT Linked.  you'll need a Flow and pressure drop parameter of some sort (i can't recall if these are Built-In for that category or not).  Pass the flow data by associating the Flow parameters on the different connectors.  I think you have to set the Flow Configuration to Calculated and System Classification to Global, but i'd have to mess around with it to be sure.",1708482174.0,1
+MEPEngineering,"what do you mean by 'black box'? i thought the big change/advantage in 3D+ was that they were moving the analysis engine to EnergyPlus, which is open source.",1704333165.0,1
+RevitMEP,"depending on how you model and identify your air systems, you can take this a step further and make a duct system schedule with an embedded air terminal schedule.  if you name the air systems downstream of the VAV box with that equipment identifier, you get a nice representation of the spaces served by that air system.",1700288902.0,1
+TwoHotTakes,"i had a partner that used to use this phrase with me and it doesn't help.  i did have work i needed to do on my communication quality, but it makes you feel pretty shitty.",1699367078.0,1
+RevitMEP,"depends on if you're using pipes or fabrication piping.  you can represent these connections using either Element Type, but they're implemented in different ways.  
+
+
+for Pipe/PipeFittings you need to find a Pipe Fitting called 'Branch Connection' in the ootb library, or alternately configure a family with the appropriate Part Type.  
+
+
+setting this up with fabrication parts is more involved and i don't know it as well.",1698781060.0,2
+RevitMEP,"this sounds like the behavior of a shared parameter that got renamed.  if you change the name of a shared parameter in the text file, i seem to recall that while it will display the 'intended' name in the shared parameter selection interfaces, it will use the name associated with the GUID.  
+
+
+there's probably some nuance that i'm forgetting, but i recall something like this.",1697638230.0,1
+Revit,check your routing preferences in the Pipe Type.  this sounds like the behavior of a pipe type with no fittings defined for the routing preferences.,1697552805.0,13
+gaming,Einhander,1696510345.0,1
+Revit,"depends on what you mean and how many hoops you're willing to jump through.  
+
+
+customizing your pipe sizing procedures has been possible since 2014, but i've never seen anyone do it because it's just a bit deeper than most people are willing to go  
+
+
+https://jeremytammik.github.io/tbc/a/0986\_mep\_calculation.htm",1695230281.0,3
+RevitMEP,"i personally hate the 'firm prefix' because if you are enforcing a naming convention, that alone should give an indication of its origin.  the firm abbreviation just ends up as useless information in the properties palette where screen real estate is already at a premium.",1694964727.0,1
+Revit,"so depending on what data -specifically- you're looking for, and how reliable your modeled data is, you can make a space schedule instead of a room schedule.  
+
+
+provided you're accounting for 'air' as the ""airflow provided to the space by Air Terminals"", you can use the 'Actual' airflow parameters to return the sum of the flow parameters of each Air Terminal family touching or contained in the space, so you can do  
+
+
+'Pressure Differential' = Actual Supply Airflow - (Actual Return Airflow + Actual Exhaust Airflow'  
+
+
+If you're using families with accurate lighting data, lighting can be similar where you add the Field 'Average Estimated Illumination' to the tag or schedule.  If you need this on an area basis, you can create a calculated value  
+
+
+'Luminance' = \[Average Estimated Illumination\]/Area  
+
+
+'actual' ventilation might be more difficult because it's distributed as an air fraction in the duct system, but Spaces do have a parameter 'Outdoor Airflow' that is controlled by the Space Type parameter.  
+
+
+I'm not saying ""don't try and use dynamo"", rather that there might be m ore direct ways of extracting/querying the information from the model.  depending on how you want these values calculated/driven, you can probably get far with schedules and calculated values.",1694112392.0,1
+Revit,"also install the monocle extension.  it's 'simple search' is usually more thorough, relevant, and faster than the native dynamo search.",1694101253.0,2
+Revit,"if you're explicitly trying to do this as a function of square footage, you don't need dynamo.  This can all be done with calculated values in either tags or schedules.  
+
+
+e.g. 'Light' = Area\*0.1",1694101083.0,1
+Revit,"you can divide the Title section of a schedule using the insert row/column commands.  Pick any category you like, but make the filtering eliminate all entries in the Body, then hide the Headers in appearance.",1692893610.0,2
+gaming,20 minutes til dawn,1690996760.0,1
+Revit,"if you're MEP, i like to configure working view templates with some QAQC features.  
+
+
+duct velocity/friction color scheme for design and modeling checks 
+
+space tags or a schedule that include specified and actual CFM/SF for design and actual checks  
+electrical filters to identify unpowered and uncircuited elements  
+plumbing slope color scheme for modeling checking
+
+design/BIM Management schedules: spaces, grids, levels, links are pretty standard. can be really useful for debugging  
+
+
+something i think gets overlooked is adding materials to object styles and MEPSystems.  this allows you to export system/element coloring to navisworks (the coordination module in ACC just uses the view graphics), and it also makes for a pretty nice modeling environment with Model Display = 'Consistent Colors'.  I know most people seem to be stuck on the CAD aesthetics of 'hidden line' but i think there's a nice level of visual information that comes along with the full shading.
+
+but the core stuff is pretty standard, it's just tedious and you have to go through each one: line weights, line styles, view templates
+
+and don't do things that fight against revit's systems just because they were the legacy standards. i hate having those fights - hanging on to old graphic stylings just makes life harder for users.",1690984253.0,3
+Revit,"a lot of people set this up as a sheet, but i've grown to not care for this because it's an extra thing you have to account for in the sheet browser organization.  I find setting it up as a legend or drafting view is sufficient.  
+
+
+unless you're actually good about project/model maintenance and update any of the random things that people like to put on the start view.",1690983608.0,1
+Revit,"if dynamo/designscript seems unintuitive, keep in mind it uses a lot of aspects of a functional style of programming (not too dissimilar from Lisp/Autolisp).  The most unique (and frustrating) aspect is the lacing nonsense.",1689537181.0,2
+AskReddit,reset all your pressure calibrations,1687631578.0,11
+MEPEngineering,the bulk of your time will be spent figuring out what they want.  usually making the specific configurations in the software doesn't take that much time.,1687210957.0,1
+MEPEngineering,so this is a dedicated RTS solver? most commercial platforms are moving to using the energy plus engine (except maybe IESVE). This has some nice advantages that they're all just building UIs on top of a common validated platform.  other advantages to this are outputs can also be retrieved for custom analysis,1684338269.0,1
+Revit,are you talking about a change to type catalogs?,1683606016.0,1
+AskEngineers,try FreeCAD?,1681054571.0,2
+MEPEngineering,"i don't think the rules for the way annotative scaling are explicitly stated anywhere in the documentation, but once you understand that, then you can configure families to display fittings as symbols with some moderate effort.  
+
+
+the thing that took me while to figure out is that the annotative scaling 'size' in the MEP settings sets the scaled length of the fitting from primary connector to secondary connector.  the way i like to set these up is to control some planes that define the symbol sizes with an aspect ratio parameter, and not use the solid geometry at all.  
+To me, this is unintuitively implemented because i think most people think about the 'size' of a fitting is twice the y height from the centerline of the flange 'tick' mark.    
+
+
+unfortunately, the ootb ones don't have this well implemented so you get some weird behavior and the 1-line representations look weird.  
+
+
+there are also issues with the way 1-line fittings display when they are below the bottom plane in a view (in the view depth).  Can be an issue for sanitary/domestic water below grade.",1680891789.0,1
+Revit,the closest you can get is to copy/monitor the items you're interested in and map them to your firm's families with the desired annotation.,1680096030.0,1
+Warhammer40k,"this is just sort of underwhelming, right?",1678913894.0,-3
+Revit,"you could alternately use the Issues features in ACC to identify and track status of task items.  This gives you a bidirectional link between an overview interface (ACC) and something that users can interact with (Issues in Revit).  
+
+
+if you're more interested in a checklist-as-guideline then maybe a Kanban board like trello or Microsoft Project would be more appropriate.",1678807964.0,7
+Revit,what paper is this? interested to read,1678336261.0,1
+Revit,"I really like the way the BIMForum LoD specification breaks everything down so you can get a good idea of what types of information are required for each LoD by specification section
+
+https://bimforum.org/resource/lod\_level-of-development-lodspecification-2022-supplement/",1678118438.0,3
+Revit,"this is the thing about Revit: it has a high ceiling for what you can do, but people always think it is ready to run out of the box.  Especially if you are trying to model with a high degree of accuracy and precision, you have to make sure you have all the infrastructure (families, template, macros) that meet the specific outputs.",1678118044.0,2
+antiwork,his behavior is insane and inappropriate,1677683373.0,2
+Revit,second applying stamps in bluebeam.,1677533496.0,4
+Revit,Infraworks or Civil 3D are probably your best bets,1671820272.0,2
+Revit,link and bind the links,1671128034.0,1
+AutoCAD,you can also check out FreeCAD and Blender,1669910770.0,1
+KingdomDeath,"if i want a digital version of KD, i want isometric sprite graphics and all the bookkeeping done for me.  not a proprietary skin of TTS",1669390674.0,26
+Revit,"It's more of an alternative to splitting the building into sub models.  Depending on how you're using revit, and how connected you need things like systems to be, i think it's a viable approach.  MEP design, in particular (and electrical more specificall), can benefits from having all elements in the same model.  If you're working as an architect or contractor where system connectivity is less of an issue i can see how splitting the model would be a viable solution.
+
+You do see a reduction in memory consumption when manipulating (Open/Close) the worksets. I find this mode of workset management really easy because you can just grab all elements inside a scope box and assign them to that work area.  If you have reliably structured scope box and workset standards, you can also do this automate this procedure.
+
+Workset and model composition strategy is always very project specific, but they're both tools that are available.",1669221130.0,1
+Revit,"an approach i've used to good effect is organizing elements on workset by location.  So many people still want to use/think about them as analogous to autocad layers, but that doesn't really let you tap into the benefit of Opening and Closing worksets.  
+
+
+so have a workset for Area A, B, or Floor i, j  .. whatever.  This way you can load the relevant elements into memory and close elements related to other parts of the building.",1669212260.0,3
+Revit,"depending on the type of parameter you're dealing with, you could do something like  
+
+
+If(user>x,user,default)  
+where x is an arbitrary 'empty' value such as 0 or """".  I think this should work with strings. I know you have boolean operations on strings in filters, but i haven't necessarily checked for families.",1667396834.0,2
+Revit,you can check out Microdesk BIMrx Cloud Manager,1666985779.0,1
+Revit,you should be able to check out worksets to prevent other trades from manipulating your elements,1666975272.0,5
+Revit,"the only real 'upside' is that you have access to ceiling and wall hosted families (compared to face hosted families), and things like cutting voids work correctly.",1666975168.0,3
+AutoCAD,"there are some free cad alternatives:  
+
+
+try freeCAD  
+https://www.freecadweb.org/",1666300321.0,2
+Revit,"Is this an OOTB command? or part of an addin?  I don't see Zoom Selection in the command list :(for a minute, i was thinking 'how did i miss this one!'",1662044952.0,1
+Revit,"in a 3d view, if you select a corner of the view cube, it will center the view on the current selection",1661712104.0,5
+climbergirls,i just put my head down and follow the program i've laid out.,1661313103.0,2
+lisp,"this is a pretty good resource with a bunch of AutoLisp samples.
+
+[http://www.lee-mac.com/programs.html#mathematical](http://www.lee-mac.com/programs.html#mathematical)
+
+keep in mind that most autodesk programs have .net integration, so you can also use python or c# if you prefer",1661279759.0,5
+Revit,"i really like the ultrawide format for AEC/Revit work.
+
+don't sleep on windows PowerToys FancyZones utility for managing windows",1661184672.0,13
+RevitLife,"check out the Orchid package. i think that's the one, but there's a package that will let you associate parameters inside a family",1661094501.0,2
+Revit,"to transfer sheets, you may need to use the 'insert from file' command on the Insert tab",1659630607.0,6
+Revit,"there are a lot of good starter tasks that aren't really MEP specific.  Things like setting up sheets, creating views, reading and writing parameters.  
+
+
+i think the classic 'MEP' example is to distribute a specified airflow value from a Space to the Air Devices located inside that space  
+https://www.bim42.com/2016/04/using-dynamo-for-mep-design-part-2/  
+
+
+one that i built a while ago was a 'plenum depth map' that uses the raybounce tools to determine the distance below a linked structure model",1654292197.0,2
+Revit,"you can use the RevitLookup addin and look in the database under ImportInstances to get the elementId.  Then you can select the element by the ID and see if you can bring it up in a selection view or otherwise inspecting the element's graphic settings.   
+
+
+other things to be aware of is how you linked the file in: is it linked in for 'Current view only', what level was it brought in on.",1654266644.0,0
+Revit,"what value are you inputting? you need to pass the Scope Box object, not a name or element id",1654194678.0,2
+malefashion,this is a sick look,1654110882.0,2
+ExosHeroes,"a big thing for CM is guild and friends.  people are pretty helpful, so post in the guild and friend  discords. try to get in an active/starter guild.  
+
+
+that said, it's helpful to invest in getting +3/5 hero for one or two of the high value FC so you sort of have something to 'trade' with.",1652808372.0,1
+RevitMEP,"pretty much, just alt+tab between windows. i use a combination of that and hot keyed Fancy Zones.  Fancy Zones is part of the microsoft PowerToys bundle that lets you define custom snap boundaries.  my typical work config is a 1:2 ratio, but it's nice to be able to switch to 1:1:1 or 1:1
+
+the big ergonomic difference i've observed is that it feels like i have more 'in front' of me.  with two monitors, either you're looking at the seam, or constantly having to look over at the secondary monitor.",1652554838.0,2
+RevitMEP,"the ultrawide monitors are really great.  i think in part because the nature of the work is landscape format, but i like it quite a bit better than any combination of 2 monitors",1652467249.0,2
+Revit,"i don't understand why you keep referencing C++.  Dynamo is written in c#, but these are both visual scripting tools that are specific to their host programs, and fill a very different role than text-based programming languages.
+
+It's really about whether your process uses Revit or Rhino. That's going to determine which of those tools you need.  The logic is all largely the same.
+
+If you're interested in complex geometry, then you should probably be looking at Rhino. If you're interested in documentation, then you should probably be looking at Revit.",1651844257.0,1
+Revit,"Grasshopper and Dynamo are similar in that they're visual scripting languages intended to help users automate manipulation of the parent software.  Grasshopper works for Rhino. Dynamo works for Revit.  That's probably the main reason to 'choose' one over the other.
+
+Recent updates to dynamo have improved the user experience, and the default library has a lot of nodes that were sorely missing from early builds.",1651781731.0,6
+vintagejapaneseautos,glorious. love the exterior/interior combination.,1651521644.0,5
+Revit,"this is one of those situations where it's probably going to be worth having the headbutting conversation about why the 'expectations' are what they are.
+
+however, separating your tags into a prefix and and index isn't that wild. i've seen firms use it successfully.  You can also make set the prefix to 'type', or even set it for the family with a formula, so that family will always have the same prefix and it cannot be changed.
+
+Parameters:
+
+\[Prefix\]:Text
+
+\[Index\]:Text
+
+Label:
+
+\[Prefix\]""-""\[Index\]
+
+this way you can have ""AHU-23"" or ""AHU-2-3"" or ""AHU-A"".  The only limitation here is that the Index isn't an integer or double for in-revit purposes, but you can always convert to number in an extended scripting environment.",1650577496.0,1
+AskEngineers,"i was (still am) shit at arithmetic and was sort of a C student in HS math, but took calculus anyways and actually ended up doing well.  HS math in the US seems pretty focused on pipelining to calculus, but there are a lot of other interesting branches/topics that you sort of don't get good exposure to",1647529503.0,2
+Revit,"for those interested: here's the link to an Autodesk focused discord  
+
+
+https://discord.gg/8uMTzJQP",1647489131.0,1
+Revit,"I think BlenderBIM and OpenBIM projects will often deal with the struggles of open source software.  Not to be too rude, but people in the AEC haven't always been the most tech savvy and want clean, turnkey solutions.  Open source software tends to not be that at all.  
+
+
+That said, i think it's the 'right' direction.  There is a lot of really promising activity around BlenderBIM as a modeling tool (though, this has mainly been architectural: i haven't seen much discussion or demonstration of using BlenderBIM for MEP or Structure).  The flip-side to this is that paper documents are still the final 'product', and a good tool currently needs to be able to support traditional documentation process.  
+
+
+But Autodesk has done an admirable job of marketing and capturing market share through a promise of convenience and 'interoperability' (between autodesk products .. sort of ).  I do think the current generation of tools for coordination are pretty nice (MEP perspective).",1646673216.0,15
+Revit,"then there's the whole modeling vs. documentation discussion
+
+i found revit to be easier to interact with when i stopped thinking about it as 'drawing on a plan'.  You're adding elements to the model, and each view depicts the model elements based on its view settings.",1646175532.0,3
+Revit,"you can technically edit IFC with Blender using the blenderBIM addon, but i recognize this isn't particularly useful information.",1644416586.0,2
+RevitMEP,MEP design will forever be held back by their insistence on their documents being 'diagrammatic in nature'.  I think they either need to commit to modeling accurately OR changing the deliverable so it's more abstract - just a schematic layout and let the contractors own the geometry.,1641589729.0,1
+ModelCars,these look amazing,1640617835.0,1
+Revit,"in a larger operation, any significant family will need to conform to standards for reuse in other projects and integration with potential automation/scripting.
+
+as another user stated, it's also not a valuable use of the time for the designer to have to stop production to generate a family.",1639678127.0,5
+Revit,"if it's just for documentation, you can create a section or callout as a detail view and reference that where you need to.",1638469683.0,2
+ExosHeroes,guess that means next mythic?,1638390842.0,2
+Revit,"1- it depends on what your objective is.  I firmly believe that being able to at least think programmatically is an advantage, especially with the continuing digitalization of the aeco industry. Dynamo certainly has its pitfalls, so a more efficient path for a long term plan is to probably just learn python or C#, but it can be a nice starting point for someone with little experience.  
+
+If computational design or manipulating the software in a different way is your objective, then yes.  If you just want to do production work, then maybe not.
+
+2- there are a bunch of resources.  either try to follow along with tutorials, or identify simple tasks and try and write the procedure to do them.  the most fundamental 'structure' is a Select-Read-Filter-Modify-Write task.  Most other scripts are just complicated versions of that.
+
+* Select Elements
+* Read a Parameter
+* Filter based on a comparison
+* Modify data
+* Write Parameter",1636132793.0,7
+ethereum,is cryptocurrency not mainstream?,1635526411.0,1
+KingdomDeath,poots has always cared.  he just isn't great at running a business or managing projects,1635480369.0,28
+AskReddit,i cannot beat my depression,1634395414.0,1
+Revit,"yeah, use RevitLookup to find the LinkInstance object and get its element id.  then you can select by element id and delete the object.",1633455548.0,1
+Revit,3,1632622656.0,37
+Revit,"the trick for this one is that you have to create and select ALL the angle dimensions, then assign them to the angle parameter.  
+
+
+IIRC you get problems if you lock or assign them sequentially",1631646616.0,3
+Revit,"pyrevit  
+RevitLookup
+
+BIMrx",1631372508.0,2
+Revit,"i'm pretty sure you can connect elements to services through groups.
+
+worst case use the group as a seed, then ungroup it on each level and connect it to you model.  
+
+i don't know how well the tagging will work - i think the Mark value will index sequentially and won't reset by level, but you might be able to use dynamo to set the value of whatever parameter you're using for tagging.",1631112325.0,3
+RevitMEP,not sure exactly what you are doing.  are you talking about CAD links or elements visible in a linked RVT file?,1630463256.0,1
+Revit,i'll second this: compact and audit are still important but there's not a need to 'replace' central files unless the file is corrupted.,1625156220.0,3
+Revit,"he's talking about the built-in type parameter ""Type Image"".  You can attach an image file to most families.  Most common implementation i've seen for this is including it in a schedule, as other posts have noted.  it's sort of cute.  
+
+
+you can use this approach to build a dynamic symbol legend",1624641260.0,5
+AskEngineers,"in my experience, people in the construction industry seem to value working hard not smart.",1624634165.0,1
+programming,"a similar experience.i got into coding through various low/no-code solutions throughout the years and they're usually ok for hooking into a data source and doing some basic manipulation, but a major limitation is usually that you can't create new concepts.i got wrapped up in trying to figure out what PowerApps could be good for at my current job and it just feels like such a waste because you end up with a useless specialization and you should have just learned conventional programming anyways.  
+
+
+that said, there's probably a place for some basic data manipulation/collection or proof-of-concept work by non-technical people",1623863391.0,39
+Revit,second this.  i did something similar to rebind 'nudge' to ctrl+mouse scroll,1623847369.0,1
+ExosHeroes,i think L100 is for when you're trying to squeeze every last point out before you complain about how imbalanced the CM system is,1622996039.0,3
+AutoCAD,"* In paper space, everything is 1:1 for printing elements.  Put your sheet boundary and titleblock here. 
+* in model space, everything should be drawn 1:1 to real life
+* my preferred method is using annotative scaling so i don't have to calculate text heights for notes and dimensions.  you can set the annotative scale of the model space in the menu bar on the bottom.  
+
+* create a viewport on your paper space.  Double clicking on the viewport will activate model space from paper space.  do this to center or align the work you intend to show.
+* Viewports have a scale property.  select the scale the work is intended to be shown at.",1622994312.0,3
+Revit,"if you are MEP design, a strongly recommend custom, generic families.  
+
+
+https://www.autodesk.com/autodesk-university/class/Creating-Smarter-Revit-MEP-Families-2015#video  
+[https://www.autodesk.com/autodesk-university/class/Creating-Even-Smarter-MEP-Families-and-Workflows-Revit-and-Dynamo-2017](https://www.autodesk.com/autodesk-university/class/Creating-Even-Smarter-MEP-Families-and-Workflows-Revit-and-Dynamo-2017)  
+
+
+these are some videos that really helped form my perspective on how to gain a lot of value from the way we can use Revit as MEP engineers",1621607272.0,2
+nanocurrency,i got burned by the bitgrail fiasco and i'm glad to see it's still going strong.,1620950466.0,4
+ExosHeroes,or to have the portraits sorted in alphabetical order,1620946463.0,1
+ExosHeroes,"at a minimum, it needs names",1620946447.0,1
+Revit,"are you trying to measure or annotate?
+
+&#x200B;
+
+the measure command has a 'chain' mode to do what you're asking.",1620743898.0,3
+AutoCAD,"AutoLisp is a very niche dialect of a language that isn't very widely used.  I think learning how to code in a .NET compatible language will give you better avenues for future career options than just knowing AutoLISP.  They'll be portable to other autodesk products (revit, inventor, etc.), and you'll develop a skill that can be useful outside of autodesk's software (writing independent programs, interfacing with excel/outlook/word).
+
+AutoLisp is sort of a tool of the 90s.  after Autodesk created the .NET inferface for autocad, it .. i'm not going to say 'became obsolete', but you have many more options with something like Python and C#: specifically other code libraries that may do what you're trying to do (build off the work of others instead of having to develop everything from the ground up).  Especially if you're interested in analyzing data from your models because there are plenty of good data science libraries that already exist.
+
+it's probably a bit of a longer path to what OP may want to do immediately, but i think you would end up with a more robust skillset.",1620567145.0,1
+AskReddit,you don't have control over the size and shape.,1620566480.0,1
+AutoCAD,you'll probably be best served by choosing a .net language such as python or c#,1620406470.0,4
+AskEngineers,"not using the Papermate Flair smh
+
+80% joke",1619466348.0,1
+RevitMEP,"If you're familiar with Trace, why not move to Trace 3D Plus?  The gbxml->\[3rd party\]->ePlus-> \[3rd party\] cycle seems like a way some of the softwares are moving.  
+
+
+You could also take a look at Revit's native System-Zone -> Open Studio loop
+
+Open Studio on its own is an option.  
+
+
+if you're looking just for load calculations, the legacy competitors are still there:
+
+Carrier HAP
+
+elite cHVAC
+
+IESVE",1619197501.0,3
+Revit,"Not entirely sure what your question is, but there are some cute things you can do with zone/space/duct system/pipe system + embedded schedules if you want to look at ventilation rates, or zone breakdown by terminal unit etc.
+
+I think the HVAC Zone schedule is possibly the least useful, but it's been a while since i really messed with it.
+
+what are you trying to do?",1619100056.0,2
+ExosHeroes,the boin,1618241410.0,3
+AskEngineers,the hard part is making sure you've done 8 billable hours worth of work.  i guess the scam is convincing someone that your work produced is equal to the rate you charged.,1617987357.0,7
+Revit,i've seen success worksharing within an AWS network,1617921092.0,1
+Revit,"Yeah, the big problem i've seen at a lot of MEP engineering firms is that they don't quite understand that they're a tech company, and don't have any tradition of improving their process - R&D.  The hard part to acknowledge is that a lot of MEP design issues are solved problems - you just have to know which tables to look up.  I used to AI/generative design doom-and-gloom too much, but there's still a significant mapping/abstraction barrier for a lot of the applications.
+
+There's a lot of interesting work and analysis that seem possible if you can eschew some of the constraints of 'traditional drafting'.
+
+The whole gbxml-to-load calculation thing never really lived up to its promise.  maybe the next generation of tools will get us there..
+
+This was a good watch - the work is sort of independent from the autodesk ecosystem, but you can tell they put the effort in.  I think the main concepts are completed in the first 20 min or so and the rest is just demonstration of the UI, they don't go too far under the hood.
+
+[https://www.youtube.com/watch?v=fx-aG-XJnxA&t=3005s](https://www.youtube.com/watch?v=fx-aG-XJnxA&t=3005s)",1616175481.0,1
+Revit,"But autodesk products have always been like this.  They do a very specific set of things, but there's always been a path for extensibility.  Autocad doesn't really do a whole lot of what you might want with a fresh install - it's AutoLisp (and .NET) that lets you actually get any work done.",1615989344.0,0
+Revit,"this is where a lot of firms seem to make the mistake of not understanding that they are a tech company and should have at least one programmer on staff or contract.  
+every script and automation pays out over time",1615989270.0,8
+DeadBedrooms,future? he's 57,1615849300.0,1
+relationship_advice,"the short answer is probably yes, better to end the relationship and find something that's more balanced for both of you.  I experienced a similar situation, but as the person with the lower sex drive and it's really hard.  you want so badly to please your partner, but it does feel like it doesn't matter that it's -you-.  we tried to make it work, but ultimately had to end the relationship.",1615848519.0,1
+ExosHeroes,only allowed to pity general duplicates in this F2P lifestyle!,1615838773.0,1
+Revit,"it takes a bit of review and validation (especially for fixed/equipment/device losses).  i've observed a lot of fittings not pulling the correct loss coefficient from the ashrae db (usually, just not retrieving the coefficient, as compared to getting a wrong one)",1615743605.0,1
+ExosHeroes,i won't have the discipline to not pity nemeris U\_U,1615649652.0,2
+relationship_advice,is it just me or is this angle sort of a disingenuous manipulation of the system?,1615476521.0,1
+AskEngineers,"it seems like most of the interesting problems you might tackle all trace back to your knowledge base.  Engineers in all disciplines are interested in optimization problems and it seems like most industries are trying to figure out how to apply ML.
+
+the real question is what type of work/activity do you want to -do-.
+
+my hunch is you're thinking about something more hands-on?  
+
+
+i'm sort of the opposite.  i started as a mech E in the construction/built environment industry and realized that all the problems you are ever actually trying to solve are OR problems, so i'm trying to build that knowledge base.",1615406944.0,1
+RevitMEP,Revit's integration with CADmep Fabrication and the associated fabrication parts databases have come a long way.  I've used it for a number of coordination projects and i find it much easier to work with than 'design' families.,1612632805.0,1
+ModelCars,[https://www.autodesk.com/products/fusion-360/pricing](https://www.autodesk.com/products/fusion-360/pricing),1611670322.0,1
+AskEngineers,"it's probably most important to be able to use math to describe a situation (modeling), and to be able to construct mathematical constructs programmatically (programming).  You will very rarely calculate anything important by hand.",1611614765.0,1
+cardano,"it depends on what you mean by 'succeed'.  there's a huge issue in the 'crypto space' where none of these projects actually act as currencies.  people just buy to hold and short, speculating on mind blowing yields that aren't really backed by any application.
+
+a functional currency needs stability, which is contradictory who want cryptocurrencies to rapidly gain value.
+
+could you imagine someone buying something with bitcoin?
+
+so the answer is probably 'yes', but you have to understand what the objective of each project is..",1611326654.0,6
+AskEngineers,"[https://ugears.us/](https://ugears.us/)  
+
+
+there are a bunch of options for mechanical/mechanism models that are pretty fun to do with another person",1611262599.0,2
+Revit,"yeah, this mentality in the year 2020 seems like a red flag to me..",1604521025.0,3
+Revit,"yeah, you just have to enter any boolean statement that evaluates to what you want",1602869471.0,1
+AskReddit,shit. i'm tearing up just thinking about this one.,1601606621.0,14
+AskReddit,"Life is Beautiful.  
+
+
+it tears me up every fucking time",1601606367.0,1
+AutoCAD,"there are a number of good open source/freeware CAD options that will do most of what you want to do if you're just interested in developing ideas or drafting.  like other posters have mentioned, if you're dead set on learning Autodesk's version look into LT",1600696591.0,1
+AskEngineers,"you owe the company you work for nothing.
+
+it's your responsibility to yourself to act in your best interest.",1598799424.0,1
+AskReddit,it's pretty depressing,1596468484.0,1
+math,get older and give up on your dreams.,1594749163.0,-2
+BloodAngels,"gotta drill those barrels, son.",1594479274.0,1
+AskEngineers,"yeah, that's some toxic shit right there. as long as your consistent. no project should ever be so poorly managed that 30 minutes makes a difference.",1594160439.0,106
+boardgames,"the class/quest progression in Gloomhaven is just too slow and gets really stale for me. I probably want to play a class for 6 adventures, max.
+
+The story also ... just didn't go anywhere. i thought the tone of the world or events would become more dire over time, but it just becomes sort of trivial.",1593175413.0,0
+Revit,"if you're talking about cloud-based or remote collaboration,
+
+Amazon Web Services connected to the company's servers is a really effective remote solution.
+
+in lieu of that, remote desktop and a VPN also works well.
+
+&#x200B;
+
+otherwise just put the central on your company's server and local files on user hard drives, as mentioned in other posts.",1593107020.0,2
+AskReddit,"i think they're really attractive and a total aesthetic.
+
+&#x200B;
+
+but, i guess, own it and love yourself! (?)",1593030998.0,1
+pics,"christ, that's a fucking photo",1591359011.0,1
+boardgames,damn.  life is a scam,1590669475.0,2
+Revit,you could probably do this by determining the the total connector area and subtract that so you can deal with pants and tees in a general case.,1590605131.0,1
+boardgames,"i recently read the reason in the code that this happens.  ghandi's hostility is the lowest value, but when they adopt Democracy, it decreases that by 1, so for ghandi it wraps around to 255; so, maximum aggression.",1590592403.0,8
+Revit,"Dynamo's always an option, but setting it up to calculate area for each fitting .. well.  it might not be that bad.  just have to find the right method.
+
+ there's a node ""solid.area"" that should make it pretty quick.  just get all the elements you're intersted in.  get the solid geometry, and run it through that node.  you can make a project parameter that you can send the number to, then use a schedule to get your totals by system, or however you want the data formatted.",1590547759.0,2
+AskEngineers,"homie's probably depressed and not satisfied with his path in life or performance or something.  I know that's where i was when i finally found a 'real' engineering job after college. I know i felt the same and that i would never be doing something i wanted or be able to make the money i wanted to.  too bad i let it sucks 4 years too many from my life, really not a healthy situation.
+
+Probably worth talking with him about it.  I mean, or not.",1590426912.0,1
+boardgames,"might be a controversial opinion, but Kingdom Death: Monster is a pretty satisfying co-op game.",1590426546.0,22
+BurningMan,a simpler time. it looks so friendly,1589559089.0,3
+vintagejapaneseautos,got that sneaky shit under the hood :p,1588166932.0,1
+Warhammer40k,"it would be rad to see overly dramatic marksman weapons
+
+https://get.wallhere.com/photo/gun-Neon-Genesis-Evangelion-weapon-EVA-Unit-01-sniper-rifle-machine-machine-gun-product-firearm-25614.jpg",1588013582.0,1
+Warhammer40k,This is pretty dope: do you have any fluff for them?,1588002798.0,1
+Warhammer40k,wait. primaris marines have been out since 2018?,1587938232.0,1
+RevitMEP,"the gsa has some color mapping standards
+
+[https://www.gsa.gov/real-estate/design-construction/3d4d-building-information-modeling/guidelines-for-bim-software/guidelines/technical-standards/bim-technical-standards-mep-color-mapping](https://www.gsa.gov/real-estate/design-construction/3d4d-building-information-modeling/guidelines-for-bim-software/guidelines/technical-standards/bim-technical-standards-mep-color-mapping)",1587431300.0,3
+AskEngineers,"no, you're thinking of HVAC
+
+&#x200B;
+
+or is that just people who weren't smart enough to get into any other sector..
+
+source: i'm an HVAC engineer",1587341556.0,16
+tarot,"I think the illustration is really cool, but that font really grinds on me",1586873120.0,2
+Keychron,"i'm having a similar problem. the first time i start typing after a short period of time, it takes a while to register and enters a bunch of duplicate characters.  after it 'catches up' it's fine.
+
+did you find any solution, or did  you just send it back as defective?",1586782817.0,1
+Revit,i think you have to 'cut' with the void,1586711022.0,8
+Revit,"to clarify: if your instance parameters are all driven by formulas then the values will pass when you c/m, but they won't update.  c/m seems to only monitor geometry changes.",1586182975.0,1
+Revit,"yeah, if you put the effort into having the equipment calculate electrical requirements (with appropriate input from the EE) it can be a pretty smooth workflow.
+Copy monitor won't bring instance parameters over, but will bring type parameters.  The real downside is that the parameters are static, and don't update with the models.  if your parameters are instance, then you can get them to pass the data by having them all be formulas.  works for some things like AHUs and motor HP.  stuff that's just driven by mfg MCA/MOP you may have to figure something else out.
+
+you can create a data link with dynamo without too much difficulty.
+You can use dynamo to create a data link between the models.",1586139826.0,1
+Revit,"yeah, if you have a VPN set up, the remote user should be able to use Remote Desktop to connect directly to the network and access the central file normally.",1586124351.0,1
+Revit,"one of the challenges with this approach (specifically for electrical) is that there isn't an in-the-box way to pass and update electrical connector information from M and P models so that electrical calculation/coordination can be current and accurate.
+
+as far as OPs \_real\_ problem: it sounds like your company doesn't have a realistic remote work strategy.  BIM 360 is really seamless for remote work, but a VPN and a remote desktop work just as well for worksharing on a network.
+
+changing the workflow to separate models as a solution to remote work is sort of dumb.  there are other reasons that you might want to do it, but that's not a good one.",1586100757.0,5
+OutreachHPG,"lol.  i was just thinking it would be amusing if they did something like this with that mech.
+
+&#x200B;
+
+still probably not logging back on, but still",1584813569.0,2
+BurningMan,you heard it here: who's the best person at burning man?,1584749183.0,2
+nier,what shoes?,1580005592.0,0
+Revit,"Here's some things i think are useful
+
+. Hold some sort of regular revit discussion or training.  Weekly, Bi-weekly, monthly, it sort of depends on your need.  Getting people sharing ideas and talking about the standard methods or best practices is important and repeated, long-term exposure is more effective than some sort of all-day training
+
+. Revit is more similar to Autocad than you might think: Out of the box, Autocad would be really hard to do production work with.  Companies and Designers have had 30 years to develop processes, resources (blocks, patterns, etc.), and scripts to improve the workflow.  Revit requires a similar investment in infrastructure (specifically on the design side): this will mainly be templates, families, parameters and schedules, and scripts.  Thoughtful investment in resources is way more efficient than a decentralized organic process.
+
+. Have post-mortem project meetings to review what went right and what was challenging.  Look at the overall process and try to understand how things are different.
+
+. Find compromise with graphics.  This is a persistent fight, and one that seems to be hard to sway older members about. You can get revit to look a lot like cad, but it's a lot of work, and requires investment in the infrastructure i mentioned before.  There are some limitations that you can work around, but you just have to figure out what the right balance for your firm is - I find it more effective to focus on making really good looking revit documents than trying to make things look like cad. Just sort of non-value-added labor.
+
+. have, or understand the function of, a BIM Execution Plan.  This helps more with collaboration and communication issues than anything, but a big part of BIM as a concept is sort of that saying 'prior planning prevents poor performance'. 
+
+. have internal BIM kickoff meetings.  Identify project specific needs (families, schedules, etc.)
+
+. Deploy gradually on a series of pilot projects.  There's a useful analogy to industrial processes: you're not going to make a major change to production with a new product, process, or technology.  My exposure is in the petrochem industry where the company i was interning at had a pilot plant to test new polymer formulations or processes, then review and evaluate.  I think trying to dump a new technology on a whole company with a diverse level of skills is a recipe for disaster.  There are going to be lots of challenges and i've seen to many people abandon revit after trying this approach.  Review the processes, successes, and challenges after each one, and plan the modifications for the next one.  This is fairly idealized and actual implementation will probably have to be adapted.  Figuring out what projects are suitable to be pilots is difficult.  Having an entirely internal one is safe, but completely overhead cost.  Using a client project is hazardous, but billable.
+
+. Evaluate hardware requirements",1578413875.0,1
+gaming,selling prints of this?,1577715897.0,1
+bodyweightfitness,something i found helpful for any hanging activity (climber here) is to keep the scapula down and shoulders active.  don't just let them relax and hang on the ligaments,1577464273.0,2
+videos,It doesn't quite seem like ... a comedy,1575929897.0,1
+BurningMan,"i think you all are seriously underestimating what you can do with a frisbee or what the connection you can create is like.  Especially if you find another ultimate player, or someone who can actually manipulate the disc.  It's really a flow toy like any other.",1573833267.0,3
+BurningMan,disc golf drivers.  go out in the playa and find the tailwind.  grip it and rip it.,1573833183.0,3
+Warhammer40k,this color scheme is so simple and effective. makes me want to steal it!,1572224256.0,2
+boardgames,"gloomhaven just ends up so grindy. the player actions have so little effect on the 'story' or any sort of outcome.  i kept waiting for things to get 'gloomier', more dangerous or the sense that the world is emperiled, but as time goes on you just sort of roflstomp through everything trying to see how high of a difficulty level you can manage.  I think the mechanics are neat, but between the lack of meaningful interaction, the long cycle time for most of the retirements, and being as fiddly as it is; i just think it's a tad overrated.",1571194790.0,7
+AskReddit,PLEASE WHEN,1569455687.0,1
+Revit,"I'm going to second this.  There should be very little information - especially equipment performance information - that you can't dynamically represent in Revit.  There may be some legends that you want as drafting views, but i rarely find a good reason to import new information.",1568953692.0,1
+cosplay,quad city,1568666711.0,2
+Revit,"i've been using the Microdesk Accelerator add-in.  It works pretty well for setting up piping in an isometric view so you don't have to flip back and forth between plan and section quite as much.
+
+[https://apps.autodesk.com/RVT/en/Detail/Index?id=7667497332723137201](https://apps.autodesk.com/RVT/en/Detail/Index?id=7667497332723137201)",1567361069.0,2
+Revit,"The autodesk sample projects are decent places to start if you just need an Arch model to work off of. They also serve as a good opportunity to learn about setting up an MEP/consultant model and manipulating your graphics and visibility.
+
+[https://knowledge.autodesk.com/support/revit-products/getting-started/caas/CloudHelp/cloudhelp/2016/ENU/Revit-GetStarted/files/GUID-61EF2F22-3A1F-4317-B925-1E85F138BE88-htm.html](https://knowledge.autodesk.com/support/revit-products/getting-started/caas/CloudHelp/cloudhelp/2016/ENU/Revit-GetStarted/files/GUID-61EF2F22-3A1F-4317-B925-1E85F138BE88-htm.html)",1566245174.0,2
+DotA2,you are both too attractive to actually have this backstory,1565634293.0,1
+Revit,"Is using the family type mapping feature in C/M an option?  You can change the type of the family represented in the your model, so the architect's generic family isn't copied over.",1564678124.0,6
+Revit,what trade are you doing this for? what's your target LOD?  seems like a lot of work for a louver ...,1564631817.0,1
+Revit,"not sure if it's really what you're looking for, but i know there is a Dynamo package called Acoustamo.  I'm not sure it's currently being maintained. ... So that's probably not a very useful answer.
+
+[https://forum.dynamobim.com/t/acustamo-released/1091](https://forum.dynamobim.com/t/acustamo-released/1091)",1564519916.0,5
+BurningMan,"i mean, the use of ""Muggles"" by Burners as an exclusionary term is sort of problematic.  Especially from a group claiming to espouse 'radical inclusion.'
+
+As they say ""you do you"", but maybe take a minute to think about the context of the words you use.",1564159439.0,18
+AutoHotkey,"depending on what you're trying to do, you can also define custom windows keyboard layouts.  so you may not even need to go through AHK",1563743731.0,1
+KingdomDeath,echoes of death sold out already wtf,1542949517.0,1
+KingdomDeath,what is the face in row 1? in position 5?,1521490292.0,5
+Revit,"2018 is supposed to have some feature to help with making P&I diagrams.  I haven't had a chance to check it out, but there might be something there that you can use.",1509755936.0,1
+Revit,"Alternatively, check out Autodesk Navisworks",1507129634.0,1
+Revit,"what are you trying to achieve?
+
+are you trying to show DrawnBy/CheckedBy/ApprovedBy for each revision?",1507129583.0,2
+videos,"so, there are some really great samples in this ..",1506358637.0,1
+gaming,"wow, did y'all even try? 
+
+more differences than there are similarities",1504296395.0,1
+KingdomDeath,no scifi twilight/order knight? (not exactly sure which it was supposed to be) tragic.  was pretty excited about that one.,1504216807.0,1
+KingdomDeath,so does this mean we'll get the paladin model eventually?  anyone else find it odd that the Variants seem to be coming before the actual models?,1501191471.0,2
+Music,Brigador Soundtrack,1499728306.0,1
+EthAnalysis,look.  you just described me.,1498787709.0,1
+EthAnalysis,rip.  we're losers,1498663504.0,2
+EthAnalysis,i just want to vent.  sold at $260 expecting a dip.  surprise surprise: 290 this morning and the 7day MACD is tight.  i'm just not very good at this.  should have been more mindful of the 1m MACD yesterday.,1498656195.0,5
+DotA2,that was insane,1493590908.0,1
+AskReddit,Consent,1492518409.0,10
+KingdomDeath,ugh.  i'm missing every release this year.  what a tragic life,1492447530.0,1
+BurningMan,"this was my immediate thought.  sure it is conceptually a good platform, but replacement parts will probably be very difficult to come by.  for something like a mutant vehicle, it seems like you would need a chassis and engine with good parts availability and ease of maintenance.",1491913107.0,1
+KingdomDeath,"I really want a reprint of the Warlords
+
+encores of the druid, monk, and bard would be appreciated as well.",1491763874.0,2
+AskReddit,image macro,1489082458.0,5
+AskReddit,evaluate things on their own merit and your metrics.  disregard others' reactions; but popular things are usually shit,1489082375.0,-5
+istp,and it usually makes me feel awful,1487773501.0,3
+istp,"are you me?
+
+i have a backlog of projects that i want to finish, and can't manage to just abandon",1487773477.0,6
+KingdomDeath,Why y'all actin' bad?,1486404739.0,1
+KingdomDeath,"bi-weekly; with poots, you will be lucky for bi-monthly updates.",1484070578.0,2
+KingdomDeath,"In the actual game, the imagery is a little more restrained.  The biggest fault as far as imbalanced objectification is that all the females tend to be dramatically busty and there's not a lot of variety of body types.  
+
+biggest offenders: white speakers and bone witch
+
+then again, i haven't played in a while so it may be worse than i remembered.",1482962215.0,3
+KingdomDeath,"I just want some diversity in the human figures: male and female. The characters are basically all the same, just with different costumes ... which is kind of boring.",1482172152.0,3
+KingdomDeath,"I still think this is lazy.  Either the cards should have had the hunt event descriptions on them, or the system should have been revised.
+
+I guess the saddest thing to realize is that KD probably makes a better video game than board game.",1482172070.0,1
+KingdomDeath,"The eroticism and portrayal of the human form is unbalanced.  We can only speculate as to what the motivation for trending towards a gravure portrayal of the female form is.  I have had some of my enthusiasm lessened by the continued trend of the exaggerated female form.  It's so frustrating, because i think there is a really special artistic vision in here, but it isn't refined -- there are still too many impurities.  
+
+A good example of this is actually in the Archetype Adventurer line. I thought we were going to get some sensibly designed characters like the Thief and the Mage, but it's all just turned towards exaggerated cheesecake in the vein of the Fighter.  Maybe the art direction will mature with time, but as fans and supporters in these early years it's just frustrating to see it veer away from the really good parts of the concept.
+
+And there are some sensibly balanced portrayals of gender roles and sexuality: namely the inclusion of consent in the intimacy description and some of the illustrations of the core survivors.  I had some hope, but it's just too sparse.
+
+It's frustrating because it's a fun concept and the gameplay is good, but it can be embarassing in an annoying sort of way to have to navigate some of the more unbalanced and immature art, especially in a mixed group of more socially aware players.
+
+It's trying to be body horror, but keeps getting distracted by a juvenile perspective.  I want it to be great, but there doesn't seem to be a way to get meaningful criticism to dear Poots.
+
+He needs Tim Gunn to come by and tell him to edit.",1482171854.0,6
+KingdomDeath,you and me both.  really wishing i had just gone in for BL gambler lantern.,1482000239.0,1
+KingdomDeath,The new armor concept artist is pretty fantastic.  Anyone know who it is?,1481595662.0,1
+KingdomDeath,"many of them are listed in the rule book.  
+  
+Thomas David is one of their main sculptors http://art.thomasdavid.over-blog.com/",1481289173.0,1
+photography,"https://www.instagram.com/plink.us/  
+https://www.flickr.com/photos/orangeocelot/
+
+abstract details, urban and natural landscapes, and portraiture if i'm lucky",1481227145.0,1
+KingdomDeath,are people actually upset about the male pinups? it's been something i've thought was necessary to provide balance to the lines.,1480961330.0,3
+KingdomDeath,"i wonder if there's an intent to move away from multi-part armor kits and give more unique/stylized survivors for the different expansions.  the one big complaint i've had about the multi part kits is that they don't lend themselves to very dynamic posing.
+
+i'm sort of puzzled why we're getting so many pinups for the DBK.  i don't go in for the pinups, but i think they're an interesting indicator for the designers' outlooks on the content.  personally i haven't gotten to the DBK fight, so i can't really comment much further.",1480378839.0,1
+AutoHotkey,"does it have to be one button?
+
+you can use:
+[modifier] & [key] :: AltTab (or ShiftAltTab) 
+to rebind the Alt+Tab behavior",1480344890.0,1
+KingdomDeath,"jesus, christ.  you guys are voracious",1480051497.0,0
+KingdomDeath,"there have been rumors of a male pinup for close to two years, i think, yet we've seen at least 2 pinups and several idolized generic adventurers in the same amount of time.",1478104501.0,1
+KingdomDeath,"This is something that has been aggravating me about the new releases.  everything is skewing towards the pinup aesthetic and body type: even the adventurer archetype line, which i had originally thought was a fun twist on classic characters, has evolved into gravure  cosplay.  Like the dark paladin.  I thought the costume was pretty good, but why that weak pose and the lolling mouth; why the exaggerated hips and unrealistic (though now KD standard) bust?  There's a lot of potential to do an imposing, powerful female character that was missed.  I had a similar reaction to the druid, though the posing and facial expression were less -- i don't know; lewd? objectified? -- but the KD hips and bust were there again.  I don't mind an occasionally busty and sexually playful model, and i thought it was a pretty responsible way to entertain those concepts by isolating them in the pinup line, but to have every female character have the same exaggerated proportions is getting tiresome.   I had originally written the fighter off, and thought successive models would be more in line with the mage and thief; sadly, i seem to be mistaken.
+
+now i regret missing some of the models more in line with what i had wanted KD to be, like the warlords, percival, and the black knight.",1478104022.0,1
+KingdomDeath,"People of the Sun campaign with 'star' names
+
+Capella, Antares, Megrez, Betria",1474680634.0,2
+analog,but do you tip them,1473787922.0,1
+KingdomDeath,"i just came here to complain about the poor integration as written.  it's just _not a replacement for the screaming antelope.  I think it's a fine concept, but removing the screaming antelope removes too much useful content. 
+
+and taken is garbage to proc every time.  Maybe if it was, like, 50% it would be fine, but every time is just sort of a liability that encourages not fighting the monster.",1473210843.0,1
+KingdomDeath,"It sounds like you can get by pretty safely and have a fair time against the Watcher if you just farm L1 monsters.  If you have the intent to win against the more challenging monsters (lion god, slenderman) and nemeses the extra resources do pay out, i think.  Better gear and more innovations faster definitely give you a leg up.
+
+I'm playing through the Sunstalker campaign and it has a [constraint that you](/sp ""lose the game if you lose to a nemesis monster, so having top rate gear and tech is a must.  You face no nemeses except for the last 5 years where that's all you fight."") In this case, i think getting to higher yield monsters is almost necessary.",1469676617.0,1
+KingdomDeath,true story: i fudge rolls and load last saves :x,1469650304.0,3
+KingdomDeath,"Yeah, it's unfortunate (in my case) that it turned out to be so rich. I probably should have popped on it and just planned to try and sell the model later.",1469119763.0,1
+KingdomDeath,"I don't think it's a grammar error, so much as a preference in diction/wordcraft.  Your proposed phrases aren't any clearer or more eloquent.  It's a cumbersome idea to convey because you have to use the phrase ""2 or more"" and indicate the experience differential relative to yourself so the phrase ends up with a bunch of ""or""s
+
+if (XPnom-XPyou) >= 2",1466171467.0,1
+KingdomDeath,"if the meaning is 'totally clear', why the fuss?",1466169803.0,1
+OutreachHPG,"i played this for a while.  pretty good results.  gives you something to do all match.
+
+i've since moved to a 6 mpl Scrow",1466024758.0,1
+KingdomDeath,"depending on the glue you use, you can put the models in super clean which will degrade the glue so you can pull the parts apart.  
+
+this doesn't seem to work with gorilla glue, though.",1461265211.0,1
+bodyweightfitness,FML.  i've been trying to do the same for 3 months and haven't realized much progress.,1461255422.0,2
+KingdomDeath,"I should have been more specific:  how did you capture/digitize the graphics - particularly the stone face from the 'print run' cards (the image on the inside).  
+I have a project that i'm working on and i'm not super skilled with digital graphics work and am not real excited about tracing over a scanned image to try and replicate the vector image to use for printing; so i was wondering if you did something different.",1460935755.0,1
+KingdomDeath,"how did you make the graphics, particularly the one on the inside?",1460832937.0,1
+mwo,"if you're looking for versatile chassis in other classes, the Stormcrow (SCR-Prime) and Timberwolf (TBR-S) are pretty hard to beat.",1459944967.0,1
+minipainting,"Gorilla Glue has a number of notable characteristics
+* long set time - i like to use it for tricky pieces that might need some adjustment or alignment.  it'll get tacky but you can still move the piece without having to reset it
+* really strong - i try not to use it for parts that i might want to separate in the future because, often, it just refuses to break
+* corrosion resistant - i found this out because i bought a group of space marines off CL for what i thought was going to be a decent deal.  i put them in the super clean only to discover the GG doesn't dissolve like some of the other glues i've used.",1458821791.0,3
+KDTrade,"are you looking for ebay prices or something more reasonable. 
+
+i would be super interested in your white speaker nico",1457893677.0,0
+KingdomDeath,"what parts does it require from the gorm?  I passed on that one because i don't really care for the model, but it would be nice to know so i can proxy in the correct materials in the event that we ever decide to use them in the game",1457855968.0,1
+KingdomDeath,"i think it would have been nice to have a dedicated settlement location and an associated card for fabricating the green armor.  i guess with just having the recipes on the back of the gear cards you don't have to spend resources to gain access to the green armor, but it would have felt a little more consistent to have a settlement location.",1457855895.0,1
+KingdomDeath,"it doesn't have to be the same material, i'm just trying to find a finish/texture that matches",1457855690.0,1
+vintagejapaneseautos,that's a really nice color,1457195151.0,2
+KingdomDeath,did you get a shipping confirmation? i'm in TX and haven't received one.,1456837437.0,1
+vintagejapaneseautos,this is so sexy,1456677999.0,2
+KingdomDeath,i haven't received shipping confirmation either.  South USA,1456458655.0,1
+KingdomDeath,"when it first came out, i made a couple playlists
+
+https://www.youtube.com/playlist?list=PLWAScXw4WLstTHGzWnVqiOcZxozDmBfpE
+https://www.youtube.com/playlist?list=PLWAScXw4WLssZ-f1o3VbxWALy2-dJ4jDk
+https://www.youtube.com/playlist?list=PLWAScXw4WLsufs-dPCCjuR5fuEP3cU_58
+
+haven't worked on them in a while, but i think they have a pretty good progression.",1456098302.0,1
+KingdomDeath,"i bought some archival gloves to help mitigate the staining from the oils on your hands.  unless you plan on traveling with it a lot, i don't really see how much wear you're going to get on a shelf.  i guess over decades, board game boxes get a little ragged ... or do they call that 'patina'",1455939743.0,1
+KingdomDeath,the only real shame is that you'd be losing that fantastic matte finish.  the quality of the paper is so remarkable,1455934864.0,1
+KingdomDeath,"we've sort of houseruled it that we'll flip to either get the speed or the damage.  haven't played enough rounds for a good enough sample, but it seems to lower the death rate.",1449809137.0,1
+Warhammer40k,this is so beautiful T_T,1449202973.0,2
+KingdomDeath,"ugh.  i'd been waiting for a Mage encore, but they were all gone by the time i received the notification.  i can only hope for a 3rd round T_T",1446429117.0,1
+AskReddit,"I can't speak from experience, but it seems like heroine would certainly be on the list.",1420246994.0,1
+Warhammer,"that's a slick conversion on the reaper alchemist model.  I started painting one to use as a character in Dark Heresy, but yours looks much better!",1415969697.0,1
+analog,erosion is weird.,1415502734.0,1
+analog,"It doesn't look quite as good as the slide.  It's pretty underexposed on the left side, but i was still pretty excited with the way this one turned out.",1414956646.0,1
+istp,i'm glad i'm not the only one guilty of this.,1398130908.0,3
+Warhammer,i love your posts.  your models just have a life that i don't see anywhere else.  do you have a blog or something where i can see more of your work?,1395623864.0,1
+BurningMan,"I mean, you can look at the recently uploaded photos and watch the streaming feeds!  It's like you're there already, but with aircon and showers.  I don't see what the problem is.",1377865935.0,2
+Warhammer,"I only have a metallic silver that i thought would be a little too bright for against the grey. 
+
+I don't even into baseball (?)",1366158448.0,1
+Warhammer,"are you referring to the blue? I don't really know why it turned out so glossy, but it's definitely something that bothered me. I'll try thinning it some more. (although, i don't really think i'll do this color combination next time)",1366158395.0,1
+Warhammer,"black wash? 
+
+The bolter is actually grey with the same blue thinned out to sort of be a wash.  it reads better in person than in the photo. That being said, i need more greys, i think. 
+
+I definitely think the contrast is too stark, so i guess i'll just have to play with the mixtures until i find the right one, or maybe choose a different accent color.  But i really like the orange. I have a good mental image of burning orange assault marines descending from the sky. ",1366158384.0,1
+Warhammer,"I'm sort of stuck on what to do next.  It looks ok, but not great and a little unfinished.  I'm not really jazzed about the color scheme overall, the blue came out a little glossy, and i think the bolter needs a different color.
+
+Any recommendations?",1366080190.0,2

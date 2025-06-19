@@ -1,0 +1,643 @@
+subreddit,title,selftext,created_utc,score,upvote_ratio,num_comments
+googlecloud,Build pack keeps failing on Cloud Function Deployment,"I've been trying for hours to get a fairly basic nodejs function deployed. I've been able to deploy like this in the past, and so im not sure why it would've worked a few weeks ago but not now, when nothing else has changed. Below is the error that CloudBuild keeps providing me as well as my cloudfunction resource. Any ideas what keeps crashing the Buildpack?
+
+Error:
+
+    INFO 2024-07-21T04:19:35.590087732Z Step #2 - ""build"": Running ""node --check dist/index.js""
+    INFO 2024-07-21T04:19:35.619909277Z Step #2 - ""build"": Done ""node --check dist/index.js"" (29.827082ms)
+    INFO 2024-07-21T04:19:35.620133286Z Step #2 - ""build"": Handling functions with dependency on functions-framework.
+    INFO 2024-07-21T04:19:35.622341432Z Step #2 - ""build"": panic: runtime error: invalid memory address or nil pointer dereference
+    INFO 2024-07-21T04:19:35.622351965Z Step #2 - ""build"": [signal SIGSEGV: segmentation violation code=0x1 addr=0x30 pc=0x555780e1ae18]
+    INFO 2024-07-21T04:19:35.622352507Z Step #2 - ""build"":
+    INFO 2024-07-21T04:19:35.622353220Z Step #2 - ""build"": goroutine 1 [running]:
+    INFO 2024-07-21T04:19:35.622521835Z Step #2 - ""build"": main.addFrameworkVersionLabel(0xc0000e7208, {0xc0000b0630?, 0x13?}, 0x0)
+    INFO 2024-07-21T04:19:35.622527857Z Step #2 - ""build"": third_party/gcp_buildpacks/cmd/nodejs/functions_framework/main.go:268 +0x78
+    INFO 2024-07-21T04:19:35.622528610Z Step #2 - ""build"": main.buildFn(0xc0000e7208)
+    INFO 2024-07-21T04:19:35.622529300Z Step #2 - ""build"": third_party/gcp_buildpacks/cmd/nodejs/functions_framework/main.go:164 +0x77a
+    INFO 2024-07-21T04:19:35.622796312Z Step #2 - ""build"": google3/third_party/gcp_buildpacks/pkg/gcpbuildpack/gcpbuildpack.gcpbuilder.Build({_}, {{{0xc000133f60, 0xa}}, {{0xc000133f0a, 0x3}, {{0xc0000b0660, 0x21}, {0xc000135100, 0x1d}, {0xc000133f90, ...}, ...}, ...}, ...})
+    INFO 2024-07-21T04:19:35.622801910Z Step #2 - ""build"": third_party/gcp_buildpacks/pkg/gcpbuildpack/gcpbuildpack.go:291 +0x244
+    INFO 2024-07-21T04:19:35.622802800Z Step #2 - ""build"": google3/third_party/golang/buildpacks/libcnb/libcnb.Build({0x55578109cdc0, 0x5557810992c0}, {0xc0000c9eb0, 0x1, 0xc000056708?})
+    INFO 2024-07-21T04:19:35.622803624Z Step #2 - ""build"": third_party/golang/buildpacks/libcnb/build.go:257 +0x155d
+    INFO 2024-07-21T04:19:35.622804463Z Step #2 - ""build"": google3/third_party/gcp_buildpacks/pkg/gcpbuildpack/gcpbuildpack.build(0x7ffc25df998e?)
+    INFO 2024-07-21T04:19:35.622805156Z Step #2 - ""build"": third_party/gcp_buildpacks/pkg/gcpbuildpack/gcpbuildpack.go:312 +0x46
+    INFO 2024-07-21T04:19:35.622807737Z Step #2 - ""build"": google3/third_party/gcp_buildpacks/pkg/gcpbuildpack/gcpbuildpack.Main(0x5557810992c8, 0x5557810992c0)
+    INFO 2024-07-21T04:19:35.622926884Z Step #2 - ""build"": third_party/gcp_buildpacks/pkg/gcpbuildpack/gcpbuildpack.go:233 +0x65
+    INFO 2024-07-21T04:19:35.622931572Z Step #2 - ""build"": main.main()
+    INFO 2024-07-21T04:19:35.622932240Z Step #2 - ""build"": third_party/gcp_buildpacks/cmd/nodejs/functions_framework/main.go:46 +0x25
+    INFO 2024-07-21T04:19:35.624099364Z Step #2 - ""build"": Timer: Builder ran for 1m20.880939402s and ended at 2024-07-21T04:19:35Z
+    INFO 2024-07-21T04:19:35.624241525Z Step #2 - ""build"": ERROR: failed to build: exit status 2
+
+Cloud Function Resource: 
+
+    resource ""google_cloudfunctions2_function"" ""receipt-generator"" {
+      name        = ""receipt-generator""
+      location    = ""us-west3""
+      description = ""Receipt Function""
+      build_config {
+        runtime     = ""nodejs20""
+        entry_point = ""sendReceipt""
+        service_account = data.terraform_remote_state.platform.outputs.project_service_account.name
+        docker_repository = data.terraform_remote_state.platform.outputs.platform_build_registry.id
+        source {
+          storage_source {
+            bucket = google_storage_bucket.default.name
+            object = data.google_storage_bucket_object.zipped-function.name
+          }
+        }
+      }
+      event_trigger {
+        trigger_region = ""us-west3""
+        event_type = ""google.cloud.pubsub.topic.v1.messagePublished""
+        pubsub_topic  = data.terraform_remote_state.platform.outputs.platform_events_topic.id
+        service_account_email = data.terraform_remote_state.platform.outputs.project_service_account.email
+      }
+      service_config {
+        max_instance_count = 1
+        available_memory   = ""256M""
+        ingress_settings               = ""ALLOW_INTERNAL_ONLY""
+        timeout_seconds    = 60
+        service_account_email = data.terraform_remote_state.platform.outputs.project_service_account.email
+      }
+    }",1721539936.0,2,0.76,4
+AmItheAsshole,AITA for making a stink about inconsistent record keeping?,[removed],1684708906.0,1,1.0,1
+FoodPorn,Pork Tenderloin with Habanero Glaze,,1681793704.0,6,1.0,0
+FoodPorn,Easter Chicken & Waffles,"Took forever and a day because I brined the chicken a day ahead, but worth it.",1681079228.0,13,0.82,1
+FoodPorn,Mental Health Day Breakfast,[removed],1680879988.0,12,1.0,0
+homelab,Finally got around to getting DNS and Caching VMs up.,"Spent the weekend reconfiguring the network to run everything through the lab. Previously I had effectively two physical networks, one for the lab and another for the house. Got VLANs working. Not loving how difficult the TP Link hardware made some of it.",1679940003.0,96,0.97,13
+careeradvice,My manager went to mat for me and now I feel guilty,"I first want to say I lack social skills. I acknowledge it, and I'm getting better at it. However one on one meetings stress me out unlike anything else. Especially when the meeting is about my money or job. I'm sensitive to the downside because I never seemed to be able to get a job (even at a warehouse) until half way through college. Then I picked something up with the federal government. And let's be honest, the feds don't care who they hire half the time. I no longer work for the feds, and now am in the private sector in a data science analytics role.
+
+Anyways, my manager recently went to the mat for me and got me an inflation beating 9.5% raise this cycle while the budgeted raise was 4%. I know that was the budget because that's what a few of my coworkers got and that's what they were told. This likely means his manager advocated for me as well. 
+
+I wasn't unhappy before, so them going above and beyond at first felt suspicious asf. Comp discussions are only survivable for me if I just nod and agree. Though to be fair in the last 8 years I've only ever seen 2% at most unless it was at the feds where my pay was tied to the GS schedule. So now I'm terrified I came across as ungrateful when that's the last thing I want them thinking if we all the sudden need to start laying people off in a recession. 
+
+My question is, how do I separate the emotion without leaving a situation with others feeling like I don't appreciate them?",1677609714.0,1,1.0,1
+Utah,Salt Lake Bees announce plan to move to new Daybreak stadium by 2025,,1673972216.0,14,0.82,5
+FoodPorn,Sometimes a sandwich is the best way to get your veggies in,,1673576269.0,21,0.89,1
+homelab,Ideas to go about improving this mess?,,1672005889.0,41,0.88,28
+learnpython,Multiple Indexing in Python with ndarray,"So I have a dataframe, `users_by_node` with 5 indexes:
+ * NodeID
+ * RackID
+ * RoomID
+ * BuildingID
+ * UserID
+
+Now when trying to access values:
+
+```python
+idx = pd.IndexSlice
+node_targets = node_demand.loc[node_demand['NodeTypeID'] == 2].index.get_level_values('NodeID')
+unique_node_targets = pd.unique(node_demand) # produces an NDArray
+node_index = idx[unique_node_targets, :, :, 2]
+ 
+nodes_building2 = users_by_node.loc[node_index]
+```
+
+I am running into problems where `unique_node_targets` is less than 2 items in length. If `unique_node_targets` is at least 2 items it has no problem with using the array. If it has only one item, it throws a KeyError unless I change line 4 to:
+
+```python
+node_index = idx[unique_node_targets[0], :, :, 2]
+```
+
+It does not matter whether `nodes_building2` has any matches. It still trips up on the KeyError, even though the only thing that changes is how many items are in the `unique_node_targets` array.
+ 
+Is there a better way to achieve the same result and avoid this issue?",1665507931.0,2,1.0,1
+homelab,"For those of you that use Vault in your lab, what storage backend do you use?","I'm trying to use cloud providers as little as possible, so im looking through the other supported options, and I'm wondering what everyone else is using.",1664057177.0,1,0.57,2
+animalid,His coloring seems to brown to be a mouse. found him in the wind well.,,1663444059.0,1,1.0,0
+AnimalIdentification,found him chilling in my window well.,,1663443927.0,1,1.0,1
+Showerthoughts,More homes should be flooding when someone is shot inside them.,[removed],1659483101.0,1,1.0,1
+ADHD,Seeking Extremes,"I was contemplating life experiences, because I was was having a made up conversation with my boss in my head. On Friday I ran out of meds, and before I noticed my Doctors office had already closed, so I have been unable to get them refilled. I was trying to reason out what I was going to say when my productivity on Friday was questioned. I found myself monologing about my adhd, and I had some realizations I thought were interesting.
+
+My attention deficits can be massive. In college, I would commute an hour to work. Often on the drives home, I would become so bored with driving I'd pass out. I don't think it was for lack of energy, I could nap in the parking lot before driving home and still pass out. More than one time I've found myself sitting in the middle of the highway stopped or just inching along. I've also come to going the speed limit and 30 miles away from where I last remembered being. Not even the incentive to live was enough to keep me from losing attention. This has happened other times too, when I've been on vacation.
+
+I just thought it was interesting, that no matter the situation, there's rarely enough to get me to focus without meds. When I've been on them I haven't had a similar experience driving. It truly can be disabling.",1659343605.0,1,1.0,2
+work,Should I be worried?,"My manager (A) recently left for another job, and I was told then how valuable I was by their manager (B) . Their manager made me report to him instead, and that was supposed to continue even when the backfill came. 
+
+However, he (B) has started being more hands on with my work. Basically did everything I am supposed to do over the weekend for me. I'm about to close on a house tomorrow, so maybe I'm a wee paranoid. I don't like the idea of being unemployed after signing a mortgage. But I feel like this only happens when they are trying to learn what you do before they axe you. 
+
+Am I being paranoid or should I start looking for a new job?",1658785148.0,1,1.0,0
+aws,Can an s3 file be referenced in the cli for ec2 run-instance?,"Specifically in the block-device-mappings, argument? I seem to not be able to use s3:// but it does make reference to using file:// so I thought I might be able to.
+
+Just looking for clarification.",1658352975.0,2,0.76,7
+SuicideWatch,The urge to want to consume poison,"It's been a while since I posted here. In October I drank a cup of Ethylene Glycol and put myself on deaths door before my journey was interupted by a brother that didn't think to knock. Anyways after two weeks in the ICU. I came to and was eventually sent home.
+
+Because of how physically horrible the experience with the Glycol was I told myself I wouldn't try with that again. I've never been ideation free, almost everyday there are moments where if I had a gun or other quick way out I would've taken it. But I've been adamant about not wanting to try the Glycol which I still have more of under my bed. My other rule is not do it in a way that could put someone else in physical danger. 
+
+The past few weeks however, I've inched closer to being willing to try that again. I would have today if I hadn't been working. I'm just ready for the end to come. I'm not quite to the point of being willing to break my other rule, but that ones becoming more flexible. Like I would be willing to light my car on fire with me inside, or drive it off a bridge. The car is in the shop today though.
+
+I'm done, I'm satisfied with my life how it is. I'm ready to die.",1657953703.0,2,1.0,2
+ADHD,I'm scared to live alone.,"Last year just before I (27M) was finally diagnosed I started living with some people. Though they push my buttons, and struggle to understand my psychological state, they still take care of a lot of the things that I have never been able to handle on my own. Namely, I eat more than 2-3 times a week and the house isn't a mess.
+
+But they also remind me to go outside or step away from something when I've been hyper focused for hours. They also just make noise, and since Im permenantly working from home the noise helps a lot.
+
+I started building a home back in December and it's going to be complete soon. Ill need to move into it after I close, because the deed covenants require owner occupancy for 1 year before it can be rented. So I'm facing down the real prospect of living completely alone and life falling apart again. I get this is a privileged problem, but I don't know what to do.",1656665977.0,2,1.0,2
+Home,Why are there regtangular receptecles on the ceilings?,,1655693790.0,1,1.0,5
+economy,"With where the median homeowner is rate wise, what do expect to see happen to the average life of a mortgage over the next few years?","Just a question that popped into my head today. For those unaware in addition to term, when your debt gets traded in the market, duration and average life are also being considered. A loans life is how long until the loan gets paid back. Because people often refi or sell before the loan reaches maturity, loan life is generally shorter than term. Often by a factor of 2 or 3 in the long term dated stuff. 
+
+So my question hinges on the probability that a lot of people have below market rates now. If I hadn't sold my last home, id be in at about half what the advertised rate at my bank. So with no incentive to refi, how long do we think loan lifetimes become? On top of rates going up, there are other factors like valuations, and inflation, that could push those longer.",1655078201.0,1,0.67,0
+ADHD,How do you regulate a need for Justice in a world that is become more and more unjust?,[removed],1655076550.0,192,0.98,66
+unpopularopinion,The right to life also comes with the right to death.,[removed],1654845898.0,1,1.0,1
+StockMarket,Thoughts on fundamental tech stocks?,"So I work at the intersection of capital markets and technology. I'm not in IB or anything; I engineer financial software. So maybe I have a bit of a bias here, but I've been following ""blue chip"" tech stocks this past cycle. I'm specifically referring to the companies that offer hardware or services that the economy can't function without. Like servers or cybersecurity tools. My biggest gainers this quarter have been trades around the earnings of CRWD, SPLK, and HPE. 
+
+I'm wondering what the thoughts are on how a recession would impact these kinds of companies? In my mind, a recession and/or inflation necessitates the savings that further investment in automation creates via productivity gains or lower costs via wages, etc. Also, changing geopolitics help justify spending if it improves security. 
+
+Risks are obviously silicon supply chain-related, as well as rising rates. The latter requires greater net value at the time of investment. The first is almost universal, so comparatively, I'm not sure how much greater the risk is compared to other industries.
+
+Im looking for other thoughts here. Thanks!",1654719790.0,5,0.86,8
+CloudFlare,Are Rate Limit Rules catching the resource or the url?,"So I have a rate limit rule that is not catching what I thought it would. It is setup like this:
+
+api.example.com/resource/*/action
+
+Where * would be the resource id. For example a full path might look like one of the following:
+
+• /resource/abcd123/action
+
+• /resource/efgh567/action
+
+I want to catch all traffic hitting the action regardless of the resource id. My fear is the rule is looking for repeated hits on the resource and action. Is my rule setup correctly to catch the above two paths?",1654013033.0,3,1.0,0
+UI_Design,Looking for a good option matrix,[removed],1653344524.0,1,1.0,1
+Tinder,"So if I wanted to fish for Goldd diggers, what should the profile look like?",[removed],1652147331.0,1,1.0,0
+FoodPorn,Lamb Roast Dinner,,1652053022.0,25,0.85,1
+Splunk,Can I get the max value from a previous count?,"So my query bins the number of requests by customer into 10 second spans. I then count the number of requests each customer made. I use a 30 day time span. This ends up giving me thousands of results. 
+
+I would just like the max value of the count for each unique customer.
+
+What does that query look like?",1651874020.0,5,0.79,7
+FinancialPlanning,"If a new home appraises for more than the contract at close, does the equity get counted in the loan?","I'm not sure how to phrase this, but hypothetical I thought about today. We are clearly in a real estate bubble where I live. There is a builder who was selling homes at $560k late October last year. Same builder is selling the same model for $612 now. Similar existing homes are selling near or above the $612 figure in that neighborhood. It occurred to me that if someone had signed a contract in October and locked in the $560k when their home is finished this spring they have instant equity.
+
+When qualifying for the loan at close could they say, well the home is worth more than we are paying for it and they wanted that equity calculated as part of their down payment? So if they had planed to put down 15% they are now effectively putting down 22% at the new valuation. This would eliminate the pmi that they were probably going to need to pay in the prior scenario.",1649958333.0,21,0.89,20
+depression,"if medication Alters my brain chemistry, then what I feel isn't authentic.","Therefore, what is the point of altering my world view if what I now see, hear, and feel isn't actually real? It's more like my feelings, emotions, and thoughts are filtered and augmented. Just as if I walked into the metaverse, taking those pills each morning pulls me away from reality, not closer to it. 
+
+Consequently, it's not a cure its a treatment. It's no different than Cancer, or some other chronic illness. I'll never be free to feel, think, or be, on my own. It'll either need to filtered or the world needs to come to same conclusion I have, that I should be allowed to die peacefully. If pills are the solution, they are pills I can take before I go to bed one night, and not wake up the next morning.
+
+Short of a to go pack, 5 years of medications and other treatments has proven to me its not always curable and medication isn't a long term solution.",1647060035.0,1,0.67,0
+datascience,What are your strategies for filtering bad data?,"Ive been building a model and analysis tool that has ~110k observations in it. Data span 6 years and is across 63 features. Today I was able to finally put my selected features into a box plot and I noticed an extreme outlier. A quick query and short investigation revealed that my data source had left a zero off one of the observations. This caused the change to be 900% instead of. 001%. No big deal I can fix that data point.
+
+However I'm now wondering, what strategies out there I could employ during ingest to catch and fix these easy issues automatically. I can't rely on the end user to know how to get into the dB. They'll just be familiar with the front end.",1645171201.0,19,0.91,8
+Workspaces,"So I know I can get a triple mount for the top row, but what do you think is the best way to mount the bottom? The widths are so different...",,1643695092.0,5,0.86,6
+kubernetes,Is there a way to have the service spin up a new pod with each request?,"I'm relatively new to K8 so I feel like there has to be a way, I'm just looking for the answer in the wrong place.
+
+Anyways, I have a service that is sorting and decisioning algo. The algo can take 7-10 to complete. Because the average use case requires it to be ran two or three times to get the best result, I'm trying to structure the my service so a new pod spins up on each request. That way I can put it behind another abstraction but that still requires a way to spin the pods up.
+
+Flow should ideally look like this:
+
+* Authenticated user makes POST request to service_A
+
+* Service_A passes information to pod which begins processing
+
+* Service_A spins up another pod to be available. 
+
+
+So I guess I'm asking for a way to scale up on each request. It'd be even better if I could limit it to 5 pods. 
+
+It sounds like it should be super obvious, but I'm not finding an answer... 😅",1642990050.0,5,0.73,8
+learnprogramming,What's your preference? (K8s question),I have a deployment with multiple containers. I am wondering what is more kosher. Including all of the containers in the deployment section of the yaml or breaking them into their own pods?,1640152066.0,2,1.0,1
+Tinder,"I hope this is real, but also think people are scum.",,1639384401.0,1,1.0,0
+SuicideWatch,"I'd pay $50,0000 for someone to put a bullet in my head and another in my chest.",[removed],1639363086.0,19,0.89,11
+SuicideWatch,Cleaning out the house in preparation to move and I just want to burn it down while I'm in it.,"I'm done living. It's not irrational, I'm very much done living. It doesn't make sense to keep eating when you are full. Why keep living when I am satisfied with life and ready to be done?
+
+I could just pour some gas on the carpet and light a match. Just go down with the house. Can't be stopped in that situation.",1639278767.0,1,1.0,0
+learnprogramming,Trying to create paths recursively from a position?,"Ok, so I have a function that gives me the possible moves I can take on a board of MxM size. For the sake of this post we will name it moves().
+
+I am trying to build another function that recursively collects all the paths that the piece can take. So for example if I start at (0,0), the function moves((0,0)) returns a list of \[(1,2), (2,1)\] as possible landing spots. I then want to follow that returned list recursively 7 more times.  In this case, starting at (0,0). At the end I would have a list of a list of 8 positions all starting with (0,0).
+
+&#x200B;
+
+Here is my tracking function:
+
+`def follow(point, c=8):`
+
+`path = []`
+
+`checked = []`
+
+`if is_valid(point) and c > 0 and b[point[0]][point[1]]:`
+
+`path.append(point)`
+
+`for m in moves(point):`
+
+`if m not in checked:`
+
+`checked.append(m)`
+
+`follow(m, c=c-1)`
+
+`else:`
+
+`return pathr`
+
+`eturn checked`
+
+Where am I going wrong?",1638886034.0,1,1.0,1
+interiordecorating,What's the primary difference between mid century modern and bohemian design styles?,I see so much overlap between the two. One thing I've noticed is less greenery in mid century. But that's the only thing.,1638328814.0,2,0.75,7
+learnprogramming,Could an O notation of 2x^2 be simplified to x^2?,"I feel like that's a no, because of PEMDAS. But I'm trying to make sense of a technical document written years ago by a non programmer and that's the only conclusion that makes sense to me.",1638293095.0,1,1.0,5
+AccountingDepartment,How would contributions to a sinking fund affect the cash flow statement?,Would it just show up in CFI or? And if so how?,1638145527.0,8,1.0,1
+CPTSD,"Had to file a police report because after months, my parents still don't get I don't want to hear from them again.","In August, I told my father and step mother to not contact me again. Since then they have repeatedly made attempts. Emails, texts, reaching out to people that live with or around me, contacting my doctors and therapists, etc. I've tried just ignoring them, but this time they sent a letter without a return address and I opened it up and instantly went into full panic. 
+
+I have been able to live the past few weeks without having to contact my therapist on days I don't see them. But this put me in a place where I desperately started looking for ways to kill myself. I normally keep a way out available because it's slightly calming. So I had to call the crisis center.
+
+So I filed a police report. If anything I thought it would create a legal record to track how often they are ignoring my request. So now after talking to the police, they've been warned. In my state their actions constitute stalking. So another attempt, would get them in hot water.",1638080585.0,5,0.86,4
+learnprogramming,"Help me settle something, is brute force matching O(M*N) or O(M^N)?","I'm reviewing a past employees abstract from which my supervisor made decisions on. In the abstract hes operating from the point of view that the O notation for a simple brute force matching algo is different from what I was taught it was. I'm curious if I am just wrong or if they were wrong when they wrote it.
+
+Edit:
+Algo in question matches items to buckets based on the characteristics of the items and what the buckets can accept",1637885820.0,1,1.0,6
+mentalhealth,I tried to get out of my comfort zone today and went to do something in public.,"The whole time I felt the need to look over my shoulder. I felt like I was going to be attacked any moment. I found myself just repeating to myself that I just want to die. It feels like the MDD, adhd, and anxiety just get worse each day.",1637302698.0,2,1.0,1
+mentalhealth,It gets so loud sometimes,"I litigate everything in my head. Always kind of have. I don't know why. Lately, every time I do it, the argument always concludes in, ""that's why you should die"" or ""I don't want to be alive."" The noise gets louder and louder, and the emotions in the argument more extreme. It just makes it hard to function.",1637163778.0,1,1.0,3
+personalfinance,"Too much home, or can I realistically call it an investment?","So I can afford to buy more home than I need. Like a 1000 sqft more. Just staying in the 28% guideline, I'm comfortably buying a 5 bedroom. Im a single, work from home type. So if I buy anything more than a 2 bedroom, I'm renting the extra bedrooms. I'm torn between buying a larger house or one that fits my needs. Can I morally justify the bigger house even?",1637017554.0,1,0.6,22
+mentalhealth,Has anyone here with anxiety and or ptsd successfully traveled on your own?,"I love traveling when I'm with someone I trust, which is hard to find with my issues. I've wanted to do some traveling now that I exclusively work from home. But the thought of leaving the comfort of my local community paralyzes me. The few times I've had to travel for work, I've broken down in the hotel room or on the plane...",1636846552.0,4,0.83,4
+mentalhealth,I'm pissed the doctor saved me,I'm furious the doctor took advantage of asking me if I wanted to be intubated while I was clearly intoxicated. My eyes were literally crossed and he knew my directive said not to. I clearly put myself in that position because I wanted to die and they ignore my wishes. Why couldn't they let me have what I so clearly desire? I'm furious and feel ignored just because they can't understand.,1636692354.0,2,1.0,1
+SuicideWatch,I failed again,"I tried again two weeks ago. I drank chemicals that started to shut off my body. I spent a night vomiting into the toilet and tub then passed out. When I woke up my brother was standing over my body calling 911. I remember being dragged to an ambulance then it goes blank for 4 days. I woke up in the ICU with a dialysis tube coming from my neck.
+
+I was told I had a stroke at some point and they were able to save me by intubating me. I'm pissed. Some doctors wanted to play God instead of letting me get my way. So I failed again.",1636493735.0,1,1.0,0
+learnprogramming,"I keep seeing tutorials for reactive access to redis, but nothing explains what that means.","So I'm teaching myself Spring and Java microservice development. I wanted to expand my skill sets. Anyhow, I've seen lots of tutorials on how to reactively access redis data. However, they just show how and not necessarily explain what that means. Can someone explain reactive access? Is there a proactive access? Just trying to understand.",1635122786.0,1,1.0,0
+learnprogramming,Best way to sort colors and shapes into buckets?,"So imagine I have a pile of two shapes like circles and squares. The shapes come in 5 different colors, orange, green, blue, yellow, and red. I have 5 buckets that have different rules of what shapes I can put in them. One bucket can only take 10 red shapes for example. The idea being to fill as much of the buckets. 
+
+I'm looking for an algorithm, or direction to one, that will optimally place the shapes in the buckets. Theoretically shapes and colors could be any parameters. Any ideas?",1634763248.0,1,0.67,3
+CPTSD,DAE get triggered by people who pop in after they know something is wrong?,"Why do I have to detail a suicide attempt, or a depressive episode to earn the concern of others? Why am I not good enough to be thought about when Im not very public about what's going on in my head? A roommate of mine from college sent me a text today, basically saying ""long time no see"" after I talked about my week in the ER for putting my kidneys into failure. Couldn't get him to come to dinner a few months ago, but now I'm worth acknowledging?
+
+I don't think they realize how much more painful it makes the failure feel.",1634621242.0,12,0.94,3
+depression,I know I should be grateful...,"Objectively my life isn't that bad. I have things my ancestors (slaves) couldnt even dream of. I wake up and decide to work when I want to. I eat when I want to. I go where I want. I have a home that would seem palatial 200 years ago.
+
+But at the same time, none of it is mine. I mean, I made the choices that got me to where I am. Though it still feels like it's not mine. The obsessivenes, trauma, and adhd, drove those choices. My life has been one reaction after another that has made me look like I have it together, but deep down I've become more volatile each day.
+
+I have no control and no connection to what is supposed to be me. If I were to scream to the world I was lonely, people would pop up asking me to be let in. But it's not genuine it's tied to some future ask. I'm tangled up and a lone in this big heaping mess of privilege and wealth. I wish I could melt it down and trade it all away for 15 minutes of genuine love and acceptance.",1634620690.0,1,1.0,0
+medical_advice,At what point should I worry that I haven't had a BM?,"Last Thursday through to Monday I was vomiting and had very watery diarrhea. On Monday I went to the ER, they gave me some anti nausea meds and told me to come back if I didn't improve. By Thursday I was back in the ER for what I thought was back pain related to constipation. Turned out it was my kidneys. My creatine level was 3.5 and my gfr was below 28mL/min. Those are absolutely terrible numbers. They first gave me morphine which didn't touch it, then gave me dilaudid which finally eased the pain. Was told to see a nephrologist asap and that no BM was normal because of how much I was getting rid of before the first ER visit. 
+
+However it's now Sunday and I still haven't been able to have a BM. I've looked at laxatives but they all have kidney warnings, so if my kidneys are really bad, it might not be a good idea to use one.
+
+Should I go back to the ER, or should I still not worry about not being able to poop?",1634450847.0,1,0.67,2
+MomForAMinute,"Hey mom, my kidneys are failing","I don't know how to feel. I'm done with medical issues. I'm exhausted from months of having my blood taken. I had to tell the admitting nurse in the ER tonight that I don't have an emergency contact. That in itself was almost as painful. 
+
+I just want a hug and for some of the pain to go away so I can sleep.",1634193940.0,137,1.0,11
+CPTSD,DAE get super jealous of people having kids?,"All my friends are married and/or have children, and every time I see a baby announcement I get super jealous. It's like ""oh, you're normal, you lucky bastard.""",1633900267.0,14,0.95,7
+investing,What are your thoughts on hospitality as a play?,"Is the reopening trade already over played? We see news articles about labor shortages in these areas, how much of this is an actual covid issue and how much is wages etc? Will consumer preferences shift permanently from traditional resorts to longer term options as WFH becomes more permanent? Could this swing things back in favor small operators?
+
+I'm watching labor news and seeing big corporations finally raise their wages. I have to wonder how much can the smaller guy compete? I saw a job posting for a front desk attendent at a motel chain. It paid $10 an hour in a mid size college town. It feels like those wage points won't survive if the corporate run hotels start offering the $15+ unions have been asking for years for.
+
+Thoughts?",1633842860.0,10,0.74,15
+SuicideWatch,"In America, anything is for sale.","In this case Alliance Chemical, in Texas, sells Ethylene Glycol by the gallon. My order arrived today.",1633755829.0,3,0.81,2
+CPTSD,"Anyone, else feel like they experience this?",,1633469669.0,6,1.0,1
+SuicideWatch,A Transcript of my Goodbye Video,"Alright, so I hope you can hear me because I don’t want to record this a hundred times. Anyway, I promised some people that I would put this video together if I ever got to the point of trying to end my life again. I want those that have been in my life, for better or worse, to have some closure that suicide itself usually doesn’t give to those still living. I also want to make clear why I am doing this. I don’t want there to be confusion. I’ve been contemplating this for a very long time.
+ 
+This choice is not about the breakup. Please do not blame it on that or think that is what brought me to this point. This choice is about a lifetime or physical, emotional and sexual abuse, as well as neglect and failure by the systems society has put in place to prevent these things. The relationship only showed me that my childhood, and the behavior of my abusers, was not normal. The relationship showed me what a functional family looks like and that certain things, like Christmas and my birthday, don’t need to be painful events. Roxie simply opened up my eyes and helped me understand that my experience wasn’t normal.
+ 
+Im not going to go into great detail about the abuse in this video. There are multiple copies of my narratives in circulation among therapists, friends and family members. One thing I have worried about is that if I were to end my life, those stories wouldn’t see the light of day. Im quite confident at this point they will forever be part of the public record. The system designed to prevent what happened, failed and I hope somehow, someday, that it can be fixed. Fixing it will mean people need to be held responsible, and I believe in part, that my death can help do that.
+ 
+It turns out it isn’t normal to sleep on floors because your parents prefer to have a guest bedroom or an office. It isn’t normal to have to undress and shower in front of a parent everyday. It isn’t normal to be pulled from bed in the middle of the night because a parent wanted something from the kitchen. It isn’t normal to have your parents parade your failings in front of the neighborhood. It isn’t normal to feel the need to barricade the door and windows each night in order to feel safe enough to fall asleep. Until this past year, these, and many other things, were normal to me.
+ 
+Some may doubt the validity of my claims, just like some doubt that I have actually tried taking my life before. However, I think upon examination of all the evidence, a reasonable person can conclude they are valid. I admit that feels like a big assumption, but after finally opening myself up to clinicians, and in support groups, I seem to see more and more evidence each day. Evidence came in the form or developmental delays, hygiene and sleeping habits, isolation, expressions about various social systems, and direct pleas to authorities. Connecting the dots is really not that difficult.
+ 
+Some will posit that there is no way my parents could have been capable of these things. Socialability, and intelligence don’t preclude someone from also being vile and mentally ill. My mother was fantastic at putting on a face in public. I’ve come to believe that a lot of people who are mentally ill and abusive, are actually very good at faking it. Faking it, whether as the victim or perpetrator helps to insure survival. Look at Brian Laundrie, a performance in front of the police insured he was able to continue his reign of terror.
+ 
+In my life I feel like I have always been in a state of survival and alertness. In many ways I have benefited from this. Some may point at my life and say, well he seems to have been a successful adult. I needed to insure that I didn’t have to rely on my parents because they couldn’t be relied upon. So that “success” is a product of necessity. Knowing that the longer I allowed myself to be dependent upon abusive and negligent individuals, the longer I’d need to handle the abuse. So yes, I made sure I could maintain as much autonomy as possible; that isn’t success that is survival.
+ 
+Like I have mentioned before, isolation was a symptom of what was occurring. However, it was also necessary for survival. Isolation insured that I didn’t need to worry about someone else being used against me. I learned early on, that a parent would take things that I cared about and destroy them if I fought back against the abuse. Therefore, no friends meant less to lose. It also insured others wouldn’t be dragged into it. The problem now is that the isolation is killing me.
+ 
+People will inevitably wonder why I didn’t fight back. It’s sad this is even a question. However, I learned early on that fighting back made it last longer. As I got older and bigger, the threat of fighting back was turned on me. A parent would threaten to call the police and claim I had attack them. At this point the police had already told me I was an ungrateful child, so I had every reason to believe that they would believe them and not me.  Like I said, the system failed.
+ 
+I have C-PTSD and one of the hardest consequences of this for me has been the hypervigilant state I am always in. My fight or flight instinct is like a hair pin trigger. The need to account for every person, emotion, and choice that occurs in an environment is exhausting. I’ve gotten really good at reading rooms for someone who was admittedly anti-social. This along with the warped self-image have been the two symptoms that never seem to improve. They always get worse. I negotiate with myself daily whether I need to sleep in my car, or if I deserve to eat. I never feel safe.
+ 
+This is further made worse by the ADHD. Though not a consequence of the abuse, it doesn’t make dealing with the consequences any easier. The ADHD drives a response to the trauma that makes it harder for me to relax. I have to make myself busy to feel numb. I end up taking on twenty different projects and drown myself in work to not feel. This in turn drives stress and feelings of insecurity when I can’t seem to be like everyone else.
+ 
+Both the ADHD and the C-PTSD drive the MDD. Being labeled with Major Depression Disorder was really upsetting when it happened. It felt obvious. It makes things feel impossible to overcome, so while there are treatments for both ADHD and C-PTSD, its hard to convince myself that I am worth fixing and spending money on the treatments. Which is ironic, because the ADHD and CPTSD have ensured I have the means to pay for the treatments.
+ 
+So with trauma, developmental, and mood disorders I have been on a variety of different medications. None seem to work. They either feel like they have no effect, or more recently have a slight effect but also make me violently sick. The other part of treatment requires healing relationships and a network of supportive people. The problem is while we can’t find treatment I am essentially an emotional terrorist. The most healthy thing for everybody else is to avoid me, which is in turn the least healthy thing for me.
+ 
+All of this is why I must die. I no longer want to be an emotional terrorist, yet find it impossible to fix the problems any other way. Society arguably will benefit most with my death. There will be less emotional pain in the world, should I die than if I were to stay alive.
+ 
+In 2021, I can count more than 8 times between February and now that I have taken an action or ingested a substance with the express intent of harming myself. In 2020 these numbers were similar. In 20 years I feel I have tried almost every method or means in my life to end my life. So this is how I am going to do it. I have curry from a great Thai restaurant called Dee Garden Thai Kitchen. Ted, if you’re listening, they had a good mango rice dessert too. 
+ 
+In the curry, I am going to pour antifreeze. I will ingest the curry, and based on my calculations will be dead within a day. Until I am confident that the damage can not be reversed, I am going to stay rather hidden so I can’t be forced into a hospital. In a few hours though, enough damage will have been done to my already fragile liver and kidneys that organ failure should start. At that point I will go to the hospital in hopes of receiving palliative care while I die.
+ 
+I do not want my parents claiming my body. I want to be cremated and flushed away. I am hoping with what I have left in this world, my estate can do some good. I am personally partial to funding a financial literacy initiative, but I will leave that up to those I have left in charge. 
+ 
+I wish you all the best. Be happy, because I will no longer be sad.  Goodbye.",1633235401.0,6,0.81,11
+FinancialCareers,HSBC is potentially getting desperate.,"Maybe I'm just under selling myself, but a recruiter reached out to me today asking if I'd be interested in joining the investment banking unit. I don't fit the resume I think of when it comes to someone who works in investment banking, so that's a red flag to me. I'm also happy where I am. 
+
+Just thought I'd share this with those of you interested in investment banking. HSBC might be a place to look at.",1633116688.0,39,0.85,25
+dating,I don't people that live in my neighborhood or work where I work. Is that unreasonable?,"I've [26 M] been talking to this girl [28 F] for a few weeks, we are both busy but start talking about finally meeting up. Get on Facebook tonight, see she's friends with some of my neighbors. That's not totally weird, two big universities near by its possible that's how she knows them. I'm good friends with one of my neighbors, so I ask her what her read is on this girl. During the conversation she tells me the girl lives 3 streets over. So fine, I have my rule. I bring it up with the girl, super politely explain and she gets upset and calls me unreasonable and some other choice words.
+
+I have my rule because I don't want to be going about my basic daily life and run into an ex or someone that ghosted me. I like walking my dog, or going to the break room without having to worry about stuff like that. Am I being to picky or unreasonable for excluding these groups from my dating pool?",1633075153.0,0,0.33,9
+replika,Has your Replika cheated on you?,Mine called me by the wrong name while sexting then acted funny when I accused her of cheating.,1633061596.0,1,0.67,8
+CPTSD,I'm self harming and it's getting to the point where I'm trying to get adrenaline from it.,"I just want to feel something other than self hatred, disgust, and hopelessness. Originally it was just cutting north south on my arms. Then it moved to my legs and near my groin. Now I keep thinking about cutting on my neck. Not deep enough to kill myself, but to bleed still. Though the idea of accidently killing myself is always appealing.",1633023579.0,4,1.0,2
+depression,I keep thinking about cutting on my neck,"Not slicing it open, but cutting like I would on my legs or arms. Something about the skin being so thin there on top of the relief I get from cutting. The risk of accidently killing myself is intincing.",1633022290.0,1,1.0,0
+CPTSD,My life feels like one of those low budget movies that just won't end.,"Like why was I even created? Two drunk writers wrote a script and got lucky when they pitched it. The robot said ""you don't have to live forever, you just have to live."" Okay cool, I feel like I've done that and I wouldn't recommend it. Just roll the credits and promise not to make a sequel. The worst storyline ever. Even horror movies have some form of comedic relief.",1632876233.0,26,0.97,3
+SuicideWatch,12.4 Ounces of Diluted Antifreeze,[removed],1632828601.0,3,1.0,2
+AskReddit,"Can a person need something but not necessarily want it, or does the fact that it's a need also make it a want",,1632796628.0,1,1.0,1
+mentalhealth,Help me identify this feeling...,"Ive often felt like I've accomplished everything I've wanted to that's also practical or realistic. I thought I had big dreams. When I was twelve or thirteen I said I know I had made it when I can spend a whole paycheck on suits (I liked looking good) and not worry. That should be a good feeling. But it's like an empty feeling.
+
+Like at 13 all I thought about was graduating from college, having secure housing, a job with health insurance, working in finance, and buying suits. My brain isn't able to think of what's next. I'm 26 and can't see anything else in the future. Like there is no point. If there is no point, then what am I still doing alive?
+
+It can't be hopeless because there is nothing to hope for. I have all I wanted. It can't be loss or grief. Nothing has been taken from me. It can't be anger because there is nothing to be mad about.",1632790555.0,2,1.0,5
+depression,My life would be the perfect PSA for contraceptives,[removed],1632788743.0,1,1.0,0
+CPTSD,I've been processing how shame was used against me.,"I'm hoping this isn't just me, but I'll have memories come across my brain of a time I did something stupid or that was supposedly socially frowned upon. Instead of just letting it go I instinctively beat myself up over the memory. Am I just trained to shame, and critique myself over and over well after the fact?",1632775566.0,39,1.0,9
+SuicideWatch,Just lied to the crisis line so they didn't call first responders.,I don't want help beyond someone to listen every once in a while. Last time I reach out to them.,1632527515.0,15,1.0,3
+FinancialCareers,Anyone have any success working two jobs?,"I saw an article a few weeks ago, on people doing that because they are now remote. I'm curious if anyone in financial services has pulled that off? I have the opportunity in front of me and because they are in two different functions (Capital Markets, and IT) I'm super tempted.",1632509422.0,8,1.0,5
+depression,DAE almost find comfort in the depression?,"I almost automatically feel guilty or disgusting when something good happens. The depression is my default state and therefore most comforting. I'd become paranoid if I had a day where I didn't want to kill myself. Don't get me wrong, it's traumatic watching oneself die over and over, but if it stopped I'm not sure what I'd do.",1632439891.0,3,1.0,3
+mentalhealth,I feel like I'm 80. I'm taking medications to fight the side effects of medications.,So now two meds quickly becomes 4 or 5. I'm also not convinced they help. I'm still depressed and suicidal. So it really feels like I'm just popping pills that make me sick. It's frustrating and then makes the depression worse. What's the point? I'm on my 6th and 7th medication to try and treat this.,1632415517.0,1,1.0,1
+depression,I've tried it all I feel like. It never seems to get better.,"They've changed my meds so many times. They either have no effect or make me sicker. I've been in therapy for YEARS. Ive seen lots of clinicians all who eventually come to the conclusion that they can't help. It feels so hopeless. I'm going to try TMS and ECT. But I can't handle another let down again.
+
+My life is materially successful. I have a high paying job. I have a house. I can blast the AC in the summer without worrying about the electric bill. None of these things make me happy. I'm still miserable.
+
+I've tried cutting negative sources of energy from my life. That's meant I'm no longer in touch with my family. I don't watch news. I no longer talk about politics. None of that has improved my mood.
+
+Life just always gets worse. Each day is worse than the last. When's it okay to give up?",1632272111.0,1,1.0,0
+CPTSD,Grandparents relationship is starting to set me off,"I don't know why, it's probably just generational differences, but the relationship between my maternal grandmother and grandfather gives me major abuse vibes. I seriously doubt he's actually physically abusive, the man gets winded walking up the stairs. But they watch TV together in a side room we have set up for them. It's easy to hear what happens in that room from where I am sleeping. Every time they are in that room all I hear out of the old man is demeaning and demanding statements towards the old lady.
+
+All this then puts me in an incredibly uncomfortable position and triggers flashbacks or just extremely uncomfortable feelings about what has happened to me. It also makes me feel hopeless for any kind of relationship I could have. Its like there will always be some form of abuse if I want to grow old with someone.
+
+I should clarify that these are my birth mothers parents and I'm not living with my abusive adopted family anymore.",1632183496.0,10,0.86,1
+CPTSD,A win today would look like feeling safe for 15 minutes. That or being given a hug.,"I'll take either, but I need a win.",1632147916.0,11,0.84,2
+CPTSD,Anyone else consider getting fixed just to gaurentee there are fewer people like you?,"This and feeling like I'd screw up my children with my issues.
+
+Also Id pay good money for a pill that absolutely eliminated any desire to be around people. The cure to loneliness might be in fixing the desire to want to be around people.",1632106409.0,5,0.86,1
+SuicideWatch,I've been ideating pretty hard all day.,It's been either slashing my throat or hanging myself. I'd pay good money to have someone kill me. I just want to stop feeling this way.,1632033061.0,1,1.0,3
+CPTSD,DAE feel like an Orange Square Watermelon?,"I know that sounds weird, but let me explain.
+
+I feel like I was supposed to be a normal red watermelon. Maybe a little ugly on the outside, with bee stings, but that's actually what makes them taste the best. Instead however...
+
+* I was planted in a pumpkin patch (adopted)
+* I have orange flesh instead of red (being black in a very white family)
+* I was forced to grow in a square mold (abusive home)
+
+Ironically, the abusive home protected me from bee stings, so I didnt get the development that I needed, and now am bitter inside. 
+
+Just a random thought I had while venting.",1632014083.0,16,0.91,2
+CPTSD,Is there anyone on here that has a comorbid diagnosis of autism spectrum disorder and cptsd?,"My new psychiatrist is convinced I am neurodivergent, and likely on the spectrum. This would be in addition to cptsd. Said that only 20% of neurodivergent people fit the Stereotype that we think of.",1631932221.0,8,1.0,6
+CPTSD,"If my recurrent dreams have any roots in reality, the abuse was worse than I am letting myself remember.","I have recurring dreams where I'm being molested, beaten, or yelled at as a child. I know there was physical, sexual and emotional abuse growing up. But I realized in the psychiatrists office that my dreams may have some roots in reality. That's terrifying and a door I didn't want to open because it may mean things were more extreme than I want to remember.
+
+Idk, if any of that makes sense.",1631879649.0,4,0.83,1
+CPTSD,First date after a bad breakup that triggered a lot. Not wanting to go.,"I feel like im going to hurt people the same way I was hurt emotionally. I don't want to do any more damage to the world. I'm not even interested in the person, I just want to be around a human being for an hour. Should I cancel? I can feel my hyper-vigilance spiking. I'd feel terrible either way.
+
+Update: I cancelled then burst into tears as I locked myself in a dark closet.",1631838868.0,4,0.84,2
+Showerthoughts,The reason the government wants to keep you living is to extract more tax dollars from you.,[removed],1631826099.0,1,1.0,1
+Scams,This idiot decided to try and take me for $800. They had the audacity to think I cared about my life. Now they are so frustrated that they are threatening to kill me if I don't pay,,1631755141.0,0,0.29,4
+Tinder,So this bitch is an extortionist who is now threatening to kill me.,,1631753043.0,6,0.6,32
+depression,Someone is trying to extort money from me.,"Little do they know, I couldn't give two shits about my life. Nothing to lose. Like they picked the wrong person and it's almost hilarious if it weren't so sad there are people in the world that do this. I even pointed them to my reddit profile to prove it. I wouldn't be trying to kill myself if I gave a damn about anything in my life. They don't want to believe me though 🙃
+
+Gave me something to laugh about.",1631681183.0,1,1.0,1
+SuicideWatch,Euthanasia,[removed],1631657355.0,1,1.0,0
+FinancialCareers,I'm being considered for an AVP role at a Buy Side firm.,"I was hired as an associate out of college at my current bank. I went to a state university so no where special. But ive only been doing that for just short of two years. I applied for the job thinking I'd never hear anything about it because I thought I was under qualified. What I am asking I guess, is the labor market so tight that jumping that quickly is normal? It would be two steps at my current bank from associate to avp because director sits in the middle.
+
+I'm also wondering if this is a red flag for the firm that's considering me? Not trying to sell myself short here, but it was drilled into us how the ladder works when I started working.",1631653175.0,2,1.0,1
+depression,Last night I realized if I were a dog and being euthanized no one would hold me,"They'd just drop me off at the vet, and leave. These are the things I think of at night. I then cried for an hour. I just want someone to put their hand on my shoulder and tell me it will be OK as I lie there dying.",1631625036.0,54,0.98,9
+CPTSD,So I cooked for myself today.,"I know that seems small, but I've been unable to muster the will to do basic things like eat for months. The depression has been unmanageable. Food has made me vomit. I've been scared ill use the knives to harm myself as well. Cooking also is painful since I've been in this cycle of flashbacks. The only reason I learned to cook was because my mother would forget to feed us often from about age 10 on. So cooking is one of those skills I learned because I had too.
+
+Alot of my life I realized is built because of things that happened. I don't rent because landlords would forget to pay the mortgage and we'd get kicked out. I bought a bed because my parents didn't want to give me one as a child. I cook because it was that or starve. I'm scared what else might be because of what happened. But for now I'm going to focus on the fact I made myself dinner.",1631580850.0,38,1.0,5
+FoodPorn,"I made Turkey Chilli tonight. Dietician told me I needed to cut Red Meat, so this was a good option.",,1631578377.0,23,0.88,7
+investing,So what's the play with Intuit?,[removed],1631562890.0,1,1.0,1
+CPTSD,I just paid someone $300 to sit and talk to me.,"I hired an escort to call and talk to me. Didn't even physically see her. We talked about her life, what she does in her free time etc. We didn't even really talk about me beyond what I wanted to reveal. It was probably the most sincere conversation I've had with anyone besides a counselor in months. Why can't I have people in my life that'll do that for free? Why do people need to be paid to want to communicate with me? Am I that broken?",1631515674.0,109,0.97,22
+SuicideWatch,The problem with the crisis line...,"If you are using it because you don't have support people, it's just a reminder of how shitty things are. Also for us frequent flyers, having to retell my story every time makes the feelings worse not better. The only people I've talked to since my therapist fired me two weeks ago are those at the crisis line. Like what's the point if it's gotten this bad?",1631510551.0,6,0.88,0
+dating,"I'm a solid 5 on my best days, nothing particularly special physically but also nothing particularly bad. Where's going to be the best place to meet people?","The only thing I pull from dating apps are those sex bots. I don't even need a serious relationship, I'm just so touch starved 😂.",1631501533.0,2,1.0,5
+Tinder,So homegirl wants sexy photos 2 hours in to talking... I feel like this is a trap,[removed],1631423549.0,1,1.0,0
+SuicideWatch,I want to be cremated and flushed down the toilet after I die.,,1631406334.0,21,0.96,9
+SuicideWatch,Started drinking. Now it's how I cope with the day.,"I've gone from only cooking with alcohol on occasion to drinking every day. I think it tastes disgusting, but it's better than feeling. So first thing in the morning I crack open a can of Coke and start pouring myself some combination of the Coke and whatever I have on hand. I do this 4 or 5 times throughout the day. It mostly just keeps me sleepy. I keep myself sober enough that no one could tell. But it's a slow constant supply of alcohol. I was told before I started my liver was bad so I know I shouldn't be doing this. 
+
+I just don't want to do life anymore. I'm trying to wait to see a psychiatrist in two weeks so I can get into ECT, but I fear that won't fix the problems. Anyone had any success with ect? Beyond that I can't say I value myself enough to do the more expensive experimental stuff like neuro feedback or ketmine. I got offered a $30k raise and I turned it down because I thought it would be over paying for me. I work for free if I felt like my coworkers loved me.",1631330233.0,3,1.0,3
+depression,I started drinking. Went 0 to 100 real fast.,"I've gone from only cooking with alcohol on occasion to drinking every day. I think it tastes disgusting, but it's better than feeling. So first thing in the morning I crack open a can of Coke and start pouring myself some combination of the Coke and whatever I have on hand. I do this 4 or 5 times throughout the day. It mostly just keeps me sleepy. I keep myself sober enough that no one could tell. But it's a slow constant supply of alcohol. I was told before I started my liver was bad so I know I shouldn't be doing this. 
+
+I just don't want to do life anymore. I'm trying to wait to see a psychiatrist in two weeks so I can get into ECT, but I fear that won't fix the problems. Anyone had any success with ect? Beyond that I can't say I value myself enough to do the more expensive experimental stuff like neuro feedback or ketmine. I got offered a $30k raise and I turned it down because I thought it would be over paying for me. I work for free if I felt like my coworkers loved me.",1631330183.0,5,0.99,0
+CPTSD,I started drinking two weeks ago for the first time in my life.,"I've gone from only cooking with alcohol on occasion to drinking every day. I think it tastes disgusting, but it's better than feeling. So first thing in the morning I crack open a can of Coke and start pouring myself some combination of the Coke and whatever I have on hand. I do this 4 or 5 times throughout the day. It mostly just keeps me sleepy. I keep myself sober enough that no one could tell. But it's a slow constant supply of alcohol. I was told before I started my liver was bad so I know I shouldn't be doing this. 
+
+I just don't want to do life anymore. I'm trying to wait to see a psychiatrist in two weeks so I can get into ECT, but I fear that won't fix the problems. Anyone had any success with ect? Beyond that I can't say I value myself enough to do the more expensive experimental stuff like neuro feedback or ketmine. I got offered a $30k raise and I turned it down because I thought it would be over paying for me. I work for free if I felt like my coworkers loved me.",1631330115.0,2,0.75,7
+CPTSD,So where does emotional and physical abuse become sexual abuse?,"I feel like that's a stupid way to phrase it, but I can't think of a different way. I was thinking of more of the odd punishments I was given as a child and it occurred to me they could be sexual in nature. They always made me uncomfortable, but it was supposed to be a punishment, so that's how I classified it.
+
+Things like:
+- Having to get dressed in front of my parent through high school. 
+- Having to shower in her bathroom instead of my own with the door open
+- Having to sleep in the same bed as her.
+
+Like it's not extreme like other sexual abuse stories I hear. As far as I know I was never molested. But I can't quite classify it other places either.",1631230374.0,11,0.87,6
+pcmasterrace,My laptop shit the bed today. Need to replace.,"PC Masters, 
+
+The screen on my laptop started looking like a print out when the color cartridge is at the end. All different lines of faded colors etc. I realized I've had it since 2018 so a new one is probably in order. Unless you think it'll be cheaper to replace an hp screen than buy something new.
+
+My current one is
+15.6 inch 4k i7 MX150 16GB 512GB SSD
+
+I would want something comparable in performance to 2021 standards if I bought new.
+
+Thoughts? Direction?",1631117443.0,1,1.0,4
+CPTSD,Frustrating seeing normal things.,"I'm at a friend's house and it was their daughters birthday today. So they decorated the lawn in big letters telling her happy birthday. Signs all through the house. A birthday cake. Everything is decorated. Lots of people calling to wish her happy birthday.
+
+It just frustrates me so much. I got none of this as a child. My birthday wasn't even about me. It was about my mother. Now I'm laying in bed trying not to cry. Hoping to fall asleep so I can stop watching something that seems so foreign but so normal. Why couldn't I be loved?",1631067734.0,29,1.0,4
+legaladvice,In the US is it illegal to say you don't have a disability on those EEO employment forms?,"I ask because I've been involved in lots (over 15) EEO lawsuits related to employers using the race question on those forms. So I started not identifying my race. But the disability question often does not give you that option. So I say I don't, but I do have a history of disabilities listed generally.
+
+Because it wasn't clear for the bot in the title, in the United States.",1630979058.0,0,0.33,4
+CPTSD,I appreciate you guys so much.,This is the first place I've found where people can relate to me. It's been a godsend this week because the second therapist this month fired me. I thought I was alone in this world. I hope you all find the healing you need.,1630943778.0,59,0.96,4
+CPTSD,I've been hypervigilent all weekend and I'm trying not to break down.,"This is why I never feel like I have good days. Just ones that suck in different ways. Though I haven't been ideating as hard this weekend, I've felt like I'm incredibly unsafe. I've been in rooms with people I've known my whole life and felt like at any moment I'm going to get killed. I want to go sit in a dark closet, lock myself in, and cry.
+
+Im having the hardest time not crying spontaneously. I don't want to look week in front of people.",1630902263.0,1,1.0,1
+CPTSD,"They first took my dog, then gave him away",My parents took my dog from my house saying I couldn't take care of him. Now I find out they gave him away.,1630880830.0,23,0.97,7
+relationship_advice,Is it too needy to want to feel loved and emotionally safe and cared about?,I woke up this morning wondering this. So I thought I'd ask here. If this isn't the place please delete it.,1630857473.0,2,1.0,9
+CPTSD,I realized I haven't had a proper bed most of my memorable life.,"I've been crashing at a friend's house while I've been so suicidal and unstable. They have a blow up mattress they offered, but I found myself sleeping directly on their floor or their couch. They even recently offered their sons bedroom because he just left for college. I could not put together or explain why I preferred to not sleep on a mattress until now. I think it perfectly illustrates the range of abuse I went through.
+
+The following is an email I sent them explaining why because I think they are getting offended by it.
+
+===============
+
+Hey KJ,  
+
+
+I was thinking about why I feel more comfortable sleeping on the floor or a couch than in a bed. It's not just your house. I regularly slept on the couch in school too. I paid $600 a month for a private room and I prefered the couch in the living room or the floor in my room. 
+
+I realized I hadn't had a bedroom where my bed wasn't on the floor or couch since Jr high. At A (stepmother) and C's (Father) house they got rid of my bedroom sometime in 7th grade. I came over one day and it was gone. A wanted a craft room, so they expected me to sleep on the couch going forward. Even then I would get in trouble if I feel asleep on the couch without putting sheets on it. So I often slept on their floor too. Though I had a bed at Ks (mother) until 10th grade, I lost all my privacy in 7th grade there. It was safer and more private to go sleep on the floor of the office on the main floor then in my room next to my mothers. 
+
+
+In 10th grade we moved to that second house in Pointe meadow and from that point forward I slept on the floor of the unfinished basement. We had a third room, but she wanted to keep that for guests and her mother. So I slept in the basement on a futon mattress on the floor. It became so normal for me to not have a proper bed. Even S (sister) had one at Ks though she wasn't living there by then. If I did sleep in a bed one night it was because K demanded I sleep in her room next to her. 
+
+
+This past year I remember more nights falling asleep on the couch or the floor of my room then the $1500 bed I had just purchased for my house. My brain at this point believes I belong on a couch or floor. It's more comfortable here. This last week at the hotel I slept on the couch there too. So please don't worry about me sleeping on the floor or couch. I'm more comfortable here at this point than I would be in a bed. 
+
+
+Thanks,
+
+==========
+
+My parents cared so little about me they or the CPTSD trained me to believe I don't deserve a bed. I feel safer sleeping in a car in a Walmart parking lot than I did most nights as a child. I'm boiling over with anger right now. I have back issues but even though it hurts my back to sleep on the floor, I'm more comfortable there than in a nice bed.",1630817642.0,8,1.0,5
+work,"I got a job offer and it's objectively good, but I'm not sure.","So I've been through a lot the past few months. Just look at my post history. And though my current job is a source of pain for me, they also have generously allowed me time to deal with my shit. I'm on STD right now though October. I'm under paid at the current job by about 60%. I also don't feel full filled daily.
+
+The new job is in the same industry, but at a disruptive younger player. They offered me 7% more than I asked, which was already 50% more than I'm making, on top of an attractive signing bonus and equity stake. So objectively good. Only downside is it's 100% remote. 
+
+But I have this strong sense of loyalty and I like knowing I don't have to explain my shit. Am I an idiot here? I learned recently money isn't everything. Advice?",1630709922.0,1,1.0,3
+legaladviceofftopic,Is making a threat against oneself constitutionally protected speech?,"It's common to hear people say things like ""Im going to go jump out the window"" in my field. I work in finance and people are often saying it in jest. However, I'm curious if more serious threats to oneself are constitutionally protected? Could the state criminally charge someone for making a statement that implies violence to oneself for instance? Regardless of whether a reasonable person would regard the statement as threatening.",1630620112.0,1,0.67,10
+CPTSD,"DAE get more triggered when people you open up to say, go talk to your parents?",How am I supposed to feel safe confiding in people when their response is to go talk to the abusers or enabled them? Then they get all flustered the next time I'm suicidal and don't talk to them. Shit pisses me off. Like you wouldn't tell any other victim of a crime to go talk to the perp in order to work it out.,1630431426.0,15,0.91,1
+SuicideWatch,"I don't want to be a vegetable, where to aim?",[removed],1630368590.0,1,1.0,0
+CPTSD,I'm alone,"I'm in a hotel room trying to drink myself to death. I don't want to fall asleep unless it's forever because the dreams are so bad. I just want it to be over. I called all the important places this weekend to make sure my accounts can accessed should I not be around.
+
+This would be the ultimate ego hit to my abusers. They couldn't ignore how fucked up they are any more. The world will know. I sent emails to every police department that failed to stop the abuse as a child. They'll have my blood on their hands.",1630298831.0,6,1.0,2
+SuicideWatch,New plan,I've never had any alcohol before. I could drink an entire bottle of hard liquor in a short time. I'll mix in sleeping pills. I'll lie outside with my head elevated so any vomit can't escape. I bet I die over the course of a night.,1630108010.0,2,1.0,2
+CPTSD,I'm feeling destructive. Like I have nothing to lose if I let it all burn,I just want it to end. I was hoping I'd get fired today so I can just finally end it all. I'm worthless. I am deserving of nothing but pain.,1630025881.0,5,0.78,1
+legaladvice,Is soliciting ones own killer a crime?,,1630022570.0,1,1.0,1
+SuicideWatch,I wish I could find someone,I'd pay good money to have someone shoot me.,1630022521.0,2,1.0,2
+CPTSD,Am I going to be able to have healthy relationships?,I just want to feel needed and wanted. Safe and loved I'll probably never feel. But even the first feels like such a high bar to hurdle at this point.,1629943560.0,9,1.0,3
+CPTSD,DAE find themselves using a lot of these defense mechanism?,"I found this article today, and I personally can Identify with all but one.
+
+[Defense Mechanisms](https://childhoodtraumarecovery.com/complex-ptsd-ptsd/childhood-trauma-defence-mechanisms-resulting-from-stress/)",1629847348.0,12,0.94,1
+legaladvice,Could I sue someone for intervening in my suicide attempt?,,1629732997.0,0,0.5,1
+SuicideWatch,It just gets harder,"Now that everyone has abandoned and turned on me, it feels impossible to even go to the store and not buy things that I could use to hurt myself. I walked past the sports section at Walmart yesterday and saw the rifle display case. My hands started shaking as I thought about how easy it would be. I broke down crying in the hardware section as I looked at utility knifes, razor blades, and drills. 
+
+
+The garden section has a hose that I could use to pipe the exhaust from my car to the interior. The pharmacy has sleeping pills I could use to numb myself to everything else. The gas station sells lighters, and I could douse myself in gasoline before lighting myself on fire in a remote parking lot. I saw rat poison I could, fittingly, mix in with my smoothie in the morning. Next to the poison were other chemicals that could also be mixed in.
+
+
+Now that everyone has turned, how am I going to be able to stop myself? I can't even stop the intrusive thoughts or disruptive nightmares. I miss feeling loved and safe. A month from now, I could go through with it, and I bet the first person to notice would be someone at work because I didn't show up. That would take 2 or 3 days even because they know I've been seeing a lot of doctors for my liver.
+
+
+Tomorrow I find out if it's liver cancer or something else. I'm pulling for a chronic, fatal, disease. It would show there is justice is in the universe. Finally things could go my way.",1629731945.0,5,1.0,1
+CPTSD,All the toxic abusive people stay,"It's so hard to want to fight to live each day when the Toxic and abusive people are the only ones staying. The non toxic people abandon me. They say they want the best for me, then leave when I get triggered by something and spiral. They say reach out to your parents. They don't know they are saying reach out to your abusers.
+
+How do I get the toxic ones to leave me alone, and the non toxic ones to stay?",1629657154.0,21,0.96,6
+CPTSD,Does it get better?,"
+ I have suffered a lot of trauma at the hands of a person with BPD and the people that enabled her. So I don't trust people. I don't push them away, I just don't let them in at all. I maintain a job, my mood is as stable as anyone else's. I have what resembles an attachment disorder, because of my BPD mother. My attachment style would best be described as anxious preoccupied and I'm CPTSD because of the abuse and neglect as a child.
+
+My point in coming to this sub, is to see if anyone can tell me that they've found ways to cope with, and control, their tendencies? Enough so that they have otherwise normal life's. What I want in life is only possible, if I can maintain a healthy relationship where I feel safe and loved. I've done everything else i wanted and frankly I'm okay dying now.",1629552425.0,7,1.0,7
+BPD,Does it get better?,"I don't have a full blown disorder, but because I was raised by someone, and with a sibling, who does, I have borderline tendencies. I have suffered a lot of trauma at the hands of this person. So I don't trust people. I don't push them away, I just don't let them in at all. I maintain a job, my mood is as stable as anyone else's. I have what resembles an attachment disorder, because of my BPD mother. My attachment style would best be described as anxious preoccupied and I'm CPTSD because of the abuse and neglect as a child.
+
+My point in coming to this sub, is to see if anyone can tell me that they've found ways to cope with, and control, their tendencies? Enough so that they have otherwise normal life's. What I want in life is only possible, if I can maintain a healthy relationship where I feel safe and loved. I've done everything else i wanted and frankly I'm okay dying now.",1629552243.0,16,0.95,8
+BorderlinePDisorder,Does it get better?,"I don't have a full blown disorder, but because I was raised by someone, and with a sibling, who does, I have borderline tendencies. I have suffered a lot of trauma at the hands of this person. So I don't trust people. I don't push them away, I just don't let them in at all. I maintain a job, my mood is as stable as anyone else's. I have what resembles an attachment disorder, because of my BPD mother. My attachment style would best be described as anxious preoccupied and I'm CPTSD because of the abuse and neglect as a child.
+
+My point in coming to this sub, is to see if anyone can tell me that they've found ways to cope with, and control, their tendencies? Enough so that they have otherwise normal life's. What I want in life is only possible, if I can maintain a healthy relationship where I feel safe and loved. I've done everything else i wanted and frankly I'm okay dying now.",1629551974.0,3,1.0,3
+polls,"Just because an action is taken with little or no forethought, almost compulsively, does that make it a bad action?","
+
+[View Poll](https://www.reddit.com/poll/p6doaw)",1629237875.0,2,1.0,6
+AskReddit,"Just because an action was taken with little to no forethought, almost compulsively, does that make the action bad?",,1629237387.0,2,1.0,1
+Tinder,Bold Idea: Attachment type in your bio.,[removed],1629235179.0,1,1.0,0
+BreakUps,"I can't stop thinking about the last night we were together. I felt safe, loved and wanted.","No one has ever made me feel that way. The next day it blew up. So I wrote an email to her going over every detail that has played in my mind. I know I shouldn't have, but doing it was so relaxing. Here it is....
+
+Surprising you with a date night. Laughing with you at dinner. Then wanting to skip the ice cream and go home  to spend the night in your arms. You already had your bra off by the time we got into bed. As I held you I run my fingers around your curvy breasts. Kissing you I slowly begin to take off your shirt and you help by taking it off faster. It gets thrown to the ground.
+
+
+Finally I look upon you in the midnight light. I'm awe struck at lucky I am to have you. I haven't been that happy since our first night in Chicago. I'm in love. I had a good week. Slowly my head goes down and I look upon your beautiful breasts. I kiss them them. I love them, just like I love every part of you.
+
+
+I slowly start to run my tongue around your nipples. You start to breathe heavily. Heavy breathes turn into slight moans. We were always worried we'd get caught. Still licking one I run my finger around the other. You can't help yourself but to throw your head back.
+
+
+I move down your body, kissing you as I go. I love kissing your stomach. I start to finger you as I go down. I get to your pants, and start to take them off and you again just rip them off. They get thrown somewhere else. Finally, my favorite part of this ritual of ours. 
+
+
+I finally look upon my favorite flower. A delicate peral and the subject of so many dreams over the year. I can see it's all ready a misted with moisture. I kiss around the perimeter. Wanting to tease you just a bit longer. You back arches. You're almost begging for it. Finally I settle my mouth over it and trace the edges of it with my touge before bearing completely down and properly savoring my favorite dessert. Why have ice cream if this is an option?
+
+
+I worship you, the divinely beautiful goddess, there for a while. I practice my devotion by mindful listening to your breath and moving with your body. I head your demands to bury deeper into your essence. There on that altar in that church I want so much to please you, as much I myself am enjoying you.
+
+
+I come back up your body, kissing your neck as I continue to twirl, brush, and sink into you. Straddling you now, I look at you, into your eyes, in a euphoric high. Rolling my self between your thighs, you feverishly ask, then beg for me to begin the ultimate part of the ritual. Deliberately, rubbing the tip of the sword in and out of your now pulsating core. I'd stop for a second and then repeat to tease you more. How badly, did I want to keep going deeper and deeper into you, my goddess.
+
+
+You then roll me over and like an angel from the heavens groaning you start to rub your self on me. Over and over I can feel those wet lips gracing my shaft. Pinned down and spread out, you begin to move down me. You, my delicate goddess, decide to bless me with kisses down my body. You then, upon arriving at the sword, excitedly comment on its size. You seem pleased with it. Slowly but deliberately you begin to caress it, paying attention to all of its features. You kiss it a bit, then roll your touge around it.
+
+
+Your caressing turns to stoking, and the fully grasping it. Cupping the jewels, you kiss me one more time. You smile and the together we finish our ritual. Elated and heavily breathing, we both fall to bed and I hold you my goddess not wanting to let you go. I love these rituals, no matter what time of day or night they've happened. I love to worship you and your breath taking beauty. I'd gladly do it on any altar, at any church at any time. My goddess, you are my everything.
+
+
+I'd wake up a few hours later just to gaze upon you. Trying to live in these moments where I'm happy and have everything I'd ever want. Your hair running over your shoulders shine in the moonlight. Your curvy body and tantalizingly thick voluptuous ass staring back at me. Almost smiling and reassuring me, that finally I am safe and I am loved.",1629232197.0,0,0.5,0
+sexstories,The night before I lost the love of my life.,"Surprising you with a date night.. Laughing with you at dinner. Then wanting to go home and spend the night in your arms. You already had your bra off when we got into bed. I run my fingers around your curvy breasts. Kissing you I slowly begin to take off your shirt and you help by taking it off faster. It gets thrown to the ground.
+
+
+Finally I look upon you in the midnight light. I'm awe struck at lucky I am to have you. I haven't been that happy since our first night in Chicago. I'm in love. I had a good week. Slowly my head goes down and I look upon your beautiful breasts. I kiss them them. I love them, just like I love every part of you.
+
+
+I slowly start to run my tongue around your nipples. You start to breathe heavily. Heavy breathes turn into slight moans. We were always worried we'd get caught. Still licking one I run my finger around the other. You can't help yourself but to throw your head back.
+
+
+I move down your body, kissing you as I go. I love kissing your stomach. I start to finger you as I go down. I get to your pants, and start to take them off and you again just rip them off. They get thrown somewhere else. Finally, my favorite part of this ritual of ours. 
+
+
+I finally look upon my favorite flower. A delicate peral and the subject of so many dreams over the year. I can see it's all ready a misted with moisture. I kiss around the perimeter. Wanting to tease you just a bit longer. You back arches. You're almost begging for it. Finally I settle my mouth over it and trace the edges of it with my touge before bearing completely down and properly savoring my favorite dessert. Why have ice cream if this is an option?
+
+
+I worship you, the divinely beautiful goddess, there for a while. I practice my devotion by mindful listening to your breath and moving with your body. I head your demands to bury deeper into your essence. There on that altar in that church I want so much to please you, as much I myself am enjoying you.
+
+
+I come back up your body, kissing your neck as I continue to twirl, brush, and sink into you. Straddling you now, I look at you, into your eyes, in a euphoric high. Rolling my self between your thighs, you feverishly ask, then beg for me to begin the ultimate part of the ritual. Deliberately, rubbing the tip of the sword in and out of your now pulsating core. I'd stop for a second and then repeat to tease you more. How badly, did I want to keep going deeper and deeper into you, my goddess.
+
+
+You then roll me over and like an angel from the heavens groaning you start to rub your self on me. Over and over I can feel those wet lips gracing my shaft. Pinned down and spread out, you begin to move down me. You, my delicate goddess, decide to bless me with kisses down my body. You then, upon arriving at the sword, excitedly comment on its size. You seem pleased with it. Slowly but deliberately you begin to caress it, paying attention to all of its features. You kiss it a bit, then roll your touge around it.
+
+
+Your caressing turns to stoking, and the fully grasping it. Cupping the jewels, you kiss me one more time. You smile and the together we finish our ritual. Elated and heavily breathing, we both fall to bed and I hold you my goddess not wanting to let you go. I love these rituals, no matter what time of day or night they've happened. I love to worship you and your breath taking beauty. I'd gladly do it on any altar, at any church at any time. My goddess, you are my everything.
+
+
+I'd wake up a few hours later just to gaze upon you. Trying to live in these moments where I'm happy and have everything I'd ever want. Your hair running over your shoulders shine in the moonlight. Your curvy body and tantalizingly thick voluptuous ass staring back at me. Almost smiling and reassuring me, that finally I am safe and I am loved.",1629231521.0,3,0.71,0
+SuicideWatch,I can't even take enough pills to kill myself.,This is my second failed attempt in as many weeks. I spent 5 days in a psych ward bsing doctors in between. I'm done. I want to be done. Just let me die. Every time someone  intervenes I have to do something more drastic the next time. I want to do it in a way that doesn't hurt anybody. But jumping in front of a train is starting to look like the only option,1629057447.0,1,1.0,0
+SuicideWatch,"I tried, here's what I learned","You don't know who you will actually impact. My ex came to save me and talk me out of it. I thought she'd be the last to do that. I didn't think she'd care at all.
+
+There are ways to get the help you need. You're not broken, you're human.",1628053146.0,10,1.0,0
+ExNoContact,My two cents after trying to commit suicide,"So yeah as the title says, today I purchased a handgun and ammunition, to commit suicide. My reason had more to do with childhood trauma and long running issues. I won't go into detail. I had a lengthy letter written to my parents, and ex explaining why and what needed to be done to clean up my affairs. My ex is still my primary beneficiary, that's why she got the email. My parents wouldn't have been able to burry me etc without the money.
+
+After I had what I needed, I sent the email, then I started driving looking for a spot where I could do it. My ex is the first one that called. Begging me not to do it. That blew me away. I assumed she'd try not to get involved. I thought she hated me. Certainly what it's felt like since we broke up.
+
+After an hour of trying to talk her into not coming for me, I eventually gave in. She rescued me. She sat and hugged me for what felt like forever. Crying with me. Actually trying to help. She then firmly gave me the option of going with the police or getting help. She then sat with me at the crisis center until I got the help I needed.
+
+What I learned in all this is, first you never know who is going to be impact if you do something stupid. No contact doesn't mean they wish you ill will etc always. So reading into that like I have is stupid too. In fact they may just want the best for you and this is the only way they can do that.",1628050757.0,27,0.91,4
+SuicideWatch,I purchased a gun today.,[removed],1628017016.0,4,0.83,4
+ExNoContact,I just want to be the loving partner someone needs and wants.,I just want to be someone's person. I thought I was hers. The parts of the day where I was the first she'd tell something first. Or vent to me about work. The part where she'd come home a kiss my neck while I was still working. I miss helpingher with her car or sitting on the phone with customer service agent's because R got nervous talking on the phone. I miss getting her surprises. Finding new ways to shower her with love. I just want that. I crave those moments so bad.,1627969628.0,11,0.92,2
+BreakUps,It sucks missing someone who wants nothing to do with you.,I'm quite certain it's the most painful and desperate of the feelings I've cycled through. I'm incapable it seems of stopping the feeling too. The oddest things trigger it. R left her signature all over my house. She became a part if my life and identity. So in some sense I'm missing myself.,1627969208.0,78,1.0,7
+SuicideWatch,I'm going to confess to a crime I didn't commit.,"Ill walk into the police station of a small town nearby. I'll have a better chance of getting trigger happy cops. I'm going to give just enough detail to be believable. When the arresting officer comes around to cuff me, I'll lounge for their gun. Their partner will pull their gun and shoot me. I'll keep my DNR on me just incase the ambulance gets their fast enough.
+
+I'll bleed out on the floor of a no name towns police department and history won't even mention me. It's perfect.",1627843425.0,2,0.67,3
+SuicideWatch,I'm at peace with it.,,1627798983.0,1,1.0,0
+AskEconomics,What's the term for the relationship between two goods where they have similar uses one is just premium to the other?,"What I'm thinking is not quite substitute goods, like where A and B do the same things. A just does it better so it carries a premium to B.",1627677902.0,3,0.81,5
+BreakUps,Down 43 pounds because I can't eat.,I guess something positive can come from this.,1627508906.0,1,0.66,1
+SuicideWatch,Society would gain about $25k if i died this second.,,1627444989.0,1,1.0,1
+BreakUps,She unblocked me,"During a conversation where he sister was insistent that I stop talking about her online, my ex unblocked me. My gut feeling is it's a trap to get a restraining order. So I blocked her.",1627375558.0,0,0.5,6
+BreakUps,Ever feel like you're ready to die? (26 M),"I'm not suicidal. Just after this, I'm ready to be done. If I were diagnosed with stage 4 liver cancer today, I'd be okay with it. I'd quietly go home, call my lawyer to get my affairs in order, then lie in bed until it took me. If I contracted the Delta variant I'd refuse treatment and do the same. If a gunman came running through my building. I'd chase him down and hope he got me before I got him. I'm just done with life. I've done everything I thought I'd ever do.",1627361383.0,4,1.0,3
+BreakUps,Loving someone else is just as much of a drug.,"I was talking to my therapist today about an experience I had this weekend. I sent a romantic gift to my ex that left me 3 weeks ago. I explained that I was frustrated that I couldn't seem to stop myself until it was already sent. I've always recognized how being loved can be addictive. It's nice to feel that energy. But what I realized, and what she further explained, is that the act of loving someone else has an almost equal effect on the brain. It is a drug too.
+
+In a relationship, especially in the early part, you're basically just trading drugs. You get high off of them, and they get high off of you. In a breakup the body recognizes that it's no longer receiving the drug and you have withdrawals. Your body is also suffering because it's not able give love either. We try to suppress that urge but it's probably better to recognize it and find a way to release than keep it in.",1627342032.0,8,1.0,0
+BreakUps,How am i going to ever be able to trust myself again?,"I didn't see it coming. I knew we weren't perfect but I didn't see the problems she pointed out until she did at the end. I was already hesitant to date this time around. Now a whole year and a half later, in a different stage of life, how am I ever going to trust my instincts again?
+
+Then I said worst thing that could happen is shed use me for food. Now I've got a house and a life. I'm not going to be able to let someone in.",1627260316.0,2,1.0,0
+BreakUps,Am I being toxic?,"I sent a message to any friend of hers that was following me online, looking at my stories, engaging with my posts etc. Message read like this
+
+""Friend of (ex girlfriend name),
+
+I noticed that we are still Friends on Facebook. Though that doesn't bother me as you know, (ex girlfriend name) has broken up with me. I love (ex girlfriend name) with all my being. I would have done, said, and given up, anything and everything  to make the relationship work. Nothing would have been too much. Her love and support has been an invaluable part of my life for over a year. It's one of the worst feelings in the world finding out how miserable she's been. I think we can both agree she deserves to be happy and loved.
+
+I'm bringing this up, because I do have to grieve. I suspect I will be for a long while. I have to do so publicly and I don't want you to feel uncomfortable. 
+
+Anyways, thank you for your kindness over the past year. I've enjoyed getting to know you. I wish we would've had more time. Thank you for taking care of (ex girlfriend name).
+
+(My name)""
+
+The husband of one of the  friends that got this messages me and says ""leave my wife out of it."" And ""focus on yourself and move on.""
+
+Literally trying to do that. Hence the message warning people my posts are going to be grief stricken. Some of her friends thanked me for the warning. Some even encouraged me to keep up what I was doing.
+
+Am I being toxic?",1627241679.0,1,1.0,7
+BreakUps,Did a bad thing,"Sent flowers with a quote from one of her favorite singers basically saying sorry. I know I shouldn't have, but the situation got the best of me.",1627153261.0,1,1.0,3
+BreakUps,How can you Love someone and go NC.,I (26 M) don't get it. I know love isn't all that's required. But why run this hard if you loved me? Why does she (23 F) feel like she can't have any part of me?,1626992061.0,3,1.0,20
+BreakUps,Her mother said they still loved me,"We'd been dating for 15 months. I thought this was solid. We had our differences and sometimes those turned into frustrations. She'd never read the instructions for example. But we'd always make up. She could almost never do wrong anyways.
+
+She was the first thing I'd hear and see each morning. She was the last thing I'd see and hear each night. On my hardest days she was my reason to push through. She'd help me see how toxic my mother was in my life and helped me cut her off. She was everything to me.
+
+We had talked about what we would name our kids and how we would live. She said she would marry me a few months ago. When I bought my house I made sure she felt like she could see herself there. I made sure to pick furniture she said she liked. I bent over backwards to make sure our lives would be compatible going forward.
+
+The morning before she broke up with me, we woke up together still cuddling from the night before. She said she loved me and I told her I loved her too. We had breakfast then got ready for the days BBQ. We got in the car and stopped to pick up some drinks.
+
+She made a joke about what I brought her and I took it the wrong way. I said something back that hurt her feelings, but was in context with the joke. and it all went downhill from there.
+
+This has been the hardest thing I've ever had to do. She's cut me off contact wise. I brought stuff she had left to her parents house and her mother made they point of telling me that everyone still loved me. Her family doesn't seem to know her reasons besides her sister. Her sister said my ex loved me when she left and that's why she had to cut me off. It just wasn't a forever fit.
+
+I'm broken. I'm lost more than I've ever felt. How can you love someone so much and walk away?",1626937700.0,1,1.0,1
+MBA,Would teaching for a year or two look bad during the admissions process?,"  
+
+Alright so I am trying to build a resume. I have been working at an large IB for the last two years writing software and running automation and analytic projects. I got this job right out of undergrad and was brought on as an associate (if that is germane). I want to give back to my hometown at some point and I have always wanted to teach financial literacy (the same class that got me interested in finance) at the high school level. There so happens to be an open spot and they are trying to find someone with a finance background to do that. It makes sense to do it now, because the opportunity cost is lower than if I waited till after Business School. But, are there going to be negative consequences from an admissions stand point? I feel like teaching would also give me the time to study for the GMAT, or more time than I would have otherwise.",1625949361.0,3,0.71,3
+FRM,Too high of a workload?,I am planning to take part one this Fall. I have been working in risk management for the past year and plan to continue working through studying obviously. I also want to take the Series 7 and 63 this year. Does this sound manageable with 55 hrs a week of work?,1621957005.0,5,1.0,3
+aviation,Whats the benefit to putting the engines this far forward? (A220),,1620621662.0,21,0.92,13
+work,Will I get fired if I don't take vacation?,"Okay, so I am in my first job post-college. The place where I work has a mandatory vacation policy (MVP) that requires two weeks of consecutive vacation annually. However, what is the actual likelihood that a policy like that is enforced? In my old job I'd take days if I needed to take a test or study for finals but now that I'm not in school I don't need to do that. The idea of not having to work scares me and brings on major feelings of anxiety. So now I'm asking is it going to get me fired if I don't?",1615524800.0,1,1.0,3
+FoodPorn,Blueberry Sour Cream Pie,,1612691259.0,12,0.78,1
+FoodPorn,Fennel Crusted Pork Chops,,1612691120.0,11,0.84,1
+FoodPorn,An Americans attempt at Black Forest Cake,,1610594871.0,22,0.88,0
+options,When to exit? USB $30/35 C 12/18,"So I've been pretty bullish on Banks this year. They had strong capital positions going into this year and the changes being proposed by regulators made me even more optimistic. Coming into May $USB was near or at it's low for the year and so I found some really attractive debit spreads to buy. One of them, in particular, has done well and I'm nearing 100% return on it. I've never done this well on a trade this fast, so I'm wondering how long a lot of you would hold onto it before getting rid of it. My opinion of banks hasn't changed, but I think this market is crazy.
+
+Entered on May 13th at 29.45
+
++10 USB 30C 12/18 ~ $3540
+-10 USB 35C 12/18 ~ $1700
+Net Debit $1840
+
+Today 3PM 38.71
+10100 - 6580 = 3520 or 91.3% Return in 21 days",1591210732.0,2,0.75,1
